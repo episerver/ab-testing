@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>EPiServer.ABTesting</id>
+    <version>1.0.0</version>
+    <authors>EPiServer</authors>
+    <owners>EPiServer</owners>
+    <projectUrl>http://www.episerver.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package provides AB testing functionality to an EPiServer CMS.</description>
+    <copyright>Copyright ©  2015</copyright>
+    <tags>EPiServer ABTesting</tags>
+  </metadata>
+</package>
