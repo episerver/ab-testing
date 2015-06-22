@@ -49,6 +49,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void Save_Throws_When_Original_Id_Is_In_Use()
+        {
+            var testManager = GetUnitUnderTest();
+            testData.SetupGet(td => td.Id).Returns(null);
+            testData.SetupGet(td => td.OriginalItemId).Returns(Guid.NewGuid());
+
+            dal.Setup(d => d.GetTestByPageId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters());
+
+            var retId = testManager.Save(testData.Object);
+        }
+
+        [TestMethod]
         public void Save_Updates_A_Test_With_A_Given_Id()
         {
             var testManager = GetUnitUnderTest();

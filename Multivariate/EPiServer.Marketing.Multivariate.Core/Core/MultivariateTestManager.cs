@@ -52,7 +52,13 @@ namespace EPiServer.Marketing.Multivariate
             if (testGuid != Guid.Empty)
                 _dataAccess.Update(aParameter);
             else
+            {
+                if(TestExists(aParameter.OriginalItemId))
+                {
+                    throw new Exception("A test already exists for the given OriginalItemId");
+                }
                 testGuid = _dataAccess.Add(aParameter);
+            }
 
             return testGuid;
         }
@@ -152,6 +158,12 @@ namespace EPiServer.Marketing.Multivariate
                 default:
                     return TestState.Inactive;
             }
+        }
+
+        private bool TestExists(Guid originalItemId)
+        {
+            var test = _dataAccess.GetTestByPageId(originalItemId);
+            return test != null;
         }
     }
 }

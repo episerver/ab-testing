@@ -27,5 +27,11 @@ namespace EPiServer.Marketing.Multivariate.Dal
         {
             throw new NotImplementedException();
         }
+
+
+        public MultivariateTestParameters GetTestByPageId(Guid originalPageId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
