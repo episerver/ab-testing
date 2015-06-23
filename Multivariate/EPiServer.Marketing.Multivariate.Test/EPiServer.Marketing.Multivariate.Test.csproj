@@ -180,7 +180,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Core\MultivariateManagerTests.cs" />
-    <Compile Include="Core\MultivariateTestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
