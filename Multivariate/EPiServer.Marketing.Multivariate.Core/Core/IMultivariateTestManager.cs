@@ -9,6 +9,7 @@ namespace EPiServer.Marketing.Multivariate
     public interface IMultivariateTestManager
     {
         IMultivariateTest Get(Guid testObjectId);
+        IMultivariateTest GetTestByItemId(Guid originalItemId);
         Guid Save(IMultivariateTest testObject);
         void Delete(Guid testObjectId);
         void Start(Guid testObjectId);

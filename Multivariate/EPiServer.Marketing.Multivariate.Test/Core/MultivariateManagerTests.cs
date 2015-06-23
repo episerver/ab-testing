@@ -138,5 +138,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             Assert.AreEqual(actualTest.Id, testGuid, "The Id returned should match the one supplied to the get method.");
         }
+
+        [TestMethod] 
+        public void GetTestByItemId_Returns_The_Test_With_The_Given_Original_Id()
+        {
+            var testManager = GetUnitUnderTest();
+            var itemGuid = Guid.NewGuid();
+
+            dal.Setup(d => d.GetTestByPageId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { OriginalItemId = itemGuid });
+
+            var actualTest = testManager.GetTestByItemId(itemGuid);
+
+            Assert.AreEqual(actualTest.OriginalItemId, itemGuid, "The test returned should have the same OriginalItemId as was requested");
+        }
     }
 }

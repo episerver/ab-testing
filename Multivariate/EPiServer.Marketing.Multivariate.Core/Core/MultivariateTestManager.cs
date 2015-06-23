@@ -41,6 +41,11 @@ namespace EPiServer.Marketing.Multivariate
             return ConvertParametersToData(_dataAccess.Get(testObjectId));
         }
 
+        public IMultivariateTest GetTestByItemId(Guid originalItemId)
+        {
+            return ConvertParametersToData(_dataAccess.GetTestByPageId(originalItemId));
+        }
+
         public Guid Save(IMultivariateTest testObject)
         {
             var aParameter = ConvertDataToParameters(testObject);
