@@ -7,9 +7,9 @@ namespace EPiServer.Marketing.Multivariate.Dal
     public interface IMultivariateTestDal
     {
         MultivariateTestParameters Get(Guid objectId);
-        MultivariateTestParameters GetTestByPageId(Guid originalPageId);
+        MultivariateTestParameters GetByOriginalItemId(Guid itemId);
         Guid Add(MultivariateTestParameters parameters);
-        bool Update(MultivariateTestParameters parameters);
-        bool Delete(Guid Id);
+        void Update(MultivariateTestParameters parameters);
+        void Delete(Guid Id);
     }
 }

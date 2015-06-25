@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EPiServer.Data.Configuration;
 
-namespace EPiServer.Marketing.Multivariate.Core.Cms
+namespace EPiServer.Marketing.Multivariate
 {
     public class CurrentSite : ICurrentSite
     {

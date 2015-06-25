@@ -16,6 +16,7 @@ namespace EPiServer.Marketing.Multivariate
         internal ILog _log;
         internal IMultivariateTestDal _dataAccess;
         internal ICurrentUser _user;
+        internal ICurrentSite _siteData;
 
         private const string _active = "Active";
         private const string _inactive = "Inactive";
@@ -24,16 +25,18 @@ namespace EPiServer.Marketing.Multivariate
 
         public MultivariateTestManager()
         {
+            _siteData = new CurrentSite();
             _log = LogManager.GetLogger(typeof(MultivariateTestManager));
-            _dataAccess = new MultivariateTestDal();
+            _dataAccess = new MultivariateTestDal(_siteData.GetSiteDataBaseConnectionString());
             _user = new CurrentUser();
         }
 
-        internal MultivariateTestManager(ILog log, IMultivariateTestDal dal, ICurrentUser user)
+        internal MultivariateTestManager(ILog log, IMultivariateTestDal dal, ICurrentUser user, ICurrentSite siteData)
         {
             _log = log;
             _dataAccess = dal;
             _user = user;
+            _siteData = siteData;
         }
 
         public IMultivariateTest Get(Guid testObjectId)
@@ -43,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate
 
         public IMultivariateTest GetTestByItemId(Guid originalItemId)
         {
-            return ConvertParametersToData(_dataAccess.GetTestByPageId(originalItemId));
+            return ConvertParametersToData(_dataAccess.GetByOriginalItemId(originalItemId));
         }
 
         public Guid Save(IMultivariateTest testObject)
@@ -167,7 +170,7 @@ namespace EPiServer.Marketing.Multivariate
 
         private bool TestExists(Guid originalItemId)
         {
-            var test = _dataAccess.GetTestByPageId(originalItemId);
+            var test = _dataAccess.GetByOriginalItemId(originalItemId);
             return test != null;
         }
     }

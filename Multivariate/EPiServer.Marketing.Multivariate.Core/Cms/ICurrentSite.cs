@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EPiServer.Marketing.Multivariate.Core.Cms
+namespace EPiServer.Marketing.Multivariate
 {
     public interface ICurrentSite
     {

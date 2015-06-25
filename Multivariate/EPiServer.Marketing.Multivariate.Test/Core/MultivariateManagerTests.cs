@@ -13,15 +13,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         private Mock<IMultivariateTestDal> dal;
         private Mock<ICurrentUser> user;
         private Mock<IMultivariateTest> testData;
+        private Mock<ICurrentSite> siteData;
         private string testUsername = "TestUser";
         private MultivariateTestManager GetUnitUnderTest()
         {
             log = new Mock<ILog>();
             dal = new Mock<IMultivariateTestDal>();
             user = new Mock<ICurrentUser>();
+            siteData = new Mock<ICurrentSite>();
             testData = new Mock<IMultivariateTest>();
+            
             user.Setup(u => u.GetDisplayName()).Returns(testUsername);
-            return new MultivariateTestManager(log.Object, dal.Object, user.Object);
+            return new MultivariateTestManager(log.Object, dal.Object, user.Object, siteData.Object);
         }
 
         [TestMethod]
@@ -56,7 +59,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             testData.SetupGet(td => td.Id).Returns(null);
             testData.SetupGet(td => td.OriginalItemId).Returns(Guid.NewGuid());
 
-            dal.Setup(d => d.GetTestByPageId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters());
+            dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters());
 
             var retId = testManager.Save(testData.Object);
         }
@@ -67,7 +70,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var testManager = GetUnitUnderTest();
             testData.SetupGet(td => td.Id).Returns(Guid.NewGuid());
             
-            dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>())).Returns(true);
+            dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
             var retId = testManager.Save(testData.Object);
 
             dal.Verify(d => d.Update(It.IsAny<MultivariateTestParameters>()), Times.Once, "Update should only be called once");
@@ -145,7 +148,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var testManager = GetUnitUnderTest();
             var itemGuid = Guid.NewGuid();
 
-            dal.Setup(d => d.GetTestByPageId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { OriginalItemId = itemGuid });
+            dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { OriginalItemId = itemGuid });
 
             var actualTest = testManager.GetTestByItemId(itemGuid);
 
