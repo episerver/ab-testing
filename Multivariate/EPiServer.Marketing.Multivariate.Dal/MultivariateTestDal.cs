@@ -101,15 +101,20 @@ namespace EPiServer.Marketing.Multivariate.Dal
             return multiVarTestParam;
         }
 
-        public MultivariateTestParameters GetByOriginalItemId(Guid itemId)
+        public MultivariateTestParameters[] GetByOriginalItemId(Guid itemId)
         {
-            MultivariateTestParameters multiVarTestParam = null;
+            List<MultivariateTestParameters> multiVarTestParamList = new List<MultivariateTestParameters>();
             SqlParameter[] sqlParams = { 
             new SqlParameter() { ParameterName = "OriginalItemId", Value = itemId, DbType = DbType.Guid, Size = 36 },
             };
 
-            multiVarTestParam = MapReaderToParameters(_dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams));
-            return multiVarTestParam;
+            var reader = _dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams);
+            while (reader.Read())
+            {
+                multiVarTestParamList.Add(MapReaderToParameters(reader));
+            }
+
+            return multiVarTestParamList.ToArray();
         }
 
         private MultivariateTestParameters MapReaderToParameters(DbDataReader dataReader)
