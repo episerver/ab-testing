@@ -42,11 +42,11 @@ GO
 
 
 ---Stored Procedure Upsert tblMultivariateTests.
-IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Add]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
-    DROP PROCEDURE [dbo].[MultivariateTest_Add]
+IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Save]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+    DROP PROCEDURE [dbo].[MultivariateTest_Save]
 GO
 
-CREATE PROCEDURE [dbo].[MultivariateTest_Add]
+CREATE PROCEDURE [dbo].[MultivariateTest_Save]
 	 @Id uniqueidentifier
 	,@Title nvarchar(255)
     ,@Owner nvarchar(100)
