@@ -197,6 +197,9 @@ xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Dep
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
 
+IF exist "$(SolutionDir)Deployment\tools\epiupdates\sql" ( del "$(SolutionDir)Deployment\tools\epiupdates\sql" /s /q )
+xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates\sql"  /I /F /R 
+
 cd "$(SolutionDir)Deployment\"
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
 xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
