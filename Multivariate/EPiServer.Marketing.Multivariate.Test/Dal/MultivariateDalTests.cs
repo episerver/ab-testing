@@ -143,8 +143,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         public void GetByOriginalItemId_Calls_ExecuteReader_WithCorrectParameters()
         {
             var testDal = GetUnitUnderTest();
+            var moqDbDataReader = new Mock<DbDataReader>();
             var originalItemId = new Guid("ACAEE520-FFC8-4197-AF98-B37EB77083B4");
-            dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>()));
+            dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>())).Returns(moqDbDataReader.Object);
             testDal.GetByOriginalItemId(originalItemId);
             dataOperationsMock.Verify(d => d.ExecuteReader(It.Is<string>(arg => arg == "MultivariateTest_GetByOriginalItemId"),
                                                              It.Is<CommandType>(arg => arg == CommandType.StoredProcedure),
