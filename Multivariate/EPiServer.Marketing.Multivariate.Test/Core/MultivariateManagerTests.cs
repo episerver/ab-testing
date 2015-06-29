@@ -27,15 +27,15 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return new MultivariateTestManager(log.Object, dal.Object, user.Object, siteData.Object);
         }
 
-        [TestMethod]
-        public void TestManager_Construction_Creates_Internal_Objects()
-        {
-            var aTestManager = new MultivariateTestManager();
+        //[TestMethod]
+        //public void TestManager_Construction_Creates_Internal_Objects()
+        //{
+        //    var aTestManager = new MultivariateTestManager();
 
-            Assert.IsNotNull(aTestManager._log, "The logger should be created upon construction");
-            Assert.IsNotNull(aTestManager._dataAccess, "The data access object should be created upon construction");
-            Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
-        }
+        //    Assert.IsNotNull(aTestManager._log, "The logger should be created upon construction");
+        //    Assert.IsNotNull(aTestManager._dataAccess, "The data access object should be created upon construction");
+        //    Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
+        //}
 
         [TestMethod]
         public void Save_Adds_A_New_Test_Given_No_Id()
