@@ -13,7 +13,9 @@ namespace EPiServer.Marketing.Multivariate
         public string GetSiteDataBaseConnectionString()
         {
             var siteSettings = new SiteDataSettingsElement();
-            return siteSettings.ConnectionStringName;
+            var connectionStringName = siteSettings.ConnectionStringName;
+            return EPiServerDataStoreSection.ConfigurationInstance.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString;
+
         }
     }
 }
