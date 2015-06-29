@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Multivariate
     {
         public string GetDisplayName()
         {
-            return EPiServerProfile.Current.DisplayName;
+            return EPiServerProfile.Current.DisplayName ?? "API";
         }
     }
 }

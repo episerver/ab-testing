@@ -175,6 +175,7 @@
     <Compile Include="Core\IMultivariateTestManager.cs" />
     <Compile Include="Core\MultivariateTest.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
+    <Compile Include="Core\PageCounter.cs" />
     <Compile Include="Core\TestState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
