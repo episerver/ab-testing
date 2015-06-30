@@ -40,9 +40,32 @@ END
 
 GO
 
+-- Create tblMultivariateTestsResults Table to Store results of the multivariatetests i.e. views and conversions.
+IF NOT (EXISTS (SELECT * 
+                 FROM INFORMATION_SCHEMA.TABLES 
+                 WHERE TABLE_NAME = 'tblMultivariateTestsResults'))
+BEGIN
+
+    CREATE TABLE [dbo].[tblMultivariateTestsResults](
+               [Id] [uniqueidentifier] NOT NULL,
+			   [TestId] [uniqueidentifier] NOT NULL,
+               [ItemId] [uniqueidentifier] NOT NULL,
+		       [Views] [int],
+			   [Conversions][int]        
+				CONSTRAINT [PK_tblMultivariateTestsResults] PRIMARY KEY CLUSTERED 
+				(
+							   [Id] ASC
+				)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+				CONSTRAINT [FK_tblMultivariateTestsResults] FOREIGN KEY ([TestId])
+				 REFERENCES [tblMultivariateTests] ([Id]) 
+				) ON [PRIMARY]			
+END
+
+GO
+
 
 ---Stored Procedure Upsert tblMultivariateTests.
-IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Save]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Save]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
     DROP PROCEDURE [dbo].[MultivariateTest_Save]
 GO
 
@@ -62,8 +85,8 @@ AS
 SET NOCOUNT ON
 BEGIN
 
-	if(not exists(select * FROM dbo.tblMultivariateTests WHERE [Id] = @Id))
-	begin	
+	if(not exists(SELECT * FROM dbo.tblMultivariateTests WHERE [Id] = @Id))
+	BEGIN	
 		INSERT INTO dbo.tblMultivariateTests(
 			 [Id]
 	        ,[Title]
@@ -91,10 +114,10 @@ BEGIN
 		    ,@LastModifiedBy
 		)
 
-	end
+	END
 	ELSE
-	begin
-		update dbo.tblMultivariateTests set			
+	BEGIN
+		UPDATE dbo.tblMultivariateTests SET			
 	        [Title] = @Title
 	        ,[Owner] = @Owner
             ,[OriginalItemId] = @OriginalItemId
@@ -105,15 +128,15 @@ BEGIN
 		    ,[EndDate] = @EndDate 
 		    ,[LastModifiedDate] = @LastModifiedDate   
 		    ,[LastModifiedBy] = @LastModifiedBy 
-		where Id = @Id
-	end
+		WHERE Id = @Id
+	END
 END 
 
 GO
 
 
 ---Store Procedure Delete tblMultivariateTests.
-IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Delete]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Delete]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
     DROP PROCEDURE [dbo].[MultivariateTest_Delete]
 GO
 
@@ -122,14 +145,15 @@ CREATE PROCEDURE [dbo].[MultivariateTest_Delete]
 AS
 SET NOCOUNT ON
 BEGIN
-		Delete from dbo.tblMultivariateTests where [Id] = @Id
+        DELETE FROM dbo.tblMultivariateTestsResults WHERE [TestId] = @Id
+		DELETE FROM dbo.tblMultivariateTests WHERE [Id] = @Id
 END 
 
 GO
 
 
 ---Store Procedure Get tblMultivariateTests.
-IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Get]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Get]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
     DROP PROCEDURE [dbo].[MultivariateTest_Get]
 GO
 
@@ -139,7 +163,10 @@ CREATE PROCEDURE [dbo].[MultivariateTest_Get]
 AS
 SET NOCOUNT ON
 BEGIN
-	select * FROM dbo.tblMultivariateTests WHERE [Id] = @Id
+	SELECT mt.[Id], mt.[Title], mt.[Owner], mt.[OriginalItemId], mt.[VariantItemId], mt.[ConversionItemId], mt.[State], mt.[StartDate], mt.[EndDate], mt.[LastModifiedDate], mt.[LastModifiedBy], mtr.[ItemId], mtr.[Views], mtr.[Conversions]
+	FROM dbo.tblMultivariateTests mt INNER JOIN dbo.tblMultivariateTestsResults mtr 
+	ON mt.[Id] = mtr.[TestId] 
+	WHERE mt.[Id] = @Id
 END 
 
 GO
@@ -147,7 +174,7 @@ GO
 
 
 ---Store Procedure GetByOriginalItemId tblMultivariateTests.
-IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_GetByOriginalItemId]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_GetByOriginalItemId]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
     DROP PROCEDURE [dbo].[MultivariateTest_GetByOriginalItemId]
 GO
 
@@ -156,11 +183,72 @@ CREATE PROCEDURE [dbo].[MultivariateTest_GetByOriginalItemId]
 AS
 SET NOCOUNT ON
 BEGIN
-	select * FROM dbo.tblMultivariateTests WHERE [OriginalItemId] = @OriginalItemId
+	SELECT mt.[Id], mt.[Title], mt.[Owner], mt.[OriginalItemId], mt.[VariantItemId], mt.[ConversionItemId], mt.[State], mt.[StartDate], mt.[EndDate], mt.[LastModifiedDate], mt.[LastModifiedBy], mtr.[ItemId], mtr.[Views], mtr.[Conversions]
+	FROM dbo.tblMultivariateTests mt INNER JOIN dbo.tblMultivariateTestsResults mtr 
+	ON mt.[Id] = mtr.[TestId] 
+	WHERE mt.[OriginalItemId] = @OriginalItemId
 END 
 
 GO
 
+---Stored Procedure Increment Views.
+IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_IncrementViews]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+    DROP PROCEDURE [dbo].[MultivariateTest_IncrementViews]
+GO
 
+CREATE PROCEDURE [dbo].[MultivariateTest_IncrementViews]
+	 @TestId uniqueidentifier
+	,@ItemId uniqueidentifier
+AS
+SET NOCOUNT ON
+BEGIN
 
+	if(not exists(SELECT * FROM dbo.tblMultivariateTestsResults WHERE [TestId] = @TestId))
+	BEGIN	
+		INSERT INTO dbo.tblMultivariateTestsResults(
+			 [Id]
+	        ,[TestId]
+	        ,[ItemId]
+            ,[Views]
+            ,[Conversions]
+		)
+		VALUES(
+		    NEWID()
+		    ,@TestId
+	        ,@ItemId
+            ,1
+            ,0
+		)
 
+	END
+	ELSE
+	BEGIN
+	DECLARE @existingViews int
+	SELECT @existingViews = [Views] FROM dbo.tblMultivariateTestsResults WHERE [TestId] = @TestId and [ItemId] = @ItemId
+		UPDATE dbo.tblMultivariateTestsResults 
+		SET	[Views] = @existingViews + 1
+		WHERE [TestId] = @TestId and [ItemId] = @ItemId
+	END
+END 
+
+GO
+
+---Stored Procedure Increment Conversions.
+IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_IncrementConversions]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+    DROP PROCEDURE [dbo].[MultivariateTest_IncrementConversions]
+GO
+
+CREATE PROCEDURE [dbo].[MultivariateTest_IncrementConversions]
+	 @TestId uniqueidentifier
+	,@ItemId uniqueidentifier
+AS
+SET NOCOUNT ON
+BEGIN
+	DECLARE @existingConversions int
+	SELECT @existingConversions = [Conversions] FROM dbo.tblMultivariateTestsResults WHERE [TestId] = @TestId and [ItemId] = @ItemId
+		UPDATE dbo.tblMultivariateTestsResults 
+		SET [Conversions] = @existingConversions + 1
+		WHERE [TestId] = @TestId and [ItemId] = @ItemId
+END 
+
+GO
