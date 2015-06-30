@@ -17,9 +17,6 @@ namespace EPiServer.Marketing.Multivariate.Dal
         protected const string Proc_MultivariateTest_Delete = "MultivariateTest_Delete";
         protected const string Proc_MultivariateTest_Get = "MultivariateTest_Get";
         protected const string Proc_MultivariateTest_GetByOriginalItemId = "MultivariateTest_GetByOriginalItemId";
-        protected const string Proc_MultivariateTest_IncrementViews = "MultivariateTest_IncrementViews";
-        protected const string Proc_MultivariateTest_IncrementConversions = "MultivariateTest_IncrementConversions";
-
 
         private string _connectionString;
         private IDataOperations _dataOperations;
@@ -93,21 +90,15 @@ namespace EPiServer.Marketing.Multivariate.Dal
             _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_Delete, CommandType.StoredProcedure, sqlParams);
         }
 
-        public MultivariateTestParameters[] Get(Guid objectId)
+        public MultivariateTestParameters Get(Guid objectId)
         {
-            List<MultivariateTestParameters> multiVarTestParamList = new List<MultivariateTestParameters>();
+            MultivariateTestParameters multiVarTestParam = null;
             SqlParameter[] sqlParams = { 
             new SqlParameter() { ParameterName = "Id", Value = objectId, DbType = DbType.Guid, Size = 36 },
             };
 
-            var reader = _dataOperations.ExecuteReader(Proc_MultivariateTest_Get, CommandType.StoredProcedure, sqlParams);
-
-            while (reader.Read())
-            {
-                multiVarTestParamList.Add(MapReaderToParameters(reader));
-            }
-
-            return multiVarTestParamList.ToArray();
+            multiVarTestParam = MapReaderToParameters(_dataOperations.ExecuteReader(Proc_MultivariateTest_Get, CommandType.StoredProcedure, sqlParams));
+            return multiVarTestParam;
         }
 
         public MultivariateTestParameters[] GetByOriginalItemId(Guid itemId)
@@ -155,26 +146,6 @@ namespace EPiServer.Marketing.Multivariate.Dal
             }
 
             return multiVarTestParam;
-        }
-
-        public void UpdateViews(Guid TestId, Guid ItemId)
-        {
-            SqlParameter[] sqlParams = { 
-            new SqlParameter() { ParameterName = "TestId", Value = TestId, DbType = DbType.Guid, Size = 36 },
-            new SqlParameter() { ParameterName = "ItemId", Value = ItemId, DbType = DbType.Guid, Size = 36 },
-            };
-
-            _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_IncrementViews, CommandType.StoredProcedure, sqlParams);
-        }
-
-        public void UpdateConversions(Guid TestId, Guid ItemId)
-        {
-            SqlParameter[] sqlParams = { 
-            new SqlParameter() { ParameterName = "TestId", Value = TestId, DbType = DbType.Guid, Size = 36 },
-            new SqlParameter() { ParameterName = "ItemId", Value = ItemId, DbType = DbType.Guid, Size = 36 },
-            };
-
-            _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_IncrementConversions, CommandType.StoredProcedure, sqlParams);
         }
     }
 }

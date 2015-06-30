@@ -157,45 +157,5 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             return (args.Length == 1) &&
                    (args[0].ParameterName == "OriginalItemId" && (Guid)args[0].Value == new Guid("ACAEE520-FFC8-4197-AF98-B37EB77083B4") && args[0].DbType == DbType.Guid && args[0].Size == 36);
         }
-
-        [TestMethod]
-        public void UpdateViews_Calls_ExecuteNonQuery_WithCorrectParameters()
-        {
-            var testDal = GetUnitUnderTest();
-            var testId = new Guid("3FA43918-3CC1-452F-B1EC-C63F590BD585");
-            var itemId = new Guid("BEFCA120-6BFF-4687-A8BD-F24A7F962613");
-            dataOperationsMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>()));
-            testDal.UpdateViews(testId, itemId);
-            dataOperationsMock.Verify(d => d.ExecuteNonQuery(It.Is<string>(arg => arg == "MultivariateTest_IncrementViews"),
-                                                             It.Is<CommandType>(arg => arg == CommandType.StoredProcedure),
-                                                             It.Is<SqlParameter[]>(arg => VerifyParametersForUpdateViews(arg))));
-        }
-
-        private bool VerifyParametersForUpdateViews(SqlParameter[] args)
-        {
-            return (args.Length == 2) &&
-                   (args[0].ParameterName == "TestId" && (Guid)args[0].Value == new Guid("3FA43918-3CC1-452F-B1EC-C63F590BD585") && args[0].DbType == DbType.Guid && args[0].Size == 36) &&
-                   (args[1].ParameterName == "ItemId" && (Guid)args[1].Value == new Guid("BEFCA120-6BFF-4687-A8BD-F24A7F962613") && args[1].DbType == DbType.Guid && args[1].Size == 36);
-        }
-
-        [TestMethod]
-        public void UpdateConversions_Calls_ExecuteNonQuery_WithCorrectParameters()
-        {
-            var testDal = GetUnitUnderTest();
-            var testId = new Guid("3FA43918-3CC1-452F-B1EC-C63F590BD585");
-            var itemId = new Guid("BEFCA120-6BFF-4687-A8BD-F24A7F962613");
-            dataOperationsMock.Setup(x => x.ExecuteNonQuery(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>()));
-            testDal.UpdateConversions(testId, itemId);
-            dataOperationsMock.Verify(d => d.ExecuteNonQuery(It.Is<string>(arg => arg == "MultivariateTest_IncrementConversions"),
-                                                             It.Is<CommandType>(arg => arg == CommandType.StoredProcedure),
-                                                             It.Is<SqlParameter[]>(arg => VerifyParametersForUpdateConversions(arg))));
-        }
-
-        private bool VerifyParametersForUpdateConversions(SqlParameter[] args)
-        {
-            return (args.Length == 2) &&
-                   (args[0].ParameterName == "TestId" && (Guid)args[0].Value == new Guid("3FA43918-3CC1-452F-B1EC-C63F590BD585") && args[0].DbType == DbType.Guid && args[0].Size == 36) &&
-                   (args[1].ParameterName == "ItemId" && (Guid)args[1].Value == new Guid("BEFCA120-6BFF-4687-A8BD-F24A7F962613") && args[1].DbType == DbType.Guid && args[1].Size == 36);
-        }
     }
 }
