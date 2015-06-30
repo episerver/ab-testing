@@ -23,7 +23,6 @@ namespace EPiServer.Marketing.Multivariate
         public Guid VariantItemId { get; set; }
         public Guid ConversionItemId { get; set; }
 
-        public int Views { get; set; }
-        public int Conversions { get; set; }
+        public List<TestResult> Results { get; set; }
     }
 }

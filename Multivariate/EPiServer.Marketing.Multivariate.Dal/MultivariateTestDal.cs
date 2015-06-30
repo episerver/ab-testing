@@ -93,21 +93,15 @@ namespace EPiServer.Marketing.Multivariate.Dal
             _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_Delete, CommandType.StoredProcedure, sqlParams);
         }
 
-        public MultivariateTestParameters[] Get(Guid objectId)
+        public MultivariateTestParameters Get(Guid objectId)
         {
-            List<MultivariateTestParameters> multiVarTestParamList = new List<MultivariateTestParameters>();
+            MultivariateTestParameters multiVarTestParam = null;
             SqlParameter[] sqlParams = { 
-            new SqlParameter() { ParameterName = "Id", Value = objectId, DbType = DbType.Guid, Size = 36 },
+            new SqlParameter() { ParameterName = "OriginalItemId", Value = objectId, DbType = DbType.Guid, Size = 36 },
             };
 
-            var reader = _dataOperations.ExecuteReader(Proc_MultivariateTest_Get, CommandType.StoredProcedure, sqlParams);
-
-            while (reader.Read())
-            {
-                multiVarTestParamList.Add(MapReaderToParameters(reader));
-            }
-
-            return multiVarTestParamList.ToArray();
+            multiVarTestParam = MapReaderToParameters(_dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams));
+            return multiVarTestParam;
         }
 
         public MultivariateTestParameters[] GetByOriginalItemId(Guid itemId)
