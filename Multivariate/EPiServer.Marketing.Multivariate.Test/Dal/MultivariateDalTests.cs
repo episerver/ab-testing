@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var Id = new Guid("3FA43918-3CC1-452F-B1EC-C63F590BD585");
             dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>()));
             testDal.Get(Id);
-            dataOperationsMock.Verify(d => d.ExecuteReader(It.Is<string>(arg => arg == "MultivariateTest_Get"),
+            dataOperationsMock.Verify(d => d.ExecuteReader(It.Is<string>(arg => arg == "MultivariateTest_GetTest"),
                                                              It.Is<CommandType>(arg => arg == CommandType.StoredProcedure),
                                                              It.Is<SqlParameter[]>(arg => VerifyParametersForGet(arg))));
         }
