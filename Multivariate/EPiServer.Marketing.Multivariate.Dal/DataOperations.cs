@@ -41,6 +41,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
 
                     Connection.Open();
                     Command.ExecuteNonQuery();
+                    Command.Parameters.Clear();
                 }
             }
         }
@@ -66,6 +67,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
                     {
                         callBack(reader);
                     }
+                    Command.Parameters.Clear();
                 }
             }
         }
