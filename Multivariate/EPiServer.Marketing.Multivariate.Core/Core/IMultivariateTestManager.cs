@@ -15,5 +15,7 @@ namespace EPiServer.Marketing.Multivariate
         void Start(Guid testObjectId);
         void Stop(Guid testObjectId);
         void Archive(Guid testObjectId);
+        void IncrementCount(Guid testId, Guid testItemId, CountType resultType);
+
     }
 }

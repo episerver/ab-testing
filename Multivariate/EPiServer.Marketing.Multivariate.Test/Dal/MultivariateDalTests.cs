@@ -14,6 +14,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
     {
         private string connectionString = "ConnectionString";
         private Mock<IDataOperations> dataOperationsMock;
+
         private MultivariateTestDal GetUnitUnderTest()
         {
             dataOperationsMock = new Mock<IDataOperations>();
@@ -126,11 +127,14 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var testDal = GetUnitUnderTest();
             var Id = new Guid("3FA43918-3CC1-452F-B1EC-C63F590BD585");
-            dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>()));
+
+            dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>(), It.IsAny<Action<IDataReader>>()));
+
             testDal.Get(Id);
-            dataOperationsMock.Verify(d => d.ExecuteReader(It.Is<string>(arg => arg == "MultivariateTest_Get"),
+            dataOperationsMock.Verify(d => d.ExecuteReader(It.Is<string>(arg => arg == "MultivariateTest_GetTest"),
                                                              It.Is<CommandType>(arg => arg == CommandType.StoredProcedure),
-                                                             It.Is<SqlParameter[]>(arg => VerifyParametersForGet(arg))));
+                                                             It.Is<SqlParameter[]>(arg => VerifyParametersForGet(arg)),
+                                                             It.IsAny<Action<IDataReader>>()));
         }
 
         private bool VerifyParametersForGet(SqlParameter[] args)
@@ -143,13 +147,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         public void GetByOriginalItemId_Calls_ExecuteReader_WithCorrectParameters()
         {
             var testDal = GetUnitUnderTest();
-            var moqDbDataReader = new Mock<DbDataReader>();
             var originalItemId = new Guid("ACAEE520-FFC8-4197-AF98-B37EB77083B4");
-            dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>())).Returns(moqDbDataReader.Object);
+            dataOperationsMock.Setup(x => x.ExecuteReader(It.IsAny<string>(), It.IsAny<CommandType>(), It.IsAny<SqlParameter[]>(), It.IsAny<Action<IDataReader>>()));
             testDal.GetByOriginalItemId(originalItemId);
             dataOperationsMock.Verify(d => d.ExecuteReader(It.Is<string>(arg => arg == "MultivariateTest_GetByOriginalItemId"),
                                                              It.Is<CommandType>(arg => arg == CommandType.StoredProcedure),
-                                                             It.Is<SqlParameter[]>(arg => VerifyParametersForGetByOriginalItemId(arg))));
+                                                             It.Is<SqlParameter[]>(arg => VerifyParametersForGetByOriginalItemId(arg)),
+                                                             It.IsAny<Action<IDataReader>>()));
         }
 
         private bool VerifyParametersForGetByOriginalItemId(SqlParameter[] args)

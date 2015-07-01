@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
             }
         }
 
-        public DbDataReader ExecuteReader(string commandText, CommandType commandType, SqlParameter[] parameters)
+        public void ExecuteReader(string commandText, CommandType commandType, SqlParameter[] parameters, Action<IDataReader> callBack)
         {
             using (SqlConnection Connection = new SqlConnection(this._connectionString))
             {
@@ -62,7 +62,10 @@ namespace EPiServer.Marketing.Multivariate.Dal
                     }
 
                     Connection.Open();
-                    return Command.ExecuteReader();
+                    using (IDataReader reader = Command.ExecuteReader(CommandBehavior.CloseConnection))
+                    {
+                        callBack(reader);
+                    }
                 }
             }
         }

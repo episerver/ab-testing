@@ -15,8 +15,12 @@ namespace EPiServer.Marketing.Multivariate.Dal
 
         protected const string Proc_MultivariateTest_Save = "MultivariateTest_Save";
         protected const string Proc_MultivariateTest_Delete = "MultivariateTest_Delete";
-        protected const string Proc_MultivariateTest_Get = "MultivariateTest_Get";
+        protected const string Proc_MultivariateTest_GetTest = "MultivariateTest_GetTest";
+        protected const string Proc_MultivariateTest_GetTestResults = "MultivariateTest_GetTestResults";
         protected const string Proc_MultivariateTest_GetByOriginalItemId = "MultivariateTest_GetByOriginalItemId";
+        protected const string Proc_MultivariateTest_IncrementViews = "MultivariateTest_IncrementViews";
+        protected const string Proc_MultivariateTest_IncrementConversions = "MultivariateTest_IncrementConversions";
+
 
         private string _connectionString;
         private IDataOperations _dataOperations;
@@ -93,11 +97,24 @@ namespace EPiServer.Marketing.Multivariate.Dal
         public MultivariateTestParameters Get(Guid objectId)
         {
             MultivariateTestParameters multiVarTestParam = null;
+
             SqlParameter[] sqlParams = { 
             new SqlParameter() { ParameterName = "Id", Value = objectId, DbType = DbType.Guid, Size = 36 },
             };
 
-            multiVarTestParam = MapReaderToParameters(_dataOperations.ExecuteReader(Proc_MultivariateTest_Get, CommandType.StoredProcedure, sqlParams));
+            _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTest, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
+            {
+                multiVarTestParam = MapReaderToTestParameters(reader);
+            });
+
+            if (multiVarTestParam != null)
+            {
+                _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
+                {
+                    multiVarTestParam.Results = MapReaderToTestResults(reader);
+                });
+            }
+
             return multiVarTestParam;
         }
 
@@ -108,16 +125,33 @@ namespace EPiServer.Marketing.Multivariate.Dal
             new SqlParameter() { ParameterName = "OriginalItemId", Value = itemId, DbType = DbType.Guid, Size = 36 },
             };
 
-            var reader = _dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams);
-            while (reader.Read())
-            {
-                multiVarTestParamList.Add(MapReaderToParameters(reader));
-            }
+            _dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
+              {
+                  while (reader.Read())
+                  {
+                      MultivariateTestParameters multiVarTestParam = new MultivariateTestParameters();
+                      multiVarTestParam = MapReaderToTestParameters(reader);
+                      if (multiVarTestParam != null)
+                      {
+                          SqlParameter[] sqlParamsForResults = { 
+                            new SqlParameter() { ParameterName = "Id", Value = multiVarTestParam.Id, DbType = DbType.Guid, Size = 36 },
+                            };
+
+                          _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParamsForResults, (IDataReader readerResults) =>
+                          {
+                              multiVarTestParam.Results = MapReaderToTestResults(readerResults);
+                          });
+
+                      }
+
+                      multiVarTestParamList.Add(multiVarTestParam);
+                  }
+              });
 
             return multiVarTestParamList.ToArray();
         }
 
-        private MultivariateTestParameters MapReaderToParameters(DbDataReader dataReader)
+        private MultivariateTestParameters MapReaderToTestParameters(IDataReader dataReader)
         {
             if (dataReader == null)
             {
@@ -125,9 +159,8 @@ namespace EPiServer.Marketing.Multivariate.Dal
             }
 
             MultivariateTestParameters multiVarTestParam = null;
-            bool hasValues = false;
-            hasValues = dataReader.Read();
-            if (hasValues)
+
+            while (dataReader.Read())
             {
                 multiVarTestParam = new MultivariateTestParameters()
                 {
@@ -146,6 +179,47 @@ namespace EPiServer.Marketing.Multivariate.Dal
             }
 
             return multiVarTestParam;
+        }
+
+        private List<Result> MapReaderToTestResults(IDataReader dataReader)
+        {
+            if (dataReader == null)
+            {
+                return null;
+            }
+
+            List<Result> results = new List<Result>();
+            while (dataReader.Read())
+            {
+                results.Add(new Result()
+                {
+                    ItemId = dataReader["ItemId"] != null ? (Guid)dataReader["ItemId"] : Guid.Empty,
+                    Views = dataReader["Views"] != null ? int.Parse(dataReader["Views"].ToString()) : 0,
+                    Conversions = dataReader["Conversions"] != null ? int.Parse(dataReader["Conversions"].ToString()) : 0
+                });
+            }
+
+            return results;
+        }
+
+        public void UpdateViews(Guid TestId, Guid ItemId)
+        {
+            SqlParameter[] sqlParams = { 
+            new SqlParameter() { ParameterName = "TestId", Value = TestId, DbType = DbType.Guid, Size = 36 },
+            new SqlParameter() { ParameterName = "ItemId", Value = ItemId, DbType = DbType.Guid, Size = 36 },
+            };
+
+            _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_IncrementViews, CommandType.StoredProcedure, sqlParams);
+        }
+
+        public void UpdateConversions(Guid TestId, Guid ItemId)
+        {
+            SqlParameter[] sqlParams = { 
+            new SqlParameter() { ParameterName = "TestId", Value = TestId, DbType = DbType.Guid, Size = 36 },
+            new SqlParameter() { ParameterName = "ItemId", Value = ItemId, DbType = DbType.Guid, Size = 36 },
+            };
+
+            _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_IncrementConversions, CommandType.StoredProcedure, sqlParams);
         }
     }
 }

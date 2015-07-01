@@ -92,6 +92,15 @@ namespace EPiServer.Marketing.Multivariate
             SetTestState(testObjectId, TestState.Archived);
         }
 
+        public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
+        {
+            if (resultType == CountType.View)
+                _dataAccess.UpdateViews(testId, testItemId);
+            else
+                _dataAccess.UpdateConversions(testId, testItemId);
+        }
+
+
         private void SetTestState(Guid theTestId, TestState theState)
         {
             var aTest = ConvertParametersToData(_dataAccess.Get(theTestId));
@@ -112,6 +121,19 @@ namespace EPiServer.Marketing.Multivariate
             aTest.ConversionItemId = parameters.ConversionItemId;
             aTest.StartDate = parameters.StartDate;
             aTest.EndDate = parameters.EndDate;
+
+            if (parameters.Results != null)
+            {
+                foreach (var result in parameters.Results)
+                {
+                    var aResult = new TestResult()
+                    {
+                        ItemId = result.ItemId,
+                        Views = result.Views,
+                        Conversions = result.Conversions
+                    };
+                }
+            }
 
             return aTest;
         }

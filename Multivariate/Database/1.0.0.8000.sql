@@ -153,24 +153,37 @@ GO
 
 
 ---Store Procedure Get tblMultivariateTests.
-IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_Get]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
-    DROP PROCEDURE [dbo].[MultivariateTest_Get]
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_GetTest]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+    DROP PROCEDURE [dbo].[MultivariateTest_GetTest]
 GO
 
-CREATE PROCEDURE [dbo].[MultivariateTest_Get]
+CREATE PROCEDURE [dbo].[MultivariateTest_GetTest]
 	 @Id	uniqueidentifier
 		
 AS
 SET NOCOUNT ON
 BEGIN
-	SELECT mt.[Id], mt.[Title], mt.[Owner], mt.[OriginalItemId], mt.[VariantItemId], mt.[ConversionItemId], mt.[State], mt.[StartDate], mt.[EndDate], mt.[LastModifiedDate], mt.[LastModifiedBy], mtr.[ItemId], mtr.[Views], mtr.[Conversions]
-	FROM dbo.tblMultivariateTests mt INNER JOIN dbo.tblMultivariateTestsResults mtr 
-	ON mt.[Id] = mtr.[TestId] 
-	WHERE mt.[Id] = @Id
+	SELECT * FROM dbo.tblMultivariateTests WHERE [Id] = @Id
 END 
 
 GO
 
+
+---Store Procedure GetTestResults from tblMultivariateTestsResults.
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_GetTestResults]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+    DROP PROCEDURE [dbo].[MultivariateTest_GetTestResults]
+GO
+
+CREATE PROCEDURE [dbo].[MultivariateTest_GetTestResults]
+	 @Id	uniqueidentifier
+		
+AS
+SET NOCOUNT ON
+BEGIN
+	SELECT * FROM  dbo.tblMultivariateTestsResults WHERE [TestId] = @Id
+END 
+
+GO
 
 
 ---Store Procedure GetByOriginalItemId tblMultivariateTests.
@@ -183,10 +196,7 @@ CREATE PROCEDURE [dbo].[MultivariateTest_GetByOriginalItemId]
 AS
 SET NOCOUNT ON
 BEGIN
-	SELECT mt.[Id], mt.[Title], mt.[Owner], mt.[OriginalItemId], mt.[VariantItemId], mt.[ConversionItemId], mt.[State], mt.[StartDate], mt.[EndDate], mt.[LastModifiedDate], mt.[LastModifiedBy], mtr.[ItemId], mtr.[Views], mtr.[Conversions]
-	FROM dbo.tblMultivariateTests mt INNER JOIN dbo.tblMultivariateTestsResults mtr 
-	ON mt.[Id] = mtr.[TestId] 
-	WHERE mt.[OriginalItemId] = @OriginalItemId
+	SELECT * FROM dbo.tblMultivariateTests WHERE [OriginalItemId] = @OriginalItemId
 END 
 
 GO

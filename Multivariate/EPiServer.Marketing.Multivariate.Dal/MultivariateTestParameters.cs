@@ -30,5 +30,14 @@ namespace EPiServer.Marketing.Multivariate.Dal
         public DateTime LastModifiedDate { get; set; }
         /// <summary> Optional </summary>
         public string LastModifiedBy { get; set; }
+        /// <summary> Optional </summary>
+        public List<Result> Results { get; set; }
+    }
+
+    public class Result
+    {
+        public Guid ItemId { get; set; }
+        public int Views { get; set; }
+        public int Conversions { get; set; }
     }
 }

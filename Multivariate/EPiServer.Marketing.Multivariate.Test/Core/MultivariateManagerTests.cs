@@ -154,5 +154,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             
             Assert.AreEqual(actualTest[0].OriginalItemId, itemGuid, "The test returned should have the same OriginalItemId as was requested");
         }
+
+        [TestMethod]
+        public void IncrementCount_Calls_Into_Dal_To_Update_The_Counts()
+        {
+            var testManager = GetUnitUnderTest();
+            var testGuid = Guid.NewGuid();
+            var itemGuid = Guid.NewGuid();
+
+            testManager.IncrementCount(testGuid, itemGuid, CountType.View);
+            testManager.IncrementCount(testGuid, itemGuid, CountType.Conversion);
+
+            dal.Verify(d => d.UpdateViews(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items views");
+            dal.Verify(d => d.UpdateConversions(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items conversions");
+        }
     }
 }
