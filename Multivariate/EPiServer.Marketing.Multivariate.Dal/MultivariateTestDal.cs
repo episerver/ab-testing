@@ -102,10 +102,17 @@ namespace EPiServer.Marketing.Multivariate.Dal
             new SqlParameter() { ParameterName = "Id", Value = objectId, DbType = DbType.Guid, Size = 36 },
             };
 
-            multiVarTestParam = MapReaderToTestParameters(_dataOperations.ExecuteReader(Proc_MultivariateTest_GetTest, CommandType.StoredProcedure, sqlParams));
+            _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTest, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
+            {
+                multiVarTestParam = MapReaderToTestParameters(reader);
+            });
+
             if (multiVarTestParam != null)
             {
-                multiVarTestParam.Results = MapReaderToTestResults(_dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParams));
+                _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
+                {
+                    multiVarTestParam.Results = MapReaderToTestResults(reader);
+                });
             }
 
             return multiVarTestParam;
@@ -118,27 +125,33 @@ namespace EPiServer.Marketing.Multivariate.Dal
             new SqlParameter() { ParameterName = "OriginalItemId", Value = itemId, DbType = DbType.Guid, Size = 36 },
             };
 
-            var reader = _dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams);
-            while (reader.Read())
-            {
-                MultivariateTestParameters multiVarTestParam = new MultivariateTestParameters();
-                multiVarTestParam = MapReaderToTestParameters(reader);
-                if (multiVarTestParam != null)
-                {
-                    SqlParameter[] sqlParamsForResults = { 
-                    new SqlParameter() { ParameterName = "Id", Value = multiVarTestParam.Id, DbType = DbType.Guid, Size = 36 },
-                    };
+            _dataOperations.ExecuteReader(Proc_MultivariateTest_GetByOriginalItemId, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
+              {
+                  while (reader.Read())
+                  {
+                      MultivariateTestParameters multiVarTestParam = new MultivariateTestParameters();
+                      multiVarTestParam = MapReaderToTestParameters(reader);
+                      if (multiVarTestParam != null)
+                      {
+                          SqlParameter[] sqlParamsForResults = { 
+                            new SqlParameter() { ParameterName = "Id", Value = multiVarTestParam.Id, DbType = DbType.Guid, Size = 36 },
+                            };
 
-                    multiVarTestParam.Results = MapReaderToTestResults(_dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParamsForResults));
-                }
+                          _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParamsForResults, (IDataReader readerResults) =>
+                          {
+                              multiVarTestParam.Results = MapReaderToTestResults(readerResults);
+                          });
 
-                multiVarTestParamList.Add(multiVarTestParam);
-            }
+                      }
+
+                      multiVarTestParamList.Add(multiVarTestParam);
+                  }
+              });
 
             return multiVarTestParamList.ToArray();
         }
 
-        private MultivariateTestParameters MapReaderToTestParameters(DbDataReader dataReader)
+        private MultivariateTestParameters MapReaderToTestParameters(IDataReader dataReader)
         {
             if (dataReader == null)
             {
@@ -168,7 +181,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
             return multiVarTestParam;
         }
 
-        private List<Result> MapReaderToTestResults(DbDataReader dataReader)
+        private List<Result> MapReaderToTestResults(IDataReader dataReader)
         {
             if (dataReader == null)
             {

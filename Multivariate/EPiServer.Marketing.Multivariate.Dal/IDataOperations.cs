@@ -12,6 +12,6 @@ namespace EPiServer.Marketing.Multivariate.Dal
     public interface IDataOperations
     {
         void ExecuteNonQuery(string commandText, CommandType commandType, SqlParameter[] parameters);
-        DbDataReader ExecuteReader(string commandText, CommandType commandType, SqlParameter[] parameters);
+        void ExecuteReader(string commandText, CommandType commandType, SqlParameter[] parameters, Action<IDataReader> callBack);
     }
 }
