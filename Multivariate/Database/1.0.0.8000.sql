@@ -1,12 +1,7 @@
 --beginvalidatingquery
 	if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[sp_DatabaseVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
     begin
-            if (EXISTS (SELECT * 
-                 FROM INFORMATION_SCHEMA.TABLES 
-                 WHERE TABLE_NAME = 'tblMultivariateTests'))
-				select 0, 'Multivariate tables already exist'
-            else 
-                 select 1, 'Upgrading database'
+		 select 1, 'Upgrading database'
     end
     else
             select -1, 'Not an EPiServer database'
