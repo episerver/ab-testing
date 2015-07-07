@@ -17,11 +17,13 @@ namespace EPiServer.Marketing.Multivariate
         internal IMultivariateTestDal _dataAccess;
         internal ICurrentUser _user;
         internal ICurrentSite _siteData;
-        
+
         private const string _active = "Active";
         private const string _inactive = "Inactive";
         private const string _archived = "Archived";
         private const string _done = "Done";
+
+        private static Random _r = new Random();
 
         public MultivariateTestManager()
         {
@@ -78,7 +80,7 @@ namespace EPiServer.Marketing.Multivariate
             {
                 throw new Exception("The test page already has an Active test");
             }
-            
+
             SetTestState(testObjectId, TestState.Active);
         }
 
@@ -100,6 +102,26 @@ namespace EPiServer.Marketing.Multivariate
                 _dataAccess.UpdateConversions(testId, testItemId);
         }
 
+        public Guid GetActivePage(Guid testId)
+        {
+            var currentTest = _dataAccess.Get(testId);
+            Guid activePage = Guid.Empty;
+            if (currentTest != null)
+            {
+                switch (GetRandomNumber())
+                {
+                    case 1:
+                    default:
+                        activePage = currentTest.OriginalItemId;
+                        break;
+                    case 2:
+                        activePage = currentTest.VariantItemId;
+                        break;
+                }
+            }
+
+            return activePage;
+        }
 
         private void SetTestState(Guid theTestId, TestState theState)
         {
@@ -124,15 +146,7 @@ namespace EPiServer.Marketing.Multivariate
 
             if (parameters.Results != null)
             {
-                foreach (var result in parameters.Results)
-                {
-                    var aResult = new TestResult()
-                    {
-                        ItemId = result.ItemId,
-                        Views = result.Views,
-                        Conversions = result.Conversions
-                    };
-                }
+                aTest.Results = parameters.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions });
             }
 
             return aTest;
@@ -142,21 +156,26 @@ namespace EPiServer.Marketing.Multivariate
         {
             var aRetTests = new List<IMultivariateTest>();
 
-            foreach(MultivariateTestParameters aParam in parameters)
+            foreach (MultivariateTestParameters aParam in parameters)
             {
-                aRetTests.Add(new MultivariateTest()
+                if (aParam != null)
                 {
-                    Id = aParam.Id,
-                    Title = aParam.Title,
-                    Owner = aParam.Owner,
-                    State = GetState(aParam.State),
-                    OriginalItemId = aParam.OriginalItemId,
-                    VariantItemId = aParam.VariantItemId,
-                    ConversionItemId = aParam.ConversionItemId,
-                    StartDate = aParam.StartDate,
-                    EndDate = aParam.EndDate
-                });
+                    aRetTests.Add(new MultivariateTest()
+                    {
+                        Id = aParam.Id,
+                        Title = aParam.Title,
+                        Owner = aParam.Owner,
+                        State = GetState(aParam.State),
+                        OriginalItemId = aParam.OriginalItemId,
+                        VariantItemId = aParam.VariantItemId,
+                        ConversionItemId = aParam.ConversionItemId,
+                        StartDate = aParam.StartDate,
+                        EndDate = aParam.EndDate,
+                        Results = aParam.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions })
+                    });
+                }
             }
+
             return aRetTests;
         }
 
@@ -180,7 +199,7 @@ namespace EPiServer.Marketing.Multivariate
         private string GetStateValue(TestState state)
         {
             var retState = string.Empty;
-            switch(state)
+            switch (state)
             {
                 case TestState.Active:
                     retState = _active;
@@ -200,7 +219,7 @@ namespace EPiServer.Marketing.Multivariate
 
         private TestState GetState(string state)
         {
-            switch(state)
+            switch (state)
             {
                 case _active:
                     return TestState.Active;
@@ -217,6 +236,13 @@ namespace EPiServer.Marketing.Multivariate
         {
             var allTests = _dataAccess.GetByOriginalItemId(originalItemId);
             return allTests.Any(t => t.State == _active);
+        }
+
+        // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
+        // to determine what page to display to the user.
+        private int GetRandomNumber()
+        {
+            return _r.Next(1, 3);
         }
     }
 }

@@ -104,7 +104,10 @@ namespace EPiServer.Marketing.Multivariate.Dal
 
             _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTest, CommandType.StoredProcedure, sqlParams, (IDataReader reader) =>
             {
-                multiVarTestParam = MapReaderToTestParameters(reader);
+                while (reader.Read())
+                {
+                    multiVarTestParam = MapReaderToTestParameters(reader);
+                }
             });
 
             if (multiVarTestParam != null)
