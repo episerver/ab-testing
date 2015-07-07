@@ -159,24 +159,20 @@ namespace EPiServer.Marketing.Multivariate.Dal
             }
 
             MultivariateTestParameters multiVarTestParam = null;
-
-            while (dataReader.Read())
+            multiVarTestParam = new MultivariateTestParameters()
             {
-                multiVarTestParam = new MultivariateTestParameters()
-                {
-                    Id = dataReader["Id"] != null ? (Guid)dataReader["Id"] : Guid.Empty,
-                    Title = dataReader["Title"] != null ? dataReader["Title"].ToString() : string.Empty,
-                    Owner = dataReader["Owner"] != null ? dataReader["Owner"].ToString() : string.Empty,
-                    LastModifiedBy = dataReader["LastModifiedBy"] != null ? dataReader["LastModifiedBy"].ToString() : string.Empty,
-                    OriginalItemId = dataReader["OriginalItemId"] != null ? (Guid)dataReader["OriginalItemId"] : Guid.Empty,
-                    VariantItemId = dataReader["VariantItemId"] != null ? (Guid)dataReader["VariantItemId"] : Guid.Empty,
-                    ConversionItemId = dataReader["ConversionItemId"] != null ? (Guid)dataReader["ConversionItemId"] : Guid.Empty,
-                    State = dataReader["State"] != null ? dataReader["State"].ToString() : string.Empty,
-                    StartDate = dataReader["StartDate"] != null ? Convert.ToDateTime(dataReader["StartDate"].ToString()) : default(DateTime),
-                    EndDate = dataReader["EndDate"] != null ? Convert.ToDateTime(dataReader["EndDate"].ToString()) : default(DateTime),
-                    LastModifiedDate = dataReader["LastModifiedDate"] != null ? Convert.ToDateTime(dataReader["LastModifiedDate"].ToString()) : default(DateTime)
-                };
-            }
+                Id = dataReader["Id"] != null ? (Guid)dataReader["Id"] : Guid.Empty,
+                Title = dataReader["Title"] != null ? dataReader["Title"].ToString() : string.Empty,
+                Owner = dataReader["Owner"] != null ? dataReader["Owner"].ToString() : string.Empty,
+                LastModifiedBy = dataReader["LastModifiedBy"] != null ? dataReader["LastModifiedBy"].ToString() : string.Empty,
+                OriginalItemId = dataReader["OriginalItemId"] != null ? (Guid)dataReader["OriginalItemId"] : Guid.Empty,
+                VariantItemId = dataReader["VariantItemId"] != null ? (Guid)dataReader["VariantItemId"] : Guid.Empty,
+                ConversionItemId = dataReader["ConversionItemId"] != null ? (Guid)dataReader["ConversionItemId"] : Guid.Empty,
+                State = dataReader["State"] != null ? dataReader["State"].ToString() : string.Empty,
+                StartDate = dataReader["StartDate"] != null ? Convert.ToDateTime(dataReader["StartDate"].ToString()) : default(DateTime),
+                EndDate = dataReader["EndDate"] != null ? Convert.ToDateTime(dataReader["EndDate"].ToString()) : default(DateTime),
+                LastModifiedDate = dataReader["LastModifiedDate"] != null ? Convert.ToDateTime(dataReader["LastModifiedDate"].ToString()) : default(DateTime)
+            };
 
             return multiVarTestParam;
         }
