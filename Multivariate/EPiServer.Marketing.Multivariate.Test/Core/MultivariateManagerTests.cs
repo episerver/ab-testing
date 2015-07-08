@@ -22,7 +22,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             user = new Mock<ICurrentUser>();
             siteData = new Mock<ICurrentSite>();
             testData = new Mock<IMultivariateTest>();
-            
+
             user.Setup(u => u.GetDisplayName()).Returns(testUsername);
             return new MultivariateTestManager(log.Object, dal.Object, user.Object, siteData.Object);
         }
@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             var testManager = GetUnitUnderTest();
             testData.SetupGet(td => td.Id).Returns(Guid.NewGuid());
-            
+
             dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
             var retId = testManager.Save(testData.Object);
 
@@ -70,7 +70,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var testGuid = Guid.NewGuid();
 
             dal.Setup(d => d.Delete(It.IsAny<Guid>()));
-            
+
             testManager.Delete(testGuid);
 
             dal.Verify(d => d.Delete(It.IsAny<Guid>()), Times.Once, "Delete should be called once");
@@ -142,7 +142,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             Assert.AreEqual(actualTest.Id, testGuid, "The Id returned should match the one supplied to the get method.");
         }
 
-        [TestMethod] 
+        [TestMethod]
         public void GetTestByItemId_Returns_The_Test_With_The_Given_Original_Id()
         {
             var testManager = GetUnitUnderTest();
@@ -151,7 +151,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters[1] { new MultivariateTestParameters() { OriginalItemId = itemGuid } });
 
             var actualTest = testManager.GetTestByItemId(itemGuid);
-            
+
             Assert.AreEqual(actualTest[0].OriginalItemId, itemGuid, "The test returned should have the same OriginalItemId as was requested");
         }
 
@@ -167,6 +167,24 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             dal.Verify(d => d.UpdateViews(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items views");
             dal.Verify(d => d.UpdateConversions(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items conversions");
+        }
+
+        [TestMethod]
+        public void ReturnLandingPage_Returns_OriginalOrVariantPage_BasedOnRandomNumberGenerator()
+        {
+            var testManager = GetUnitUnderTest();
+            Guid testGuid = Guid.NewGuid(), origItemId = Guid.NewGuid(), varItemId = Guid.NewGuid();
+            var mockTest = new MultivariateTestParameters()
+            {
+                Title = "Test 1",
+                OriginalItemId = origItemId,
+                VariantItemId = varItemId
+            };
+
+            dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(mockTest);
+
+            var actualItemId = testManager.ReturnLandingPage(testGuid);
+            Assert.IsTrue((actualItemId == mockTest.OriginalItemId || actualItemId == mockTest.VariantItemId), "The value returned was not equal to the expected Guid");
         }
     }
 }

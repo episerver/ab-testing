@@ -16,6 +16,6 @@ namespace EPiServer.Marketing.Multivariate
         void Stop(Guid testObjectId);
         void Archive(Guid testObjectId);
         void IncrementCount(Guid testId, Guid testItemId, CountType resultType);
-
+        Guid ReturnLandingPage(Guid testId);
     }
 }

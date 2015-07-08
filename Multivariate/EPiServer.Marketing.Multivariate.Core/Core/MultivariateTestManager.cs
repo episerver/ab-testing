@@ -102,7 +102,7 @@ namespace EPiServer.Marketing.Multivariate
                 _dataAccess.UpdateConversions(testId, testItemId);
         }
 
-        public Guid GetActivePage(Guid testId)
+        public Guid ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
             Guid activePage = Guid.Empty;
@@ -171,7 +171,7 @@ namespace EPiServer.Marketing.Multivariate
                         ConversionItemId = aParam.ConversionItemId,
                         StartDate = aParam.StartDate,
                         EndDate = aParam.EndDate,
-                        Results = aParam.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions })
+                        Results = aParam.Results != null ? aParam.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions }) : null
                     });
                 }
             }
