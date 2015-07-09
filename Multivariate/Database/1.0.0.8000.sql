@@ -4,7 +4,7 @@
 		 select 1, 'Upgrading database'
     end
     else
-            select -1, 'Not an EPiServer database'
+		select -1, 'Not an EPiServer database'
 --endvalidatingquery
 
 -- Create tblMultivariateTests Table to Store MultivariateTest Information.
@@ -208,7 +208,7 @@ AS
 SET NOCOUNT ON
 BEGIN
 
-	if(not exists(SELECT * FROM dbo.tblMultivariateTestsResults WHERE [TestId] = @TestId))
+	if(not exists(SELECT * FROM dbo.tblMultivariateTestsResults WHERE [TestId] = @TestId and [ItemId] = @ItemId))
 	BEGIN	
 		INSERT INTO dbo.tblMultivariateTestsResults(
 			 [Id]
