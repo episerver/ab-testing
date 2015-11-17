@@ -12,9 +12,9 @@
     <copyright>Copyright 2015</copyright>
     <tags>EPiServerModulePackage EPiServerAddon EPiServer Marketing Multivariate</tags>
     <dependencies>
-		  <dependency id="EPiServer.CMS.Core" version="[8.9,9)"  />
-      <dependency id="EPiServer.Framework" version="[8.9,9)"  />
-      <dependency id="EPiServer.Logging.Log4Net" version="1.0.0"  />
+      <dependency id="EPiServer.CMS.Core" version="[9.0.3,10)" />
+      <dependency id="EPiServer.CMS.UI" version="[9.2,10)" />
+      <dependency id="EPiServer.Logging.Log4Net" version="[2,3)" />
     </dependencies>
   </metadata>
 </package>
