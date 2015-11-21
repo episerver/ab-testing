@@ -148,12 +148,12 @@
     <Compile Include="Cms\CurrentUser.cs" />
     <Compile Include="Cms\ICurrentSite.cs" />
     <Compile Include="Cms\ICurrentUser.cs" />
-	<Compile Include="Core\CountType.cs" />
+    <Compile Include="Core\CountType.cs" />
     <Compile Include="Core\IMultivariateTest.cs" />
     <Compile Include="Core\IMultivariateTestManager.cs" />
     <Compile Include="Core\MultivariateTest.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
-	<Compile Include="Core\TestResult.cs" />
+    <Compile Include="Core\TestResult.cs" />
     <Compile Include="Core\TestState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -172,20 +172,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
-mkdir "$(SolutionDir)Deployment\lib"
-xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
-xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+    <PostBuildEvent>
 
-IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
-xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\tools\epiupdates\sql" ( del "$(SolutionDir)Deployment\tools\epiupdates\sql" /s /q )
-xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates\sql"  /I /F /R 
 
-cd "$(SolutionDir)Deployment\"
-"$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
-xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+
+</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

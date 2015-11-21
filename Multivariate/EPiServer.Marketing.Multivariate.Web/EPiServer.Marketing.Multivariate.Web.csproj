@@ -180,21 +180,41 @@
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj">
+      <Project>{cc88efff-8474-401b-87f8-ec4db6ba8633}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
+      <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Dal</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
+    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
+mkdir "$(SolutionDir)Deployment\lib"
+xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Core*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
+xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
 xcopy "$(ProjectDir)"MultivariateConfiguration.aspx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"  /I /F /R /Y
 xcopy "$(ProjectDir)"module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"  /I /F /R /Y
 
-xcopy "$(TargetDir)"EPiServer.Marketing.Multivariate.Web.dll "$(SolutionDir)Deployment\Lib"  /I /F /R /Y
-
-
+IF exist "$(SolutionDir)Deployment\tools\epiupdates\sql" ( del "$(SolutionDir)Deployment\tools\epiupdates\sql" /s /q )
+xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates\sql"  /I /F /R 
 
 cd "$(SolutionDir)Deployment\"
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
-xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y
+
+
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
