@@ -164,8 +164,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web\MultivariateConfiguration.aspx" />
-    <Compile Include="Web\MultivariateConfiguration.aspx.cs">
+    <Content Include="MultivariateConfiguration.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Compile Include="MultivariateConfiguration.aspx.cs">
       <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -173,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="module.config" />
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="packages.config" />
@@ -181,8 +184,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web"
-xcopy "$(ProjectDir)"\Web\MultivariateConfiguration.aspx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web"  /I /F /R /Y
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
+xcopy "$(ProjectDir)"MultivariateConfiguration.aspx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"  /I /F /R /Y
+xcopy "$(ProjectDir)"module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"  /I /F /R /Y
+
+xcopy "$(TargetDir)"EPiServer.Marketing.Multivariate.Web.dll "$(SolutionDir)Deployment\Lib"  /I /F /R /Y
+
+
 
 cd "$(SolutionDir)Deployment\"
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
