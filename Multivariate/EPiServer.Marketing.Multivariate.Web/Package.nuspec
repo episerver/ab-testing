@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EPiServer.Marketing.Multivariate</id>
+    <title>EPiServer Marketing Multivariate Testing</title>
+    <version>1.0.0.8000</version>
+    <authors>EPiServer</authors>
+    <owners>EPiServer</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Create Multivariate and A/B Tests for your EPiServer Site</description>
+    <releaseNotes>First release.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>EPiServerModulePackage EPiServerAddon EPiServer Marketing Multivariate</tags>
+    <dependencies>
+		  <dependency id="EPiServer.CMS.Core" version="[8.9,10)"  />
+      <dependency id="EPiServer.Framework" version="[8.9,10)"  />
+      <dependency id="EPiServer.Logging.Log4Net" version="1.0.0"  />
+    </dependencies>
+  </metadata>
+</package>
