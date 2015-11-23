@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using log4net;
 using Moq;
 using EPiServer.Marketing.Multivariate.Dal;
 
@@ -9,7 +8,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
     [TestClass]
     public class MultivariateManagerTests
     {
-        private Mock<ILog> log;
         private Mock<IMultivariateTestDal> dal;
         private Mock<ICurrentUser> user;
         private Mock<IMultivariateTest> testData;
@@ -17,14 +15,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         private string testUsername = "TestUser";
         private MultivariateTestManager GetUnitUnderTest()
         {
-            log = new Mock<ILog>();
             dal = new Mock<IMultivariateTestDal>();
             user = new Mock<ICurrentUser>();
             siteData = new Mock<ICurrentSite>();
             testData = new Mock<IMultivariateTest>();
 
             user.Setup(u => u.GetDisplayName()).Returns(testUsername);
-            return new MultivariateTestManager(log.Object, dal.Object, user.Object, siteData.Object);
+            return new MultivariateTestManager(dal.Object, user.Object, siteData.Object);
         }
 
         //[TestMethod]
