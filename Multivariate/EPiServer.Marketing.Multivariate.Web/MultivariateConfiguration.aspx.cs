@@ -1,6 +1,10 @@
 ﻿using System;
+using EPiServer.Core;
+using EPiServer.Logging;
 using EPiServer.PlugIn;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell.WebForms;
+
 
 
 namespace EPiServer.Marketing.Multivariate.Web
