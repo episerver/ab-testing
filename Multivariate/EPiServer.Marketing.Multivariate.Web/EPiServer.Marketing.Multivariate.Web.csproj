@@ -133,6 +133,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -164,9 +165,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
     <Content Include="MultivariateConfiguration.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
+    <Compile Include="Models\DataSource.cs" />
     <Compile Include="MultivariateConfiguration.aspx.cs">
       <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -193,7 +196,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
+    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment" /s /q )
 mkdir "$(SolutionDir)Deployment\lib"
 xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
@@ -209,6 +212,25 @@ xcopy "$(ProjectDir)"module.config "$(SolutionDir)Deployment\content\modules\_pr
 
 IF exist "$(SolutionDir)Deployment\tools\epiupdates\sql" ( del "$(SolutionDir)Deployment\tools\epiupdates\sql" /s /q )
 xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates\sql"  /I /F /R 
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles"
+xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Multivariate_EN.xml "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
+mkdir "$(SolutionDir)Deployment\temp"
+
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)\Scripts\buildzip.ps1" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate" "$(SolutionDir)Deployment\temp\EPiServer.Multivariate.zip"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" Unblock-File "$(SolutionDir)Deployment\temp\EPiServer.Multivariate.zip"
+
+for /d %25%25i in ("$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\*") do rd /s /q "%25%25i"
+del /q "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\*.*"
+
+xcopy "$(SolutionDir)Deployment\temp\*.zip" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\"  /I /F /R /Y
+rmdir "$(SolutionDir)Deployment\temp" /s /q
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\module.config" ( del "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\module.config" /s /q )
+xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\"  /I /F /R /Y
 
 cd "$(SolutionDir)Deployment\"
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec

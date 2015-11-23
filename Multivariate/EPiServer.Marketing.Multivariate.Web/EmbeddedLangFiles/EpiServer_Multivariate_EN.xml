@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<languages>
+  <language name="English" id="en">
+    <sharepoint>
+      <admin>
+        <multivariate>
+          
+        </multivariate>
+      </admin>
+    </sharepoint>
+  </language>
+</languages>
