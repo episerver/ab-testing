@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="false" CodeBehind="MultivariateConfiguration.aspx.cs"
-    Inherits="EPiServer.Marketing.Multivariate.Web.MultivariateConfiguration" %>
+    Inherits="EPiServer.Marketing.Multivariate.Web.MultivariateConfiguration, EPiServer.Marketing.Multivariate.Web" %>
 
 <%@ Import Namespace="EPiServer" %>
 <%@ Register Assembly="EPiServer.UI" Namespace="EPiServer.UI.WebControls" TagPrefix="EPiServerUI" %>
@@ -9,6 +9,34 @@
 </asp:content>
 
 <asp:content contentplaceholderid="FullRegion" runat="server">
+    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        // jquery ui dialog
+        $(document).ready(function () {
+            var dlg = $("#treedialog").dialog({
+                autoOpen: false,
+                modal: true
+            });
+
+            $("#btnOriginPagePickerPH").click(function () {
+                dlg.dialog("open");
+                $(".ui-dialog-titlebar").hide();
+
+            });
+        });
+
+        // called when user clicks Ok in select folder dlg
+        function onOkClick() {
+            $("#treedialog").dialog("close");
+        }
+
+        // called when user clicks Cancel in select folder dlg
+        function onCloseClick() {
+            $("#treedialog").dialog("close");
+        }
+    </script>
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
@@ -37,8 +65,15 @@
                 <div class="epi-size15">
                     <asp:label AssociateControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
                     <asp:TextBox ID="OriginPage" MaxLength="255" runat="server"/>
-                    <asp:Button ID="btnOriginPagePickerPH" Text="PagePicker PH" runat="server"/>
+                    <input type="button" ID="btnOriginPagePickerPH" Value="PagePicker PH" />
+                    <div id="treedialog" class="ui-helper-hidden" >
+                        <div align="right">
+                            <asp:Button runat="server" Text="OK" OnClientClick="return onOkClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
+                            <asp:Button runat="server" Text="Cancel" OnClientClick="onCloseClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
+                        </div>
+                    </div>
                 </div>
+               
                 
                 <div class="epi-size15">
                     <asp:label AssociateControlID="VariantPage" runat="server"><%= Translate("/multivariate/settings/variantpage") %></asp:label>
