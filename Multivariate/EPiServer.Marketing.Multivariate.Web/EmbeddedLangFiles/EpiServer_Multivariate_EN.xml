@@ -1,12 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <languages>
   <language name="English" id="en">
-    <sharepoint>
-      <admin>
-        <multivariate>
-          
-        </multivariate>
-      </admin>
-    </sharepoint>
+   <multivariate>
+     <settings>
+       <displayname>Multivariate Test Settings</displayname>
+       <description>New Test Details</description>
+       <testtitle>Test Title</testtitle>
+       <teststart>Test Start</teststart>
+       <testend>Test End</testend>
+       <originpage>Original Page</originpage>
+       <variantpage>Variant Page</variantpage>
+       <conversionpage>Conversion Page</conversionpage>
+     </settings>
+   </multivariate>
   </language>
 </languages>
