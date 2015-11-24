@@ -180,6 +180,9 @@
       <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+	<Compile Include="MultivariateConfiguration.aspx.designer.cs">
+      <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
