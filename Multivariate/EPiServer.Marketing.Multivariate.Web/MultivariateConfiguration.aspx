@@ -64,7 +64,7 @@
             
                 <div class="epi-size15">
                     <asp:label AssociateControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
-                    <asp:TextBox ID="OriginPage" MaxLength="255" runat="server"/>
+                    <asp:TextBox ID="OriginPage" MaxLength="255" runat="server" Text="1"/>
                     <input type="button" ID="btnOriginPagePickerPH" Value="PagePicker PH" />
                     <div id="treedialog" class="ui-helper-hidden" >
                         <div align="right">
@@ -77,13 +77,13 @@
                 
                 <div class="epi-size15">
                     <asp:label AssociateControlID="VariantPage" runat="server"><%= Translate("/multivariate/settings/variantpage") %></asp:label>
-                    <asp:TextBox ID="VariantPage" MaxLength="255" runat="server"/>
+                    <asp:TextBox ID="VariantPage" MaxLength="255" runat="server" Text="2"/>
                     <asp:Button ID="btnVariantPagePickerPH" Text="PagePicker PH" runat="server"/>
                 </div>
             
                  <div class="epi-size15">
                     <asp:label AssociateControlID="ConversionPage" runat="server"><%= Translate("/multivariate/settings/conversionpage") %></asp:label>
-                    <asp:TextBox ID="ConversionPage"  MaxLength="255" runat="server"></asp:TextBox>
+                    <asp:TextBox ID="ConversionPage"  MaxLength="255" runat="server" Text="3"></asp:TextBox>
                     <asp:Button ID="btnConversionPagePickerPH" Text="PagePicker PH" runat="server"/>
                 </div>
 

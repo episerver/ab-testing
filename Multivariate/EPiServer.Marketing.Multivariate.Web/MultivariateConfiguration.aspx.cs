@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Multivariate.Web
         protected void Create_Test(object sender, EventArgs e)
         {
             multivariateTestRepository = new Repositories.MultivariateTestRepository();
-            multivariateTestRepository.CreateTest("", DateTime.Now, DateTime.Now);
+            multivariateTestRepository.CreateTest(TestTitle.Text, DateTime.Now, DateTime.Now,int.Parse(OriginPage.Text),int.Parse(VariantPage.Text),int.Parse(ConversionPage.Text));
 
         }
 
