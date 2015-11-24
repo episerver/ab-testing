@@ -14,7 +14,7 @@
     <dependencies>
 		  <dependency id="EPiServer.CMS.Core" version="[8.9,10)"  />
       <dependency id="EPiServer.Framework" version="[8.9,10)"  />
-      <dependency id="EPiServer.Logging.Log4Net" version="1.0.0"  />
+      <!--<dependency id="EPiServer.Logging.Log4Net" version="1.0.0"  />-->
     </dependencies>
   </metadata>
 </package>
