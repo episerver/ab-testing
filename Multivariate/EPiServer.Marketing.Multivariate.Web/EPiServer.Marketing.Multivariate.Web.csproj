@@ -110,6 +110,10 @@
       <HintPath>..\packages\EPiServer.CMS.Core.9.3.2\lib\net45\EPiServer.XForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -165,7 +169,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
+    <Compile Include="Repositories\IMultivariateTestRepository.cs" />
+    <Compile Include="Repositories\MultivariateTestRepository.cs" />
+    <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
     <Content Include="MultivariateConfiguration.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -174,13 +180,12 @@
       <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-	<Compile Include="MultivariateConfiguration.aspx.designer.cs">
-      <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="module.config" />
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
