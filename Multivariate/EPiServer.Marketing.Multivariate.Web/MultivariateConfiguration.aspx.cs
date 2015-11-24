@@ -28,5 +28,11 @@ namespace EPiServer.Marketing.Multivariate.Web
             multivariateTestRepository.CreateTest("", DateTime.Now, DateTime.Now);
 
         }
+
+        protected void Cancel_Create(object sender, EventArgs e)
+        {
+  
+
+        }
     }
 }

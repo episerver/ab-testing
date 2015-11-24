@@ -55,7 +55,16 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label OriginPage;
+        protected global::System.Web.UI.WebControls.TextBox OriginPage;
+        
+        /// <summary>
+        /// btnOriginPagePickerPH control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnOriginPagePickerPH;
         
         /// <summary>
         /// VariantPage control.
@@ -64,7 +73,16 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label VariantPage;
+        protected global::System.Web.UI.WebControls.TextBox VariantPage;
+        
+        /// <summary>
+        /// btnVariantPagePickerPH control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnVariantPagePickerPH;
         
         /// <summary>
         /// ConversionPage control.
@@ -73,16 +91,34 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ConversionPage;
+        protected global::System.Web.UI.WebControls.TextBox ConversionPage;
         
         /// <summary>
-        /// CreateTest control.
+        /// btnConversionPagePickerPH control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button CreateTest;
+        protected global::System.Web.UI.WebControls.Button btnConversionPagePickerPH;
+        
+        /// <summary>
+        /// btnCreate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCreate;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCancel;
         
         /// <summary>
         /// TestReport control.
