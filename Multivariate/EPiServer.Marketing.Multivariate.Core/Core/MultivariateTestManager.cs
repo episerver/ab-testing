@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using System.Web;
 
 using EPiServer.Marketing.Multivariate.Dal;
-using log4net;
 
 
 namespace EPiServer.Marketing.Multivariate
 {
     public class MultivariateTestManager : IMultivariateTestManager
     {
-        internal ILog _log;
         internal IMultivariateTestDal _dataAccess;
         internal ICurrentUser _user;
         internal ICurrentSite _siteData;
@@ -28,14 +26,12 @@ namespace EPiServer.Marketing.Multivariate
         public MultivariateTestManager()
         {
             _siteData = new CurrentSite();
-            _log = LogManager.GetLogger(typeof(MultivariateTestManager));
             _dataAccess = new MultivariateTestDal(_siteData.GetSiteDataBaseConnectionString());
             _user = new CurrentUser();
         }
 
-        internal MultivariateTestManager(ILog log, IMultivariateTestDal dal, ICurrentUser user, ICurrentSite siteData)
+        internal MultivariateTestManager(IMultivariateTestDal dal, ICurrentUser user, ICurrentSite siteData)
         {
-            _log = log;
             _dataAccess = dal;
             _user = user;
             _siteData = siteData;
