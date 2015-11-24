@@ -8,6 +8,6 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
     interface IMultivariateTestRepository
     {
-        void CreateTest(string title, DateTime testStart, DateTime testStop);
+        void CreateTest(string title, DateTime testStart, DateTime testStop, int originalPageLink, int variantPageLink, int conversionPageLink);
     }
 }

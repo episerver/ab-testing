@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         private readonly IMultivariateTestManager _multivariateTestManager = new MultivariateTestManager();
         private IMultivariateTest _multivariateTest = new MultivariateTest();
 
-        public void CreateTest(string title, DateTime testStart, DateTime testStop)
+        public void CreateTest(string title, DateTime testStart, DateTime testStop, int originalPageLink, int variantPageLink, int conversionPageLink)
         {
             //temp fake forced create for getting a functioning create test working until asp tag woes
             //are fixed.
@@ -15,17 +15,25 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
 
             _multivariateTest = new MultivariateTest
             {
-                Title = $"Title{DateTime.Now.DayOfWeek}{DateTime.Now.Second}",
+                Title = title,
                 Id = Guid.NewGuid(),
-                OriginalItemId = Guid.NewGuid(),
-                VariantItemId = Guid.NewGuid(),
-                ConversionItemId = Guid.NewGuid(),
+                OriginalItemId = getPageId(originalPageLink),
+                VariantItemId = getPageId(variantPageLink),
+                ConversionItemId = getPageId(conversionPageLink),
                 Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                StartDate = DateTime.Now.AddDays(1),
-                EndDate = DateTime.Now.AddDays(5)
+                StartDate = testStart,
+                EndDate = testStop
             };
 
             _multivariateTestManager.Save(_multivariateTest);
+        }
+
+        private Guid getPageId(int pageLink)
+        {
+            //I am assuming the picker will return the page link of the page in question. 
+            //This method is just to find the page id (guid) of the chosen page.
+
+            return Guid.NewGuid();
         }
     }
 }
