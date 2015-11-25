@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            var testTitle = FindControl("TestTitle");
+            
         }
 
         protected void Create_Test(object sender, EventArgs e)

@@ -13,15 +13,6 @@ namespace EPiServer.Marketing.Multivariate.Web {
     public partial class MultivariateConfiguration {
         
         /// <summary>
-        /// TestSettingsForm control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl TestSettingsForm;
-        
-        /// <summary>
         /// TestTitle control.
         /// </summary>
         /// <remarks>

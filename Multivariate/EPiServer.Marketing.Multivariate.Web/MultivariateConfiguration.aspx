@@ -37,6 +37,8 @@
             $("#treedialog").dialog("close");
         }
     </script>
+    
+
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
@@ -45,25 +47,25 @@
         </div>
     
 
-        <div id="TestSettingsForm" runat="server" class="epi-formArea">
+
+        <asp:Panel class="epi-formArea" runat="server">
             <fieldset>
                 <legend> <%= Translate("/multivariate/settings/description") %></legend>
 
                 <div class="epi-size15">
-                    <asp:label AssociateControlID="TestTitle" runat="server"><%= Translate("/multivariate/settings/testtitle") %></asp:label>
+                    <asp:label AssociatedControlID="TestTitle" runat="server"><%= Translate("/multivariate/settings/testtitle") %></asp:label>
                     <asp:TextBox ID="TestTitle" MaxLength="255" runat="server"/>
                 </div>
                 <div class="epi-size15">
-                    <asp:label AssociateControlID="TestStart" runat="server"><%= Translate("/multivariate/settings/teststart") %></asp:label>
+                    <asp:label AssociatedControlID="TestStart" runat="server"><%= Translate("/multivariate/settings/teststart") %></asp:label>
                     <asp:label ID="TestStart" MaxLength="255" runat="server">[DatePicker PH]</asp:label>
                 </div>
                 <div class="epi-size15">
-                    <asp:label AssociateControlID="TestStop" runat="server"><%= Translate("/multivariate/settings/testend") %></asp:label>
+                    <asp:label AssociatedControlID="TestStop" runat="server"><%= Translate("/multivariate/settings/testend") %></asp:label>
                     <asp:label ID="TestStop" MaxLength="255" runat="server" >[DatePicker PH]</asp:label>
                 </div>
-            
                 <div class="epi-size15">
-                    <asp:label AssociateControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
+                    <asp:label AssociatedControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
                     <asp:TextBox ID="OriginPage" MaxLength="255" runat="server" Text="1"/>
                     <input type="button" ID="btnOriginPagePickerPH" Value="PagePicker PH" />
                     <div id="treedialog" class="ui-helper-hidden" >
@@ -73,27 +75,23 @@
                         </div>
                     </div>
                 </div>
-               
-                
                 <div class="epi-size15">
-                    <asp:label AssociateControlID="VariantPage" runat="server"><%= Translate("/multivariate/settings/variantpage") %></asp:label>
+                    <asp:label AssociatedControlID="VariantPage" runat="server"><%= Translate("/multivariate/settings/variantpage") %></asp:label>
                     <asp:TextBox ID="VariantPage" MaxLength="255" runat="server" Text="2"/>
                     <asp:Button ID="btnVariantPagePickerPH" Text="PagePicker PH" runat="server"/>
                 </div>
-            
-                 <div class="epi-size15">
-                    <asp:label AssociateControlID="ConversionPage" runat="server"><%= Translate("/multivariate/settings/conversionpage") %></asp:label>
+                <div class="epi-size15">
+                    <asp:label AssociatedControlID="ConversionPage" runat="server"><%= Translate("/multivariate/settings/conversionpage") %></asp:label>
                     <asp:TextBox ID="ConversionPage"  MaxLength="255" runat="server" Text="3"></asp:TextBox>
                     <asp:Button ID="btnConversionPagePickerPH" Text="PagePicker PH" runat="server"/>
                 </div>
-
                 <div>
                     <asp:button ID="btnCreate" text="Submit" OnClick="Create_Test" runat="server"/>
                     <asp:Button ID="btnCancel" Text="Cancel" OnClick="Cancel_Create" runat="server"/>
                 </div>
 
             </fieldset>
-        </div>
+        </asp:panel>
 
         <div id="TestListReport" class="epi-contentContainer epi-padding">
             <div class="epi-contentArea">
@@ -104,7 +102,4 @@
             </div>
         </div>
     </div>
-
-
-    
-</asp:content>
+ </asp:content>
