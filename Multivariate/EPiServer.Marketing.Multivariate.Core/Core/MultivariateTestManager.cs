@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-
 using EPiServer.Marketing.Multivariate.Dal;
 
 
@@ -37,6 +33,12 @@ namespace EPiServer.Marketing.Multivariate
             _siteData = siteData;
         }
 
+        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        {
+
+            return ConvertParametersToData(_dataAccess.GetFilteredTestList(criteria));
+        } 
+
         public IMultivariateTest Get(Guid testObjectId)
         {
             return ConvertParametersToData(_dataAccess.Get(testObjectId));
@@ -46,6 +48,8 @@ namespace EPiServer.Marketing.Multivariate
         {
             return ConvertParametersToData(_dataAccess.GetByOriginalItemId(originalItemId));
         }
+
+
 
         public Guid Save(IMultivariateTest testObject)
         {
