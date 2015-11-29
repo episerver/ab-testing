@@ -49,6 +49,15 @@ namespace EPiServer.Marketing.Multivariate.Web {
         protected global::System.Web.UI.WebControls.TextBox OriginPage;
         
         /// <summary>
+        /// btnOriginPagePickerPH control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::EPiServer.UI.WebControls.ToolButton btnOriginPagePickerPH;
+        
+        /// <summary>
         /// VariantPage control.
         /// </summary>
         /// <remarks>
@@ -64,7 +73,7 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVariantPagePickerPH;
+        protected global::EPiServer.UI.WebControls.ToolButton btnVariantPagePickerPH;
         
         /// <summary>
         /// ConversionPage control.
@@ -82,7 +91,7 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnConversionPagePickerPH;
+        protected global::EPiServer.UI.WebControls.ToolButton btnConversionPagePickerPH;
         
         /// <summary>
         /// btnCreate control.
@@ -91,7 +100,7 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCreate;
+        protected global::EPiServer.UI.WebControls.ToolButton btnCreate;
         
         /// <summary>
         /// btnCancel control.
@@ -100,15 +109,15 @@ namespace EPiServer.Marketing.Multivariate.Web {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCancel;
+        protected global::EPiServer.UI.WebControls.ToolButton btnCancel;
         
         /// <summary>
-        /// TestReport control.
+        /// Grid control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView TestReport;
+        protected global::System.Web.UI.WebControls.GridView Grid;
     }
 }

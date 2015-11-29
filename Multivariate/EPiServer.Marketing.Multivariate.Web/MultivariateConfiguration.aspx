@@ -67,39 +67,43 @@
                 <div class="epi-size15">
                     <asp:label AssociatedControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
                     <asp:TextBox ID="OriginPage" MaxLength="255" runat="server" Text="1"/>
-                    <input type="button" ID="btnOriginPagePickerPH" Value="PagePicker PH" />
+                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" OnClick="Create_Test" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                     <div id="treedialog" class="ui-helper-hidden" >
                         <div align="right">
-                            <asp:Button runat="server" Text="OK" OnClientClick="return onOkClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
-                            <asp:Button runat="server" Text="Cancel" OnClientClick="onCloseClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
+                            <EPiServerUI:ToolButton runat="server" Text="OK" OnClientClick="return onOkClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
+                            <EPiServerUI:ToolButton runat="server" Text="Cancel" OnClientClick="onCloseClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                         </div>
                     </div>
                 </div>
                 <div class="epi-size15">
                     <asp:label AssociatedControlID="VariantPage" runat="server"><%= Translate("/multivariate/settings/variantpage") %></asp:label>
                     <asp:TextBox ID="VariantPage" MaxLength="255" runat="server" Text="2"/>
-                    <asp:Button ID="btnVariantPagePickerPH" Text="PagePicker PH" runat="server"/>
+                    <EPiServerUI:ToolButton ID="btnVariantPagePickerPH" Text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                 </div>
                 <div class="epi-size15">
                     <asp:label AssociatedControlID="ConversionPage" runat="server"><%= Translate("/multivariate/settings/conversionpage") %></asp:label>
                     <asp:TextBox ID="ConversionPage"  MaxLength="255" runat="server" Text="3"></asp:TextBox>
-                    <asp:Button ID="btnConversionPagePickerPH" Text="PagePicker PH" runat="server"/>
+                    <EPiServerUI:ToolButton ID="btnConversionPagePickerPH" Text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                 </div>
                 <div>
-                    <asp:button ID="btnCreate" text="Submit" OnClick="Create_Test" runat="server"/>
-                    <asp:Button ID="btnCancel" Text="Cancel" OnClick="Cancel_Create" runat="server"/>
+                    <EPiServerUI:ToolButton ID="btnCreate" text="Ok" OnClick="Create_Test" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
+                    <EPiServerUI:ToolButton Tasks ID="btnCancel" Text="Cancel" OnClick="Cancel_Create" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                 </div>
-
+                 
             </fieldset>
         </asp:panel>
-
-        <div id="TestListReport" class="epi-contentContainer epi-padding">
-            <div class="epi-contentArea">
-                <asp:GridView ID="TestReport" runat="server" BackColor="LightGoldenrodYellow" BorderColor="Tan"
-                    Caption="Current Multivariate Test Reports" AllowPaging="true" AllowSorting="False"
-                    BorderWidth="1px" CellPadding="2" ForeColor="Black" GridLines="None">
-                </asp:GridView> 
-            </div>
+        
+        <div class="epi-contentContainer epi-padding">
+        <div class="epi-contentArea">
+        <div>
+            <asp:GridView runat="server" ID="Grid" cssClass="epi-padding">
+                
+            </asp:GridView>
         </div>
+            </div>
+            </div>
+        
+                
+            
     </div>
  </asp:content>
