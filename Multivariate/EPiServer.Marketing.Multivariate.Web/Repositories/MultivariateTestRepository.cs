@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using EPiServer.Marketing.Multivariate.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
-    class MultivariateTestRepository : IMultivariateTestRepository
+    public class MultivariateTestRepository : IMultivariateTestRepository
     {
         private readonly IMultivariateTestManager _multivariateTestManager = new MultivariateTestManager();
         private IMultivariateTest _multivariateTest = new MultivariateTest();
@@ -26,6 +28,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             };
 
             _multivariateTestManager.Save(_multivariateTest);
+        }
+
+        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        {
+            return _multivariateTestManager.GetTestList(criteria);
         }
 
         private Guid getPageId(int pageLink)
