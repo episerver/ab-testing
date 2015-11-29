@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EPiServer.Marketing.Multivariate.Dal;
 
 namespace EPiServer.Marketing.Multivariate
 {
@@ -10,6 +11,7 @@ namespace EPiServer.Marketing.Multivariate
     {
         IMultivariateTest Get(Guid testObjectId);
         List<IMultivariateTest> GetTestByItemId(Guid originalItemId);
+        List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria);
         Guid Save(IMultivariateTest testObject);
         void Delete(Guid testObjectId);
         void Start(Guid testObjectId);
