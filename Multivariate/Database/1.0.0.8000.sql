@@ -196,6 +196,21 @@ END
 
 GO
 
+---Store Procedure GetFilteredTestResults tblMultivariateTests.
+IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_GetFilteredTestResults]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
+    DROP PROCEDURE [dbo].[MultivariateTest_GetFilteredTestResults]
+GO
+
+CREATE PROCEDURE [dbo].[MultivariateTest_GetFilteredTestResults]
+AS	
+SET NOCOUNT ON	
+BEGIN
+	SELECT * FROM dbo.tblMultivariateTests
+END 
+
+GO
+
+
 ---Stored Procedure Increment Views.
 IF EXISTS (select * FROM SYS.OBJECTS WHERE object_id = object_id(N'[dbo].[MultivariateTest_IncrementViews]') and OBJECTPROPERTY(object_id, N'IsProcedure') = 1)
     DROP PROCEDURE [dbo].[MultivariateTest_IncrementViews]
