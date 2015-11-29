@@ -46,6 +46,7 @@
     <Compile Include="DataOperations.cs" />
     <Compile Include="IDataOperations.cs" />
     <Compile Include="IMultivariateTestDal.cs" />
+    <Compile Include="MultivariateTestCriteria.cs" />
     <Compile Include="MultivariateTestDal.cs" />
     <Compile Include="MultivariateTestParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -20,6 +20,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
         protected const string Proc_MultivariateTest_GetByOriginalItemId = "MultivariateTest_GetByOriginalItemId";
         protected const string Proc_MultivariateTest_IncrementViews = "MultivariateTest_IncrementViews";
         protected const string Proc_MultivariateTest_IncrementConversions = "MultivariateTest_IncrementConversions";
+        protected const string Proc_MultivariateTest_GetFilteredTestResults = "MultivariateTest_GetFilteredTestResults";
 
 
         private string _connectionString;
@@ -218,6 +219,36 @@ namespace EPiServer.Marketing.Multivariate.Dal
             };
 
             _dataOperations.ExecuteNonQuery(Proc_MultivariateTest_IncrementConversions, CommandType.StoredProcedure, sqlParams);
+        }
+
+        public MultivariateTestParameters[] GetFilteredTestList(MultivariateTestCriteria criteria)
+        {
+            List<MultivariateTestParameters> multiVarTestParamList = new List<MultivariateTestParameters>();
+            
+
+            _dataOperations.ExecuteReader(Proc_MultivariateTest_GetFilteredTestResults, CommandType.StoredProcedure, null, (IDataReader reader) =>
+            {
+                while (reader.Read())
+                {
+                    MultivariateTestParameters multiVarTestParam = new MultivariateTestParameters();
+                    multiVarTestParam = MapReaderToTestParameters(reader);
+                    if (multiVarTestParam != null)
+                    {
+                        SqlParameter[] sqlParamsForResults = {
+                            new SqlParameter() { ParameterName = "Id", Value = multiVarTestParam.Id, DbType = DbType.Guid, Size = 36 },
+                            };
+                        _dataOperations.ExecuteReader(Proc_MultivariateTest_GetTestResults, CommandType.StoredProcedure, sqlParamsForResults, (IDataReader readerResults) =>
+                        {
+                            multiVarTestParam.Results = MapReaderToTestResults(readerResults);
+                        });
+
+                    }
+
+                    multiVarTestParamList.Add(multiVarTestParam);
+                }
+            });
+
+            return multiVarTestParamList.ToArray();
         }
     }
 }

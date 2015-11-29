@@ -13,5 +13,6 @@ namespace EPiServer.Marketing.Multivariate.Dal
         void Delete(Guid Id);
         void UpdateViews(Guid TestId, Guid ItemId);
         void UpdateConversions(Guid TestId, Guid ItemId);
+        MultivariateTestParameters[] GetFilteredTestList(MultivariateTestCriteria criteria);
     }
 }
