@@ -1,0 +1,97 @@
+﻿@model EPiServer.Marketing.Multivariate.MultivariateTest
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TestDetails</title>
+</head>
+<body>
+    <fieldset>
+        <legend>MultivariateTest</legend>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.Title)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Title)
+        </div>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.Owner)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Owner)
+        </div>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.StartDate)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.StartDate)
+        </div>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.EndDate)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.EndDate)
+        </div>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.OriginalItemId)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.OriginalItemId)
+        </div>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.VariantItemId)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.VariantItemId)
+        </div>
+    
+        <div class="display-label">
+             @Html.DisplayNameFor(model => model.ConversionItemId)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.ConversionItemId)
+        </div>
+        <hr/>
+        @if (Model.Results != null)
+        {
+            foreach (var result in Model.Results)
+             {
+                 <div class="display-label">
+                     @Html.DisplayNameFor(resultItem => result.Views)
+                 </div>
+                 <div class="display-field">
+                     @Html.DisplayFor(resultItem => result.Views)
+                 </div>
+                 <div class="display-label">
+                     @Html.DisplayNameFor(resultItem => result.ItemId)
+                 </div>
+                 <div class="display-field">
+                     @Html.DisplayFor(resultItem => result.ItemId)
+                 </div>
+                 <div class="display-label">
+                     @Html.DisplayNameFor(resultItem => result.Conversions)
+                 </div>
+                 <div class="display-field">
+                     @Html.DisplayFor(resultItem => result.Conversions)
+                 </div>
+             }
+        }
+    </fieldset>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>
