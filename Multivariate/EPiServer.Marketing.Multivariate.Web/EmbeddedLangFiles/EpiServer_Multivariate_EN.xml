@@ -12,6 +12,16 @@
        <variantpage>Variant Page</variantpage>
        <conversionpage>Conversion Page</conversionpage>
      </settings>
+     <gadget>
+       <name>Name</name>
+       <start>Start</start>
+       <finish>Finish</finish>
+       <state>State</state>
+       <original>Original</original>
+       <winner>Winning Variation</winner>
+       <conversions>Conversion Rate</conversions>
+       <actions>Actions</actions>
+     </gadget>
    </multivariate>
   </language>
 </languages>

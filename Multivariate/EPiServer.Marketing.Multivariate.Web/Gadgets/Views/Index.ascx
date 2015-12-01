@@ -1,20 +1,22 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
+<%@ Import Namespace="EPiServer.Core" %>
 
 <asp:Content>
 <p>&nbsp;&nbsp;<%= Html.ViewLinkButton("Refresh", "Refresh", "Index/?id=1&",  "", "", null)%></p>
 	<table class="epi-default">
 	<tr>
-		<th class="episize300">Name</th>
-		<th class="episize300">Start</th>
-		<th class="episize300">Finish</th>
-		<th class="episize300">State</th>
-		<th class="episize300">Original</th>
-		<th class="episize300">Winning Variation</th>
-		<th class="episize300">Conversion</th>
-		<th class="episize300">Actions</th>
-	</tr>
+	<tr>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/name")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/start")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/finish")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/state")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/original")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/winner")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/conversions")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/actions")%></th>
+	</tr>	</tr>
 	
 	<% foreach (var item in Model) { %>
 	<tr>
