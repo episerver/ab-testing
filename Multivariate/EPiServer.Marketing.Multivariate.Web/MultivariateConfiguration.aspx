@@ -20,8 +20,14 @@
     <script>
         $(document).ready(function () {
             // displays date time picker for creating new tests
-            $('#datetimepickerstart').datetimepicker();
-            $('#datetimepickerstop').datetimepicker();
+            $('#datetimepickerstart').datetimepicker({
+                format: 'Y-m-d H:i',
+                step:30
+            });
+            $('#datetimepickerstop').datetimepicker({
+                format: 'Y-m-d H:i',
+                step: 30
+            });
         });
     </script>
 
