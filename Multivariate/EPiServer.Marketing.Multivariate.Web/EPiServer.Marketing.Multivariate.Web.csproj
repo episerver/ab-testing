@@ -165,9 +165,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gadgets\Controller\MultivariateGadgetController.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
+    <Content Include="Gadgets\Views\Details.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+    <Content Include="Gadgets\Views\Index.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="MultivariateConfiguration.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -201,6 +208,7 @@
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment" /s /q )
@@ -211,6 +219,11 @@ xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Core*dll "$(SolutionDir)De
 
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\content\Views" ( rmdir "$(SolutionDir)Deployment\content\Views" /s /q )
+mkdir "$(SolutionDir)Deployment\content\Views"
+mkdir "$(SolutionDir)Deployment\content\Views\MultivariateGadget"
+xcopy "$(ProjectDir)"\Gadgets\Views\*.ascx "$(SolutionDir)Deployment\content\Views\MultivariateGadget\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
