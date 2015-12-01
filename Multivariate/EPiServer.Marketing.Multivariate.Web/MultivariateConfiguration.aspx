@@ -44,7 +44,7 @@
                 </div>
                 <div class="epi-size15">
                     <label for="datetimepickerstart" runat="server"><%= Translate("/multivariate/settings/teststart") %></label>
-                    <input id="datetimepickerstart" type="text" style="width:175px" value="<%= Translate("/multivariate/settings/startdate") %>"/>
+                    <input id="datetimepickerstart" type="text" style="width:175px" value="<%= Translate("/multivariate/settings/startdate") %>" />
                 </div>
                 <div class="epi-size15">
                     <label for="datetimepickerstop" runat="server"><%= Translate("/multivariate/settings/testend") %></label>
