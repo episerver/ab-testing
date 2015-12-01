@@ -15,7 +15,7 @@
     
     <link rel="stylesheet" type="text/css" href="Scripts/datetimepicker/jquery.datetimepicker.css"/>
     <script src="Scripts/datetimepicker/jquery.js"></script>
-    <script src="Scripts/datetimepicker/build/jquery.datetimepicker.full.js"></script>
+    <script src="Scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
     
     <script>
         $(document).ready(function () {
