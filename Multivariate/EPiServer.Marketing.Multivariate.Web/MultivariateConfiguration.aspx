@@ -12,32 +12,24 @@
     <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-    <script type="text/javascript">
-        // jquery ui dialog
+    
+    <link rel="stylesheet" type="text/css" href="Scripts/datetimepicker/jquery.datetimepicker.css"/>
+    <script src="Scripts/datetimepicker/jquery.js"></script>
+    <script src="Scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
+    
+    <script>
         $(document).ready(function () {
-            var dlg = $("#treedialog").dialog({
-                autoOpen: false,
-                modal: true
+            // displays date time picker for creating new tests
+            $('#datetimepickerstart').datetimepicker({
+                format: 'Y-m-d H:i',
+                step:30
             });
-
-            $("#btnOriginPagePickerPH").click(function () {
-                dlg.dialog("open");
-                $(".ui-dialog-titlebar").hide();
-
+            $('#datetimepickerstop').datetimepicker({
+                format: 'Y-m-d H:i',
+                step: 30
             });
         });
-
-        // called when user clicks Ok in select folder dlg
-        function onOkClick() {
-            $("#treedialog").dialog("close");
-        }
-
-        // called when user clicks Cancel in select folder dlg
-        function onCloseClick() {
-            $("#treedialog").dialog("close");
-        }
     </script>
-    
 
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
@@ -57,17 +49,17 @@
                     <asp:TextBox ID="TestTitle" MaxLength="255" runat="server"/>
                 </div>
                 <div class="epi-size15">
-                    <asp:label AssociatedControlID="TestStart" runat="server"><%= Translate("/multivariate/settings/teststart") %></asp:label>
-                    <asp:label ID="TestStart" MaxLength="255" runat="server">[DatePicker PH]</asp:label>
+                    <label for="datetimepickerstart" runat="server"><%= Translate("/multivariate/settings/teststart") %></label>
+                    <input id="datetimepickerstart" name="datetimestart" type="text" style="width:175px" value="<%= Translate("/multivariate/settings/startdate") %>" />
                 </div>
                 <div class="epi-size15">
-                    <asp:label AssociatedControlID="TestStop" runat="server"><%= Translate("/multivariate/settings/testend") %></asp:label>
-                    <asp:label ID="TestStop" MaxLength="255" runat="server" >[DatePicker PH]</asp:label>
+                    <label for="datetimepickerstop" runat="server"><%= Translate("/multivariate/settings/testend") %></label>
+                    <input id="datetimepickerstop" name="datetimeend" type="text" style="width:175px" value="<%= Translate("/multivariate/settings/enddate") %>"/>
                 </div>
                 <div class="epi-size15">
                     <asp:label AssociatedControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
                     <asp:TextBox ID="OriginPage" MaxLength="255" runat="server" Text="1"/>
-                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" OnClick="Create_Test" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
+                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                     <div id="treedialog" class="ui-helper-hidden" >
                         <div align="right">
                             <EPiServerUI:ToolButton runat="server" Text="OK" OnClientClick="return onOkClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools" />

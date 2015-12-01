@@ -11,6 +11,8 @@
        <originpage>Original Page</originpage>
        <variantpage>Variant Page</variantpage>
        <conversionpage>Conversion Page</conversionpage>
+       <startdate>Click to choose start date...</startdate>
+       <enddate>Click to choose end date...</enddate>
      </settings>
      <gadget>
        <name>Name</name>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.Marketing.Multivariate.Dal;
@@ -35,8 +36,12 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         protected void Create_Test(object sender, EventArgs e)
         {
+            var startTime = Convert.ToDateTime(Request.Form["datetimestart"], CultureInfo.InvariantCulture);
+            var endTime = Convert.ToDateTime(Request.Form["datetimeend"], CultureInfo.InvariantCulture);
+
             _multivariateTestRepository = new Repositories.MultivariateTestRepository();
-            _multivariateTestRepository.CreateTest(TestTitle.Text, DateTime.Now, DateTime.Now,int.Parse(OriginPage.Text),int.Parse(VariantPage.Text),int.Parse(ConversionPage.Text));
+            _multivariateTestRepository.CreateTest(TestTitle.Text, startTime, endTime, int.Parse(OriginPage.Text), 
+                int.Parse(VariantPage.Text), int.Parse(ConversionPage.Text));
 
         }
 

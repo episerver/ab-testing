@@ -168,6 +168,13 @@
     <Compile Include="Gadgets\Controller\MultivariateGadgetController.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
+    <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.css" />
+    <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.full.js" />
+    <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.full.min.js" />
+    <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.js" />
+    <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.min.js" />
+    <Content Include="Scripts\DateTimePicker\jquery.js" />
+    <Content Include="Scripts\DateTimePicker\MIT-LICENSE.txt" />
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
     <Content Include="Gadgets\Views\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
@@ -197,6 +204,8 @@
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="Package.nuspec" />
     <None Include="packages.config" />
+    <None Include="Scripts\DateTimePicker\datetimepicker.jquery.json" />
+    <None Include="Scripts\DateTimePicker\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj">
@@ -236,6 +245,10 @@ xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles"
 xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Multivariate_EN.xml "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"
+xcopy "$(ProjectDir)"\Scripts "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"  /I /F /R /Y /S
 
 IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
 mkdir "$(SolutionDir)Deployment\temp"
