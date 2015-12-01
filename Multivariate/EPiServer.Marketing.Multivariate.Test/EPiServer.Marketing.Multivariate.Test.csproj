@@ -165,7 +165,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -173,10 +175,9 @@
     <Compile Include="Core\MultivariateManagerTests.cs" />
     <Compile Include="Dal\MultivariateDalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\UIHelperTests.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Web\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">
@@ -191,6 +192,10 @@
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Web\EPiServer.Marketing.Multivariate.Web.csproj">
+      <Project>{cb8500e5-9999-4e35-97d6-142e87857e6a}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

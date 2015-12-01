@@ -166,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gadgets\Controller\MultivariateGadgetController.cs" />
+    <Compile Include="Helpers\IUIHelper.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.css" />
