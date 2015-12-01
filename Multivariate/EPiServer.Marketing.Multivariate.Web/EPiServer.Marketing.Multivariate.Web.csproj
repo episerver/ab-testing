@@ -167,9 +167,9 @@
   <ItemGroup>
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
-    <Content Include="Scripts\DateTimePicker\build\jquery.datetimepicker.full.js" />
-    <Content Include="Scripts\DateTimePicker\build\jquery.datetimepicker.full.min.js" />
-    <Content Include="Scripts\DateTimePicker\build\jquery.datetimepicker.min.js" />
+    <Content Include="Scripts\DateTimePicker\Build\jquery.datetimepicker.full.js" />
+    <Content Include="Scripts\DateTimePicker\Build\jquery.datetimepicker.full.min.js" />
+    <Content Include="Scripts\DateTimePicker\Build\jquery.datetimepicker.min.js" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.css" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.js" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.min.js" />
