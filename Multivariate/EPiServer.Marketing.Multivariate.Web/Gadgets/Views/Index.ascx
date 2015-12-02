@@ -5,7 +5,7 @@
 <%@ Import Namespace="EPiServer.Core" %>
 
 <asp:Content>
-<p>&nbsp;&nbsp;<%= Html.ViewLinkButton("Refresh", "Refresh", "Index/?id=1&",  "", "", null)%></p>
+<p>&nbsp;&nbsp;<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), "Index/?id=1&",  "", "", null)%></p>
 	<table class="epi-default">
 	<tr>
 	<tr>
@@ -31,14 +31,14 @@
         <td>58%</td>
 	<td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
-		title="Details">
-                <img border="0" alt="Details" src="document_selected.gif">
+		title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" src="document_selected.gif">
 		</a>
-            <a href="" title="Edit">
-                <img border="0" alt="Edit" src="table_selected.gif">
+            <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>" src="table_selected.gif">
             </a>
-            <a href="" title="Promote">
-                <img border="0" alt="Promote" src="maximize_over.gif">
+            <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>" src="maximize_over.gif">
             </a>
 	</td>                    
 	</tr>

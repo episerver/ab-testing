@@ -15,6 +15,11 @@
        <enddate>Click to choose end date...</enddate>
      </settings>
      <gadget>
+       <refresh>Refresh</refresh>
+       <back>Back</back>
+       <details>Details</details>
+       <edit>Edit</edit>
+       <promote>Promote</promote>
        <name>Name</name>
        <start>Start</start>
        <finish>Finish</finish>
