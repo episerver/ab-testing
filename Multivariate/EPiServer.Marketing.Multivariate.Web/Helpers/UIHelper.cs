@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Helpers
         /// Given the specified Guid, get the content data from cms
         /// </summary>
         /// <param name="guid"></param>
-        /// <returns></returns>
+        /// <returns>The icontent object if found</returns>
         public IContent getContent(Guid guid)
         {
             IContentRepository repo = _serviceLocator.GetInstance<IContentRepository>();
