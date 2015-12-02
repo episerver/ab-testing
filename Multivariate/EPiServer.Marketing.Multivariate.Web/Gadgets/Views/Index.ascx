@@ -1,40 +1,44 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
+<%@ Import Namespace="EPiServer.Core" %>
 
 <asp:Content>
-<p>&nbsp;&nbsp;<%= Html.ViewLinkButton("Refresh", "Refresh", "Index/?id=1&",  "", "", null)%></p>
+<p>&nbsp;&nbsp;<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), "Index/?id=1&",  "", "", null)%></p>
 	<table class="epi-default">
 	<tr>
-		<th class="episize300">Name</th>
-		<th class="episize300">Start</th>
-		<th class="episize300">Finish</th>
-		<th class="episize300">State</th>
-		<th class="episize300">Original</th>
-		<th class="episize300">Winning Variation</th>
-		<th class="episize300">Conversion</th>
-		<th class="episize300">Actions</th>
-	</tr>
+	<tr>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/name")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/start")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/finish")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/state")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/original")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/winner")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/conversions")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/actions")%></th>
+	</tr>	</tr>
 	
-	<% foreach (var item in Model) { %>
+	<%  UIHelper helper = new UIHelper();
+        foreach (var item in Model) { %>
 	<tr>
         <td><%= item.Title%></td>
         <td><%= item.StartDate%></td>
         <td><%= item.EndDate%></td>
         <td><%= item.State%></td>
-        <td><%= item.OriginalItemId%></td>
-        <td><%= item.ConversionItemId%></td>
+        <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
+        <td><%= helper.getContent( item.ConversionItemId).Name %></td>
         <td>58%</td>
 	<td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
-		title="Details">
-                <img border="0" alt="Details" src="document_selected.gif">
+		title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" src="document_selected.gif">
 		</a>
-            <a href="" title="Edit">
-                <img border="0" alt="Edit" src="table_selected.gif">
+            <a href="<%= helper.getConfigurationURL()"%> title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>" src="table_selected.gif">
             </a>
-            <a href="" title="Promote">
-                <img border="0" alt="Promote" src="maximize_over.gif">
+            <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>" src="maximize_over.gif">
             </a>
 	</td>                    
 	</tr>
