@@ -33,11 +33,17 @@ namespace EPiServer.Marketing.Multivariate.Web.Helpers
         /// Given the specified Guid, get the content data from cms
         /// </summary>
         /// <param name="guid"></param>
-        /// <returns>The icontent object if found</returns>
+        /// <returns>The icontent object if found, if not found returns a BasicContent instance with name set to ContentNotFound</returns>
         public IContent getContent(Guid guid)
         {
             IContentRepository repo = _serviceLocator.GetInstance<IContentRepository>();
-            return repo.Get<IContent>(guid);
+            try
+            {
+                return repo.Get<IContent>(guid);
+            } catch
+            {
+                return new BasicContent() { Name = "ContentNotFound" };
+            }
         }
     }
 }
