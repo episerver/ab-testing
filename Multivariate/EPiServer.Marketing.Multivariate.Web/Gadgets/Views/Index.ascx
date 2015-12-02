@@ -34,7 +34,7 @@
 		title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" src="document_selected.gif">
 		</a>
-            <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
+            <a href="<%= helper.getConfigurationURL()"%> title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>" src="table_selected.gif">
             </a>
             <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>">
