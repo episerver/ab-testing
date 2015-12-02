@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
+    [ServiceConfiguration(ServiceType = typeof(IMultivariateTestRepository))]
     public class MultivariateTestRepository : IMultivariateTestRepository
     {
         private readonly IMultivariateTestManager _multivariateTestManager = new MultivariateTestManager();
