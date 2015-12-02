@@ -165,6 +165,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\MultivariateAdministration.cs" />
     <Compile Include="Gadgets\Controller\MultivariateGadgetController.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
@@ -178,6 +179,8 @@
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.min.js" />
     <Content Include="Scripts\DateTimePicker\jquery.js" />
     <Content Include="Scripts\DateTimePicker\MIT-LICENSE.txt" />
+    <Content Include="Views\MultivariateAdministration\Create.ascx" />
+    <Content Include="Views\MultivariateAdministration\index.ascx" />
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
     <Content Include="Gadgets\Views\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
@@ -236,6 +239,10 @@ IF exist "$(SolutionDir)Deployment\content\Views" ( rmdir "$(SolutionDir)Deploym
 mkdir "$(SolutionDir)Deployment\content\Views"
 mkdir "$(SolutionDir)Deployment\content\Views\MultivariateGadget"
 xcopy "$(ProjectDir)"\Gadgets\Views\*.ascx "$(SolutionDir)Deployment\content\Views\MultivariateGadget\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration"
+xcopy "$(ProjectDir)"\Views\MultivariateAdministration\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
