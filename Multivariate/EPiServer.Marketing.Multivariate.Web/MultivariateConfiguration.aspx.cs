@@ -36,8 +36,24 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         protected void Create_Test(object sender, EventArgs e)
         {
-            var startTime = Convert.ToDateTime(Request.Form["datetimestart"], CultureInfo.InvariantCulture);
-            var endTime = Convert.ToDateTime(Request.Form["datetimeend"], CultureInfo.InvariantCulture);
+            var startDate = Request.Form["datetimestart"];
+            var endDate = Request.Form["datetimeend"];
+
+            if (string.IsNullOrEmpty(startDate) || startDate == Translate("/multivariate/settings/startdate"))
+            {
+                // TODO: display message saying start date is not set
+                
+                return;
+            }
+            else if (string.IsNullOrEmpty(endDate) || endDate == Translate("/multivariate/settings/endDate"))
+            {
+                // TODO: display message saying end date is not set
+
+                return;
+            }
+
+            var startTime = Convert.ToDateTime(startDate, CultureInfo.InvariantCulture);
+            var endTime = Convert.ToDateTime(endDate, CultureInfo.InvariantCulture);
 
             _multivariateTestRepository = new Repositories.MultivariateTestRepository();
             _multivariateTestRepository.CreateTest(TestTitle.Text, startTime, endTime, int.Parse(OriginPage.Text), 
@@ -51,7 +67,24 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         }
 
-       
+
+        /// <summary>
+        /// Check for Edit Access before displaying this page or generating Registration Script
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnInit(EventArgs e)
+        {
+            // Security validation: user should have Edit access to view this page
+            if (!EPiServer.Security.PrincipalInfo.HasAdminAccess)
+            {
+                throw new AccessDeniedException();
+            }
+
+            DataBind();
+            base.OnInit(e);
+        }
+
+
     }
 
     

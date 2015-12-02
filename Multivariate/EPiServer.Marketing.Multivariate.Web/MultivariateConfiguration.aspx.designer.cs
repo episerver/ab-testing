@@ -31,13 +31,22 @@ namespace EPiServer.Marketing.Multivariate.Web {
         protected global::System.Web.UI.WebControls.TextBox OriginPage;
         
         /// <summary>
-        /// btnOriginPagePickerPH control.
+        /// contentDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::EPiServer.UI.WebControls.ToolButton btnOriginPagePickerPH;
+        protected global::EPiServer.Marketing.Multivariate.Web.Models.PageDataSource contentDataSource;
+
+        /// <summary>
+        /// pageTreeView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::EPiServer.UI.WebControls.PageTreeView pageTreeView;
         
         /// <summary>
         /// VariantPage control.
