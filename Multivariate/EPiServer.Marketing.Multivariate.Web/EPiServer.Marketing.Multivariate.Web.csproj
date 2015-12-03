@@ -209,7 +209,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="module.config" />
+    <None Include="module.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="modules\_protected\CMS\CMS.zip" />
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="Package.nuspec" />
@@ -239,10 +241,9 @@ xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Core*dll "$(SolutionDir)De
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\Views" ( rmdir "$(SolutionDir)Deployment\content\Views" /s /q )
-mkdir "$(SolutionDir)Deployment\content\Views"
-mkdir "$(SolutionDir)Deployment\content\Views\MultivariateGadget"
-xcopy "$(ProjectDir)"\Gadgets\Views\*.ascx "$(SolutionDir)Deployment\content\Views\MultivariateGadget\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget"
+xcopy "$(ProjectDir)"\Gadgets\Views\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration"
