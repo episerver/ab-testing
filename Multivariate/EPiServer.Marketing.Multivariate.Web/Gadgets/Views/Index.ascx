@@ -31,10 +31,10 @@
         <td>58%</td>
 	<td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
-		title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
+		        title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" src="document_selected.gif">
-		</a>
-            <a href="<%= helper.getConfigurationURL()"%> title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
+		    </a>
+            <a href="<%= helper.getConfigurationURL()%>" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>" src="table_selected.gif">
             </a>
             <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>">
