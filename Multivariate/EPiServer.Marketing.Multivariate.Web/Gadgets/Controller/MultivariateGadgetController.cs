@@ -53,8 +53,25 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Details()
         {
+            var testId = Guid.Parse(Request["id"]);
 
-            return PartialView();
+            // will we ever show details of a list of tests, maybe I guess.
+            List<IMultivariateTest> list = new List<IMultivariateTest>();
+
+            list.Add(new MultivariateTest()
+            {
+                Id = testId,
+                ConversionItemId = Guid.NewGuid(),
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Now,
+                OriginalItemId = Guid.NewGuid(),
+                Title = "Call to Action 4", Results = new List<TestResult>() {
+                    new TestResult() {  ItemId = Guid.NewGuid(), Views=5, Conversions=5 },
+                    new TestResult() {  ItemId = Guid.NewGuid(), Views=2, Conversions=1 },
+                    new TestResult() {  ItemId = Guid.NewGuid(), Views=10, Conversions=3 }
+                }
+            });
+            return PartialView(list);
         }
     }
 }
