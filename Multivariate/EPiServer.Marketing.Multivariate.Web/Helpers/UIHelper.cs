@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Helpers
             var baseUrl = EPiServer.UriSupport.ResolveUrlFromUIBySettings("Admin/");
 
             // out: /{PROTECTED_PATH}/{MODULE_NAME}/Views/Admin/Settings.aspx
-            var targetResourcePath = Paths.ToResource(typeof(UIHelper), "MultivariateConfiguration.aspx");
+            var targetResourcePath = Paths.ToResource(typeof(UIHelper), "MultivariateAdministration");
 
             // out: http://{DOMAIN}/{PROTECTED_PATH}/CMS/Admin/?customdefaultpage=/{PROTECTED_PATH}/{MODULE_NAME}/Views/Admin/Settings.aspx
             return EPiServer.UriSupport.AddQueryString(baseUrl, "customdefaultpage", targetResourcePath);
