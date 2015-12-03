@@ -6,9 +6,11 @@
        <displayname>Multivariate Test Settings</displayname>
        <description>New Test Details</description>
        <testtitle>Test Title</testtitle>
+       <owner>Owner</owner>
+       <state>State</state>
        <teststart>Test Start</teststart>
        <testend>Test End</testend>
-       <originpage>Original Page</originpage>
+       <originpage>Origin Page</originpage>
        <variantpage>Variant Page</variantpage>
        <conversionpage>Conversion Page</conversionpage>
        <startdate>Click to choose start date...</startdate>
