@@ -4,21 +4,32 @@
 <%@ Import Namespace="EPiServer" %>
 <%@ Register Assembly="EPiServer.UI" Namespace="EPiServer.UI.WebControls" TagPrefix="EPiServerUI" %>
 <%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
+<%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.Edit" Assembly="EPiServer.UI, Version=9.3.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7" %>
 
 <asp:content contentplaceholderid="HeaderContentRegion" runat="server">
 </asp:content>
 
 <asp:content contentplaceholderid="FullRegion" runat="server">
-    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+    <script src="Scripts/datetimepicker/jquery.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-    
-    <link rel="stylesheet" type="text/css" href="Scripts/datetimepicker/jquery.datetimepicker.css"/>
-    <script src="Scripts/datetimepicker/jquery.js"></script>
     <script src="Scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
-    
-    <script>
+    <link rel="stylesheet" type="text/css" href="Scripts/datetimepicker/jquery.datetimepicker.css"/>
+    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
+
+    <script type="text/javascript">
         $(document).ready(function () {
+            var dlg = $("#treedialog").dialog({
+                autoOpen: false,
+                modal: true
+            });
+
+            $("#btnOriginPagePickerPH").click(function () {
+                dlg.dialog("open");
+                $(".ui-dialog-titlebar").hide();
+
+            });
+
             // displays date time picker for creating new tests
             $('#datetimepickerstart').datetimepicker({
                 format: 'Y-m-d H:i',
@@ -29,8 +40,19 @@
                 step: 30
             });
         });
-    </script>
 
+        // called when user clicks Ok in select folder dlg
+        function onOkClick() {
+            $("#treedialog").dialog("close");
+        }
+
+        // called when user clicks Cancel in select folder dlg
+        function onCloseClick() {
+            $("#treedialog").dialog("close");
+        }
+
+    </script>
+    
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
@@ -59,8 +81,30 @@
                 <div class="epi-size15">
                     <asp:label AssociatedControlID="OriginPage" runat="server"><%= Translate("/multivariate/settings/originpage") %></asp:label>
                     <asp:TextBox ID="OriginPage" MaxLength="255" runat="server" Text="1"/>
-                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
+                    <span class="epi-cmsButton"><input id="btnOriginPagePickerPH" type="button" value="..."/></span>
                     <div id="treedialog" class="ui-helper-hidden" >
+                        <EPiServerUIDataSource:PageDataSource ID="contentDataSource" 
+                            AccessLevel="NoAccess" 
+                            runat="server" 
+                            IncludeRootItem="false" 
+                            ContentLink="<%# EPiServer.Web.SiteDefinition.Current.RootPage %>" />
+                       <div class="episcroll episerver-pagetree-selfcontained" style="max-height:250px;">
+                           <EPiServerUI:PageTreeView ID="pageTreeView" 
+                               DataSourceID="contentDataSource" 
+                               CssClass="episerver-pagetreeview" 
+                               runat="server" 
+                               ExpandDepth="1"
+                               DataTextField="Name" 
+                               ExpandOnSelect="false"
+                               DataNavigateUrlField="ContentLink" EnableViewState="false">
+                                <TreeNodeTemplate>
+                                    <a style="outline:none !important" href="#" title="<%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>" onclick="return setval(<%# ((EPiServer.Core.IContent)((PageTreeNode)Container.DataItem).DataItem).ContentLink.ID %>)" >
+                                        <%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>
+                                    </a>
+                                </TreeNodeTemplate>
+                            </EPiServerUI:PageTreeView>
+                        </div> 
+                        
                         <div align="right">
                             <EPiServerUI:ToolButton runat="server" Text="OK" OnClientClick="return onOkClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
                             <EPiServerUI:ToolButton runat="server" Text="Cancel" OnClientClick="onCloseClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>

@@ -6,7 +6,7 @@
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
-
+<%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
 
 <!DOCTYPE html>
 
@@ -28,12 +28,11 @@
         <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/system.aspx")) %>
 
         <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-
         <link rel="stylesheet" type="text/css" href="../Scripts/datetimepicker/jquery.datetimepicker.css" />
         <script src="../Scripts/datetimepicker/jquery.js"></script>
         <script src="../Scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+
         <script>
             $(document).ready(function () {
                 // displays date time picker for creating new tests
@@ -45,11 +44,31 @@
                     format: 'Y-m-d H:i',
                     step: 30
                 });
+
+                var dlg = $("#treedialog").dialog({
+                    autoOpen: false,
+                    modal: true
+                });
+
+                $("#btnOriginPagePickerPH").click(function () {
+                    dlg.dialog("open");
+                    $(".ui-dialog-titlebar").hide();
+
+                });
+
+                $("#btnDlgCancel").click(function () {
+                    dlg.dialog("close");
+                });
+
+                $("#btnDlgOk").click(function () {
+                    dlg.dialog("close");
+                });
             });
 
             $('#btnCancel').click(function () {
                 window.location.href = '@Url.Action("Index")';
             });
+
         </script>
 
 
@@ -95,17 +114,38 @@
             <div class="epi-size15">
                 <label for="OriginPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
                 <%= Html.TextBoxFor(model => model.OriginalItemId) %>
-                <button type="button" class="epi-cmsButton-text epi-cmsButton-tools">PagePicker PH</button>
+                <span class="epi-cmsButton"><input id="btnOriginPagePickerPH" type="button" value="..."/></span>
                 <span style="color: red">*</span>
                 <%--                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>--%>
 
-                <div id="treedialog" class="ui-helper-hidden">
-                    <div align="right">
-                        <%--                            <button type="button" Text="PagePicker PH" Onclick="return onOkClick" class="epi-cmsButton-text epi-cmsButton-tools" ></button>--%>
-                        <%--<EPiServerUI:ToolButton runat="server" Text="OK" OnClientClick="return onOkClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
-                            <EPiServerUI:ToolButton runat="server" Text="Cancel" OnClientClick="onCloseClick()" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>--%>
+                <div id="treedialog" class="ui-helper-hidden" >
+                        <EPiServerUIDataSource:PageDataSource ID="contentDataSource" 
+                            AccessLevel="NoAccess" 
+                            runat="server" 
+                            IncludeRootItem="false" 
+                            ContentLink="<%# EPiServer.Web.SiteDefinition.Current.RootPage %>" />
+                       <div class="episcroll episerver-pagetree-selfcontained" style="max-height:250px;">
+                           <EPiServerUI:PageTreeView ID="pageTreeView" 
+                               DataSourceID="contentDataSource" 
+                               CssClass="episerver-pagetreeview" 
+                               runat="server" 
+                               ExpandDepth="1"
+                               DataTextField="Name" 
+                               ExpandOnSelect="false"
+                               DataNavigateUrlField="ContentLink" EnableViewState="false">
+                                <TreeNodeTemplate>
+                                    <a style="outline:none !important" href="#" title="<%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>" onclick="return setval(<%# ((EPiServer.Core.IContent)((PageTreeNode)Container.DataItem).DataItem).ContentLink.ID %>)" >
+                                        <%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>
+                                    </a>
+                                </TreeNodeTemplate>
+                            </EPiServerUI:PageTreeView>
+                        </div> 
+                        
+                        <div align="right">
+                            <span class="epi-cmsButton"><input id="btnDlgOk" type="button" value="OK" /></span>
+                            <span class="epi-cmsButton"><input id="btnDlgCancel" type="button" value="Cancel" /></span>
+                        </div>
                     </div>
-                </div>
             </div>
             <div class="epi-size15">
                 <label for="VariantPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>

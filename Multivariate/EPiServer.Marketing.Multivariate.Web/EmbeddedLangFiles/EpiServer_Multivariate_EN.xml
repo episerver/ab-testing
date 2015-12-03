@@ -22,6 +22,10 @@
        <details>Details</details>
        <edit>Edit</edit>
        <promote>Promote</promote>
+       <results>Results</results>
+       <views>Total Views</views>
+       <totalconversion>Total Conversions</totalconversion>
+       <resultconversions>Conversions</resultconversions>
        <name>Name</name>
        <start>Start</start>
        <finish>Finish</finish>

@@ -144,7 +144,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
                 //    return DataSourceHelper.ConvertToBool(SelectValues["IncludeRootItem"]);
                 //}
                 //return this.ViewState["IncludeRootItem"] != null ? (bool)this.ViewState["IncludeRootItem"] : true;
-                return true;
+                return false;
             }
             set
             {
@@ -284,10 +284,10 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         /// Default constructor
         /// </summary>
         /// 
-        //public SharepointContentDataSource()
-        //{
-        //    //SelectParameters.ParametersChanged += delegate { OnDataSourceChanged(EventArgs.Empty); };
-        //}
+        public PageDataSource()
+        {
+            //SelectParameters.ParametersChanged += delegate { OnDataSourceChanged(EventArgs.Empty); };
+        }
 
         /// <summary>
         /// Raises the <see cref="E:System.Web.UI.Control.Load"></see> event and invalidates the SessionId in the cache.
@@ -373,7 +373,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
                 children = new List<IContentData>();
                 foreach (int pageId in range)
                 {
-                    IContentData page = this.DataFactory.Get<ContentFolder>(new ContentReference(pageId), LanguageSelector.AutoDetect(UseFallbackLanguage));
+                    IContentData page = this.DataFactory.Get<PageData>(new ContentReference(pageId), LanguageSelector.AutoDetect(UseFallbackLanguage));
                     if (page != null)
                     {
                         children.Add(page);
@@ -396,7 +396,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         /// <returns></returns>
         private List<int> GetChildrenCallback(int startIndex, int maxRows)
         {
-            var pdc = DataFactory.GetChildren<ContentFolder>(this.GetContentLink(),
+            var pdc = DataFactory.GetChildren<PageData>(this.GetContentLink(),
                                                                           LanguageSelector.AutoDetect(
                                                                               UseFallbackLanguage), startIndex, maxRows);
             return pdc.Select(cd => ((IContent)cd).ContentLink.ID).ToList();
@@ -409,7 +409,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         /// <returns></returns>
         private bool FilterContentCallback(int contentId)
         {
-            IContentData content = DataFactory.Get<ContentFolder>(new ContentReference(contentId), LanguageSelector.AutoDetect(UseFallbackLanguage));
+            IContentData content = DataFactory.Get<PageData>(new ContentReference(contentId), LanguageSelector.AutoDetect(UseFallbackLanguage));
 
             if (content == null)
             {
@@ -565,13 +565,13 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
             {
                 if (ContentReference.IsNullOrEmpty(ContentLink))
                 {
-                    return new ContentHierarchicalEnumerable(Enumerable.Empty<ContentFolder>(), this, 0);
+                    return new ContentHierarchicalEnumerable(Enumerable.Empty<PageData>(), this, 0);
                 }
                 if (IncludeRootItem)
                 {
-                    var items = new List<ContentFolder>()
+                    var items = new List<PageData>()
                     {
-                        DataFactory.Get<ContentFolder>(ContentLink)
+                        DataFactory.Get<PageData>(ContentLink)
                     };
                     return new ContentHierarchicalEnumerable(items, this, 0);
                 }
@@ -592,7 +592,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         public IList<IContentData> GetFilteredChildren(ContentReference contentLink)
         {
             var children = new List<IContentData>();
-            foreach (var child in DataFactory.GetChildren<ContentFolder>(contentLink, LanguageSelectorFactory.Service.AutoDetect(true)))
+            foreach (var child in DataFactory.GetChildren<PageData>(contentLink, LanguageSelectorFactory.Service.AutoDetect(true)))
             {
                 var content = child as IContent;
                 if (!IncludeContentAssets && content != null && content.ContentLink.CompareToIgnoreWorkID(SiteDefinition.Current.GlobalAssetsRoot))
