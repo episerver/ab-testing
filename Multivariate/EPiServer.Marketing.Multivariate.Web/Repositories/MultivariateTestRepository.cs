@@ -46,6 +46,13 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             });
         }
 
+        public void DeleteTest(Guid testuGuid)
+        {
+            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            tm.Delete(testuGuid);
+            
+        }
+
         public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();

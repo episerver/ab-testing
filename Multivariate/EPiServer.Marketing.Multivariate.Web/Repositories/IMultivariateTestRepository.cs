@@ -8,6 +8,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
     {
         void CreateTest(string title, DateTime testStart, DateTime testStop, int originalPageLink, int variantPageLink, int conversionPageLink);
 
+
+        void DeleteTest(Guid testGuid);
+
         /// <summary>
         /// Call to get the list of list of test objects
         /// </summary>

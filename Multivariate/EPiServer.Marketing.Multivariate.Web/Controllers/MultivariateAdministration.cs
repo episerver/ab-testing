@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.PlugIn;
 
@@ -22,13 +23,24 @@ namespace EPiServer.Marketing.Multivariate.Web
             return View();
         }
         [HttpPost]
-        public ActionResult Create(MultivariateTest testSettings)
+        public ActionResult Create(MultivariateTestViewModel testSettings)
         {
-            MultivariateTestRepository repo = new MultivariateTestRepository();
-            DateTime start = DateTime.Now.AddDays(1);
-            DateTime stop = DateTime.Now.AddDays(2);
-            repo.CreateTest(testSettings.Title,start,stop,1,2,3);
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View();
+
+            }
+            else
+            {
+                MultivariateTestRepository repo = new MultivariateTestRepository();
+                DateTime start = testSettings.TestStart;
+                DateTime stop = testSettings.TestStop;
+                repo.CreateTest(testSettings.TestTitle, start, stop, 1, 2, 3);
+                return View("Index");
+            }
+            
+              
+            
         }
     }
 }

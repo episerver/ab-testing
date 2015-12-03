@@ -131,6 +131,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -170,6 +171,9 @@
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
+    <Compile Include="Models\EndDateAttribute.cs" />
+    <Compile Include="Models\StartDateAttrbiute.cs" />
+    <Compile Include="Models\MultivariateTestViewModel.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.css" />
