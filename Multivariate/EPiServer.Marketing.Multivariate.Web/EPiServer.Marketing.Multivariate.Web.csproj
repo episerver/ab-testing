@@ -265,7 +265,7 @@ IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivar
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"
 xcopy "$(ProjectDir)"\Scripts "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"  /I /F /R /Y /S
 
-  IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
+IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
 mkdir "$(SolutionDir)Deployment\temp"
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)\Scripts\buildzip.ps1" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate" "$(SolutionDir)Deployment\temp\EPiServer.Multivariate.zip"

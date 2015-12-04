@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.IMultivariateTest>>" %>
+﻿%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.IMultivariateTest>>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
@@ -6,6 +6,7 @@
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 
 <!DOCTYPE html>
@@ -31,11 +32,21 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 
-        <link rel="stylesheet" type="text/css" href="../Scripts/datetimepicker/jquery.datetimepicker.css" />
-        <script src="../Scripts/datetimepicker/jquery.js"></script>
-        <script src="../Scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
+
         <script>
-           
+            $(function () {
+                $('tr.parent')
+                    .css("cursor", "pointer")
+                    .attr("title", "Click to expand/collapse")
+                    .click(function () {
+                        $(this).siblings('#child-' + this.id).toggle(); });
+                });
+
+            
+
+
+
+
         </script>
 
 
@@ -43,7 +54,7 @@
 
 
 </head>
-<body>
+<body class="sleek">
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
@@ -51,26 +62,27 @@
             </h1>
         </div>
         <div>
-            <%= Html.ActionLink("Create New Test","Create",null,null) %>
+       <%= Html.ActionLink("Create New Test","Create",null,null) %>
         </div>
         <div>
             <table class="epi-default">
                 <tr>
 
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/owner")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
-                    <th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/conversionpage")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/owner")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/conversionpage")%></th>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
+                    int index = 1;
                     foreach (var item in Model)
                     { %>
-                <tr>
+                <tr class="parent" id="parent<%= index %>">
                     <td><%= item.Title %></td>
                     <td><%= item.Owner %></td>
                     <td><%= item.State %></td>
@@ -79,10 +91,42 @@
                     <td><%= item.OriginalItemId %></td>
                     <td><%= item.VariantItemId %></td>
                     <td><%= item.ConversionItemId %></td>
-                 
+
 
                 </tr>
-                <% } %>
+
+                <tr id="child-parent<%= index %>" style="display: none">
+                    <td colspan="8">
+                        <% if (item.State == TestState.Inactive)
+                           { %>
+                               <span style="color: red">This test has not been started</span>
+                            <% } %>
+
+
+                        <%  if (item.Results != null)
+                            {
+                                foreach (var result in item.Results)
+                                { %>
+                        <table>
+                            <tr>
+                                <th colspan="2"><%= result.ItemId %></th>
+                            </tr>
+                            <tr>
+                                <th>Views</th>
+                                <th>Conversions</th>
+                            </tr>
+                            <tr>
+                                <td><%= result.Views %></td>
+                                <td><%= result.Conversions %> </td>
+                            </tr>
+                        </table>
+                        <% } %>
+                        <% } %>  
+                        
+                    </td>
+                </tr>
+                <% index++;
+                    } %>
             </table>
         </div>
 
