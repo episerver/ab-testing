@@ -282,10 +282,7 @@ xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_p
 
 cd "$(SolutionDir)Deployment\"
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
-xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y
-
-
-</PostBuildEvent>
+xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
