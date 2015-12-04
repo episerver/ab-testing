@@ -27,7 +27,6 @@
         <td><%= item.EndDate%></td>
         <td><%= item.State%></td>
         <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
-        <td><%= helper.getContent( item.ConversionItemId).Name %></td>
         <td>58%</td>
 	<td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
