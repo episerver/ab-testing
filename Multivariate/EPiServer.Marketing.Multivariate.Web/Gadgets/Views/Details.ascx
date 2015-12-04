@@ -20,8 +20,6 @@
 	<tr><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;End</td><td>&nbsp;&nbsp;<%= item.EndDate%></td></tr>
 <tr><td>&nbsp;&nbsp;</td></tr>
 	<tr><td>Original Item</td><td><%= helper.getContent( item.OriginalItemId ).Name %></td><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td></tr>
-	<tr><td>Conversion Item&nbsp;&nbsp;</td><td><%= helper.getContent( item.ConversionItemId).Name %></td></tr>
-	<tr><td>Varient Item</td><td><%= helper.getContent( item.VariantItemId ).Name %></td></tr>
 </table>
 <br>
 <div class="epi-contentArea" >
