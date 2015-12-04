@@ -42,6 +42,12 @@ namespace EPiServer.Marketing.Multivariate.Dal
         public List<Result> Results { get; set; }
 
         public List<PerformanceIndicator> Conversions { get; set; }
+
+        /// <summary> Required </summary>
+        public Guid VariantItemId { get; set; }
+
+        /// <summary> Required </summary>
+        public Guid ConversionItemId { get; set; }
     }
 
     public class Result

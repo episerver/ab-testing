@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 Title = title,
                 Id = Guid.NewGuid(),
                 OriginalItemId = getPageId(originalPageLink),
-                VariantItems = getPageId(variantPageLink),
+                VariantItems = new List<Guid>() { getPageId(variantPageLink) },
                 Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
                 Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                 StartDate = testStart,
