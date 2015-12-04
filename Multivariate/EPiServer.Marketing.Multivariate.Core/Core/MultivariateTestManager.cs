@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 
@@ -116,7 +117,7 @@ namespace EPiServer.Marketing.Multivariate
                         activePage = currentTest.OriginalItemId;
                         break;
                     case 2:
-                        activePage = currentTest.VariantItemId;
+                        activePage = currentTest.VariantItems[0];
                         break;
                 }
             }
@@ -140,8 +141,7 @@ namespace EPiServer.Marketing.Multivariate
             aTest.Owner = parameters.Owner;
             aTest.State = GetState(parameters.State);
             aTest.OriginalItemId = parameters.OriginalItemId;
-            aTest.VariantItemId = parameters.VariantItemId;
-            aTest.ConversionItemId = parameters.ConversionItemId;
+            aTest.VariantItems = parameters.VariantItems;
             aTest.StartDate = parameters.StartDate;
             aTest.EndDate = parameters.EndDate;
 
@@ -149,6 +149,13 @@ namespace EPiServer.Marketing.Multivariate
             {
                 aTest.Results = parameters.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions });
             }
+
+            if (parameters.Conversions != null)
+            {
+                aTest.Conversions = parameters.Conversions.ConvertAll(x => new KeyPerformanceIndicator());
+            }
+
+            
 
             return aTest;
         }
@@ -168,11 +175,12 @@ namespace EPiServer.Marketing.Multivariate
                         Owner = aParam.Owner,
                         State = GetState(aParam.State),
                         OriginalItemId = aParam.OriginalItemId,
-                        VariantItemId = aParam.VariantItemId,
-                        ConversionItemId = aParam.ConversionItemId,
+                        VariantItems = aParam.VariantItems,
                         StartDate = aParam.StartDate,
                         EndDate = aParam.EndDate,
-                        Results = aParam.Results != null ? aParam.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions }) : null
+                        Results = aParam.Results != null ? aParam.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions }) : null,
+                        Conversions = aParam.Conversions != null ? aParam.Conversions.ConvertAll(x=>new KeyPerformanceIndicator()):null
+                        
                     });
                 }
             }
@@ -189,11 +197,13 @@ namespace EPiServer.Marketing.Multivariate
             aRetParameter.Owner = testObject.Owner;
             aRetParameter.State = GetStateValue(testObject.State);
             aRetParameter.OriginalItemId = testObject.OriginalItemId;
-            aRetParameter.VariantItemId = testObject.VariantItemId;
-            aRetParameter.ConversionItemId = testObject.ConversionItemId;
+            aRetParameter.VariantItems = testObject.VariantItems;
             aRetParameter.StartDate = testObject.StartDate;
             aRetParameter.EndDate = testObject.EndDate;
-
+            if (aRetParameter.Conversions != null)
+            {
+                aRetParameter.Conversions = testObject.Conversions.ConvertAll(x => new PerformanceIndicator());
+            }
             return aRetParameter;
         }
 

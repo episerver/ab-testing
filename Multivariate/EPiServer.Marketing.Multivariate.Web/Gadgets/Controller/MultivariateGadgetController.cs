@@ -5,21 +5,26 @@ using System.Web.Mvc;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
-    [Gadget(Title ="Multivariate Test Report")]
+    [Gadget(Title = "Multivariate Test Report")]
     class MultivariateGadgetController : Controller
     {
         public ActionResult Index()
         {
             List<IMultivariateTest> list = new List<IMultivariateTest>();
-            list.Add( new MultivariateTest() { Id = Guid.NewGuid(), ConversionItemId = Guid.NewGuid(),
-                 StartDate = DateTime.Today , EndDate = DateTime.Now, OriginalItemId = Guid.NewGuid(),
-                  Title="Call to Action" 
-                  
-            } );
             list.Add(new MultivariateTest()
             {
                 Id = Guid.NewGuid(),
-                ConversionItemId = Guid.NewGuid(),
+                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Now,
+                OriginalItemId = Guid.NewGuid(),
+                Title = "Call to Action"
+
+            });
+            list.Add(new MultivariateTest()
+            {
+                Id = Guid.NewGuid(),
+                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Now,
                 OriginalItemId = Guid.NewGuid(),
@@ -29,7 +34,7 @@ namespace EPiServer.Marketing.Multivariate.Web
             list.Add(new MultivariateTest()
             {
                 Id = Guid.NewGuid(),
-                ConversionItemId = Guid.NewGuid(),
+                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Now,
                 OriginalItemId = Guid.NewGuid(),
@@ -39,7 +44,7 @@ namespace EPiServer.Marketing.Multivariate.Web
             list.Add(new MultivariateTest()
             {
                 Id = Guid.NewGuid(),
-                ConversionItemId = Guid.NewGuid(),
+                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Now,
                 OriginalItemId = Guid.NewGuid(),
@@ -61,11 +66,12 @@ namespace EPiServer.Marketing.Multivariate.Web
             list.Add(new MultivariateTest()
             {
                 Id = testId,
-                ConversionItemId = Guid.NewGuid(),
+                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Now,
                 OriginalItemId = Guid.NewGuid(),
-                Title = "Call to Action 4", Results = new List<TestResult>() {
+                Title = "Call to Action 4",
+                Results = new List<TestResult>() {
                     new TestResult() {  ItemId = Guid.NewGuid(), Views=5, Conversions=5 },
                     new TestResult() {  ItemId = Guid.NewGuid(), Views=2, Conversions=1 },
                     new TestResult() {  ItemId = Guid.NewGuid(), Views=10, Conversions=3 }

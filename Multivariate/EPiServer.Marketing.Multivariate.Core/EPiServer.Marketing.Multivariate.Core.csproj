@@ -160,6 +160,7 @@
     <Compile Include="Core\CountType.cs" />
     <Compile Include="Core\IMultivariateTest.cs" />
     <Compile Include="Core\IMultivariateTestManager.cs" />
+    <Compile Include="Core\KeyPerformanceIndicator.cs" />
     <Compile Include="Core\MultivariateTest.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
     <Compile Include="Core\TestResult.cs" />

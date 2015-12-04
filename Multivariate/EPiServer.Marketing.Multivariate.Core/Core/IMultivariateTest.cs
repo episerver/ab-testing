@@ -17,9 +17,10 @@ namespace EPiServer.Marketing.Multivariate
         DateTime EndDate { get; set; }
 
         Guid OriginalItemId { get; set; }
-        Guid VariantItemId { get; set; }
-        Guid ConversionItemId { get; set; }
+        List<Guid> VariantItems { get; set; }
 
         List<TestResult> Results { get; }
+
+        List<KeyPerformanceIndicator> Conversions { get; set; } 
     }
 }

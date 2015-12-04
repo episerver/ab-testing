@@ -38,13 +38,15 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 Title = title,
                 Id = Guid.NewGuid(),
                 OriginalItemId = getPageId(originalPageLink),
-                VariantItemId = getPageId(variantPageLink),
-                ConversionItemId = getPageId(conversionPageLink),
+                VariantItems = getPageId(variantPageLink),
+                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
                 Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                 StartDate = testStart,
                 EndDate = testStop
             });
         }
+
+        
 
         public void DeleteTest(Guid testuGuid)
         {
