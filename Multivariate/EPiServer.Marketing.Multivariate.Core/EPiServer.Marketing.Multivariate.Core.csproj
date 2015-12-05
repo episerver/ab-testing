@@ -153,6 +153,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersionAuto.cs">
+      <Link>AssemblyVersionAuto.cs</Link>
+    </Compile>
     <Compile Include="Cms\CurrentSite.cs" />
     <Compile Include="Cms\CurrentUser.cs" />
     <Compile Include="Cms\ICurrentSite.cs" />
@@ -182,20 +185,22 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
-mkdir "$(SolutionDir)Deployment\lib"
-xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
-xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+    <PostBuildEvent>IF exist "$(ProjectDir)..\Deployment\lib\" ( rmdir "$(ProjectDir)..\Deployment\lib" /s /q )
+mkdir "$(ProjectDir)..\Deployment\lib"
+xcopy "$(TargetDir)"\$(TargetName)*dll "$(ProjectDir)..\Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(ProjectDir)..\Deployment\lib\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
-xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
+IF exist "$(ProjectDir)..\Deployment\*.nuspec" ( del "$(ProjectDir)..\Deployment\*.nuspec" /s /q )
+xcopy "$(ProjectDir)"\*.nuspec "$(ProjectDir)..\Deployment\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\tools\epiupdates\sql" ( del "$(SolutionDir)Deployment\tools\epiupdates\sql" /s /q )
-xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates\sql"  /I /F /R 
+IF exist "$(ProjectDir)..\Deployment\tools\epiupdates\sql" ( del "$(ProjectDir)..\Deployment\tools\epiupdates\sql" /s /q )
+xcopy "$(ProjectDir)..\"\Database\*.sql "$(ProjectDir)..\Deployment\tools\epiupdates\sql"  /I /F /R 
 
-cd "$(SolutionDir)Deployment\"
-"$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
-xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+del $(ProjectDir)..\Deployment\*.nupkg
+
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)MSBuild\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
+
+xcopy "$(ProjectDir)..\Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

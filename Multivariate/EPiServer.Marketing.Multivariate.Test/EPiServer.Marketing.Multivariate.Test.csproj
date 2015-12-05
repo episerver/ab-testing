@@ -170,6 +170,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersionAuto.cs">
+      <Link>AssemblyVersionAuto.cs</Link>
+    </Compile>
     <Compile Include="Core\MultivariateManagerTests.cs" />
     <Compile Include="Dal\MultivariateDalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

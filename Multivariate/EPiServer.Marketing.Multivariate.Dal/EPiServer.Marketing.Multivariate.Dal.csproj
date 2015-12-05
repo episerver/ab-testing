@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersionAuto.cs">
+      <Link>AssemblyVersionAuto.cs</Link>
+    </Compile>
     <Compile Include="DataOperations.cs" />
     <Compile Include="IDataOperations.cs" />
     <Compile Include="IMultivariateTestDal.cs" />

@@ -22,6 +22,12 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>12.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -116,6 +122,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersionAuto.cs">
+      <Link>AssemblyVersionAuto.cs</Link>
+    </Compile>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -166,12 +175,19 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
-mkdir "$(SolutionDir)Deployment\lib"
-xcopy "$(TargetDir)"\EPiServer.ABTesting*dll "$(SolutionDir)Deployment\lib\" /I /F /R /Y
-cd "$(SolutionDir)Deployment\"
+    <PostBuildEvent>IF exist "$(ProjectDir)..\Deployment\lib\" ( rmdir "$(ProjectDir)..\Deployment\lib" /s /q )
+mkdir "$(ProjectDir)..\Deployment\lib"
+xcopy "$(TargetDir)"\EPiServer.ABTesting*dll "$(ProjectDir)..\Deployment\lib\" /I /F /R /Y
+
+cd "$(ProjectDir)..\Deployment\"
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
-xcopy "$(SolutionDir)Deployment\*.nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+
+del $(ProjectDir)..\Deployment\*.nupkg
+
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)MSBuild\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
+
+
+xcopy "$(ProjectDir)..\Deployment\*.nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
