@@ -2,10 +2,9 @@ Param(
     [Parameter(Mandatory=$true)]
     [string]$packageVersion,
     [Parameter(Mandatory=$true)]
-    [string]$destinationPath
+    [string]$destinationPath,
     [Parameter(Mandatory=$true)]
-    [string]$branchName
-)
+    [string]$branchName)
 
 
 if (!$destinationPath) {
