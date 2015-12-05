@@ -1,0 +1,224 @@
+﻿.epi-LPOGadget-item {
+	min-width: 700px;
+	overflow: hidden;
+	border-top: 1px solid #d1d1d1;
+	padding: 0.5em 0.5em 1em 0.5em;
+}
+.iPhone .epi-LPOGadget-item {
+    min-width: 0;
+}
+
+.epi-LPOGadget-item-winner {
+    background: #E8EFE8;
+}
+
+.iPhone .epi-LPOGadget-item-winner
+{
+    background: #4D4D4D;
+}
+
+.epi-LPOGadget-item:first-child {
+	border-top: none;
+	margin: 0;
+}
+.epi-LPOGadget-item-name {
+	width: 100%;
+	float: left;
+	font-size: 1.2em;
+	margin-bottom: 0.5em;
+}
+.epi-LPOGadget-item-winnerIndicator
+{
+    font-weight: bolder;
+    color: #0FD000;
+}
+.iPhone .epi-LPOGadget-item-winnerIndicator {
+    color: #1C9724;
+}
+.epi-LPOGadget-item-thumb {
+    float: left;
+    width: 169px;
+}
+.epi-LPOGadget-item-thumb img {
+    background: #d1d1d1;
+    padding: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.epi-LPOGadget-item-gauge {
+	float: left;
+	margin-left: 3em;
+    width: 200px;
+    height: 120px;
+}
+.epi-LPOGadget-item-stats {
+    float: left;
+	color: #666;
+    margin-left: 1em;
+}
+.iPhone .epi-LPOGadget-item-stats {
+    margin-left: 2em;
+    font-size: 0.8em;    
+	color: inherit;
+}
+.epi-LPOGadget-item-stats > div {
+    overflow: hidden;
+}
+.epi-LPOGadget-item-mainValue {
+    float: left;
+    margin: -0.9em 0 1em 0;
+    font-weight: bold;
+}
+.epi-LPOGadget-item-mainValue-best {
+    color:  #090;
+}
+.epi-LPOGadget-item-mainValue-worst {
+    color:  #900;
+}
+.epi-LPOGadget-item-mainValue-major {
+    font-size: 3.5em;
+}
+.epi-LPOGadget-item-mainValue-minor {
+    margin-left: 0.2em;
+    font-size: 1.8em;
+}
+.epi-LPOGadget-item-value {
+    float: left;
+    clear: both;
+    margin-bottom: 0.3em;
+    white-space: nowrap;
+}
+.epi-LPOGadget-item-value span {
+    margin-left: 0.5em;
+    font-weight: bold;
+}
+
+.epi-LPOGadget-itemCompact {
+	float: left;
+	width: 33%;
+	min-width: 220px;
+	text-align: center;
+	margin-top: 1em;
+	font-size: 0.9em;
+}
+.epi-LPOGadget-itemCompact .epi-LPOGadget-item-mainValue {
+	display: inline-block;
+	float: none;
+	margin: 0;
+}
+
+.epi-LPOGadget-itemCompact .epi-LPOGadget-item-gauge {
+    float: none;
+    margin-left: 0;
+    display:inline-block;
+}
+
+.epi-LPOGadget-buttonWinner {
+    clear: both;
+    float: left;
+    margin-top: 0.3em;
+}
+.epi-LPOGadget-itemCompact .epi-LPOGadget-buttonWinner {
+    clear: none;
+    float: none;
+}
+
+
+
+
+
+/* iPhone, iPad */
+.epi-LPOGadget-bars {
+    position: relative;
+    margin: 0.5em;
+}
+.epi-LPOGadget-bar-annotation {
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+    font-size: 0.9em;
+    margin: 1em 0 0.1em 0;
+}
+.epi-LPOGadget-bar { 
+    position: relative;
+    z-index: 2;
+    height: 15px;
+    margin: 10px 5px 5px 5px;
+    border: 1px solid #ddd;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #666666; 
+}
+.epi-LPOGadget-bar-value {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1;
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;    
+    background-color: #bfcff2;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfcff2', endColorstr='#89A8E7'); /* IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#bfcff2), to(#89A8E7)); /* webkit browsers */
+    background: -moz-linear-gradient(top, #bfcff2,  #89A8E7); /* FF */
+}
+.epi-LPOGadget-bar-range {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 2;
+    background-color: #5184b7;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5184b7', endColorstr='#315579'); /* IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#5184b7), to(#315579)); /* webkit browsers */
+    background: -moz-linear-gradient(top, #5184b7,  #315579); /* FF */
+}
+.epi-LPOGadget-bar-tick {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    z-index: 3;
+    background-color: #bfcff2;
+}
+.epi-LPOGadget-bar-marker {
+    position: absolute;
+    top: -5px;
+    width: 9px;
+    height: 5px;
+    z-index: 3;
+    margin-left: -4px;
+    background: transparent url('../SharedResources/marker.gif') no-repeat left top;
+}
+.epi-LPOGadget-bar-positive .epi-LPOGadget-bar-value {
+    background-color: #b2dcb3;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b2dcb3', endColorstr='#73BF75'); /* IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#b2dcb3), to(#73BF75)); /* webkit browsers */
+    background: -moz-linear-gradient(top, #b2dcb3,  #73BF75); /* FF */    
+}
+.epi-LPOGadget-bar-positive .epi-LPOGadget-bar-range {
+    background-color: #1c9724;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1c9724', endColorstr='#105A15'); /* IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#1c9724), to(#105A15)); /* webkit browsers */
+    background: -moz-linear-gradient(top, #1c9724,  #105A15); /* FF */    
+}
+.epi-LPOGadget-bar-positive .epi-LPOGadget-bar-tick {
+    background-color: #b2dcb3;
+}
+
+.epi-LPOGadget-bar-negative .epi-LPOGadget-bar-value {
+    background-color: #f0aca6;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0aca6', endColorstr='#E98178'); /* IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#f0aca6), to(#E98178)); /* webkit browsers */
+    background: -moz-linear-gradient(top, #f0aca6,  #E98178); /* FF */        
+}
+.epi-LPOGadget-bar-negative .epi-LPOGadget-bar-range {
+    background-color: #fe3f2f;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fe3f2f', endColorstr='#A30D01'); /* IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#fe3f2f), to(#A30D01)); /* webkit browsers */
+    background: -moz-linear-gradient(top, #fe3f2f,  #A30D01); /* FF */        
+}
+.epi-LPOGadget-bar-negative .epi-LPOGadget-bar-tick {
+    background-color: #f0aca6;
+}
+span.epi-LPOGadget-deleted { text-decoration: line-through; }
