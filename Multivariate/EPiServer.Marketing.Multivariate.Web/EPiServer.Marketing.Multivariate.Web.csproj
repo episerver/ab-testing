@@ -166,6 +166,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersionAuto.cs">
+      <Link>AssemblyVersionAuto.cs</Link>
+    </Compile>
     <Compile Include="Controllers\MultivariateAdministration.cs" />
     <Compile Include="Gadgets\Controller\MultivariateGadgetController.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
@@ -280,8 +283,7 @@ rmdir "$(SolutionDir)Deployment\temp" /s /q
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\module.config" ( del "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\module.config" /s /q )
 xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\"  /I /F /R /Y
 
-cd "$(SolutionDir)Deployment\"
-"$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\MSBuild\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
 xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
