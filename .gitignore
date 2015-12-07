@@ -187,3 +187,8 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/Multivariate/Deployment/Package.nuspec
+/Multivariate/Deployment/lib/EPiServer.Marketing.Multivariate.Dal.dll
+/Multivariate/Deployment/lib/EPiServer.Marketing.Multivariate.Core.dll
+/Multivariate/Deployment/lib
+/Multivariate/Deployment/EPiServer.Marketing.Multivariate.1.0.0.0.nupkg
