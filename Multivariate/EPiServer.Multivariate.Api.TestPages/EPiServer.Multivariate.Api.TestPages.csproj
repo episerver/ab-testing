@@ -281,14 +281,16 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
+    <Compile Include="Controllers\MultivariateApiTestingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestLib\MultivariateTestLib.cs" />
+    <Compile Include="TestLib\MultivariateTestRouteInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Business\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\Blocks\" />
     <Folder Include="Models\Media\" />
     <Folder Include="Models\Pages\" />
@@ -311,6 +313,10 @@
     <Content Include="modules\_protected\CMS\CMS.zip" />
     <Content Include="modules\_protected\EPiServer.Multivariate\module.config" />
     <Content Include="modules\_protected\EPiServer.Multivariate\EPiServer.Multivariate.zip" />
+    <Content Include="Views\MultivariateApiTesting\CreateAbTest.cshtml" />
+    <Content Include="Views\MultivariateApiTesting\GetAbTestList.cshtml" />
+    <Content Include="Views\MultivariateApiTesting\Index.cshtml" />
+    <Content Include="Views\MultivariateApiTesting\TestDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
