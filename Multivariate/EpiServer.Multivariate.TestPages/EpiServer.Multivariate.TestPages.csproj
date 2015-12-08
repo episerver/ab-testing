@@ -253,6 +253,7 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
+    <Compile Include="TestLib\MultivariateTestRouteInitializer.cs" />
     <Compile Include="Controllers\MultivariateApiTestingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -288,6 +289,7 @@
     <Content Include="Views\MultivariateApiTesting\GetAbTestList.cshtml" />
     <Content Include="modules\_protected\EPiServer.Multivariate\module.config" />
     <Content Include="modules\_protected\EPiServer.Multivariate\EPiServer.Multivariate.zip" />
+    <Content Include="Package.nuspec" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -313,6 +315,27 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+IF exist "$(SolutionDir)MultivariateTestingDeployment\content" ( rmdir "$(SolutionDir)MultivariateTesting\content" /s /q )
+
+mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Views"
+mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Controllers"
+mkdir "$(SolutionDir)MultivariateTestingDeployment\content\TestLib"
+
+
+xcopy "$(ProjectDir)"\Views\MultivariateApiTesting\*.cshtml "$(SolutionDir)MultivariateTestingDeployment\content\Views\MultivariateApiTesting\"  /I /F /R /Y
+xcopy "$(ProjectDir)"\Controllers\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\Controllers\" /I /F /R /Y
+xcopy "$(ProjectDir)"\TestLib\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\TestLib\"  /I /F /R /Y
+
+
+
+IF exist "$(SolutionDir)MultivariateTestingDeployment\*.nuspec" ( del "$(SolutionDir)MultivariateTestingDeployment\*.nuspec" /s /q )
+xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)MultivariateTestingDeployment\"  /I /F /R /Y
+
+cd "$(SolutionDir)MultivariateTestingDeployment\" 
+"$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
