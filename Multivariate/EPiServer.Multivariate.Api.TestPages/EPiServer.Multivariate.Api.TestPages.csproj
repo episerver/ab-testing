@@ -317,6 +317,7 @@
     <Content Include="Views\MultivariateApiTesting\GetAbTestList.cshtml" />
     <Content Include="Views\MultivariateApiTesting\Index.cshtml" />
     <Content Include="Views\MultivariateApiTesting\TestDetails.cshtml" />
+    <Content Include="Package.nuspec" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
