@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.IMultivariateTest>>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<EPiServer.Marketing.Multivariate.Web.Models.Entities.MultivariateTestViewModel2[]>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
@@ -74,8 +74,6 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
-                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
-                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/conversionpage")%></th>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
@@ -85,7 +83,7 @@
                 <tr class="parent" id="parent<%= index %>">
                     <td><%= item.Title %></td>
                     <td><%= item.Owner %></td>
-                    <td><%= item.State %></td>
+                    <td><%= item.TestState %></td>
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
                     <td><%= item.OriginalItemId %></td>
@@ -93,9 +91,9 @@
 
                 </tr>
 
-                <tr id="child-parent<%= index %>" style="display: none">
+              <%--  <tr id="child-parent<%= index %>" style="display: none">
                     <td colspan="8">
-                        <% if (item.State == TestState.Inactive)
+                        <% if (item.TestState == (int)TestState.Inactive)
                            { %>
                                <span style="color: red">This test has not been started</span>
                             <% } %>
@@ -122,7 +120,7 @@
                         <% } %>  
                         
                     </td>
-                </tr>
+                </tr>--%>
                 <% index++;
                     } %>
             </table>

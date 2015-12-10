@@ -31,9 +31,8 @@ namespace EPiServer.Marketing.Multivariate.Dal.Mappings
             this.Property(m => m.OriginalItemId)
                 .IsRequired();
 
-            this.Property(m => m.State)
-                .HasMaxLength(10)
-                .IsRequired();
+            this.Property(m => m.TestState)
+                .IsOptional();
 
             this.Property(m => m.StartDate)
                 .IsRequired();
@@ -43,7 +42,7 @@ namespace EPiServer.Marketing.Multivariate.Dal.Mappings
 
             this.Property(m => m.LastModifiedBy)
                 .HasMaxLength(100)
-                .IsRequired();
+                .IsOptional();
 
             this.Property(m => m.CreatedDate)
                 .IsRequired();

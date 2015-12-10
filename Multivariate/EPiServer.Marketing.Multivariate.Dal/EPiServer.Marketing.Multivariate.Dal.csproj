@@ -63,6 +63,7 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="Entities\Conversion.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\Enums\TestState.cs" />
     <Compile Include="Entities\KeyPerformanceIndicator.cs" />
     <Compile Include="Entities\Variant.cs" />
     <Compile Include="IDataOperations.cs" />
@@ -85,7 +86,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\Entities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,3 +1,5 @@
+using EPiServer.Marketing.Multivariate.Dal.Entities.Enums;
+
 namespace EPiServer.Marketing.Multivariate.Dal.Entities
 {
     using System;
@@ -22,7 +24,19 @@ namespace EPiServer.Marketing.Multivariate.Dal.Entities
 
         public Guid OriginalItemId { get; set; }
 
-        public string State { get; set; }
+        private TestState testState { get; set; }
+
+        public int TestState
+        {
+            get
+            {
+                return (int)testState;
+            }
+            set
+            {
+                testState = (TestState) value;
+            }
+        }
 
         public DateTime StartDate { get; set; }
 

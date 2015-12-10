@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 Title = title,
                 OriginalItemId = getPageId(originalPageLink),
                 Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                State = "1",
+                TestState = (int)Dal.Entities.Enums.TestState.Active,
                 LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                 StartDate = testStart,
                 EndDate = testStop
