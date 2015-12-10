@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multiva
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Dal", "EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj", "{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Multivariate.Api.TestPages", "EPiServer.Multivariate.Api.TestPages\EPiServer.Multivariate.Api.TestPages.csproj", "{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
