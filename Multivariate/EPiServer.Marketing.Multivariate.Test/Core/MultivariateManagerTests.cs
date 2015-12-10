@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using EPiServer.Marketing.Multivariate.Dal;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
 {
@@ -175,7 +176,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             {
                 Title = "Test 1",
                 OriginalItemId = origItemId,
-                VariantItemId = varItemId
+                VariantItemId = varItemId,
+
+                // we only need one item in the list cause the code is kind of bogus right now and 
+                // only returns the first item in the list anyway. We need a better test.
+                VariantItems = new List<Guid>() { Guid.NewGuid() } 
             };
 
             dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(mockTest);

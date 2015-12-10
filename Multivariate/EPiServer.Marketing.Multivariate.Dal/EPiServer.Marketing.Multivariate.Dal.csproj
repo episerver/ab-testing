@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyVersionAuto.cs">
+      <Link>AssemblyVersionAuto.cs</Link>
+    </Compile>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DataOperations.cs" />
     <Compile Include="DatabaseContext.cs" />
