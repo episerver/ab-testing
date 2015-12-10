@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Multivariate.Dal.Entities;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
@@ -44,6 +45,34 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 StartDate = testStart,
                 EndDate = testStop
             });
+
+
+            var context = new DatabaseContext();
+
+            var myTest = new EPiServer.Marketing.Multivariate.Dal.Entities.MultivariateTest()
+            {
+                Title = title,
+                OriginalItemId = getPageId(originalPageLink),
+                Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
+                State = "1",
+                LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
+                StartDate = testStart,
+                EndDate = testStop
+            };
+
+            context.MultivariateTests.Add(myTest);
+
+            var testResult = new MultivariateTestResult()
+            {
+                ItemId = new Guid("C18C9E6C-6CFE-4797-B5F3-60A91F1A4A79"),
+                Views = 2,
+                Conversions = 1,
+                MultivariateTest = myTest
+            };
+
+            context.MultivariateTestsResults.Add(testResult);
+
+            context.SaveChanges();
         }
 
         

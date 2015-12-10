@@ -89,8 +89,6 @@
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
                     <td><%= item.OriginalItemId %></td>
-                    <td><%= item.VariantItemId %></td>
-                    <td><%= item.ConversionItemId %></td>
 
 
                 </tr>
