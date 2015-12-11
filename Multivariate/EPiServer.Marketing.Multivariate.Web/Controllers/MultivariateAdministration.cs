@@ -26,12 +26,8 @@ namespace EPiServer.Marketing.Multivariate.Web
         {
             var tests = _context.MultivariateTests.ToArray();
 
-            Mapper.CreateMap<Dal.Entities.MultivariateTest, MultivariateTestViewModel2>();
-            var testViews = Mapper.Map<Dal.Entities.MultivariateTest[], MultivariateTestViewModel2[]>(tests);
-
-            //List<IMultivariateTest> mvTestList = new List<IMultivariateTest>();
-            //IMultivariateTestRepository testRepository = new MultivariateTestRepository();
-            //mvTestList = testRepository.GetTestList(new MultivariateTestCriteria());
+            Mapper.CreateMap<Dal.Entities.MultivariateTest, MultivariateTestViewModel>();
+            var testViews = Mapper.Map<Dal.Entities.MultivariateTest[], MultivariateTestViewModel[]>(tests);
 
             return View(testViews);
         }
@@ -40,25 +36,34 @@ namespace EPiServer.Marketing.Multivariate.Web
         {
             return View();
         }
-        //[HttpPost]
-        //public ActionResult Create(Models.Entities.MultivariateTestViewModel testSettings)
-        //{
-        //    //if (!ModelState.IsValid)
-        //    //{
-        //        return View();
 
-        //    //}
-        //    //else
-        //    //{
-        //    //    MultivariateTestRepository repo = new MultivariateTestRepository();
-        //    //    DateTime start = testSettings.TestStart;
-        //    //    DateTime stop = testSettings.TestStop;
-        //    //    repo.CreateTest(testSettings.TestTitle, start, stop, 1, 2, 3);
-        //    //    return RedirectToAction("Index");
-        //    //}
-            
-              
-            
-        //}
+        [HttpPost]
+        public ActionResult Create(MultivariateTestViewModel testSettings)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+
+            }
+            else
+            {
+                var myTest = new EPiServer.Marketing.Multivariate.Dal.Entities.MultivariateTest()
+                {
+                    Title = testSettings.Title,
+                    OriginalItemId = Guid.NewGuid(),
+                    Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
+                    TestState = (int)Dal.Entities.Enums.TestState.Active,
+                    LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
+                    StartDate = testSettings.StartDate,
+                    EndDate = testSettings.EndDate
+                };
+
+                _context.MultivariateTests.Add(myTest);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+        }
     }
 }

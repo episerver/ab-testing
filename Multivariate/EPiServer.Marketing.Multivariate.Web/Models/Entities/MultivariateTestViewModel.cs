@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models.Entities
 {
-    public class MultivariateTestViewModel2
+    public class MultivariateTestViewModel
     {
         [Required]
         [Display(Name = "Test Title")]
@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models.Entities
 
         [Required(ErrorMessage = "A start Date and Time is required")]
         [Display(Name = "Test Stop")]
-        [EndDate(StartDate = "TestStart", ErrorMessage = "End date cannot be before Start Date")]
+        [EndDate(StartDate = "StartDate", ErrorMessage = "End date cannot be before Start Date")]
         public DateTime EndDate { get; set; }
 
         public Guid OriginalItemId { get; set; }

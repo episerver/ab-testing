@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<EPiServer.Marketing.Multivariate.Web.Models.Entities.MultivariateTestViewModel2[]>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<EPiServer.Marketing.Multivariate.Web.Models.Entities.MultivariateTestViewModel[]>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
