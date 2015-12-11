@@ -129,18 +129,6 @@
       <HintPath>..\..\packages\EPiServer.Logging.Log4Net.2.0.0\lib\net45\EPiServer.Logging.Log4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Marketing.Multivariate.Core">
-      <HintPath>..\..\packages\EPiServer.Marketing.Multivariate.1.0.0.0\lib\EPiServer.Marketing.Multivariate.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Marketing.Multivariate.Dal">
-      <HintPath>..\..\packages\EPiServer.Marketing.Multivariate.1.0.0.0\lib\EPiServer.Marketing.Multivariate.Dal.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Marketing.Multivariate.Web">
-      <HintPath>..\..\packages\EPiServer.Marketing.Multivariate.1.0.0.0\lib\EPiServer.Marketing.Multivariate.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EPiServer.Packaging, Version=3.2.3.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\EPiServer.Packaging.3.2.3\lib\net45\EPiServer.Packaging.dll</HintPath>
@@ -328,6 +316,20 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj">
+      <Project>{cc88efff-8474-401b-87f8-ec4db6ba8633}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
+      <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Web\EPiServer.Marketing.Multivariate.Web.csproj">
+      <Project>{cb8500e5-9999-4e35-97d6-142e87857e6a}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
