@@ -180,7 +180,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
                 // we only need one item in the list cause the code is kind of bogus right now and 
                 // only returns the first item in the list anyway. We need a better test.
-                VariantItems = new List<Guid>() { Guid.NewGuid() } 
+                VariantItems = new List<Guid>() { origItemId } 
             };
 
             dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(mockTest);
