@@ -28,5 +28,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Models.Entities
         public DateTime EndDate { get; set; }
 
         public Guid OriginalItemId { get; set; }
+
+        public List<Guid> VariantItems { get; set; }
+
+        public List<KeyPerformanceIndicator> Conversions { get; set; }
     }
 }
