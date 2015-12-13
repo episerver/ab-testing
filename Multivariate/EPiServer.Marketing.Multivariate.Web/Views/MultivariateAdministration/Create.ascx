@@ -17,8 +17,6 @@
     <asp:PlaceHolder runat="server">
         <%=Page.ClientResources("ShellCore")%>
         <%=Page.ClientResources("ShellCoreLightTheme")%>
-        <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.js"))%>
-        <%= Html.CssLink(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "system.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "ToolButton.css"))%>
         <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))%>
@@ -63,11 +61,13 @@
                 $("#btnDlgOk").click(function () {
                     dlg.dialog("close");
                 });
+
+                $('#btnCancel').click(function () {
+                    location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                });
             });
 
-            $('#btnCancel').click(function () {
-                window.location.href = '@Url.Action("Index")';
-            });
+
 
         </script>
 
@@ -114,40 +114,43 @@
             <div class="epi-size15">
                 <label for="OriginPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
                 <%= Html.TextBoxFor(model => model.OriginalItemId) %>
-                <span class="epi-cmsButton"><input id="btnOriginPagePickerPH" type="button" value="..."/></span>
+                <span class="epi-cmsButton">
+                    <input id="btnOriginPagePickerPH" type="button" value="..." /></span>
                 <span style="color: red">*</span>
                 <%--                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>--%>
 
-                <div id="treedialog" class="ui-helper-hidden" >
-                        <EPiServerUIDataSource:PageDataSource ID="contentDataSource" 
-                            AccessLevel="NoAccess" 
-                            runat="server" 
-                            IncludeRootItem="false" 
-                            ContentLink="<%# EPiServer.Web.SiteDefinition.Current.RootPage %>" />
-                       <div class="episcroll episerver-pagetree-selfcontained" style="max-height:250px;">
-                           <EPiServerUI:PageTreeView ID="pageTreeView" 
-                               DataSourceID="contentDataSource" 
-                               CssClass="episerver-pagetreeview" 
-                               runat="server" 
-                               ExpandDepth="1"
-                               DataTextField="Name" 
-                               ExpandOnSelect="false"
-                               DataNavigateUrlField="ContentLink" EnableViewState="false">
-                                <TreeNodeTemplate>
+                <div id="treedialog" class="ui-helper-hidden">
+                    <EPiServerUIDataSource:PageDataSource ID="contentDataSource"
+                        AccessLevel="NoAccess"
+                        runat="server"
+                        IncludeRootItem="false"
+                        ContentLink="<%# EPiServer.Web.SiteDefinition.Current.RootPage %>" />
+                    <div class="episcroll episerver-pagetree-selfcontained" style="max-height: 250px;">
+                        <EPiServerUI:PageTreeView ID="pageTreeView"
+                            DataSourceID="contentDataSource"
+                            CssClass="episerver-pagetreeview"
+                            runat="server"
+                            ExpandDepth="1"
+                            DataTextField="Name"
+                            ExpandOnSelect="false"
+                            DataNavigateUrlField="ContentLink" EnableViewState="false">
+                            <treenodetemplate>
                                     <a style="outline:none !important" href="#" title="<%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>" onclick="return setval(<%# ((EPiServer.Core.IContent)((PageTreeNode)Container.DataItem).DataItem).ContentLink.ID %>)" >
                                         <%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>
                                     </a>
-                                </TreeNodeTemplate>
-                            </EPiServerUI:PageTreeView>
-                        </div> 
-                        
-                        <div align="right">
-                            <span class="epi-cmsButton"><input id="btnDlgOk" type="button" value="OK" /></span>
-                            <span class="epi-cmsButton"><input id="btnDlgCancel" type="button" value="Cancel" /></span>
-                        </div>
+                                </treenodetemplate>
+                        </EPiServerUI:PageTreeView>
                     </div>
+
+                    <div align="right">
+                        <span class="epi-cmsButton">
+                            <input id="btnDlgOk" type="button" value="OK" /></span>
+                        <span class="epi-cmsButton">
+                            <input id="btnDlgCancel" type="button" value="Cancel" /></span>
+                    </div>
+                </div>
             </div>
-           <%-- <div class="epi-size15">
+            <%-- <div class="epi-size15">
                 <label for="VariantPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
                 <%= Html.TextBoxFor(model => model.VariantItemId) %>
                 <button type="button" class="epi-cmsButton-text epi-cmsButton-tools">PagePicker PH</button>
@@ -165,7 +168,7 @@
             </div>
             <div>
                 <button type="submit" class="epi-cmsButton-text epi-cmsButton-tools">Ok</button>
-                <button type="button" id="btnAdd" class="epi-cmsButton-text epi-cmsButton-tools">Cancel</button>
+                <button type="button" id="btnCancel" class="epi-cmsButton-text epi-cmsButton-tools">Cancel</button>
 
             </div>
             <% } %>
