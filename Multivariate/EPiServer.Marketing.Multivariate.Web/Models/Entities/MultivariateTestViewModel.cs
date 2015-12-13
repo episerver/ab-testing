@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EPiServer.Marketing.Multivariate.Dal.Entities;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models.Entities
 {
@@ -29,7 +30,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models.Entities
 
         public Guid OriginalItemId { get; set; }
 
-        public List<Guid> VariantItems { get; set; }
+        public List<Variant> VariantItems { get; set; }
 
         public List<KeyPerformanceIndicator> Conversions { get; set; }
     }

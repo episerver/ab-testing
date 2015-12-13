@@ -40,11 +40,11 @@
                         $(this).siblings('#child-' + this.id).toggle(); });
                 });
 
-            $(function() {
-                $('#btnCreate').click(function () {
-                    location.href = '<%= Url.Action("Create","MultivariateAdministration") %>';
-                });
+           $(function () {
+                $('#btnCreate')
+                    .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
 
+            });
 
 
 
