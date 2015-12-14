@@ -15,6 +15,8 @@
       <dependency id="EPiServer.CMS.Core" version="[9.0.3,10)" />
       <dependency id="EPiServer.CMS.UI" version="[9.2,10)" />
       <dependency id="EPiServer.Logging.Log4Net" version="[2,3)" />
+      <dependency id="AutoMapper" version="4.1.1" />
+      <dependency id="EntityFramework" version="6.1.3" />
     </dependencies>
   </metadata>
 </package>
