@@ -18,8 +18,6 @@
     <asp:PlaceHolder runat="server">
         <%=Page.ClientResources("ShellCore")%>
         <%=Page.ClientResources("ShellCoreLightTheme")%>
-        <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.js"))%>
-        <%= Html.CssLink(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "system.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "ToolButton.css"))%>
         <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))%>
@@ -42,8 +40,11 @@
                         $(this).siblings('#child-' + this.id).toggle(); });
                 });
 
-            
+           $(function () {
+                $('#btnCreate')
+                    .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
 
+            });
 
 
 
@@ -61,9 +62,10 @@
                 <%= LanguageManager.Instance.Translate("/multivariate/settings/displayname")%>
             </h1>
         </div>
-        <div>
-       <%= Html.ActionLink("Create New Test","Create",null,null) %>
+               <div>
+            <button id="btnCreate" type="button" class="epi-cmsButton-text epi-cmsButton-tools" Style="background:url('/App_Themes/Default/Images/General/addIcon.png');horiz-align:left;background-repeat: no-repeat">&nbsp Add Test</button>
         </div>
+        <br/>
         <div>
             <table class="epi-default">
                 <tr>
