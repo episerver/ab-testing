@@ -35,13 +35,13 @@
                     @Html.DisplayNameFor(model => model.EndDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.State)
+                    @Html.DisplayNameFor(model => model.TestState)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.OriginalItemId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.VariantItems)
+                    @Html.DisplayNameFor(model => model.Variants)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Conversions)
@@ -68,21 +68,21 @@
                         @Html.DisplayFor(modelItem => item.EndDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.State)
+                        @Html.DisplayFor(modelItem => item.TestState)
                     </td>
 
                     <td>
                         @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new { id = item.OriginalItemId })
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.VariantItems)
+                        @Html.DisplayFor(modelItem => item.Variants)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Conversions)
                     </td>
-                    @if (item.Results.Count > 0)
+                    @if (item.MultivariateTestResults.Count > 0)
                 {
-                    foreach (var result in item.Results)
+                    foreach (var result in item.MultivariateTestResults)
                     {
                             <td>
                                 Views:
@@ -95,7 +95,7 @@
                                 @Html.DisplayFor(resultItem => result.Conversions)
                             </td>
                         }
-                        if (item.Results.Count == 1)
+                        if (item.MultivariateTestResults.Count == 1)
                         {
                             <td></td>}
 

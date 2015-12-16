@@ -1,4 +1,4 @@
-﻿@model EPiServer.Marketing.Multivariate.MultivariateTest
+﻿@model EPiServer.Marketing.Multivariate.Model.MultivariateTest
 
 @{
     Layout = null;
@@ -65,11 +65,11 @@
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.VariantItems[0])
+                @Html.LabelFor(model => model.Variants[0].VariantId)
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.VariantItems[0])
-                @Html.ValidationMessageFor(model => model.VariantItems[0])
+                @Html.EditorFor(model => model.Variants[0].VariantId)
+                @Html.ValidationMessageFor(model => model.Variants[0].VariantId)
             </div>
 
             <div class="editor-label">
