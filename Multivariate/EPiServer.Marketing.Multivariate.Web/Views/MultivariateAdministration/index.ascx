@@ -41,7 +41,12 @@
                     .attr("title", "Click to expand/collapse")
                     .click(function () {
                         $(this).siblings('#child-' + this.id).toggle(); });
-                });
+            });
+            $(function () {
+                $('#btnCreate')
+                    .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
+
+            });
 
             
 
@@ -63,9 +68,10 @@
             </h1>
         </div>
         <div>
-       <%= Html.ActionLink("Create New Test","Create",null,null) %>
+            <button id="btnCreate" type="button" class="epi-cmsButton-text epi-cmsButton-tools" Style="background:url('/App_Themes/Default/Images/General/addIcon.png');horiz-align:left;background-repeat: no-repeat">&nbsp Add Test</button>
         </div>
-        <div>
+       <br/>
+         <div>
             <table class="epi-default">
                 <tr>
 
