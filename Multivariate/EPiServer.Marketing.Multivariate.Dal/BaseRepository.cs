@@ -78,12 +78,12 @@ namespace EPiServer.Marketing.Multivariate.Dal
 
         public IMultivariateTest GetById(object id)
         {
-            return DatabaseContext.Set<IMultivariateTest>().Find(id);
+            return DatabaseContext.Set<MultivariateTest>().Find(id);
         }
 
         public IQueryable<IMultivariateTest> GetAll()
         {
-            return DatabaseContext.Set<IMultivariateTest>().AsQueryable();
+            return DatabaseContext.Set<MultivariateTest>().AsQueryable();
         } 
 
 

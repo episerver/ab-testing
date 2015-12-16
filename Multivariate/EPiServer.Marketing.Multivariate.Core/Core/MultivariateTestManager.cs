@@ -60,10 +60,12 @@ namespace EPiServer.Marketing.Multivariate
         public Guid Save(IMultivariateTest multivariateTest)
         {
             var test = _repository.GetById(multivariateTest.Id);
+            Guid id;
 
             if (test == null)
             {
                 _repository.Add(multivariateTest);
+                id = multivariateTest.Id;
             }
             else
             {
@@ -77,11 +79,12 @@ namespace EPiServer.Marketing.Multivariate
                 test.Variants = multivariateTest.Variants;
                 test.KeyPerformanceIndicators = multivariateTest.KeyPerformanceIndicators;
                 test.MultivariateTestResults = multivariateTest.MultivariateTestResults;
+                id = test.Id;
             }
 
             _repository.SaveChanges();
 
-            return test.Id;
+            return id;
         }
 
         public void Delete(Guid testObjectId)

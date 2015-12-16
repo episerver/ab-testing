@@ -17,19 +17,20 @@ namespace EPiServer.Marketing.Multivariate.Web
     [GuiPlugIn(DisplayName = "Multivariate Test Configuration",UrlFromModuleFolder = "MultivariateAdministration",Area=PlugInArea.AdminConfigMenu)]
     class MultivariateAdministrationController : Controller
     {
-        private readonly DatabaseContext _context;
+        private MultivariateTestManager _mtManager;
 
         public MultivariateAdministrationController()
         {
-            _context = new DatabaseContext();
+            _mtManager = new MultivariateTestManager();
         }
 
         public ActionResult Index()
         {
-            var tests = _context.MultivariateTests.ToArray();
+            var tests = _mtManager.GetTestList(new MultivariateTestCriteria()).ToArray();
+            //var tests = _context.MultivariateTests.ToArray();
 
-            Mapper.CreateMap<MultivariateTest, MultivariateTestViewModel>();
-            var testViews = Mapper.Map<MultivariateTest[], MultivariateTestViewModel[]>(tests);
+            Mapper.CreateMap<IMultivariateTest, MultivariateTestViewModel>();
+            var testViews = Mapper.Map<IMultivariateTest[], MultivariateTestViewModel[]>(tests);
 
             return View(testViews);
         }
@@ -60,8 +61,10 @@ namespace EPiServer.Marketing.Multivariate.Web
                     EndDate = testSettings.EndDate
                 };
 
-                _context.MultivariateTests.Add(myTest);
-                _context.SaveChanges();
+                //_context.MultivariateTests.Add(myTest);
+                //_context.SaveChanges();
+
+                _mtManager.Save(myTest);
 
                 return RedirectToAction("Index");
             }
