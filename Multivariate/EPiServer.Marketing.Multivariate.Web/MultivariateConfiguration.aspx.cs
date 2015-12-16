@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using EPiServer.Core;
 using EPiServer.Logging;
+using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.PlugIn;

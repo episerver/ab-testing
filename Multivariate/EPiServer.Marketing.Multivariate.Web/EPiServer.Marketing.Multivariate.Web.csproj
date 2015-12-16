@@ -247,6 +247,10 @@
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj">
+      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

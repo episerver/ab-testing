@@ -1,5 +1,6 @@
+using System.Data.Common;
 using System.Data.Entity.Infrastructure;
-using EPiServer.Marketing.Multivariate.Dal.Entities;
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Dal
 {
@@ -16,9 +17,21 @@ namespace EPiServer.Marketing.Multivariate.Dal
             Database.SetInitializer<DatabaseContext>(null);
         }
 
+        public DatabaseContext(DbConnection dbConn)
+            : base(dbConn, true)
+        {
+
+        }
+
         public DbSet<MultivariateTest> MultivariateTests { get; set; }
 
         public DbSet<MultivariateTestResult> MultivariateTestsResults { get; set; }
+
+        public DbSet<Conversion> Conversion { get; set; }
+
+        public DbSet<Variant> Variants { get; set; }
+
+        public DbSet<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

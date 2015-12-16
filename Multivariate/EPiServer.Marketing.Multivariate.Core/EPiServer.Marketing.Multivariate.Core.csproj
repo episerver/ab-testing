@@ -42,6 +42,15 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\packages\Castle.Windsor.3.2.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer, Version=9.3.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EPiServer.CMS.Core.9.3.2\lib\net45\EPiServer.dll</HintPath>
       <Private>True</Private>
@@ -122,6 +131,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -161,14 +171,8 @@
     <Compile Include="Cms\CurrentUser.cs" />
     <Compile Include="Cms\ICurrentSite.cs" />
     <Compile Include="Cms\ICurrentUser.cs" />
-    <Compile Include="Core\CountType.cs" />
-    <Compile Include="Core\IMultivariateTest.cs" />
     <Compile Include="Core\IMultivariateTestManager.cs" />
-    <Compile Include="Core\KeyPerformanceIndicator.cs" />
-    <Compile Include="Core\MultivariateTest.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
-    <Compile Include="Core\TestResult.cs" />
-    <Compile Include="Core\TestState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -185,6 +189,10 @@
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj">
+      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

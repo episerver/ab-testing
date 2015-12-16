@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories

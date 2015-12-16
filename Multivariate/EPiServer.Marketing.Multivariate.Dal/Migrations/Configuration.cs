@@ -5,6 +5,10 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
+    /// <summary>
+    /// Add-Migration Initial  -- creates internal migration info for upgrading to the next release for future schema changes
+    /// Update-Database -Script -SourceMigration:$InitialDatabase  -- generates the final sql script for creating the db once schema design is done
+    /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.Multivariate.Dal.DatabaseContext>
     {
         public Configuration()

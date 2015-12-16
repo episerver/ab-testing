@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Dal
 {
@@ -74,6 +75,18 @@ namespace EPiServer.Marketing.Multivariate.Dal
             
             return records;
         }
+
+        public IMultivariateTest GetById(object id)
+        {
+            return DatabaseContext.Set<IMultivariateTest>().Find(id);
+        }
+
+        public IQueryable<IMultivariateTest> GetAll()
+        {
+            return DatabaseContext.Set<IMultivariateTest>().AsQueryable();
+        } 
+
+
 
         /// <summary>
         /// Get a repository object by id from the ORM
@@ -191,11 +204,6 @@ namespace EPiServer.Marketing.Multivariate.Dal
                         DatabaseContext = null;
                     }
                 }
-
-                // Free your own state (unmanaged - ie native - objects).
-                // Set large fields to null.
-
-                // This allows the deterministic destruction of the attached com object.
 
                 _disposed = true;
             }

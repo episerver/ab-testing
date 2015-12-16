@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EPiServer.Marketing.Multivariate.Dal.Entities;
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models.Entities
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Dal
 {
@@ -55,6 +56,8 @@ namespace EPiServer.Marketing.Multivariate.Dal
         /// <returns>Entity corresponding to the given id in the repository</returns>
         T GetById<T>(object id) where T : class;
 
+        IMultivariateTest GetById(object id);
+
         /// <summary>
         /// Retrieves all entity objects of the given type from the repository
         /// </summary>
@@ -62,6 +65,8 @@ namespace EPiServer.Marketing.Multivariate.Dal
         /// <typeparam name="T">Type of entity to retrive</typeparam>
         /// <returns>IQueryable of all the entity object of the given type in the repository</returns>
         IQueryable<T> GetAll<T>() where T : class;
+
+        IQueryable<IMultivariateTest> GetAll();
 
         /// <summary>
         /// Retrieves all entity objects of the given type from the repository as a list

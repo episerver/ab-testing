@@ -1,19 +1,16 @@
-using EPiServer.Marketing.Multivariate.Dal.Entities.Enums;
+using EPiServer.Marketing.Multivariate.Model.Enums;
+using System;
+using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Multivariate.Dal.Entities
+namespace EPiServer.Marketing.Multivariate.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
-
-    public partial class MultivariateTest : EntityBase
+    public class MultivariateTest : IMultivariateTest
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MultivariateTest()
         {
-            //MultivariateTestResults = new HashSet<MultivariateTestResult>();
+            CreatedDate = DateTime.UtcNow;
+            ModifiedDate = DateTime.UtcNow;
         }
 
         public Guid Id { get; set; }
@@ -45,6 +42,10 @@ namespace EPiServer.Marketing.Multivariate.Dal.Entities
         public DateTime? LastModifiedDate { get; set; }
 
         public string LastModifiedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual IList<Conversion> Conversions { get; set; }

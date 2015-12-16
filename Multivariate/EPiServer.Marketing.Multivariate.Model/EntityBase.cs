@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Multivariate.Dal.Entities
+namespace EPiServer.Marketing.Multivariate.Model
 {
     public class EntityBase
     {

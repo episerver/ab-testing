@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models.Entities;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
@@ -26,8 +28,8 @@ namespace EPiServer.Marketing.Multivariate.Web
         {
             var tests = _context.MultivariateTests.ToArray();
 
-            Mapper.CreateMap<Dal.Entities.MultivariateTest, MultivariateTestViewModel>();
-            var testViews = Mapper.Map<Dal.Entities.MultivariateTest[], MultivariateTestViewModel[]>(tests);
+            Mapper.CreateMap<MultivariateTest, MultivariateTestViewModel>();
+            var testViews = Mapper.Map<MultivariateTest[], MultivariateTestViewModel[]>(tests);
 
             return View(testViews);
         }
@@ -47,12 +49,12 @@ namespace EPiServer.Marketing.Multivariate.Web
             }
             else
             {
-                var myTest = new EPiServer.Marketing.Multivariate.Dal.Entities.MultivariateTest()
+                var myTest = new MultivariateTest()
                 {
                     Title = testSettings.Title,
                     OriginalItemId = Guid.NewGuid(),
                     Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                    TestState = (int)Dal.Entities.Enums.TestState.Active,
+                    TestState = (int)TestState.Active,
                     LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                     StartDate = testSettings.StartDate,
                     EndDate = testSettings.EndDate

@@ -63,11 +63,6 @@
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DataOperations.cs" />
     <Compile Include="DatabaseContext.cs" />
-    <Compile Include="Entities\Conversion.cs" />
-    <Compile Include="Entities\EntityBase.cs" />
-    <Compile Include="Entities\Enums\TestState.cs" />
-    <Compile Include="Entities\KeyPerformanceIndicator.cs" />
-    <Compile Include="Entities\Variant.cs" />
     <Compile Include="IDataOperations.cs" />
     <Compile Include="IMultivariateTestDal.cs" />
     <Compile Include="IRepository.cs" />
@@ -76,13 +71,15 @@
     <Compile Include="Mappings\MultivariateTestMap.cs" />
     <Compile Include="Mappings\MultivariateTestResultMap.cs" />
     <Compile Include="Mappings\VariantMap.cs" />
+    <Compile Include="Migrations\201512151848336_Initial.cs" />
+    <Compile Include="Migrations\201512151848336_Initial.Designer.cs">
+      <DependentUpon>201512151848336_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MultivariateTestCriteria.cs" />
     <Compile Include="MultivariateTestDal.cs" />
     <Compile Include="MultivariateTestParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Entities\MultivariateTest.cs" />
-    <Compile Include="Entities\MultivariateTestResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -91,7 +88,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UI\Entities\" />
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj">
+      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201512151848336_Initial.resx">
+      <DependentUpon>201512151848336_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

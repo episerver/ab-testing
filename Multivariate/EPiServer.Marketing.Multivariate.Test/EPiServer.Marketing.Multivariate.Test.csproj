@@ -49,6 +49,19 @@
       <HintPath>..\..\packages\Castle.Windsor.3.2.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Effort">
+      <HintPath>..\..\packages\Effort.EF6.1.1.4\lib\net45\Effort.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer, Version=9.3.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EPiServer.CMS.Core.9.3.2\lib\net45\EPiServer.dll</HintPath>
       <Private>True</Private>
@@ -117,6 +130,10 @@
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NMemory">
+      <HintPath>..\..\packages\NMemory.1.0.1\lib\net45\NMemory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <HintPath>..\..\packages\structuremap-signed.3.1.6.186\lib\net40\StructureMap.dll</HintPath>
       <Private>True</Private>
@@ -130,7 +147,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -175,14 +194,19 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
+    <Compile Include="Core\Tests.cs" />
     <Compile Include="Core\MultivariateManagerTests.cs" />
+    <Compile Include="Core\TestBase.cs" />
     <Compile Include="Dal\MultivariateDalTests.cs" />
+    <Compile Include="Dal\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\UIHelperTests.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -195,6 +219,10 @@
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj">
+      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Web\EPiServer.Marketing.Multivariate.Web.csproj">
       <Project>{cb8500e5-9999-4e35-97d6-142e87857e6a}</Project>

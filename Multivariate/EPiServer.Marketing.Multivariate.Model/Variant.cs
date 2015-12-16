@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EPiServer.Marketing.Multivariate.Dal.Entities
+namespace EPiServer.Marketing.Multivariate.Model
 {
     public class Variant : EntityBase
     {

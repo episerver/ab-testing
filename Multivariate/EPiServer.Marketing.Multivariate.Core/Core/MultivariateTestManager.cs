@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate
 {
     [ServiceConfiguration(ServiceType = typeof(IMultivariateTestManager))]
     public class MultivariateTestManager : IMultivariateTestManager
     {
-        internal IMultivariateTestDal _dataAccess;
+        internal IRepository _repository;
         internal ICurrentUser _user;
         internal ICurrentSite _siteData;
 
@@ -24,61 +25,77 @@ namespace EPiServer.Marketing.Multivariate
         public MultivariateTestManager()
         {
             _siteData = new CurrentSite();
-            _dataAccess = new MultivariateTestDal(_siteData.GetSiteDataBaseConnectionString());
             _user = new CurrentUser();
+            _repository = new BaseRepository(new DatabaseContext());
         }
 
-        internal MultivariateTestManager(IMultivariateTestDal dal, ICurrentUser user, ICurrentSite siteData)
+        internal MultivariateTestManager(ICurrentUser user, ICurrentSite siteData, IRepository repo)
         {
-            _dataAccess = dal;
             _user = user;
             _siteData = siteData;
+            _repository = repo;
         }
-
-        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
-        {
-
-            return ConvertParametersToData(_dataAccess.GetFilteredTestList(criteria));
-        } 
 
         public IMultivariateTest Get(Guid testObjectId)
         {
-            return ConvertParametersToData(_dataAccess.Get(testObjectId));
+            return _repository.GetById(testObjectId);
         }
 
         public List<IMultivariateTest> GetTestByItemId(Guid originalItemId)
         {
-            return ConvertParametersToData(_dataAccess.GetByOriginalItemId(originalItemId));
+            return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
         }
 
-
-
-        public Guid Save(IMultivariateTest testObject)
+        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
         {
-            var aParameter = ConvertDataToParameters(testObject);
-            aParameter.LastModifiedBy = _user.GetDisplayName();
-            aParameter.LastModifiedDate = DateTime.Now;
+            // TODO:implement criteria object and retrieve accordingly
+            return _repository.GetAll().ToList();
+        }
 
-            var testGuid = aParameter.Id;
+        /// <summary>
+        /// Add new test to the db or updated an existing test if it already exists.
+        /// </summary>
+        /// <param name="multivariateTest"></param>
+        /// <returns>Id of the new or modified test.</returns>
+        public Guid Save(IMultivariateTest multivariateTest)
+        {
+            var test = _repository.GetById(multivariateTest.Id);
 
-            if (testGuid != Guid.Empty)
-                _dataAccess.Update(aParameter);
+            if (test == null)
+            {
+                _repository.Add(multivariateTest);
+            }
             else
-                testGuid = _dataAccess.Add(aParameter);
+            {
+                test.Title = multivariateTest.Title;
+                test.StartDate = multivariateTest.StartDate;
+                test.EndDate = multivariateTest.EndDate;
+                test.Owner = multivariateTest.Owner;
+                test.LastModifiedBy = multivariateTest.LastModifiedBy;
+                test.ModifiedDate = DateTime.UtcNow;
+                test.Conversions = multivariateTest.Conversions;
+                test.Variants = multivariateTest.Variants;
+                test.KeyPerformanceIndicators = multivariateTest.KeyPerformanceIndicators;
+                test.MultivariateTestResults = multivariateTest.MultivariateTestResults;
+            }
 
-            return testGuid;
+            _repository.SaveChanges();
+
+            return test.Id;
         }
 
         public void Delete(Guid testObjectId)
         {
-            _dataAccess.Delete(testObjectId);
+            var test = _repository.GetById(testObjectId);
+            _repository.Delete(test);
+            _repository.SaveChanges();
         }
 
         public void Start(Guid testObjectId)
         {
-            var localParameters = _dataAccess.Get(testObjectId);
+            var test = _repository.GetById(testObjectId);
 
-            if (IsTestActive(localParameters.OriginalItemId))
+            if (IsTestActive(test.OriginalItemId))
             {
                 throw new Exception("The test page already has an Active test");
             }
@@ -98,16 +115,24 @@ namespace EPiServer.Marketing.Multivariate
 
         public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
         {
+            var test = _repository.GetById(testId);
+            var result = test.MultivariateTestResults.FirstOrDefault(v => v.ItemId == testItemId);
+
             if (resultType == CountType.View)
-                _dataAccess.UpdateViews(testId, testItemId);
+            {
+                result.Views++;
+            }
             else
-                _dataAccess.UpdateConversions(testId, testItemId);
+            {
+                result.Conversions++;
+            }
         }
 
         public Guid ReturnLandingPage(Guid testId)
         {
-            var currentTest = _dataAccess.Get(testId);
-            Guid activePage = Guid.Empty;
+            var currentTest = _repository.GetById(testId);
+            var activePage = Guid.Empty;
+
             if (currentTest != null)
             {
                 switch (GetRandomNumber())
@@ -117,7 +142,7 @@ namespace EPiServer.Marketing.Multivariate
                         activePage = currentTest.OriginalItemId;
                         break;
                     case 2:
-                        activePage = currentTest.VariantItems[0];
+                        activePage = currentTest.Variants[0].VariantId;
                         break;
                 }
             }
@@ -127,84 +152,9 @@ namespace EPiServer.Marketing.Multivariate
 
         private void SetTestState(Guid theTestId, TestState theState)
         {
-            var aTest = ConvertParametersToData(_dataAccess.Get(theTestId));
-            aTest.State = theState;
+            var aTest = _repository.GetById(theTestId);
+            aTest.TestState = (int)theState;
             Save(aTest);
-        }
-
-        private IMultivariateTest ConvertParametersToData(MultivariateTestParameters parameters)
-        {
-            var aTest = new MultivariateTest();
-
-            aTest.Id = parameters.Id;
-            aTest.Title = parameters.Title;
-            aTest.Owner = parameters.Owner;
-            aTest.State = GetState(parameters.State);
-            aTest.OriginalItemId = parameters.OriginalItemId;
-            aTest.VariantItems = parameters.VariantItems;
-            aTest.StartDate = parameters.StartDate;
-            aTest.EndDate = parameters.EndDate;
-
-            if (parameters.Results != null)
-            {
-                aTest.Results = parameters.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions });
-            }
-
-            if (parameters.Conversions != null)
-            {
-                aTest.Conversions = parameters.Conversions.ConvertAll(x => new KeyPerformanceIndicator());
-            }
-
-            
-
-            return aTest;
-        }
-
-        private List<IMultivariateTest> ConvertParametersToData(MultivariateTestParameters[] parameters)
-        {
-            var aRetTests = new List<IMultivariateTest>();
-
-            foreach (MultivariateTestParameters aParam in parameters)
-            {
-                if (aParam != null)
-                {
-                    aRetTests.Add(new MultivariateTest()
-                    {
-                        Id = aParam.Id,
-                        Title = aParam.Title,
-                        Owner = aParam.Owner,
-                        State = GetState(aParam.State),
-                        OriginalItemId = aParam.OriginalItemId,
-                        VariantItems = aParam.VariantItems,
-                        StartDate = aParam.StartDate,
-                        EndDate = aParam.EndDate,
-                        Results = aParam.Results != null ? aParam.Results.ConvertAll(x => new TestResult { ItemId = x.ItemId, Views = x.Views, Conversions = x.Conversions }) : null,
-                        Conversions = aParam.Conversions != null ? aParam.Conversions.ConvertAll(x=>new KeyPerformanceIndicator()):null
-                        
-                    });
-                }
-            }
-
-            return aRetTests;
-        }
-
-        private MultivariateTestParameters ConvertDataToParameters(IMultivariateTest testObject)
-        {
-            var aRetParameter = new MultivariateTestParameters();
-
-            aRetParameter.Id = testObject.Id;
-            aRetParameter.Title = testObject.Title;
-            aRetParameter.Owner = testObject.Owner;
-            aRetParameter.State = GetStateValue(testObject.State);
-            aRetParameter.OriginalItemId = testObject.OriginalItemId;
-            aRetParameter.VariantItems = testObject.VariantItems;
-            aRetParameter.StartDate = testObject.StartDate;
-            aRetParameter.EndDate = testObject.EndDate;
-            if (aRetParameter.Conversions != null)
-            {
-                aRetParameter.Conversions = testObject.Conversions.ConvertAll(x => new PerformanceIndicator());
-            }
-            return aRetParameter;
         }
 
         private string GetStateValue(TestState state)
@@ -245,8 +195,10 @@ namespace EPiServer.Marketing.Multivariate
 
         private bool IsTestActive(Guid originalItemId)
         {
-            var allTests = _dataAccess.GetByOriginalItemId(originalItemId);
-            return allTests.Any(t => t.State == _active);
+            var tests = _repository.GetAll()
+                .Where(t => t.OriginalItemId == originalItemId && t.TestState == (int)TestState.Active);
+
+            return tests.Any();
         }
 
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
@@ -255,5 +207,6 @@ namespace EPiServer.Marketing.Multivariate
         {
             return _r.Next(1, 3);
         }
+    
     }
 }

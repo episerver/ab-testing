@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Dal.Mappings
 {
@@ -33,10 +30,10 @@ namespace EPiServer.Marketing.Multivariate.Dal.Mappings
                 .IsRequired();
 
             this.Property(s => s.Views)
-                .IsOptional();
+                .IsRequired();
 
             this.Property(s => s.Conversions)
-                .IsOptional();
+                .IsRequired();
             
         }
     }

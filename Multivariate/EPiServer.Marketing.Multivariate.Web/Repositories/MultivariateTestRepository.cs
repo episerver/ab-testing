@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Dal.Entities;
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
@@ -37,42 +38,14 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             tm.Save( new MultivariateTest
             {
                 Title = title,
-                Id = Guid.NewGuid(),
                 OriginalItemId = getPageId(originalPageLink),
-                VariantItems = new List<Guid>() { getPageId(variantPageLink) },
-                Conversions = new List<KeyPerformanceIndicator> { new KeyPerformanceIndicator() },
+                Variants = new List<Variant>(),
+                Conversions = new List<Conversion>(),
                 Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                 StartDate = testStart,
                 EndDate = testStop
             });
-
-
-            var context = new DatabaseContext();
-
-            var myTest = new EPiServer.Marketing.Multivariate.Dal.Entities.MultivariateTest()
-            {
-                Title = title,
-                OriginalItemId = getPageId(originalPageLink),
-                Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                TestState = (int)Dal.Entities.Enums.TestState.Active,
-                LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                StartDate = testStart,
-                EndDate = testStop
-            };
-
-            context.MultivariateTests.Add(myTest);
-
-            var testResult = new MultivariateTestResult()
-            {
-                ItemId = new Guid("C18C9E6C-6CFE-4797-B5F3-60A91F1A4A79"),
-                Views = 2,
-                Conversions = 1,
-                MultivariateTest = myTest
-            };
-
-            context.MultivariateTestsResults.Add(testResult);
-
-            context.SaveChanges();
+            
         }
 
         
@@ -81,7 +54,6 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             tm.Delete(testuGuid);
-            
         }
 
         public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
