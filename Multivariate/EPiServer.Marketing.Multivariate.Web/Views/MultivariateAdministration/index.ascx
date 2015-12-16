@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<EPiServer.Marketing.Multivariate.Web.Models.Entities.MultivariateTestViewModel[]>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.Model.IMultivariateTest>>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
@@ -7,6 +7,7 @@
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 
 <!DOCTYPE html>
@@ -18,6 +19,8 @@
     <asp:PlaceHolder runat="server">
         <%=Page.ClientResources("ShellCore")%>
         <%=Page.ClientResources("ShellCoreLightTheme")%>
+        <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.js"))%>
+        <%= Html.CssLink(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "system.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "ToolButton.css"))%>
         <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))%>
@@ -40,11 +43,8 @@
                         $(this).siblings('#child-' + this.id).toggle(); });
                 });
 
-           $(function () {
-                $('#btnCreate')
-                    .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
+            
 
-            });
 
 
 
@@ -62,10 +62,9 @@
                 <%= LanguageManager.Instance.Translate("/multivariate/settings/displayname")%>
             </h1>
         </div>
-               <div>
-            <button id="btnCreate" type="button" class="epi-cmsButton-text epi-cmsButton-tools" Style="background:url('/App_Themes/Default/Images/General/addIcon.png');horiz-align:left;background-repeat: no-repeat">&nbsp Add Test</button>
+        <div>
+       <%= Html.ActionLink("Create New Test","Create",null,null) %>
         </div>
-        <br/>
         <div>
             <table class="epi-default">
                 <tr>
@@ -76,6 +75,8 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/conversionpage")%></th>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
@@ -91,19 +92,20 @@
                     <td><%= item.OriginalItemId %></td>
 
 
+
                 </tr>
 
-              <%--  <tr id="child-parent<%= index %>" style="display: none">
+                <tr id="child-parent<%= index %>" style="display: none">
                     <td colspan="8">
-                        <% if (item.TestState == (int)TestState.Inactive)
+                        <% if (item.TestState == 0)
                            { %>
                                <span style="color: red">This test has not been started</span>
                             <% } %>
 
 
-                        <%  if (item.Results != null)
+                        <%  if (item.MultivariateTestResults != null)
                             {
-                                foreach (var result in item.Results)
+                                foreach (var result in item.MultivariateTestResults)
                                 { %>
                         <table>
                             <tr>
@@ -122,7 +124,7 @@
                         <% } %>  
                         
                     </td>
-                </tr>--%>
+                </tr>
                 <% index++;
                     } %>
             </table>
