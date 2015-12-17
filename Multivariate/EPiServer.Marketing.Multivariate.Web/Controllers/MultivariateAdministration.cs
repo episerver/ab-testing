@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,38 +6,28 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
-using EPiServer.Marketing.Multivariate.Web.Models.Entities;
+using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
-    [GuiPlugIn(DisplayName = "Multivariate Test Configuration",UrlFromModuleFolder = "MultivariateAdministration",Area=PlugInArea.AdminConfigMenu)]
+    [GuiPlugIn(DisplayName = "Multivariate Test Configuration", UrlFromModuleFolder = "MultivariateAdministration", Area = PlugInArea.AdminConfigMenu)]
     class MultivariateAdministrationController : Controller
     {
-        private readonly MultivariateTestManager _mtManager;
-
-        public MultivariateAdministrationController()
-        {
-            _mtManager = new MultivariateTestManager();
-        }
-
         public ActionResult Index()
         {
-            var tests = _mtManager.GetTestList(new MultivariateTestCriteria()).ToArray();
-
-            Mapper.CreateMap<IMultivariateTest, MultivariateTestViewModel>();
-            var testViews = Mapper.Map<IMultivariateTest[], MultivariateTestViewModel[]>(tests);
-
-            return View(testViews);
+            List<IMultivariateTest> mvTestList = new List<IMultivariateTest>();
+            IMultivariateTestRepository testRepository = new MultivariateTestRepository();
+            mvTestList = testRepository.GetTestList(new MultivariateTestCriteria());
+            return View(mvTestList);
         }
 
         public ActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult Create(MultivariateTestViewModel testSettings)
         {
@@ -49,22 +38,14 @@ namespace EPiServer.Marketing.Multivariate.Web
             }
             else
             {
-                var myTest = new MultivariateTest()
-                {
-                    Id = Guid.NewGuid(),
-                    Title = testSettings.Title,
-                    OriginalItemId = Guid.NewGuid(),
-                    Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                    TestState = (int)TestState.Active,
-                    LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                    StartDate = testSettings.StartDate,
-                    EndDate = testSettings.EndDate
-                };
-
-                _mtManager.Save(myTest);
-
+                MultivariateTestRepository repo = new MultivariateTestRepository();
+                DateTime start = testSettings.StartDate;
+                DateTime stop = testSettings.EndDate;
+                repo.CreateTest(testSettings.Title, start, stop, 1, 2, 3);
                 return RedirectToAction("Index");
             }
+
+
 
         }
     }

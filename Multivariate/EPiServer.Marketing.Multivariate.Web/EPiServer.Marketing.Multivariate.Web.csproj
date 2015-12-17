@@ -187,7 +187,7 @@
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
     <Compile Include="Models\EndDateAttribute.cs" />
-    <Compile Include="Models\Entities\MultivariateTestViewModel.cs" />
+    <Compile Include="Models\MultivariateTestViewModel.cs" />
     <Compile Include="Models\StartDateAttrbiute.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
@@ -260,6 +260,7 @@ mkdir "$(SolutionDir)Deployment\lib"
 xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Core*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Model*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y

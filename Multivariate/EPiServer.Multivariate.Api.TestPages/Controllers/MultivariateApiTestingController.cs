@@ -28,15 +28,34 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             multiVariateTest.OriginalItemId = Guid.NewGuid();
             multiVariateTest.Conversions = new List<Conversion>()
             {
-                new Conversion(),
-                new Conversion(),
                 new Conversion()
+                {
+                    ConversionString = "First Conversion String"
+                },
+                new Conversion()
+                {
+                    ConversionString = "Second Conversion String"
+                },
+                new Conversion()
+                {
+                    ConversionString = "Third Conversion String"
+                }
             };
             multiVariateTest.Variants = new List<Variant>()
             {
-                new Variant(),
-                new Variant(),
                 new Variant()
+                {
+                    VariantId = Guid.NewGuid()
+                },
+                new Variant()
+                {
+                    VariantId = Guid.NewGuid()
+                },
+
+                new Variant()
+                {
+                    VariantId = Guid.NewGuid()
+                }
             };
 
             return View(multiVariateTest);
