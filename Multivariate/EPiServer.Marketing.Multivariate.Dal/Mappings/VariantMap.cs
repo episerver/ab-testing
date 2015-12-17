@@ -10,9 +10,7 @@ namespace EPiServer.Marketing.Multivariate.Dal.Mappings
         {
             this.ToTable("tblVariant");
 
-            this.HasKey(hk => hk.Id)
-                .Property(hk => hk.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(hk => hk.Id);
 
             this.Property(m => m.VariantId)
                 .IsRequired();

@@ -37,6 +37,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             tm.Save( new MultivariateTest
             {
+                Id = Guid.NewGuid(),
                 Title = title,
                 OriginalItemId = getPageId(originalPageLink),
                 Variants = new List<Variant>(),

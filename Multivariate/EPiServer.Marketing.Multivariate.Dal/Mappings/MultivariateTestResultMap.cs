@@ -11,9 +11,7 @@ namespace EPiServer.Marketing.Multivariate.Dal.Mappings
         {
             this.ToTable("tblMultivariateTestResult");
 
-            this.HasKey(hk => hk.Id)
-               .Property(hk => hk.Id)
-               .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(hk => hk.Id);
 
             this.Property(s => s.CreatedDate)
                .IsRequired();

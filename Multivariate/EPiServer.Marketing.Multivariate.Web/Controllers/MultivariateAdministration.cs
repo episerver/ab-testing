@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.Multivariate.Web
     [GuiPlugIn(DisplayName = "Multivariate Test Configuration",UrlFromModuleFolder = "MultivariateAdministration",Area=PlugInArea.AdminConfigMenu)]
     class MultivariateAdministrationController : Controller
     {
-        private MultivariateTestManager _mtManager;
+        private readonly MultivariateTestManager _mtManager;
 
         public MultivariateAdministrationController()
         {
@@ -27,7 +27,6 @@ namespace EPiServer.Marketing.Multivariate.Web
         public ActionResult Index()
         {
             var tests = _mtManager.GetTestList(new MultivariateTestCriteria()).ToArray();
-            //var tests = _context.MultivariateTests.ToArray();
 
             Mapper.CreateMap<IMultivariateTest, MultivariateTestViewModel>();
             var testViews = Mapper.Map<IMultivariateTest[], MultivariateTestViewModel[]>(tests);
@@ -52,6 +51,7 @@ namespace EPiServer.Marketing.Multivariate.Web
             {
                 var myTest = new MultivariateTest()
                 {
+                    Id = Guid.NewGuid(),
                     Title = testSettings.Title,
                     OriginalItemId = Guid.NewGuid(),
                     Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
@@ -60,9 +60,6 @@ namespace EPiServer.Marketing.Multivariate.Web
                     StartDate = testSettings.StartDate,
                     EndDate = testSettings.EndDate
                 };
-
-                //_context.MultivariateTests.Add(myTest);
-                //_context.SaveChanges();
 
                 _mtManager.Save(myTest);
 

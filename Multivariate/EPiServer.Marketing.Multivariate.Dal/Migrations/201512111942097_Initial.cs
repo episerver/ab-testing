@@ -8,20 +8,6 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.tblConversion",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false, identity: true),
-                        TestId = c.Guid(nullable: false),
-                        ConversionString = c.String(nullable: false),
-                        CreatedDate = c.DateTime(nullable: false),
-                        ModifiedDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.tblMultivariateTest", t => t.TestId, cascadeDelete: true)
-                .Index(t => t.TestId);
-            
-            CreateTable(
                 "dbo.tblMultivariateTest",
                 c => new
                     {
@@ -38,6 +24,20 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
                         ModifiedDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.tblConversion",
+                c => new
+                    {
+                        Id = c.Guid(nullable: false, identity: true),
+                        TestId = c.Guid(nullable: false),
+                        ConversionString = c.String(nullable: false),
+                        CreatedDate = c.DateTime(nullable: false),
+                        ModifiedDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.tblMultivariateTest", t => t.TestId, cascadeDelete: true)
+                .Index(t => t.TestId);
             
             CreateTable(
                 "dbo.tblKeyPerformanceIndicator",
@@ -60,8 +60,8 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
                         Id = c.Guid(nullable: false, identity: true),
                         TestId = c.Guid(nullable: false),
                         ItemId = c.Guid(nullable: false),
-                        Views = c.Int(nullable: false),
-                        Conversions = c.Int(nullable: false),
+                        Views = c.Int(),
+                        Conversions = c.Int(),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
@@ -87,10 +87,10 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.tblConversion", "TestId", "dbo.tblMultivariateTest");
             DropForeignKey("dbo.tblVariant", "TestId", "dbo.tblMultivariateTest");
             DropForeignKey("dbo.tblMultivariateTestResult", "TestId", "dbo.tblMultivariateTest");
             DropForeignKey("dbo.tblKeyPerformanceIndicator", "TestId", "dbo.tblMultivariateTest");
+            DropForeignKey("dbo.tblConversion", "TestId", "dbo.tblMultivariateTest");
             DropIndex("dbo.tblVariant", new[] { "TestId" });
             DropIndex("dbo.tblMultivariateTestResult", new[] { "TestId" });
             DropIndex("dbo.tblKeyPerformanceIndicator", new[] { "TestId" });
@@ -98,8 +98,8 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
             DropTable("dbo.tblVariant");
             DropTable("dbo.tblMultivariateTestResult");
             DropTable("dbo.tblKeyPerformanceIndicator");
-            DropTable("dbo.tblMultivariateTest");
             DropTable("dbo.tblConversion");
+            DropTable("dbo.tblMultivariateTest");
         }
     }
 }

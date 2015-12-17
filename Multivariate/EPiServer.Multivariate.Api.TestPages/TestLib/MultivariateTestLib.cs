@@ -71,6 +71,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
 
             var savedTest = new MultivariateTest
             {
+                Id = Guid.NewGuid(),
                 KeyPerformanceIndicators = conversionsToSave,
                 
                 EndDate = dataToSave.EndDate,

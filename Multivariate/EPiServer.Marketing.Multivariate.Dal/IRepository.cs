@@ -48,6 +48,8 @@ namespace EPiServer.Marketing.Multivariate.Dal
         /// <typeparam name="T">Type of the object to delete.</typeparam>
         void Delete<T>(T instance) where T : class;
 
+        void Delete(object id);
+
         /// <summary>
         /// Retrieves the entity object by Id from the repository
         /// </summary>

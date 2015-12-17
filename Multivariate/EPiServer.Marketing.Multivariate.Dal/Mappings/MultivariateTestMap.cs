@@ -10,9 +10,7 @@ namespace EPiServer.Marketing.Multivariate.Dal.Mappings
         {
             this.ToTable("tblMultivariateTest");
 
-            this.HasKey(hk => hk.Id)
-                .Property(hk => hk.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            this.HasKey(hk => hk.Id);
 
             this.Property(m => m.Title)
                 .HasMaxLength(255)

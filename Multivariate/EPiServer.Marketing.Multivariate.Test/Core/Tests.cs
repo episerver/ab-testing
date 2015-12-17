@@ -49,6 +49,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             _context.SaveChanges();
 
             Assert.AreEqual(_context.MultivariateTests.Count(), 1);
+            Assert.AreEqual(_context.MultivariateTests.Find(id), test.Id);
         }
 
         [TestMethod]
@@ -62,5 +63,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
         }
 
+
+        public void NewMultivariateTestTest()
+        {
+            var newTests = AddMultivariateTests(_context);
+            _context.SaveChanges();
+
+
+        }
     }
 }

@@ -192,3 +192,4 @@ ModelManifest.xml
 /Multivariate/Deployment/lib/EPiServer.Marketing.Multivariate.Core.dll
 /Multivariate/Deployment/lib
 /Multivariate/Deployment/EPiServer.Marketing.Multivariate.1.0.0.0.nupkg
+/Multivariate/MultivariateTestingDeployment/Package.nuspec
