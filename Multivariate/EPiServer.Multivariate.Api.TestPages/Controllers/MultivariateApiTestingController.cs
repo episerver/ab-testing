@@ -26,37 +26,13 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         {
             MultivariateTest multiVariateTest = new MultivariateTest();
             multiVariateTest.OriginalItemId = Guid.NewGuid();
-            multiVariateTest.Conversions = new List<Conversion>()
+            multiVariateTest.Variants = new List<Variant>();
+            multiVariateTest.Variants.Add(new Variant()
             {
-                new Conversion()
-                {
-                    ConversionString = "First Conversion String"
-                },
-                new Conversion()
-                {
-                    ConversionString = "Second Conversion String"
-                },
-                new Conversion()
-                {
-                    ConversionString = "Third Conversion String"
-                }
-            };
-            multiVariateTest.Variants = new List<Variant>()
-            {
-                new Variant()
-                {
-                    VariantId = Guid.NewGuid()
-                },
-                new Variant()
-                {
-                    VariantId = Guid.NewGuid()
-                },
+                VariantId = Guid.NewGuid()
+            });
 
-                new Variant()
-                {
-                    VariantId = Guid.NewGuid()
-                }
-            };
+
 
             return View(multiVariateTest);
         }
@@ -96,8 +72,8 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             MultivariateTestManager mtm = new MultivariateTestManager();
             if (ModelState.IsValid)
             {
-                Guid savedTestId = testLib.CreateAbTest(dataToSave);
-                MultivariateTest returnedTestData = mtm.Get(savedTestId) as MultivariateTest;
+                testLib.CreateAbTest(dataToSave);
+                MultivariateTest returnedTestData = mtm.Get(dataToSave.Id) as MultivariateTest;
 
                 return View("TestDetails", returnedTestData);
             }

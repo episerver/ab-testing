@@ -75,7 +75,16 @@
                         @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new { id = item.OriginalItemId })
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Variants)
+
+                        @if (item.Variants != null)
+                        {
+                            for (int i = 0; i < item.Variants.Count; i++)
+                            {
+                                @Html.DisplayFor(modelItem => item.Variants[i].VariantId)
+                            }
+
+                        }
+
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Conversions)

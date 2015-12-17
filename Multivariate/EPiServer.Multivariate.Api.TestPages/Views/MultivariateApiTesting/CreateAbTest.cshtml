@@ -72,13 +72,6 @@
                 @Html.ValidationMessageFor(model => model.Variants[0].VariantId)
             </div>
 
-            <div class="editor-label">
-                @Html.LabelFor(model => model.Conversions[0])
-            </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Conversions[0])
-                @Html.ValidationMessageFor(model => model.Conversions[0])
-            </div>
 
             <p>
                 @if (Model.Id == Guid.Empty)
