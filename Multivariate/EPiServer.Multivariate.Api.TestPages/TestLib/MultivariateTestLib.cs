@@ -18,20 +18,20 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         {
 
 
-
+            MultivariateTestManager mtm = new MultivariateTestManager();
             List<IMultivariateTest> discoveredTests = new List<IMultivariateTest>();
             IMultivariateTestRepository testRepo = new MultivariateTestRepository();
 
             ICurrentSite currentSite = new CurrentSite();
 
-            discoveredTests = testRepo.GetTestList(new MultivariateTestCriteria());
+            discoveredTests = mtm.GetTestList(new MultivariateTestCriteria());
 
 
 
             return discoveredTests;
         }
 
-        private List<KeyPerformanceIndicator> conversionsToSave;
+        private List<KeyPerformanceIndicator> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
 
@@ -47,39 +47,43 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
 
             if (dataToSave.Id == Guid.Empty)
             {
-                conversionsToSave = new List<KeyPerformanceIndicator>()
+                Kpis = new List<KeyPerformanceIndicator>()
                 {
-                    new KeyPerformanceIndicator(),
+                    new KeyPerformanceIndicator()
+                    {
+                      KeyPerformanceIndicatorId  = Guid.NewGuid()
+                    },
 
                 };
                 originalItemGuid = Guid.NewGuid();
                 variantsToSave = new List<Variant>()
                 {
                     new Variant()
+                    {
+                        VariantId = dataToSave.Variants[0].VariantId
+                    }
                 };
 
 
             }
             else
             {
-                dataToSave.KeyPerformanceIndicators.AddRange(conversionsToSave);
 
                 originalItemGuid = dataToSave.OriginalItemId;
-                dataToSave.Variants.AddRange(variantsToSave);
 
             }
 
             var savedTest = new MultivariateTest
             {
-                Id = Guid.NewGuid(),
-                KeyPerformanceIndicators = conversionsToSave,
-                
+                KeyPerformanceIndicators = Kpis,
+
                 EndDate = dataToSave.EndDate,
                 OriginalItemId = originalItemGuid,
                 StartDate = dataToSave.StartDate,
                 Title = dataToSave.Title,
                 Variants = variantsToSave,
                 Owner = dataToSave.Owner,
+                MultivariateTestResults = new List<MultivariateTestResult>()
             };
 
             _mtm.Save(savedTest);
@@ -132,23 +136,23 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         public IMultivariateTest RunTests(Guid testId)
         {
             _mtm = new MultivariateTestManager();
-            List<Guid> results = new List<Guid>();
+            MultivariateTest currentTest = (MultivariateTest)_mtm.Get(testId);
             _mtm.Start(testId);
-            for (int x = 0; x < 1000; x++)
+            for (int x = 0; x < 5; x++)
             {
+                currentTest.MultivariateTestResults.Add(new MultivariateTestResult()
+                {
+                    ItemId = _mtm.ReturnLandingPage(testId)
+                });
 
-                results.Add(_mtm.ReturnLandingPage(testId));
             }
 
-            var pageResults = results.GroupBy(x => x);
-            foreach (var result in pageResults)
+
+            foreach (var result in currentTest.MultivariateTestResults)
             {
-                for (int views = 0; views < result.Count(); views++)
+                for (int views = 0; views < currentTest.MultivariateTestResults.Count(); views++)
                 {
-                    if (views % 5 == 0)
-                        _mtm.IncrementCount(testId, result.Key, CountType.Conversion);
-                    else
-                        _mtm.IncrementCount(testId, result.Key, CountType.View);
+                    _mtm.IncrementCount(testId, result.ItemId, views%5 == 0 ? CountType.Conversion : CountType.View);
                 }
             }
 
