@@ -31,7 +31,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             {
                 VariantId = Guid.NewGuid()
             });
-
+            multiVariateTest.Id = Guid.NewGuid();
 
 
             return View(multiVariateTest);
@@ -44,6 +44,16 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             MultivariateTestManager mtm = new MultivariateTestManager();
             if (ModelState.IsValid)
             {
+                multivariateTestData.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                {
+                    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
+                };
+
+                multivariateTestData.Variants = new List<Variant>() {
+                   new Variant() {Id = Guid.NewGuid(),VariantId = Guid.NewGuid()}
+                };
+
+
                 Guid savedTestId = testLib.CreateAbTest(multivariateTestData);
                 var returnedTestData = mtm.Get(savedTestId);
 

@@ -51,15 +51,18 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
                 {
                     new KeyPerformanceIndicator()
                     {
+                        Id=Guid.NewGuid(),
                       KeyPerformanceIndicatorId  = Guid.NewGuid()
                     },
 
                 };
                 originalItemGuid = Guid.NewGuid();
+                dataToSave.Id = Guid.NewGuid();
                 variantsToSave = new List<Variant>()
                 {
                     new Variant()
                     {
+                        Id = Guid.NewGuid(),
                         VariantId = dataToSave.Variants[0].VariantId
                     }
                 };
@@ -68,15 +71,16 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             }
             else
             {
-
+                variantsToSave = dataToSave.Variants.ToList();
+                Kpis = dataToSave.KeyPerformanceIndicators.ToList();
                 originalItemGuid = dataToSave.OriginalItemId;
 
             }
 
             var savedTest = new MultivariateTest
             {
+                Id = dataToSave.Id,
                 KeyPerformanceIndicators = Kpis,
-
                 EndDate = dataToSave.EndDate,
                 OriginalItemId = originalItemGuid,
                 StartDate = dataToSave.StartDate,
@@ -142,6 +146,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             {
                 currentTest.MultivariateTestResults.Add(new MultivariateTestResult()
                 {
+                    Id = Guid.NewGuid(),
                     ItemId = _mtm.ReturnLandingPage(testId)
                 });
 
@@ -152,7 +157,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             {
                 for (int views = 0; views < currentTest.MultivariateTestResults.Count(); views++)
                 {
-                    _mtm.IncrementCount(testId, result.ItemId, views%5 == 0 ? CountType.Conversion : CountType.View);
+                    _mtm.IncrementCount(testId, result.ItemId, views % 5 == 0 ? CountType.Conversion : CountType.View);
                 }
             }
 
