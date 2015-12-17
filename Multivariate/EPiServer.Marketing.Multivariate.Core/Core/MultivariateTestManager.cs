@@ -89,8 +89,7 @@ namespace EPiServer.Marketing.Multivariate
 
         public void Delete(Guid testObjectId)
         {
-            var test = _repository.GetById(testObjectId);
-            _repository.Delete(test);
+            _repository.DeleteTest(testObjectId);
             _repository.SaveChanges();
         }
 

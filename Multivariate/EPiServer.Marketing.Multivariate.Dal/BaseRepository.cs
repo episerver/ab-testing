@@ -86,7 +86,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
             return DatabaseContext.Set<MultivariateTest>().AsQueryable();
         } 
 
-        public void Delete(object id)
+        public void DeleteTest(object id)
         {
             var test = DatabaseContext.Set<MultivariateTest>().Find(id);
             DatabaseContext.Set<MultivariateTest>().Remove(test);
