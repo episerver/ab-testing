@@ -9,10 +9,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 {
     public class MultivariateApiTestingController : Controller
     {
-        /// <summary>
-        /// Gets a list of all Multivariate Tests saved to the current EPiServer Site
-        /// </summary>
-        /// Status:  Done as of 7/8/2015
+
         public ActionResult Index()
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
@@ -25,14 +22,12 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult CreateAbTest()
         {
             MultivariateTest multiVariateTest = new MultivariateTest();
-            multiVariateTest.OriginalItemId = Guid.NewGuid();
-            multiVariateTest.Variants = new List<Variant>();
-            multiVariateTest.Variants.Add(new Variant()
-            {
-                VariantId = Guid.NewGuid()
-            });
-            multiVariateTest.Id = Guid.NewGuid();
 
+            multiVariateTest.OriginalItemId = Guid.NewGuid();
+            multiVariateTest.Variants = new List<Variant>()
+            {
+                new Variant() {Id=Guid.NewGuid(),VariantId = Guid.NewGuid()}
+            };
 
             return View(multiVariateTest);
         }
@@ -44,20 +39,9 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             MultivariateTestManager mtm = new MultivariateTestManager();
             if (ModelState.IsValid)
             {
-                multivariateTestData.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
-                {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
-                };
-
-                multivariateTestData.Variants = new List<Variant>() {
-                   new Variant() {Id = Guid.NewGuid(),VariantId = Guid.NewGuid()}
-                };
-
-
                 Guid savedTestId = testLib.CreateAbTest(multivariateTestData);
-                var returnedTestData = mtm.Get(savedTestId);
 
-                return View("TestDetails", returnedTestData);
+                return View("TestDetails", mtm.Get(savedTestId));
             }
             return View(multivariateTestData);
 

@@ -34,65 +34,33 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         private List<KeyPerformanceIndicator> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
+        private List<MultivariateTestResult> testResults = new List<MultivariateTestResult>();
 
 
 
         public Guid CreateAbTest(MultivariateTest dataToSave)
         {
 
-            _mtm = new MultivariateTestManager();
+            MultivariateTestManager _mtm = new MultivariateTestManager();
+            dataToSave.Id = Guid.NewGuid();
 
-
-
-
-            if (dataToSave.Id == Guid.Empty)
-            {
-                Kpis = new List<KeyPerformanceIndicator>()
+            dataToSave.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 {
-                    new KeyPerformanceIndicator()
-                    {
-                        Id=Guid.NewGuid(),
-                      KeyPerformanceIndicatorId  = Guid.NewGuid()
-                    },
-
-                };
-                originalItemGuid = Guid.NewGuid();
-                dataToSave.Id = Guid.NewGuid();
-                variantsToSave = new List<Variant>()
-                {
-                    new Variant()
-                    {
-                        Id = Guid.NewGuid(),
-                        VariantId = dataToSave.Variants[0].VariantId
-                    }
+                    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
                 };
 
 
-            }
-            else
-            {
-                variantsToSave = dataToSave.Variants.ToList();
-                Kpis = dataToSave.KeyPerformanceIndicators.ToList();
-                originalItemGuid = dataToSave.OriginalItemId;
 
-            }
-
-            var savedTest = new MultivariateTest
+            dataToSave.MultivariateTestResults = new List<MultivariateTestResult>()
             {
-                Id = dataToSave.Id,
-                KeyPerformanceIndicators = Kpis,
-                EndDate = dataToSave.EndDate,
-                OriginalItemId = originalItemGuid,
-                StartDate = dataToSave.StartDate,
-                Title = dataToSave.Title,
-                Variants = variantsToSave,
-                Owner = dataToSave.Owner,
-                MultivariateTestResults = new List<MultivariateTestResult>()
+                new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.OriginalItemId},
+                new MultivariateTestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].VariantId}
             };
 
-            _mtm.Save(savedTest);
 
-            return savedTest.Id;
+            _mtm.Save(dataToSave);
+
+            return dataToSave.Id;
         }
 
         /// <summary>
@@ -144,22 +112,11 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             _mtm.Start(testId);
             for (int x = 0; x < 5; x++)
             {
-                currentTest.MultivariateTestResults.Add(new MultivariateTestResult()
-                {
-                    Id = Guid.NewGuid(),
-                    ItemId = _mtm.ReturnLandingPage(testId)
-                });
+                Guid result = _mtm.ReturnLandingPage(testId);
+                _mtm.IncrementCount(testId, result, x % 5 == 0 ? CountType.Conversion : CountType.View);
 
             }
 
-
-            foreach (var result in currentTest.MultivariateTestResults)
-            {
-                for (int views = 0; views < currentTest.MultivariateTestResults.Count(); views++)
-                {
-                    _mtm.IncrementCount(testId, result.ItemId, views % 5 == 0 ? CountType.Conversion : CountType.View);
-                }
-            }
 
             _mtm.Stop(testId);
 

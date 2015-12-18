@@ -14,7 +14,9 @@
 <body>
     <fieldset>
         <legend>MultivariateTest</legend>
-
+        <div class="display-label">
+            @Html.DisplayFor(model => model.Id)
+        </div>
         <div class="display-label">
             @Html.DisplayNameFor(model => model.TestState) : @Html.DisplayFor(model => model.TestState)
         </div>
