@@ -9,10 +9,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 {
     public class MultivariateApiTestingController : Controller
     {
-        /// <summary>
-        /// Gets a list of all Multivariate Tests saved to the current EPiServer Site
-        /// </summary>
-        /// Status:  Done as of 7/8/2015
+
         public ActionResult Index()
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
@@ -25,14 +22,12 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult CreateAbTest()
         {
             MultivariateTest multiVariateTest = new MultivariateTest();
+
             multiVariateTest.OriginalItemId = Guid.NewGuid();
-            multiVariateTest.Variants = new List<Variant>();
-            multiVariateTest.Variants.Add(new Variant()
+            multiVariateTest.Variants = new List<Variant>()
             {
-                VariantId = Guid.NewGuid()
-            });
-
-
+                new Variant() {Id=Guid.NewGuid(),VariantId = Guid.NewGuid()}
+            };
 
             return View(multiVariateTest);
         }
@@ -45,9 +40,8 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             if (ModelState.IsValid)
             {
                 Guid savedTestId = testLib.CreateAbTest(multivariateTestData);
-                var returnedTestData = mtm.Get(savedTestId);
 
-                return View("TestDetails", returnedTestData);
+                return View("TestDetails", mtm.Get(savedTestId));
             }
             return View(multivariateTestData);
 
