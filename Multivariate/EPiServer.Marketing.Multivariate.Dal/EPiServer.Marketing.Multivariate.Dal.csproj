@@ -61,10 +61,7 @@
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
     <Compile Include="BaseRepository.cs" />
-    <Compile Include="DataOperations.cs" />
     <Compile Include="DatabaseContext.cs" />
-    <Compile Include="IDataOperations.cs" />
-    <Compile Include="IMultivariateTestDal.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Mappings\ConversionMap.cs" />
     <Compile Include="Mappings\KeyPerformanceIndicatorMap.cs" />
@@ -73,8 +70,6 @@
     <Compile Include="Mappings\VariantMap.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MultivariateTestCriteria.cs" />
-    <Compile Include="MultivariateTestDal.cs" />
-    <Compile Include="MultivariateTestParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -128,6 +128,8 @@ namespace EPiServer.Marketing.Multivariate
             {
                 result.Conversions++;
             }
+
+            _repository.Save(test);
         }
 
         public Guid ReturnLandingPage(Guid testId)

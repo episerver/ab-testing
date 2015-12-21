@@ -1,192 +1,220 @@
-﻿//using System;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using Moq;
-//using EPiServer.Marketing.Multivariate.Dal;
-//using System.Collections.Generic;
-//using EPiServer.Marketing.Multivariate.Model;
-
-//namespace EPiServer.Marketing.Multivariate.Test.Core
-//{
-//    [TestClass]
-//    public class MultivariateManagerTests
-//    {
-//        private Mock<ICurrentUser> user;
-//        private Mock<MultivariateTest> testData;
-//        private Mock<ICurrentSite> siteData;
-//        private string testUsername = "TestUser";
-//        private MultivariateTestManager GetUnitUnderTest()
-//        {
-//            user = new Mock<ICurrentUser>();
-//            siteData = new Mock<ICurrentSite>();
-//            testData = new Mock<MultivariateTest>();
-            
-
-//            user.Setup(u => u.GetDisplayName()).Returns(testUsername);
-//            return new MultivariateTestManager(user.Object, siteData.Object, null);
-//        }
-
-//        //[TestMethod]
-//        //public void TestManager_Construction_Creates_Internal_Objects()
-//        //{
-//        //    var aTestManager = new MultivariateTestManager();
-
-//        //    Assert.IsNotNull(aTestManager._log, "The logger should be created upon construction");
-//        //    Assert.IsNotNull(aTestManager._dataAccess, "The data access object should be created upon construction");
-//        //    Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
-//        //}
-
-//        //[TestMethod]
-//        //public void Save_Adds_A_New_Test_Given_No_Id()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    testData.SetupGet(td => td.Id).Returns(null);
-
-//        //    var testGuid = Guid.NewGuid();
-//        //    dal.Setup(d => d.Add(It.IsAny<MultivariateTestParameters>())).Returns(testGuid);
-//        //    var retId = testManager.Save(testData.Object);
-
-//        //    Assert.AreEqual(testGuid, retId, "The value returned was not equal to the expected Guid");
-//        //    dal.Verify(d => d.Add(It.IsAny<MultivariateTestParameters>()), Times.Once, "Add should only be called once");
-//        //}
-
-//        //[TestMethod]
-//        //public void Save_Updates_A_Test_With_A_Given_Id()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    testData.SetupGet(td => td.Id).Returns(Guid.NewGuid());
-
-//        //    dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-//        //    var retId = testManager.Save(testData.Object);
-
-//        //    dal.Verify(d => d.Update(It.IsAny<MultivariateTestParameters>()), Times.Once, "Update should only be called once");
-//        //}
-
-//        //[TestMethod]
-//        //public void Delete_Passes_The_Id_Of_The_Item_To_Delete()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
-
-//        //    dal.Setup(d => d.Delete(It.IsAny<Guid>()));
-
-//        //    testManager.Delete(testGuid);
-
-//        //    dal.Verify(d => d.Delete(It.IsAny<Guid>()), Times.Once, "Delete should be called once");
-//        //    dal.Verify(d => d.Delete(It.Is<Guid>(arg => arg == testGuid)), "The id passed in should be the same as the one passed to the DAL");
-//        //}
-
-//        //[TestMethod]
-//        //public void Start_Saves_The_Test_State_To_Active()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
-//        //    dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-//        //    dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { Id = testGuid });
-
-//        //    testManager.Start(testGuid);
-
-//        //    dal.Verify(d => d.Update(It.Is<MultivariateTestParameters>(arg => arg.Id == testGuid && arg.State == "Active")));
-//        //}
-
-//        //[TestMethod]
-//        //[ExpectedException(typeof(Exception))]
-//        //public void Start_Throws_When_There_Is_A_Test_Active()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
-//        //    dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters());
-//        //    dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters[1] { new MultivariateTestParameters() { State = "Active" } });
-
-//        //    testManager.Start(testGuid);
-//        //}
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.Entity;
+using System.Linq;
+using EPiServer.Enterprise;
+using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NMemory.Linq;
+using TestContext = EPiServer.Marketing.Multivariate.Test.Dal.TestContext;
 
 
-//        //[TestMethod]
-//        //public void Stop_Sets_The_Test_State_To_Done()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
-//        //    dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-//        //    dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { Id = testGuid });
+namespace EPiServer.Marketing.Multivariate.Test.Core
+{
+    [TestClass]
+    public class MultivariateManagerTests : TestBase
+    {
+        private TestContext _context;
+        private DbConnection _dbConnection;
+        private MultivariateTestManager _mtm;
 
-//        //    testManager.Stop(testGuid);
+        [TestInitialize]
+        public void Initialization()
+        {
+            _dbConnection = Effort.DbConnectionFactory.CreateTransient();
+            _context = new TestContext(_dbConnection);
+            _mtm = new MultivariateTestManager(new CurrentUser(), new CurrentSite(), new TestRepository(_context));
+        }
 
-//        //    dal.Verify(d => d.Update(It.Is<MultivariateTestParameters>(arg => arg.Id == testGuid && arg.State == "Done")));
-//        //}
+        [TestMethod]
+        public void TestManager_Construction_Creates_Internal_Objects()
+        {
+            var aTestManager = new MultivariateTestManager();
 
-//        //[TestMethod]
-//        //public void Archive_Sets_The_Test_State_To_Archived()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
-//        //    dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-//        //    dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { Id = testGuid });
+            //TODO: logger does not exist currently
+            //Assert.IsNotNull(aTestManager._log, "The logger should be created upon construction");
+            Assert.IsNotNull(aTestManager._repository, "The data access object should be created upon construction");
+            Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
+        }
 
-//        //    testManager.Archive(testGuid);
+        [TestMethod]
+        public void MultivariateTestManagerGet()
+        {
+            var id = Guid.NewGuid();
 
-//        //    dal.Verify(d => d.Update(It.Is<MultivariateTestParameters>(arg => arg.Id == testGuid && arg.State == "Archived")));
-//        //}
+            var test = new MultivariateTest()
+            {
+                Id = id,
+                Title = "test",
+                CreatedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                TestState = (int)TestState.Active,
+                Owner = "Bert"
+            };
 
-//        //[TestMethod]
-//        //public void Get_Returns_The_Test_With_The_Passed_In_Id()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
+            _mtm.Save(test);
 
-//        //    dal.Setup(d => d.Get(It.Is<Guid>(a => a == testGuid))).Returns(new MultivariateTestParameters() { Id = testGuid });
+            Assert.AreEqual(_mtm.Get(id), test);
+        }
 
-//        //    var actualTest = testManager.Get(testGuid);
+       [TestMethod]
+        public void MultivariateTestManagerGetTestList()
+        {
+            var tests = AddMultivariateTests(_mtm, 3);
 
-//        //    Assert.AreEqual(actualTest.Id, testGuid, "The Id returned should match the one supplied to the get method.");
-//        //}
+            Assert.AreEqual(_mtm.GetTestList(new MultivariateTestCriteria()).Count(), 3);
+        }
 
-//        //[TestMethod]
-//        //public void GetTestByItemId_Returns_The_Test_With_The_Given_Original_Id()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var itemGuid = Guid.NewGuid();
+        [TestMethod]
+        public void MultivariateTestManagerSave()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
+            var newTitle = "newTitle";
+            tests[0].Title = newTitle;
+            _mtm.Save(tests[0]);
 
-//        //    dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters[1] { new MultivariateTestParameters() { OriginalItemId = itemGuid } });
+            Assert.AreEqual(_mtm.Get(tests[0].Id).Title, newTitle);
+        }
 
-//        //    var actualTest = testManager.Get(itemGuid);
+        [TestMethod]
+        public void MultivariateTestManagerDelete()
+        {
+            var tests = AddMultivariateTests(_mtm, 3);
 
-//        //    Assert.AreEqual(actualTest.OriginalItemId, itemGuid, "The test returned should have the same OriginalItemId as was requested");
-//        //}
+            _mtm.Delete(tests[0].Id);
+            _mtm._repository.SaveChanges();
 
-//        //[TestMethod]
-//        //public void IncrementCount_Calls_Into_Dal_To_Update_The_Counts()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    var testGuid = Guid.NewGuid();
-//        //    var itemGuid = Guid.NewGuid();
+            Assert.AreEqual(_mtm._repository.GetAll().Count(), 2);
+        }
 
-//        //    testManager.IncrementCount(testGuid, itemGuid, CountType.View);
-//        //    testManager.IncrementCount(testGuid, itemGuid, CountType.Conversion);
+        [TestMethod]
+        public void MultivariateTestManagerStart()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
 
-//        //    dal.Verify(d => d.UpdateViews(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items views");
-//        //    dal.Verify(d => d.UpdateConversions(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items conversions");
-//        //}
+            _mtm.Start(tests[0].Id);
 
-//        //[TestMethod]
-//        //public void ReturnLandingPage_Returns_OriginalOrVariantPage_BasedOnRandomNumberGenerator()
-//        //{
-//        //    var testManager = GetUnitUnderTest();
-//        //    Guid testGuid = Guid.NewGuid(), origItemId = Guid.NewGuid(), varItemId = Guid.NewGuid();
-//        //    var mockTest = new MultivariateTestParameters()
-//        //    {
-//        //        Title = "Test 1",
-//        //        OriginalItemId = origItemId,
-//        //        VariantItemId = varItemId,
+            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, (int)TestState.Active);
+        }
 
-//        //        // we only need one item in the list cause the code is kind of bogus right now and 
-//        //        // only returns the first item in the list anyway. We need a better test.
-//        //        VariantItems = new List<Guid>() { origItemId } 
-//        //    };
+        [TestMethod]
+        public void MultivariateTestManagerStop()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
+            tests[0].TestState = (int) TestState.Active;
+            _mtm.Save(tests[0]);
 
-//        //    dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(mockTest);
+            _mtm.Stop(tests[0].Id);
 
-//        //    var actualItemId = testManager.ReturnLandingPage(testGuid);
-//        //    Assert.IsTrue((actualItemId == mockTest.OriginalItemId || actualItemId == mockTest.VariantItemId), "The value returned was not equal to the expected Guid");
-//        //}
-//    }
-//}
+            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, (int)TestState.Done);
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerArchive()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
+            tests[0].TestState = (int)TestState.Active;
+            _mtm.Save(tests[0]);
+
+            _mtm.Archive(tests[0].Id);
+
+            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, (int)TestState.Archived);
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerIncrementCount()
+        {
+            var testId = Guid.NewGuid();
+            var itemId = Guid.NewGuid();
+
+            var test = new MultivariateTest()
+            {
+                Id = testId,
+                Title = "test",
+                CreatedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                Owner = "Bert",
+                MultivariateTestResults = new List<MultivariateTestResult>(),
+                OriginalItemId = itemId
+            };
+
+            _mtm.Save(test);
+
+            var result = new MultivariateTestResult()
+            {
+                ItemId = itemId,
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                Views = 0,
+                Conversions = 0
+            };
+
+            test.MultivariateTestResults.Add(result);
+
+            _mtm.Save(test);
+
+            // check that a result exists
+            Assert.AreEqual(test.MultivariateTestResults.Count(), 1);
+
+            _mtm.IncrementCount(testId, itemId, CountType.View);
+            _mtm.IncrementCount(testId, itemId, CountType.Conversion);
+
+            // check the result is incremented correctly
+            Assert.AreEqual(test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == itemId).Views, 1);
+            Assert.AreEqual(test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == itemId).Conversions, 1);
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerReturnLandingPage()
+        {
+            var itemId = Guid.NewGuid();
+            var variantId = Guid.NewGuid();
+            var tests = AddMultivariateTests(_mtm, 1);
+            var test = tests[0];
+
+            test.OriginalItemId = itemId;
+
+
+            var variant = new Variant()
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                VariantId = variantId
+            };
+
+            test.Variants.Add(variant);
+
+            _mtm.Save(test);
+
+            var landingPageId = _mtm.ReturnLandingPage(test.Id);
+
+            Assert.IsTrue(landingPageId == itemId || landingPageId == variantId);
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerAddNoId()
+        {
+            var test = new MultivariateTest()
+            {
+                Title = "test" ,
+                CreatedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                TestState = (int)TestState.Active,
+                Owner = "Bert"
+            };
+
+            _mtm._repository.Add(test);
+            _mtm._repository.SaveChanges();
+
+            Assert.AreEqual(_mtm._repository.GetAll().Count(), 1);
+        }
+       
+    }
+}
