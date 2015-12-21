@@ -10,7 +10,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
     {
         public TestContext(DbConnection dbConnection) : base(dbConnection)
         {
-            
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

@@ -1,23 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Data.Entity;
 using System.Linq;
 using EPiServer.Enterprise;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Multivariate.Test.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NMemory.Linq;
 using TestContext = EPiServer.Marketing.Multivariate.Test.Dal.TestContext;
 
 
-namespace EPiServer.Marketing.Multivariate.Test.Core
+namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
     [TestClass]
-    public class Tests : TestBase
+    public class DalTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;
 
-        [SetUp]
+        [TestInitialize]
         public void Initialization()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
@@ -25,12 +29,30 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [TestMethod]
-        public void SimpleTest()
+        public void AddMultivariateTest()
         {
-            _dbConnection = Effort.DbConnectionFactory.CreateTransient();
-            _context = new TestContext(_dbConnection);
+            var newTests = AddMultivariateTests(_context, 2);
+            _context.SaveChanges();
 
-            var id = new Guid();
+            Assert.AreEqual(_context.MultivariateTests.Count(), 2);
+        }
+
+        [TestMethod]
+        public void DeleteMultivariateTest()
+        {
+            var newTests = AddMultivariateTests(_context, 3);
+            _context.SaveChanges();
+
+            _context.MultivariateTests.Remove(newTests[0]);
+            _context.SaveChanges();
+
+            Assert.AreEqual(_context.MultivariateTests.Count(), 2);
+        }
+
+        [TestMethod]
+        public void UpdateMultivariateTest()
+        {
+            var id = Guid.NewGuid();
 
             var test = new MultivariateTest()
             {
@@ -48,28 +70,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             _context.MultivariateTests.Add(test);
             _context.SaveChanges();
 
-            Assert.AreEqual(_context.MultivariateTests.Count(), 1);
-            Assert.AreEqual(_context.MultivariateTests.Find(id), test.Id);
-        }
-
-        [TestMethod]
-        public void TestManager_Construction_Creates_Internal_Objects()
-        {
-            var aTestManager = new MultivariateTestManager();
-
-            //TODO: logger does not exist currently
-            //Assert.IsNotNull(aTestManager._log, "The logger should be created upon construction");
-            Assert.IsNotNull(aTestManager._repository, "The data access object should be created upon construction");
-            Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
-        }
-
-
-        public void NewMultivariateTestTest()
-        {
-            var newTests = AddMultivariateTests(_context);
+            var newTitle = "NewTitle";
+            test.Title = newTitle;
             _context.SaveChanges();
 
-
+            Assert.AreEqual(_context.MultivariateTests.Find(id).Title, newTitle);
         }
+
     }
 }
