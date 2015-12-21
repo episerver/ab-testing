@@ -70,6 +70,9 @@
             <div class="editor-field">
                 @Html.EditorFor(model => model.Variants[0].VariantId)
                 @Html.ValidationMessageFor(model => model.Variants[0].VariantId)
+                @Html.HiddenFor(model => model.Variants[0].Id)
+
+
             </div>
 
 
