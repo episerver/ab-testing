@@ -1,5 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Model" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
 <%@ Import Namespace="EPiServer.Core" %>
@@ -15,7 +15,7 @@
 	UIHelper helper = new UIHelper();
 	foreach (var item in Model) { 
 %>
-	<tr><td>Name</td><td><%= item.Title%></td><td>&nbsp;&nbsp;State</td><td>&nbsp;&nbsp;<%= item.State%></td></tr>
+	<tr><td>Name</td><td><%= item.Title%></td><td>&nbsp;&nbsp;State</td><td>&nbsp;&nbsp;<%= item.TestState%></td></tr>
 	<tr><td>Owner</td><td><%= item.Owner%></td><td>&nbsp;&nbsp;Start</td><td>&nbsp;&nbsp;<%= item.StartDate%></td></tr>
 	<tr><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;End</td><td>&nbsp;&nbsp;<%= item.EndDate%></td></tr>
 <tr><td>&nbsp;&nbsp;</td></tr>

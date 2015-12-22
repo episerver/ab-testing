@@ -1,5 +1,5 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Model" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
 <%@ Import Namespace="EPiServer.Core" %>
@@ -25,7 +25,7 @@
         <td><%= item.Title%></td>
         <td><%= item.StartDate%></td>
         <td><%= item.EndDate%></td>
-        <td><%= item.State%></td>
+        <td><%= item.TestState%></td>
         <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
         <td>58%</td>
 	<td>
