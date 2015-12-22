@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{167D31D8-063C-48CA-84EC-0D136BAED1F8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EPiServer.Marketing.Messaging</RootNamespace>
+    <AssemblyName>EPiServer.Mrketing.Messaging</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\MessagingApplication.cs" />
+    <Compile Include="Application\MessagingApplicationBuilder.cs" />
+    <Compile Include="FanOutMessageDispatcher.cs" />
+    <Compile Include="IMessageDispatcher.cs" />
+    <Compile Include="IMessageEmitter.cs" />
+    <Compile Include="IMessageHandler.cs" />
+    <Compile Include="IMessageReceiver.cs" />
+    <Compile Include="InMemory\InMemoryMessageEmitter.cs" />
+    <Compile Include="InMemory\InMemoryMessageReceiver.cs" />
+    <Compile Include="InMemory\InMemoryQueueStore.cs" />
+    <Compile Include="MessageHandlerInvoker.cs" />
+    <Compile Include="MessageHandlerRegistry.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
+mkdir "$(SolutionDir)Deployment\lib"
+del $(SolutionDir)Deployment\*.nupkg
+xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Messaging*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
+mkdir "$(SolutionDir)Deployment\temp"
+
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)\buildzip.ps1" 
+
+for /d %25%25i in ("$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\*") do rd /s /q "%25%25i"
+del /q "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\*.*"
+
+xcopy "$(SolutionDir)Deployment\temp\*.zip" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\"  /I /F /R /Y
+rmdir "$(SolutionDir)Deployment\temp" /s /q
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\module.config" ( del "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\module.config" /s /q )
+xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
+xcopy "$(SolutionDir)"MSBuild\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
+
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)MSBuild\buildpackage.ps1" "$(SolutionDir)\"
+
+xcopy "$(SolutionDir)Deployment\*.nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

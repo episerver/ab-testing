@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Multivariate.Api.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Model", "EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj", "{BF1B7106-7B84-4692-BBD2-22DD3D6B6AD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPIServer.Marketing.Messaging", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj", "{167D31D8-063C-48CA-84EC-0D136BAED1F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Messaging.Test", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.csproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 		{BF1B7106-7B84-4692-BBD2-22DD3D6B6AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF1B7106-7B84-4692-BBD2-22DD3D6B6AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF1B7106-7B84-4692-BBD2-22DD3D6B6AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
