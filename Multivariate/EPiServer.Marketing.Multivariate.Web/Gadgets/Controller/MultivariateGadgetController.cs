@@ -20,31 +20,19 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Index()
         {
-            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            return PartialView(testRepository.GetTestList(new MultivariateTestCriteria()));
+            IMultivariateTestRepository testRepo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            return PartialView(testRepo.GetTestList(new MultivariateTestCriteria()));
         }
 
         public ActionResult Details()
         {
             var testId = Guid.Parse(Request["id"]);
+            IMultivariateTestRepository testRepo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            var test = testRepo.GetTestById(testId);
 
-            // will we ever show details of a list of tests, maybe I guess.
+            // will we ever show details of a list of tests?
             List<IMultivariateTest> list = new List<IMultivariateTest>();
-
-            list.Add(new MultivariateTest()
-            {
-                Id = testId,
-                Conversions = new List<Conversion> { new Conversion() },
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Now,
-                OriginalItemId = Guid.NewGuid(),
-                Title = "Call to Action 4",
-                MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() {  ItemId = Guid.NewGuid(), Views=5, Conversions=5 },
-                    new MultivariateTestResult() {  ItemId = Guid.NewGuid(), Views=2, Conversions=1 },
-                    new MultivariateTestResult() {  ItemId = Guid.NewGuid(), Views=10, Conversions=3 }
-                }
-            });
+            list.Add(test);
             return PartialView(list);
         }
     }
