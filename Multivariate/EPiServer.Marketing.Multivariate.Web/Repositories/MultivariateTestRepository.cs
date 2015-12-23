@@ -4,6 +4,7 @@ using System.Linq;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Web.Models;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
@@ -29,46 +30,56 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             _serviceLocator = locator;
         }
 
-        public void CreateTest(string title, DateTime testStart, DateTime testStop, int originalPageLink, int variantPageLink, int conversionPageLink)
+
+        /// <summary>
+        /// Creates a test based on supplied multivariate test data
+        /// </summary>
+        /// <param name="testData"></param>
+        public Guid CreateTest(MultivariateTestViewModel testData)
         {
-            // todo : i assume this method is going away?
-            // temp fake forced create for getting a functioning create test working until asp tag woes
-            //are fixed.
-            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            tm.Save( new MultivariateTest
-            {
-                Id = Guid.NewGuid(),
-                Title = title,
-                OriginalItemId = getPageId(originalPageLink),
-                Variants = new List<Variant>(),
-                Conversions = new List<Conversion>(),
-                Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-                StartDate = testStart,
-                EndDate = testStop
-            });
+            //todo: This will need to be filled in as part of the admin pages story
+            //todo: generate conversion from MultivariateTestViewModel -> MultivariateTest
+            MultivariateTest mvTest = new MultivariateTest();
             
+
+            return mvTest.Id;
         }
 
-        
-
+        /// <summary>
+        /// Permanently deletes a test from the multivariate tables including
+        /// associated variants, keyperformance indicators and test results.
+        /// There is no recovery.
+        /// </summary>
+        /// <param name="testuGuid">The GUID of the test to be deleted.</param>
         public void DeleteTest(Guid testuGuid)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             tm.Delete(testuGuid);
         }
-
+        
+        /// <summary>
+        /// Returns a list of tests satisfying the supplied criteria
+        /// </summary>
+        /// <param name="criteria">Criteria to filter on.</param>
+        /// <returns>Filtered IMultivariate test list</returns>
         public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             return tm.GetTestList(criteria);
         }
 
-        private Guid getPageId(int pageLink)
+        /// <summary>
+        /// Returns a multivariate object based no the supplied testId
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <returns>MultivariateTest</returns>
+        public IMultivariateTest GetTestById(Guid testId)
         {
-            //I am assuming the picker will return the page link of the page in question. 
-            //This method is just to find the page id (guid) of the chosen page.
+            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
 
-            return Guid.NewGuid();
+            return tm.GetTestList(new MultivariateTestCriteria()).FirstOrDefault(t => t.Id == testId);
         }
+
+        
     }
 }
