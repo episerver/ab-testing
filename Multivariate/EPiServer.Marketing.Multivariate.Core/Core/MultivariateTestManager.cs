@@ -157,7 +157,7 @@ namespace EPiServer.Marketing.Multivariate
         private void SetTestState(Guid theTestId, TestState theState)
         {
             var aTest = _repository.GetById(theTestId);
-            aTest.TestState = (int)theState;
+            aTest.TestState = theState;
             Save(aTest);
         }
 
@@ -200,7 +200,7 @@ namespace EPiServer.Marketing.Multivariate
         private bool IsTestActive(Guid originalItemId)
         {
             var tests = _repository.GetAll()
-                .Where(t => t.OriginalItemId == originalItemId && t.TestState == (int)TestState.Active);
+                .Where(t => t.OriginalItemId == originalItemId && t.TestState == TestState.Active);
 
             return tests.Any();
         }

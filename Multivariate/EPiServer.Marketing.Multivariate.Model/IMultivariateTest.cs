@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Model
 {
@@ -13,13 +14,11 @@ namespace EPiServer.Marketing.Multivariate.Model
 
         Guid OriginalItemId { get; set; }
 
-        int TestState { get; set; }
+        TestState TestState { get; set; }
 
         DateTime StartDate { get; set; }
 
         DateTime? EndDate { get; set; }
-
-        DateTime? LastModifiedDate { get; set; }
 
         string LastModifiedBy { get; set; }
 

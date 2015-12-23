@@ -68,6 +68,10 @@
     <Compile Include="Mappings\MultivariateTestMap.cs" />
     <Compile Include="Mappings\MultivariateTestResultMap.cs" />
     <Compile Include="Mappings\VariantMap.cs" />
+    <Compile Include="Migrations\201512222034080_Initial.cs" />
+    <Compile Include="Migrations\201512222034080_Initial.Designer.cs">
+      <DependentUpon>201512222034080_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MultivariateTestCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +87,11 @@
       <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
       <Name>EPiServer.Marketing.Multivariate.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201512222034080_Initial.resx">
+      <DependentUpon>201512222034080_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

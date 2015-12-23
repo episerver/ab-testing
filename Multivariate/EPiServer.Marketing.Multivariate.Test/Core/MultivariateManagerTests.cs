@@ -53,7 +53,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                TestState = (int)TestState.Active,
+                TestState = TestState.Active,
                 Owner = "Bert"
             };
 
@@ -99,31 +99,31 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             _mtm.Start(tests[0].Id);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, (int)TestState.Active);
+            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, TestState.Active);
         }
 
         [TestMethod]
         public void MultivariateTestManagerStop()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].TestState = (int) TestState.Active;
+            tests[0].TestState = TestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Stop(tests[0].Id);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, (int)TestState.Done);
+            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, TestState.Done);
         }
 
         [TestMethod]
         public void MultivariateTestManagerArchive()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].TestState = (int)TestState.Active;
+            tests[0].TestState = TestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Archive(tests[0].Id);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, (int)TestState.Archived);
+            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, TestState.Archived);
         }
 
         [TestMethod]
@@ -206,7 +206,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                TestState = (int)TestState.Active,
+                TestState = TestState.Active,
                 Owner = "Bert"
             };
 

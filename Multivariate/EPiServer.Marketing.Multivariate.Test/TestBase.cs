@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
-                    TestState = (int) TestState.Active,
+                    TestState = TestState.Active,
                     Owner = "Bert" + i
                 });
             };
