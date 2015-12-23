@@ -3,7 +3,7 @@
   <metadata>
     <id>EPiServer.Marketing.Multivariate</id>
     <title>EPiServer Marketing Multivariate Testing</title>
-    <version>1.0.0.8000</version>
+    <version>1.0.0.0</version>
     <authors>EPiServer</authors>
     <owners>EPiServer</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
