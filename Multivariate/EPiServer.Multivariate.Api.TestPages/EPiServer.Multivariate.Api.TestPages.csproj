@@ -49,6 +49,10 @@
       <HintPath>..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\..\packages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
@@ -303,8 +307,6 @@
     <Content Include="modules\_protected\Shell\Shell.zip" />
     <Content Include="modules\_protected\CMS\web.config" />
     <Content Include="modules\_protected\CMS\CMS.zip" />
-    <Content Include="modules\_protected\EPiServer.Multivariate\module.config" />
-    <Content Include="modules\_protected\EPiServer.Multivariate\EPiServer.Multivariate.zip" />
     <Content Include="Views\MultivariateApiTesting\CreateAbTest.cshtml" />
     <Content Include="Views\MultivariateApiTesting\GetAbTestList.cshtml" />
     <Content Include="Views\MultivariateApiTesting\Index.cshtml" />
