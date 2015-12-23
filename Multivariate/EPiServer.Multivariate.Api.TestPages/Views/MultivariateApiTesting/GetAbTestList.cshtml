@@ -16,7 +16,7 @@
         <legend>MultivariateTest</legend>
 
         <div class="display-label">
-            @Html.DisplayNameFor(model => model.State) : @Html.DisplayFor(model => model.State)
+            @Html.DisplayNameFor(model => model.TestState) : @Html.DisplayFor(model => model.TestState)
         </div>
 
 
@@ -41,16 +41,16 @@
         </div>
 
         <div class="display-label">
-            @Html.DisplayNameFor(model => model.VariantItems) : @Html.DisplayFor(model => model.VariantItems)
+            @Html.DisplayNameFor(model => model.Variants[0].VariantId) : @Html.DisplayFor(model => model.Variants[0].VariantId)
         </div>
 
         <div class="display-label">
             @Html.DisplayNameFor(model => model.Conversions) : @Html.DisplayFor(model => model.Conversions)
         </div>
         <hr />
-        @if (Model.Results != null)
+        @if (Model.MultivariateTestResults != null)
         {
-            foreach (var result in Model.Results)
+            foreach (var result in Model.MultivariateTestResults)
             {
                 <div class="display-label">
                     @Html.DisplayNameFor(resultItem => result.Views) : @Html.DisplayFor(resultItem => result.Views)
