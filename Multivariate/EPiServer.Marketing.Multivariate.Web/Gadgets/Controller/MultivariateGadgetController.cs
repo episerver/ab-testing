@@ -3,58 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Multivariate.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
     [Gadget(Title = "Multivariate Test Report")]
     class MultivariateGadgetController : Controller
     {
+        private IServiceLocator _serviceLocator;
+        public MultivariateGadgetController()
+        {
+            _serviceLocator = ServiceLocator.Current;
+        }
+
         public ActionResult Index()
         {
-            List<IMultivariateTest> list = new List<IMultivariateTest>();
-            list.Add(new MultivariateTest()
-            {
-                Id = Guid.NewGuid(),
-                Conversions = new List<Conversion> { new Conversion() },
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Now,
-                OriginalItemId = Guid.NewGuid(),
-                Title = "Call to Action"
-
-            });
-            list.Add(new MultivariateTest()
-            {
-                Id = Guid.NewGuid(),
-                Conversions = new List<Conversion> { new Conversion() },
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Now,
-                OriginalItemId = Guid.NewGuid(),
-                Title = "Call to Action 2"
-
-            });
-            list.Add(new MultivariateTest()
-            {
-                Id = Guid.NewGuid(),
-                Conversions = new List<Conversion> { new Conversion() },
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Now,
-                OriginalItemId = Guid.NewGuid(),
-                Title = "Call to Action 3"
-
-            });
-            list.Add(new MultivariateTest()
-            {
-                Id = Guid.NewGuid(),
-                Conversions = new List<Conversion> { new Conversion() },
-                StartDate = DateTime.Today,
-                EndDate = DateTime.Now,
-                OriginalItemId = Guid.NewGuid(),
-                Title = "Call to Action 4"
-
-            });
-
-
-            return PartialView(list);
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            return PartialView(testRepository.GetTestList(new MultivariateTestCriteria()));
         }
 
         public ActionResult Details()

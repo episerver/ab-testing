@@ -28,6 +28,7 @@
         <td><%= item.TestState%></td>
         <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
         <td>58%</td>
+        <td></td>
 	<td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
 		        title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
