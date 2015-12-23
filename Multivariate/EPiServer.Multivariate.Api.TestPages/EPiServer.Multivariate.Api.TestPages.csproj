@@ -374,7 +374,9 @@ IF exist "$(SolutionDir)MultivariateTestingDeployment\*.nuspec" ( del "$(Solutio
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)MultivariateTestingDeployment\"  /I /F /R /Y
 
 cd "$(SolutionDir)MultivariateTestingDeployment\" 
-"$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec</PostBuildEvent>
+"$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
+xcopy "*nupkg" "$(SolutionDir)\Deployment"  /I /F /R /Y
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
