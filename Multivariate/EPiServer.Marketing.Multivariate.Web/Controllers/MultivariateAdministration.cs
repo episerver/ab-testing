@@ -50,8 +50,18 @@ namespace EPiServer.Marketing.Multivariate.Web
                 return RedirectToAction("Index");
             }
 
+        }
+
+        [HttpGet]
+        public ActionResult Update(string id)
+        {
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
 
 
+            MultivariateTestManager mtm = new MultivariateTestManager();
+            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
+
+            return View("CreateAbTest", testRepository.GetTestById(Guid.Parse(id)) as MultivariateTest);
         }
     }
 }

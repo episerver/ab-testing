@@ -77,7 +77,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
 
-            return tm.GetTestList(new MultivariateTestCriteria()).FirstOrDefault(t => t.Id == testId);
+            return tm.Get(testId);
         }
 
         
