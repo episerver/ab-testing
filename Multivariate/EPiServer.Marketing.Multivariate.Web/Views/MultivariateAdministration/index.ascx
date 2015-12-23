@@ -82,7 +82,6 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
-                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/conversionpage")%></th>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
@@ -96,6 +95,7 @@
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
                     <td><%= item.OriginalItemId %></td>
+                    <td><%= item.Variants[0].VariantId %></td>
 
 
 

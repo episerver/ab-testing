@@ -16,12 +16,17 @@ namespace EPiServer.Marketing.Multivariate.Web
     [GuiPlugIn(DisplayName = "Multivariate Test Configuration", UrlFromModuleFolder = "MultivariateAdministration", Area = PlugInArea.AdminConfigMenu)]
     class MultivariateAdministrationController : Controller
     {
+        private IServiceLocator _serviceLocator;
+
+        public MultivariateAdministrationController()
+        {
+            _serviceLocator = ServiceLocator.Current;
+        }
+
         public ActionResult Index()
         {
-            List<IMultivariateTest> mvTestList = new List<IMultivariateTest>();
-            IMultivariateTestRepository testRepository = new MultivariateTestRepository();
-            mvTestList = testRepository.GetTestList(new MultivariateTestCriteria());
-            return View(mvTestList);
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            return View(testRepository.GetTestList(new MultivariateTestCriteria()));
         }
 
         public ActionResult Create()
@@ -41,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Web
                 MultivariateTestRepository repo = new MultivariateTestRepository();
                 DateTime start = testSettings.StartDate;
                 DateTime stop = testSettings.EndDate;
-                repo.CreateTest(testSettings.Title, start, stop, 1, 2, 3);
+                repo.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
 
