@@ -211,17 +211,7 @@
     <Content Include="Gadgets\Views\Index.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="MultivariateConfiguration.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
     <Compile Include="Models\PageDataSource.cs" />
-    <Compile Include="MultivariateConfiguration.aspx.cs">
-      <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MultivariateConfiguration.aspx.designer.cs">
-      <DependentUpon>MultivariateConfiguration.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
