@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Multivariate.Web
             {
                 MultivariateTestRepository repo = new MultivariateTestRepository();
                 DateTime start = testSettings.StartDate;
-                DateTime stop = testSettings.EndDate;
+                DateTime? stop = testSettings.EndDate;
                 repo.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
@@ -57,11 +57,17 @@ namespace EPiServer.Marketing.Multivariate.Web
         {
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
 
-
             MultivariateTestManager mtm = new MultivariateTestManager();
             MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
-            return View("CreateAbTest", testRepository.GetTestById(Guid.Parse(id)) as MultivariateTest);
+            return View("Create", testRepository.ConvertToViewModel(multivariateTest));
+        }
+
+        public ActionResult Delete(string id)
+        {
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            testRepository.DeleteTest(Guid.Parse(id));
+            return View("Index");
         }
     }
 }

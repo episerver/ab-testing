@@ -80,6 +80,24 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             return tm.Get(testId);
         }
 
+        public MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert)
+        {
+            MultivariateTestViewModel testModel = new MultivariateTestViewModel()
+            {
+                id = testToConvert.Id,
+                Title = testToConvert.Title,
+                Owner = testToConvert.Owner,
+                StartDate = testToConvert.StartDate,
+                EndDate = testToConvert.EndDate,
+                OriginalItemId = testToConvert.OriginalItemId,
+                VariantItems = testToConvert.Variants,
+                TestResults = testToConvert.MultivariateTestResults,
+                Conversions = testToConvert.KeyPerformanceIndicators
+            };
+            
+            return testModel;
+        }
+
         
     }
 }

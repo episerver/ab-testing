@@ -36,11 +36,11 @@
 
         <script>
             $(function () {
-                $('tr.parent')
+                $('td.parent')
                     .css("cursor", "pointer")
                     .attr("title", "Click to expand/collapse")
                     .click(function () {
-                        $(this).siblings('#child-' + this.id).toggle(); });
+                        $(this).parent.siblings('#child-' + this.id).toggle(); });
             });
             $(function () {
                 $('#btnCreate')
@@ -82,6 +82,7 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
+                    <td> Actions </td>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
@@ -96,13 +97,17 @@
                     <td><%= item.EndDate %></td>
                     <td><%= item.OriginalItemId %></td>
                     <td><%= item.Variants[0].VariantId %></td>
-
+                    <td>
+                        <%= Html.ActionLink("Edit", "Update", new {id = item.Id})  %> |
+                        <%= Html.ActionLink("Details", "GetAbTestById", new { id = item.Id })  %> |
+                        <%= Html.ActionLink("Delete", "Delete", new {id = item.Id}) %>
+                    </td>
 
 
                 </tr>
 
-                <tr id="child-parent<%= index %>" style="display: none">
-                    <td colspan="8">
+                <tr  style="display: none">
+                    <td id="child-parent<%= index %>" colspan="8">
                         <% if (item.TestState == 0)
                            { %>
                                <span style="color: red">This test has not been started</span>
@@ -130,6 +135,7 @@
                         <% } %>  
                         
                     </td>
+                   
                 </tr>
                 <% index++;
                     } %>
