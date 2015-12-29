@@ -9,21 +9,29 @@
 <div class="epi-contentArea" >
 <%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/gadget/back"), LanguageManager.Instance.Translate("/multivariate/gadget/back"), "Index/?id=1&",  "", "", null)%>
 <h1 class="EP-prefix"><%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%></h1>
-</div>
 <table>
+<tr><th>Name</th><th>Owner</th><th>State</th><th>Start</th><th>End</th></tr>
 <%  	
 	UIHelper helper = new UIHelper();
 	foreach (var item in Model) { 
 %>
-	<tr><td>Name</td><td><%= item.Title%></td><td>&nbsp;&nbsp;State</td><td>&nbsp;&nbsp;<%= item.TestState%></td></tr>
-	<tr><td>Owner</td><td><%= item.Owner%></td><td>&nbsp;&nbsp;Start</td><td>&nbsp;&nbsp;<%= item.StartDate%></td></tr>
-	<tr><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;End</td><td>&nbsp;&nbsp;<%= item.EndDate%></td></tr>
-<tr><td>&nbsp;&nbsp;</td></tr>
-	<tr><td>Original Item</td><td>&nbsp;&nbsp;<%= helper.getContent( item.OriginalItemId ).Name %></td><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td></tr>
+	<tr><td><%= item.Title%></td><td><%= item.Owner%></td><td><%= item.TestState%></td><td><%= item.StartDate%></td><td><%= item.EndDate%></tr>
 </table>
-<br>
+</div>
 <div class="epi-contentArea" >
 <h1><%= LanguageManager.Instance.Translate("/multivariate/gadget/results")%></h1>
+<table>
+<tr><th>Item name</th><th>Views</th><th>Conversions</th><th>Conversion Rate</th></tr>
+<%
+	foreach( var result in item.MultivariateTestResults ) {
+		int rate = 0;
+		if( result.Views != 0 )
+			rate = (int)(result.Conversions * 100.0 / result.Views);
+%>
+	<tr><td><%= helper.getContent( result.ItemId ).Name %></td><td><%= result.Views %></td><td><%= result.Conversions %></td><td><%= rate %> %</td></tr>
+	
+	<% } %>
+</table>
 </div>
 
 <% } %>
