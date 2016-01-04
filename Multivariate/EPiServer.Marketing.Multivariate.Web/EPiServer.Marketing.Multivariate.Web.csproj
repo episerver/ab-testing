@@ -182,7 +182,7 @@
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
     <Compile Include="Controllers\MultivariateAdministration.cs" />
-    <Compile Include="Gadgets\Controller\MultivariateGadgetController.cs" />
+    <Compile Include="Controllers\MultivariateGadgetController.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
@@ -205,10 +205,10 @@
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
-    <Content Include="Gadgets\Views\Details.ascx">
+    <Content Include="Views\MultivariateGadget\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Gadgets\Views\Index.ascx">
+    <Content Include="Views\MultivariateGadget\Index.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Compile Include="Models\PageDataSource.cs" />
@@ -255,13 +255,13 @@ xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Model*dll "$(SolutionDir)D
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget"
-xcopy "$(ProjectDir)"\Gadgets\Views\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget"  /I /F /R /Y
-
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration"
 xcopy "$(ProjectDir)"\Views\MultivariateAdministration\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration\"  /I /F /R /Y
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget"
+xcopy "$(ProjectDir)"\Views\MultivariateGadget\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
