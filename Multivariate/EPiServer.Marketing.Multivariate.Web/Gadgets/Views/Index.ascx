@@ -9,11 +9,11 @@
 	<table class="epi-default">
 	<tr>
 	<tr>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/name")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/start")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/finish")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/state")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/original")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/winner")%></th>
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/conversions")%></th>
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/actions")%></th>

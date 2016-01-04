@@ -5,12 +5,12 @@
      <settings>
        <displayname>Multivariate Test Settings</displayname>
        <description>New Test Details</description>
-       <testtitle>Test Title</testtitle>
+       <testtitle>Name</testtitle>
        <owner>Owner</owner>
        <state>State</state>
-       <teststart>Test Start</teststart>
-       <testend>Test End</testend>
-       <originpage>Origin Page</originpage>
+       <teststart>Start</teststart>
+       <testend>End</testend>
+       <originpage>Original</originpage>
        <variantpage>Variant Page</variantpage>
        <conversionpage>Conversion Page</conversionpage>
        <startdate>Click to choose start date...</startdate>
@@ -26,11 +26,6 @@
        <views>Total Views</views>
        <totalconversion>Total Conversions</totalconversion>
        <resultconversions>Conversions</resultconversions>
-       <name>Name</name>
-       <start>Start</start>
-       <finish>Finish</finish>
-       <state>State</state>
-       <original>Original</original>
        <winner>Winning Variation</winner>
        <conversions>Conversion Rate</conversions>
        <actions>Actions</actions>
