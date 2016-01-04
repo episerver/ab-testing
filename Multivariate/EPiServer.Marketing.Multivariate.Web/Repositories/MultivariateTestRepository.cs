@@ -109,7 +109,10 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 {
                     var rate = (int)(result.Conversions * 100.0 / result.Views);
                     if (rate > currentConversionRate)
+                    {
+                        currentConversionRate = rate;
                         winningTest = result;
+                    }
                 }
             }
 
