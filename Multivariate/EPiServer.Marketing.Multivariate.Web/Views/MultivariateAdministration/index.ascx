@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.Model.IMultivariateTest>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.Model.IMultivariateTest>>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
@@ -47,18 +47,8 @@
                     .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
 
             });
-
-            
-
-
-
-
         </script>
-
-
     </asp:PlaceHolder>
-
-
 </head>
 <body class="sleek">
     <div class="epi-contentContainer epi-padding">
@@ -95,15 +85,13 @@
                     <td><%= item.TestState %></td>
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
-                    <td><%= item.OriginalItemId %></td>
-                    <td><%= item.Variants[0].VariantId %></td>
+                    <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
+                    <td></td>
                     <td>
                         <%= Html.ActionLink("Edit", "Update", new {id = item.Id})  %> |
                         <%= Html.ActionLink("Details", "GetAbTestById", new { id = item.Id })  %> |
                         <%= Html.ActionLink("Delete", "Delete", new {id = item.Id}) %>
                     </td>
-
-
                 </tr>
 
                 <tr  style="display: none">
