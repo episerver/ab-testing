@@ -98,6 +98,22 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             return testModel;
         }
 
-        
+        public MultivariateTestResult GetWinningTestResult(IMultivariateTest test)
+        {
+            var winningTest = new MultivariateTestResult(); // never return null
+            var currentConversionRate = 0.0;
+
+            foreach (var result in test.MultivariateTestResults)
+            {
+                if (result.Views != 0)
+                {
+                    var rate = (int)(result.Conversions * 100.0 / result.Views);
+                    if (rate > currentConversionRate)
+                        winningTest = result;
+                }
+            }
+
+            return winningTest;
+        }
     }
 }

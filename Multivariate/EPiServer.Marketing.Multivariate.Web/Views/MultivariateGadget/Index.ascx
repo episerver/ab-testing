@@ -1,8 +1,10 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
 <%@ Import Namespace="EPiServer.Core" %>
+<%@ Import Namespace="EPiServer.ServiceLocation" %>
 
 <asp:Content>
 <p>&nbsp;&nbsp;<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), "Index/?id=1&",  "", "", null)%></p>
@@ -19,16 +21,25 @@
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/actions")%></th>
 	</tr>	</tr>
 	
-	<%  UIHelper helper = new UIHelper();
-        foreach (var item in Model) { %>
+	<%  
+        UIHelper helper = new UIHelper();
+        IMultivariateTestRepository repo = ServiceLocator.Current.GetInstance<IMultivariateTestRepository>();
+
+        foreach (var item in Model) {
+            var winner = repo.GetWinningTestResult(item);
+		    int rate = 0;
+		    if( winner.Views != 0 )
+			    rate = (int)(winner.Conversions * 100.0 / winner.Views);
+
+            %>
 	<tr>
         <td><%= item.Title%></td>
         <td><%= item.StartDate%></td>
         <td><%= item.EndDate%></td>
         <td><%= item.TestState%></td>
         <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
-        <td></td>
-        <td>58%</td>
+        <td><%= helper.getContent( winner.ItemId ).Name %></td>
+        <td><%= rate%>%</td>
         <td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
 		        title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
