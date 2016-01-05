@@ -30,7 +30,6 @@
 		    int rate = 0;
 		    if( winner.Views != 0 )
 			    rate = (int)(winner.Conversions * 100.0 / winner.Views);
-
             %>
 	<tr>
         <td><%= item.Title%></td>

@@ -4,8 +4,10 @@
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Core" %>
+<%@ Import Namespace="EPiServer.ServiceLocation" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
@@ -66,27 +68,35 @@
                 <tr>
 
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle")%></th>
-                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/owner")%></th>
-                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
+                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
-                    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
-                    <th>Actions</th>
+		    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/winner")%></th>
+		    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/conversions")%></th>
+		    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/actions")%></th>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
+        	    IMultivariateTestRepository repo = ServiceLocator.Current.GetInstance<IMultivariateTestRepository>();
+                
                     int index = 1;
                     foreach (var item in Model)
-                    { %>
+                    { 
+			var winner = repo.GetWinningTestResult(item);
+			int rate = 0;
+			if( winner.Views != 0 )
+				rate = (int)(winner.Conversions * 100.0 / winner.Views);
+                    
+		%>
                 <tr class="parent" id="parent<%= index %>">
                     <td><%= item.Title %></td>
-                    <td><%= item.Owner %></td>
-                    <td><%= item.TestState %></td>
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
+                    <td><%= item.TestState %></td>
                     <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
-                    <td></td>
+                    <td><%= helper.getContent( winner.ItemId ).Name %></td>
+                    <td><%= rate%>%</td>
                     <td>
                     	<a href="<%: Url.Action("GetAbTestById", new {id = item.Id}) %>">
                     		<img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" 
