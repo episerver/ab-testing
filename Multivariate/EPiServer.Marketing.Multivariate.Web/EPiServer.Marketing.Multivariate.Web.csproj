@@ -201,6 +201,9 @@
     <Content Include="Views\MultivariateAdministration\Create.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
+    <Content Include="Views\MultivariateAdministration\Details.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Views\MultivariateAdministration\index.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>

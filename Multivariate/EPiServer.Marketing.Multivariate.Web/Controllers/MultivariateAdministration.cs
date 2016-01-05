@@ -69,5 +69,11 @@ namespace EPiServer.Marketing.Multivariate.Web
             testRepository.DeleteTest(Guid.Parse(id));
             return View("Index", testRepository.GetTestList(new MultivariateTestCriteria()));
         }
+
+        public ActionResult Details(string id)
+        {
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            return View("Details", testRepository.GetTestList(new MultivariateTestCriteria()));
+        }
     }
 }

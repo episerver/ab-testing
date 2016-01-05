@@ -98,7 +98,7 @@
                     <td><%= helper.getContent( winner.ItemId ).Name %></td>
                     <td><%= rate%>%</td>
                     <td>
-                    	<a href="<%: Url.Action("GetAbTestById", new {id = item.Id}) %>">
+                    	<a href="<%: Url.Action("Details", new {id = item.Id}) %>">
                     		<img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" 
                     		src="/App_Themes/Default/Images/Tools/Report.gif"
                     		title="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>">
