@@ -7,7 +7,7 @@
 <%@ Import Namespace="EPiServer.ServiceLocation" %>
 
 <asp:Content>
-<p>&nbsp;&nbsp;<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), "Index/?id=1&",  "", "", null)%></p>
+<p>&nbsp;&nbsp;<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/settings/refresh"), LanguageManager.Instance.Translate("/multivariate/gadget/refresh"), "Index/?id=1&",  "", "", null)%></p>
 	<table class="epi-default">
 	<tr>
 	<tr>
@@ -16,9 +16,9 @@
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
 		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/winner")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/conversions")%></th>
-		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/gadget/actions")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/winner")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/conversions")%></th>
+		<th class="episize300"><%= LanguageManager.Instance.Translate("/multivariate/settings/actions")%></th>
 	</tr>	</tr>
 	
 	<%  
@@ -42,14 +42,11 @@
         <td><%= rate%>%</td>
         <td>
             <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
-		        title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>">
-                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" src="/App_Themes/Default/Images/AdminMenu/Settings.gif">
+		        title="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>" src="/App_Themes/Default/Images/Tools/Report.gif">
 		    </a>
-            <a href="<%= helper.getConfigurationURL()%>/Update/<%=item.Id%>" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>">
-                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/edit")%>" src="/App_Themes/Default/Images/AdminMenu/ToolSettings.gif">
-            </a>
-            <a href="" title="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>">
-                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/promote")%>" src="/App_Themes/Default/Images/Tools/Up.gif">
+            <a href="<%= helper.getConfigurationURL()%>/Update/<%=item.Id%>" title="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>">
+                <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>" src="/App_Themes/Default/Images/Tools/Edit.gif">
             </a>
 	</td>                    
 	</tr>

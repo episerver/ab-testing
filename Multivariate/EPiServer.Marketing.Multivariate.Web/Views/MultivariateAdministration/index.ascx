@@ -58,7 +58,7 @@
             </h1>
         </div>
         <div>
-            <button id="btnCreate" type="button" class="epi-cmsButton-text epi-cmsButton-tools" Style="background:url('/App_Themes/Default/Images/General/addIcon.png');horiz-align:left;background-repeat: no-repeat">&nbsp Add Test</button>
+            <button id="btnCreate" type="button" class="epi-cmsButton-text epi-cmsButton-tools" Style="background:url('/App_Themes/Default/Images/General/addIcon.png');horiz-align:left;background-repeat: no-repeat">&nbsp&nbspAdd</button>
         </div>
        <br/>
          <div>
@@ -72,7 +72,7 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
-                    <td> Actions </td>
+                    <th>Actions</th>
                 </tr>
 
                 <%  UIHelper helper = new UIHelper();
@@ -88,9 +88,21 @@
                     <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
                     <td></td>
                     <td>
-                        <%= Html.ActionLink("Edit", "Update", new {id = item.Id})  %> |
-                        <%= Html.ActionLink("Details", "GetAbTestById", new { id = item.Id })  %> |
-                        <%= Html.ActionLink("Delete", "Delete", new {id = item.Id}) %>
+                    	<a href="<%: Url.Action("GetAbTestById", new {id = item.Id}) %>">
+                    		<img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%>" 
+                    		src="/App_Themes/Default/Images/Tools/Report.gif"
+                    		title="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>">
+                    	</a>
+                    	<a href="<%: Url.Action("Update", new {id = item.Id}) %>">
+                    		<img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>" 
+                    		src="/App_Themes/Default/Images/Tools/Edit.gif" 
+                    		title="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>">
+                    	</a>
+                    	<a href="<%: Url.Action("Delete", new {id = item.Id}) %>">
+                    		<img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>" 
+                    		src="/App_Themes/Default/Images/Tools/Delete.gif"
+                    		title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>">
+                    	</a>
                     </td>
                 </tr>
 
