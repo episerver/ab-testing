@@ -6,14 +6,19 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
     using System.Linq;
 
     /// <summary>
+    /// Good example: http://martinnormark.com/entity-framework-migrations-cheat-sheet/
+    /// 
     /// Add-Migration Initial  -- creates internal migration info for upgrading to the next release for future schema changes
-    /// Update-Database -Script -SourceMigration:$InitialDatabase  -- generates the final sql script for creating the db once schema design is done
+    /// Add-Migration Version2 -- creates a new migration based off the previous one
+    /// 
+    /// Update-Database -Script -SourceMigration:Initial  -- generates the final sql script for creating the db once schema design is done
+    /// -SourceMigration:'migration name to come from' flag is to generate sql script from previous version to current schema (i.e. only creates sql for new schema changes)
     /// </summary>
     internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.Multivariate.Dal.DatabaseContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(EPiServer.Marketing.Multivariate.Dal.DatabaseContext context)
