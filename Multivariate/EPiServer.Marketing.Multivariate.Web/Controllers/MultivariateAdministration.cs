@@ -56,8 +56,7 @@ namespace EPiServer.Marketing.Multivariate.Web
         public ActionResult Update(string id)
         {
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
             return View("Create", testRepository.ConvertToViewModel(multivariateTest));
@@ -72,8 +71,9 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Details(string id)
         {
-            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            return View("Details", testRepository.GetTestList(new MultivariateTestCriteria()));
+            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
+            return View("Details", new List<IMultivariateTest>() { multivariateTest });
         }
     }
 }
