@@ -15,8 +15,6 @@
        <conversionpage>Conversion Page</conversionpage>
        <startdate>Click to choose start date...</startdate>
        <enddate>Click to choose end date...</enddate>
-     </settings>
-     <gadget>
        <refresh>Refresh</refresh>
        <back>Back</back>
        <details>Details</details>
@@ -29,7 +27,8 @@
        <winner>Winning Variation</winner>
        <conversions>Conversion Rate</conversions>
        <actions>Actions</actions>
-     </gadget>
+       <delete>Delete</delete>
+   </settings>
    </multivariate>
   </language>
 </languages>

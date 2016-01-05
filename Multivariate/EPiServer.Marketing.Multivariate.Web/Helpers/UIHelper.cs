@@ -40,11 +40,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Helpers
                 port = ":" + uri.Port;
 
             var requested = uri.Scheme + "://" + uri.Host + port;
-            string settingsUrl = GetConnectorSettingsUrlString();
+            string settingsUrl = GetSettingsUrlString();
             return string.Format("{0}{1}", requested, settingsUrl);
         }
 
-        private string GetConnectorSettingsUrlString()
+        private string GetSettingsUrlString()
         {
             // out: http://{DOMAIN}/{PROTECTED_PATH}/CMS/Admin/
             var baseUrl = EPiServer.UriSupport.ResolveUrlFromUIBySettings("Admin/");

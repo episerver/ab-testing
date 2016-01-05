@@ -7,8 +7,8 @@
 <asp:Content>
 <div class="epi-contentContainer epi-padding" >
 <div class="epi-contentArea" >
-<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/gadget/back"), LanguageManager.Instance.Translate("/multivariate/gadget/back"), "Index/?id=1&",  "", "", null)%>
-<h1 class="EP-prefix"><%= LanguageManager.Instance.Translate("/multivariate/gadget/details")%></h1>
+<%= Html.ViewLinkButton(LanguageManager.Instance.Translate("/multivariate/settings/back"), LanguageManager.Instance.Translate("/multivariate/gadget/back"), "Index/?id=1&",  "", "", null)%>
+<h1 class="EP-prefix"><%= LanguageManager.Instance.Translate("/multivariate/settings/details")%></h1>
 <table>
 <tr><th>Name</th><th>Owner</th><th>State</th><th>Start</th><th>End</th></tr>
 <%  	
@@ -19,7 +19,7 @@
 </table>
 </div>
 <div class="epi-contentArea" >
-<h1><%= LanguageManager.Instance.Translate("/multivariate/gadget/results")%></h1>
+<h1><%= LanguageManager.Instance.Translate("/multivariate/settings/results")%></h1>
 <table>
 <tr><th>Item name</th><th>Views</th><th>Conversions</th><th>Conversion Rate</th></tr>
 <%
