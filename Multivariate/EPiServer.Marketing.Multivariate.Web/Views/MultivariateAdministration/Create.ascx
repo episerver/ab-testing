@@ -88,27 +88,36 @@
         <fieldset>
             <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post))
                 { %>
+           <% if (Model != null)
+               { %>
+                 <input type="hidden" name="Id" value="<%= Model.id %>" />
+             <% }
+               else
+               { %>
+                <input type="hidden" name="Id" value="<%= ViewData["TestGuid"] %>"/>        
+            <% } %>
+
             <div class="epi-size15">
                 <label for="Title"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle") %></label>
-                <%= Html.TextBoxFor(Model => Model.Title) %>
+                <%= Html.TextBoxFor(model => model.Title) %>
                 <span style="color: red">*&nbsp
-                        <%= Html.ValidationMessageFor(Model => Model.Title) %>
+                        <%= Html.ValidationMessageFor(model => model.Title) %>
                 </span>
             </div>
 
             <div class="epi-size15">
                 <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
-                <%= Html.TextBoxFor(Model => Model.StartDate, new {id = "datetimepickerstart"}) %>
+                <%= Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) %>
                 <span style="color: red">*&nbsp
-                        <%= Html.ValidationMessageFor(Model => Model.StartDate) %>
+                        <%= Html.ValidationMessageFor(model => model.StartDate) %>
                 </span>
 
             </div>
             <div class="epi-size15">
                 <label for="datetimepickerstop"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend") %></label>
-                <%= Html.TextBoxFor(Model => Model.EndDate, new {id = "datetimepickerstop"}) %>
+                <%= Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}) %>
                 <span style="color: red">*&nbsp
-                    <%= Html.ValidationMessageFor(Model => Model.EndDate) %>
+                    <%= Html.ValidationMessageFor(model => model.EndDate) %>
                 </span>
             </div>
             <div class="epi-size15">
@@ -149,23 +158,13 @@
                             <input id="btnDlgCancel" type="button" value="Cancel" /></span>
                     </div>
                 </div>
-            </div>
-            <%-- <div class="epi-size15">
+            <div class="epi-size15">
                 <label for="VariantPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
                 <%= Html.TextBoxFor(model => model.VariantItemId) %>
                 <button type="button" class="epi-cmsButton-text epi-cmsButton-tools">PagePicker PH</button>
                 <span style="color: red">*</span>
             </div>
-            <div class="epi-size15">
-                <label for="ConversionPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/conversionpage") %></label>
-                <%= Html.TextBoxFor(model => model.ConversionItemId) %>
-                <button type="button" class="epi-cmsButton-text epi-cmsButton-tools">PagePicker PH</button>
-                <span style="color: red">*</span>
-            </div>--%>
-            <div>
-                <%--<EPiServerUI:ToolButton ID="btnCreate" text="Ok"  runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
-                    <EPiServerUI:ToolButton ID="btnCancel" Text="Cancel" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>--%>
-            </div>
+           
             <div>
                 <button type="submit" class="epi-cmsButton-text epi-cmsButton-tools">Ok</button>
                 <button type="button" id="btnCancel" class="epi-cmsButton-text epi-cmsButton-tools">Cancel</button>

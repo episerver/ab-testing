@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 
         public Guid OriginalItemId { get; set; }
 
-        public IList<Variant> VariantItems { get; set; }
+        public Guid VariantItemId { get; set; }
 
         public IList<KeyPerformanceIndicator> Conversions { get; set; }
 

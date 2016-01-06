@@ -31,11 +31,15 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Create()
         {
+            ViewData["TestGuid"] = Guid.NewGuid();
             return View();
         }
+
         [HttpPost]
         public ActionResult Create(MultivariateTestViewModel testSettings)
         {
+            
+
             if (!ModelState.IsValid)
             {
                 return View();
@@ -44,8 +48,6 @@ namespace EPiServer.Marketing.Multivariate.Web
             else
             {
                 MultivariateTestRepository repo = new MultivariateTestRepository();
-                DateTime start = testSettings.StartDate;
-                DateTime? stop = testSettings.EndDate;
                 repo.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }

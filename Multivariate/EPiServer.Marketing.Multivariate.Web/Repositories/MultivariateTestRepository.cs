@@ -37,12 +37,57 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// <param name="testData"></param>
         public Guid CreateTest(MultivariateTestViewModel testData)
         {
-            //todo: This will need to be filled in as part of the admin pages story
-            //todo: generate conversion from MultivariateTestViewModel -> MultivariateTest
-            MultivariateTest mvTest = new MultivariateTest();
-            
+            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
 
-            return mvTest.Id;
+            MultivariateTest test = new MultivariateTest();
+            test.Id = testData.id;
+            test.Title = testData.Title;
+            test.Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name;
+            test.OriginalItemId = testData.OriginalItemId;
+            test.StartDate = testData.StartDate;
+            test.EndDate =testData.EndDate;
+            test.Variants = new List<Variant>()
+            {
+               new Variant() {Id=Guid.NewGuid(),VariantId = testData.VariantItemId}
+            };
+            test.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+            {
+               new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
+            };
+            test.MultivariateTestResults = new List<MultivariateTestResult>()
+            {
+               new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId = testData.OriginalItemId},
+               new MultivariateTestResult() {Id = Guid.NewGuid(),ItemId = testData.VariantItemId}
+
+            };
+
+
+            //MultivariateTest mvTest = new MultivariateTest()
+            //{
+            //    Id = testData.id,
+            //    Title = testData.Title,
+            //    Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
+            //    Conversions = new List<Conversion>(),
+            //    OriginalItemId = testData.OriginalItemId,
+            //    Variants = new List<Variant>()
+            //};
+            //mvTest.Variants.Add(new Variant()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    VariantId = testData.VariantItemId,
+            //    TestId = mvTest.Id
+            //});
+            //mvTest.MultivariateTestResults = new List<MultivariateTestResult>()
+            //{
+            //    new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId=mvTest.OriginalItemId,TestId = mvTest.Id},
+            //    new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId=mvTest.Variants[0].VariantId,TestId = mvTest.Id}
+            //};
+            //mvTest.KeyPerformanceIndicators=new List<KeyPerformanceIndicator>()
+            //{
+            //    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid(),TestId = mvTest.Id}
+            //};
+
+            return tm.Save(test);
         }
 
         /// <summary>
@@ -90,7 +135,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 StartDate = testToConvert.StartDate,
                 EndDate = testToConvert.EndDate,
                 OriginalItemId = testToConvert.OriginalItemId,
-                VariantItems = testToConvert.Variants,
+                VariantItemId = testToConvert.Variants[0].VariantId,
                 TestResults = testToConvert.MultivariateTestResults,
                 Conversions = testToConvert.KeyPerformanceIndicators
             };
