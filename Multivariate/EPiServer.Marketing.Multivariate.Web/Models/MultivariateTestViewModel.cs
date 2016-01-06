@@ -19,20 +19,18 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         [StartDate(ErrorMessage = "Start date cannot be in the past")]
         public DateTime StartDate { get; set; }
 
-        public string Owner { get; set; }
-
-        public TestState testState { get; set; }
-
         [Required(ErrorMessage = "A start Date and Time is required")]
         [Display(Name = "Test Stop")]
         [EndDate(StartDate = "StartDate", ErrorMessage = "End date cannot be before Start Date")]
         public DateTime? EndDate { get; set; }
 
+        public string Owner { get; set; }
+
+        public TestState testState { get; set; }
+
         public Guid OriginalItemId { get; set; }
 
         public Guid VariantItemId { get; set; }
-
-        public IList<KeyPerformanceIndicator> Conversions { get; set; }
 
         public IList<MultivariateTestResult> TestResults { get; set; } 
     }
