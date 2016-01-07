@@ -5,6 +5,8 @@
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
+<%@ Import Namespace="EPiServer.Web.WebControls" %> 
+<%@ Register TagPrefix="EPiServer" Assembly="EpiServer" Namespace="EPiServer.Web.WebControls" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 <%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
 
@@ -41,25 +43,6 @@
                 $('#datetimepickerstop').datetimepicker({
                     format: 'Y-m-d H:i',
                     step: 30
-                });
-
-                var dlg = $("#treedialog").dialog({
-                    autoOpen: false,
-                    modal: true
-                });
-
-                $("#btnOriginPagePickerPH").click(function () {
-                    dlg.dialog("open");
-                    $(".ui-dialog-titlebar").hide();
-
-                });
-
-                $("#btnDlgCancel").click(function () {
-                    dlg.dialog("close");
-                });
-
-                $("#btnDlgOk").click(function () {
-                    dlg.dialog("close");
                 });
 
                 $('#btnCancel').click(function () {
@@ -121,50 +104,34 @@
                 </span>
             </div>
             <div class="epi-size15">
-                <label for="OriginPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
-                <%= Html.TextBoxFor(model => model.OriginalItemId) %>
+                <label for="OriginalItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
+                <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display:none" value="">
+                <input name="originalItemTextBox" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
                 <span class="epi-cmsButton">
-                    <input id="btnOriginPagePickerPH" type="button" value="..." /></span>
-                <span style="color: red">*</span>
-                <%--                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>--%>
-
-                <div id="treedialog" class="ui-helper-hidden">
-                    <EPiServerUIDataSource:PageDataSource ID="contentDataSource"
-                        AccessLevel="NoAccess"
-                        runat="server"
-                        IncludeRootItem="false"
-                        ContentLink="<%# EPiServer.Web.SiteDefinition.Current.RootPage %>" />
-                    <div class="episcroll episerver-pagetree-selfcontained" style="max-height: 250px;">
-                        <EPiServerUI:PageTreeView ID="pageTreeView"
-                            DataSourceID="contentDataSource"
-                            CssClass="episerver-pagetreeview"
-                            runat="server"
-                            ExpandDepth="1"
-                            DataTextField="Name"
-                            ExpandOnSelect="false"
-                            DataNavigateUrlField="ContentLink" EnableViewState="false">
-                            <treenodetemplate>
-                                    <a style="outline:none !important" href="#" title="<%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>" onclick="return setval(<%# ((EPiServer.Core.IContent)((PageTreeNode)Container.DataItem).DataItem).ContentLink.ID %>)" >
-                                        <%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>
-                                    </a>
-                                </treenodetemplate>
-                        </EPiServerUI:PageTreeView>
-                    </div>
-
-                    <div align="right">
-                        <span class="epi-cmsButton">
-                            <input id="btnDlgOk" type="button" value="OK" /></span>
-                        <span class="epi-cmsButton">
-                            <input id="btnDlgCancel" type="button" value="Cancel" /></span>
-                    </div>
-                </div>
-            <div class="epi-size15">
-                <label for="VariantPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
-                <%= Html.TextBoxFor(model => model.VariantItemId) %>
-                <button type="button" class="epi-cmsButton-text epi-cmsButton-tools">PagePicker PH</button>
+                    <input name="originalItemBtn" type="button" value="..." class="epismallbutton" 
+                        onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
+                                                            document.getElementById('OriginalItem').value,
+                                                            'True',
+                                                            'False',
+                                                            'OriginalItemDisplay',
+                                                            'OriginalItem', 'en', null, null, false);"></span>
                 <span style="color: red">*</span>
             </div>
-           
+             <div class="epi-size15">
+                <label for="VariantItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
+                <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display:none" value="">
+                <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                <span class="epi-cmsButton">
+                    <input name="variantItemBtn" type="button" value="..." class="epismallbutton" 
+                        onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
+                                                            document.getElementById('VariantItem').value,
+                                                            'True',
+                                                            'False',
+                                                            'VariantItemDisplay',
+                                                            'VariantItem', 'en', null, null, false);"></span>
+                 <span style="color: red">*</span>
+            </div>
+
             <div>
                 <button type="submit" class="epi-cmsButton-text epi-cmsButton-tools">Ok</button>
                 <button type="button" id="btnCancel" class="epi-cmsButton-text epi-cmsButton-tools">Cancel</button>
