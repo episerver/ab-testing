@@ -91,10 +91,18 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="criteria">Criteria to filter on.</param>
         /// <returns>Filtered IMultivariate test list</returns>
-        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        public List<MultivariateTestViewModel> GetTestList(MultivariateTestCriteria criteria)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            return tm.GetTestList(criteria);
+            List<MultivariateTestViewModel> tests = new List<MultivariateTestViewModel>();
+
+            foreach (MultivariateTest test in tm.GetTestList(criteria))
+            {
+               tests.Add(ConvertToViewModel(test));
+            }
+
+
+            return tests;
         }
 
         /// <summary>
@@ -127,12 +135,12 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             return testModel;
         }
 
-        public MultivariateTestResult GetWinningTestResult(IMultivariateTest test)
+        public MultivariateTestResult GetWinningTestResult(MultivariateTestViewModel test)
         {
             var winningTest = new MultivariateTestResult(); // never return null
             var currentConversionRate = 0.0;
 
-            foreach (var result in test.MultivariateTestResults)
+            foreach (var result in test.TestResults)
             {
                 if (result.Views != 0)
                 {
