@@ -1,4 +1,4 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<EPiServer.Marketing.Multivariate.Web.Models.MultivariateTestViewModel>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
@@ -35,16 +35,16 @@
         <td><%= item.Title%></td>
         <td><%= item.StartDate%></td>
         <td><%= item.EndDate%></td>
-        <td><%= item.TestState%></td>
+        <td><%= item.testState%></td>
         <td><%= helper.getContent( item.OriginalItemId ).Name %></td>
         <td><%= helper.getContent( winner.ItemId ).Name %></td>
         <td><%= rate%>%</td>
         <td>
-            <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.Id%>&'});return false;"
+            <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.id%>&'});return false;"
 		        title="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>" src="/App_Themes/Default/Images/Tools/Report.gif">
 		    </a>
-            <a href="<%= helper.getConfigurationURL()%>/Update/<%=item.Id%>" title="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>">
+            <a href="<%= helper.getConfigurationURL()%>/Update/<%=item.id%>" title="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>" src="/App_Themes/Default/Images/Tools/Edit.gif">
             </a>
 	</td>                    
