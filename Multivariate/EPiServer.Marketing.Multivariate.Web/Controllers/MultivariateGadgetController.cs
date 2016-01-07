@@ -6,6 +6,7 @@ using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Dal;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
@@ -13,9 +14,16 @@ namespace EPiServer.Marketing.Multivariate.Web
     class MultivariateGadgetController : Controller
     {
         private IServiceLocator _serviceLocator;
+
+        [ExcludeFromCodeCoverage]
         public MultivariateGadgetController()
         {
             _serviceLocator = ServiceLocator.Current;
+        }
+
+        internal MultivariateGadgetController(IServiceLocator serviceLocator)
+        {
+            _serviceLocator = serviceLocator;
         }
 
         public ActionResult Index()
