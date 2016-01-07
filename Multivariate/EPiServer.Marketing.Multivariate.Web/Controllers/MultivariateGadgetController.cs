@@ -7,6 +7,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Dal;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Multivariate.Web.Models;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
@@ -39,7 +40,7 @@ namespace EPiServer.Marketing.Multivariate.Web
             var test = testRepo.GetTestById(testId);
 
             // will we ever show details of a list of tests?
-            List<IMultivariateTest> list = new List<IMultivariateTest>();
+            List<MultivariateTestViewModel> list = new List<MultivariateTestViewModel>();
             list.Add(test);
             return PartialView(list);
         }

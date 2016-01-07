@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         Guid CreateTest(MultivariateTestViewModel testData);
         void DeleteTest(Guid testGuid);
         List<MultivariateTestViewModel> GetTestList(MultivariateTestCriteria criteria);
-        IMultivariateTest GetTestById(Guid testId);
+        MultivariateTestViewModel GetTestById(Guid testId);
         MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert);
         MultivariateTestResult GetWinningTestResult(MultivariateTestViewModel test);
     }

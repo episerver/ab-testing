@@ -110,11 +110,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="testId"></param>
         /// <returns>MultivariateTest</returns>
-        public IMultivariateTest GetTestById(Guid testId)
+        public MultivariateTestViewModel GetTestById(Guid testId)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
 
-            return tm.Get(testId);
+            return ConvertToViewModel(tm.Get(testId));
         }
 
         public MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert)
