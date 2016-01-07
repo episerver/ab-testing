@@ -1,4 +1,4 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<IMultivariateTest>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<EPiServer.Marketing.Multivariate.Web.Models.MultivariateTestViewModel>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
@@ -48,7 +48,7 @@
 	UIHelper helper = new UIHelper();
 	foreach (var item in Model) { 
 %>
-	<tr><td><%= item.Title%></td><td><%= item.Owner%></td><td><%= item.TestState%></td><td><%= item.StartDate%></td><td><%= item.EndDate%></tr>
+	<tr><td><%= item.Title%></td><td><%= item.Owner%></td><td><%= item.testState%></td><td><%= item.StartDate%></td><td><%= item.EndDate%></tr>
 </table>
 </div>
 <div class="epi-contentArea" >
@@ -56,7 +56,7 @@
 <table>
 <tr><th>Item name</th><th>Views</th><th>Conversions</th><th>Conversion Rate</th></tr>
 <%
-	foreach( var result in item.MultivariateTestResults ) {
+	foreach( var result in item.TestResults ) {
 		int rate = 0;
 		if( result.Views != 0 )
 			rate = (int)(result.Conversions * 100.0 / result.Views);
