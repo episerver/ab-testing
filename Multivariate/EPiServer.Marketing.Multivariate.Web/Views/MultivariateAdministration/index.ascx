@@ -22,9 +22,11 @@
         <%=Page.ClientResources("ShellCore")%>
         <%=Page.ClientResources("ShellCoreLightTheme")%>
         <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.js"))%>
+        
         <%= Html.CssLink(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "system.css"))%>
         <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "ToolButton.css"))%>
+        
         <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))%>
         <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUtilBySettings("javascript/episerverscriptmanager.js"))%>
         <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/system.js")) %>
@@ -97,7 +99,7 @@
                     
 		%>
                 <tr class="parent" id="parent<%= index %>">
-                    <td><%= item.Title %></td>
+                    <td><a href="<%: Url.Action("Update", new {id = item.Id}) %>"><%= item.Title %></a></td>
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
                     <td><%= item.TestState %></td>
