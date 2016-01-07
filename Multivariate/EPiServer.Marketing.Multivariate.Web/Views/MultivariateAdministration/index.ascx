@@ -59,10 +59,17 @@
                 <%= LanguageManager.Instance.Translate("/multivariate/settings/displayname")%>
             </h1>
         </div>
-        <div>
-            <button id="btnCreate" type="button" class="epi-cmsButton-text epi-cmsButton-tools" Style="background:url('/App_Themes/Default/Images/General/addIcon.png');horiz-align:left;background-repeat: no-repeat">&nbsp&nbspAdd</button>
-        </div>
-       <br/>
+        
+	<div class="epi-buttonDefault">
+	<span class="epi-cmsButton">
+        	<input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Add" 
+        		type="button" id="btnCreate" value="<%= LanguageManager.Instance.Translate("/multivariate/settings/create")%>" 
+                title="<%= LanguageManager.Instance.Translate("/multivariate/settings/create")%>" 
+        		onmouseover="EPi.ToolButton.MouseDownHandler(this)" 
+        		onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+	</span>
+    	</div>
+    	
          <div>
             <table class="epi-default">
                 <tr>
