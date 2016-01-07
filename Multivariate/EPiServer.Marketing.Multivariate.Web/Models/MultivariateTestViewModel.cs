@@ -28,7 +28,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 
         public TestState testState { get; set; }
 
+        public int OriginalItem { get; set; }
+
         public Guid OriginalItemId { get; set; }
+
+        public int VariantItem { get; set; }
 
         public Guid VariantItemId { get; set; }
 

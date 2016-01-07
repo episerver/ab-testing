@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer.Core;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
@@ -12,13 +13,15 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
     public class MultivariateTestRepository : IMultivariateTestRepository
     {
         private IServiceLocator _serviceLocator;
-
+        private readonly IContentRepository _contentRepository;
+        
         /// <summary>
         /// Default constructor
         /// </summary>
         public MultivariateTestRepository()
         {
             _serviceLocator = ServiceLocator.Current;
+            _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         }
 
         /// <summary>
@@ -37,55 +40,34 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// <param name="testData"></param>
         public Guid CreateTest(MultivariateTestViewModel testData)
         {
-            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            // need to get guid for pages from the page picker content id's we get
+            var originalItemRef = _contentRepository.Get<IContent>(new ContentReference(testData.OriginalItem));
+            var variantItemRef = _contentRepository.Get<IContent>(new ContentReference(testData.VariantItem));
 
-            MultivariateTest test = new MultivariateTest();
-            test.Id = testData.id;
-            test.Title = testData.Title;
-            test.Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name;
-            test.OriginalItemId = testData.OriginalItemId;
-            test.StartDate = testData.StartDate;
-            test.EndDate =testData.EndDate;
-            test.Variants = new List<Variant>()
+            var tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+
+            var test = new MultivariateTest
             {
-               new Variant() {Id=Guid.NewGuid(),VariantId = testData.VariantItemId}
+                Id = testData.id,
+                Title = testData.Title,
+                Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
+                OriginalItemId = originalItemRef.ContentGuid,
+                StartDate = testData.StartDate,
+                EndDate = testData.EndDate,
+                Variants = new List<Variant>()
+                {
+                    new Variant() {Id = Guid.NewGuid(), VariantId = variantItemRef.ContentGuid}
+                },
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                {
+                    new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid()},
+                },
+                MultivariateTestResults = new List<MultivariateTestResult>()
+                {
+                    new MultivariateTestResult() {Id = Guid.NewGuid(), ItemId = originalItemRef.ContentGuid},
+                    new MultivariateTestResult() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}
+                }
             };
-            test.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
-            {
-               new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
-            };
-            test.MultivariateTestResults = new List<MultivariateTestResult>()
-            {
-               new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId = testData.OriginalItemId},
-               new MultivariateTestResult() {Id = Guid.NewGuid(),ItemId = testData.VariantItemId}
-
-            };
-
-
-            //MultivariateTest mvTest = new MultivariateTest()
-            //{
-            //    Id = testData.id,
-            //    Title = testData.Title,
-            //    Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
-            //    Conversions = new List<Conversion>(),
-            //    OriginalItemId = testData.OriginalItemId,
-            //    Variants = new List<Variant>()
-            //};
-            //mvTest.Variants.Add(new Variant()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    VariantId = testData.VariantItemId,
-            //    TestId = mvTest.Id
-            //});
-            //mvTest.MultivariateTestResults = new List<MultivariateTestResult>()
-            //{
-            //    new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId=mvTest.OriginalItemId,TestId = mvTest.Id},
-            //    new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId=mvTest.Variants[0].VariantId,TestId = mvTest.Id}
-            //};
-            //mvTest.KeyPerformanceIndicators=new List<KeyPerformanceIndicator>()
-            //{
-            //    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid(),TestId = mvTest.Id}
-            //};
 
             return tm.Save(test);
         }
