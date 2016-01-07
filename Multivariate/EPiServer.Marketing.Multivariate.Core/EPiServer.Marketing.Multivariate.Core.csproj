@@ -42,6 +42,15 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\packages\Castle.Windsor.3.2.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EPiServer, Version=9.3.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EPiServer.CMS.Core.9.3.2\lib\net45\EPiServer.dll</HintPath>
       <Private>True</Private>
@@ -119,8 +128,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -160,18 +171,15 @@
     <Compile Include="Cms\CurrentUser.cs" />
     <Compile Include="Cms\ICurrentSite.cs" />
     <Compile Include="Cms\ICurrentUser.cs" />
-    <Compile Include="Core\CountType.cs" />
-    <Compile Include="Core\IMultivariateTest.cs" />
     <Compile Include="Core\IMultivariateTestManager.cs" />
-    <Compile Include="Core\MultivariateTest.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
-    <Compile Include="Core\TestResult.cs" />
-    <Compile Include="Core\TestState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Package.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -182,25 +190,15 @@
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj">
+      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
+      <Name>EPiServer.Marketing.Multivariate.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(ProjectDir)..\Deployment\lib\" ( rmdir "$(ProjectDir)..\Deployment\lib" /s /q )
-mkdir "$(ProjectDir)..\Deployment\lib"
-xcopy "$(TargetDir)"\$(TargetName)*dll "$(ProjectDir)..\Deployment\lib\"  /I /F /R /Y
-xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(ProjectDir)..\Deployment\lib\"  /I /F /R /Y
-
-IF exist "$(ProjectDir)..\Deployment\*.nuspec" ( del "$(ProjectDir)..\Deployment\*.nuspec" /s /q )
-xcopy "$(ProjectDir)"\*.nuspec "$(ProjectDir)..\Deployment\"  /I /F /R /Y
-
-IF exist "$(ProjectDir)..\Deployment\tools\epiupdates\sql" ( del "$(ProjectDir)..\Deployment\tools\epiupdates\sql" /s /q )
-xcopy "$(ProjectDir)..\"\Database\*.sql "$(ProjectDir)..\Deployment\tools\epiupdates\sql"  /I /F /R 
-
-del $(ProjectDir)..\Deployment\*.nupkg
-
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\MSBuild\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
-
-xcopy "$(ProjectDir)..\Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

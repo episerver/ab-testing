@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using EPiServer.Data.Configuration;
 
 namespace EPiServer.Marketing.Multivariate
@@ -14,8 +9,7 @@ namespace EPiServer.Marketing.Multivariate
         {
             var siteSettings = new SiteDataSettingsElement();
             var connectionStringName = siteSettings.ConnectionStringName;
-            return EPiServerDataStoreSection.ConfigurationInstance.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString;
-
+            return ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
         }
     }
 }

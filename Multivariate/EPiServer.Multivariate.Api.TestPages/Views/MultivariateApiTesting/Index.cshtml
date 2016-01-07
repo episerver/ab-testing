@@ -1,0 +1,137 @@
+﻿@using System.Web.Optimization
+@model IEnumerable<EPiServer.Marketing.Multivariate.Model.IMultivariateTest>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    @Styles.Render("~/bundles/css")
+    @Scripts.Render("~/bundles/js")
+
+</head>
+<body class="Sleek">
+    <p>
+
+    </p>
+    <div class="container">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Owner)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TestState)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OriginalItemId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Variants)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Conversions)
+                </th>
+                <th colspan="2">
+                    Test Results
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TestState)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new { id = item.OriginalItemId })
+                    </td>
+                    <td>
+
+                        @if (item.Variants != null)
+                        {
+                            for (int i = 0; i < item.Variants.Count; i++)
+                            {
+                                @Html.DisplayFor(modelItem => item.Variants[i].VariantId)
+                            }
+
+                        }
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Conversions)
+                    </td>
+                    @if (item.MultivariateTestResults.Count > 0)
+                {
+                    foreach (var result in item.MultivariateTestResults)
+                    {
+                            <td>
+                                Views:
+                                @Html.DisplayFor(resultItem => result.Views)
+                                <br />
+                                Item Id:
+                                @Html.DisplayFor(resultItem => result.ItemId)
+                                <br />
+                                Conversions:
+                                @Html.DisplayFor(resultItem => result.Conversions)
+                            </td>
+                        }
+                        if (item.MultivariateTestResults.Count == 1)
+                        {
+                            <td></td>}
+
+
+                    }
+                    else
+                    {
+                        <td>No Page Conversion Test Results Found </td>
+                        <td></td>
+                    }
+
+                    <td>
+                        @Html.ActionLink("Edit", "UpdateAbTest", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "GetAbTestById", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteAbTest", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+    <div>
+        <p>
+            <span class="btn">@Html.ActionLink("Create New", "CreateAbTest")</span>
+        </p>
+    </div>
+</body>
+</html>
+
