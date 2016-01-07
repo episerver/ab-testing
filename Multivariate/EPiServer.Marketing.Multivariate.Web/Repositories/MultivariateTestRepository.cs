@@ -5,6 +5,7 @@ using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Web.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
@@ -16,6 +17,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// <summary>
         /// Default constructor
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public MultivariateTestRepository()
         {
             _serviceLocator = ServiceLocator.Current;
