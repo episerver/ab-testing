@@ -124,6 +124,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 id = testToConvert.Id,
                 Title = testToConvert.Title,
                 Owner = testToConvert.Owner,
+                testState = testToConvert.TestState,
                 StartDate = testToConvert.StartDate,
                 EndDate = testToConvert.EndDate,
                 OriginalItemId = testToConvert.OriginalItemId,
