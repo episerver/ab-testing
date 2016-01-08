@@ -108,17 +108,41 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         public IMultivariateTest RunTests(Guid testId)
         {
             _mtm = new MultivariateTestManager();
-            MultivariateTest currentTest = (MultivariateTest)_mtm.Get(testId);
             _mtm.Start(testId);
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, x % 5 == 0 ? CountType.Conversion : CountType.View);
+                _mtm.IncrementCount(testId, result, CountType.View);
+                if (x % 5 == 0)
+                    _mtm.IncrementCount(testId, result, CountType.Conversion);
+
 
             }
 
 
             _mtm.Stop(testId);
+
+
+            return _mtm.Get(testId);
+
+        }
+
+        public IMultivariateTest StartTest(Guid testId)
+        {
+            _mtm = new MultivariateTestManager();
+            _mtm.Start(testId);
+            for (int x = 0; x < 5; x++)
+            {
+                Guid result = _mtm.ReturnLandingPage(testId);
+                _mtm.IncrementCount(testId, result, CountType.View);
+                if (x % 5 == 0)
+                    _mtm.IncrementCount(testId, result, CountType.Conversion);
+
+
+            }
+
+
+
 
 
             return _mtm.Get(testId);
