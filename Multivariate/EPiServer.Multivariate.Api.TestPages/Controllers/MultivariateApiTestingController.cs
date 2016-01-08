@@ -138,6 +138,14 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
+        public ActionResult StartTest(string id)
+        {
+            MultivariateTestLib testLib = new MultivariateTestLib();
+            var multiVariateTest = testLib.StartTest(Guid.Parse(id));
+
+            return View("TestDetails", multiVariateTest);
+        }
+
         public ActionResult ArchiveAbTest(string id)
         {
             MultivariateTestManager mtm = new MultivariateTestManager();
