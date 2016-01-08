@@ -14,7 +14,6 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
     public class MultivariateTestRepository : IMultivariateTestRepository
     {
         private IServiceLocator _serviceLocator;
-        private readonly IContentRepository _contentRepository;
         
         /// <summary>
         /// Default constructor
@@ -23,7 +22,6 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         public MultivariateTestRepository()
         {
             _serviceLocator = ServiceLocator.Current;
-            _contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
         }
 
         /// <summary>
@@ -42,9 +40,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// <param name="testData"></param>
         public Guid CreateTest(MultivariateTestViewModel testData)
         {
+            IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
+
             // need to get guid for pages from the page picker content id's we get
-            var originalItemRef = _contentRepository.Get<IContent>(new ContentReference(testData.OriginalItem));
-            var variantItemRef = _contentRepository.Get<IContent>(new ContentReference(testData.VariantItem));
+            var originalItemRef = contentrepo.Get<IContent>(new ContentReference(testData.OriginalItem));
+            var variantItemRef = contentrepo.Get<IContent>(new ContentReference(testData.VariantItem));
 
             var tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
 
