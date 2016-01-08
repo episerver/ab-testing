@@ -40,7 +40,7 @@
 
         <script>
             $(function () {
-                $("td[colspan=8]").find("div").hide();
+                $("td[colspan=9]").find("div").hide();
                 $(".expand").click(function (event) {
                     event.stopPropagation();
                     var $target = $(event.target);
@@ -100,6 +100,7 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
 		            <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
+                    <th> Stop Test</th>
                     <th> Delete </th>
                 </tr>
 
@@ -115,18 +116,31 @@
                     <td><%= item.testState %></td>
                     <td><%= item.OriginalItemId %></td>
                     <td><%= item.VariantItemId %></td>
-                    <td>
+                    <td style="text-align: center">
+                        <% if (item.testState == TestState.Active)
+                           { %>
+                    	<a href="<%: Url.Action("Stop", new {id = item.id}) %>">
+                    		<img border="0" 
+                                alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete") %>" 
+                    		    src="./Images/StopTest.gif"
+                                height="18"
+                                width="18"
+                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete") %>">
+                    	</a>
+                        <% } %> 
+                    </td>
+                    <td style="text-align:center">
                     	<a href="<%: Url.Action("Delete", new {id = item.id}) %>">
                     		<img border="0" 
                                 alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>" 
                     		    src="/App_Themes/Default/Images/Tools/Delete.gif"
-                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>">
+                    		    title="">
                     	</a>
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="8" class="detailsRow" style="padding: 0 0">
+                    <td colspan="9" class="detailsRow" style="padding: 0 0">
                         <div style="padding: 10px 10px">
                             <% Html.RenderPartial("_details",item); %>
                         
