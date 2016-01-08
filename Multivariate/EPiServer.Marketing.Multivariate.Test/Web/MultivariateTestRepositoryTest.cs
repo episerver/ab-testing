@@ -97,6 +97,22 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         }
 
         [TestMethod]
+        public void StopTestCallsTestManagerStopWithProperTestGuid()
+        {
+            Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
+            var repo = GetUnitUnderTest();
+
+            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+
+            repo.StopTest(theGuid);
+
+            // verify thes testmanager was called with the proper guid.
+            _testmanager.Verify(tm => tm.Stop(It.Is<Guid>(guid => guid.Equals(theGuid))),
+                Times.Once(), "StopTest did not call Stop or Stop was not called with expected values");
+
+        }
+
+        [TestMethod]
         public void GetTestByIdCallsTestManagerWithProperTestGuid()
         {
             var repo = GetUnitUnderTest();
