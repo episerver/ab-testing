@@ -30,6 +30,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
+            OriginalItem = 1,
+            VariantItem = 2,
             testState = Model.Enums.TestState.Active,
             VariantItemId = varient,
             TestResults = new List<MultivariateTestResult>() {
@@ -58,6 +60,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _testmanager = new Mock<IMultivariateTestManager>();
+
+            // Setup the contentrepo so it simulates episerver returning content
+            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
+            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
+
+            var contentRepo = new Mock<IContentRepository>();
+            viewdata.OriginalItem = 1;
+            viewdata.VariantItem = 2;
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
+            _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
+
             return new MultivariateTestRepository(_serviceLocator.Object);
         }
 
@@ -171,22 +185,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         [TestMethod]
         public void CreateTestCallsTestRepoSave()
         {
-            MultivariateTestViewModel viewdata = new MultivariateTestViewModel();
             var repo = GetUnitUnderTest();
 
             // Setup the service locator to return our mocked testmanager class
             _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
-
-            // Setup the contentrepo so it simulates episerver returning content
-            var page1 = new TestContent() { ContentGuid = viewdata.OriginalItemId };
-            var page2 = new TestContent() { ContentGuid = viewdata.VariantItemId };
-
-            var contentRepo = new Mock<IContentRepository>();
-            viewdata.OriginalItem = 1;
-            viewdata.VariantItem = 2;
-            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
-            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
-            _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
 
             repo.CreateTest(viewdata);
 
@@ -202,17 +204,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             // Setup the service locator to return our mocked testmanager class
             _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
-
-            // Setup the contentrepo so it simulates episerver returning content
-            var page1 = new TestContent() { ContentGuid = viewdata.OriginalItemId };
-            var page2 = new TestContent() { ContentGuid = viewdata.VariantItemId };
-
-            var contentRepo = new Mock<IContentRepository>();
-            viewdata.OriginalItem = 1;
-            viewdata.VariantItem = 2;
-            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
-            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
-            _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
 
             // now create the test and verify data was mapped properly
             repo.CreateTest(viewdata);
@@ -232,17 +223,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "CreateTest did not call save with correctly mapped OriginalItemId");
             _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Variants[0].VariantId.Equals(viewdata.VariantItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped Variants[0].VariantId");
-        }
-
-        private class TestContent : IContent
-        {
-            public Guid ContentGuid { get; set; }
-            public ContentReference ContentLink { get; set; }
-            public int ContentTypeID { get; set; }
-            public bool IsDeleted { get; set; }
-            public string Name { get; set; }
-            public ContentReference ParentLink { get; set; }
-            public PropertyDataCollection Property { get; set; }
         }
     }
 }
