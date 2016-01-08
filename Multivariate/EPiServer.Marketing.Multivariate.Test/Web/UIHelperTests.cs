@@ -26,7 +26,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         [TestMethod]
         public void Get_ContentCallsServiceLocator()
         {
-            GetUnitUnderTest().getContent(Guid.NewGuid());
+            var helper = GetUnitUnderTest();
+            Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
+            TestContent tc = new TestContent();
+
+            _contentrepository.Setup(cr => cr.Get<IContent>(It.Is<Guid>(guid => guid.Equals(theGuid)))).Returns(tc);
+            helper.getContent(theGuid);
+
             _serviceLocator.Verify(sl => sl.GetInstance<IContentRepository>(), Times.Once, "GetInstance was never called");
         }
 
@@ -48,6 +54,17 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             // Now verify the name of the content returned (should be what the api specifies - ContentNotFound)
             Assert.AreEqual(content.Name, "ContentNotFound", false, "Name of content was unexpected");
+        }
+
+        private class TestContent : IContent
+        {
+            public Guid ContentGuid { get; set; }
+            public ContentReference ContentLink { get; set; }
+            public int ContentTypeID { get; set; }
+            public bool IsDeleted { get; set; }
+            public string Name { get; set; }
+            public ContentReference ParentLink { get; set; }
+            public PropertyDataCollection Property { get; set; }
         }
     }
 }

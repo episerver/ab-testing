@@ -30,6 +30,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
+            testState = Model.Enums.TestState.Active,
             VariantItemId = varient,
             TestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
@@ -45,6 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
+            TestState = Model.Enums.TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = varient } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
@@ -160,6 +162,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             Assert.AreEqual(test.StartDate, ViewData.StartDate, "StartDate was not mapped.");
             Assert.AreEqual(test.EndDate, ViewData.EndDate, "EndDate was not mapped.");
             Assert.AreEqual(test.OriginalItemId, ViewData.OriginalItemId, "OriginalItemId was not mapped.");
+            Assert.AreEqual(test.TestState, ViewData.testState, "TestState was not mapped.");
             Assert.AreEqual(test.Variants[0].VariantId, ViewData.VariantItemId, "Variants was not mapped.");
             Assert.AreEqual(test.MultivariateTestResults[0].Id, ViewData.TestResults[0].Id, "TestResults[0] was not mapped.");
             Assert.AreEqual(test.MultivariateTestResults[1].Id, ViewData.TestResults[1].Id, "TestResults[1] was not mapped.");

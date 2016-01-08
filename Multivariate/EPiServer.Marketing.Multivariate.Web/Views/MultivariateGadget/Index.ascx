@@ -75,7 +75,7 @@
         <td><%= helper.getContent( winner.ItemId ).Name %></td>
         <td><%= rate%>%</td>
         <td>
-            <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/?id=<%=item.id%>&'});return false;"
+            <a length="0" class="epi-button-child-item" href="#" onclick="epi.gadget.loadView(this, {'action':'Details/<%=item.id%>'});return false;"
 		        title="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>" src="/App_Themes/Default/Images/Tools/Report.gif">
 		    </a>
