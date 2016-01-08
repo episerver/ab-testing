@@ -23,6 +23,11 @@ namespace EPiServer.Marketing.Multivariate.Web
             _serviceLocator = ServiceLocator.Current;
         }
 
+        internal MultivariateAdministrationController(IServiceLocator serviceLocator)
+        {
+            _serviceLocator = serviceLocator;
+        }
+
         public ActionResult Index()
         {
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
