@@ -40,7 +40,7 @@
 
         <script>
             $(function () {
-                $("td[colspan=9]").find("div").hide();
+                $("td[colspan=8]").find("div").hide();
                 $(".expand").click(function (event) {
                     event.stopPropagation();
                     var $target = $(event.target);
@@ -99,20 +99,12 @@
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/testend")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/state")%></th>
                     <th><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage")%></th>
-		    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/winner")%></th>
-		    <th><%= LanguageManager.Instance.Translate("/multivariate/settings/conversions")%></th>
+		            <th><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage")%></th>
                     <th> Delete </th>
                 </tr>
 
-                <%  UIHelper helper = new UIHelper();
-        	    IMultivariateTestRepository repo = ServiceLocator.Current.GetInstance<IMultivariateTestRepository>();
-                
-                    int index = 1;
-                    foreach (var item in Model)
-                    { 
-
-                    
-		%>
+                <%  foreach (var item in Model)
+                    {   %>
                 <tr>
                     <td class="expand" style="color: green; font-size: large;cursor: pointer">+</td>
                     <td>
@@ -123,51 +115,26 @@
                     <td><%= item.testState %></td>
                     <td><%= item.OriginalItemId %></td>
                     <td><%= item.VariantItemId %></td>
-                    <td> </td>
                     <td>
-                    	
                     	<a href="<%: Url.Action("Delete", new {id = item.id}) %>">
-                    		<img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>" 
-                    		src="/App_Themes/Default/Images/Tools/Delete.gif"
-                    		title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>">
+                    		<img border="0" 
+                                alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>" 
+                    		    src="/App_Themes/Default/Images/Tools/Delete.gif"
+                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>">
                     	</a>
                     </td>
                 </tr>
 
                 <tr>
-                    <td colspan="9" class="detailsRow" style="padding: 0 0">
+                    <td colspan="8" class="detailsRow" style="padding: 0 0">
                         <div style="padding: 10px 10px">
-                        <% if (item.testState == 0)
-                           { %>
-                               <span style="color: red">This test has not been started</span>
-                            <% } %>
-
-
-                        <%  if (item.TestResults != null)
-                            {
-                                foreach (var result in item.TestResults)
-                                { %>
-                        <table>
-                            <tr>
-                                <th colspan="2"><%= result.ItemId %></th>
-                            </tr>
-                            <tr>
-                                <th>Views</th>
-                                <th>Conversions</th>
-                            </tr>
-                            <tr>
-                                <td><%= result.Views %></td>
-                                <td><%= result.Conversions %> </td>
-                            </tr>
-                        </table>
-                        <% } %>
-                        <% } %>  
+                            <% Html.RenderPartial("_details",item); %>
+                        
                         </div>
                     </td>
                    
                 </tr>
-                <% index++;
-                    } %>
+                <% } %>
             </table>
         </div>
 
