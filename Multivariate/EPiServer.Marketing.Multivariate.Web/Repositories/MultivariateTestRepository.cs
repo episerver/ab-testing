@@ -156,5 +156,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
 
             return winningTest;
         }
+
+        public void StopTest(Guid testGuid)
+        {
+            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            tm.Stop(testGuid);
+        }
     }
 }

@@ -71,11 +71,12 @@ namespace EPiServer.Marketing.Multivariate.Web
             return View("Index", testRepository.GetTestList(new MultivariateTestCriteria()));
         }
 
-        public ActionResult Details(string id)
+
+        public ActionResult Stop(string id)
         {
-            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
-            return View("Details", new List<IMultivariateTest>() { multivariateTest });
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            testRepository.StopTest(Guid.Parse(id));
+            return View("Index", testRepository.GetTestList(new MultivariateTestCriteria()));
         }
     }
 }
