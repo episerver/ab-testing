@@ -33,9 +33,9 @@ namespace EPiServer.Marketing.Multivariate.Web
             return PartialView(testRepo.GetTestList(new MultivariateTestCriteria()));
         }
 
-        public ActionResult Details()
+        public ActionResult Details(string id)
         {
-            var testId = Guid.Parse(Request["id"]);
+            var testId = Guid.Parse(id);
             IMultivariateTestRepository testRepo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
             var test = testRepo.GetTestById(testId);
 
