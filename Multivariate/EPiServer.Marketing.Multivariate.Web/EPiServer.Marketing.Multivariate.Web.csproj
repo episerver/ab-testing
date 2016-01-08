@@ -201,11 +201,9 @@
     <Content Include="Views\MultivariateAdministration\Create.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Views\MultivariateAdministration\Details.ascx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
     <Content Include="Views\MultivariateAdministration\index.ascx" />
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
+    <Content Include="Views\MultivariateAdministration\_details.ascx" />
     <Content Include="Views\MultivariateGadget\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
