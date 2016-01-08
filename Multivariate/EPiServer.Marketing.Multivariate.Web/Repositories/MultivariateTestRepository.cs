@@ -139,8 +139,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         public MultivariateTestResult GetWinningTestResult(MultivariateTestViewModel test)
         {
             var winningTest = new MultivariateTestResult(); // never return null
+            winningTest.ItemId = test.OriginalItemId;       // set it to something incase no test results
+                                                            // exist, i.e. the original is still winning!
             var currentConversionRate = 0.0;
-
             foreach (var result in test.TestResults)
             {
                 if (result.Views != 0)
