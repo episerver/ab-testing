@@ -1,6 +1,7 @@
-﻿namespace EPiServer.Marketing.Multivariate.Dal
+﻿namespace EPiServer.Marketing.Multivariate.Model
 {
     public class MultivariateTestCriteria
     {
+
     }
 }

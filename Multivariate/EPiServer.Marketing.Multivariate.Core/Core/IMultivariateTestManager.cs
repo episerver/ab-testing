@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 
