@@ -26,7 +26,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         [TestMethod]
         public void Get_ContentCallsServiceLocator()
         {
-            GetUnitUnderTest().getContent(Guid.NewGuid());
+            var helper = GetUnitUnderTest();
+            Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
+            BasicContent tc = new BasicContent();
+
+            _contentrepository.Setup(cr => cr.Get<IContent>(It.Is<Guid>(guid => guid.Equals(theGuid)))).Returns(tc);
+            helper.getContent(theGuid);
+
             _serviceLocator.Verify(sl => sl.GetInstance<IContentRepository>(), Times.Once, "GetInstance was never called");
         }
 

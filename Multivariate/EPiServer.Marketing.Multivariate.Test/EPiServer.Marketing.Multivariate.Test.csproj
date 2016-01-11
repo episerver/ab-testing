@@ -200,8 +200,10 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="Dal\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\MultivariateAdministrationControllerTest.cs" />
     <Compile Include="Web\UIHelperTests.cs" />
     <Compile Include="Web\MultivariateTestRepositoryTest.cs" />
+    <Compile Include="Web\MultivariateGadgetControllerTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

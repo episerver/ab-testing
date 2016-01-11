@@ -191,6 +191,7 @@
     <Compile Include="Models\StartDateAttrbiute.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
+    <Content Include="Images\StopTest.gif" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.css" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.full.min.js" />
@@ -201,11 +202,11 @@
     <Content Include="Views\MultivariateAdministration\Create.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Views\MultivariateAdministration\Details.ascx">
+    <Content Include="Views\MultivariateAdministration\Index.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Views\MultivariateAdministration\index.ascx" />
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
+    <Content Include="Views\MultivariateAdministration\_details.ascx" />
     <Content Include="Views\MultivariateGadget\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -279,6 +280,10 @@ xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Multivariate_EN.xml "$(Solutio
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"
 xcopy "$(ProjectDir)"\Scripts "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"  /I /F /R /Y /S
+
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images"
+xcopy "$(ProjectDir)"\Images "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images"  /I /F /R /Y /S
 
 IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
 mkdir "$(SolutionDir)Deployment\temp"
