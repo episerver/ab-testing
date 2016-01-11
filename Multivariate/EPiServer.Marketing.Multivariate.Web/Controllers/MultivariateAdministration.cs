@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Multivariate.Web
 
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("Create",testSettings);
 
             }
             else
