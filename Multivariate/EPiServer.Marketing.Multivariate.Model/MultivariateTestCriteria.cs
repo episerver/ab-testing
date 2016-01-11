@@ -32,16 +32,27 @@ namespace EPiServer.Marketing.Multivariate.Model
 
     public class MultivariateTestFilter
     {
-        public MultivariateTestFilter(MultivariateTestProperty theProperty, FilterOperator theOperator)
+        public MultivariateTestFilter(MultivariateTestProperty theProperty, FilterOperator theOperator, object theValue)
         {
             Property = theProperty;
             Operator = theOperator;
+            Value = theValue;
         }
 
         private MultivariateTestFilter() { }
         
+        /// <summary>
+        /// The MultivariateTest property that will be filtered on
+        /// </summary>
         public MultivariateTestProperty Property { get; private set; }
+        /// <summary>
+        /// The operation that will be performed to filter the results set
+        /// </summary>
         public FilterOperator Operator { get; private set; }
+        /// <summary>
+        /// The limiter value that will be used to filter the result set
+        /// </summary>
+        public object Value { get; private set; }
     }
 
     public enum MultivariateTestProperty
