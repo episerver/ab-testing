@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace EPiServer.Marketing.Multivariate.Web
     class MultivariateAdministrationController : Controller
     {
         private IServiceLocator _serviceLocator;
-
+        [ExcludeFromCodeCoverage]
         public MultivariateAdministrationController()
         {
             _serviceLocator = ServiceLocator.Current;
@@ -62,6 +63,7 @@ namespace EPiServer.Marketing.Multivariate.Web
         [HttpGet]
         public ActionResult Update(string id)
         {
+            //todo: refactor to remove dependency on IMultivariateTestManager
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
             IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
