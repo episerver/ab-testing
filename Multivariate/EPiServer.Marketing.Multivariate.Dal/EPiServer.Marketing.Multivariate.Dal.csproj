@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="IMultiVariantDataAccess.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Mappings\ConversionMap.cs" />
     <Compile Include="Mappings\KeyPerformanceIndicatorMap.cs" />
@@ -73,6 +74,7 @@
       <DependentUpon>201601041747161_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MultiVariantDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

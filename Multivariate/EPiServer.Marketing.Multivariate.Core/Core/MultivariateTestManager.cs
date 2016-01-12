@@ -11,130 +11,71 @@ namespace EPiServer.Marketing.Multivariate
     [ServiceConfiguration(ServiceType = typeof(IMultivariateTestManager))]
     public class MultivariateTestManager : IMultivariateTestManager
     {
-        internal IRepository _repository;
-        internal ICurrentUser _user;
-        internal ICurrentSite _siteData;
-
-        private const string _active = "Active";
-        private const string _inactive = "Inactive";
-        private const string _archived = "Archived";
-        private const string _done = "Done";
-
+        private IMultiVariantDataAccess _dataAccess;
+        private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
 
         public MultivariateTestManager()
         {
-            _siteData = new CurrentSite();
-            _user = new CurrentUser();
-            _repository = new BaseRepository(new DatabaseContext());
+            _serviceLocator = ServiceLocator.Current;
+            _dataAccess = new MultiVariantDataAccess();
         }
-
-        internal MultivariateTestManager(ICurrentUser user, ICurrentSite siteData, IRepository repo)
+        internal MultivariateTestManager(IServiceLocator serviceLocator)
         {
-            _user = user;
-            _siteData = siteData;
-            _repository = repo;
+            _serviceLocator = serviceLocator;
+            _dataAccess = _serviceLocator.GetInstance<IMultiVariantDataAccess>();
         }
 
         public IMultivariateTest Get(Guid testObjectId)
         {
-            return _repository.GetById(testObjectId);
+            return _dataAccess.Get(testObjectId);
         }
 
         public List<IMultivariateTest> GetTestByItemId(Guid originalItemId)
         {
-            return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
+            return _dataAccess.GetTestByItemId(originalItemId);
         }
 
         public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
         {
-            // TODO:implement criteria object and retrieve accordingly
-            return _repository.GetAll().ToList();
+            return _dataAccess.GetTestList(criteria);
         }
-
-        /// <summary>
-        /// Add new test to the db or updated an existing test if it already exists.
-        /// </summary>
-        /// <param name="multivariateTest"></param>
-        /// <returns>Id of the new or modified test.</returns>
         public Guid Save(IMultivariateTest multivariateTest)
         {
-            var test = _repository.GetById(multivariateTest.Id);
-            Guid id;
-
-            if (test == null)
-            {
-                _repository.Add(multivariateTest);
-                id = multivariateTest.Id;
-            }
-            else
-            {
-                test.Title = multivariateTest.Title;
-                test.StartDate = multivariateTest.StartDate;
-                test.EndDate = multivariateTest.EndDate;
-                test.Owner = multivariateTest.Owner;
-                test.LastModifiedBy = multivariateTest.LastModifiedBy;
-                test.ModifiedDate = DateTime.UtcNow;
-                test.Conversions = multivariateTest.Conversions;
-                test.Variants = multivariateTest.Variants;
-                test.KeyPerformanceIndicators = multivariateTest.KeyPerformanceIndicators;
-                test.MultivariateTestResults = multivariateTest.MultivariateTestResults;
-                id = test.Id;
-            }
-
-            _repository.SaveChanges();
-
-            return id;
+            // Todo : We should probably check to see if item quid is empty or null and
+            // create a new unique guid here?
+            // 
+            return _dataAccess.Save(multivariateTest);
         }
 
         public void Delete(Guid testObjectId)
         {
-            _repository.DeleteTest(testObjectId);
-            _repository.SaveChanges();
+            _dataAccess.Delete(testObjectId);
         }
 
         public void Start(Guid testObjectId)
         {
-            var test = _repository.GetById(testObjectId);
-
-            if (IsTestActive(test.OriginalItemId))
-            {
-                throw new Exception("The test page already has an Active test");
-            }
-
-            SetTestState(testObjectId, TestState.Active);
+            _dataAccess.Start(testObjectId);
         }
 
         public void Stop(Guid testObjectId)
         {
-            SetTestState(testObjectId, TestState.Done);
+            _dataAccess.Stop(testObjectId);
         }
 
         public void Archive(Guid testObjectId)
         {
-            SetTestState(testObjectId, TestState.Archived);
+            _dataAccess.Archive(testObjectId);
         }
 
         public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
         {
-            var test = _repository.GetById(testId);
-            var result = test.MultivariateTestResults.FirstOrDefault(v => v.ItemId == testItemId);
-
-            if (resultType == CountType.View)
-            {
-                result.Views++;
-            }
-            else
-            {
-                result.Conversions++;
-            }
-
-            _repository.Save(test);
+            _dataAccess.IncrementCount(testId, testItemId, resultType);
         }
 
         public Guid ReturnLandingPage(Guid testId)
         {
-            var currentTest = _repository.GetById(testId);
+            var currentTest = _dataAccess.Get(testId);
             var activePage = Guid.Empty;
 
             if (currentTest != null)
@@ -154,63 +95,11 @@ namespace EPiServer.Marketing.Multivariate
             return activePage;
         }
 
-        private void SetTestState(Guid theTestId, TestState theState)
-        {
-            var aTest = _repository.GetById(theTestId);
-            aTest.TestState = theState;
-            Save(aTest);
-        }
-
-        private string GetStateValue(TestState state)
-        {
-            var retState = string.Empty;
-            switch (state)
-            {
-                case TestState.Active:
-                    retState = _active;
-                    break;
-                case TestState.Inactive:
-                    retState = _inactive;
-                    break;
-                case TestState.Done:
-                    retState = _done;
-                    break;
-                case TestState.Archived:
-                    retState = _archived;
-                    break;
-            }
-            return retState;
-        }
-
-        private TestState GetState(string state)
-        {
-            switch (state)
-            {
-                case _active:
-                    return TestState.Active;
-                case _archived:
-                    return TestState.Archived;
-                case _done:
-                    return TestState.Done;
-                default:
-                    return TestState.Inactive;
-            }
-        }
-
-        private bool IsTestActive(Guid originalItemId)
-        {
-            var tests = _repository.GetAll()
-                .Where(t => t.OriginalItemId == originalItemId && t.TestState == TestState.Active);
-
-            return tests.Any();
-        }
-
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
         // to determine what page to display to the user.
         private int GetRandomNumber()
         {
             return _r.Next(1, 3);
         }
-    
     }
 }
