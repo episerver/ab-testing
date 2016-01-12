@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 
@@ -62,6 +60,10 @@ namespace EPiServer.Marketing.Multivariate.Dal
         public void Start(Guid testObjectId)
         {
             var test = _repository.GetById(testObjectId);
+            if (IsTestActive(test.OriginalItemId))
+            {
+                throw new Exception("The test page already has an Active test");
+            }
 
             SetTestState(testObjectId, TestState.Active);
         }
