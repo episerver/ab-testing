@@ -194,6 +194,7 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
+    <Compile Include="Dal\MultiVariantDataAccessTests.cs" />
     <Compile Include="Model\MultivariateTestCriteriaTests.cs" />
     <Compile Include="TestRepository.cs" />
     <Compile Include="Dal\DalTests.cs" />
