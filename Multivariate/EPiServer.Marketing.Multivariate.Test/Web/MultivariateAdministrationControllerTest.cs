@@ -72,15 +72,15 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             Assert.AreEqual("Create", actionResult.ViewName);
         }
 
-        [TestMethod]
-        public void AdministrationController_CreateWithValidModel_CallsTestRepository_ReturnsIndex()
-        {
-            var controller = GetUnitUnderTest();
-            var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
+        //[TestMethod]
+        //public void AdministrationController_CreateWithValidModel_CallsTestRepository_ReturnsIndex()
+        //{
+        //    var controller = GetUnitUnderTest();
+        //    var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
 
-            Assert.IsTrue(actionResult!=null);
-            Assert.AreEqual("Index", actionResult.ViewName);
-        }
+        //    Assert.IsTrue(actionResult!=null);
+        //    Assert.AreEqual("Index", actionResult.ViewName);
+        //}
 
         [TestMethod]
         public void AdministrationController_DeleteWithId_CallsTestRepository_ReturnsIndex()
