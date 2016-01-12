@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace EPiServer.Marketing.Multivariate.Web
     class MultivariateAdministrationController : Controller
     {
         private IServiceLocator _serviceLocator;
-
+        [ExcludeFromCodeCoverage]
         public MultivariateAdministrationController()
         {
             _serviceLocator = ServiceLocator.Current;
@@ -47,26 +48,24 @@ namespace EPiServer.Marketing.Multivariate.Web
 
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("Create",testSettings);
 
             }
             else
             {
-                MultivariateTestRepository repo = new MultivariateTestRepository();
-                repo.CreateTest(testSettings);
+                IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+                testRepository.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
 
         }
 
         [HttpGet]
-        public ActionResult Update(string id)
+        public ActionResult Edit(string id)
         {
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
-            return View("Create", testRepository.ConvertToViewModel(multivariateTest));
+            return View("Create", testRepository.GetTestById(Guid.Parse(id)));
         }
 
         public ActionResult Delete(string id)

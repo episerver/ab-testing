@@ -94,15 +94,8 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         public List<MultivariateTestViewModel> GetTestList(MultivariateTestCriteria criteria)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            List<MultivariateTestViewModel> tests = new List<MultivariateTestViewModel>();
 
-            foreach (MultivariateTest test in tm.GetTestList(criteria))
-            {
-               tests.Add(ConvertToViewModel(test));
-            }
-
-
-            return tests;
+            return (from MultivariateTest test in tm.GetTestList(criteria) select ConvertToViewModel(test)).ToList();
         }
 
         /// <summary>
