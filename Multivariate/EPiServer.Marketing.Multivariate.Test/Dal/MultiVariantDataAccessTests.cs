@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.Entity;
 using System.Linq;
-using EPiServer.Enterprise;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using NMemory.Linq;
-using TestContext = EPiServer.Marketing.Multivariate.Test.Dal.TestContext;
 using EPiServer.Marketing.Multivariate.Test.Core;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
@@ -54,7 +49,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [TestMethod]
         public void MultivariateTestManagerGetTestList()
         {
-            var tests = AddMultivariateTests(_context, 3);
+            var tests = AddMultivariateTests(_mtm, 3);
             var list = _mtm.GetTestList(new MultivariateTestCriteria());
             Assert.AreEqual(list.Count(), 3);
         }
@@ -62,7 +57,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [TestMethod]
         public void MultivariateTestManagerSave()
         {
-            var tests = AddMultivariateTests(_context, 1);
+            var tests = AddMultivariateTests(_mtm, 1);
             var newTitle = "newTitle";
             tests[0].Title = newTitle;
             _mtm.Save(tests[0]);
@@ -73,7 +68,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [TestMethod]
         public void MultivariateTestManagerDelete()
         {
-            var tests = AddMultivariateTests(_context, 3);
+            var tests = AddMultivariateTests(_mtm, 3);
 
             _mtm.Delete(tests[0].Id);
             _mtm._repository.SaveChanges();
@@ -84,7 +79,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [TestMethod]
         public void MultivariateTestManagerStart()
         {
-            var tests = AddMultivariateTests(_context, 1);
+            var tests = AddMultivariateTests(_mtm, 1);
 
             _mtm.Start(tests[0].Id);
 
@@ -94,7 +89,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [TestMethod]
         public void MultivariateTestManagerStop()
         {
-            var tests = AddMultivariateTests(_context, 1);
+            var tests = AddMultivariateTests(_mtm, 1);
             tests[0].TestState = TestState.Active;
             _mtm.Save(tests[0]);
 
@@ -106,7 +101,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [TestMethod]
         public void MultivariateTestManagerArchive()
         {
-            var tests = AddMultivariateTests(_context, 1);
+            var tests = AddMultivariateTests(_mtm, 1);
             tests[0].TestState = TestState.Active;
             _mtm.Save(tests[0]);
 
