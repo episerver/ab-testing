@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using EPiServer.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Web;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Web.Models;
-using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
@@ -22,63 +17,17 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IMultivariateTestRepository> _testRepository;
-        private Mock<MultivariateAdministrationController> _controller;
 
-        static Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
-        static Guid original = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE7");
-        static Guid varient = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
-        static Guid result1 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE5");
-        static Guid result2 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE4");
-        MultivariateTestViewModel viewdata = new MultivariateTestViewModel()
-        {
-            id = theGuid,
-            Title = "Title",
-            Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name, // Repo / business logic sets it to this.
-            StartDate = DateTime.Today.AddDays(1),
-            EndDate = DateTime.Today.AddDays(2),
-            OriginalItemId = original,
-            OriginalItem = 1,
-            VariantItem = 2,
-            testState = Model.Enums.TestState.Active,
-            VariantItemId = varient,
-            TestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
-                }
-        };
-
-        MultivariateTest test = new MultivariateTest()
-        {
-            Id = theGuid,
-            Title = "Title",
-            Owner = "Owner",
-            StartDate = DateTime.Today.AddDays(1),
-            EndDate = DateTime.Today.AddDays(2),
-            OriginalItemId = original,
-            TestState = Model.Enums.TestState.Active,
-            Variants = new List<Variant>() { new Variant() { Id = varient } },
-            MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
-                }
-        };
+       
 
         private MultivariateAdministrationController GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _testRepository = new Mock<IMultivariateTestRepository>();
-            _controller = new Mock<MultivariateAdministrationController>();
-
-            // Setup the contentrepo so it simulates episerver returning content
-            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
-            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
-
-            //viewdata.OriginalItem = 1;
-            //viewdata.VariantItem = 2;
-            //contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
-            //contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
-            //_serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
+            Mock<IContentRepository> repository = new Mock<IContentRepository>();
             _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
+
+            _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(repository.Object);
             return new MultivariateAdministrationController(_serviceLocator.Object);
         }
 
@@ -97,11 +46,16 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         public void AdministrationController_CreateAction_ReturnsCreateViewWithId()
         {
             var controller = GetUnitUnderTest();
-            ActionResult actionResult = controller.Create();
+            var actionResult = controller.Create() as ViewResult;
+
             Assert.IsInstanceOfType(actionResult, typeof (ViewResult));
+
             ViewDataDictionary viewResult = controller.ViewData;
+
             Assert.IsTrue(viewResult.Keys.Contains("TestGuid"));
-            Guid convertedGuid = new Guid();
+
+            Guid convertedGuid;
+
             Assert.IsTrue(Guid.TryParse(viewResult["TestGuid"].ToString(),out convertedGuid));
 
         }
@@ -112,25 +66,49 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var controller = GetUnitUnderTest();
 
             controller.ModelState.AddModelError("", "error");
-            var result = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
+            var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
 
-            Assert.AreEqual("Create",result.ViewName);
+            Assert.IsTrue(actionResult != null);
+            Assert.AreEqual("Create", actionResult.ViewName);
+        }
+
+        [TestMethod]
+        public void AdministrationController_CreateWithValidModel_CallsTestRepository_ReturnsIndex()
+        {
+            var controller = GetUnitUnderTest();
+            var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
+
+            Assert.IsTrue(actionResult!=null);
+            Assert.AreEqual("Index", actionResult.ViewName);
+        }
+
+        [TestMethod]
+        public void AdministrationController_DeleteWithId_CallsTestRepository_ReturnsIndex()
+        {
+            var controller = GetUnitUnderTest();
+            string testGuid = Guid.NewGuid().ToString();
+            var actionResult = controller.Delete(testGuid) as ViewResult;
+
+            Assert.IsTrue(actionResult != null);
+            Assert.AreEqual("Index",actionResult.ViewName);
+            _testRepository.Verify(tr => tr.GetTestList(It.IsAny<MultivariateTestCriteria>()),
+                Times.Once, "Controller did not call repository to populate list after Delete");
 
         }
 
-        //[TestMethod]
-        //public void AdministrationController_CreateWithValidModel_CallsTestRepository_ReturnsIndex()
-        //{
-        //    var controller = GetUnitUnderTest();
+        [TestMethod]
+        public void AdministrationController_StopWithId_CallsTestRepository_ReturnsIndex()
+        {
+            var controller = GetUnitUnderTest();
+            string testGuid = Guid.NewGuid().ToString();
+            var actionResult = controller.Stop(testGuid) as ViewResult;
 
-        //    Mock<IContentRepository> _repository = new Mock<IContentRepository>();
-        //    _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_repository.Object);
-        //    var result = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
+            Assert.IsTrue(actionResult!=null);
+            Assert.AreEqual("Index", actionResult.ViewName);
+            _testRepository.Verify(tr => tr.GetTestList(It.IsAny<MultivariateTestCriteria>()),
+                Times.Once, "Controller did not call repository to populate list after Delete");
 
-
-        //    Assert.AreEqual("Index", result.ViewName);
-
-        //}
+        }
 
     }
 
