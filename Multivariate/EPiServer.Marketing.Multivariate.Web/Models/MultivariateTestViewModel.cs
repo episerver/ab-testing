@@ -27,12 +27,12 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 
         public TestState testState { get; set; }
 
-        [Required]
+        [Required(ErrorMessage= "An Origin Item is Required to create a test")]
         public int OriginalItem { get; set; }
 
         public Guid OriginalItemId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage="A Variant Item is Required to create a test")]
         public int VariantItem { get; set; }
 
         public Guid VariantItemId { get; set; }

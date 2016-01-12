@@ -5,8 +5,8 @@ using System.Web;
 namespace EPiServer.Marketing.Multivariate.Web.Models
 {
     /// <summary>
-    /// Validation attribute for multivariate test Start Date which
-    /// verifies the start date is not set to a value later than the end date.
+    ///     Validation attribute for multivariate test Start Date which
+    ///     verifies the start date is not set to a value later than the end date.
     /// </summary>
     public class EndDateAttribute : ValidationAttribute
     {
@@ -16,9 +16,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         {
             if (value != null)
             {
-                string dateStart = HttpContext.Current.Request[StartDate];
-                DateTime end = (DateTime) value;
-                DateTime start = DateTime.Parse(dateStart);
+                var dateStart = HttpContext.Current.Request[StartDate];
+                var end = (DateTime) value;
+                var start = DateTime.Parse(dateStart);
 
                 return start.Date < end.Date;
             }
