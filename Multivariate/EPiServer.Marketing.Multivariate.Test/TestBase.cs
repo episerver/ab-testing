@@ -26,12 +26,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
-                    TestState = TestState.Active,
                     Owner = "Bert" + i
                 });
             };
 
             AddObjectsToContext(context, newMultivariateTests);
+            context.SaveChanges();
             return newMultivariateTests;
         }
 
