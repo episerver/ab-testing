@@ -49,12 +49,49 @@ namespace EPiServer.Marketing.Multivariate.Dal
 
         public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
         {
-            throw new NotImplementedException();
+            var test = _repository.GetById(testId);
+            var result = test.MultivariateTestResults.FirstOrDefault(v => v.ItemId == testItemId);
+
+            if (resultType == CountType.View)
+            {
+                result.Views++;
+            }
+            else
+            {
+                result.Conversions++;
+            }
+
+            _repository.Save(test);
         }
 
         public Guid Save(IMultivariateTest testObject)
         {
-            throw new NotImplementedException();
+            var test = _repository.GetById(testObject.Id);
+            Guid id;
+
+            if (test == null)
+            {
+                _repository.Add(testObject);
+                id = testObject.Id;
+            }
+            else
+            {
+                test.Title = testObject.Title;
+                test.StartDate = testObject.StartDate;
+                test.EndDate = testObject.EndDate;
+                test.Owner = testObject.Owner;
+                test.LastModifiedBy = testObject.LastModifiedBy;
+                test.ModifiedDate = DateTime.UtcNow;
+                test.Conversions = testObject.Conversions;
+                test.Variants = testObject.Variants;
+                test.KeyPerformanceIndicators = testObject.KeyPerformanceIndicators;
+                test.MultivariateTestResults = testObject.MultivariateTestResults;
+                id = test.Id;
+            }
+
+            _repository.SaveChanges();
+
+            return id;
         }
 
         public void Start(Guid testObjectId)
