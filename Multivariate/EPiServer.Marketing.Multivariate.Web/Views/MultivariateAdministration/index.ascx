@@ -10,6 +10,7 @@
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
+<%@ Import Namespace="EPiServer.Framework.Localization" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 
 <!DOCTYPE html>
@@ -73,6 +74,7 @@
     </asp:PlaceHolder>
 </head>
 <body class="sleek">
+<%  %>
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
@@ -109,7 +111,7 @@
                 <tr>
                     <td class="expand" style="color: green; font-size: large;cursor: pointer">+</td>
                     <td>
-                        <a href="<%: Url.Action("Update", new {id = item.id}) %>"><%= item.Title %></a>
+                        <a href="<%: Url.Action("Edit", new {id = item.id}) %>"><%= item.Title %></a>
                     </td>
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>

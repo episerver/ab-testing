@@ -53,22 +53,19 @@ namespace EPiServer.Marketing.Multivariate.Web
             }
             else
             {
-                MultivariateTestRepository repo = new MultivariateTestRepository();
-                repo.CreateTest(testSettings);
+                IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+                testRepository.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
 
         }
 
         [HttpGet]
-        public ActionResult Update(string id)
+        public ActionResult Edit(string id)
         {
-            //todo: refactor to remove dependency on IMultivariateTestManager
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
-            return View("Create", testRepository.ConvertToViewModel(multivariateTest));
+            return View("Create", testRepository.GetTestById(Guid.Parse(id)));
         }
 
         public ActionResult Delete(string id)
