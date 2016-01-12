@@ -79,6 +79,7 @@
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
                 <%= LanguageManager.Instance.Translate("/multivariate/settings/displayname")%>
+                <a href="#" title="Help"><img class="EPEdit-CommandTool" align="absmiddle" border="0" alt="Help" src="/App_Themes/Default/Images/Tools/Help.png"/></a>
             </h1>
         </div>
         

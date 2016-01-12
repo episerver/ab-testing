@@ -59,16 +59,21 @@
 
 
 </head>
-<body>
+<body class="Sleek">
 
     <div class="epi-contentContainer epi-padding">
-    </div>
 
     <div class="epi-contentArea">
-    </div>
+    <h1 class="EP-prefix">
+                <%= LanguageManager.Instance.Translate("/multivariate/settings/form/title")%>
+                <a href="#" title="Help"><img class="EPEdit-CommandTool" align="absmiddle" border="0" alt="Help" src="/App_Themes/Default/Images/Tools/Help.png"/></a>
+            </h1>
+            </div>
 
     <div class="epi-formArea">
         <fieldset>
+            <legend><%= LanguageManager.Instance.Translate("/multivariate/settings/form/legendtitle")%>
+</legend>
             <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post))
                 { %>
            <% if (Model != null)
@@ -115,7 +120,8 @@
                                                             'False',
                                                             'OriginalItemDisplay',
                                                             'OriginalItem', 'en', null, null, false);"></span>
-                <span style="color: red">*</span>
+                <span style="color: red">*&nbsp
+                    <%= Html.ValidationMessageFor(model => model.OriginalItem) %></span>
             </div>
              <div class="epi-size15">
                 <label for="VariantItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
@@ -129,7 +135,9 @@
                                                             'False',
                                                             'VariantItemDisplay',
                                                             'VariantItem', 'en', null, null, false);"></span>
-                 <span style="color: red">*</span>
+                 <span style="color: red">*&nbsp
+                    <%= Html.ValidationMessageFor(model => model.VariantItem) %></span>
+
             </div>
 
             <div>
@@ -139,8 +147,8 @@
             </div>
             <% } %>
         </fieldset>
+            </div>
 
     </div>
-
 </body>
 </html>
