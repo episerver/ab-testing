@@ -57,7 +57,7 @@ namespace EPiServer.Marketing.Multivariate.Model
 
     public enum MultivariateTestProperty
     {
-        State = 0,
+        TestState = 0,
         OriginalItemId = 1,
         VariantItemId = 2
     }

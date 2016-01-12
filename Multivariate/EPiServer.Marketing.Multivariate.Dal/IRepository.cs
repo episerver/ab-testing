@@ -78,6 +78,8 @@ namespace EPiServer.Marketing.Multivariate.Dal
         /// <returns>IList of all the entity object of the given type in the repository</returns>
         IList<T> GetAllList<T>() where T : class;
 
+        IQueryable<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria);
+
         /// <summary>
         /// Add a detached object to the repository
         /// </summary>

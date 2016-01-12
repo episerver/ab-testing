@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Model
         public void Get_And_Add_Filter_Methods_Operate_On_The_Collection()
         {
             var testCriteria = new MultivariateTestCriteria();
-            var addedFilter = new MultivariateTestFilter(MultivariateTestProperty.State, FilterOperator.And, TestState.Active);
+            var addedFilter = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
             testCriteria.AddFilter(addedFilter);
             var retFilters = testCriteria.GetFilters();
             
@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Model
         public void AddFilter_Will_Not_Add_If_The_Property_Exists()
         {
             var testCriteria = new MultivariateTestCriteria();
-            var dupeFilter = new MultivariateTestFilter(MultivariateTestProperty.State, FilterOperator.And, TestState.Active);
+            var dupeFilter = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
 
             testCriteria.AddFilter(dupeFilter);
             testCriteria.AddFilter(dupeFilter);

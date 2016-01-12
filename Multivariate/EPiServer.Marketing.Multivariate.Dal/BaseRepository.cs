@@ -8,11 +8,15 @@ using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Dal
 {
@@ -90,6 +94,48 @@ namespace EPiServer.Marketing.Multivariate.Dal
         {
             var test = DatabaseContext.Set<MultivariateTest>().Find(id);
             DatabaseContext.Set<MultivariateTest>().Remove(test);
+        }
+
+        public IQueryable<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        {
+            var filters = criteria.GetFilters();
+
+            var andFilters = filters.Where(filter => filter.Operator == FilterOperator.And);
+            var orFilters = filters.Where(filter => filter.Operator == FilterOperator.Or);
+
+
+            var tests = DatabaseContext.MultivariateTests.AsQueryable();
+            var pe = Expression.Parameter(typeof (string), "test");
+            Expression wholeExpression = null;
+
+            foreach (var filter in filters)
+            {
+                Expression left = Expression.Property(pe, typeof(string).GetProperty(filter.Property.ToString()));
+                Expression right = Expression.Constant(filter.Value);
+                Expression e = Expression.Equal(left, right);
+
+                // first time through, so we just set the expression to the first filter criteria and continue to the next one
+                if (wholeExpression == null)
+                {
+                    wholeExpression = e;
+                    continue;
+                }
+
+                // each subsequent iteration we check to see if the filter is for an AND or OR and append accordingly
+                wholeExpression = filter.Operator == FilterOperator.And 
+                    ? Expression.And(wholeExpression, e) : Expression.Or(wholeExpression, e);
+            }
+
+            MethodCallExpression whereCallExpression = Expression.Call(
+                typeof(Queryable),
+                "Where",
+                new Type[] { tests.ElementType },
+                tests.Expression,
+                Expression.Lambda<Func < MultivariateTest, bool >> (wholeExpression, new ParameterExpression[] { pe })
+                );
+
+            IQueryable<MultivariateTest> results = tests.Provider.CreateQuery<MultivariateTest>(whereCallExpression);
+            return results;
         }
 
         /// <summary>
