@@ -71,7 +71,7 @@
 		        title="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/details")%>" src="/App_Themes/Default/Images/Tools/Report.gif">
 		    </a>
-            <a href="<%= helper.getConfigurationURL()%>/Update/<%=item.id%>" title="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>">
+            <a href="<%= helper.getConfigurationURL()%>/Edit/<%=item.id%>" title="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>">
                 <img border="0" alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/edit")%>" src="/App_Themes/Default/Images/Tools/Edit.gif">
             </a>
 	</td>                    
