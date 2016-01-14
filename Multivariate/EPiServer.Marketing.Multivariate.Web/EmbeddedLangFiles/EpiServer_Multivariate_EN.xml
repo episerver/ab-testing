@@ -29,6 +29,7 @@
        <conversions>Conversion Rate</conversions>
        <actions>Actions</actions>
        <delete>Delete</delete>
+       <stop>Stop Test</stop>
        <form>
          <title>Multivariate Test</title>
          <legendtitle>Test Information</legendtitle>
