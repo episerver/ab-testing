@@ -167,12 +167,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             var controller = GetUnitUnderTest();
             string testGuid = Guid.NewGuid().ToString();
-            var actionResult = controller.Delete(testGuid) as ViewResult;
+            var redirectResult = controller.Delete(testGuid) as RedirectToRouteResult;
 
-            Assert.IsTrue(actionResult != null);
-            Assert.AreEqual("Index",actionResult.ViewName);
-            _testRepository.Verify(tr => tr.GetTestList(It.IsAny<MultivariateTestCriteria>()),
-                Times.Once, "Controller did not call repository to populate list after Delete");
+            Assert.IsTrue(redirectResult != null);
+            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
 
         }
 
@@ -181,12 +179,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             var controller = GetUnitUnderTest();
             string testGuid = Guid.NewGuid().ToString();
-            var actionResult = controller.Stop(testGuid) as ViewResult;
+            var redirectResult = controller.Delete(testGuid) as RedirectToRouteResult;
 
-            Assert.IsTrue(actionResult!=null);
-            Assert.AreEqual("Index", actionResult.ViewName);
-            _testRepository.Verify(tr => tr.GetTestList(It.IsAny<MultivariateTestCriteria>()),
-                Times.Once, "Controller did not call repository to populate list after Delete");
+            Assert.IsTrue(redirectResult != null);
+            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
 
         }
 
