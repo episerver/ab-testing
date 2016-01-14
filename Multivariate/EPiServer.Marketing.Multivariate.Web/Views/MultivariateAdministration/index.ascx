@@ -70,6 +70,20 @@
                     .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
 
             });
+
+            $(function() {
+                $('.btnDelete').click(function() {
+                    return confirm('Are you sure you want to delete this test?\nThis cannot be undone.');
+                });
+            });
+
+            $(function () {
+                $('.btnStop').click(function () {
+                    return confirm('Are you sure you want to stop this test?\nThis test cannot be re-started once it is stopped.');
+                });
+            });
+
+            
         </script>
     </asp:PlaceHolder>
 </head>
@@ -122,22 +136,22 @@
                     <td style="text-align: center">
                         <% if (item.testState == TestState.Active)
                            { %>
-                    	<a href="<%: Url.Action("Stop", new {id = item.id}) %>">
+                    	<a href="<%: Url.Action("Stop", new {id = item.id}) %>" class="btnStop">
                     		<img border="0" 
-                                alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete") %>" 
+                                alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/stop") %>" 
                     		    src="./Images/StopTest.gif"
                                 height="18"
                                 width="18"
-                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete") %>">
+                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/stop") %>">
                     	</a>
                         <% } %> 
                     </td>
                     <td style="text-align:center">
-                    	<a href="<%: Url.Action("Delete", new {id = item.id}) %>">
+                    	<a href="<%: Url.Action("Delete", new {id = item.id}) %>" class="btnDelete">
                     		<img border="0" 
                                 alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>" 
                     		    src="/App_Themes/Default/Images/Tools/Delete.gif"
-                    		    title="">
+                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>">
                     	</a>
                     </td>
                 </tr>
