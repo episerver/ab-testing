@@ -143,19 +143,14 @@
                 </fieldset>
             <div class="epi-buttonContainer">
             <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ctl00$FullRegion$MainRegion$ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
             </span>
             <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="submit" name="ctl00$FullRegion$MainRegion$ApplyButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
             </span>
-
         </div>
-
-
                 <% } %>
-            
         </div>
-        
     </div>
 </body>
 </html>
