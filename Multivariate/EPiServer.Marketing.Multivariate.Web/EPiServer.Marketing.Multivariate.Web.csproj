@@ -189,6 +189,7 @@
     <Compile Include="Models\EndDateAttribute.cs" />
     <Compile Include="Models\MultivariateTestViewModel.cs" />
     <Compile Include="Models\StartDateAttrbiute.cs" />
+    <Compile Include="Models\VisiblePageAttribute.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
     <Content Include="Images\StopTest.gif" />
