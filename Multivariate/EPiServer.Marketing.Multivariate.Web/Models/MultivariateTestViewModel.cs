@@ -12,14 +12,14 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         
         public Guid id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "A title is required")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "A start Date and Time is required")]
+        [Required(ErrorMessage = "A start date and time is required")]
         [StartDate(ErrorMessage = "Start date cannot be in the past")]
         public DateTime StartDate { get; set; }
 
-        [Required(ErrorMessage = "A start Date and Time is required")]
+        [Required(ErrorMessage = "An end date and time is required")]
         [EndDate(StartDate = "StartDate", ErrorMessage = "End date cannot be before Start Date")]
         public DateTime? EndDate { get; set; }
 
@@ -27,12 +27,12 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 
         public TestState testState { get; set; }
 
-        [Required(ErrorMessage= "An Origin Item is Required to create a test")]
+        [Required(ErrorMessage= "An origin item is required")]
         public int OriginalItem { get; set; }
 
         public Guid OriginalItemId { get; set; }
 
-        [Required(ErrorMessage="A Variant Item is Required to create a test")]
+        [Required(ErrorMessage="A variant item is required")]
         public int VariantItem { get; set; }
 
         public Guid VariantItemId { get; set; }
