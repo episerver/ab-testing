@@ -4,6 +4,7 @@ using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Marketing.Multivariate.Dal;
@@ -32,7 +33,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItemId = original,
             OriginalItem = 1,
             VariantItem = 2,
-            testState = Model.Enums.TestState.Active,
+            testState = TestState.Active,
             VariantItemId = varient,
             TestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
@@ -48,7 +49,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
-            TestState = Model.Enums.TestState.Active,
+            TestState = TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = varient } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
