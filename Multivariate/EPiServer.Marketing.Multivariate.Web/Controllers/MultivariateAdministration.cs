@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,10 +18,15 @@ namespace EPiServer.Marketing.Multivariate.Web
     class MultivariateAdministrationController : Controller
     {
         private IServiceLocator _serviceLocator;
-
+        [ExcludeFromCodeCoverage]
         public MultivariateAdministrationController()
         {
             _serviceLocator = ServiceLocator.Current;
+        }
+
+        internal MultivariateAdministrationController(IServiceLocator serviceLocator)
+        {
+            _serviceLocator = serviceLocator;
         }
 
         public ActionResult Index()
@@ -42,40 +48,39 @@ namespace EPiServer.Marketing.Multivariate.Web
 
             if (!ModelState.IsValid)
             {
-                return View();
+                return View("Create",testSettings);
 
             }
             else
             {
-                MultivariateTestRepository repo = new MultivariateTestRepository();
-                repo.CreateTest(testSettings);
+                IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+                testRepository.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
 
         }
 
         [HttpGet]
-        public ActionResult Update(string id)
+        public ActionResult Edit(string id)
         {
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
-            return View("Create", testRepository.ConvertToViewModel(multivariateTest));
+            return View("Create", testRepository.GetTestById(Guid.Parse(id)));
         }
 
         public ActionResult Delete(string id)
         {
             IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
             testRepository.DeleteTest(Guid.Parse(id));
-            return View("Index", testRepository.GetTestList(new MultivariateTestCriteria()));
+            return RedirectToAction("Index");
         }
 
-        public ActionResult Details(string id)
+
+        public ActionResult Stop(string id)
         {
-            IMultivariateTestManager mtm = _serviceLocator.GetInstance<IMultivariateTestManager>();
-            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
-            return View("Details", new List<IMultivariateTest>() { multivariateTest });
+            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            testRepository.StopTest(Guid.Parse(id));
+            return RedirectToAction("Index");
         }
     }
 }

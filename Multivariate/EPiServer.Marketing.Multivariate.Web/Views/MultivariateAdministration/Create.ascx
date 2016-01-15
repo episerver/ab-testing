@@ -5,6 +5,8 @@
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
+<%@ Import Namespace="EPiServer.Web.WebControls" %>
+<%@ Register TagPrefix="EPiServer" Assembly="EpiServer" Namespace="EPiServer.Web.WebControls" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 <%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
 
@@ -43,25 +45,6 @@
                     step: 30
                 });
 
-                var dlg = $("#treedialog").dialog({
-                    autoOpen: false,
-                    modal: true
-                });
-
-                $("#btnOriginPagePickerPH").click(function () {
-                    dlg.dialog("open");
-                    $(".ui-dialog-titlebar").hide();
-
-                });
-
-                $("#btnDlgCancel").click(function () {
-                    dlg.dialog("close");
-                });
-
-                $("#btnDlgOk").click(function () {
-                    dlg.dialog("close");
-                });
-
                 $('#btnCancel').click(function () {
                     location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
                 });
@@ -76,104 +59,98 @@
 
 
 </head>
-<body>
+<body class="Sleek">
 
     <div class="epi-contentContainer epi-padding">
-    </div>
 
-    <div class="epi-contentArea">
-    </div>
+        <div class="epi-contentArea">
+            <h1 class="EP-prefix">
+                <%= LanguageManager.Instance.Translate("/multivariate/settings/form/title")%>
+                <a href="#" title="Help">
+                    <img class="EPEdit-CommandTool" align="absmiddle" border="0" alt="Help" src="/App_Themes/Default/Images/Tools/Help.png" /></a>
+            </h1>
+        </div>
 
-    <div class="epi-formArea">
-        <fieldset>
-            <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post))
-                { %>
-           <% if (Model != null)
-               { %>
-                 <input type="hidden" name="Id" value="<%= Model.id %>" />
-             <% }
-               else
-               { %>
-                <input type="hidden" name="Id" value="<%= ViewData["TestGuid"] %>"/>        
-            <% } %>
+        <div class="epi-formArea">
+            <fieldset>
+                <legend><%= LanguageManager.Instance.Translate("/multivariate/settings/form/legendtitle")%>
+                </legend>
+                <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post))
+                    { %>
+                <% if (Model != null)
+                    { %>
+                <input type="hidden" name="Id" value="<%= Model.id %>" />
+                <% }
+                    else
+                    { %>
+                <input type="hidden" name="Id" value="<%= ViewData["TestGuid"] %>" />
+                <% } %>
 
-            <div class="epi-size15">
-                <label for="Title"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle") %></label>
-                <%= Html.TextBoxFor(model => model.Title) %>
-                <span style="color: red">*&nbsp
+                <div class="epi-size15">
+                    <label for="Title"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle") %></label>
+                    <%= Html.TextBoxFor(model => model.Title) %>
+                    <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.Title) %>
-                </span>
-            </div>
-
-            <div class="epi-size15">
-                <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
-                <%= Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) %>
-                <span style="color: red">*&nbsp
-                        <%= Html.ValidationMessageFor(model => model.StartDate) %>
-                </span>
-
-            </div>
-            <div class="epi-size15">
-                <label for="datetimepickerstop"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend") %></label>
-                <%= Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}) %>
-                <span style="color: red">*&nbsp
-                    <%= Html.ValidationMessageFor(model => model.EndDate) %>
-                </span>
-            </div>
-            <div class="epi-size15">
-                <label for="OriginPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
-                <%= Html.TextBoxFor(model => model.OriginalItemId) %>
-                <span class="epi-cmsButton">
-                    <input id="btnOriginPagePickerPH" type="button" value="..." /></span>
-                <span style="color: red">*</span>
-                <%--                    <EPiServerUI:ToolButton ID="btnOriginPagePickerPH" text="PagePicker PH" runat="server" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>--%>
-
-                <div id="treedialog" class="ui-helper-hidden">
-                    <EPiServerUIDataSource:PageDataSource ID="contentDataSource"
-                        AccessLevel="NoAccess"
-                        runat="server"
-                        IncludeRootItem="false"
-                        ContentLink="<%# EPiServer.Web.SiteDefinition.Current.RootPage %>" />
-                    <div class="episcroll episerver-pagetree-selfcontained" style="max-height: 250px;">
-                        <EPiServerUI:PageTreeView ID="pageTreeView"
-                            DataSourceID="contentDataSource"
-                            CssClass="episerver-pagetreeview"
-                            runat="server"
-                            ExpandDepth="1"
-                            DataTextField="Name"
-                            ExpandOnSelect="false"
-                            DataNavigateUrlField="ContentLink" EnableViewState="false">
-                            <treenodetemplate>
-                                    <a style="outline:none !important" href="#" title="<%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>" onclick="return setval(<%# ((EPiServer.Core.IContent)((PageTreeNode)Container.DataItem).DataItem).ContentLink.ID %>)" >
-                                        <%# Server.HtmlEncode(((PageTreeNode)Container.DataItem).Text) %>
-                                    </a>
-                                </treenodetemplate>
-                        </EPiServerUI:PageTreeView>
-                    </div>
-
-                    <div align="right">
-                        <span class="epi-cmsButton">
-                            <input id="btnDlgOk" type="button" value="OK" /></span>
-                        <span class="epi-cmsButton">
-                            <input id="btnDlgCancel" type="button" value="Cancel" /></span>
-                    </div>
+                    </span>
                 </div>
-            <div class="epi-size15">
-                <label for="VariantPage"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
-                <%= Html.TextBoxFor(model => model.VariantItemId) %>
-                <button type="button" class="epi-cmsButton-text epi-cmsButton-tools">PagePicker PH</button>
-                <span style="color: red">*</span>
-            </div>
-           
-            <div>
-                <button type="submit" class="epi-cmsButton-text epi-cmsButton-tools">Ok</button>
-                <button type="button" id="btnCancel" class="epi-cmsButton-text epi-cmsButton-tools">Cancel</button>
 
-            </div>
-            <% } %>
-        </fieldset>
+                <div class="epi-size15">
+                    <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
+                    <%= Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) %>
+                    <span style="color: red">*&nbsp
+                        <%= Html.ValidationMessageFor(model => model.StartDate) %>
+                    </span>
 
+                </div>
+                <div class="epi-size15">
+                    <label for="datetimepickerstop"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend") %></label>
+                    <%= Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}) %>
+                    <span style="color: red">*&nbsp
+                    <%= Html.ValidationMessageFor(model => model.EndDate) %>
+                    </span>
+                </div>
+                <div class="epi-size15">
+                    <label for="OriginalItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
+                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="">
+                    <input name="originalItemTextBox" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                    <span class="epi-cmsButton">
+                        <input name="originalItemBtn" type="button" value="..." class="epismallbutton"
+                            onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
+                                                            document.getElementById('OriginalItem').value,
+                                                            'True',
+                                                            'False',
+                                                            'OriginalItemDisplay',
+                                                            'OriginalItem', 'en', null, null, false);"></span>
+                    <span style="color: red">*&nbsp
+                    <%= Html.ValidationMessageFor(model => model.OriginalItem) %></span>
+                </div>
+                <div class="epi-size15">
+                    <label for="VariantItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
+                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="">
+                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                    <span class="epi-cmsButton">
+                        <input name="variantItemBtn" type="button" value="..." class="epismallbutton"
+                            onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
+                                                            document.getElementById('VariantItem').value,
+                                                            'True',
+                                                            'False',
+                                                            'VariantItemDisplay',
+                                                            'VariantItem', 'en', null, null, false);"></span>
+                    <span style="color: red">*&nbsp
+                    <%= Html.ValidationMessageFor(model => model.VariantItem) %></span>
+
+                </div>
+                </fieldset>
+            <div class="epi-buttonContainer">
+            <span class="epi-cmsButton">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+            </span>
+            <span class="epi-cmsButton">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+            </span>
+        </div>
+                <% } %>
+        </div>
     </div>
-
 </body>
 </html>

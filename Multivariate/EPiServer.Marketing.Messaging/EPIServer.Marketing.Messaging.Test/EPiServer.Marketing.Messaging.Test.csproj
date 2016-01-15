@@ -141,6 +141,12 @@
     <None Include="modules\_protected\Shell\Shell.zip" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj">
+      <Project>{167d31d8-063c-48ca-84ec-0d136baed1f8}</Project>
+      <Name>EPIServer.Marketing.Messaging</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -150,6 +150,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -202,8 +203,10 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="Dal\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\MultivariateAdministrationControllerTest.cs" />
     <Compile Include="Web\UIHelperTests.cs" />
     <Compile Include="Web\MultivariateTestRepositoryTest.cs" />
+    <Compile Include="Web\MultivariateGadgetControllerTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

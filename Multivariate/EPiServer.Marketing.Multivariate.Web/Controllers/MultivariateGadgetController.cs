@@ -6,6 +6,8 @@ using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Dal;
+using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Multivariate.Web.Models;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
@@ -13,9 +15,16 @@ namespace EPiServer.Marketing.Multivariate.Web
     class MultivariateGadgetController : Controller
     {
         private IServiceLocator _serviceLocator;
+
+        [ExcludeFromCodeCoverage]
         public MultivariateGadgetController()
         {
             _serviceLocator = ServiceLocator.Current;
+        }
+
+        internal MultivariateGadgetController(IServiceLocator serviceLocator)
+        {
+            _serviceLocator = serviceLocator;
         }
 
         public ActionResult Index()
@@ -24,14 +33,14 @@ namespace EPiServer.Marketing.Multivariate.Web
             return PartialView(testRepo.GetTestList(new MultivariateTestCriteria()));
         }
 
-        public ActionResult Details()
+        public ActionResult Details(string id)
         {
-            var testId = Guid.Parse(Request["id"]);
+            var testId = Guid.Parse(id);
             IMultivariateTestRepository testRepo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
             var test = testRepo.GetTestById(testId);
 
             // will we ever show details of a list of tests?
-            List<IMultivariateTest> list = new List<IMultivariateTest>();
+            List<MultivariateTestViewModel> list = new List<MultivariateTestViewModel>();
             list.Add(test);
             return PartialView(list);
         }
