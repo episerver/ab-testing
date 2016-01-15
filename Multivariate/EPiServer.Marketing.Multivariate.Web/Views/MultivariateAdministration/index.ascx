@@ -10,6 +10,7 @@
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
+<%@ Import Namespace="EPiServer.Framework.Localization" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 
 <!DOCTYPE html>
@@ -69,14 +70,30 @@
                     .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
 
             });
+
+            $(function() {
+                $('.btnDelete').click(function() {
+                    return confirm('Are you sure you want to delete this test?\nThis cannot be undone.');
+                });
+            });
+
+            $(function () {
+                $('.btnStop').click(function () {
+                    return confirm('Are you sure you want to stop this test?\nThis test cannot be re-started once it is stopped.');
+                });
+            });
+
+            
         </script>
     </asp:PlaceHolder>
 </head>
 <body class="sleek">
+<%  %>
     <div class="epi-contentContainer epi-padding">
         <div class="epi-contentArea">
             <h1 class="EP-prefix">
                 <%= LanguageManager.Instance.Translate("/multivariate/settings/displayname")%>
+                <a href="#" title="Help"><img class="EPEdit-CommandTool" align="absmiddle" border="0" alt="Help" src="/App_Themes/Default/Images/Tools/Help.png"/></a>
             </h1>
         </div>
         
@@ -109,7 +126,7 @@
                 <tr>
                     <td class="expand" style="color: green; font-size: large;cursor: pointer">+</td>
                     <td>
-                        <a href="<%: Url.Action("Update", new {id = item.id}) %>"><%= item.Title %></a>
+                        <a href="<%: Url.Action("Edit", new {id = item.id}) %>"><%= item.Title %></a>
                     </td>
                     <td><%= item.StartDate %></td>
                     <td><%= item.EndDate %></td>
@@ -119,22 +136,22 @@
                     <td style="text-align: center">
                         <% if (item.testState == TestState.Active)
                            { %>
-                    	<a href="<%: Url.Action("Stop", new {id = item.id}) %>">
+                    	<a href="<%: Url.Action("Stop", new {id = item.id}) %>" class="btnStop">
                     		<img border="0" 
-                                alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete") %>" 
+                                alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/stop") %>" 
                     		    src="./Images/StopTest.gif"
                                 height="18"
                                 width="18"
-                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete") %>">
+                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/stop") %>">
                     	</a>
                         <% } %> 
                     </td>
                     <td style="text-align:center">
-                    	<a href="<%: Url.Action("Delete", new {id = item.id}) %>">
+                    	<a href="<%: Url.Action("Delete", new {id = item.id}) %>" class="btnDelete">
                     		<img border="0" 
                                 alt="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>" 
                     		    src="/App_Themes/Default/Images/Tools/Delete.gif"
-                    		    title="">
+                    		    title="<%= LanguageManager.Instance.Translate("/multivariate/settings/delete")%>">
                     	</a>
                     </td>
                 </tr>

@@ -21,7 +21,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
             if (value != null)
             {
                 DateTime date = (DateTime) value;
-                if (date >= currentDate)
+                if (date.Date >= currentDate.Date)
                 {
                     return true;
                 }

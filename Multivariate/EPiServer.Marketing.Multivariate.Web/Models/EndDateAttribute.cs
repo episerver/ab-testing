@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models
 {
+    /// <summary>
+    ///     Validation attribute for multivariate test Start Date which
+    ///     verifies the start date is not set to a value later than the end date.
+    /// </summary>
     public class EndDateAttribute : ValidationAttribute
     {
         public string StartDate { get; set; }
@@ -16,11 +16,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         {
             if (value != null)
             {
-                string dateStart = HttpContext.Current.Request[StartDate];
-                DateTime end = (DateTime) value;
-                DateTime start = DateTime.Parse(dateStart);
+                var dateStart = HttpContext.Current.Request[StartDate];
+                var end = (DateTime) value;
+                var start = DateTime.Parse(dateStart);
 
-                return start < end;
+                return start.Date < end.Date;
             }
             return false;
         }
