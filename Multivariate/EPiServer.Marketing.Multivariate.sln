@@ -18,6 +18,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multiva
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Multivariate.Api.TestPages", "EPiServer.Multivariate.Api.TestPages\EPiServer.Multivariate.Api.TestPages.csproj", "{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPIServer.Marketing.Messaging", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj", "{167D31D8-063C-48CA-84EC-0D136BAED1F8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CB8500E5-9999-4E35-97D6-142E87857E6A} = {CB8500E5-9999-4E35-97D6-142E87857E6A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Messaging.Test", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.csproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +55,14 @@ Global
 		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
