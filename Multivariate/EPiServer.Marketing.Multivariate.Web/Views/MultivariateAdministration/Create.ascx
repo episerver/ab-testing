@@ -46,7 +46,9 @@
                 });
 
                 $('#btnCancel').click(function () {
-                    location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                    if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
+                        location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                    } else { return false; }
                 });
             });
 
