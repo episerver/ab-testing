@@ -30,8 +30,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         [Required(ErrorMessage = "An origin item is required")]
         [VisiblePage(ErrorMessage = "The original item is not a page that can be displayed on the site.")]
         public int OriginalItem { get; set; }
-
         public Guid OriginalItemId { get; set; }
+        public string OriginalItemDisplay { get; set; }
+    
 
         [Required(ErrorMessage = "A variant item is required")]
         [VisiblePage(ErrorMessage = "The variant item is not a page that can be displayed on the site.")]

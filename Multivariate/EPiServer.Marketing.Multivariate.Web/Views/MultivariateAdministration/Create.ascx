@@ -46,7 +46,9 @@
                 });
 
                 $('#btnCancel').click(function () {
-                    location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                    if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
+                        location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                    } else { return false; }
                 });
             });
 
@@ -111,8 +113,16 @@
                 </div>
                 <div class="epi-size15">
                     <label for="OriginalItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
+                    <% if (Model!=null) { %>
+                    
+                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="<%= Model.OriginalItem %>">
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>">
+                   
+                    <% } else {%> 
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="">
-                    <input name="originalItemTextBox" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
+                    <% }%>
+                    
                     <span class="epi-cmsButton">
                         <input name="originalItemBtn" type="button" value="..." class="epismallbutton"
                             onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
