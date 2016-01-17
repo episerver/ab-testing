@@ -52,6 +52,11 @@
                 });
             });
 
+            var cancelClick = function () {
+                 if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
+                        location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                    } else { return false; }
+            };
 
 
         </script>
@@ -156,7 +161,7 @@
                 <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
             </span>
             <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();">
             </span>
         </div>
                 <% } %>
