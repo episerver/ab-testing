@@ -44,27 +44,15 @@
                     format: 'Y-m-d H:i',
                     step: 30
                 });
-
-                $('#btnCancel').click(function () {
-                    if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
-                        location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
-                    } else { return false; }
-                });
             });
 
             var cancelClick = function () {
-                 if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
-                        location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
-                    } else { return false; }
+                if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
+                    location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                 } else { return false; }
             };
-
-
         </script>
-
-
     </asp:PlaceHolder>
-
-
 </head>
 <body class="Sleek">
 
@@ -118,16 +106,19 @@
                 </div>
                 <div class="epi-size15">
                     <label for="OriginalItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
-                    <% if (Model!=null) { %>
-                    
+                    <% if (Model != null)
+                    { %>
+
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="<%= Model.OriginalItem %>">
                     <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>">
-                   
-                    <% } else {%> 
+
+                    <% }
+                    else
+                    {%>
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="">
                     <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
                     <% }%>
-                    
+
                     <span class="epi-cmsButton">
                         <input name="originalItemBtn" type="button" value="..." class="epismallbutton"
                             onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
@@ -155,16 +146,16 @@
                     <%= Html.ValidationMessageFor(model => model.VariantItem) %></span>
 
                 </div>
-                </fieldset>
+            </fieldset>
             <div class="epi-buttonContainer">
-            <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
-            </span>
-            <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();">
-            </span>
-        </div>
-                <% } %>
+                <span class="epi-cmsButton">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                </span>
+                <span class="epi-cmsButton">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();">
+                </span>
+            </div>
+            <% } %>
         </div>
     </div>
 </body>
