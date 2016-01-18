@@ -15,5 +15,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert);
         MultivariateTestResult GetWinningTestResult(MultivariateTestViewModel test);
         void StopTest(Guid tetsGuid);
+        void UpdateConversion(Guid testId, Guid VariantId);
+        void UpdateView(Guid testId, Guid VariantId);
     }
 }

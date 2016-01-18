@@ -156,5 +156,35 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
             tm.Stop(testGuid);
         }
+
+        public void UpdateConversion(Guid testId, Guid VariantId)
+        {
+            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            var test = tm.Get(testId);
+            foreach (var result in test.MultivariateTestResults)
+            {
+                if( result.ItemId.Equals(VariantId) )
+                {
+                    result.Conversions++;
+                    tm.Save(test);
+                    break;
+                }
+            }
+        }
+
+        public void UpdateView(Guid testId, Guid VariantId)
+        {
+            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            var test = tm.Get(testId);
+            foreach (var result in test.MultivariateTestResults )
+            {
+                if (result.ItemId.Equals(VariantId))
+                {
+                    result.Views++;
+                    tm.Save(test);
+                    break;
+                }
+            }
+        }
     }
 }

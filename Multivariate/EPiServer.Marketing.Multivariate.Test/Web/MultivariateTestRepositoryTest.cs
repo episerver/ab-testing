@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
         static Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
         static Guid original = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE7");
-        static Guid varient = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
+        static Guid variant = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
         static Guid result1 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE5");
         static Guid result2 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE4");
         MultivariateTestViewModel viewdata = new MultivariateTestViewModel()
@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItem = 1,
             VariantItem = 2,
             testState = Model.Enums.TestState.Active,
-            VariantItemId = varient,
+            VariantItemId = variant,
             TestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
                     new MultivariateTestResult() { Id = result2 }
@@ -49,10 +49,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
             TestState = Model.Enums.TestState.Active,
-            Variants = new List<Variant>() { new Variant() { Id = varient } },
+            Variants = new List<Variant>() { new Variant() { Id = variant } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+                    new MultivariateTestResult() { Id = result1, ItemId = original },
+                    new MultivariateTestResult() { Id = result2, ItemId = variant }
                 }
         };
 
@@ -223,6 +223,40 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "CreateTest did not call save with correctly mapped OriginalItemId");
             _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Variants[0].VariantId.Equals(viewdata.VariantItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped Variants[0].VariantId");
+        }
+
+        [TestMethod]
+        public void UpdateConversionIncrementsConversionValueAndCallsSave()
+        {
+            var repo = GetUnitUnderTest();
+
+            // Setup the service locator to return our mocked testmanager class
+            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _testmanager.Setup(tm => tm.Get(It.Is<Guid>(g => g.Equals(theGuid)))).Returns(test);
+
+            repo.UpdateConversion(theGuid, original);   // verifies that we update the original result
+            repo.UpdateConversion(theGuid, variant);    // verifies that we update the variant result
+            repo.UpdateConversion(theGuid, Guid.NewGuid()); // Shouldnt find this one!
+
+            _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
+                Times.Exactly(2), "Update conversion should only have been called twice since a new guid should not be in the result list");
+        }
+
+        [TestMethod]
+        public void UpdateViewIncrementsViewValueAndCallsSave()
+        {
+            var repo = GetUnitUnderTest();
+
+            // Setup the service locator to return our mocked testmanager class
+            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _testmanager.Setup(tm => tm.Get(It.Is<Guid>( g => g.Equals(theGuid)))).Returns(test);
+
+            repo.UpdateView(theGuid, original); // verifies that we update the original result
+            repo.UpdateView(theGuid, variant);  // verifies that we update the variant result
+            repo.UpdateConversion(theGuid, Guid.NewGuid()); // Shouldnt find this one!
+
+            _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
+                Times.Exactly(2), "Update conversion should only have been called twice since a new guid should not be in the result list");
         }
     }
 }

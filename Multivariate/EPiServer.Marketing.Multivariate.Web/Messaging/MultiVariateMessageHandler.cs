@@ -1,9 +1,14 @@
-﻿using EPiServer.ServiceLocation;
+﻿using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Multivariate.Web.Messaging
 {
+    /// <summary>
+    /// The message handler simply handles the messages and passes them on the registered
+    /// IMultivariateTestRepository which in turn handles the cache and database layer.
+    /// </summary>
     class MultiVariateMessageHandler : IMultiVariateMessageHandler
     {
         private IServiceLocator _serviceLocator;
@@ -25,12 +30,14 @@ namespace EPiServer.Marketing.Multivariate.Web.Messaging
 
         public void Handle(UpdateConversionsMessage message)
         {
-            throw new NotImplementedException();
+            var repo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            repo.UpdateConversion(message.TestId, message.VariantId);
         }
 
         public void Handle(UpdateViewsMessage message)
         {
-            throw new NotImplementedException();
+            var repo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            repo.UpdateView(message.TestId, message.VariantId);
         }
     }
 }

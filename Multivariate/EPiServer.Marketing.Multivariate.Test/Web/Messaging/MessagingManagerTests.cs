@@ -33,7 +33,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web.Messaging
         public void EmitUpdateViewsEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();
-            Thread.Sleep(1000);
             messageManager.EmitUpdateViews(Guid.Empty, Guid.NewGuid());
             Thread.Sleep(1000);
 
@@ -45,7 +44,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web.Messaging
         public void EmitUpdateConversionEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();
-            Thread.Sleep(1000);
             messageManager.EmitUpdateConversion(Guid.Empty, Guid.NewGuid());
             Thread.Sleep(1000);
             _messageHandler.Verify(mh => mh.Handle(It.IsAny<UpdateConversionsMessage>()),
