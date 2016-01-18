@@ -130,6 +130,8 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 EndDate = testToConvert.EndDate,
                 OriginalItemId = testToConvert.OriginalItemId,
                 VariantItemId = testToConvert.Variants[0].VariantId,
+                VariantItem = variantItemRef.ContentLink.ID,
+                VariantItemDisplay = variantItemRef.Name,
                 TestResults = testToConvert.MultivariateTestResults
                
             };
