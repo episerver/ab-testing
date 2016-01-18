@@ -34,6 +34,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             VariantItem = 2,
             testState = Model.Enums.TestState.Active,
             VariantItemId = varient,
+            OriginalItemDisplay = "Original Item",
+            VariantItemDisplay = "Variant Item",
             TestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
                     new MultivariateTestResult() { Id = result2 }
@@ -49,7 +51,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
             TestState = Model.Enums.TestState.Active,
-            Variants = new List<Variant>() { new Variant() { Id = varient } },
+            Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient} },
             MultivariateTestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
                     new MultivariateTestResult() { Id = result2 }
@@ -62,14 +64,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager = new Mock<IMultivariateTestManager>();
 
             // Setup the contentrepo so it simulates episerver returning content
-            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
-            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
+            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId,Name =viewdata.OriginalItemDisplay,ContentLink = new ContentReference() {ID=viewdata.OriginalItem} };
+            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId, Name = viewdata.VariantItemDisplay, ContentLink = new ContentReference() { ID = viewdata.VariantItem } };
 
             var contentRepo = new Mock<IContentRepository>();
             viewdata.OriginalItem = 1;
             viewdata.VariantItem = 2;
             contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
             contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<Guid>(x => x==original))).Returns(page1);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<Guid>(x => x==varient))).Returns(page2);
+
+
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
 
             return new MultivariateTestRepository(_serviceLocator.Object);
