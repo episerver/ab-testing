@@ -201,6 +201,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="Dal\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\Messaging\MessagingManagerTests.cs" />
     <Compile Include="Web\MultivariateAdministrationControllerTest.cs" />
     <Compile Include="Web\UIHelperTests.cs" />
     <Compile Include="Web\MultivariateTestRepositoryTest.cs" />
@@ -216,6 +217,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj">
+      <Project>{167d31d8-063c-48ca-84ec-0d136baed1f8}</Project>
+      <Name>EPIServer.Marketing.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj">
       <Project>{cc88efff-8474-401b-87f8-ec4db6ba8633}</Project>
       <Name>EPiServer.Marketing.Multivariate.Core</Name>
