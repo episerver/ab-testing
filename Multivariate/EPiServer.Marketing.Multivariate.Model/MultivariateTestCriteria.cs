@@ -59,7 +59,7 @@ namespace EPiServer.Marketing.Multivariate.Model
     {
         TestState = 0,
         OriginalItemId = 1,
-        VariantItemId = 2
+        VariantId = 2
     }
 
     public enum FilterOperator

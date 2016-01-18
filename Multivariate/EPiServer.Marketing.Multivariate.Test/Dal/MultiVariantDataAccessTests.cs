@@ -52,11 +52,126 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [TestMethod]
-        public void MultivariateTestManagerGetTestList()
+        public void MultivariateTestManagerGetTestListNoFilter()
         {
-            var tests = AddMultivariateTests(_context, 3);
+            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+            var tests = AddMultivariateTests(_context, 2);
+
             var list = _mtm.GetTestList(new MultivariateTestCriteria());
-            Assert.AreEqual(list.Count(), 3);
+            Assert.AreEqual(2, list.Count());
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerGetTestListVariantFilter()
+        {
+            var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
+            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
+            _context.SaveChanges();
+
+            var criteria = new MultivariateTestCriteria();
+            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
+            criteria.AddFilter(filter);
+            var list = _mtm.GetTestList(criteria);
+            Assert.AreEqual(2, list.Count());
+        }
+
+
+        [TestMethod]
+        public void MultivariateTestManagerGetTestListOneFilter()
+        {
+            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].OriginalItemId = Guid.NewGuid();
+            tests[1].OriginalItemId = Guid.NewGuid();
+            tests[2].OriginalItemId = originalItemId;
+            _context.SaveChanges();
+
+            var criteria = new MultivariateTestCriteria();
+            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            criteria.AddFilter(filter);
+            var list = _mtm.GetTestList(criteria);
+            Assert.AreEqual(1, list.Count());
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerGetTestListTwoFiltersAnd()
+        {
+            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+           
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].OriginalItemId = originalItemId;
+            tests[0].TestState = TestState.Archived;
+            _context.SaveChanges();
+            
+            var criteria = new MultivariateTestCriteria();
+            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Archived);
+            criteria.AddFilter(filter);
+            criteria.AddFilter(filter2);
+            var list = _mtm.GetTestList(criteria);
+            Assert.AreEqual(1, list.Count());
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerGetTestListTwoFiltersOr()
+        {
+            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].OriginalItemId = originalItemId;
+            tests[1].TestState = TestState.Archived;
+            tests[2].TestState = TestState.Archived;
+            _context.SaveChanges();
+
+            var criteria = new MultivariateTestCriteria();
+            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
+            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
+            criteria.AddFilter(filter);
+            criteria.AddFilter(filter2);
+            var list = _mtm.GetTestList(criteria);
+            Assert.AreEqual(3, list.Count());
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerGetTestListTwoFiltersAndVariant()
+        {
+            var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
+            tests[1].TestState = TestState.Archived;
+            _context.SaveChanges();
+
+            var criteria = new MultivariateTestCriteria();
+            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
+            criteria.AddFilter(filter);
+            criteria.AddFilter(filter2);
+            var list = _mtm.GetTestList(criteria);
+            Assert.AreEqual(0, list.Count());
+        }
+
+        [TestMethod]
+        public void MultivariateTestManagerGetTestListTwoFiltersOrVariant()
+        {
+            var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
+            tests[1].TestState = TestState.Active;
+            _context.SaveChanges();
+            
+            var criteria = new MultivariateTestCriteria();
+            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.Or, variantItemId);
+            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
+            criteria.AddFilter(filter);
+            criteria.AddFilter(filter2);
+
+
+            var list = _mtm.GetTestList(criteria);
+            Assert.AreEqual(2, list.Count());
         }
 
         [TestMethod]

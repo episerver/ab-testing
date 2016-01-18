@@ -26,7 +26,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
-                    Owner = "Bert" + i
+                    Owner = "Bert" + i,
+                    MultivariateTestResults = new List<MultivariateTestResult>(),
+                    Variants = new List<Variant>(),
+                    Conversions = new List<Conversion>()
+
                 });
             };
 

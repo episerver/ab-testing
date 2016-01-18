@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using System.Reflection;
 
 namespace EPiServer.Marketing.Multivariate.Dal
 {
@@ -43,9 +46,81 @@ namespace EPiServer.Marketing.Multivariate.Dal
 
         public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
         {
-            // TODO:implement criteria object and retrieve accordingly
-            return _repository.GetAll().ToList();
+            // if no filters are passed in, just return all tests
+            var filters = criteria.GetFilters();
+            if (!filters.Any())
+            {
+                return _repository.GetAll().ToList();
+            }
+
+            var variantOperator = FilterOperator.And;
+            IQueryable<IMultivariateTest> variantResults = null;
+            var variantId = Guid.Empty;
+            var pe = Expression.Parameter(typeof(MultivariateTest), "test");
+            Expression wholeExpression = null;
+
+            // build up expression tree based on the filters that are passed in
+            foreach (var filter in filters)
+            {
+                // if we are filtering on a single property(not an element in a list) create the expression
+                if (filter.Property != MultivariateTestProperty.VariantId)
+                {
+                    var left = Expression.Property(pe, typeof (MultivariateTest).GetProperty(filter.Property.ToString()));
+                    var right = Expression.Constant(filter.Value);
+                    var expression = Expression.Equal(left, right);
+
+                    // first time through, so we just set the expression to the first filter criteria and continue to the next one
+                    if (wholeExpression == null)
+                    {
+                        wholeExpression = expression;
+                        continue;
+                    }
+
+                    // each subsequent iteration we check to see if the filter is for an AND or OR and append accordingly
+                    wholeExpression = filter.Operator == FilterOperator.And
+                        ? Expression.And(wholeExpression, expression) : Expression.Or(wholeExpression, expression);
+                }
+                else // if we are filtering on an item in a list, then generate simple results that we can lump in at the end
+                {
+                    variantId = new Guid(filter.Value.ToString());
+                    variantOperator = filter.Operator;
+                    variantResults = _repository.GetAll().Where(x => x.Variants.Any(v => v.VariantId == variantId));
+                }
+            }
+
+            IQueryable<IMultivariateTest> results = null;
+            var tests = _repository.GetAll().AsQueryable();
+
+            // if we have created an expression tree, then execute it against the tests to get the results
+            if (wholeExpression != null)
+            {
+                var whereCallExpression = Expression.Call(
+                    typeof (Queryable),
+                    "Where",
+                    new Type[] {tests.ElementType},
+                    tests.Expression,
+                    Expression.Lambda<Func<MultivariateTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
+                    );
+
+                results = tests.Provider.CreateQuery<MultivariateTest>(whereCallExpression);
+            }
+
+            // if we are also filtering against a variantId, include those results
+            if (variantResults != null)
+            {
+                if (results == null)
+                {
+                    return variantResults.ToList();
+                }
+
+                results = variantOperator == FilterOperator.And 
+                    ? results.Where(test => test.Variants.Any(v => v.VariantId == variantId)) 
+                    : results.Concat(variantResults).Distinct();
+            }
+
+            return results.ToList<IMultivariateTest>();
         }
+
 
         public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
         {

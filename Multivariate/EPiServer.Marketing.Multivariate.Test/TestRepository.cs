@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public IQueryable<T> GetAll<T>() where T : class
         {
-            throw new NotImplementedException();
+            return TestContext.Set<T>().AsQueryable();
         }
 
         public IQueryable<IMultivariateTest> GetAll()
