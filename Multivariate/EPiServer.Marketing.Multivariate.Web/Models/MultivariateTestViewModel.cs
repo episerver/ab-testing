@@ -9,7 +9,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 {
     public class MultivariateTestViewModel
     {
-        
+
         public Guid id { get; set; }
 
         [Required(ErrorMessage = "A title is required")]
@@ -27,16 +27,18 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 
         public TestState testState { get; set; }
 
-        [Required(ErrorMessage= "An origin item is required")]
+        [Required(ErrorMessage = "An origin item is required")]
+        [VisiblePage(ErrorMessage = "The original item is not a page that can be displayed on the site.")]
         public int OriginalItem { get; set; }
 
         public Guid OriginalItemId { get; set; }
 
-        [Required(ErrorMessage="A variant item is required")]
+        [Required(ErrorMessage = "A variant item is required")]
+        [VisiblePage(ErrorMessage = "The variant item is not a page that can be displayed on the site.")]
         public int VariantItem { get; set; }
 
         public Guid VariantItemId { get; set; }
 
-        public IList<MultivariateTestResult> TestResults { get; set; } 
+        public IList<MultivariateTestResult> TestResults { get; set; }
     }
 }
