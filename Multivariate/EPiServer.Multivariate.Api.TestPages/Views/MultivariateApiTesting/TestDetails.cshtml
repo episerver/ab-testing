@@ -68,7 +68,8 @@
         }
     </fieldset>
     <p>
-        @Html.ActionLink("Start Test", "RunAbTests", new { id = Model.Id }) |
+        @Html.ActionLink("Start & Stop Test", "RunAbTests", new {id = Model.Id}) |
+        @Html.ActionLink("Start", "StartTest", new { id = Model.Id })
         @Html.ActionLink("Archive", "ArchiveAbTest", new { id = Model.Id }) |
         @Html.ActionLink("Edit", "UpdateAbTest", new { id = Model.Id }) |
         @Html.ActionLink("Back to List", "Index")
