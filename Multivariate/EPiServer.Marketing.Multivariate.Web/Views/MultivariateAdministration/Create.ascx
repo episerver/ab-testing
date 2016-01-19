@@ -6,6 +6,7 @@
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Web.WebControls" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
 <%@ Register TagPrefix="EPiServer" Assembly="EpiServer" Namespace="EPiServer.Web.WebControls" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 <%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
@@ -44,20 +45,15 @@
                     format: 'Y-m-d H:i',
                     step: 30
                 });
-
-                $('#btnCancel').click(function () {
-                    location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
-                });
             });
 
-
-
+            var cancelClick = function () {
+                if (confirm("Are you sure you wish to cancel?\nAll unsaved changes will be lost!")) {
+                    location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                 } else { return false; }
+            };
         </script>
-
-
     </asp:PlaceHolder>
-
-
 </head>
 <body class="Sleek">
 
@@ -85,10 +81,14 @@
                     { %>
                 <input type="hidden" name="Id" value="<%= ViewData["TestGuid"] %>" />
                 <% } %>
-
+                
+                
                 <div class="epi-size15">
                     <label for="Title"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle") %></label>
-                    <%= Html.TextBoxFor(model => model.Title) %>
+                
+                    <%= ((Model != null && Model.testState == TestState.Inactive) ?
+                           Html.TextBoxFor(model => model.Title) :
+                           Html.TextBoxFor(model => model.Title, new {disabled = "disabled"})) %>
                     <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.Title) %>
                     </span>
@@ -96,23 +96,48 @@
 
                 <div class="epi-size15">
                     <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
-                    <%= Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) %>
-                    <span style="color: red">*&nbsp
+                    
+                    <%= ((Model != null && Model.testState == TestState.Inactive) ?
+                    Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}):
+                    Html.TextBoxFor(model => model.StartDate, new {disabled = "disabled", id="datetimepickerstart"})) %>
+                   
+                     <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.StartDate) %>
                     </span>
 
                 </div>
                 <div class="epi-size15">
                     <label for="datetimepickerstop"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend") %></label>
-                    <%= Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}) %>
+                    
+                     <%= ((Model != null && (Model.testState == TestState.Inactive || Model.testState== TestState.Active)) ?
+                    Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}):
+                    Html.TextBoxFor(model => model.EndDate, new {disabled = "disabled", id="datetimepickerstop"})) %>
+                    
                     <span style="color: red">*&nbsp
                     <%= Html.ValidationMessageFor(model => model.EndDate) %>
                     </span>
+
                 </div>
                 <div class="epi-size15">
                     <label for="OriginalItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/originpage") %></label>
+                    <% if (Model != null)
+                    { %>
+
+                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="<%= Model.OriginalItem %>">
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>">
+
+                    <% }
+                    else
+                    {%>
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="">
-                    <input name="originalItemTextBox" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
+                    <% }%>
+
+                    
+                        
+                        
+                     <% if (Model != null && (Model.testState == TestState.Inactive))
+                        { %> 
                     <span class="epi-cmsButton">
                         <input name="originalItemBtn" type="button" value="..." class="epismallbutton"
                             onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
@@ -121,13 +146,28 @@
                                                             'False',
                                                             'OriginalItemDisplay',
                                                             'OriginalItem', 'en', null, null, false);"></span>
+                    
+                    <% } %> 
                     <span style="color: red">*&nbsp
                     <%= Html.ValidationMessageFor(model => model.OriginalItem) %></span>
                 </div>
                 <div class="epi-size15">
                     <label for="VariantItem"><%= LanguageManager.Instance.Translate("/multivariate/settings/variantpage") %></label>
+                    
+                    
+                    <% if (Model != null)
+                    { %>
+
+                   <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>">
+                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" Value="<%= Model.VariantItemDisplay %>">
+                    <% }
+                    else
+                    {%>
                     <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="">
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;"> <% }%>
+                    
+                     <% if (Model != null && (Model.testState == TestState.Inactive))
+                        { %> 
                     <span class="epi-cmsButton">
                         <input name="variantItemBtn" type="button" value="..." class="epismallbutton"
                             onclick="EPi.CreatePageBrowserDialog('/EPiServer/CMS/edit/pagebrowser.aspx',
@@ -136,20 +176,21 @@
                                                             'False',
                                                             'VariantItemDisplay',
                                                             'VariantItem', 'en', null, null, false);"></span>
+                     <% } %> 
                     <span style="color: red">*&nbsp
                     <%= Html.ValidationMessageFor(model => model.VariantItem) %></span>
 
                 </div>
-                </fieldset>
+            </fieldset>
             <div class="epi-buttonContainer">
-            <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
-            </span>
-            <span class="epi-cmsButton">
-                <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
-            </span>
-        </div>
-                <% } %>
+                <span class="epi-cmsButton">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                </span>
+                <span class="epi-cmsButton">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();">
+                </span>
+            </div>
+            <% } %>
         </div>
     </div>
 </body>

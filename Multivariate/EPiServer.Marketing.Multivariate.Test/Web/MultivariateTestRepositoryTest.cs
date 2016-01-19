@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
         static Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
         static Guid original = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE7");
-        static Guid variant = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
+        static Guid varient = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
         static Guid result1 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE5");
         static Guid result2 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE4");
         MultivariateTestViewModel viewdata = new MultivariateTestViewModel()
@@ -33,10 +33,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItem = 1,
             VariantItem = 2,
             testState = Model.Enums.TestState.Active,
-            VariantItemId = variant,
+            VariantItemId = varient,
+            OriginalItemDisplay = "Original Item",
+            VariantItemDisplay = "Variant Item",
             TestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+                    new MultivariateTestResult() { Id = result1, ItemId = original },
+                    new MultivariateTestResult() { Id = result2, ItemId = varient }
                 }
         };
 
@@ -49,10 +51,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
             TestState = Model.Enums.TestState.Active,
-            Variants = new List<Variant>() { new Variant() { Id = variant } },
+            Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient} },
             MultivariateTestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1, ItemId = original },
-                    new MultivariateTestResult() { Id = result2, ItemId = variant }
+                    new MultivariateTestResult() { Id = result2, ItemId = varient }
                 }
         };
 
@@ -62,14 +64,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager = new Mock<IMultivariateTestManager>();
 
             // Setup the contentrepo so it simulates episerver returning content
-            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
-            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
+            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId,Name =viewdata.OriginalItemDisplay,ContentLink = new ContentReference() {ID=viewdata.OriginalItem} };
+            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId, Name = viewdata.VariantItemDisplay, ContentLink = new ContentReference() { ID = viewdata.VariantItem } };
 
             var contentRepo = new Mock<IContentRepository>();
             viewdata.OriginalItem = 1;
             viewdata.VariantItem = 2;
             contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
             contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<Guid>(x => x==original))).Returns(page1);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<Guid>(x => x==varient))).Returns(page2);
+
+
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
 
             return new MultivariateTestRepository(_serviceLocator.Object);
@@ -235,7 +241,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager.Setup(tm => tm.Get(It.Is<Guid>(g => g.Equals(theGuid)))).Returns(test);
 
             repo.UpdateConversion(theGuid, original);   // verifies that we update the original result
-            repo.UpdateConversion(theGuid, variant);    // verifies that we update the variant result
+            repo.UpdateConversion(theGuid, varient);    // verifies that we update the variant result
             repo.UpdateConversion(theGuid, Guid.NewGuid()); // Shouldnt find this one!
 
             _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
@@ -249,10 +255,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             // Setup the service locator to return our mocked testmanager class
             _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
-            _testmanager.Setup(tm => tm.Get(It.Is<Guid>( g => g.Equals(theGuid)))).Returns(test);
+            _testmanager.Setup(tm => tm.Get(It.Is<Guid>(g => g.Equals(theGuid)))).Returns(test);
 
             repo.UpdateView(theGuid, original); // verifies that we update the original result
-            repo.UpdateView(theGuid, variant);  // verifies that we update the variant result
+            repo.UpdateView(theGuid, varient);  // verifies that we update the variant result
             repo.UpdateConversion(theGuid, Guid.NewGuid()); // Shouldnt find this one!
 
             _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),

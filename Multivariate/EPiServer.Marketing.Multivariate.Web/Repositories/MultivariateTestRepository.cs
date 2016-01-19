@@ -112,6 +112,12 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
 
         public MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert)
         {
+            IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
+
+            // need to get guid for pages from the page picker content id's we get
+            var originalItemRef = contentrepo.Get<IContent>(testToConvert.OriginalItemId);
+            var variantItemRef = contentrepo.Get<IContent>(testToConvert.Variants[0].VariantId);
+
             MultivariateTestViewModel testModel = new MultivariateTestViewModel()
             {
                 id = testToConvert.Id,
@@ -119,9 +125,13 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 Owner = testToConvert.Owner,
                 testState = testToConvert.TestState,
                 StartDate = testToConvert.StartDate,
+                OriginalItem = originalItemRef.ContentLink.ID,
+                OriginalItemDisplay = originalItemRef.Name,
                 EndDate = testToConvert.EndDate,
                 OriginalItemId = testToConvert.OriginalItemId,
                 VariantItemId = testToConvert.Variants[0].VariantId,
+                VariantItem = variantItemRef.ContentLink.ID,
+                VariantItemDisplay = variantItemRef.Name,
                 TestResults = testToConvert.MultivariateTestResults
                
             };
