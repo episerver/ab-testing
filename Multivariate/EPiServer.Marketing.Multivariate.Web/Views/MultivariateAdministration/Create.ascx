@@ -182,18 +182,22 @@
                 </div>
             </fieldset>
             <div class="epi-buttonContainer">
+                <% if (Model == null || Model.testState == TestState.Inactive || Model.testState == TestState.Active)
+                    { %>
                 <span class="epi-cmsButton">
-                    <% if (Model == null || Model.testState == TestState.Inactive || Model.testState == TestState.Active)
-                        { %>
+
                     <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
-                    <% }
-                        else
-                        {%>
-                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save epi-tabView-navigation-item-disabled" disabled="disabled" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
-
-                    <% }%>
-
                 </span>
+                <% }
+                    else
+                    {%>
+                <span class="epi-cmsButtondisabled">
+
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save " disabled="disabled" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                </span>
+
+                <% }%>
+
                 <span class="epi-cmsButton">
                     <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();">
                 </span>
