@@ -1,9 +1,6 @@
-﻿using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+﻿using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.ServiceLocation;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace EPiServer.Marketing.Multivariate.Messaging
 {
@@ -14,13 +11,13 @@ namespace EPiServer.Marketing.Multivariate.Messaging
     class MultiVariateMessageHandler : IMultiVariateMessageHandler
     {
         private IServiceLocator _serviceLocator;
-        internal IRepository _repository;
+        internal IMultivariateTestManager _testManager;
 
         [ExcludeFromCodeCoverage]
-        public MultiVariateMessageHandler(IRepository repository)
+        public MultiVariateMessageHandler()
         {
             _serviceLocator = ServiceLocator.Current;
-            _repository = repository;
+            _testManager = _serviceLocator.GetInstance<IMultivariateTestManager>();
         }
 
         /// <summary>
@@ -30,34 +27,17 @@ namespace EPiServer.Marketing.Multivariate.Messaging
         internal MultiVariateMessageHandler(IServiceLocator locator)
         {
             _serviceLocator = locator;
-            _repository = locator.GetInstance<IRepository>();
+            _testManager = _serviceLocator.GetInstance<IMultivariateTestManager>();
         }
 
         public void Handle(UpdateViewsMessage message)
         {
-            IncrementCount(message.TestId, message.VariantId, CountType.View);
+            _testManager.IncrementCount(message.TestId, message.VariantId, CountType.View);
         }
 
         public void Handle(UpdateConversionsMessage message)
         {
-            IncrementCount(message.TestId, message.VariantId, CountType.Conversion);
-        }
-
-        public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
-        {
-            var test = _repository.GetById(testId);
-            var result = test.MultivariateTestResults.FirstOrDefault(v => v.ItemId == testItemId);
-
-            if (resultType == CountType.View)
-            {
-                result.Views++;
-            }
-            else
-            {
-                result.Conversions++;
-            }
-
-            _repository.Save(test);
+            _testManager.IncrementCount(message.TestId, message.VariantId, CountType.Conversion);
         }
     }
 }

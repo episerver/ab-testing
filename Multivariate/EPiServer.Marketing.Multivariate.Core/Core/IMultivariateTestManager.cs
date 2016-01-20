@@ -25,6 +25,7 @@ namespace EPiServer.Marketing.Multivariate
         void Archive(Guid testObjectId);
 
         void IncrementCount(Guid testId, Guid testItemId, CountType resultType);
+        void EmitUpdateCount(Guid testId, Guid testItemId, CountType resultType);
 
         Guid ReturnLandingPage(Guid testId);
     }

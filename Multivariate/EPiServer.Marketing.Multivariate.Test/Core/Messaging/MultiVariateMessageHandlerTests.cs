@@ -13,8 +13,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
     public class MultiVariateMessageHandlerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IRepository> _testrepository;
-        private Mock<IMultiVariateMessageHandler> _messageHandler;
+        private Mock<IMultivariateTestManager> _testManager;
 
         static Guid testGuid = Guid.NewGuid();
         static Guid original = Guid.NewGuid();
@@ -34,12 +33,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         private MultiVariateMessageHandler GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testrepository = new Mock<IRepository>();
-            _testrepository.Setup(tp => tp.GetById(It.Is<Guid>(g => g.Equals(testGuid)))).Returns(test);
-            _serviceLocator.Setup(sl => sl.GetInstance<IRepository>()).Returns(_testrepository.Object);
-
-            _messageHandler = new Mock<IMultiVariateMessageHandler>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultiVariateMessageHandler>()).Returns(_messageHandler.Object);
+            _testManager = new Mock<IMultivariateTestManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testManager.Object);
 
             return new MultiVariateMessageHandler(_serviceLocator.Object);
         }
@@ -52,9 +47,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             messageHandler.Handle( new UpdateConversionsMessage() { TestId = testGuid, VariantId = varient } );
 
             // Verify that save is called and conversion value is correct
-            _testrepository.Verify(tp => tp.Save(It.Is<IMultivariateTest>(
-                aa =>  aa.MultivariateTestResults[1].Conversions == 101 )),
-                Times.Once, "Repository save was not called or conversion value is not as expected");
+            _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>( gg =>  gg.Equals(testGuid)),
+                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<Model.Enums.CountType>(ct => ct.Equals(Model.Enums.CountType.Conversion))) ,
+                Times.Once, "Repository save was not called or conversion value is not as expected") ;
         }
 
         [TestMethod]
@@ -63,11 +58,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             var messageHandler = GetUnitUnderTest();
 
             messageHandler.Handle(new UpdateViewsMessage() { TestId = testGuid, VariantId = varient });
-
             // Verify that save is called and conversion value is correct
-            _testrepository.Verify(tp => tp.Save(It.Is<IMultivariateTest>(
-                aa => aa.MultivariateTestResults[1].Views == 201)),
+
+            _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>(gg => gg.Equals(testGuid)),
+                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<Model.Enums.CountType>(ct => ct.Equals(Model.Enums.CountType.View))),
                 Times.Once, "Repository save was not called or view value is not as expected");
+
         }
     }
 }
