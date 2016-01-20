@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate
             // create a new unique guid here?
             // 
             return _dataAccess.Save(multivariateTest);
-        }
+            }
 
         public void Delete(Guid testObjectId)
         {
