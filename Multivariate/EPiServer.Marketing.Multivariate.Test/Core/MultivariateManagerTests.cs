@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.Entity;
-using System.Linq;
-using EPiServer.Enterprise;
-using EPiServer.Marketing.Multivariate.Dal;
+﻿using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.ServiceLocation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NMemory.Linq;
-using TestContext = EPiServer.Marketing.Multivariate.Test.Dal.TestContext;
-using EPiServer.ServiceLocation;
+using System;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
 {
@@ -40,6 +34,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
                 "DataAcessLayer get was never called or Guid did not match.");
         }
+
         [TestMethod]
         public void MultivariateTestManager_CallsDataAccessGetTestByItemId()
         {
@@ -94,6 +89,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             _dataAccessLayer.Verify(da => da.Stop(It.Is<Guid>(arg => arg.Equals(theGuid))),
                 "DataAcessLayer Stop was never called or Guid did not match.");
         }
+
         [TestMethod]
         public void MultivariateTestManager_CallsArchiveWithGuid()
         {
@@ -104,6 +100,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             _dataAccessLayer.Verify(da => da.Archive(It.Is<Guid>(arg => arg.Equals(theGuid))),
                 "DataAcessLayer Archive was never called or Guid did not match.");
         }
+
         [TestMethod]
         public void MultivariateTestManager_CallsSaveWithProperArguments()
         {
@@ -115,6 +112,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             _dataAccessLayer.Verify(da => da.Save(It.Is<MultivariateTest>(arg => arg.Equals(test))),
                 "DataAcessLayer Save was never called or object did not match.");
         }
+
         [TestMethod]
         public void MultivariateTestManager_CallsIncrementCountWithProperArguments()
         {
@@ -136,7 +134,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         [TestMethod]
         public void MultivariateTestManager_ReturnLandingPage_NoCache()
         {
-            // Make sure that ther return landing page, calls data access layer if its not in the cache..
+            // Make sure that the return landing page, calls data access layer if its not in the cache..
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
@@ -151,14 +149,33 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     Variants = variantList
                 });
 
-            // clear the cache if you have to (tm.clearCache() ?) - this test is supposed to verify that the 
-            // database layer is called.
-            Guid landingPage = tm.ReturnLandingPage(theGuid);
+            var count = 0;
+            var originalCalled = false;
+            var variantCalled = false;
+            // loop over call until all possible switch options are generated.
+            while (count < 2)
+            {
+                // clear the cache if you have to (tm.clearCache() ?) - this test is supposed to verify that the 
+                // database layer is called.
+                var landingPage = tm.ReturnLandingPage(theGuid);
 
-            _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
-                "DataAcessLayer get was never called or Guid did not match.");
-            Assert.IsTrue(landingPage.Equals(originalItemId) ||
-                landingPage.Equals(vID), "landingPage is not the original quid or the variant quid");
+                if (landingPage == originalItemId && !originalCalled)
+                {
+                    count++;
+                    originalCalled = true;
+                }
+
+                if (landingPage == vID && !variantCalled)
+                {
+                    count++;
+                    variantCalled = true;
+                }
+
+                _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                    "DataAcessLayer get was never called or Guid did not match.");
+                Assert.IsTrue(landingPage.Equals(originalItemId) ||
+                              landingPage.Equals(vID), "landingPage is not the original quid or the variant quid");
+            }
         }
     }
 }

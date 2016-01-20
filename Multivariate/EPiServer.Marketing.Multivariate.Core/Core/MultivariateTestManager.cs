@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
@@ -15,6 +15,7 @@ namespace EPiServer.Marketing.Multivariate
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
 
+        [ExcludeFromCodeCoverage]
         public MultivariateTestManager()
         {
             _serviceLocator = ServiceLocator.Current;
