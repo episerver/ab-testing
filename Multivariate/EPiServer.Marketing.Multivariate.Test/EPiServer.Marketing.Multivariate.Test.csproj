@@ -195,14 +195,14 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
+    <Compile Include="Core\Messaging\MessagingManagerTests.cs" />
+    <Compile Include="Core\Messaging\MultiVariateMessageHandlerTests.cs" />
     <Compile Include="TestRepository.cs" />
     <Compile Include="Dal\DalTests.cs" />
     <Compile Include="Core\MultivariateManagerTests.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Dal\TestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\Messaging\MessagingManagerTests.cs" />
-    <Compile Include="Web\Messaging\MultiVariateMessageHandlerTests.cs" />
     <Compile Include="Web\MultivariateAdministrationControllerTest.cs" />
     <Compile Include="Web\UIHelperTests.cs" />
     <Compile Include="Web\MultivariateTestRepositoryTest.cs" />

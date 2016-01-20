@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Multivariate.Web.Messaging
+namespace EPiServer.Marketing.Multivariate.Messaging
 {
     interface IMessagingManager
     {

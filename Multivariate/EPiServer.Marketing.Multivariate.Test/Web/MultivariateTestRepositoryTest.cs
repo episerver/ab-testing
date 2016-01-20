@@ -230,39 +230,5 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Variants[0].VariantId.Equals(viewdata.VariantItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped Variants[0].VariantId");
         }
-
-        [TestMethod]
-        public void UpdateConversionIncrementsConversionValueAndCallsSave()
-        {
-            var repo = GetUnitUnderTest();
-
-            // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
-            _testmanager.Setup(tm => tm.Get(It.Is<Guid>(g => g.Equals(theGuid)))).Returns(test);
-
-            repo.UpdateConversion(theGuid, original);   // verifies that we update the original result
-            repo.UpdateConversion(theGuid, varient);    // verifies that we update the variant result
-            repo.UpdateConversion(theGuid, Guid.NewGuid()); // Shouldnt find this one!
-
-            _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
-                Times.Exactly(2), "Update conversion should only have been called twice since a new guid should not be in the result list");
-        }
-
-        [TestMethod]
-        public void UpdateViewIncrementsViewValueAndCallsSave()
-        {
-            var repo = GetUnitUnderTest();
-
-            // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
-            _testmanager.Setup(tm => tm.Get(It.Is<Guid>(g => g.Equals(theGuid)))).Returns(test);
-
-            repo.UpdateView(theGuid, original); // verifies that we update the original result
-            repo.UpdateView(theGuid, varient);  // verifies that we update the variant result
-            repo.UpdateConversion(theGuid, Guid.NewGuid()); // Shouldnt find this one!
-
-            _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
-                Times.Exactly(2), "Update conversion should only have been called twice since a new guid should not be in the result list");
-        }
     }
 }

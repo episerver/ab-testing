@@ -4,7 +4,7 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace EPiServer.Marketing.Multivariate.Web.Messaging
+namespace EPiServer.Marketing.Multivariate.Messaging
 {
     /// <summary>
     /// The messaging manager provides an interface for sending asynchronous messages to update view and 

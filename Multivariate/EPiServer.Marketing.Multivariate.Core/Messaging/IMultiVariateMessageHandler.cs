@@ -1,6 +1,6 @@
 ﻿using EPiServer.Marketing.Messaging;
 
-namespace EPiServer.Marketing.Multivariate.Web.Messaging
+namespace EPiServer.Marketing.Multivariate.Messaging
 {
     public interface IMultiVariateMessageHandler :
         IMessageHandler<UpdateViewsMessage>,

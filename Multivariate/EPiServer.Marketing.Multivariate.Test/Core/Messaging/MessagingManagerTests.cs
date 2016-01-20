@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.Marketing.Multivariate.Web.Messaging;
 using System.Threading;
+using EPiServer.Marketing.Multivariate.Messaging;
 
-namespace EPiServer.Marketing.Multivariate.Test.Web.Messaging
+namespace EPiServer.Marketing.Multivariate.Test.Messaging
 {
     [TestClass]
     public class MessagingManagerTests

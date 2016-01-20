@@ -186,12 +186,6 @@
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
-    <Compile Include="Messaging\IMessagingManager.cs" />
-    <Compile Include="Messaging\IMultiVariateMessageHandler.cs" />
-    <Compile Include="Messaging\MessagingManager.cs" />
-    <Compile Include="Messaging\MultiVariateMessageHandler.cs" />
-    <Compile Include="Messaging\UpdateConversionsMessage.cs" />
-    <Compile Include="Messaging\UpdateViewsMessage.cs" />
     <Compile Include="Models\EndDateAttribute.cs" />
     <Compile Include="Models\MultivariateTestViewModel.cs" />
     <Compile Include="Models\StartDateAttrbiute.cs" />
@@ -238,10 +232,6 @@
     <None Include="Scripts\DateTimePicker\README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj">
-      <Project>{167d31d8-063c-48ca-84ec-0d136baed1f8}</Project>
-      <Name>EPIServer.Marketing.Messaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj">
       <Project>{cc88efff-8474-401b-87f8-ec4db6ba8633}</Project>
       <Name>EPiServer.Marketing.Multivariate.Core</Name>
