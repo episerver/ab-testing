@@ -107,11 +107,18 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             return ConvertToViewModel(tm.Get(testId));
         }
 
+
+        /// <summary>
+        /// Returns a ViewModel converted from the given working multivariatetest, used
+        /// in the multivarite test views.
+        /// </summary>
+        /// <param name="testToConvert"></param>
+        /// <returns>MulviaraiteTestViewmodel</returns>
         public MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 
-            // need to get guid for pages from the page picker content id's we get
+            // need to get content reference for pages from the view model item ids
             var originalItemRef = contentrepo.Get<IContent>(testToConvert.OriginalItemId);
             var variantItemRef = contentrepo.Get<IContent>(testToConvert.Variants[0].VariantId);
 
@@ -136,22 +143,28 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             return testModel;
         }
 
-        public MultivariateTest ConvertToMultivariateTest(MultivariateTestViewModel testToConvert)
+        /// <summary>
+        /// Returns a MultivariateTest converted from the given working view model, used
+        /// by core libraries for working with multivariate tests.
+        /// </summary>
+        /// <param name="viewModelToConvert"></param>
+        /// <returns>MulviaraiteTestViewmodel</returns>
+        public MultivariateTest ConvertToMultivariateTest(MultivariateTestViewModel viewModelToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 
             // need to get guid for pages from the page picker content id's we get
-            var originalItemRef = contentrepo.Get<IContent>(new ContentReference(testToConvert.OriginalItem));
-            var variantItemRef = contentrepo.Get<IContent>(new ContentReference(testToConvert.VariantItem));
+            var originalItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.OriginalItem));
+            var variantItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.VariantItem));
 
             var test = new MultivariateTest
             {
-                Id = testToConvert.id,
-                Title = testToConvert.Title,
+                Id = viewModelToConvert.id,
+                Title = viewModelToConvert.Title,
                 Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                 OriginalItemId = originalItemRef.ContentGuid,
-                StartDate = testToConvert.StartDate,
-                EndDate = testToConvert.EndDate,
+                StartDate = viewModelToConvert.StartDate,
+                EndDate = viewModelToConvert.EndDate,
                 Variants = new List<Variant>()
                 {
                     new Variant() {Id = Guid.NewGuid(), VariantId = variantItemRef.ContentGuid}
@@ -193,6 +206,10 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             return winningTest;
         }
 
+        /// <summary>
+        /// Stops the test associated with the given id
+        /// </summary>
+        /// <param name="testGuid"></param>
         public void StopTest(Guid testGuid)
         {
             IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
