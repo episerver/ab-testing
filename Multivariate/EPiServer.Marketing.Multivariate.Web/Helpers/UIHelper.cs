@@ -56,6 +56,12 @@ namespace EPiServer.Marketing.Multivariate.Web.Helpers
             return EPiServer.UriSupport.AddQueryString(baseUrl, "customdefaultpage", targetResourcePath);
         }
 
+        public string GetAppRelativePath()
+        {
+            // out: /{PROTECTED_PATH}/{MODULE_NAME}/
+            return Paths.ToResource(typeof(UIHelper), "");
+        }
+
         /// <summary>
         /// Given the specified Guid, get the content data from cms
         /// </summary>
