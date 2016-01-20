@@ -287,5 +287,24 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
             Assert.AreEqual(_mtm._repository.GetAll().Count(), 1);
         }
+
+        [TestMethod]
+        public void MultivariteTestManagerMultivariateDataAccess()
+        {
+            MultiVariantDataAccess mda = new MultiVariantDataAccess();
+            Assert.IsNotNull(mda._repository);
+        }
+
+        [TestMethod]
+        public void MultivariteTestManagerGetTestByItemId()
+        {
+            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+            var tests = AddMultivariateTests(_context, 2);
+            tests[0].OriginalItemId = originalItemId;
+            _mtm.Save(tests[0]);
+            
+            var list = _mtm.GetTestByItemId(originalItemId);
+            Assert.AreEqual(1, list.Count());
+        }
     }
 }

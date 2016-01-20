@@ -103,6 +103,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             _context.SaveChanges();
 
             Assert.AreEqual(test.Variants.Count(), 1);
+
+            Assert.AreEqual(1, _context.Variants.Count());
         }
 
         [TestMethod]
@@ -137,6 +139,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             _context.SaveChanges();
 
             Assert.AreEqual(test.Conversions.Count(), 1);
+
+            Assert.AreEqual(1, _context.Conversions.Count());
         }
 
         [TestMethod]
@@ -170,7 +174,47 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             test.KeyPerformanceIndicators.Add(kpi);
             _context.SaveChanges();
 
-            Assert.AreEqual(test.KeyPerformanceIndicators.Count(), 1);
+            Assert.AreEqual(1, test.KeyPerformanceIndicators.Count());
+
+            Assert.AreEqual(1, _context.KeyPerformanceIndicators.Count());
+        }
+
+        [TestMethod]
+        public void AddTestResultToTest()
+        {
+            var id = Guid.NewGuid();
+
+            var test = new MultivariateTest()
+            {
+                Id = id,
+                Title = "Test",
+                Owner = "me",
+                OriginalItemId = new Guid(),
+                TestState = TestState.Active,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                MultivariateTestResults = new List<MultivariateTestResult>()
+            };
+
+            _context.MultivariateTests.Add(test);
+
+            var tr = new MultivariateTestResult()
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ItemId = Guid.NewGuid(),
+                Conversions = 1,
+                Views = 1
+            };
+
+            test.MultivariateTestResults.Add(tr);
+            _context.SaveChanges();
+
+            Assert.AreEqual(1, test.MultivariateTestResults.Count());
+
+            Assert.AreEqual(1, _context.MultivariateTestsResults.Count());
         }
     }
 }
