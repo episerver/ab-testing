@@ -181,7 +181,7 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
-    <Compile Include="Controllers\MultivariateAdministration.cs" />
+    <Compile Include="Controllers\MultivariateAdministrationController.cs" />
     <Compile Include="Controllers\MultivariateGadgetController.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />

@@ -130,12 +130,12 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 testState = testToConvert.TestState,
                 StartDate = testToConvert.StartDate,
                 OriginalItem = originalItemRef.ContentLink.ID,
-                OriginalItemDisplay = originalItemRef.Name,
+                OriginalItemDisplay = $"{originalItemRef.Name} [{originalItemRef.ContentLink}]",
                 EndDate = testToConvert.EndDate,
                 OriginalItemId = testToConvert.OriginalItemId,
                 VariantItemId = testToConvert.Variants[0].VariantId,
                 VariantItem = variantItemRef.ContentLink.ID,
-                VariantItemDisplay = variantItemRef.Name,
+                VariantItemDisplay = $"{variantItemRef.Name} [{variantItemRef.ContentLink}]",
                 TestResults = testToConvert.MultivariateTestResults
                
             };
