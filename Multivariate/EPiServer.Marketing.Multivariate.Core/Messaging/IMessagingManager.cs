@@ -2,7 +2,7 @@
 
 namespace EPiServer.Marketing.Multivariate.Messaging
 {
-    interface IMessagingManager
+    public interface IMessagingManager
     {
         /// <summary>
         /// Emits the asynchronous message to update the view result for the specified VariantId
