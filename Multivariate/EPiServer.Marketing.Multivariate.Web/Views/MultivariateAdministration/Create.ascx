@@ -116,7 +116,7 @@
                     <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
 
                     <%= ((Model == null || Model.testState == TestState.Inactive) ?
-                            Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart", @onchange="setChangeText"}) :
+                            Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) :
                             Html.TextBoxFor(model => model.StartDate, new {disabled = "disabled", id = "datetimepickerstart"})) %>
 
                     <span style="color: red">*&nbsp
