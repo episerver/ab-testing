@@ -52,6 +52,15 @@
                     format: 'Y-m-d H:i',
                     step: 30
                 });
+
+                $('#btnSave').click(function () {
+                    
+                    if ($("#OriginalItemDisplay").val() === $("#VariantItemDisplay").val()) {
+                        alert("Cannot Save Test:\nThe Variant Item (" + $("#VariantItemDisplay").val() + ") must be different from the Original Item (" + $("#OriginalItemDisplay").val() + ")");
+                        return false;
+                    }
+                });
+
             });
 
             var cancelClick = function () {
@@ -59,6 +68,10 @@
                     location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
                 } else { return false; }
             };
+
+            
+
+
         </script>
     </asp:PlaceHolder>
 </head>
@@ -163,13 +176,13 @@
                     <% if (Model != null)
                         { %>
 
-                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>">
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>">
+                        <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>"/>
+                        <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>"/>
                     <% }
                         else
                         { %>
-                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="">
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                        <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value=""/>
+                        <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;"/>
                     <% } %>
 
                     <% if (Model == null || Model.testState == TestState.Inactive)
@@ -193,20 +206,20 @@
                     { %>
                 <span class="epi-cmsButton">
 
-                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)"/>
                 </span>
                 <% }
                     else
                     {%>
                 <span class="epi-cmsButtondisabled">
 
-                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save " disabled="disabled" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Save " disabled="disabled" type="submit" name="ApplyButton" id="btnSave" value="Save" title="Save" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" />
                 </span>
 
                 <% }%>
 
                 <span class="epi-cmsButton">
-                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();">
+                    <input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="CancelButton" id="btnCancel" value="Cancel" title="Cancel" onmouseover="EPi.ToolButton.MouseDownHandler(this)" onmouseout="EPi.ToolButton.ResetMouseDownHandler(this)" onclick="cancelClick();"/>
                 </span>
             </div>
             <% } %>
