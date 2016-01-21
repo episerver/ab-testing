@@ -52,7 +52,14 @@
                     format: 'Y-m-d H:i',
                     step: 30
                 });
-                
+
+                $('#btnSave').click(function () {
+
+                    if ($("#OriginalItemDisplay").val() === $("#VariantItemDisplay").val()) {
+                        alert("Cannot Save Test:\nThe Variant Item (" + $("#VariantItemDisplay").val() + ") must be different from the Original Item (" + $("#OriginalItemDisplay").val() + ")");
+                        return false;
+                    }
+                });
 
 
             });
