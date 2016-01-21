@@ -7,6 +7,7 @@
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Web.WebControls" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
+<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Register TagPrefix="EPiServer" Assembly="EpiServer" Namespace="EPiServer.Web.WebControls" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 <%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
@@ -28,10 +29,16 @@
         <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/dialog.js")) %>
         <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/system.aspx")) %>
 
+        <%  
+            // Get the relative path of the app i.e. /{PROTECTED_PATH}/EPiServer.Multivariate/
+            UIHelper helper = new UIHelper();
+            string appUrl = helper.GetAppRelativePath();
+        %>
+
         <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="../Scripts/datetimepicker/jquery.datetimepicker.css" />
-        <script src="../Scripts/datetimepicker/jquery.js"></script>
-        <script src="../Scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
+        <link rel="stylesheet" type="text/css" href="<%=appUrl %>scripts/datetimepicker/jquery.datetimepicker.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="<%=appUrl %>scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
 
         <script>
