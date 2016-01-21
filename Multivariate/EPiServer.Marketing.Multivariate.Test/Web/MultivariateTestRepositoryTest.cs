@@ -40,8 +40,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItemDisplay = "Original Item",
             VariantItemDisplay = "Variant Item",
             TestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+                    new MultivariateTestResult() { Id = result1, ItemId = original },
+                    new MultivariateTestResult() { Id = result2, ItemId = varient }
                 }
         };
 
@@ -56,8 +56,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             TestState = Model.Enums.TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+                    new MultivariateTestResult() { Id = result1, ItemId = original },
+                    new MultivariateTestResult() { Id = result2, ItemId = varient }
                 }
         };
 

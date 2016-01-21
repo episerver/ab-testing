@@ -5,6 +5,7 @@ using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Multivariate.Messaging;
 
 namespace EPiServer.Marketing.Multivariate
 {
@@ -211,6 +212,14 @@ namespace EPiServer.Marketing.Multivariate
         {
             return _r.Next(1, 3);
         }
-    
+
+        public void EmitUpdateCount(Guid testId, Guid testItemId, CountType resultType)
+        {
+            var messaging = ServiceLocator.Current.GetInstance<IMessagingManager>();
+            if (resultType == CountType.Conversion)
+                messaging.EmitUpdateConversion(testId, testItemId);
+            else if (resultType == CountType.View)
+                messaging.EmitUpdateViews(testId, testItemId);
+        }
     }
 }

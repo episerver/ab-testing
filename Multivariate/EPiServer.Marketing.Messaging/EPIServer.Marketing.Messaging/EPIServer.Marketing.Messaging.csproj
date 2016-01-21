@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EPiServer.Marketing.Messaging</RootNamespace>
-    <AssemblyName>EPiServer.Mrketing.Messaging</AssemblyName>
+    <AssemblyName>EPiServer.Marketing.Messaging</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -62,32 +62,19 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
-mkdir "$(SolutionDir)Deployment\lib"
-del $(SolutionDir)Deployment\*.nupkg
-xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
-xcopy "$(TargetDir)"\EPiServer.Messaging*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+    <PostBuildEvent>IF exist "$(SolutionDir)MessagingDeployment\lib" ( rmdir "$(SolutionDir)MessagingDeployment\lib" /s /q )
 
-IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
-mkdir "$(SolutionDir)Deployment\temp"
+mkdir "$(SolutionDir)MessagingDeployment\lib"
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)\buildzip.ps1" 
+xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)MessagingDeployment\lib\"  /I /F /R /Y
 
-for /d %25%25i in ("$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\*") do rd /s /q "%25%25i"
-del /q "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\*.*"
+IF exist "$(SolutionDir)MessagingDeploymen\*.nuspec" ( del "$(SolutionDir)MessagingDeployment\*.nuspec" /s /q )
+xcopy "$(ProjectDir)"..\MSBuild\EPiServer.Messaging.nuspec "$(SolutionDir)MessagingDeployment\"  /I /F /R /Y
 
-xcopy "$(SolutionDir)Deployment\temp\*.zip" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\"  /I /F /R /Y
-rmdir "$(SolutionDir)Deployment\temp" /s /q
-
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\module.config" ( del "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\module.config" /s /q )
-xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Messaging\"  /I /F /R /Y
-
-IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
-xcopy "$(SolutionDir)"MSBuild\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
-
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)MSBuild\buildpackage.ps1" "$(SolutionDir)\"
-
-xcopy "$(SolutionDir)Deployment\*.nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+cd "$(SolutionDir)MessagingDeployment\" 
+"$(SolutionDir)\.nuget\nuget.exe" pack EPiServer.Messaging.nuspec
+xcopy "*nupkg" "$(SolutionDir)\Deployment"  /I /F /R /Y
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
