@@ -1,4 +1,5 @@
 ﻿using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Multivariate.Messaging;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.ServiceLocation;
@@ -176,6 +177,44 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 Assert.IsTrue(landingPage.Equals(originalItemId) ||
                               landingPage.Equals(vID), "landingPage is not the original quid or the variant quid");
             }
+        }
+
+        [TestMethod]
+        public void MultivariateTestManager_EmitUpdateConversion()
+        {
+            var testManager = GetUnitUnderTest();
+
+            // Mock up the message manager
+            Mock<IMessagingManager> messageManager = new Mock<IMessagingManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(messageManager.Object);
+
+            Guid original = Guid.NewGuid();
+            Guid testItemId = Guid.NewGuid();
+            testManager.EmitUpdateCount(original, testItemId, CountType.Conversion);
+
+            messageManager.Verify(mm => mm.EmitUpdateConversion(
+                It.Is<Guid>(arg => arg.Equals(original)),
+                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                "Guids are not correct or update conversion message not emmited");
+        }
+
+        [TestMethod]
+        public void MultivariateTestManager_EmitUpdateView()
+        {
+            var testManager = GetUnitUnderTest();
+
+            // Mock up the message manager
+            Mock<IMessagingManager> messageManager = new Mock<IMessagingManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(messageManager.Object);
+
+            Guid original = Guid.NewGuid();
+            Guid testItemId = Guid.NewGuid();
+            testManager.EmitUpdateCount(original, testItemId, CountType.View);
+
+            messageManager.Verify(mm => mm.EmitUpdateViews(
+                It.Is<Guid>(arg => arg.Equals(original)),
+                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                "Guids are not correct or update View message not emmited");
         }
     }
 }

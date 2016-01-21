@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Multivariate
 
         public void EmitUpdateCount(Guid testId, Guid testItemId, CountType resultType)
         {
-            var messaging = ServiceLocator.Current.GetInstance<IMessagingManager>();
+            var messaging = _serviceLocator.GetInstance<IMessagingManager>();
             if (resultType == CountType.Conversion)
                 messaging.EmitUpdateConversion(testId, testItemId);
             else if (resultType == CountType.View)
