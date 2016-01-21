@@ -1,17 +1,18 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.ServiceLocation;
-using Moq;
+﻿using EPiServer.Core;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
-using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Web.Models;
-using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Core;
+using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.ServiceLocation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
+    [ExcludeFromCodeCoverage]
     [TestClass]
     public class MultivariateTestRepositoryTest
     {
@@ -35,9 +36,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             VariantItem = 2,
             testState = TestState.Active,
             VariantItemId = varient,
+            OriginalItemDisplay = "Original Item",
+            VariantItemDisplay = "Variant Item",
             TestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+                    new MultivariateTestResult() { Id = result1, ItemId = original },
+                    new MultivariateTestResult() { Id = result2, ItemId = varient }
                 }
         };
 
@@ -50,12 +53,14 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
             TestState = TestState.Active,
-            Variants = new List<Variant>() { new Variant() { Id = varient } },
+            Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+                    new MultivariateTestResult() { Id = result1, ItemId = original },
+                    new MultivariateTestResult() { Id = result2, ItemId = varient }
                 }
         };
+
+        private DateTime newEndDate = DateTime.Now;
 
         private MultivariateTestRepository GetUnitUnderTest()
         {
@@ -63,14 +68,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager = new Mock<IMultivariateTestManager>();
 
             // Setup the contentrepo so it simulates episerver returning content
-            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
-            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
+            var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId, Name = viewdata.OriginalItemDisplay, ContentLink = new ContentReference() { ID = viewdata.OriginalItem } };
+            var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId, Name = viewdata.VariantItemDisplay, ContentLink = new ContentReference() { ID = viewdata.VariantItem } };
 
             var contentRepo = new Mock<IContentRepository>();
             viewdata.OriginalItem = 1;
             viewdata.VariantItem = 2;
             contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
             contentRepo.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<Guid>(x => x == original))).Returns(page1);
+            contentRepo.Setup(cr => cr.Get<IContent>(It.Is<Guid>(x => x == varient))).Returns(page2);
+
+
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
 
             return new MultivariateTestRepository(_serviceLocator.Object);
@@ -197,6 +206,35 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
                 Times.Once, "CreateTest did not call save");
         }
+
+        [TestMethod]
+        public void CreateTest_WithTestStateInactive_CallsTestManagerDelete()
+        {
+            var repo = GetUnitUnderTest();
+
+            test.TestState = TestState.Inactive;    
+            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
+
+            repo.CreateTest(viewdata);
+            _testmanager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Once, "Create Test with Inactive Test State did not call Delete.");
+        }
+
+        [TestMethod]
+        public void CreateTest_WithTestStateActive_SetsDateValue()
+        {
+            var repo = GetUnitUnderTest();
+
+            test.TestState = TestState.Active;
+            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
+            viewdata.EndDate = newEndDate;
+            repo.CreateTest(viewdata);
+            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.EndDate.Equals(newEndDate))),
+               Times.Once, "CreateTest did not call save with correctly altered end date");
+
+        }
+
 
         [TestMethod]
         public void CreateTestCallsTestRepoSaveWithMappedData()

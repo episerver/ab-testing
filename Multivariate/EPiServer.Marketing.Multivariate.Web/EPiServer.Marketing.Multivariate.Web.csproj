@@ -181,7 +181,7 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
-    <Compile Include="Controllers\MultivariateAdministration.cs" />
+    <Compile Include="Controllers\MultivariateAdministrationController.cs" />
     <Compile Include="Controllers\MultivariateGadgetController.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
@@ -248,7 +248,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment" /s /q )
+    <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
 mkdir "$(SolutionDir)Deployment\lib"
 xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y

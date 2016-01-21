@@ -195,6 +195,8 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
+    <Compile Include="Core\Messaging\MessagingManagerTests.cs" />
+    <Compile Include="Core\Messaging\MultiVariateMessageHandlerTests.cs" />
     <Compile Include="Dal\MultiVariantDataAccessTests.cs" />
     <Compile Include="Model\MultivariateTestCriteriaTests.cs" />
     <Compile Include="TestRepository.cs" />
@@ -218,6 +220,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj">
+      <Project>{167d31d8-063c-48ca-84ec-0d136baed1f8}</Project>
+      <Name>EPIServer.Marketing.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj">
       <Project>{cc88efff-8474-401b-87f8-ec4db6ba8633}</Project>
       <Name>EPiServer.Marketing.Multivariate.Core</Name>
