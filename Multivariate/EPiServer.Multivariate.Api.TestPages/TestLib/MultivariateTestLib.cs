@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Marketing.Multivariate;
 using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using NuGet;
@@ -13,34 +12,24 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
     public class MultivariateTestLib
     {
         private MultivariateTestManager _mtm;
-
-        public List<IMultivariateTest> GetTests()
-        {
-
-
-            MultivariateTestManager mtm = new MultivariateTestManager();
-            List<IMultivariateTest> discoveredTests = new List<IMultivariateTest>();
-            IMultivariateTestRepository testRepo = new MultivariateTestRepository();
-
-            ICurrentSite currentSite = new CurrentSite();
-
-            discoveredTests = mtm.GetTestList(new MultivariateTestCriteria());
-
-
-
-            return discoveredTests;
-        }
-
         private List<KeyPerformanceIndicator> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
         private List<MultivariateTestResult> testResults = new List<MultivariateTestResult>();
 
+        public List<IMultivariateTest> GetTests()
+        {
+            MultivariateTestManager mtm = new MultivariateTestManager();
+            List<IMultivariateTest> discoveredTests = new List<IMultivariateTest>();
+            IMultivariateTestRepository testRepo = new MultivariateTestRepository();
 
+            discoveredTests = mtm.GetTestList(new MultivariateTestCriteria());
+
+            return discoveredTests;
+        }
 
         public Guid CreateAbTest(MultivariateTest dataToSave)
         {
-
             MultivariateTestManager _mtm = new MultivariateTestManager();
             dataToSave.Id = Guid.NewGuid();
 
@@ -49,14 +38,11 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
                     new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
                 };
 
-
-
             dataToSave.MultivariateTestResults = new List<MultivariateTestResult>()
             {
                 new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.OriginalItemId},
                 new MultivariateTestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].VariantId}
             };
-
 
             _mtm.Save(dataToSave);
 
@@ -79,7 +65,6 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             return _mtm.GetTestList(new MultivariateTestCriteria()).Where(t => t.OriginalItemId == itemId).ToList();
         }
 
-
         public IMultivariateTest SetAbState(Guid testId, TestState? state)
         {
             _mtm = new MultivariateTestManager();
@@ -96,14 +81,9 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
                     break;
                 default:
                     return null;
-
             }
             return _mtm.Get(testId);
         }
-
-
-
-
 
         public IMultivariateTest RunTests(Guid testId)
         {
@@ -115,16 +95,11 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
                 _mtm.IncrementCount(testId, result, CountType.View);
                 if (x % 5 == 0)
                     _mtm.IncrementCount(testId, result, CountType.Conversion);
-
-
             }
-
 
             _mtm.Stop(testId);
 
-
             return _mtm.Get(testId);
-
         }
 
         public IMultivariateTest StartTest(Guid testId)
@@ -137,20 +112,9 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
                 _mtm.IncrementCount(testId, result, CountType.View);
                 if (x % 5 == 0)
                     _mtm.IncrementCount(testId, result, CountType.Conversion);
-
-
             }
 
-
-
-
-
             return _mtm.Get(testId);
-
         }
     }
-
-
-
-
 }

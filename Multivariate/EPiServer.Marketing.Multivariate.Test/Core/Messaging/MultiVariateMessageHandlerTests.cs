@@ -6,6 +6,7 @@ using EPiServer.Marketing.Multivariate.Messaging;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using System.Collections.Generic;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Test.Messaging
 {
@@ -48,7 +49,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
 
             // Verify that save is called and conversion value is correct
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>( gg =>  gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<Model.Enums.CountType>(ct => ct.Equals(Model.Enums.CountType.Conversion))) ,
+                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<CountType>(ct => ct.Equals(CountType.Conversion))) ,
                 Times.Once, "Repository save was not called or conversion value is not as expected") ;
         }
 
@@ -61,7 +62,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             // Verify that save is called and conversion value is correct
 
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>(gg => gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<Model.Enums.CountType>(ct => ct.Equals(Model.Enums.CountType.View))),
+                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<CountType>(ct => ct.Equals(CountType.View))),
                 Times.Once, "Repository save was not called or view value is not as expected");
 
         }

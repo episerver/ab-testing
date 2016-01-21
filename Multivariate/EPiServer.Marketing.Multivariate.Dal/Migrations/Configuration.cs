@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace EPiServer.Marketing.Multivariate.Dal.Migrations
 {
     using System;
@@ -14,6 +16,7 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
     /// Update-Database -Script -SourceMigration:Initial  -- generates the final sql script for creating the db once schema design is done
     /// -SourceMigration:'migration name to come from' flag is to generate sql script from previous version to current schema (i.e. only creates sql for new schema changes)
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.Multivariate.Dal.DatabaseContext>
     {
         public Configuration()

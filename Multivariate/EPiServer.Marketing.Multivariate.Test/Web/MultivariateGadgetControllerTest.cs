@@ -4,7 +4,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Web;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Multivariate.Model;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {

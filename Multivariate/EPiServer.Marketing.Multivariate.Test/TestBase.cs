@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Test.Dal;
+using EPiServer.Marketing.Multivariate.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
 {
@@ -26,16 +27,20 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
-                    TestState = TestState.Active,
-                    Owner = "Bert" + i
+                    Owner = "Bert" + i,
+                    MultivariateTestResults = new List<MultivariateTestResult>(),
+                    Variants = new List<Variant>(),
+                    Conversions = new List<Conversion>()
+
                 });
             };
 
             AddObjectsToContext(context, newMultivariateTests);
+            context.SaveChanges();
             return newMultivariateTests;
         }
 
-        public IList<MultivariateTest> AddMultivariateTests(MultivariateTestManager mtmManager, int numberOfTests)
+        public IList<MultivariateTest> AddMultivariateTests(MultiVariantDataAccess mtmManager, int numberOfTests)
         {
             var newMultivariateTests = new List<MultivariateTest>();
 
@@ -61,7 +66,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return newMultivariateTests;
         }
 
-        public void AddMultivariateTestResults(MultivariateTestManager mtmManager, MultivariateTest multivariateTest, Guid itemId)
+        public void AddMultivariateTestResults(MultiVariantDataAccess mtmManager, MultivariateTest multivariateTest, Guid itemId)
         {
             var result = new MultivariateTestResult()
             {

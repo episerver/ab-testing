@@ -167,10 +167,6 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
-    <Compile Include="Cms\CurrentSite.cs" />
-    <Compile Include="Cms\CurrentUser.cs" />
-    <Compile Include="Cms\ICurrentSite.cs" />
-    <Compile Include="Cms\ICurrentUser.cs" />
     <Compile Include="Core\IMultivariateTestManager.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
     <Compile Include="Messaging\IMessagingManager.cs" />
@@ -186,7 +182,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Package.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

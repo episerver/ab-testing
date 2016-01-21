@@ -197,6 +197,8 @@
     </Compile>
     <Compile Include="Core\Messaging\MessagingManagerTests.cs" />
     <Compile Include="Core\Messaging\MultiVariateMessageHandlerTests.cs" />
+    <Compile Include="Dal\MultiVariantDataAccessTests.cs" />
+    <Compile Include="Model\MultivariateTestCriteriaTests.cs" />
     <Compile Include="TestRepository.cs" />
     <Compile Include="Dal\DalTests.cs" />
     <Compile Include="Core\MultivariateManagerTests.cs" />

@@ -6,16 +6,22 @@ using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Dal
 {
+    [ExcludeFromCodeCoverage]
     public class BaseRepository : IRepository
     {
         #region Constants and Tables

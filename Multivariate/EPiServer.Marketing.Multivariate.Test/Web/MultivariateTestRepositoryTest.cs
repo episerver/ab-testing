@@ -1,15 +1,14 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using EPiServer.Core;
+using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.ServiceLocation;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using EPiServer.Marketing.Multivariate.Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Multivariate.Web.Models;
-using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Core;
-using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
@@ -35,7 +34,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItemId = original,
             OriginalItem = 1,
             VariantItem = 2,
-            testState = Model.Enums.TestState.Active,
+            testState = TestState.Active,
             VariantItemId = varient,
             OriginalItemDisplay = "Original Item",
             VariantItemDisplay = "Variant Item",
@@ -53,7 +52,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
-            TestState = Model.Enums.TestState.Active,
+            TestState = TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1, ItemId = original },
