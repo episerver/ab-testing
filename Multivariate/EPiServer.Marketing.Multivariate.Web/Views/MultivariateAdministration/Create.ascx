@@ -37,6 +37,13 @@
 
         <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<%=appUrl %>scripts/datetimepicker/jquery.datetimepicker.css" />
+        <style type="text/css">
+            input[type="text"][readonly] {
+                background-color: #efefef;
+                opacity: 0.5;
+                cursor: default;
+            }
+        </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="<%=appUrl %>scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -60,9 +67,8 @@
                         return false;
                     }
                 });
-
-
             });
+
             var cancelMessage = "Are you sure you wish to cancel?\nAny unsaved changes will be lost!";
 
             var cancelClick = function (validate) {
@@ -148,14 +154,14 @@
                     <% if (Model != null)
                         { %>
 
-                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="<%= Model.OriginalItem %>">
-                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>">
+                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="<%= Model.OriginalItem %>" />
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>" />
 
                     <% }
                         else
                         { %>
-                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="">
-                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
+                    <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="" />
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
                     <% } %>
 
 
@@ -183,13 +189,13 @@
                     <% if (Model != null)
                         { %>
 
-                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>">
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>">
+                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>" />
+                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>" />
                     <% }
                         else
                         { %>
-                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="">
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;">
+                    <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="" />
+                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" />
                     <% } %>
 
                     <% if (Model == null || Model.testState == TestState.Inactive)
