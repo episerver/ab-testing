@@ -16,12 +16,17 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         {
             if (value != null)
             {
-                var dateStart = HttpContext.Current.Request[StartDate];
-                var end = (DateTime) value;
-                var start = DateTime.Parse(dateStart);
+                DateTime dateStart;
+                if (!DateTime.TryParse(HttpContext.Current.Request[StartDate], out dateStart))
+                {
+                    return false;
+                }
 
-                return start.Date < end.Date;
+                var end = (DateTime)value;
+
+                return dateStart.Date < end.Date;
             }
+
             return false;
         }
     }
