@@ -190,12 +190,12 @@
                         { %>
 
                     <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>" />
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>" />
+                    <input name="VariantItemDisplay" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>" />
                     <% }
                         else
                         { %>
                     <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="" />
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" />
+                    <input name="VariantItemDisplay" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" />
                     <% } %>
 
                     <% if (Model == null || Model.testState == TestState.Inactive)
