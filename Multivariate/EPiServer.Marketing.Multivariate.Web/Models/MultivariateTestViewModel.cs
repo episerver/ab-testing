@@ -40,6 +40,11 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         public Guid VariantItemId { get; set; }
         public string VariantItemDisplay { get; set; }
 
+        public string LastModifiedBy { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
+
+
         public IList<MultivariateTestResult> TestResults { get; set; }
     }
 }

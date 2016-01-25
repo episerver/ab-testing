@@ -136,7 +136,10 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 VariantItemId = testToConvert.Variants[0].VariantId,
                 VariantItem = variantItemRef.ContentLink.ID,
                 VariantItemDisplay = string.Format("{0} [{1}]", variantItemRef.Name, variantItemRef.ContentLink),
-                TestResults = testToConvert.MultivariateTestResults
+                TestResults = testToConvert.MultivariateTestResults,
+                DateCreated = testToConvert.CreatedDate,
+                DateModified = testToConvert.ModifiedDate,
+                LastModifiedBy = testToConvert.LastModifiedBy
                
             };
             
