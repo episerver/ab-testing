@@ -52,11 +52,14 @@
             $(document).ready(function () {
                 // displays date time picker for creating new tests
                 $('#datetimepickerstart').datetimepicker({
-                    format: 'Y-m-d H:i',
+                    format: 'm/d/Y g:i:s A',
+                    formatTime: 'g:i A',
                     step: 30
                 });
+
                 $('#datetimepickerstop').datetimepicker({
-                    format: 'Y-m-d H:i',
+                    format: 'm/d/Y g:i:s A',
+                    formatTime: 'g:i A',
                     step: 30
                 });
 
