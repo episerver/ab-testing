@@ -167,12 +167,14 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
-    <Compile Include="Cms\CurrentSite.cs" />
-    <Compile Include="Cms\CurrentUser.cs" />
-    <Compile Include="Cms\ICurrentSite.cs" />
-    <Compile Include="Cms\ICurrentUser.cs" />
     <Compile Include="Core\IMultivariateTestManager.cs" />
     <Compile Include="Core\MultivariateTestManager.cs" />
+    <Compile Include="Messaging\IMessagingManager.cs" />
+    <Compile Include="Messaging\IMultiVariateMessageHandler.cs" />
+    <Compile Include="Messaging\MessagingManager.cs" />
+    <Compile Include="Messaging\MultiVariateMessageHandler.cs" />
+    <Compile Include="Messaging\UpdateConversionsMessage.cs" />
+    <Compile Include="Messaging\UpdateViewsMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -180,12 +182,15 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Package.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj">
+      <Project>{167d31d8-063c-48ca-84ec-0d136baed1f8}</Project>
+      <Name>EPIServer.Marketing.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Multivariate.Dal</Name>

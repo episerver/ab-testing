@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using EPiServer.Marketing.Multivariate.Model;
+﻿using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using System;
+using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Multivariate
+namespace EPiServer.Marketing.Multivariate.Dal
 {
-    public interface IMultivariateTestManager
+    public interface IMultiVariantDataAccess
     {
         IMultivariateTest Get(Guid testObjectId);
 
@@ -24,8 +24,5 @@ namespace EPiServer.Marketing.Multivariate
         void Archive(Guid testObjectId);
 
         void IncrementCount(Guid testId, Guid testItemId, CountType resultType);
-        void EmitUpdateCount(Guid testId, Guid testItemId, CountType resultType);
-
-        Guid ReturnLandingPage(Guid testId);
     }
 }

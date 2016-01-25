@@ -11,6 +11,7 @@ using EPiServer.Marketing.Multivariate.Web;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
@@ -39,7 +40,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItemId = original,
             OriginalItem = 1,
             VariantItem = 2,
-            testState = Model.Enums.TestState.Active,
+            testState = TestState.Active,
             VariantItemId = varient,
             TestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
@@ -55,7 +56,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
-            TestState = Model.Enums.TestState.Active,
+            TestState = TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = varient } },
             MultivariateTestResults = new List<MultivariateTestResult>() {
                     new MultivariateTestResult() { Id = result1 },
@@ -74,7 +75,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             // Setup the contentrepo so it simulates episerver returning content
             var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
             var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
-
+            
              
             viewdata.OriginalItem = 1;
             viewdata.VariantItem = 2;
