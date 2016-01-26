@@ -77,7 +77,7 @@
                 <% }
                     else
                     { %>
-                <div class="display-field"><%= Html.Encode(Model.DateModified) %> by <%= Html.Encode(Model.LastModifiedBy) %></div>
+                <div class="display-field"><%= Html.Encode(Model.DateModified) %></div>
                 <% }%>
             </div>
 
