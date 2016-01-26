@@ -11,6 +11,7 @@ using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Web
 {
@@ -44,12 +45,16 @@ namespace EPiServer.Marketing.Multivariate.Web
         [HttpPost]
         public ActionResult Create(MultivariateTestViewModel testSettings)
         {
-            
+            // remove validation on the StartDate when the test is active
+            // because we don't allow StartDate to be changed.
+            if (testSettings.testState == TestState.Active)
+            {
+                    ModelState["StartDate"].Errors.Clear();
+            }
 
             if (!ModelState.IsValid)
             {
                 return View("Create",testSettings);
-
             }
             else
             {
