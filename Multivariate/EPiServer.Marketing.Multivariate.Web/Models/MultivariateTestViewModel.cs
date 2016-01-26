@@ -27,14 +27,15 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
 
         public TestState testState { get; set; }
 
-        [Required(ErrorMessage = "An origin item is required")]
+        [Required(ErrorMessage = "A valid page is required")]
         [VisiblePage()]
+        [UnassignedTest()]
         public int OriginalItem { get; set; }
         public Guid OriginalItemId { get; set; }
         public string OriginalItemDisplay { get; set; }
     
 
-        [Required(ErrorMessage = "A variant item is required")]
+        [Required(ErrorMessage = "A valid page is required")]
         [VisiblePage()]
         public int VariantItem { get; set; }
         public Guid VariantItemId { get; set; }

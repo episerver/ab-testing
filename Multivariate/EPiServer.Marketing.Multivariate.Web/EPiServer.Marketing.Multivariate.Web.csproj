@@ -188,6 +188,7 @@
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
     <Compile Include="Models\EndDateAttribute.cs" />
+    <Compile Include="Models\InactivePageAttribute.cs" />
     <Compile Include="Models\MultivariateTestViewModel.cs" />
     <Compile Include="Models\StartDateAttrbiute.cs" />
     <Compile Include="Models\VisiblePageAttribute.cs" />
