@@ -183,6 +183,7 @@
     </Compile>
     <Compile Include="Controllers\MultivariateAdministrationController.cs" />
     <Compile Include="Controllers\MultivariateGadgetController.cs" />
+    <Compile Include="Controllers\MultivariateRestStore.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
