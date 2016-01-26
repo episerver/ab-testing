@@ -64,10 +64,12 @@
                 });
 
                 $('#btnSave').click(function () {
-
-                    if ($("#OriginalItemDisplay").val() === $("#VariantItemDisplay").val()) {
-                        alert("Cannot Save Test:\nThe Variant Item (" + $("#VariantItemDisplay").val() + ") must be different from the Original Item (" + $("#OriginalItemDisplay").val() + ")");
-                        return false;
+                    if($("#OriginalItemDisplay").val().length !== 0 || $("#VariantItemDisplay").val().length !== 0)
+                    {
+                        if ($("#OriginalItemDisplay").val() === $("#VariantItemDisplay").val()) {
+                            alert("Cannot Save Test:\nThe Variant Item (" + $("#VariantItemDisplay").val() + ") must be different from the Original Item (" + $("#OriginalItemDisplay").val() + ")");
+                            return false;
+                        }
                     }
                 });
             });
