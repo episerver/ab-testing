@@ -84,10 +84,6 @@
                location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
                
             };
-
-        
-
-
         </script>
     </asp:PlaceHolder>
 </head>
@@ -112,6 +108,7 @@
                 <% if (Model != null)
                     { %>
                 <input type="hidden" name="Id" value="<%= Model.id %>" />
+                <input type="hidden" name="testState" value="<%= Model.testState %>" />
                 <% }
                     else
                     { %>
@@ -122,18 +119,20 @@
                 <div class="epi-size15">
                     <label for="Title"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle") %></label>
 
-                    <%= (Model == null || Model.testState == TestState.Inactive) ? Html.TextBoxFor(model => model.Title) : Html.TextBoxFor(model => model.Title, new {disabled = "disabled"}) %>
+                    <%= (Model == null || Model.testState == TestState.Inactive) ? Html.TextBoxFor(model => model.Title, new { id = "testTitle", @name="testTitle" }) : Html.TextBoxFor(model => model.Title, new { id = "testTitle", @name="testTitle", @readonly = "readonly" }) %>
+               
                     <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.Title) %>
                     </span>
+                  
                 </div>
 
                 <div class="epi-size15">
                     <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
 
                     <%= ((Model == null || Model.testState == TestState.Inactive) ?
-                            Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) :
-                            Html.TextBoxFor(model => model.StartDate, new {disabled = "disabled", id = "datetimepickerstart"})) %>
+                            Html.TextBoxFor(model => model.StartDate, new { id = "datetimepickerstart", @name="datetimepickerstart" }) :
+                            Html.TextBoxFor(model => model.StartDate, new { id = "datetimepickerstart", @name="datetimepickerstart", @readonly = "readonly" })) %>
 
                     <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.StartDate) %>
@@ -144,8 +143,8 @@
                     <label for="datetimepickerstop"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend") %></label>
 
                     <%= ((Model == null || Model.testState == TestState.Inactive || Model.testState == TestState.Active) ?
-                             Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}) :
-                             Html.TextBoxFor(model => model.EndDate, new {disabled = "disabled", id = "datetimepickerstop"})) %>
+                             Html.TextBoxFor(model => model.EndDate, new { id = "datetimepickerstop", @name = "datetimepickerstop" }) :
+                             Html.TextBoxFor(model => model.EndDate, new { id = "datetimepickerstop", @name = "datetimepickerstop", @readonly = "readonly" })) %>
 
                     <span style="color: red">*&nbsp
                     <%= Html.ValidationMessageFor(model => model.EndDate) %>
@@ -166,9 +165,6 @@
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="" />
                     <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
                     <% } %>
-
-
-
 
                     <% if (Model == null || Model.testState == TestState.Inactive)
                         { %>
@@ -237,9 +233,6 @@
                 </span>
 
                 <% }%>
-                
-
-                
             </div>
             <% } %>
         </div>
