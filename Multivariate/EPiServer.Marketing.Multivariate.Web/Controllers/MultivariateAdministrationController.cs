@@ -45,11 +45,19 @@ namespace EPiServer.Marketing.Multivariate.Web
         [HttpPost]
         public ActionResult Create(MultivariateTestViewModel testSettings)
         {
+            if (testSettings == null)
+            {
+                return View("Create", testSettings);
+            }
+
             // remove validation on the StartDate when the test is active
             // because we don't allow StartDate to be changed.
             if (testSettings.testState == TestState.Active)
             {
+                if (ModelState["StartDate"] != null)
+                {
                     ModelState["StartDate"].Errors.Clear();
+                }
             }
 
             if (!ModelState.IsValid)
@@ -62,7 +70,6 @@ namespace EPiServer.Marketing.Multivariate.Web
                 testRepository.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
-
         }
 
         [HttpGet]
