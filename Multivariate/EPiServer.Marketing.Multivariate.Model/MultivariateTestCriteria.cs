@@ -39,20 +39,20 @@ namespace EPiServer.Marketing.Multivariate.Model
             Value = theValue;
         }
 
-        private MultivariateTestFilter() { }
+        public MultivariateTestFilter() { }
         
         /// <summary>
         /// The MultivariateTest property that will be filtered on
         /// </summary>
-        public MultivariateTestProperty Property { get; private set; }
+        public MultivariateTestProperty Property { get; set; }
         /// <summary>
         /// The operation that will be performed to filter the results set
         /// </summary>
-        public FilterOperator Operator { get; private set; }
+        public FilterOperator Operator { get; set; }
         /// <summary>
         /// The limiter value that will be used to filter the result set
         /// </summary>
-        public object Value { get; private set; }
+        public object Value { get; set; }
     }
 
     public enum MultivariateTestProperty

@@ -277,6 +277,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestLib\MultivariateTestLib.cs" />
     <Compile Include="TestLib\MultivariateTestRouteInitializer.cs" />
@@ -357,17 +358,17 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PostBuildEvent>
-IF exist "$(SolutionDir)MultivariateTestingDeployment\content" ( rmdir "$(SolutionDir)MultivariateTesting\content" /s /q )
+IF exist "$(SolutionDir)MultivariateTestingDeployment\content" ( rmdir "$(SolutionDir)MultivariateTestingDeployment\content" /s /q )
 
 mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Views"
 mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Controllers"
 mkdir "$(SolutionDir)MultivariateTestingDeployment\content\TestLib"
-
+mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Models"
 
 xcopy "$(ProjectDir)"\Views\MultivariateApiTesting\*.cshtml "$(SolutionDir)MultivariateTestingDeployment\content\Views\MultivariateApiTesting\"  /I /F /R /Y
 xcopy "$(ProjectDir)"\Controllers\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\Controllers\" /I /F /R /Y
 xcopy "$(ProjectDir)"\TestLib\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\TestLib\"  /I /F /R /Y
-
+xcopy "$(ProjectDir)"\Models\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\Models\"  /I /F /R /Y
 
 
 IF exist "$(SolutionDir)MultivariateTestingDeployment\*.nuspec" ( del "$(SolutionDir)MultivariateTestingDeployment\*.nuspec" /s /q )
@@ -375,7 +376,7 @@ xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)MultivariateTestingDeployment\"  /
 
 cd "$(SolutionDir)MultivariateTestingDeployment\" 
 "$(SolutionDir)\.nuget\nuget.exe" pack Package.nuspec
-xcopy "*nupkg" "$(SolutionDir)\Deployment"  /I /F /R /Y
+xcopy "*nupkg" "$(SolutionDir)Deployment"  /I /F /R /Y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

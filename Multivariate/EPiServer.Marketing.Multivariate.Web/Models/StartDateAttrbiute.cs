@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models
 {
-    class StartDateAttribute : ValidationAttribute
+    public class StartDateAttribute : ValidationAttribute
     {
         public DateTime currentDate { get; set; }
 

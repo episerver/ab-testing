@@ -73,7 +73,7 @@ xcopy "$(ProjectDir)"..\MSBuild\EPiServer.Messaging.nuspec "$(SolutionDir)Messag
 
 cd "$(SolutionDir)MessagingDeployment\" 
 "$(SolutionDir)\.nuget\nuget.exe" pack EPiServer.Messaging.nuspec
-xcopy "*nupkg" "$(SolutionDir)\Deployment"  /I /F /R /Y
+xcopy "*nupkg" "$(SolutionDir)Deployment"  /I /F /R /Y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
