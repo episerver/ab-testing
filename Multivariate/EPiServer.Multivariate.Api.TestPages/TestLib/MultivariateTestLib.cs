@@ -5,6 +5,7 @@ using EPiServer.Marketing.Multivariate;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Multivariate.Api.TestPages.Models;
 using NuGet;
 
 namespace EPiServer.Multivariate.Api.TestPages.TestLib
@@ -17,14 +18,55 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         private List<Variant> variantsToSave;
         private List<MultivariateTestResult> testResults = new List<MultivariateTestResult>();
 
-        public List<IMultivariateTest> GetTests()
+        public List<IMultivariateTest> GetTests(ViewModel viewModel = null)
         {
             MultivariateTestManager mtm = new MultivariateTestManager();
             List<IMultivariateTest> discoveredTests = new List<IMultivariateTest>();
             IMultivariateTestRepository testRepo = new MultivariateTestRepository();
 
-            discoveredTests = mtm.GetTestList(new MultivariateTestCriteria());
+            if (viewModel == null)
+            {
+                discoveredTests = mtm.GetTestList(new MultivariateTestCriteria());
+            }
+            else
+            {
+                var criteria = new MultivariateTestCriteria();
 
+                foreach (var filter in viewModel.Filters.Where(filter => filter.IsEnabled))
+                {
+                    if (filter.Property == MultivariateTestProperty.TestState)
+                    {
+                        var state = TestState.Active;
+                        switch (filter.FilterValue.ToLower())
+                        {
+                            case "inactive":
+                                state = TestState.Inactive;
+                                break;
+                            case "active":
+                                state = TestState.Active;
+                                break;
+                            case "done":
+                                state = TestState.Done;
+                                break;
+                            case "archived":
+                                state = TestState.Archived;
+                                break;
+                        }
+
+                        criteria.AddFilter(new MultivariateTestFilter(filter.Property,
+                            filter.OperatorValue.ToLower() == "and" ? FilterOperator.And : FilterOperator.Or,
+                            state));
+                    }
+                    else
+                    {
+                        criteria.AddFilter(new MultivariateTestFilter(filter.Property,
+                            filter.OperatorValue.ToLower() == "and" ? FilterOperator.And : FilterOperator.Or,
+                            new Guid(filter.FilterValue)));
+                    }
+                }
+
+                discoveredTests = mtm.GetTestList(criteria);
+            }
             return discoveredTests;
         }
 

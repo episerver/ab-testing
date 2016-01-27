@@ -1,5 +1,7 @@
 ﻿@using System.Web.Optimization
-@model IEnumerable<EPiServer.Marketing.Multivariate.Model.IMultivariateTest>
+@using EPiServer.Marketing.Multivariate.Model
+@using EPiServer.Marketing.Multivariate.Model.Enums
+@model EPiServer.Multivariate.Api.TestPages.Models.ViewModel
 
 @{
     Layout = null;
@@ -21,38 +23,37 @@
     </p>
     <div class="container">
         <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Owner)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.StartDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EndDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TestState)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OriginalItemId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Variants)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Conversions)
-                </th>
-                <th colspan="2">
-                    Test Results
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].Owner)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].EndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].TestState)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].Variants)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => Model.Tests[0].Conversions)
+                    </th>
+                    <th colspan="2">
+                        Test Results
+                    </th>
+                    <th></th>
+                </tr>
+            @foreach (var item in Model.Tests)
             {
                 <tr>
                     <td>
@@ -72,7 +73,7 @@
                     </td>
 
                     <td>
-                        @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new { id = item.OriginalItemId })
+                        @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new {id = item.OriginalItemId})
                     </td>
                     <td>
 
@@ -90,16 +91,16 @@
                         @Html.DisplayFor(modelItem => item.Conversions)
                     </td>
                     @if (item.MultivariateTestResults.Count > 0)
-                {
-                    foreach (var result in item.MultivariateTestResults)
                     {
+                        foreach (var result in item.MultivariateTestResults)
+                        {
                             <td>
                                 Views:
                                 @Html.DisplayFor(resultItem => result.Views)
-                                <br />
+                                <br/>
                                 Item Id:
                                 @Html.DisplayFor(resultItem => result.ItemId)
-                                <br />
+                                <br/>
                                 Conversions:
                                 @Html.DisplayFor(resultItem => result.Conversions)
                             </td>
@@ -117,9 +118,9 @@
                     }
 
                     <td>
-                        @Html.ActionLink("Edit", "UpdateAbTest", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "GetAbTestById", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "DeleteAbTest", new { id = item.Id })
+                        @Html.ActionLink("Edit", "UpdateAbTest", new {id = item.Id}) |
+                        @Html.ActionLink("Details", "GetAbTestById", new {id = item.Id}) |
+                        @Html.ActionLink("Delete", "DeleteAbTest", new {id = item.Id})
                     </td>
                 </tr>
             }
@@ -130,6 +131,31 @@
     <div>
         <p>
             <span class="btn">@Html.ActionLink("Create New", "CreateAbTest")</span>
+        </p>
+        <p>
+            @using (Html.BeginForm("FilteredTests", "MultivariateApiTesting", FormMethod.Post))
+            {
+                <table class="table">
+                    @for (var i = 0; i < Model.Filters.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.CheckBoxFor(f => Model.Filters[i].IsEnabled, new {@checked = Model.Filters[i].IsEnabled})@Html.Label(Model.Filters[i].Property.ToString())
+                                @Html.HiddenFor(f => Model.Filters[i].Property, new {@value = Model.Filters[i].Property})
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(f => Model.Filters[i].FilterValue)
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(f => Model.Filters[i].OperatorValue)
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <label>Operator Field Values: and, or</label>
+                <label>Item Field Values: a guid or teststate(active, inactive, done, archived)</label>
+                <input type="submit" value="FilteredTests" />
+            }
         </p>
     </div>
 </body>

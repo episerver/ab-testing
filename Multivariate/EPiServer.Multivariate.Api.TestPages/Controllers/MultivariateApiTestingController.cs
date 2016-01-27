@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Marketing.Multivariate;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Multivariate.Api.TestPages.Models;
 using EPiServer.Multivariate.Api.TestPages.TestLib;
 
 namespace EPiServer.Multivariate.Api.TestPages.Controllers
@@ -13,9 +14,21 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult Index()
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
-            List<IMultivariateTest> tests = testLib.GetTests();
+            ViewModel vm = new ViewModel
+            {
+                Tests = testLib.GetTests()
+            };
 
-            return View(tests);
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult FilteredTests(ViewModel viewModel)
+        {
+            MultivariateTestLib testLib = new MultivariateTestLib();
+            //ViewModel vm = new ViewModel { Tests = testLib.GetTests(viewModel)};
+            viewModel.Tests = testLib.GetTests(viewModel);
+            return View("Index", viewModel);
         }
 
         [HttpGet]
@@ -100,9 +113,6 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
             return View(returnedTestList);
         }
-
-
-
 
 
 
