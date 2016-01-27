@@ -66,7 +66,7 @@
 
             <div class="epi-size15 detailsPadding">
                 <div class="display-label">Created:</div>
-                <div class="display-field"><%= Html.Encode(Model.DateCreated) %> by <%= Html.Encode(Model.Owner) %></div>
+                <div class="display-field"><%= Html.Encode(Model.DateCreated.ToLocalTime()) %> by <%= Html.Encode(Model.Owner) %></div>
             </div>
 
             <div class="epi-size15 detailsPadding">
@@ -77,7 +77,7 @@
                 <% }
                     else
                     { %>
-                <div class="display-field"><%= Html.Encode(Model.DateModified) %></div>
+                <div class="display-field"><%= Html.Encode(Model.DateModified.ToLocalTime()) %></div>
                 <% }%>
             </div>
 
