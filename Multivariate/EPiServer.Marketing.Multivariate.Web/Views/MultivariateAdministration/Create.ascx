@@ -37,13 +37,7 @@
 
         <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<%=appUrl %>scripts/datetimepicker/jquery.datetimepicker.css" />
-        <style type="text/css">
-            input[type="text"][readonly] {
-                background-color: #efefef;
-                opacity: 0.5;
-                cursor: default;
-            }
-        </style>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="<%=appUrl %>scripts/datetimepicker/jquery.datetimepicker.full.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
@@ -52,19 +46,54 @@
             $(document).ready(function () {
                 // displays date time picker for creating new tests
                 $('#datetimepickerstart').datetimepicker({
-                    format: 'Y-m-d H:i',
+                    format: 'm/d/Y g:i A',
+                    formatTime: 'g:i A',
                     step: 30
                 });
+
                 $('#datetimepickerstop').datetimepicker({
-                    format: 'Y-m-d H:i',
+                    format: 'm/d/Y g:i A',
+                    formatTime: 'g:i A',
                     step: 30
                 });
 
                 $('#btnSave').click(function () {
+                    if ($("#OriginalItemDisplay").val().length !== 0 || $("#VariantItemDisplay").val().length !== 0) {
+                        if ($("#OriginalItemDisplay").val() === $("#VariantItemDisplay").val()) {
+                            alert("Cannot Save Test:\nThe Variant Item (" + $("#VariantItemDisplay").val() + ") must be different from the Original Item (" + $("#OriginalItemDisplay").val() + ")");
+                            return false;
+                        }
+                    }
+                });
 
-                    if ($("#OriginalItemDisplay").val() === $("#VariantItemDisplay").val()) {
-                        alert("Cannot Save Test:\nThe Variant Item (" + $("#VariantItemDisplay").val() + ") must be different from the Original Item (" + $("#OriginalItemDisplay").val() + ")");
-                        return false;
+                $('#mvtForm').submit(function () {
+
+                    // enable all the disabled fields before submitting the form, because 
+                    // otherwise their values are not sent to the server.
+                    var $testTitle = $("#testTitle");
+                    var $origItemDisplay = $("#OriginalItemDisplay");
+                    var $varItemDisplay = $("#VariantItemDisplay");
+                    var $datetimepickerstart = $("#datetimepickerstart");
+                    var $datetimepickerstop = $("#datetimepickerstop");
+
+                    if ($testTitle != null && $testTitle.prop("disabled")) {
+                        $testTitle.removeProp("disabled");
+                    }
+
+                    if ($origItemDisplay != null && $origItemDisplay.prop("disabled")) {
+                        $origItemDisplay.removeProp("disabled");
+                    }
+
+                    if ($varItemDisplay != null && $varItemDisplay.prop("disabled")) {
+                        $varItemDisplay.removeProp("disabled");
+                    }
+
+                    if ($datetimepickerstart != null && $datetimepickerstart.prop("disabled")) {
+                        $datetimepickerstart.removeProp("disabled");
+                    }
+
+                    if ($datetimepickerstop != null && $datetimepickerstop.prop("disabled")) {
+                        $datetimepickerstop.removeProp("disabled");
                     }
                 });
             });
@@ -78,13 +107,8 @@
                     } else {
                         return false;
                     }
-               location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
-               
+                location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
             };
-
-        
-
-
         </script>
     </asp:PlaceHolder>
 </head>
@@ -104,11 +128,12 @@
             <fieldset>
                 <legend><%= LanguageManager.Instance.Translate("/multivariate/settings/form/legendtitle")%>
                 </legend>
-                <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post))
+                <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post, new { id = "mvtForm" }))
                     { %>
                 <% if (Model != null)
                     { %>
                 <input type="hidden" name="Id" value="<%= Model.id %>" />
+                <input type="hidden" name="testState" value="<%= Model.testState %>" />
                 <% }
                     else
                     { %>
@@ -119,18 +144,20 @@
                 <div class="epi-size15">
                     <label for="Title"><%= LanguageManager.Instance.Translate("/multivariate/settings/testtitle") %></label>
 
-                    <%= (Model == null || Model.testState == TestState.Inactive) ? Html.TextBoxFor(model => model.Title) : Html.TextBoxFor(model => model.Title, new {disabled = "disabled"}) %>
+                    <%= (Model == null || Model.testState == TestState.Inactive) ? Html.TextBoxFor(model => model.Title, new { id = "testTitle", @name="testTitle" }) : Html.TextBoxFor(model => model.Title, new { id = "testTitle", @name="testTitle", @disabled = "disabled" }) %>
+
                     <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.Title) %>
                     </span>
+
                 </div>
 
                 <div class="epi-size15">
                     <label for="datetimepickerstart"><%= LanguageManager.Instance.Translate("/multivariate/settings/teststart") %></label>
 
                     <%= ((Model == null || Model.testState == TestState.Inactive) ?
-                            Html.TextBoxFor(model => model.StartDate, new {id = "datetimepickerstart"}) :
-                            Html.TextBoxFor(model => model.StartDate, new {disabled = "disabled", id = "datetimepickerstart"})) %>
+                            Html.TextBoxFor(model => model.StartDate, new { id = "datetimepickerstart", @name="datetimepickerstart" }) :
+                            Html.TextBoxFor(model => model.StartDate, new { id = "datetimepickerstart", @name="datetimepickerstart", @disabled = "disabled" })) %>
 
                     <span style="color: red">*&nbsp
                         <%= Html.ValidationMessageFor(model => model.StartDate) %>
@@ -141,8 +168,8 @@
                     <label for="datetimepickerstop"><%= LanguageManager.Instance.Translate("/multivariate/settings/testend") %></label>
 
                     <%= ((Model == null || Model.testState == TestState.Inactive || Model.testState == TestState.Active) ?
-                             Html.TextBoxFor(model => model.EndDate, new {id = "datetimepickerstop"}) :
-                             Html.TextBoxFor(model => model.EndDate, new {disabled = "disabled", id = "datetimepickerstop"})) %>
+                             Html.TextBoxFor(model => model.EndDate, new { id = "datetimepickerstop", @name = "datetimepickerstop" }) :
+                             Html.TextBoxFor(model => model.EndDate, new { id = "datetimepickerstop", @name = "datetimepickerstop", @disabled = "disabled" })) %>
 
                     <span style="color: red">*&nbsp
                     <%= Html.ValidationMessageFor(model => model.EndDate) %>
@@ -155,17 +182,14 @@
                         { %>
 
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="<%= Model.OriginalItem %>" />
-                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>" />
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.OriginalItemDisplay %>" />
 
                     <% }
                         else
                         { %>
                     <input data-val="true" data-val-required="The OriginalItem field is required." id="OriginalItem" name="OriginalItem" type="text" style="display: none" value="" />
-                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
+                    <input name="OriginalItemDisplay" type="text" size="30" id="OriginalItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="">
                     <% } %>
-
-
-
 
                     <% if (Model == null || Model.testState == TestState.Inactive)
                         { %>
@@ -190,12 +214,12 @@
                         { %>
 
                     <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="<%= Model.VariantItem %>" />
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>" />
+                    <input name="VariantItemDisplay" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" value="<%= Model.VariantItemDisplay %>" />
                     <% }
                         else
                         { %>
                     <input data-val="true" data-val-required="The VariantItem field is required." id="VariantItem" name="VariantItem" type="text" style="display: none" value="" />
-                    <input name="variantItemTextBox" type="text" size="30" id="VariantItemDisplay" readonly="readonly" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" />
+                    <input name="VariantItemDisplay" type="text" size="30" id="VariantItemDisplay" disabled="disabled" class="epi-tabView-navigation-item-disabled episize240" style="display: inline;" />
                     <% } %>
 
                     <% if (Model == null || Model.testState == TestState.Inactive)
@@ -234,9 +258,6 @@
                 </span>
 
                 <% }%>
-                
-
-                
             </div>
             <% } %>
         </div>

@@ -8,6 +8,7 @@ using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Security;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
@@ -54,12 +55,24 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             }
             else if (test.TestState == TestState.Inactive)
             {
+                
                 //they could be changing any or all fields so easier
                 //to delete the existing test and let ef handle cleanup. 
                 //Then recreate test to avoid potenitally orphaning
                 //origin, variant and test result db entries
+
+                //Todo: Must rework this and move this functionality deeper.
+                DateTime preservedCreateDate = test.CreatedDate;
+                testData.LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name;
+                testData.DateModified = DateTime.UtcNow;
+                
                 tm.Delete(testData.id);
                 test = ConvertToMultivariateTest(testData);
+
+                tm.Save(test);
+                test.CreatedDate = preservedCreateDate; //This is to preserve original created date.
+                
+
             }
             if (test.TestState == TestState.Active)
             {
@@ -136,7 +149,10 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 VariantItemId = testToConvert.Variants[0].VariantId,
                 VariantItem = variantItemRef.ContentLink.ID,
                 VariantItemDisplay = string.Format("{0} [{1}]", variantItemRef.Name, variantItemRef.ContentLink),
-                TestResults = testToConvert.MultivariateTestResults
+                TestResults = testToConvert.MultivariateTestResults,
+                DateCreated = testToConvert.CreatedDate,
+                DateModified = testToConvert.ModifiedDate,
+                LastModifiedBy = testToConvert.LastModifiedBy
                
             };
             

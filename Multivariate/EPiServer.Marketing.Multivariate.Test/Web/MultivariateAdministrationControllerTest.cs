@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Routing;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
@@ -9,7 +8,6 @@ using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Web;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
@@ -75,8 +73,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             // Setup the contentrepo so it simulates episerver returning content
             var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
             var page2 = new BasicContent() { ContentGuid = viewdata.VariantItemId };
-            
-             
+
+
             viewdata.OriginalItem = 1;
             viewdata.VariantItem = 2;
             _contentRepository.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
@@ -95,8 +93,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             controller.Index();
 
-            _testRepository.Verify(x=>x.GetTestList(It.IsAny<MultivariateTestCriteria>()),
-                Times.Once,"Multivariate Administration Controller Index Did Not Properly Call Repositories GetTestList");
+            _testRepository.Verify(x => x.GetTestList(It.IsAny<MultivariateTestCriteria>()),
+                Times.Once, "Multivariate Administration Controller Index Did Not Properly Call Repositories GetTestList");
         }
 
         [TestMethod]
@@ -105,7 +103,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var controller = GetUnitUnderTest();
             var actionResult = controller.Create() as ViewResult;
 
-            Assert.IsInstanceOfType(actionResult, typeof (ViewResult));
+            Assert.IsInstanceOfType(actionResult, typeof(ViewResult));
 
             ViewDataDictionary viewResult = controller.ViewData;
 
@@ -113,17 +111,56 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             Guid convertedGuid;
 
-            Assert.IsTrue(Guid.TryParse(viewResult["TestGuid"].ToString(),out convertedGuid));
-
+            Assert.IsTrue(Guid.TryParse(viewResult["TestGuid"].ToString(), out convertedGuid));
         }
 
         [TestMethod]
-        public void AdministrationController_CreateWithInValidModel_CallsTestRepository_ReturnsCreateView()
+        public void AdministrationController_CreateWithNullModel_CallsTestRepository_ReturnsCreateView()
         {
             var controller = GetUnitUnderTest();
 
-            controller.ModelState.AddModelError("", "error");
             var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
+
+            Assert.IsTrue(actionResult != null);
+            Assert.AreEqual("Create", actionResult.ViewName);
+        }
+
+        [TestMethod]
+        public void AdministrationController_CreateWithInvalidModel_CallsTestRepository_ReturnsCreateView()
+        {
+            var controller = GetUnitUnderTest();
+
+            controller.ModelState.AddModelError("EndDate", "error");
+            var actionResult = controller.Create(viewdata) as ViewResult;
+
+            Assert.IsTrue(actionResult != null);
+            Assert.AreEqual("Create", actionResult.ViewName);
+        }
+
+        [TestMethod]
+        public void AdministrationController_CreateWithActiveTest_RemovesValidationCheckOnFieldsOtherThanEndDate_ReturnsCreateView()
+        {
+            var controller = GetUnitUnderTest();
+
+            controller.ModelState.AddModelError("Title", "error");
+            controller.ModelState.AddModelError("StartDate", "error");
+            controller.ModelState.AddModelError("OriginalItem", "error");
+            var redirectResult = controller.Create(viewdata) as RedirectToRouteResult;
+            _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
+              Times.Once, "Controller did not call repository to create test");
+
+            Assert.IsTrue(redirectResult != null);
+            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
+        }
+
+        [TestMethod]
+        public void AdministrationController_CreateWithNonActiveTest_KeepsTheValidationCheckOnStartDate_ReturnsCreateView()
+        {
+            var controller = GetUnitUnderTest();
+
+            viewdata.testState = TestState.Inactive;
+            controller.ModelState.AddModelError("StartDate", "error");
+            var actionResult = controller.Create(viewdata) as ViewResult;
 
             Assert.IsTrue(actionResult != null);
             Assert.AreEqual("Create", actionResult.ViewName);
@@ -134,16 +171,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             var controller = GetUnitUnderTest();
 
-            var redirectResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as RedirectToRouteResult;
+            var redirectResult = controller.Create(viewdata) as RedirectToRouteResult;
 
             _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
                 Times.Once, "Controller did not call repository to create test");
 
             Assert.IsTrue(redirectResult != null);
-            Assert.AreEqual("Index",redirectResult.RouteValues["Action"]);
-
-            
-
+            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
         }
 
         [TestMethod]
@@ -158,9 +192,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             Assert.IsTrue(actionResult != null);
             Assert.AreEqual("Create", actionResult.ViewName);
-
-
-
         }
 
         [TestMethod]
@@ -172,7 +203,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             Assert.IsTrue(redirectResult != null);
             Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
-
         }
 
         [TestMethod]
@@ -184,10 +214,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             Assert.IsTrue(redirectResult != null);
             Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
-
         }
-
     }
-
-    
 }

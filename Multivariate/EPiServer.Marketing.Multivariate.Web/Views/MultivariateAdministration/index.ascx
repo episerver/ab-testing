@@ -76,6 +76,19 @@
             });
 
         </script>
+        
+          <style type="text/css">
+            .display-label {
+                float: left;
+                clear: left;
+                width: 100px;
+                font-weight: bold;
+            }
+
+            .detailsPadding {
+                padding-bottom: 4px;
+            }
+        </style>
     </asp:PlaceHolder>
 </head>
 <body class="sleek">

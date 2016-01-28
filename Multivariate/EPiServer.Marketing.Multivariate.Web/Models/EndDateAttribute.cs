@@ -22,9 +22,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
                     return false;
                 }
 
-                var end = (DateTime)value;
+                var dateEnd = (DateTime)value;
 
-                return dateStart.Date < end.Date;
+                return DateTime.Compare(dateStart, dateEnd) < 0;
             }
 
             return false;

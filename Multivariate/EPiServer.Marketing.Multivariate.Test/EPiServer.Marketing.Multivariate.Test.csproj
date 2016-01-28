@@ -209,6 +209,7 @@
     <Compile Include="Web\UIHelperTests.cs" />
     <Compile Include="Web\MultivariateTestRepositoryTest.cs" />
     <Compile Include="Web\MultivariateGadgetControllerTest.cs" />
+    <Compile Include="Web\MultivariateRestStoreTest.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

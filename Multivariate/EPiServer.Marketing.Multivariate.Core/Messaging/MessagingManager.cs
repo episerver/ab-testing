@@ -19,6 +19,7 @@ namespace EPiServer.Marketing.Multivariate.Messaging
         private MessageHandlerRegistry registry;
         private MessagingApplicationBuilder appBuilder;
         private InMemoryQueueStore _queueStore;
+        private IMultiVariateMessageHandler _handler;
 
         [ExcludeFromCodeCoverage]
         public MessagingManager()
@@ -31,10 +32,10 @@ namespace EPiServer.Marketing.Multivariate.Messaging
         /// Used specifically for unit tests.
         /// </summary>
         /// <param name="locator"></param>
-        internal MessagingManager(IServiceLocator locator)
+        internal MessagingManager(IServiceLocator locator, IMultiVariateMessageHandler handler)
         {
             _serviceLocator = locator;
-
+            _handler = handler;
             Init();
         }
 
@@ -49,9 +50,11 @@ namespace EPiServer.Marketing.Multivariate.Messaging
             appBuilder = new MessagingApplicationBuilder();
 
             // register the handler for each message
-            var handler = _serviceLocator.GetInstance<IMultiVariateMessageHandler>();
-            registry.Register<UpdateViewsMessage>(handler);
-            registry.Register<UpdateConversionsMessage>(handler);
+            if (_handler == null)
+                _handler = new MultiVariateMessageHandler();
+
+            registry.Register<UpdateViewsMessage>(_handler);
+            registry.Register<UpdateConversionsMessage>(_handler);
             
             // Create the dispatcher, queue store, and the memory reciever
             var messageDispatcher = new FanOutMessageDispatcher(registry);

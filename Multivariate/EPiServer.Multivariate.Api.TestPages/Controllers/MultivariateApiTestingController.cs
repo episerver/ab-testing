@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Marketing.Multivariate;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Multivariate.Api.TestPages.Models;
 using EPiServer.Multivariate.Api.TestPages.TestLib;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Multivariate.Api.TestPages.Controllers
 {
@@ -13,9 +15,21 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult Index()
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
-            List<IMultivariateTest> tests = testLib.GetTests();
+            ViewModel vm = new ViewModel
+            {
+                Tests = testLib.GetTests()
+            };
 
-            return View(tests);
+            return View(vm);
+        }
+
+        [HttpPost]
+        public ActionResult FilteredTests(ViewModel viewModel)
+        {
+            MultivariateTestLib testLib = new MultivariateTestLib();
+            //ViewModel vm = new ViewModel { Tests = testLib.GetTests(viewModel)};
+            viewModel.Tests = testLib.GetTests(viewModel);
+            return View("Index", viewModel);
         }
 
         [HttpGet]
@@ -105,9 +119,6 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
 
 
-
-
-
         public ActionResult TestDetails(MultivariateTest testDetails)
         {
             return View(testDetails);
@@ -150,6 +161,24 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         {
             MultivariateTestManager mtm = new MultivariateTestManager();
             mtm.Archive(Guid.Parse(id));
+            var multivariateTest = mtm.Get(Guid.Parse(id));
+
+            return View("TestDetails", multivariateTest);
+        }
+
+        public ActionResult UpdateView(string id, string itemid)
+        {
+            MultivariateTestManager mtm = new MultivariateTestManager();
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.View);
+            var multivariateTest = mtm.Get(Guid.Parse(id));
+
+            return View("TestDetails", multivariateTest);
+        }
+
+        public ActionResult UpdateConversion(string id, string itemid)
+        {
+            MultivariateTestManager mtm = new MultivariateTestManager();
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);

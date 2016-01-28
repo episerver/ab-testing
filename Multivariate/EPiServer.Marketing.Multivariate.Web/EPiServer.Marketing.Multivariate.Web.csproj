@@ -183,12 +183,14 @@
     </Compile>
     <Compile Include="Controllers\MultivariateAdministrationController.cs" />
     <Compile Include="Controllers\MultivariateGadgetController.cs" />
+    <Compile Include="Controllers\MultivariateRestStore.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
     <Compile Include="Models\EndDateAttribute.cs" />
+    <Compile Include="Models\InactivePageAttribute.cs" />
     <Compile Include="Models\MultivariateTestViewModel.cs" />
-    <Compile Include="Models\StartDateAttrbiute.cs" />
+    <Compile Include="Models\StartDateAttribute.cs" />
     <Compile Include="Models\VisiblePageAttribute.cs" />
     <Compile Include="Repositories\IMultivariateTestRepository.cs" />
     <Compile Include="Repositories\MultivariateTestRepository.cs" />
@@ -207,7 +209,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
-    <Content Include="Views\MultivariateAdministration\_details.ascx" />
+    <Content Include="Views\MultivariateAdministration\_details.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="Views\MultivariateGadget\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
