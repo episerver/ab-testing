@@ -1,4 +1,4 @@
-﻿@model EPiServer.Marketing.Multivariate.Model.MultivariateTest
+@model EPiServer.Marketing.Multivariate.Model.MultivariateTest
 
 @{
     Layout = null;
@@ -52,19 +52,17 @@
         <hr />
         @if (Model.MultivariateTestResults != null)
         {
-            foreach (var result in Model.MultivariateTestResults)
-            {
-                <div class="display-label">
-                    @Html.DisplayNameFor(resultItem => result.Views) : @Html.DisplayFor(resultItem => result.Views)
-                </div>
-                <div class="display-label">
-                    @Html.DisplayNameFor(resultItem => result.ItemId) : @Html.DisplayFor(resultItem => result.ItemId)
-                </div>
-                <div class="display-label">
-                    @Html.DisplayNameFor(resultItem => result.Conversions) : @Html.DisplayFor(resultItem => result.Conversions)
-                </div>
-                <br />
-            }
+		<table style="width:50%">
+		    @foreach (var result in Model.MultivariateTestResults)
+		    {
+			<tr><td> @Html.DisplayNameFor(resultItem => result.ItemId) </td><td> @Html.DisplayFor(resultItem => result.ItemId) </td></tr>
+			<tr><td>@Html.DisplayNameFor(resultItem => result.Views)</td><td>@Html.DisplayFor(resultItem => result.Views)</td>
+				<td>@Html.ActionLink("Queue Update", "UpdateView", new { id = Model.Id, itemid = result.ItemId})</td></tr>
+			<tr><td>@Html.DisplayNameFor(resultItem => result.Conversions)</td><td>@Html.DisplayFor(resultItem => result.Conversions)</td>
+				<td>@Html.ActionLink("Queue Update", "UpdateConversion", new { id = Model.Id, itemid = result.ItemId})</td></tr>
+			<tr><td>&nbsp;</td></tr>
+		    }
+		</table>            
         }
     </fieldset>
     <p>
