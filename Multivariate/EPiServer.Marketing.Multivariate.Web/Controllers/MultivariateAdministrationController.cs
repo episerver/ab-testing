@@ -50,13 +50,16 @@ namespace EPiServer.Marketing.Multivariate.Web
                 return View("Create", testSettings);
             }
 
-            // remove validation on the StartDate when the test is active
-            // because we don't allow StartDate to be changed.
+            // remove validation on all the fields except EndDate, because we allow 
+            // only EndDate to be changed, when the test is active.
             if (testSettings.testState == TestState.Active)
             {
-                if (ModelState["StartDate"] != null)
+                foreach (var key in ModelState.Keys)
                 {
-                    ModelState["StartDate"].Errors.Clear();
+                    if (key != "EndDate")
+                    {
+                        ModelState[key].Errors.Clear();
+                    }
                 }
             }
 
