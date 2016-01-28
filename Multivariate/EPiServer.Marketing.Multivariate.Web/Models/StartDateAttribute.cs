@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models
 {
@@ -20,14 +16,15 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         {
             if (value != null)
             {
-                DateTime date = (DateTime) value;
-                if (date.Date >= currentDate.Date)
+                DateTime dateStart;
+                if (!DateTime.TryParse(value.ToString(), out dateStart))
                 {
-                    return true;
+                    return false;
                 }
 
-                return false;
+                return DateTime.Compare(dateStart, currentDate) > 0;
             }
+
             return false;
         }
     }
