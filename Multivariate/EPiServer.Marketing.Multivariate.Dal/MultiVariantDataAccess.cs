@@ -136,7 +136,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
                 result.Conversions++;
             }
 
-            _repository.Save(test);
+            Save(test);
         }
 
         public Guid Save(IMultivariateTest testObject)

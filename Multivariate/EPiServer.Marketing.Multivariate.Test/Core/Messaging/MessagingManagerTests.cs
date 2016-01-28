@@ -23,10 +23,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
                 _testRepository = new Mock<IMultivariateTestRepository>();
                 _messageHandler = new Mock<IMultiVariateMessageHandler>();
                 _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
-                _serviceLocator.Setup(sl => sl.GetInstance<IMultiVariateMessageHandler>()).Returns(_messageHandler.Object);
             }
 
-            return new MessagingManager(_serviceLocator.Object);
+            return new MessagingManager(_serviceLocator.Object, _messageHandler.Object);
         }
 
         [TestMethod]

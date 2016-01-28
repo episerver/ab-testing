@@ -5,6 +5,7 @@ using EPiServer.Marketing.Multivariate;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Multivariate.Api.TestPages.Models;
 using EPiServer.Multivariate.Api.TestPages.TestLib;
+using EPiServer.Marketing.Multivariate.Model.Enums;
 
 namespace EPiServer.Multivariate.Api.TestPages.Controllers
 {
@@ -160,6 +161,24 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         {
             MultivariateTestManager mtm = new MultivariateTestManager();
             mtm.Archive(Guid.Parse(id));
+            var multivariateTest = mtm.Get(Guid.Parse(id));
+
+            return View("TestDetails", multivariateTest);
+        }
+
+        public ActionResult UpdateView(string id, string itemid)
+        {
+            MultivariateTestManager mtm = new MultivariateTestManager();
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.View);
+            var multivariateTest = mtm.Get(Guid.Parse(id));
+
+            return View("TestDetails", multivariateTest);
+        }
+
+        public ActionResult UpdateConversion(string id, string itemid)
+        {
+            MultivariateTestManager mtm = new MultivariateTestManager();
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
