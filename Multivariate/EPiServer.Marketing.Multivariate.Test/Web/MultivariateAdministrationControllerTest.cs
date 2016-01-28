@@ -130,7 +130,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             var controller = GetUnitUnderTest();
 
-            controller.ModelState.AddModelError("Title", "error");
+            controller.ModelState.AddModelError("EndDate", "error");
             var actionResult = controller.Create(viewdata) as ViewResult;
 
             Assert.IsTrue(actionResult != null);
@@ -138,11 +138,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         }
 
         [TestMethod]
-        public void AdministrationController_CreateWithActiveTest_RemovesValidationCheckOnStartDate_ReturnsCreateView()
+        public void AdministrationController_CreateWithActiveTest_RemovesValidationCheckOnFieldsOtherThanEndDate_ReturnsCreateView()
         {
             var controller = GetUnitUnderTest();
 
+            controller.ModelState.AddModelError("Title", "error");
             controller.ModelState.AddModelError("StartDate", "error");
+            controller.ModelState.AddModelError("OriginalItem", "error");
             var redirectResult = controller.Create(viewdata) as RedirectToRouteResult;
             _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
               Times.Once, "Controller did not call repository to create test");
