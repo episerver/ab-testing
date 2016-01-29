@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Messaging;
@@ -7,11 +6,11 @@ using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Messaging
 {
-    [TestClass]
-    public class MultiVariateMessageHandlerTests
+        public class MultiVariateMessageHandlerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IMultivariateTestManager> _testManager;
@@ -40,7 +39,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             return new MultiVariateMessageHandler(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpdateConversionUpdatesCorrectValue()
         {
             var messageHandler = GetUnitUnderTest();
@@ -53,7 +52,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
                 Times.Once, "Repository save was not called or conversion value is not as expected") ;
         }
 
-        [TestMethod]
+        [Fact]
         public void UpdateViewUpdatesCorrectValue()
         {
             var messageHandler = GetUnitUnderTest();

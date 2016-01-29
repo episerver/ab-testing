@@ -5,33 +5,32 @@ using System.Linq;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Test.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
-    [TestClass]
     public class DalTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;
 
-        [TestInitialize]
-        public void Initialization()
+
+        public DalTests()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddMultivariateTest()
         {
             var newTests = AddMultivariateTests(_context, 2);
             _context.SaveChanges();
 
-            Assert.AreEqual(_context.MultivariateTests.Count(), 2);
+            Assert.Equal(_context.MultivariateTests.Count(), 2);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteMultivariateTest()
         {
             var newTests = AddMultivariateTests(_context, 3);
@@ -40,10 +39,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             _context.MultivariateTests.Remove(newTests[0]);
             _context.SaveChanges();
 
-            Assert.AreEqual(_context.MultivariateTests.Count(), 2);
+            Assert.Equal(_context.MultivariateTests.Count(), 2);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpdateMultivariateTest()
         {
             var id = Guid.NewGuid();
@@ -68,10 +67,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             test.Title = newTitle;
             _context.SaveChanges();
 
-            Assert.AreEqual(_context.MultivariateTests.Find(id).Title, newTitle);
+            Assert.Equal(_context.MultivariateTests.Find(id).Title, newTitle);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddVariantToTest()
         {
             var id = Guid.NewGuid();
@@ -102,12 +101,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             test.Variants.Add(variant);
             _context.SaveChanges();
 
-            Assert.AreEqual(test.Variants.Count(), 1);
+            Assert.Equal(test.Variants.Count(), 1);
 
-            Assert.AreEqual(1, _context.Variants.Count());
+            Assert.Equal(1, _context.Variants.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void AddConversionToTest()
         {
             var id = Guid.NewGuid();
@@ -138,12 +137,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             test.Conversions.Add(conversion);
             _context.SaveChanges();
 
-            Assert.AreEqual(test.Conversions.Count(), 1);
+            Assert.Equal(test.Conversions.Count(), 1);
 
-            Assert.AreEqual(1, _context.Conversions.Count());
+            Assert.Equal(1, _context.Conversions.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void AddKeyPerformanceIndicatorToTest()
         {
             var id = Guid.NewGuid();
@@ -174,12 +173,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             test.KeyPerformanceIndicators.Add(kpi);
             _context.SaveChanges();
 
-            Assert.AreEqual(1, test.KeyPerformanceIndicators.Count());
+            Assert.Equal(1, test.KeyPerformanceIndicators.Count());
 
-            Assert.AreEqual(1, _context.KeyPerformanceIndicators.Count());
+            Assert.Equal(1, _context.KeyPerformanceIndicators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void AddTestResultToTest()
         {
             var id = Guid.NewGuid();
@@ -212,9 +211,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             test.MultivariateTestResults.Add(tr);
             _context.SaveChanges();
 
-            Assert.AreEqual(1, test.MultivariateTestResults.Count());
+            Assert.Equal(1, test.MultivariateTestResults.Count());
 
-            Assert.AreEqual(1, _context.MultivariateTestsResults.Count());
+            Assert.Equal(1, _context.MultivariateTestsResults.Count());
         }
     }
 }

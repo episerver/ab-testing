@@ -4,16 +4,15 @@ using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.ServiceLocation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
     [ExcludeFromCodeCoverage]
-    [TestClass]
     public class MultivariateTestRepositoryTest
     {
         private Mock<IServiceLocator> _serviceLocator;
@@ -85,7 +84,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             return new MultivariateTestRepository(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetWinningTestResult_ReturnsCorrectResult()
         {
             MultivariateTestViewModel test = new MultivariateTestViewModel();
@@ -103,10 +102,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             var winner = repo.GetWinningTestResult(test);
 
-            Assert.AreEqual(theGuid, winner.Id);
+            Assert.Equal(theGuid, winner.Id);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteTestCallsTestManagerDeleteWithProperTestGuid()
         {
             Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
@@ -122,7 +121,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "DeleteTest did not call Delete or Delete was not called with expected values");
         }
 
-        [TestMethod]
+        [Fact]
         public void StopTestCallsTestManagerStopWithProperTestGuid()
         {
             Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
@@ -138,7 +137,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTestByIdCallsTestManagerWithProperTestGuid()
         {
             var repo = GetUnitUnderTest();
@@ -154,7 +153,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "GetTestById did not call Get or Get was not called with expected values");
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTestListCallsTestManagerWithProperCriteria()
         {
             var criteria = new MultivariateTestCriteria();
@@ -173,26 +172,26 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "GetTestList did not call TestManager.GetTestList or TestManager.GetTestList was not called with expected values");
         }
 
-        [TestMethod]
+        [Fact]
         public void ConvertToViewModelConvertsProperly()
         {
             var repo = GetUnitUnderTest();
             var ViewData = repo.ConvertToViewModel(test);
 
             // Verify the testmanager was called by the repo with the proper argument
-            Assert.AreEqual(test.Id, ViewData.id, "Test ID was not mapped.");
-            Assert.AreEqual(test.Title, ViewData.Title, "Title was not mapped.");
-            Assert.AreEqual(test.Owner, ViewData.Owner, "Owner was not mapped.");
-            Assert.AreEqual(test.StartDate, ViewData.StartDate, "StartDate was not mapped.");
-            Assert.AreEqual(test.EndDate, ViewData.EndDate, "EndDate was not mapped.");
-            Assert.AreEqual(test.OriginalItemId, ViewData.OriginalItemId, "OriginalItemId was not mapped.");
-            Assert.AreEqual(test.TestState, ViewData.testState, "TestState was not mapped.");
-            Assert.AreEqual(test.Variants[0].VariantId, ViewData.VariantItemId, "Variants was not mapped.");
-            Assert.AreEqual(test.MultivariateTestResults[0].Id, ViewData.TestResults[0].Id, "TestResults[0] was not mapped.");
-            Assert.AreEqual(test.MultivariateTestResults[1].Id, ViewData.TestResults[1].Id, "TestResults[1] was not mapped.");
+            Assert.Equal(test.Id, ViewData.id);
+            Assert.Equal(test.Title, ViewData.Title);
+            Assert.Equal(test.Owner, ViewData.Owner);
+            Assert.Equal(test.StartDate, ViewData.StartDate);
+            Assert.Equal(test.EndDate, ViewData.EndDate);
+            Assert.Equal(test.OriginalItemId, ViewData.OriginalItemId);
+            Assert.Equal(test.TestState, ViewData.testState);
+            Assert.Equal(test.Variants[0].VariantId, ViewData.VariantItemId);
+            Assert.Equal(test.MultivariateTestResults[0].Id, ViewData.TestResults[0].Id);
+            Assert.Equal(test.MultivariateTestResults[1].Id, ViewData.TestResults[1].Id);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTestCallsTestRepoSave()
         {
             var repo = GetUnitUnderTest();
@@ -207,12 +206,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "CreateTest did not call save");
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTest_WithTestStateInactive_CallsTestManagerDelete()
         {
             var repo = GetUnitUnderTest();
 
-            test.TestState = TestState.Inactive;    
+            test.TestState = TestState.Inactive;
             _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
             _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
 
@@ -220,7 +219,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Once, "Create Test with Inactive Test State did not call Delete.");
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTest_WithTestStateActive_SetsDateValue()
         {
             var repo = GetUnitUnderTest();
@@ -236,7 +235,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         }
 
 
-        [TestMethod]
+        [Fact]
         public void CreateTestCallsTestRepoSaveWithMappedData()
         {
             var repo = GetUnitUnderTest();

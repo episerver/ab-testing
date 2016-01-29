@@ -3,15 +3,14 @@ using EPiServer.Marketing.Multivariate.Messaging;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.ServiceLocation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
 {
-    [TestClass]
-    public class MultivariateManagerTests
+        public class MultivariateManagerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IMultiVariantDataAccess> _dataAccessLayer;
@@ -25,7 +24,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return new MultivariateTestManager(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsDataAccessGetWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -36,7 +35,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer get was never called or Guid did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsDataAccessGetTestByItemId()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -47,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsGetTestListWithCritera()
         {
             var critera = new MultivariateTestCriteria();
@@ -58,7 +57,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer GetTestList was never called or criteria did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsDeleteWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -69,7 +68,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer Delete was never called or Guid did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsStartWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -80,7 +79,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer Start was never called or Guid did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsStopWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -91,7 +90,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer Stop was never called or Guid did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsArchiveWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -102,7 +101,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer Archive was never called or Guid did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsSaveWithProperArguments()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -114,7 +113,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer Save was never called or object did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_CallsIncrementCountWithProperArguments()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -132,7 +131,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_ReturnLandingPage_NoCache()
         {
             // Make sure that the return landing page, calls data access layer if its not in the cache..
@@ -174,12 +173,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
                 _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
                     "DataAcessLayer get was never called or Guid did not match.");
-                Assert.IsTrue(landingPage.Equals(originalItemId) ||
+                Assert.True(landingPage.Equals(originalItemId) ||
                               landingPage.Equals(vID), "landingPage is not the original quid or the variant quid");
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_EmitUpdateConversion()
         {
             var testManager = GetUnitUnderTest();
@@ -198,7 +197,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "Guids are not correct or update conversion message not emmited");
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariateTestManager_EmitUpdateView()
         {
             var testManager = GetUnitUnderTest();

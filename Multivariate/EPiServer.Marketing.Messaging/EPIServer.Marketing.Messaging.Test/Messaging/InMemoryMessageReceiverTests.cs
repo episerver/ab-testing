@@ -1,29 +1,27 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.Marketing.Messaging;
 using System.Collections.Concurrent;
 using EPiServer.Marketing.Messaging.InMemory;
 using System.Threading;
 using Moq;
+using Xunit;
 
-namespace EPiServer.ConnectForSharePoint.Test.Messaging
+namespace EPiServer.Marketing.Test.Messaging
 {
-    [TestClass]
     public class InMemoryMessageReceiverTests
     {
         private MessageHandlerRegistry registry;
         private IMessageDispatcher dispatcher;
         private BlockingCollection<object> queue;
 
-        [TestInitialize]
-        public void Setup()
+        public InMemoryMessageReceiverTests()
         {
             this.registry = new MessageHandlerRegistry();
             this.dispatcher = new FanOutMessageDispatcher(this.registry);
             this.queue = new BlockingCollection<object>();
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_DispatchesMessagesToRegisteredHandlers()
         {
             var receiver = new InMemoryMessageReceiver(this.dispatcher, this.queue);
@@ -38,7 +36,7 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
                 ).Callback<string>(
                     (message) =>
                     {
-                        Assert.AreEqual<string>("test-data", message, "Received expected message");
+                        Assert.Equal("test-data", message);
                         source.Cancel();
                     }
                 );
@@ -51,7 +49,7 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Start_ContinuesDispatchingMessagesWhenAHandlerFails()
         {
             var receiver = new InMemoryMessageReceiver(this.dispatcher, this.queue);
@@ -76,7 +74,7 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
                 ).Callback<string>(
                     (message) =>
                     {
-                        Assert.AreEqual<string>("test-data", message, "Handler received expected message");
+                        Assert.Equal("test-data", message);
                         source.Cancel();
                     }
                 );

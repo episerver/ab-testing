@@ -1,16 +1,15 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Messaging;
 using EPiServer.Marketing.Multivariate.Web.Controllers;
 using EPiServer.Marketing.Multivariate.Model;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-    [TestClass]
-    public class MultivariateRestStoreTest
+        public class MultivariateRestStoreTest
     {
         private static Mock<IServiceLocator> _serviceLocator;
         private static Mock<IMultivariateTestManager> _testManager;
@@ -27,7 +26,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             return new MultivariateRestStore(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCallsGetTestList_WhenIDIsNull()
         {
             var unit = GetUnitUnderTest();
@@ -36,7 +35,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testManager.Verify(tm => tm.GetTestList(It.IsAny<MultivariateTestCriteria>()), "Get did not call getTestList when id is null");
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCallsGetWhenIDIsValidGuid()
         {
             Guid testGuid = Guid.NewGuid();
@@ -47,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 "Get did not call TestManager.Get with proper Guid");
         }
 
-        [TestMethod]
+        [Fact]
         public void PostEmitsUpdateConversionWhenConversionIsNotNull()
         {
             var unit = GetUnitUnderTest();
@@ -57,7 +56,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 "MessageManager did not call EmitUpdateConversion when converson argument is not null");
         }
 
-        [TestMethod]
+        [Fact]
         public void PostEmitsUpdateViewWhenConversionIsNull()
         {
             var unit = GetUnitUnderTest();

@@ -1,15 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Web;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Model;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-    [TestClass]
-    public class MultivariateGadgetControllerTest
+        public class MultivariateGadgetControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IMultivariateTestRepository> _testRepository;
@@ -24,7 +23,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         }
 
 
-        [TestMethod]
+        [Fact]
         public void GadgetControlCallsRepositoryForIndexAction()
         {
             var controller = GetUnitUnderTest();
@@ -37,7 +36,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
         }
 
-        [TestMethod]
+        [Fact]
         public void GadgetControlCallsRepositoryForDetailsAction()
         {
             var controller = GetUnitUnderTest();

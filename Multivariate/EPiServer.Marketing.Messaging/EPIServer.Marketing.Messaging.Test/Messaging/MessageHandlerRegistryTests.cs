@@ -1,15 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.Marketing.Messaging;
 using Moq;
 using System.Linq;
+using Xunit;
 
-namespace EPiServer.ConnectForSharePoint.Test.Messaging
+namespace EPiServer.Marketing.Test.Messaging
 {
-    [TestClass]
     public class MessageHandlerRegistryTests
     {
-        [TestMethod]
+        [Fact]
         public void Get_RetrievesRegisteredHandlersByType()
         {
             var registry = new MessageHandlerRegistry();
@@ -17,11 +16,11 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
             registry.Register<int>(new Mock<IMessageHandler<int>>().Object);
             registry.Register<int>(new Mock<IMessageHandler<int>>().Object);
 
-            Assert.AreEqual<int>(1, registry.Get<string>().Count(), "Registry has 1 StringMessageHandler");
-            Assert.AreEqual<int>(2, registry.Get<int>().Count(), "Registry has 2 IntegerMessageHandlers");
+            Assert.Equal(1, registry.Get<string>().Count());
+            Assert.Equal(2, registry.Get<int>().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Get_RetrievesRegisteredHandlersByType_UsingDynamicallyTypedObjects()
         {
             var registry = new MessageHandlerRegistry();
@@ -30,7 +29,7 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
             registry.Register(itemOne.GetType(), itemOne);
             registry.Register(itemTwo.GetType(), itemTwo);
 
-            Assert.AreEqual<int>(2, registry.Get(itemOne.GetType()).Count(), "Registry has 2 String-Type Items");
+            Assert.Equal(2, registry.Get(itemOne.GetType()).Count());
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Web.Helpers;
 using EPiServer.Core;
 using System;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-    [TestClass]
     public class UIHelperTests
     {
         private Mock<IServiceLocator> _serviceLocator;
@@ -23,7 +22,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             return new UIHelper(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Get_ContentCallsServiceLocator()
         {
             var helper = GetUnitUnderTest();
@@ -36,7 +35,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _serviceLocator.Verify(sl => sl.GetInstance<IContentRepository>(), Times.Once, "GetInstance was never called");
         }
 
-        [TestMethod]
+        [Fact]
         public void Get_ContentCallsContentRepository()
         {
             Guid theGuid = Guid.NewGuid();
@@ -44,7 +43,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _contentrepository.Verify(cr => cr.Get<IContent>(It.Is<Guid>(arg => arg.Equals(theGuid))), Times.Once, "content repository get was never called");
         }
 
-        [TestMethod]
+        [Fact]
         public void Get_ContentCallsContentRepositoryAndReturnsContentNotFound()
         {
             Guid theGuid = Guid.NewGuid();
@@ -53,7 +52,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _contentrepository.Verify(cr => cr.Get<IContent>(It.Is<Guid>(arg => arg.Equals(theGuid))), Times.Once, "content repository get was never called");
 
             // Now verify the name of the content returned (should be what the api specifies - ContentNotFound)
-            Assert.AreEqual(content.Name, "ContentNotFound", false, "Name of content was unexpected");
+            Assert.Equal(content.Name, "ContentNotFound", false);
         }
     }
 }

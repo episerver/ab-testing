@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using EPiServer.Marketing.Messaging;
+﻿using EPiServer.Marketing.Messaging;
+using Xunit;
 
-namespace EPiServer.ConnectForSharePoint.Test.Messaging
+namespace EPiServer.Marketing.Test.Messaging
 {
-    [TestClass]
     public class FanOutMessageDispatcherTests
     {
-        [TestMethod]
+        [Fact]
         public void Dispatch_DispatchesToHandlerWithOverloadedHandleStringMethod()
         {
             var handlerRegistry = new MessageHandlerRegistry();
@@ -18,10 +17,10 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
 
             dispatcher.Dispatch("hi");
 
-            Assert.AreEqual<string>("hi", overloadedHandler.FoundMessage.ToString(), "Message dispatched to expected handler");
+            Assert.Equal("hi", overloadedHandler.FoundMessage.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void Dispatch_DispatchesToHandlerWithOverloadedHandleIntMethod()
         {
             int testNumber = 123;
@@ -36,11 +35,11 @@ namespace EPiServer.ConnectForSharePoint.Test.Messaging
 
             dispatcher.Dispatch(testNumber);
 
-            Assert.AreEqual<int>(testNumber, (int)overloadedHandler.FoundMessage);
+            Assert.Equal(testNumber, (int)overloadedHandler.FoundMessage);
 
             dispatcher.Dispatch(testString);
 
-            Assert.AreEqual<string>(testString, (string)overloadedHandler.FoundMessage);
+            Assert.Equal(testString, (string)overloadedHandler.FoundMessage);
         }
 
         private class OverloadedHandler : IMessageHandler<string>, IMessageHandler<int>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using EPiServer.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Multivariate.Web;
@@ -11,11 +10,11 @@ using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-    [TestClass]
-    [ExcludeFromCodeCoverage]
+        [ExcludeFromCodeCoverage]
     public class MultivariateAdministrationControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
@@ -86,7 +85,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             return new MultivariateAdministrationController(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_IndexAction_CallsTestRepositoryGetTestList()
         {
             var controller = GetUnitUnderTest();
@@ -97,35 +96,35 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "Multivariate Administration Controller Index Did Not Properly Call Repositories GetTestList");
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_CreateAction_ReturnsCreateViewWithId()
         {
             var controller = GetUnitUnderTest();
             var actionResult = controller.Create() as ViewResult;
 
-            Assert.IsInstanceOfType(actionResult, typeof(ViewResult));
+            Assert.IsAssignableFrom(typeof(ViewResult),actionResult);
 
             ViewDataDictionary viewResult = controller.ViewData;
 
-            Assert.IsTrue(viewResult.Keys.Contains("TestGuid"));
+            Assert.True(viewResult.Keys.Contains("TestGuid"));
 
             Guid convertedGuid;
 
-            Assert.IsTrue(Guid.TryParse(viewResult["TestGuid"].ToString(), out convertedGuid));
+            Assert.True(Guid.TryParse(viewResult["TestGuid"].ToString(), out convertedGuid));
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_CreateWithNullModel_CallsTestRepository_ReturnsCreateView()
         {
             var controller = GetUnitUnderTest();
 
             var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
 
-            Assert.IsTrue(actionResult != null);
-            Assert.AreEqual("Create", actionResult.ViewName);
+            Assert.NotNull(actionResult);
+            Assert.Equal("Create", actionResult.ViewName);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_CreateWithInvalidModel_CallsTestRepository_ReturnsCreateView()
         {
             var controller = GetUnitUnderTest();
@@ -133,11 +132,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             controller.ModelState.AddModelError("EndDate", "error");
             var actionResult = controller.Create(viewdata) as ViewResult;
 
-            Assert.IsTrue(actionResult != null);
-            Assert.AreEqual("Create", actionResult.ViewName);
+            Assert.NotNull(actionResult);
+            Assert.Equal("Create", actionResult.ViewName);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_CreateWithActiveTest_RemovesValidationCheckOnFieldsOtherThanEndDate_ReturnsCreateView()
         {
             var controller = GetUnitUnderTest();
@@ -149,11 +148,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
               Times.Once, "Controller did not call repository to create test");
 
-            Assert.IsTrue(redirectResult != null);
-            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
+            Assert.NotNull(redirectResult);
+            Assert.Equal("Index", redirectResult.RouteValues["Action"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_CreateWithNonActiveTest_KeepsTheValidationCheckOnStartDate_ReturnsCreateView()
         {
             var controller = GetUnitUnderTest();
@@ -162,11 +161,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             controller.ModelState.AddModelError("StartDate", "error");
             var actionResult = controller.Create(viewdata) as ViewResult;
 
-            Assert.IsTrue(actionResult != null);
-            Assert.AreEqual("Create", actionResult.ViewName);
+            Assert.NotNull(actionResult);
+            Assert.Equal("Create", actionResult.ViewName);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_CreateWithValidModel_CallsTestRepository_ReturnsIndex()
         {
             var controller = GetUnitUnderTest();
@@ -176,11 +175,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
                 Times.Once, "Controller did not call repository to create test");
 
-            Assert.IsTrue(redirectResult != null);
-            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
+            Assert.NotNull(redirectResult);
+            Assert.Equal("Index", redirectResult.RouteValues["Action"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_EditWithId_CallsTestRepository_ReturnsCreate()
         {
             var controller = GetUnitUnderTest();
@@ -190,30 +189,30 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testRepository.Verify(tr => tr.GetTestById(It.IsAny<Guid>()),
                 Times.Once, "Controller did not call repository to create test");
 
-            Assert.IsTrue(actionResult != null);
-            Assert.AreEqual("Create", actionResult.ViewName);
+            Assert.NotNull(actionResult);
+            Assert.Equal("Create", actionResult.ViewName);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_DeleteWithId_CallsTestRepository_ReturnsIndex()
         {
             var controller = GetUnitUnderTest();
             string testGuid = Guid.NewGuid().ToString();
             var redirectResult = controller.Delete(testGuid) as RedirectToRouteResult;
 
-            Assert.IsTrue(redirectResult != null);
-            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
+            Assert.NotNull(redirectResult);
+            Assert.Equal("Index", redirectResult.RouteValues["Action"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdministrationController_StopWithId_CallsTestRepository_ReturnsIndex()
         {
             var controller = GetUnitUnderTest();
             string testGuid = Guid.NewGuid().ToString();
             var redirectResult = controller.Delete(testGuid) as RedirectToRouteResult;
 
-            Assert.IsTrue(redirectResult != null);
-            Assert.AreEqual("Index", redirectResult.RouteValues["Action"]);
+            Assert.NotNull(redirectResult);
+            Assert.Equal("Index", redirectResult.RouteValues["Action"]);
         }
     }
 }
