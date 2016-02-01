@@ -5,7 +5,7 @@ using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class MultivariateTestResultMap : EntityTypeConfiguration<MultivariateTestResult>
+    public class MultivariateTestResultMap : EntityTypeConfiguration<TestResult>
     {
         public MultivariateTestResultMap()
         {

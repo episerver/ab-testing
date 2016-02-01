@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         List<IABTest> GetTestByItemId(Guid originalItemId);
 
-        List<IABTest> GetTestList(MultivariateTestCriteria criteria);
+        List<IABTest> GetTestList(TestCriteria criteria);
 
         Guid Save(IABTest testObject);
 

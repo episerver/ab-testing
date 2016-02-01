@@ -44,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Dal
             return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
         }
 
-        public List<IABTest> GetTestList(MultivariateTestCriteria criteria)
+        public List<IABTest> GetTestList(TestCriteria criteria)
         {
             // if no filters are passed in, just return all tests
             var filters = criteria.GetFilters();
