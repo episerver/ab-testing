@@ -1,8 +1,8 @@
 ﻿using EPiServer.Core;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Web.Models;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Moq;
 using System;

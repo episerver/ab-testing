@@ -1,7 +1,7 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<EPiServer.Marketing.Multivariate.Web.Models.ABTestViewModel>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<EPiServer.Marketing.Testing.Web.Models.ABTestViewModel>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Testing.Model" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Helpers" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html"%>
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.ServiceLocation" %>

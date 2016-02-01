@@ -9,7 +9,7 @@ using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.ServiceLocation;
 
-namespace EPiServer.Marketing.Multivariate.Web.Models
+namespace EPiServer.Marketing.Testing.Web.Models
 {
     internal class UnassignedTestAttribute : ValidationAttribute
     {

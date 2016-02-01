@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Testing.Web.Models;
 
-namespace EPiServer.Marketing.Multivariate.Web.Repositories
+namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     public interface ITestRepository
     {

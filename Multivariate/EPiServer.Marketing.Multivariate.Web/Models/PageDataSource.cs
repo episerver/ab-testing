@@ -10,7 +10,7 @@ using EPiServer.UI.WebControls.ContentDataSource;
 using EPiServer.Web;
 using EPiServer.Web.WebControls;
 
-namespace EPiServer.Marketing.Multivariate.Web.Models
+namespace EPiServer.Marketing.Testing.Web.Models
 {
     [PersistChildren(false)]
     [ParseChildren(ChildrenAsProperties = true)]

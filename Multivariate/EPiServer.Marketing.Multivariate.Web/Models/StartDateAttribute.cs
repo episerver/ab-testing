@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace EPiServer.Marketing.Multivariate.Web.Models
+namespace EPiServer.Marketing.Testing.Web.Models
 {
     public class StartDateAttribute : ValidationAttribute
     {

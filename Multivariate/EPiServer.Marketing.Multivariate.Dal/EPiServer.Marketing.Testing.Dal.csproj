@@ -7,8 +7,8 @@
     <ProjectGuid>{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Marketing.Multivariate.Dal</RootNamespace>
-    <AssemblyName>EPiServer.Marketing.Multivariate.Dal</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.Testing.Dal</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.Testing.Dal</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

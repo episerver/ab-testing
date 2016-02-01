@@ -1,7 +1,7 @@
 ﻿using EPiServer.Core;
 using System;
 
-namespace EPiServer.Marketing.Multivariate.Web.Helpers
+namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public interface IUIHelper
     {

@@ -5,10 +5,10 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Web;
 using EPiServer.Editor;
 using EPiServer.Core;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Threading;
 
-namespace EPiServer.Marketing.Multivariate.Web.Initializer
+namespace EPiServer.Marketing.Testing.Web.Initializer
 {
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]

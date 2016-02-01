@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Multivariate.Web.Models;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Model.Enums;
 
-namespace EPiServer.Marketing.Multivariate.Web
+namespace EPiServer.Marketing.Testing.Web
 {
-    [GuiPlugIn(DisplayName = "Multivariate Test Configuration", UrlFromModuleFolder = "MultivariateAdministration", Area = PlugInArea.AdminConfigMenu)]
-    class MultivariateAdministrationController : Controller
+    [GuiPlugIn(DisplayName = "Multivariate Test Configuration", UrlFromModuleFolder = "TestingAdministration", Area = PlugInArea.AdminConfigMenu)]
+    class TestingAdministrationController : Controller
     {
         private IServiceLocator _serviceLocator;
         [ExcludeFromCodeCoverage]
-        public MultivariateAdministrationController()
+        public TestingAdministrationController()
         {
             _serviceLocator = ServiceLocator.Current;
         }
 
-        internal MultivariateAdministrationController(IServiceLocator serviceLocator)
+        internal TestingAdministrationController(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
         }

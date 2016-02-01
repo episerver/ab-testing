@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace EPiServer.Marketing.Multivariate.Web.Helpers
+namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class UIHelper : IUIHelper
     {
@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Helpers
             var baseUrl = EPiServer.UriSupport.ResolveUrlFromUIBySettings("Admin/");
 
             // out: /{PROTECTED_PATH}/{MODULE_NAME}/Views/Admin/Settings.aspx
-            var targetResourcePath = Paths.ToResource(typeof(UIHelper), "MultivariateAdministration");
+            var targetResourcePath = Paths.ToResource(typeof(UIHelper), "TestingAdministration");
 
             // out: http://{DOMAIN}/{PROTECTED_PATH}/CMS/Admin/?customdefaultpage=/{PROTECTED_PATH}/{MODULE_NAME}/Views/Admin/Settings.aspx
             return EPiServer.UriSupport.AddQueryString(baseUrl, "customdefaultpage", targetResourcePath);

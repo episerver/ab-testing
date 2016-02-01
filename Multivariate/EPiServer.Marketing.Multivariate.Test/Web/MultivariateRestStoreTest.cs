@@ -1,6 +1,6 @@
 ﻿using System;
 using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Multivariate.Web.Controllers;
+using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
@@ -9,13 +9,13 @@ using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-        public class MultivariateRestStoreTest
+        public class TestingRestStoreTest
     {
         private static Mock<IServiceLocator> _serviceLocator;
         private static Mock<ITestManager> _testManager;
         private static Mock<IMessagingManager> _messageManager;
 
-        private MultivariateRestStore GetUnitUnderTest()
+        private TestingRestStore GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _testManager = new Mock<ITestManager>();
@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(_messageManager.Object);
 
-            return new MultivariateRestStore(_serviceLocator.Object);
+            return new TestingRestStore(_serviceLocator.Object);
         }
 
         [Fact]

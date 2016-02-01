@@ -4,25 +4,25 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.Testing.Dal;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Testing.Web.Models;
 
-namespace EPiServer.Marketing.Multivariate.Web
+namespace EPiServer.Marketing.Testing.Web
 {
     [Gadget(Title = "Multivariate Test Report")]
-    class MultivariateGadgetController : Controller
+    class TestingGadgetController : Controller
     {
         private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
-        public MultivariateGadgetController()
+        public TestingGadgetController()
         {
             _serviceLocator = ServiceLocator.Current;
         }
 
-        internal MultivariateGadgetController(IServiceLocator serviceLocator)
+        internal TestingGadgetController(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
         }

@@ -1,6 +1,6 @@
 ﻿using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Web.Helpers;
+using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Core;
 using System;
 using Xunit;

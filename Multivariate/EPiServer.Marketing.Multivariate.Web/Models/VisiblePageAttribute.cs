@@ -4,7 +4,7 @@ using System.Web;
 using EPiServer.ServiceLocation;
 using EPiServer.Core;
 
-namespace EPiServer.Marketing.Multivariate.Web.Models
+namespace EPiServer.Marketing.Testing.Web.Models
 {
     public class VisiblePageAttribute : ValidationAttribute
     {

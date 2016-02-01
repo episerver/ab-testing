@@ -8,20 +8,20 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing;
 
-namespace EPiServer.Marketing.Multivariate.Web.Controllers
+namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     [RestStore("multivariatetests")]
-    class MultivariateRestStore : RestControllerBase
+    class TestingRestStore : RestControllerBase
     {
         private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
-        public MultivariateRestStore()
+        public TestingRestStore()
         {
             _serviceLocator = ServiceLocator.Current;
         }
 
-        internal MultivariateRestStore(IServiceLocator serviceLocator)
+        internal TestingRestStore(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
         }

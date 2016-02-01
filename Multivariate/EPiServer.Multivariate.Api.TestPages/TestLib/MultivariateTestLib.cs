@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.Testing;
 using EPiServer.Multivariate.Api.TestPages.Models;
 

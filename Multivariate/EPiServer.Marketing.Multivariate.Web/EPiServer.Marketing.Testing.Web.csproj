@@ -7,8 +7,8 @@
     <ProjectGuid>{CB8500E5-9999-4E35-97D6-142E87857E6A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Marketing.Multivariate.Web</RootNamespace>
-    <AssemblyName>EPiServer.Marketing.Multivariate.Web</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.Testing.Web</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.Testing.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -200,9 +200,9 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
-    <Compile Include="Controllers\MultivariateAdministrationController.cs" />
-    <Compile Include="Controllers\MultivariateGadgetController.cs" />
-    <Compile Include="Controllers\MultivariateRestStore.cs" />
+    <Compile Include="Controllers\TestingAdministrationController.cs" />
+    <Compile Include="Controllers\TestingGadgetController.cs" />
+    <Compile Include="Controllers\TestingRestStore.cs" />
     <Compile Include="Helpers\IUIHelper.cs" />
     <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="Initializer\Initializer.cs" />
@@ -221,20 +221,20 @@
     <Content Include="Scripts\DateTimePicker\jquery.datetimepicker.min.js" />
     <Content Include="Scripts\DateTimePicker\jquery.js" />
     <Content Include="Scripts\DateTimePicker\MIT-LICENSE.txt" />
-    <Content Include="Views\MultivariateAdministration\Create.ascx">
+    <Content Include="Views\TestingAdministration\Create.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Views\MultivariateAdministration\Index.ascx">
+    <Content Include="Views\TestingAdministration\Index.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Multivariate_EN.xml" />
-    <Content Include="Views\MultivariateAdministration\_details.ascx">
+    <EmbeddedResource Include="EmbeddedLangFiles\EpiServer_Testing_EN.xml" />
+    <Content Include="Views\TestingAdministration\_details.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Views\MultivariateGadget\Details.ascx">
+    <Content Include="Views\TestingGadget\Details.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="Views\MultivariateGadget\Index.ascx">
+    <Content Include="Views\TestingGadget\Index.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Compile Include="Models\PageDataSource.cs" />
@@ -273,20 +273,20 @@
     <PostBuildEvent>IF exist "$(SolutionDir)Deployment\lib\" ( rmdir "$(SolutionDir)Deployment\lib" /s /q )
 mkdir "$(SolutionDir)Deployment\lib"
 xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
-xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Dal*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
-xcopy "$(TargetDir)"\EPiServer.Marketing.Multivariate.Core*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Marketing.Testing.DAL*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
+xcopy "$(TargetDir)"\EPiServer.Marketing.Testing.Core*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 xcopy "$(TargetDir)"\EPiServer.Marketing.Testing.Model*dll "$(SolutionDir)Deployment\lib\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration"
-xcopy "$(ProjectDir)"\Views\MultivariateAdministration\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateAdministration\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration"
+xcopy "$(ProjectDir)"\Views\TestingAdministration\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget"
-xcopy "$(ProjectDir)"\Views\MultivariateGadget\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\MultivariateGadget\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget"
+xcopy "$(ProjectDir)"\Views\TestingGadget\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
@@ -298,7 +298,7 @@ xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles"
-xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Multivariate_EN.xml "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles\"  /I /F /R /Y
+xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Testing_EN.xml "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" /s /q )
 mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"

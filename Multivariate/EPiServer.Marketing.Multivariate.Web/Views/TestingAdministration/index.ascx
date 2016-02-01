@@ -1,4 +1,4 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Multivariate.Web.Models.ABTestViewModel>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Testing.Web.Models.ABTestViewModel>>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
@@ -6,8 +6,8 @@
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.ServiceLocation" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Helpers" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Import Namespace="EPiServer.Marketing.Testing.Model.Enums" %>
 <%@ Import Namespace="EPiServer.Framework.Localization" %>
@@ -64,7 +64,7 @@
                   });
 
                 $('#btnCreate')
-                   .click(function () { location.href = '<%= Url.Action("Create","MultivariateAdministration") %>'; });
+                   .click(function () { location.href = '<%= Url.Action("Create","TestingAdministration") %>'; });
 
                 $('.btnDelete').click(function () {
                     return confirm('Are you sure you want to delete this test?\nThis cannot be undone.');

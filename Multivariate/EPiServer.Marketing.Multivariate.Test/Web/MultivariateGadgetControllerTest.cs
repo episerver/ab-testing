@@ -1,25 +1,25 @@
 ﻿using System;
 using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Web;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.Testing.Model;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-        public class MultivariateGadgetControllerTest
+        public class TestingGadgetControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestRepository> _testRepository;
 
-        private MultivariateGadgetController GetUnitUnderTest()
+        private TestingGadgetController GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _testRepository = new Mock<ITestRepository>();
             _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
 
-            return new MultivariateGadgetController(_serviceLocator.Object);
+            return new TestingGadgetController(_serviceLocator.Object);
         }
 
 

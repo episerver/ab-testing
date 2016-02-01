@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Validation;
 
 namespace EPiServer.Multivariate.Api.TestPages.Models

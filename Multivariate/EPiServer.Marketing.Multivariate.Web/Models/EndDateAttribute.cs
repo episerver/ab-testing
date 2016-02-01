@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
-namespace EPiServer.Marketing.Multivariate.Web.Models
+namespace EPiServer.Marketing.Testing.Web.Models
 {
     /// <summary>
     ///     Validation attribute for multivariate test Start Date which

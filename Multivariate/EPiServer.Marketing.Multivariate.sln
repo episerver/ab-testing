@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Web", "EPiServer.Marketing.Multivariate.Web\EPiServer.Marketing.Multivariate.Web.csproj", "{CB8500E5-9999-4E35-97D6-142E87857E6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.Web", "EPiServer.Marketing.Multivariate.Web\EPiServer.Marketing.Testing.Web.csproj", "{CB8500E5-9999-4E35-97D6-142E87857E6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Test", "EPiServer.Marketing.Multivariate.Test\EPiServer.Marketing.Multivariate.Test.csproj", "{5391A93B-A17B-425E-B511-71CBA13E710F}"
 	ProjectSection(ProjectDependencies) = postProject

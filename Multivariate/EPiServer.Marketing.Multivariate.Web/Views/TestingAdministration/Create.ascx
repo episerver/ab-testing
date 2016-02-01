@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<EPiServer.Marketing.Multivariate.Web.Models.ABTestViewModel>" %>
+﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<EPiServer.Marketing.Testing.Web.Models.ABTestViewModel>" %>
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
@@ -7,10 +7,10 @@
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Web.WebControls" %>
 <%@ Import Namespace="EPiServer.Marketing.Testing.Model.Enums" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Helpers" %>
 <%@ Register TagPrefix="EPiServer" Assembly="EpiServer" Namespace="EPiServer.Web.WebControls" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
-<%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Multivariate.Web.Models" Assembly="EPiServer.Marketing.Multivariate.Web" %>
+<%@ Register TagPrefix="EPiServerUIDataSource" Namespace="EPiServer.Marketing.Testing.Web.Models" Assembly="EPiServer.Marketing.Testing.Web" %>
 
 <!DOCTYPE html>
 
@@ -103,11 +103,11 @@
             var cancelClick = function (validate) {
                 if (validate)
                     if (confirm(cancelMessage)) {
-                        location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                        location.href = '<%= Url.Action("Index","TestingAdministration") %>';
                     } else {
                         return false;
                     }
-                location.href = '<%= Url.Action("Index","MultivariateAdministration") %>';
+                location.href = '<%= Url.Action("Index","TestingAdministration") %>';
             };
         </script>
     </asp:PlaceHolder>
@@ -128,7 +128,7 @@
             <fieldset>
                 <legend><%= LanguageManager.Instance.Translate("/multivariate/settings/form/legendtitle")%>
                 </legend>
-                <% using (Html.BeginForm("Create", "MultivariateAdministration", FormMethod.Post, new { id = "mvtForm" }))
+                <% using (Html.BeginForm("Create", "TestingAdministration", FormMethod.Post, new { id = "mvtForm" }))
                     { %>
                 <% if (Model != null)
                     { %>

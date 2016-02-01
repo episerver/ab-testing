@@ -5,13 +5,13 @@ using EPiServer.Core;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Testing.Web.Models;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.Security;
 
-namespace EPiServer.Marketing.Multivariate.Web.Repositories
+namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     [ServiceConfiguration(ServiceType = typeof(ITestRepository))]
     public class TestRepository : ITestRepository

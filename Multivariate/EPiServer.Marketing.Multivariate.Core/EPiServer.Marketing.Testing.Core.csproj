@@ -7,8 +7,8 @@
     <ProjectGuid>{CC88EFFF-8474-401B-87F8-EC4DB6BA8633}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Marketing.Multivariate.Core</RootNamespace>
-    <AssemblyName>EPiServer.Marketing.Multivariate.Core</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.Testing.Core</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.Testing.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

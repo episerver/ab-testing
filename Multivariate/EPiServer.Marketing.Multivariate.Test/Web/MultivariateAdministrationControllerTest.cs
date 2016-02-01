@@ -5,18 +5,18 @@ using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Web;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
         [ExcludeFromCodeCoverage]
-    public class MultivariateAdministrationControllerTest
+    public class TestingAdministrationControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestRepository> _testRepository;
@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         };
 
 
-        private MultivariateAdministrationController GetUnitUnderTest()
+        private TestingAdministrationController GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _testRepository = new Mock<ITestRepository>();
@@ -83,7 +83,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
-            return new MultivariateAdministrationController(_serviceLocator.Object);
+            return new TestingAdministrationController(_serviceLocator.Object);
         }
 
         [Fact]
