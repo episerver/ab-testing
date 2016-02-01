@@ -5,13 +5,13 @@ using EPiServer.Marketing.Testing.Model.Enums;
 
 namespace EPiServer.Marketing.Testing
 {
-    public interface IMultivariateTestManager
+    public interface ITestManager
     {
         IABTest Get(Guid testObjectId);
 
         List<IABTest> GetTestByItemId(Guid originalItemId);
 
-        List<IABTest> GetTestList(MultivariateTestCriteria criteria);
+        List<IABTest> GetTestList(TestCriteria criteria);
 
         Guid Save(IABTest testObject);
 

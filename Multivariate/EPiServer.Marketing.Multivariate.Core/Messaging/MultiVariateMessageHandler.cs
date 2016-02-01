@@ -13,13 +13,13 @@ namespace EPiServer.Marketing.Testing.Messaging
     class MultiVariateMessageHandler : IMultiVariateMessageHandler
     {
         private IServiceLocator _serviceLocator;
-        internal IMultivariateTestManager _testManager;
+        internal ITestManager _testManager;
 
         [ExcludeFromCodeCoverage]
         public MultiVariateMessageHandler()
         {
             _serviceLocator = ServiceLocator.Current;
-            _testManager = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            _testManager = _serviceLocator.GetInstance<ITestManager>();
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         internal MultiVariateMessageHandler(IServiceLocator locator)
         {
             _serviceLocator = locator;
-            _testManager = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            _testManager = _serviceLocator.GetInstance<ITestManager>();
         }
 
         public void Handle(UpdateViewsMessage message)

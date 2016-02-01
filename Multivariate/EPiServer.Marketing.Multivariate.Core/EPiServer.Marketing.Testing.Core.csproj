@@ -185,8 +185,8 @@
     <Compile Include="..\AssemblyVersionAuto.cs">
       <Link>AssemblyVersionAuto.cs</Link>
     </Compile>
-    <Compile Include="Core\IMultivariateTestManager.cs" />
-    <Compile Include="Core\MultivariateTestManager.cs" />
+    <Compile Include="Core\ITestManager.cs" />
+    <Compile Include="Core\TestManager.cs" />
     <Compile Include="Messaging\IMessagingManager.cs" />
     <Compile Include="Messaging\IMultiVariateMessageHandler.cs" />
     <Compile Include="Messaging\MessagingManager.cs" />

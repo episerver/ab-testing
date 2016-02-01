@@ -9,20 +9,20 @@ using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing
 {
-    [ServiceConfiguration(ServiceType = typeof(IMultivariateTestManager))]
-    public class MultivariateTestManager : IMultivariateTestManager
+    [ServiceConfiguration(ServiceType = typeof(ITestManager))]
+    public class TestManager : ITestManager
     {
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
 
         [ExcludeFromCodeCoverage]
-        public MultivariateTestManager()
+        public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
         }
-        internal MultivariateTestManager(IServiceLocator serviceLocator)
+        internal TestManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing
             return _dataAccess.GetTestByItemId(originalItemId);
         }
 
-        public List<IABTest> GetTestList(MultivariateTestCriteria criteria)
+        public List<IABTest> GetTestList(TestCriteria criteria)
         {
             return _dataAccess.GetTestList(criteria);
         }
