@@ -8,6 +8,7 @@ using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories

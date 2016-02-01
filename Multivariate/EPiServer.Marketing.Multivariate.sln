@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Web", "EPiServer.Marketing.Multivariate.Web\EPiServer.Marketing.Multivariate.Web.csproj", "{CB8500E5-9999-4E35-97D6-142E87857E6A}"
 EndProject
@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multiva
 		{CB8500E5-9999-4E35-97D6-142E87857E6A} = {CB8500E5-9999-4E35-97D6-142E87857E6A}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Core", "EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Multivariate.Core.csproj", "{CC88EFFF-8474-401B-87F8-EC4DB6BA8633}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.Core", "EPiServer.Marketing.Multivariate.Core\EPiServer.Marketing.Testing.Core.csproj", "{CC88EFFF-8474-401B-87F8-EC4DB6BA8633}"
 	ProjectSection(ProjectDependencies) = postProject
 		{167D31D8-063C-48CA-84EC-0D136BAED1F8} = {167D31D8-063C-48CA-84EC-0D136BAED1F8}
 	EndProjectSection

@@ -1,11 +1,13 @@
 ﻿using System;
 using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Messaging;
+using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Messaging;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Messaging

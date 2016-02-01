@@ -10,6 +10,7 @@ using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
+using EPiServer.Marketing.Testing;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web

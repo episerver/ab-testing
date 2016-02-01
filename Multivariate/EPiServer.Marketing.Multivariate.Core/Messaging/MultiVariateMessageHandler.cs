@@ -1,8 +1,10 @@
 ﻿using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Messaging;
 
-namespace EPiServer.Marketing.Multivariate.Messaging
+namespace EPiServer.Marketing.Testing.Messaging
 {
     /// <summary>
     /// The message handler simply handles the messages and passes them on the registered

@@ -1,10 +1,10 @@
 ﻿using System;
-using Moq;
-using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.Marketing.Multivariate.Messaging;
-using EPiServer.Marketing.Multivariate.Web.Controllers;
 using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Multivariate.Web.Controllers;
+using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.ServiceLocation;
+using Moq;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web

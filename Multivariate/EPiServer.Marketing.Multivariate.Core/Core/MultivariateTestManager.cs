@@ -5,9 +5,9 @@ using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
-using EPiServer.Marketing.Multivariate.Messaging;
+using EPiServer.Marketing.Testing.Messaging;
 
-namespace EPiServer.Marketing.Multivariate
+namespace EPiServer.Marketing.Testing
 {
     [ServiceConfiguration(ServiceType = typeof(IMultivariateTestManager))]
     public class MultivariateTestManager : IMultivariateTestManager

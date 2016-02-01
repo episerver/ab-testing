@@ -8,6 +8,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
