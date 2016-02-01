@@ -7,7 +7,7 @@ using EPiServer.Marketing.Testing.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models
 {
-    public class MultivariateTestViewModel
+    public class ABTestViewModel
     {
 
         public Guid id { get; set; }
@@ -46,6 +46,6 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
         public DateTime DateModified { get; set; }
 
 
-        public IList<MultivariateTestResult> TestResults { get; set; }
+        public IList<TestResult> TestResults { get; set; }
     }
 }

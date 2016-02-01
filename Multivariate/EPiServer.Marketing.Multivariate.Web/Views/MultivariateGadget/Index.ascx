@@ -1,4 +1,4 @@
-<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<EPiServer.Marketing.Multivariate.Web.Models.MultivariateTestViewModel>>" %>
+<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IList<EPiServer.Marketing.Multivariate.Web.Models.ABTestViewModel>>" %>
 <%@ Import Namespace="EPiServer.Marketing.Testing.Model" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
@@ -50,13 +50,13 @@
 	
 	<%  
         UIHelper helper = new UIHelper();
-        IMultivariateTestRepository repo = ServiceLocator.Current.GetInstance<IMultivariateTestRepository>();
+        ITestRepository repo = ServiceLocator.Current.GetInstance<ITestRepository>();
 
         foreach (var item in Model) {
             var winner = repo.GetWinningTestResult(item);
-		    int rate = 0;
-		    if( winner.Views != 0 )
-			    rate = (int)(winner.Conversions * 100.0 / winner.Views);
+            int rate = 0;
+            if( winner.Views != 0 )
+                rate = (int)(winner.Conversions * 100.0 / winner.Views);
             %>
 	<tr>
         <td><%= item.Title%></td>

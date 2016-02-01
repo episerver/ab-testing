@@ -32,8 +32,8 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Index()
         {
-            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            return View(testRepository.GetTestList(new MultivariateTestCriteria()));
+            ITestRepository testRepository = _serviceLocator.GetInstance<ITestRepository>();
+            return View(testRepository.GetTestList(new TestCriteria()));
         }
 
         public ActionResult Create()
@@ -43,7 +43,7 @@ namespace EPiServer.Marketing.Multivariate.Web
         }
 
         [HttpPost]
-        public ActionResult Create(MultivariateTestViewModel testSettings)
+        public ActionResult Create(ABTestViewModel testSettings)
         {
             if (testSettings == null)
             {
@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Multivariate.Web
             }
             else
             {
-                IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+                ITestRepository testRepository = _serviceLocator.GetInstance<ITestRepository>();
                 testRepository.CreateTest(testSettings);
                 return RedirectToAction("Index");
             }
@@ -78,14 +78,14 @@ namespace EPiServer.Marketing.Multivariate.Web
         [HttpGet]
         public ActionResult Edit(string id)
         {
-            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            ITestRepository testRepository = _serviceLocator.GetInstance<ITestRepository>();
 
             return View("Create", testRepository.GetTestById(Guid.Parse(id)));
         }
 
         public ActionResult Delete(string id)
         {
-            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            ITestRepository testRepository = _serviceLocator.GetInstance<ITestRepository>();
             testRepository.DeleteTest(Guid.Parse(id));
             return RedirectToAction("Index");
         }
@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Stop(string id)
         {
-            IMultivariateTestRepository testRepository = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            ITestRepository testRepository = _serviceLocator.GetInstance<ITestRepository>();
             testRepository.StopTest(Guid.Parse(id));
             return RedirectToAction("Index");
         }

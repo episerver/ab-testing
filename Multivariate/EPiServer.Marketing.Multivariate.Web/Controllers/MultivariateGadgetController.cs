@@ -29,18 +29,18 @@ namespace EPiServer.Marketing.Multivariate.Web
 
         public ActionResult Index()
         {
-            IMultivariateTestRepository testRepo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
-            return PartialView(testRepo.GetTestList(new MultivariateTestCriteria()));
+            ITestRepository testRepo = _serviceLocator.GetInstance<ITestRepository>();
+            return PartialView(testRepo.GetTestList(new TestCriteria()));
         }
 
         public ActionResult Details(string id)
         {
             var testId = Guid.Parse(id);
-            IMultivariateTestRepository testRepo = _serviceLocator.GetInstance<IMultivariateTestRepository>();
+            ITestRepository testRepo = _serviceLocator.GetInstance<ITestRepository>();
             var test = testRepo.GetTestById(testId);
 
             // will we ever show details of a list of tests?
-            List<MultivariateTestViewModel> list = new List<MultivariateTestViewModel>();
+            List<ABTestViewModel> list = new List<ABTestViewModel>();
             list.Add(test);
             return PartialView(list);
         }

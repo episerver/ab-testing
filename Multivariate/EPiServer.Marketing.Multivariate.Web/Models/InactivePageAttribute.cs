@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Models
             if (value != null)
             {
                 var contentrepo = ServiceLocator.Current.GetInstance<IContentRepository>();
-                var testManagerRepo = ServiceLocator.Current.GetInstance<IMultivariateTestManager>();
+                var testManagerRepo = ServiceLocator.Current.GetInstance<ITestManager>();
                 var itemValue = int.Parse(value.ToString());
 
                 // need to get guid for pages from the page picker content id's we get

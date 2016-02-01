@@ -13,8 +13,8 @@ using EPiServer.Security;
 
 namespace EPiServer.Marketing.Multivariate.Web.Repositories
 {
-    [ServiceConfiguration(ServiceType = typeof(IMultivariateTestRepository))]
-    public class MultivariateTestRepository : IMultivariateTestRepository
+    [ServiceConfiguration(ServiceType = typeof(ITestRepository))]
+    public class TestRepository : ITestRepository
     {
         private IServiceLocator _serviceLocator;
         
@@ -22,7 +22,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// Default constructor
         /// </summary>
         [ExcludeFromCodeCoverage]
-        public MultivariateTestRepository()
+        public TestRepository()
         {
             _serviceLocator = ServiceLocator.Current;
         }
@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// For unit testing
         /// </summary>
         /// <param name="locator"></param>
-        internal MultivariateTestRepository(IServiceLocator locator)
+        internal TestRepository(IServiceLocator locator)
         {
             _serviceLocator = locator;
         }
@@ -41,9 +41,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// Creates or modifies a test based on supplied multivariate test data
         /// </summary>
         /// <param name="testData"></param>
-        public Guid CreateTest(MultivariateTestViewModel testData)
+        public Guid CreateTest(ABTestViewModel testData)
         {
-            var tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            var tm = _serviceLocator.GetInstance<ITestManager>();
 
             //attempt to get a saved test based on incomming id
             MultivariateTest test = tm.Get(testData.id) as MultivariateTest;
@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// <param name="testuGuid">The GUID of the test to be deleted.</param>
         public void DeleteTest(Guid testuGuid)
         {
-            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
             tm.Delete(testuGuid);
         }
         
@@ -102,9 +102,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="criteria">Criteria to filter on.</param>
         /// <returns>Filtered IMultivariate test list</returns>
-        public List<MultivariateTestViewModel> GetTestList(MultivariateTestCriteria criteria)
+        public List<ABTestViewModel> GetTestList(TestCriteria criteria)
         {
-            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
 
             return (from MultivariateTest test in tm.GetTestList(criteria) select ConvertToViewModel(test)).ToList();
         }
@@ -114,9 +114,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="testId"></param>
         /// <returns>MultivariateTest</returns>
-        public MultivariateTestViewModel GetTestById(Guid testId)
+        public ABTestViewModel GetTestById(Guid testId)
         {
-            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
 
             return ConvertToViewModel(tm.Get(testId));
         }
@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="testToConvert"></param>
         /// <returns>MulviaraiteTestViewmodel</returns>
-        public MultivariateTestViewModel ConvertToViewModel(IABTest testToConvert)
+        public ABTestViewModel ConvertToViewModel(IABTest testToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 
@@ -136,7 +136,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
             var originalItemRef = contentrepo.Get<IContent>(testToConvert.OriginalItemId);
             var variantItemRef = contentrepo.Get<IContent>(testToConvert.Variants[0].VariantId);
 
-            MultivariateTestViewModel testModel = new MultivariateTestViewModel()
+            ABTestViewModel testModel = new ABTestViewModel()
             {
                 id = testToConvert.Id,
                 Title = testToConvert.Title,
@@ -166,7 +166,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="viewModelToConvert"></param>
         /// <returns>MulviaraiteTestViewmodel</returns>
-        public MultivariateTest ConvertToMultivariateTest(MultivariateTestViewModel viewModelToConvert)
+        public MultivariateTest ConvertToMultivariateTest(ABTestViewModel viewModelToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 
@@ -190,10 +190,10 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
                 {
                     new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid()},
                 },
-                MultivariateTestResults = new List<MultivariateTestResult>()
+                MultivariateTestResults = new List<TestResult>()
                 {
-                    new MultivariateTestResult() {Id = Guid.NewGuid(), ItemId = originalItemRef.ContentGuid},
-                    new MultivariateTestResult() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}
+                    new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemRef.ContentGuid},
+                    new TestResult() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}
                 }
             };
 
@@ -201,9 +201,9 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
 
         }
 
-        public MultivariateTestResult GetWinningTestResult(MultivariateTestViewModel test)
+        public TestResult GetWinningTestResult(ABTestViewModel test)
         {
-            var winningTest = new MultivariateTestResult(); // never return null
+            var winningTest = new TestResult(); // never return null
             winningTest.ItemId = test.OriginalItemId;       // set it to something incase no test results
                                                             // exist, i.e. the original is still winning!
             var currentConversionRate = 0.0;
@@ -229,7 +229,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// <param name="testGuid"></param>
         public void StopTest(Guid testGuid)
         {
-            IMultivariateTestManager tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
             tm.Stop(testGuid);
         }
     }

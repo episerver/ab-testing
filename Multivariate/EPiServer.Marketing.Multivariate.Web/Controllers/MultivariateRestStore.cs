@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Controllers
         [HttpGet]
         public RestResult Get(string id)
         {
-            var tm = _serviceLocator.GetInstance<IMultivariateTestManager>();
+            var tm = _serviceLocator.GetInstance<ITestManager>();
 
             if (id != null)
             { // return just one
@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Controllers
             }
             else
             { // return the entire list
-                return Rest(JsonConvert.SerializeObject(tm.GetTestList(new MultivariateTestCriteria()), Formatting.Indented,
+                return Rest(JsonConvert.SerializeObject(tm.GetTestList(new TestCriteria()), Formatting.Indented,
                 new JsonSerializerSettings
                 {
                     // Apparently there is some loop referenceing problem with the 
