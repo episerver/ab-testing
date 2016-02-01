@@ -2,7 +2,7 @@ using System;
 
 namespace EPiServer.Marketing.Testing.Model
 {
-    public class MultivariateTestResult : EntityBase
+    public class TestResult : EntityBase
     {
         public Guid Id { get; set; }
 

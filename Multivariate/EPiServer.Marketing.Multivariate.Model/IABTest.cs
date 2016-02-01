@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// List of test results. There will be a MultivariateTestResult for the OriginalItem and each Variant item.
         /// </summary>
-        IList<MultivariateTestResult> MultivariateTestResults { get; set; }
+        IList<TestResult> MultivariateTestResults { get; set; }
 
         /// <summary>
         /// List of key performance indicators.  These can be time on a page, form submission, etc.

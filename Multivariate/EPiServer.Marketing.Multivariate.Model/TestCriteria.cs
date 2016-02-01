@@ -2,9 +2,9 @@
 
 namespace EPiServer.Marketing.Testing.Model
 {
-    public class MultivariateTestCriteria
+    public class TestCriteria
     {
-        public MultivariateTestCriteria()
+        public TestCriteria()
         {
             filters = new List<MultivariateTestFilter>();
         }
