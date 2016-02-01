@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerGet()
+        public void TestManagerGet()
         {
             var id = Guid.NewGuid();
 
@@ -44,17 +44,17 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerGetTestListNoFilter()
+        public void TestManagerGetTestListNoFilter()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 2);
 
-            var list = _mtm.GetTestList(new MultivariateTestCriteria());
+            var list = _mtm.GetTestList(new TestCriteria());
             Assert.Equal(2, list.Count());
         }
 
         [Fact]
-        public void MultivariateTestManagerGetTestListVariantFilter()
+        public void TestManagerGetTestListVariantFilter()
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
@@ -62,7 +62,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
 
         [Fact]
-        public void MultivariateTestManagerGetTestListOneFilter()
+        public void TestManagerGetTestListOneFilter()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
@@ -80,7 +80,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[2].OriginalItemId = originalItemId;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
@@ -88,7 +88,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerGetTestListTwoFiltersAnd()
+        public void TestManagerGetTestListTwoFiltersAnd()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
@@ -97,7 +97,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[0].TestState = TestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
             var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Archived);
             criteria.AddFilter(filter);
@@ -107,7 +107,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerGetTestListTwoFiltersOr()
+        public void TestManagerGetTestListTwoFiltersOr()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
@@ -117,7 +117,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[2].TestState = TestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
             var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
             criteria.AddFilter(filter);
@@ -127,7 +127,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerGetTestListTwoFiltersAndVariant()
+        public void TestManagerGetTestListTwoFiltersAndVariant()
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
@@ -136,7 +136,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[1].TestState = TestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
             var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
             criteria.AddFilter(filter);
@@ -146,7 +146,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerGetTestListTwoFiltersOrVariant()
+        public void TestManagerGetTestListTwoFiltersOrVariant()
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
@@ -155,7 +155,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[1].TestState = TestState.Active;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.Or, variantItemId);
             var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
             criteria.AddFilter(filter);
@@ -167,7 +167,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerSave()
+        public void TestManagerSave()
         {
             var tests = AddMultivariateTests(_mtm, 1);
             var newTitle = "newTitle";
@@ -178,7 +178,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerDelete()
+        public void TestManagerDelete()
         {
             var tests = AddMultivariateTests(_mtm, 3);
 
@@ -189,7 +189,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerStart()
+        public void TestManagerStart()
         {
             var tests = AddMultivariateTests(_mtm, 1);
 
@@ -199,7 +199,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerStop()
+        public void TestManagerStop()
         {
             var tests = AddMultivariateTests(_mtm, 1);
             tests[0].TestState = TestState.Active;
@@ -211,7 +211,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerArchive()
+        public void TestManagerArchive()
         {
             var tests = AddMultivariateTests(_mtm, 1);
             tests[0].TestState = TestState.Active;
@@ -223,7 +223,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerIncrementCount()
+        public void TestManagerIncrementCount()
         {
             var testId = Guid.NewGuid();
             var itemId = Guid.NewGuid();
@@ -236,13 +236,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
-                MultivariateTestResults = new List<MultivariateTestResult>(),
+                MultivariateTestResults = new List<TestResult>(),
                 OriginalItemId = itemId
             };
 
             _mtm.Save(test);
 
-            var result = new MultivariateTestResult()
+            var result = new TestResult()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
@@ -267,7 +267,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void MultivariateTestManagerAddNoId()
+        public void TestManagerAddNoId()
         {
             var test = new MultivariateTest()
             {

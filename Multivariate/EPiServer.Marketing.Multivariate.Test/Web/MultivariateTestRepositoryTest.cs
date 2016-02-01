@@ -17,14 +17,14 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
     public class MultivariateTestRepositoryTest
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultivariateTestManager> _testmanager;
+        private Mock<ITestManager> _testmanager;
 
         static Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
         static Guid original = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE7");
         static Guid varient = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
         static Guid result1 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE5");
         static Guid result2 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE4");
-        MultivariateTestViewModel viewdata = new MultivariateTestViewModel()
+        ABTestViewModel viewdata = new ABTestViewModel()
         {
             id = theGuid,
             Title = "Title",
@@ -38,9 +38,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             VariantItemId = varient,
             OriginalItemDisplay = "Original Item",
             VariantItemDisplay = "Variant Item",
-            TestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1, ItemId = original },
-                    new MultivariateTestResult() { Id = result2, ItemId = varient }
+            TestResults = new List<TestResult>() {
+                    new TestResult() { Id = result1, ItemId = original },
+                    new TestResult() { Id = result2, ItemId = varient }
                 }
         };
 
@@ -54,18 +54,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItemId = original,
             TestState = TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient } },
-            MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1, ItemId = original },
-                    new MultivariateTestResult() { Id = result2, ItemId = varient }
+            MultivariateTestResults = new List<TestResult>() {
+                    new TestResult() { Id = result1, ItemId = original },
+                    new TestResult() { Id = result2, ItemId = varient }
                 }
         };
 
         private DateTime newEndDate = DateTime.Now;
 
-        private MultivariateTestRepository GetUnitUnderTest()
+        private TestRepository GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testmanager = new Mock<IMultivariateTestManager>();
+            _testmanager = new Mock<ITestManager>();
 
             // Setup the contentrepo so it simulates episerver returning content
             var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId, Name = viewdata.OriginalItemDisplay, ContentLink = new ContentReference() { ID = viewdata.OriginalItem } };
@@ -82,24 +82,24 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(contentRepo.Object);
 
-            return new MultivariateTestRepository(_serviceLocator.Object);
+            return new TestRepository(_serviceLocator.Object);
         }
 
         [Fact]
         public void GetWinningTestResult_ReturnsCorrectResult()
         {
-            MultivariateTestViewModel test = new MultivariateTestViewModel();
+            ABTestViewModel test = new ABTestViewModel();
 
-            var results = new List<MultivariateTestResult>();
+            var results = new List<TestResult>();
             Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
-            results.Add(new MultivariateTestResult() { Views = 100, Conversions = 90 });
-            results.Add(new MultivariateTestResult() { Views = 200, Conversions = 100 });
-            results.Add(new MultivariateTestResult() { Id = theGuid, Views = 300, Conversions = 300 });
-            results.Add(new MultivariateTestResult() { Views = 400, Conversions = 100 });
-            results.Add(new MultivariateTestResult() { Views = 500, Conversions = 200 });
+            results.Add(new TestResult() { Views = 100, Conversions = 90 });
+            results.Add(new TestResult() { Views = 200, Conversions = 100 });
+            results.Add(new TestResult() { Id = theGuid, Views = 300, Conversions = 300 });
+            results.Add(new TestResult() { Views = 400, Conversions = 100 });
+            results.Add(new TestResult() { Views = 500, Conversions = 200 });
             test.TestResults = results;
 
-            MultivariateTestRepository repo = GetUnitUnderTest();
+            TestRepository repo = GetUnitUnderTest();
 
             var winner = repo.GetWinningTestResult(test);
 
@@ -113,7 +113,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var repo = GetUnitUnderTest();
 
             // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
 
             repo.DeleteTest(theGuid);
 
@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
             var repo = GetUnitUnderTest();
 
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
 
             repo.StopTest(theGuid);
 
@@ -144,7 +144,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var repo = GetUnitUnderTest();
 
             // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
             _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
 
             repo.GetTestById(theGuid);
@@ -157,19 +157,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         [Fact]
         public void GetTestListCallsTestManagerWithProperCriteria()
         {
-            var criteria = new MultivariateTestCriteria();
+            var criteria = new TestCriteria();
             var repo = GetUnitUnderTest();
 
             List<IABTest> list = new List<IABTest>() { test };
 
             // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
-            _testmanager.Setup(tm => tm.GetTestList(It.IsAny<MultivariateTestCriteria>())).Returns(list);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
+            _testmanager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(list);
 
             repo.GetTestList(criteria);
 
             // Verify the testmanager was called by the repo with the proper argument
-            _testmanager.Verify(tm => tm.GetTestList(It.Is<MultivariateTestCriteria>(tc => tc.Equals(criteria))),
+            _testmanager.Verify(tm => tm.GetTestList(It.Is<TestCriteria>(tc => tc.Equals(criteria))),
                 Times.Once, "GetTestList did not call TestManager.GetTestList or TestManager.GetTestList was not called with expected values");
         }
 
@@ -198,7 +198,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var repo = GetUnitUnderTest();
 
             // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
 
             repo.CreateTest(viewdata);
 
@@ -213,7 +213,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var repo = GetUnitUnderTest();
 
             test.TestState = TestState.Inactive;
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
             _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
 
             repo.CreateTest(viewdata);
@@ -226,7 +226,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var repo = GetUnitUnderTest();
 
             test.TestState = TestState.Active;
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
             _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
             viewdata.EndDate = newEndDate;
             repo.CreateTest(viewdata);
@@ -242,7 +242,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var repo = GetUnitUnderTest();
 
             // Setup the service locator to return our mocked testmanager class
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
 
             // now create the test and verify data was mapped properly
             repo.CreateTest(viewdata);

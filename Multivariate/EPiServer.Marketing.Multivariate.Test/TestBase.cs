@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     Owner = "Bert" + i,
-                    MultivariateTestResults = new List<MultivariateTestResult>(),
+                    MultivariateTestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
                     Conversions = new List<Conversion>()
 
@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     Owner = "Bert" + i,
-                    MultivariateTestResults = new List<MultivariateTestResult>(),
+                    MultivariateTestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
                     Conversions = new List<Conversion>()
                 };
@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public void AddMultivariateTestResults(TestingDataAccess mtmManager, MultivariateTest multivariateTest, Guid itemId)
         {
-            var result = new MultivariateTestResult()
+            var result = new TestResult()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

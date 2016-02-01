@@ -5,12 +5,12 @@ using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Model
 {
-    public class MultivariateTestCriteriaTests
+    public class TestCriteriaTests
     {
         [Fact]
         public void Get_And_Add_Filter_Methods_Operate_On_The_Collection()
         {
-            var testCriteria = new MultivariateTestCriteria();
+            var testCriteria = new TestCriteria();
             var addedFilter = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
             testCriteria.AddFilter(addedFilter);
             var retFilters = testCriteria.GetFilters();
@@ -22,7 +22,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Model
         [Fact]
         public void AddFilter_Will_Not_Add_If_The_Property_Exists()
         {
-            var testCriteria = new MultivariateTestCriteria();
+            var testCriteria = new TestCriteria();
             var dupeFilter = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
 
             testCriteria.AddFilter(dupeFilter);

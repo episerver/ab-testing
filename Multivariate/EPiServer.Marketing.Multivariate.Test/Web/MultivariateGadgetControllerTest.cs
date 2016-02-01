@@ -11,13 +11,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         public class MultivariateGadgetControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultivariateTestRepository> _testRepository;
+        private Mock<ITestRepository> _testRepository;
 
         private MultivariateGadgetController GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testRepository = new Mock<IMultivariateTestRepository>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
+            _testRepository = new Mock<ITestRepository>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
 
             return new MultivariateGadgetController(_serviceLocator.Object);
         }
@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             controller.Index();
 
             // Verify the testmanager was called by the repo with the proper argument
-            _testRepository.Verify(tr=> tr.GetTestList(It.IsAny<MultivariateTestCriteria>()),
+            _testRepository.Verify(tr=> tr.GetTestList(It.IsAny<TestCriteria>()),
                 Times.Once, "GadgetController did not call GetTestList");
 
         }

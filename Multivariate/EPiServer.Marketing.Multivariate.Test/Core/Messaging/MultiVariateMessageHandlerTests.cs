@@ -15,7 +15,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         public class MultiVariateMessageHandlerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultivariateTestManager> _testManager;
+        private Mock<ITestManager> _testManager;
 
         static Guid testGuid = Guid.NewGuid();
         static Guid original = Guid.NewGuid();
@@ -25,18 +25,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         {
             Id = testGuid,
             Title = "SomeTest",
-            MultivariateTestResults = new List<MultivariateTestResult>() {
-                new MultivariateTestResult() { ItemId = original, Conversions = 5, Views = 10 },
-                new MultivariateTestResult() { ItemId = varient, Conversions = 100, Views = 200 },
-                new MultivariateTestResult() { }
+            MultivariateTestResults = new List<TestResult>() {
+                new TestResult() { ItemId = original, Conversions = 5, Views = 10 },
+                new TestResult() { ItemId = varient, Conversions = 100, Views = 200 },
+                new TestResult() { }
             }
         };
 
         private MultiVariateMessageHandler GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testManager = new Mock<IMultivariateTestManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testManager.Object);
+            _testManager = new Mock<ITestManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
             return new MultiVariateMessageHandler(_serviceLocator.Object);
         }

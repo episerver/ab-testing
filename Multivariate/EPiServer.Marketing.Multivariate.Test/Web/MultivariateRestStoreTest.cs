@@ -12,15 +12,15 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         public class MultivariateRestStoreTest
     {
         private static Mock<IServiceLocator> _serviceLocator;
-        private static Mock<IMultivariateTestManager> _testManager;
+        private static Mock<ITestManager> _testManager;
         private static Mock<IMessagingManager> _messageManager;
 
         private MultivariateRestStore GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testManager = new Mock<IMultivariateTestManager>();
+            _testManager = new Mock<ITestManager>();
             _messageManager = new Mock<IMessagingManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testManager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(_messageManager.Object);
 
             return new MultivariateRestStore(_serviceLocator.Object);
@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var unit = GetUnitUnderTest();
             unit.Get(null);
 
-            _testManager.Verify(tm => tm.GetTestList(It.IsAny<MultivariateTestCriteria>()), "Get did not call getTestList when id is null");
+            _testManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), "Get did not call getTestList when id is null");
         }
 
         [Fact]

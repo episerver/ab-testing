@@ -194,12 +194,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                MultivariateTestResults = new List<MultivariateTestResult>()
+                MultivariateTestResults = new List<TestResult>()
             };
 
             _context.MultivariateTests.Add(test);
 
-            var tr = new MultivariateTestResult()
+            var tr = new TestResult()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

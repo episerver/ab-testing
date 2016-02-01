@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return TestContext.Set<MultivariateTest>().AsQueryable();
         }
 
-        public IQueryable<IABTest> GetTestList(MultivariateTestCriteria criteria)
+        public IQueryable<IABTest> GetTestList(TestCriteria criteria)
         {
             var filters = criteria.GetFilters();
 

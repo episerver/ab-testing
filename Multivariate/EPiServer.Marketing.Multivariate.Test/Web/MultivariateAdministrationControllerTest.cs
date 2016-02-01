@@ -19,16 +19,16 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
     public class MultivariateAdministrationControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultivariateTestRepository> _testRepository;
+        private Mock<ITestRepository> _testRepository;
         private Mock<IContentRepository> _contentRepository;
-        private Mock<IMultivariateTestManager> _testManager;
+        private Mock<ITestManager> _testManager;
 
         static Guid theGuid = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE8");
         static Guid original = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE7");
         static Guid varient = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE6");
         static Guid result1 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE5");
         static Guid result2 = new Guid("76B3BC47-01E8-4F6C-A07D-7F85976F5BE4");
-        MultivariateTestViewModel viewdata = new MultivariateTestViewModel()
+        ABTestViewModel viewdata = new ABTestViewModel()
         {
             id = theGuid,
             Title = "Title",
@@ -40,9 +40,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             VariantItem = 2,
             testState = TestState.Active,
             VariantItemId = varient,
-            TestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+            TestResults = new List<TestResult>() {
+                    new TestResult() { Id = result1 },
+                    new TestResult() { Id = result2 }
                 }
         };
 
@@ -56,9 +56,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             OriginalItemId = original,
             TestState = TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = varient } },
-            MultivariateTestResults = new List<MultivariateTestResult>() {
-                    new MultivariateTestResult() { Id = result1 },
-                    new MultivariateTestResult() { Id = result2 }
+            MultivariateTestResults = new List<TestResult>() {
+                    new TestResult() { Id = result1 },
+                    new TestResult() { Id = result2 }
                 }
         };
 
@@ -66,9 +66,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         private MultivariateAdministrationController GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testRepository = new Mock<IMultivariateTestRepository>();
+            _testRepository = new Mock<ITestRepository>();
             _contentRepository = new Mock<IContentRepository>();
-            _testManager = new Mock<IMultivariateTestManager>();
+            _testManager = new Mock<ITestManager>();
 
             // Setup the contentrepo so it simulates episerver returning content
             var page1 = new BasicContent() { ContentGuid = viewdata.OriginalItemId };
@@ -80,8 +80,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _contentRepository.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 1))).Returns(page1);
             _contentRepository.Setup(cr => cr.Get<IContent>(It.Is<ContentReference>(cf => cf.ID == 2))).Returns(page2);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_contentRepository.Object);
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testManager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
             return new MultivariateAdministrationController(_serviceLocator.Object);
         }
@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             controller.Index();
 
-            _testRepository.Verify(x => x.GetTestList(It.IsAny<MultivariateTestCriteria>()),
+            _testRepository.Verify(x => x.GetTestList(It.IsAny<TestCriteria>()),
                 Times.Once, "Multivariate Administration Controller Index Did Not Properly Call Repositories GetTestList");
         }
 
@@ -119,7 +119,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             var controller = GetUnitUnderTest();
 
-            var actionResult = controller.Create(It.IsAny<MultivariateTestViewModel>()) as ViewResult;
+            var actionResult = controller.Create(It.IsAny<ABTestViewModel>()) as ViewResult;
 
             Assert.NotNull(actionResult);
             Assert.Equal("Create", actionResult.ViewName);
@@ -146,7 +146,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             controller.ModelState.AddModelError("StartDate", "error");
             controller.ModelState.AddModelError("OriginalItem", "error");
             var redirectResult = controller.Create(viewdata) as RedirectToRouteResult;
-            _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
+            _testRepository.Verify(tr => tr.CreateTest(It.IsAny<ABTestViewModel>()),
               Times.Once, "Controller did not call repository to create test");
 
             Assert.NotNull(redirectResult);
@@ -173,7 +173,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
 
             var redirectResult = controller.Create(viewdata) as RedirectToRouteResult;
 
-            _testRepository.Verify(tr => tr.CreateTest(It.IsAny<MultivariateTestViewModel>()),
+            _testRepository.Verify(tr => tr.CreateTest(It.IsAny<ABTestViewModel>()),
                 Times.Once, "Controller did not call repository to create test");
 
             Assert.NotNull(redirectResult);

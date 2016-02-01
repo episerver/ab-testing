@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         public class MessagingManagerTests
     {
         private static Mock<IServiceLocator> _serviceLocator;
-        private static Mock<IMultivariateTestRepository> _testRepository;
+        private static Mock<ITestRepository> _testRepository;
         private static Mock<IMultiVariateMessageHandler> _messageHandler;
 
         private MessagingManager GetUnitUnderTest()
@@ -19,9 +19,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             if (_serviceLocator == null)
             {
                 _serviceLocator = new Mock<IServiceLocator>();
-                _testRepository = new Mock<IMultivariateTestRepository>();
+                _testRepository = new Mock<ITestRepository>();
                 _messageHandler = new Mock<IMultiVariateMessageHandler>();
-                _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
+                _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
             }
 
             return new MessagingManager(_serviceLocator.Object, _messageHandler.Object);

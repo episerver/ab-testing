@@ -16,17 +16,17 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestingDataAccess> _dataAccessLayer;
 
-        private MultivariateTestManager GetUnitUnderTest()
+        private TestManager GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _dataAccessLayer = new Mock<ITestingDataAccess>();
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
 
-            return new MultivariateTestManager(_serviceLocator.Object);
+            return new TestManager(_serviceLocator.Object);
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsDataAccessGetWithGuid()
+        public void TestManager_CallsDataAccessGetWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsDataAccessGetTestByItemId()
+        public void TestManager_CallsDataAccessGetTestByItemId()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -48,18 +48,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsGetTestListWithCritera()
+        public void TestManager_CallsGetTestListWithCritera()
         {
-            var critera = new MultivariateTestCriteria();
+            var critera = new TestCriteria();
             var tm = GetUnitUnderTest();
             tm.GetTestList(critera);
 
-            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<MultivariateTestCriteria>(arg => arg.Equals(critera))),
+            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<TestCriteria>(arg => arg.Equals(critera))),
                 "DataAcessLayer GetTestList was never called or criteria did not match.");
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsDeleteWithGuid()
+        public void TestManager_CallsDeleteWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -70,7 +70,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsStartWithGuid()
+        public void TestManager_CallsStartWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -81,7 +81,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsStopWithGuid()
+        public void TestManager_CallsStopWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -92,7 +92,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsArchiveWithGuid()
+        public void TestManager_CallsArchiveWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -103,7 +103,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsSaveWithProperArguments()
+        public void TestManager_CallsSaveWithProperArguments()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -115,7 +115,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_CallsIncrementCountWithProperArguments()
+        public void TestManager_CallsIncrementCountWithProperArguments()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var theTestItemGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
@@ -133,7 +133,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_ReturnLandingPage_NoCache()
+        public void TestManager_ReturnLandingPage_NoCache()
         {
             // Make sure that the return landing page, calls data access layer if its not in the cache..
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
@@ -180,7 +180,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_EmitUpdateConversion()
+        public void TestManager_EmitUpdateConversion()
         {
             var testManager = GetUnitUnderTest();
 
@@ -199,7 +199,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         }
 
         [Fact]
-        public void MultivariateTestManager_EmitUpdateView()
+        public void TestManager_EmitUpdateView()
         {
             var testManager = GetUnitUnderTest();
 
