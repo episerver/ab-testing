@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {

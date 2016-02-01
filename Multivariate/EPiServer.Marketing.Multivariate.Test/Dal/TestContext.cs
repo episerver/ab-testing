@@ -2,7 +2,7 @@
 using System.Data.Common;
 using System.Data.Entity;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {

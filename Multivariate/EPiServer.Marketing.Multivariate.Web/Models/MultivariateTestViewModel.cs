@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 
 namespace EPiServer.Marketing.Multivariate.Web.Models
 {

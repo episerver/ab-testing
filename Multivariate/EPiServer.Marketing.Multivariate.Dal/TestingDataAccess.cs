@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using System.Reflection;
 
 namespace EPiServer.Marketing.Testing.Dal
@@ -34,17 +34,17 @@ namespace EPiServer.Marketing.Testing.Dal
             _repository.SaveChanges();
         }
 
-        public IMultivariateTest Get(Guid testObjectId)
+        public IABTest Get(Guid testObjectId)
         {
             return _repository.GetById(testObjectId);
         }
 
-        public List<IMultivariateTest> GetTestByItemId(Guid originalItemId)
+        public List<IABTest> GetTestByItemId(Guid originalItemId)
         {
             return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
         }
 
-        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        public List<IABTest> GetTestList(MultivariateTestCriteria criteria)
         {
             // if no filters are passed in, just return all tests
             var filters = criteria.GetFilters();
@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Dal
             }
 
             var variantOperator = FilterOperator.And;
-            IQueryable<IMultivariateTest> variantResults = null;
+            IQueryable<IABTest> variantResults = null;
             var variantId = Guid.Empty;
             var pe = Expression.Parameter(typeof(MultivariateTest), "test");
             Expression wholeExpression = null;
@@ -88,7 +88,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 }
             }
 
-            IQueryable<IMultivariateTest> results = null;
+            IQueryable<IABTest> results = null;
             var tests = _repository.GetAll().AsQueryable();
 
             // if we have created an expression tree, then execute it against the tests to get the results
@@ -118,7 +118,7 @@ namespace EPiServer.Marketing.Testing.Dal
                     : results.Concat(variantResults).Distinct();
             }
 
-            return results.ToList<IMultivariateTest>();
+            return results.ToList<IABTest>();
         }
 
 
@@ -139,7 +139,7 @@ namespace EPiServer.Marketing.Testing.Dal
             Save(test);
         }
 
-        public Guid Save(IMultivariateTest testObject)
+        public Guid Save(IABTest testObject)
         {
             var test = _repository.GetById(testObject.Id);
             Guid id;

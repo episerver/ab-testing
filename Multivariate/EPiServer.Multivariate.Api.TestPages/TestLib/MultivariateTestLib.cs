@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Testing;
 using EPiServer.Multivariate.Api.TestPages.Models;
@@ -17,10 +17,10 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         private List<Variant> variantsToSave;
         private List<MultivariateTestResult> testResults = new List<MultivariateTestResult>();
 
-        public List<IMultivariateTest> GetTests(ViewModel viewModel = null)
+        public List<IABTest> GetTests(ViewModel viewModel = null)
         {
             MultivariateTestManager mtm = new MultivariateTestManager();
-            List<IMultivariateTest> discoveredTests = new List<IMultivariateTest>();
+            List<IABTest> discoveredTests = new List<IABTest>();
             IMultivariateTestRepository testRepo = new MultivariateTestRepository();
 
             if (viewModel == null)
@@ -97,8 +97,8 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         ///     Remove hardcoded test data and add parametr for
         ///     test supplied test data
         /// </summary>
-        /// <returns>List of IMultivariateTests containing</returns>
-        public List<IMultivariateTest> GetAbTestList(string originalItemId)
+        /// <returns>List of IABTest containing</returns>
+        public List<IABTest> GetAbTestList(string originalItemId)
         {
             var itemId = new Guid(originalItemId);
             _mtm = new MultivariateTestManager();
@@ -106,7 +106,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             return _mtm.GetTestList(new MultivariateTestCriteria()).Where(t => t.OriginalItemId == itemId).ToList();
         }
 
-        public IMultivariateTest SetAbState(Guid testId, TestState? state)
+        public IABTest SetAbState(Guid testId, TestState? state)
         {
             _mtm = new MultivariateTestManager();
             switch (state)
@@ -126,7 +126,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             return _mtm.Get(testId);
         }
 
-        public IMultivariateTest RunTests(Guid testId)
+        public IABTest RunTests(Guid testId)
         {
             _mtm = new MultivariateTestManager();
             _mtm.Start(testId);
@@ -143,7 +143,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
             return _mtm.Get(testId);
         }
 
-        public IMultivariateTest StartTest(Guid testId)
+        public IABTest StartTest(Guid testId)
         {
             _mtm = new MultivariateTestManager();
             _mtm.Start(testId);

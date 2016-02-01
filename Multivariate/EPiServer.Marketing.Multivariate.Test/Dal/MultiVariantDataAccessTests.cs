@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Multivariate.Test.Core;
 using Xunit;
 

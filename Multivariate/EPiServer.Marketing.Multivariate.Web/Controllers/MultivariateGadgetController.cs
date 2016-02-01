@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.Marketing.Testing.Dal;

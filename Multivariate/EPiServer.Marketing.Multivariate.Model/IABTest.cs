@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model.Enums;
 
-namespace EPiServer.Marketing.Multivariate.Model
+namespace EPiServer.Marketing.Testing.Model
 {
-    public interface IMultivariateTest
+    public interface IABTest
     {
         Guid Id { get; set; }
 

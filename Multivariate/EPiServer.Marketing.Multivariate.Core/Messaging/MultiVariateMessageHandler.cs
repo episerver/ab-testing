@@ -1,4 +1,4 @@
-﻿using EPiServer.Marketing.Multivariate.Model.Enums;
+﻿using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing;

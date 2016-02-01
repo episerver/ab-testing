@@ -1,5 +1,5 @@
 ﻿using System;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Multivariate.Web.Controllers;
 using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Messaging;

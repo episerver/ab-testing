@@ -4,10 +4,10 @@ using System.Linq;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.Security;
 
@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Multivariate.Web.Repositories
         /// </summary>
         /// <param name="testToConvert"></param>
         /// <returns>MulviaraiteTestViewmodel</returns>
-        public MultivariateTestViewModel ConvertToViewModel(IMultivariateTest testToConvert)
+        public MultivariateTestViewModel ConvertToViewModel(IABTest testToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 

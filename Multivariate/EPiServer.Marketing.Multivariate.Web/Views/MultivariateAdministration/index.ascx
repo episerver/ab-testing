@@ -9,7 +9,7 @@
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Repositories" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Model.Enums" %>
 <%@ Import Namespace="EPiServer.Framework.Localization" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
 

@@ -1,10 +1,10 @@
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Multivariate.Model
+namespace EPiServer.Marketing.Testing.Model
 {
-    public class MultivariateTest : EntityBase, IMultivariateTest
+    public class MultivariateTest : EntityBase, IABTest
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MultivariateTest()

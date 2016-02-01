@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Multivariate.Model
+namespace EPiServer.Marketing.Testing.Model
 {
     public class Variant : EntityBase
     {

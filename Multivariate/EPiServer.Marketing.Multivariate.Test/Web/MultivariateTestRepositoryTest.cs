@@ -1,6 +1,6 @@
 ﻿using EPiServer.Core;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -160,7 +160,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var criteria = new MultivariateTestCriteria();
             var repo = GetUnitUnderTest();
 
-            List<IMultivariateTest> list = new List<IMultivariateTest>() { test };
+            List<IABTest> list = new List<IABTest>() { test };
 
             // Setup the service locator to return our mocked testmanager class
             _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testmanager.Object);

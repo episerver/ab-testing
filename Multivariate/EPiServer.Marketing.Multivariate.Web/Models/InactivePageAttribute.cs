@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EPiServer.Core;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.ServiceLocation;
 

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 
 namespace EPiServer.Marketing.Testing
 {
     public interface IMultivariateTestManager
     {
-        IMultivariateTest Get(Guid testObjectId);
+        IABTest Get(Guid testObjectId);
 
-        List<IMultivariateTest> GetTestByItemId(Guid originalItemId);
+        List<IABTest> GetTestByItemId(Guid originalItemId);
 
-        List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria);
+        List<IABTest> GetTestList(MultivariateTestCriteria criteria);
 
-        Guid Save(IMultivariateTest testObject);
+        Guid Save(IABTest testObject);
 
         void Delete(Guid testObjectId);
 

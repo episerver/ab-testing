@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Models;
 using EPiServer.Validation;
 
@@ -13,14 +13,14 @@ namespace EPiServer.Multivariate.Api.TestPages.Models
     {
         public ViewModel()
         {
-            var filter1 = new FilterView(MultivariateTestProperty.OriginalItemId, Marketing.Multivariate.Model.FilterOperator.And, null, false, "and");
-            var filter2 = new FilterView(MultivariateTestProperty.VariantId, Marketing.Multivariate.Model.FilterOperator.Or, null, false, "or");
-            var filter3 = new FilterView(MultivariateTestProperty.TestState, Marketing.Multivariate.Model.FilterOperator.And, null, false, "and");
+            var filter1 = new FilterView(MultivariateTestProperty.OriginalItemId, Marketing.Testing.Model.FilterOperator.And, null, false, "and");
+            var filter2 = new FilterView(MultivariateTestProperty.VariantId, Marketing.Testing.Model.FilterOperator.Or, null, false, "or");
+            var filter3 = new FilterView(MultivariateTestProperty.TestState, Marketing.Testing.Model.FilterOperator.And, null, false, "and");
 
             Filters = new List<FilterView>() {filter1, filter2, filter3};
         }
 
-        public IList<IMultivariateTest> Tests { get; set; }
+        public IList<IABTest> Tests { get; set; }
 
         public IList<FilterView> Filters { get; set; } 
     }

@@ -6,7 +6,7 @@
 <%@ Import Namespace="EPiServer.Core" %>
 <%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
 <%@ Import Namespace="EPiServer.Web.WebControls" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate.Model.Enums" %>
+<%@ Import Namespace="EPiServer.Marketing.Testing.Model.Enums" %>
 <%@ Import Namespace="EPiServer.Marketing.Multivariate.Web.Helpers" %>
 <%@ Register TagPrefix="EPiServer" Assembly="EpiServer" Namespace="EPiServer.Web.WebControls" %>
 <%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>

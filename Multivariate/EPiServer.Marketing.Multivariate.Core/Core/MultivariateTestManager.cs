@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing
@@ -28,21 +28,21 @@ namespace EPiServer.Marketing.Testing
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
         }
 
-        public IMultivariateTest Get(Guid testObjectId)
+        public IABTest Get(Guid testObjectId)
         {
             return _dataAccess.Get(testObjectId);
         }
 
-        public List<IMultivariateTest> GetTestByItemId(Guid originalItemId)
+        public List<IABTest> GetTestByItemId(Guid originalItemId)
         {
             return _dataAccess.GetTestByItemId(originalItemId);
         }
 
-        public List<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        public List<IABTest> GetTestList(MultivariateTestCriteria criteria)
         {
             return _dataAccess.GetTestList(criteria);
         }
-        public Guid Save(IMultivariateTest multivariateTest)
+        public Guid Save(IABTest multivariateTest)
         {
             // Todo : We should probably check to see if item quid is empty or null and
             // create a new unique guid here?

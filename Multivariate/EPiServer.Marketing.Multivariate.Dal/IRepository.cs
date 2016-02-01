@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
@@ -58,7 +58,7 @@ namespace EPiServer.Marketing.Testing.Dal
         /// <returns>Entity corresponding to the given id in the repository</returns>
         T GetById<T>(object id) where T : class;
 
-        IMultivariateTest GetById(object id);
+        IABTest GetById(object id);
 
         /// <summary>
         /// Retrieves all entity objects of the given type from the repository
@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.Dal
         /// <returns>IQueryable of all the entity object of the given type in the repository</returns>
         IQueryable<T> GetAll<T>() where T : class;
 
-        IQueryable<IMultivariateTest> GetAll();
+        IQueryable<IABTest> GetAll();
 
         /// <summary>
         /// Retrieves all entity objects of the given type from the repository as a list

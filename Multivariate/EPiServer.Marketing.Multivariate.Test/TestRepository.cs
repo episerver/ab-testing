@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Multivariate.Test.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
@@ -99,7 +99,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             throw new NotImplementedException();
         }
 
-        public IMultivariateTest GetById(object id)
+        public IABTest GetById(object id)
         {
             return TestContext.Set<MultivariateTest>().Find(id);
         }
@@ -109,12 +109,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return TestContext.Set<T>().AsQueryable();
         }
 
-        public IQueryable<IMultivariateTest> GetAll()
+        public IQueryable<IABTest> GetAll()
         {
             return TestContext.Set<MultivariateTest>().AsQueryable();
         }
 
-        public IQueryable<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        public IQueryable<IABTest> GetTestList(MultivariateTestCriteria criteria)
         {
             var filters = criteria.GetFilters();
 

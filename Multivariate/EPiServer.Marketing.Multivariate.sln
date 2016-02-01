@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.Dal", "EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Testing.Dal.csproj", "{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Model", "EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj", "{BF1B7106-7B84-4692-BBD2-22DD3D6B6AD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.Model", "EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Testing.Model.csproj", "{BF1B7106-7B84-4692-BBD2-22DD3D6B6AD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Multivariate.Api.TestPages", "EPiServer.Multivariate.Api.TestPages\EPiServer.Multivariate.Api.TestPages.csproj", "{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}"
 EndProject

@@ -1,5 +1,5 @@
 ﻿using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Newtonsoft.Json;

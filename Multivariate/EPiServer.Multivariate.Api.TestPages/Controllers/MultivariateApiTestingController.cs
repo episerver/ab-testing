@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.Multivariate.Api.TestPages.Models;
 using EPiServer.Multivariate.Api.TestPages.TestLib;
@@ -110,7 +110,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult GetAbTestList(string id)
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
-            List<IMultivariateTest> returnedTestList = testLib.GetAbTestList(id);
+            List<IABTest> returnedTestList = testLib.GetAbTestList(id);
 
             return View(returnedTestList);
         }

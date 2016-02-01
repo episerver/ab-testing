@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Transactions;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
@@ -69,12 +69,12 @@ namespace EPiServer.Marketing.Testing.Dal
             return records;
         }
 
-        public IMultivariateTest GetById(object id)
+        public IABTest GetById(object id)
         {
             return DatabaseContext.Set<MultivariateTest>().Find(id);
         }
 
-        public IQueryable<IMultivariateTest> GetAll()
+        public IQueryable<IABTest> GetAll()
         {
             return DatabaseContext.Set<MultivariateTest>().AsQueryable();
         } 

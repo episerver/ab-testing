@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Multivariate.Model
+namespace EPiServer.Marketing.Testing.Model
 {
     public class MultivariateTestCriteria
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;

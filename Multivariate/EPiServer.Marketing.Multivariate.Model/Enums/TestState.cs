@@ -1,4 +1,4 @@
-﻿namespace EPiServer.Marketing.Multivariate.Model.Enums
+﻿namespace EPiServer.Marketing.Testing.Model.Enums
 {
     public enum TestState
     {
