@@ -3,9 +3,9 @@ using EPiServer.Marketing.Multivariate.Model.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Multivariate.Dal
+namespace EPiServer.Marketing.Testing.Dal
 {
-    public interface IMultiVariantDataAccess
+    public interface ITestingDataAccess
     {
         IMultivariateTest Get(Guid testObjectId);
 

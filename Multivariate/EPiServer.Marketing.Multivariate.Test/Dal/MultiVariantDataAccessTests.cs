@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Test.Core;
@@ -14,12 +14,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
     {
         private TestContext _context;
         private DbConnection _dbConnection;
-        private MultiVariantDataAccess _mtm;
+        private TestingDataAccess _mtm;
         public MultiVariantDataAccessTests()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
-            _mtm = new MultiVariantDataAccess(new Core.TestRepository(_context));
+            _mtm = new TestingDataAccess(new Core.TestRepository(_context));
         }
 
         [Fact]
@@ -288,7 +288,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [Fact]
         public void MultivariteTestManagerMultivariateDataAccess()
         {
-            MultiVariantDataAccess mda = new MultiVariantDataAccess();
+            TestingDataAccess mda = new TestingDataAccess();
             Assert.NotNull(mda._repository);
         }
 

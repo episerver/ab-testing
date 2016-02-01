@@ -2,7 +2,7 @@
 using System.Data.Entity.ModelConfiguration;
 using EPiServer.Marketing.Multivariate.Model;
 
-namespace EPiServer.Marketing.Multivariate.Dal.Mappings
+namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
     public class VariantMap : EntityTypeConfiguration<Variant>
     {

@@ -62,19 +62,19 @@
     </Compile>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DatabaseContext.cs" />
-    <Compile Include="IMultiVariantDataAccess.cs" />
+    <Compile Include="ITestingDataAccess.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Mappings\ConversionMap.cs" />
     <Compile Include="Mappings\KeyPerformanceIndicatorMap.cs" />
-    <Compile Include="Mappings\MultivariateTestMap.cs" />
-    <Compile Include="Mappings\MultivariateTestResultMap.cs" />
+    <Compile Include="Mappings\ABTestMap.cs" />
+    <Compile Include="Mappings\TestResultMap.cs" />
     <Compile Include="Mappings\VariantMap.cs" />
     <Compile Include="Migrations\201601041747161_Initial.cs" />
     <Compile Include="Migrations\201601041747161_Initial.Designer.cs">
       <DependentUpon>201601041747161_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="MultiVariantDataAccess.cs" />
+    <Compile Include="TestingDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

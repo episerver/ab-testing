@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Validation;
-using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
 
-namespace EPiServer.Marketing.Multivariate.Dal
+namespace EPiServer.Marketing.Testing.Dal
 {
     [ExcludeFromCodeCoverage]
     public class BaseRepository : IRepository
@@ -71,7 +58,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
                     TransactionScopeOption.Required,
                     new TransactionOptions()
                     {
-                        IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted
+                        IsolationLevel = IsolationLevel.ReadCommitted
                     }))
                 {
                     records = DatabaseContext.SaveChanges();
@@ -116,7 +103,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
         /// <param name="instance">Instance of the objec to save</param>
         public void Save(object instance)
         {
-            DatabaseContext.Entry(instance).State = System.Data.Entity.EntityState.Modified;
+            DatabaseContext.Entry(instance).State = EntityState.Modified;
         }
 
         /// <summary>
@@ -169,7 +156,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
             if (instance != null)
             {
                 DatabaseContext.Set(instance.GetType()).Attach(instance);
-                DatabaseContext.Entry(instance).State = System.Data.Entity.EntityState.Added;
+                DatabaseContext.Entry(instance).State = EntityState.Added;
             }
         }
 
@@ -182,7 +169,7 @@ namespace EPiServer.Marketing.Multivariate.Dal
             if (instance != null)
             {
                 DatabaseContext.Set(instance.GetType()).Attach(instance);
-                DatabaseContext.Entry(instance).State = System.Data.Entity.EntityState.Modified;
+                DatabaseContext.Entry(instance).State = EntityState.Modified;
             }
         }
 

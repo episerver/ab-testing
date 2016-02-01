@@ -327,9 +327,9 @@
       <Project>{cc88efff-8474-401b-87f8-ec4db6ba8633}</Project>
       <Name>EPiServer.Marketing.Testing.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj">
+    <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Testing.Dal.csproj">
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
-      <Name>EPiServer.Marketing.Multivariate.Dal</Name>
+      <Name>EPiServer.Marketing.Testing.Dal</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Multivariate.Model\EPiServer.Marketing.Multivariate.Model.csproj">
       <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Test.Dal;
 

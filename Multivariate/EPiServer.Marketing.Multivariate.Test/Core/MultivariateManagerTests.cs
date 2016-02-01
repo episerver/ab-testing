@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Testing;
@@ -14,13 +14,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         public class MultivariateManagerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultiVariantDataAccess> _dataAccessLayer;
+        private Mock<ITestingDataAccess> _dataAccessLayer;
 
         private MultivariateTestManager GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _dataAccessLayer = new Mock<IMultiVariantDataAccess>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultiVariantDataAccess>()).Returns(_dataAccessLayer.Object);
+            _dataAccessLayer = new Mock<ITestingDataAccess>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
 
             return new MultivariateTestManager(_serviceLocator.Object);
         }

@@ -3,7 +3,7 @@ using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Multivariate.Model;
 
-namespace EPiServer.Marketing.Multivariate.Dal
+namespace EPiServer.Marketing.Testing.Dal
 {
     using System;
     using System.Data.Entity;

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EPiServer.Marketing.Multivariate.Model;
 
-namespace EPiServer.Marketing.Multivariate.Dal
+namespace EPiServer.Marketing.Testing.Dal
 {
     /// <summary>
     /// Interface for basic repository functionality

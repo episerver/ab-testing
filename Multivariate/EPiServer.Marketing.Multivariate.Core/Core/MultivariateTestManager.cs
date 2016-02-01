@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Testing.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Testing
     [ServiceConfiguration(ServiceType = typeof(IMultivariateTestManager))]
     public class MultivariateTestManager : IMultivariateTestManager
     {
-        private IMultiVariantDataAccess _dataAccess;
+        private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
 
@@ -20,12 +20,12 @@ namespace EPiServer.Marketing.Testing
         public MultivariateTestManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _dataAccess = new MultiVariantDataAccess();
+            _dataAccess = new TestingDataAccess();
         }
         internal MultivariateTestManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
-            _dataAccess = _serviceLocator.GetInstance<IMultiVariantDataAccess>();
+            _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
         }
 
         public IMultivariateTest Get(Guid testObjectId)

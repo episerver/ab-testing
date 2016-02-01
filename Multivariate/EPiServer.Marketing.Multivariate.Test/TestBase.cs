@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Test.Dal;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Testing.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
 {
@@ -40,7 +40,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return newMultivariateTests;
         }
 
-        public IList<MultivariateTest> AddMultivariateTests(MultiVariantDataAccess mtmManager, int numberOfTests)
+        public IList<MultivariateTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
         {
             var newMultivariateTests = new List<MultivariateTest>();
 
@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return newMultivariateTests;
         }
 
-        public void AddMultivariateTestResults(MultiVariantDataAccess mtmManager, MultivariateTest multivariateTest, Guid itemId)
+        public void AddMultivariateTestResults(TestingDataAccess mtmManager, MultivariateTest multivariateTest, Guid itemId)
         {
             var result = new MultivariateTestResult()
             {

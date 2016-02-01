@@ -7,18 +7,18 @@ using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using System.Reflection;
 
-namespace EPiServer.Marketing.Multivariate.Dal
+namespace EPiServer.Marketing.Testing.Dal
 {
-    public class MultiVariantDataAccess : IMultiVariantDataAccess
+    public class TestingDataAccess : ITestingDataAccess
     {
         internal IRepository _repository;
 
-        public MultiVariantDataAccess()
+        public TestingDataAccess()
         {
             // TODO : Load repository from service locator.
             _repository = new BaseRepository(new DatabaseContext());
         }
-        internal MultiVariantDataAccess(IRepository repository)
+        internal TestingDataAccess(IRepository repository)
         {
             _repository = repository;
         }

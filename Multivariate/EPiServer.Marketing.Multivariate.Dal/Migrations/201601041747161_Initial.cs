@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace EPiServer.Marketing.Multivariate.Dal.Migrations
+namespace EPiServer.Marketing.Testing.Dal.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Marketing.Multivariate.Dal;
+using EPiServer.Marketing.Testing.Dal;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Web.Models;

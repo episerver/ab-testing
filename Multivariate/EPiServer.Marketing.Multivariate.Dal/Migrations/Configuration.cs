@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace EPiServer.Marketing.Multivariate.Dal.Migrations
+namespace EPiServer.Marketing.Testing.Dal.Migrations
 {
     using System;
     using System.Data.Entity;
@@ -17,14 +17,14 @@ namespace EPiServer.Marketing.Multivariate.Dal.Migrations
     /// -SourceMigration:'migration name to come from' flag is to generate sql script from previous version to current schema (i.e. only creates sql for new schema changes)
     /// </summary>
     [ExcludeFromCodeCoverage]
-    internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.Multivariate.Dal.DatabaseContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.Testing.Dal.DatabaseContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(EPiServer.Marketing.Multivariate.Dal.DatabaseContext context)
+        protected override void Seed(EPiServer.Marketing.Testing.Dal.DatabaseContext context)
         {
             //  This method will be called after migrating to the latest version.
 
