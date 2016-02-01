@@ -50,7 +50,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult CreateABTest(MultivariateTest multivariateTestData)
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             if (ModelState.IsValid)
             {
                 Guid savedTestId = testLib.CreateAbTest(multivariateTestData);
@@ -64,7 +64,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         [HttpGet]
         public ActionResult UpdateAbTest(string id)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
             return View("CreateAbTest", multivariateTest);
@@ -77,7 +77,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult UpdateAbTest(MultivariateTest dataToSave)
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             if (ModelState.IsValid)
             {
                 testLib.CreateAbTest(dataToSave);
@@ -90,7 +90,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult GetAbTestById(string id)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             MultivariateTest returnedTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
 
             return View("TestDetails", returnedTest);
@@ -99,7 +99,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         }
 
         /// <summary>
-        /// Verifies MultivariateTestManager.GetTestByItemId returns
+        /// Verifies TestManager.GetTestByItemId returns
         /// a list of MutlivariateTest objects
         /// 
         /// Pass: Correct List of MultivariateTestObjects is returned (count and contents)
@@ -126,7 +126,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult DeleteAbTest(Guid id)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             mtm.Delete(id);
 
             return RedirectToAction("Index");
@@ -159,7 +159,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult ArchiveAbTest(string id)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             mtm.Archive(Guid.Parse(id));
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
@@ -168,7 +168,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult UpdateView(string id, string itemid)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
@@ -177,7 +177,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult UpdateConversion(string id, string itemid)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 

@@ -11,25 +11,25 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
 {
     public class MultivariateTestLib
     {
-        private MultivariateTestManager _mtm;
+        private TestManager _mtm;
         private List<KeyPerformanceIndicator> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
-        private List<MultivariateTestResult> testResults = new List<MultivariateTestResult>();
+        private List<TestResult> testResults = new List<TestResult>();
 
         public List<IABTest> GetTests(ViewModel viewModel = null)
         {
-            MultivariateTestManager mtm = new MultivariateTestManager();
+            TestManager mtm = new TestManager();
             List<IABTest> discoveredTests = new List<IABTest>();
-            IMultivariateTestRepository testRepo = new MultivariateTestRepository();
+            ITestRepository testRepo = new TestRepository();
 
             if (viewModel == null)
             {
-                discoveredTests = mtm.GetTestList(new MultivariateTestCriteria());
+                discoveredTests = mtm.GetTestList(new TestCriteria());
             }
             else
             {
-                var criteria = new MultivariateTestCriteria();
+                var criteria = new TestCriteria();
 
                 foreach (var filter in viewModel.Filters.Where(filter => filter.IsEnabled))
                 {
@@ -71,7 +71,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
 
         public Guid CreateAbTest(MultivariateTest dataToSave)
         {
-            MultivariateTestManager _mtm = new MultivariateTestManager();
+            TestManager _mtm = new TestManager();
             dataToSave.Id = Guid.NewGuid();
 
             dataToSave.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
@@ -79,10 +79,10 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
                     new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
                 };
 
-            dataToSave.MultivariateTestResults = new List<MultivariateTestResult>()
+            dataToSave.MultivariateTestResults = new List<TestResult>()
             {
-                new MultivariateTestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.OriginalItemId},
-                new MultivariateTestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].VariantId}
+                new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.OriginalItemId},
+                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].VariantId}
             };
 
             _mtm.Save(dataToSave);
@@ -101,14 +101,14 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         public List<IABTest> GetAbTestList(string originalItemId)
         {
             var itemId = new Guid(originalItemId);
-            _mtm = new MultivariateTestManager();
+            _mtm = new TestManager();
 
-            return _mtm.GetTestList(new MultivariateTestCriteria()).Where(t => t.OriginalItemId == itemId).ToList();
+            return _mtm.GetTestList(new TestCriteria()).Where(t => t.OriginalItemId == itemId).ToList();
         }
 
         public IABTest SetAbState(Guid testId, TestState? state)
         {
-            _mtm = new MultivariateTestManager();
+            _mtm = new TestManager();
             switch (state)
             {
                 case TestState.Active:
@@ -128,7 +128,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
 
         public IABTest RunTests(Guid testId)
         {
-            _mtm = new MultivariateTestManager();
+            _mtm = new TestManager();
             _mtm.Start(testId);
             for (int x = 0; x < 5; x++)
             {
@@ -145,7 +145,7 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
 
         public IABTest StartTest(Guid testId)
         {
-            _mtm = new MultivariateTestManager();
+            _mtm = new TestManager();
             _mtm.Start(testId);
             for (int x = 0; x < 5; x++)
             {
