@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EPiServer.Marketing.Multivariate;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing;
 using EPiServer.Multivariate.Api.TestPages.Models;
-using NuGet;
 
 namespace EPiServer.Multivariate.Api.TestPages.TestLib
 {

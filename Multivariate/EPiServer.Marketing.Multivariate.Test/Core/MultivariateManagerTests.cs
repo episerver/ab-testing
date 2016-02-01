@@ -1,11 +1,12 @@
-﻿using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Messaging;
+﻿using System;
+using System.Collections.Generic;
+using EPiServer.Marketing.Multivariate.Dal;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using Moq;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core

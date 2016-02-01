@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Marketing.Multivariate.Model;
 using EPiServer.Marketing.Multivariate.Model.Enums;
 
-namespace EPiServer.Marketing.Multivariate
+namespace EPiServer.Marketing.Testing
 {
     public interface IMultivariateTestManager
     {
