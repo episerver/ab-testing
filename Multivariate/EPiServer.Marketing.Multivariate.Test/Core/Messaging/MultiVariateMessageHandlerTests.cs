@@ -2,17 +2,15 @@
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Model;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
-using EPiServer.Marketing.Testing.Messaging;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Messaging
 {
-        public class MultiVariateMessageHandlerTests
+    public class MultiVariateMessageHandlerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestManager> _testManager;

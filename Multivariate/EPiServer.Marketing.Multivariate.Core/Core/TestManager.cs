@@ -9,7 +9,7 @@ using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing
 {
-    [ServiceConfiguration(ServiceType = typeof(ITestManager))]
+    [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
         private ITestingDataAccess _dataAccess;
