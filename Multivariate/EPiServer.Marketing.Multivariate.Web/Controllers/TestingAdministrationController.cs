@@ -16,7 +16,7 @@ using EPiServer.Marketing.Testing.Model.Enums;
 namespace EPiServer.Marketing.Testing.Web
 {
     [GuiPlugIn(DisplayName = "Multivariate Test Configuration", UrlFromModuleFolder = "TestingAdministration", Area = PlugInArea.AdminConfigMenu)]
-    class TestingAdministrationController : Controller
+    public class TestingAdministrationController : Controller
     {
         private IServiceLocator _serviceLocator;
         [ExcludeFromCodeCoverage]

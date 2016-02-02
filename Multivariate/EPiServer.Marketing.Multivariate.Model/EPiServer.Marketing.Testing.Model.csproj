@@ -46,7 +46,7 @@
     <Compile Include="Enums\TestState.cs" />
     <Compile Include="IABTest.cs" />
     <Compile Include="KeyPerformanceIndicator.cs" />
-    <Compile Include="MultivariateTest.cs" />
+    <Compile Include="ABTest.cs" />
     <Compile Include="TestCriteria.cs" />
     <Compile Include="TestResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

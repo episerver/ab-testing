@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 base.OnModelCreating(modelBuilder);
 
-                modelBuilder.Entity<MultivariateTest>();
+                modelBuilder.Entity<ABTest>();
                 modelBuilder.Entity<TestResult>();
                 modelBuilder.Entity<Conversion>();
                 modelBuilder.Entity<Variant>();

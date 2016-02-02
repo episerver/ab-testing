@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         }
 
-        public DbSet<MultivariateTest> MultivariateTests { get; set; }
+        public DbSet<ABTest> MultivariateTests { get; set; }
 
         public DbSet<TestResult> MultivariateTestsResults { get; set; }
 

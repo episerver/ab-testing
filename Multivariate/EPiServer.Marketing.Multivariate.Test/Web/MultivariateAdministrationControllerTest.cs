@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 }
         };
 
-        MultivariateTest test = new MultivariateTest()
+        ABTest test = new ABTest()
         {
             Id = theGuid,
             Title = "Title",

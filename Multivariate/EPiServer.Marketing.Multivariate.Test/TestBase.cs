@@ -14,13 +14,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             context.Set<T>().AddRange(data);
         }
 
-        public IList<MultivariateTest> AddMultivariateTests(TestContext context, int numberOfTests)
+        public IList<ABTest> AddMultivariateTests(TestContext context, int numberOfTests)
         {
-            var newMultivariateTests = new List<MultivariateTest>();
+            var newMultivariateTests = new List<ABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                newMultivariateTests.Add(new MultivariateTest()
+                newMultivariateTests.Add(new ABTest()
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
@@ -40,13 +40,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return newMultivariateTests;
         }
 
-        public IList<MultivariateTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
+        public IList<ABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
         {
-            var newMultivariateTests = new List<MultivariateTest>();
+            var newMultivariateTests = new List<ABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                var test = new MultivariateTest()
+                var test = new ABTest()
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return newMultivariateTests;
         }
 
-        public void AddMultivariateTestResults(TestingDataAccess mtmManager, MultivariateTest multivariateTest, Guid itemId)
+        public void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)
         {
             var result = new TestResult()
             {

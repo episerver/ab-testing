@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         static Guid original = Guid.NewGuid();
         static Guid varient = Guid.NewGuid();
 
-        MultivariateTest test = new MultivariateTest()
+        ABTest test = new ABTest()
         {
             Id = testGuid,
             Title = "SomeTest",

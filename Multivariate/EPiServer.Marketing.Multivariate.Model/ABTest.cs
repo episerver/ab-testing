@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Model
 {
-    public class MultivariateTest : EntityBase, IABTest
+    public class ABTest : EntityBase, IABTest
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public MultivariateTest()
+        public ABTest()
         {
             CreatedDate = DateTime.UtcNow;
             ModifiedDate = DateTime.UtcNow;

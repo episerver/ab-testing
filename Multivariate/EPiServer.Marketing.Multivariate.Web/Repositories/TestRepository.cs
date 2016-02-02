@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var tm = _serviceLocator.GetInstance<ITestManager>();
 
             //attempt to get a saved test based on incomming id
-            MultivariateTest test = tm.Get(testData.id) as MultivariateTest;
+            ABTest test = tm.Get(testData.id) as ABTest;
 
 
             if (test == null) //no test exists
@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
 
-            return (from MultivariateTest test in tm.GetTestList(criteria) select ConvertToViewModel(test)).ToList();
+            return (from ABTest test in tm.GetTestList(criteria) select ConvertToViewModel(test)).ToList();
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// </summary>
         /// <param name="viewModelToConvert"></param>
         /// <returns>MulviaraiteTestViewmodel</returns>
-        public MultivariateTest ConvertToMultivariateTest(ABTestViewModel viewModelToConvert)
+        public ABTest ConvertToMultivariateTest(ABTestViewModel viewModelToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 
@@ -174,7 +174,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var originalItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.OriginalItem));
             var variantItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.VariantItem));
 
-            var test = new MultivariateTest
+            var test = new ABTest
             {
                 Id = viewModelToConvert.id,
                 Title = viewModelToConvert.Title,

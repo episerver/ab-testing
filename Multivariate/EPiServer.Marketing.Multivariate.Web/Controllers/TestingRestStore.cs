@@ -11,7 +11,7 @@ using EPiServer.Marketing.Testing;
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     [RestStore("multivariatetests")]
-    class TestingRestStore : RestControllerBase
+    public class TestingRestStore : RestControllerBase
     {
         private IServiceLocator _serviceLocator;
 

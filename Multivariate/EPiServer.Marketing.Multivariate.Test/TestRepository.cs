@@ -90,8 +90,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public void DeleteTest(object id)
         {
-            var test = TestContext.Set<MultivariateTest>().Find(id);
-            TestContext.Set<MultivariateTest>().Remove(test);
+            var test = TestContext.Set<ABTest>().Find(id);
+            TestContext.Set<ABTest>().Remove(test);
         }
 
         public T GetById<T>(object id) where T : class
@@ -101,7 +101,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public IABTest GetById(object id)
         {
-            return TestContext.Set<MultivariateTest>().Find(id);
+            return TestContext.Set<ABTest>().Find(id);
         }
 
         public IQueryable<T> GetAll<T>() where T : class
@@ -111,7 +111,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public IQueryable<IABTest> GetAll()
         {
-            return TestContext.Set<MultivariateTest>().AsQueryable();
+            return TestContext.Set<ABTest>().AsQueryable();
         }
 
         public IQueryable<IABTest> GetTestList(TestCriteria criteria)
@@ -149,10 +149,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "Where",
                 new Type[] { tests.ElementType },
                 tests.Expression,
-                Expression.Lambda<Func<MultivariateTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
+                Expression.Lambda<Func<ABTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
                 );
 
-            IQueryable<MultivariateTest> results = tests.Provider.CreateQuery<MultivariateTest>(whereCallExpression);
+            IQueryable<ABTest> results = tests.Provider.CreateQuery<ABTest>(whereCallExpression);
             return results;
         }
 

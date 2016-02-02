@@ -107,10 +107,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            MultivariateTest test = new MultivariateTest() { Id = theGuid };
+            ABTest test = new ABTest() { Id = theGuid };
             tm.Save(test);
 
-            _dataAccessLayer.Verify(da => da.Save(It.Is<MultivariateTest>(arg => arg.Equals(test))),
+            _dataAccessLayer.Verify(da => da.Save(It.Is<ABTest>(arg => arg.Equals(test))),
                 "DataAcessLayer Save was never called or object did not match.");
         }
 
@@ -143,7 +143,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
-                new MultivariateTest()
+                new ABTest()
                 {
                     Id = theGuid,
                     OriginalItemId = originalItemId,

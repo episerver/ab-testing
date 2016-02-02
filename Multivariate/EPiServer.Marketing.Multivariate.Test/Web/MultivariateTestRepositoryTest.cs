@@ -44,7 +44,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 }
         };
 
-        MultivariateTest test = new MultivariateTest()
+        ABTest test = new ABTest()
         {
             Id = theGuid,
             Title = "Title",
@@ -203,7 +203,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             repo.CreateTest(viewdata);
 
             // Verify the testmanager was called by the repo with the proper argument
-            _testmanager.Verify(tm => tm.Save(It.IsAny<MultivariateTest>()),
+            _testmanager.Verify(tm => tm.Save(It.IsAny<ABTest>()),
                 Times.Once, "CreateTest did not call save");
         }
 
@@ -230,7 +230,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
             viewdata.EndDate = newEndDate;
             repo.CreateTest(viewdata);
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.EndDate.Equals(newEndDate))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.EndDate.Equals(newEndDate))),
                Times.Once, "CreateTest did not call save with correctly altered end date");
 
         }
@@ -248,19 +248,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             repo.CreateTest(viewdata);
 
             // Verify the testmanager was called by the repo with the proper arguments - mapped
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Id.Equals(viewdata.id))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Id.Equals(viewdata.id))),
                 Times.Once, "CreateTest did not call save with correctly mapped ID");
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Title.Equals(viewdata.Title))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Title.Equals(viewdata.Title))),
                 Times.Once, "CreateTest did not call save with correctly mapped Title");
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Owner.Equals(viewdata.Owner))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Owner.Equals(viewdata.Owner))),
                 Times.Once, "CreateTest did not call save with correctly mapped Owner");
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.StartDate.Equals(viewdata.StartDate))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.StartDate.Equals(viewdata.StartDate))),
                 Times.Once, "CreateTest did not call save with correctly mapped StartDate");
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.EndDate.Equals(viewdata.EndDate))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.EndDate.Equals(viewdata.EndDate))),
                 Times.Once, "CreateTest did not call save with correctly mapped EndDate");
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.OriginalItemId.Equals(viewdata.OriginalItemId))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.OriginalItemId.Equals(viewdata.OriginalItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped OriginalItemId");
-            _testmanager.Verify(tm => tm.Save(It.Is<MultivariateTest>(tc => tc.Variants[0].VariantId.Equals(viewdata.VariantItemId))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Variants[0].VariantId.Equals(viewdata.VariantItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped Variants[0].VariantId");
         }
     }

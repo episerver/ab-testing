@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -111,7 +111,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -147,7 +147,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -183,7 +183,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "Test",

@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "test",
@@ -228,7 +228,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var testId = Guid.NewGuid();
             var itemId = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = testId,
                 Title = "test",
@@ -269,7 +269,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         [Fact]
         public void TestManagerAddNoId()
         {
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Title = "test",
                 CreatedDate = DateTime.UtcNow,

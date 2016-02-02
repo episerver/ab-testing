@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.Testing.Dal
             var variantOperator = FilterOperator.And;
             IQueryable<IABTest> variantResults = null;
             var variantId = Guid.Empty;
-            var pe = Expression.Parameter(typeof(MultivariateTest), "test");
+            var pe = Expression.Parameter(typeof(ABTest), "test");
             Expression wholeExpression = null;
 
             // build up expression tree based on the filters that are passed in
@@ -65,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 // if we are filtering on a single property(not an element in a list) create the expression
                 if (filter.Property != MultivariateTestProperty.VariantId)
                 {
-                    var left = Expression.Property(pe, typeof (MultivariateTest).GetProperty(filter.Property.ToString()));
+                    var left = Expression.Property(pe, typeof (ABTest).GetProperty(filter.Property.ToString()));
                     var right = Expression.Constant(filter.Value);
                     var expression = Expression.Equal(left, right);
 
@@ -99,10 +99,10 @@ namespace EPiServer.Marketing.Testing.Dal
                     "Where",
                     new Type[] {tests.ElementType},
                     tests.Expression,
-                    Expression.Lambda<Func<MultivariateTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
+                    Expression.Lambda<Func<ABTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
                     );
 
-                results = tests.Provider.CreateQuery<MultivariateTest>(whereCallExpression);
+                results = tests.Provider.CreateQuery<ABTest>(whereCallExpression);
             }
 
             // if we are also filtering against a variantId, include those results

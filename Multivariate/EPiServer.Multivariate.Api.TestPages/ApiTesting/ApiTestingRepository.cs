@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             return discoveredTests;
         }
 
-        public Guid CreateAbTest(MultivariateTest dataToSave)
+        public Guid CreateAbTest(ABTest dataToSave)
         {
             TestManager _mtm = new TestManager();
             dataToSave.Id = Guid.NewGuid();
