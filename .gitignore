@@ -193,3 +193,4 @@ ModelManifest.xml
 /Multivariate/Deployment/lib
 /Multivariate/Deployment/EPiServer.Marketing.Multivariate.1.0.0.0.nupkg
 /Multivariate/MultivariateTestingDeployment/Package.nuspec
+/Multivariate/Deployment

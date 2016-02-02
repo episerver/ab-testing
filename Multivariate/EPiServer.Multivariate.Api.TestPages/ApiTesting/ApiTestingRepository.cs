@@ -10,6 +10,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
     public class ApiTestingRepository
     {
+
         private TestManager _mtm;
         private List<KeyPerformanceIndicator> Kpis;
         private Guid originalItemGuid;
