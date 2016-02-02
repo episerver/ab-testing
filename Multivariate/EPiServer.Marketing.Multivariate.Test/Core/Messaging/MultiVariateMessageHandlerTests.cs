@@ -30,13 +30,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             }
         };
 
-        private MultiVariateMessageHandler GetUnitUnderTest()
+        private TestingMessageHandler GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _testManager = new Mock<ITestManager>();
             _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
-            return new MultiVariateMessageHandler(_serviceLocator.Object);
+            return new TestingMessageHandler(_serviceLocator.Object);
         }
 
         [Fact]

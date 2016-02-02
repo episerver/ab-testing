@@ -10,13 +10,13 @@ namespace EPiServer.Marketing.Testing.Messaging
     /// The message handler simply handles the messages and passes them on the registered
     /// IMultivariateTestRepository which in turn handles the cache and database layer.
     /// </summary>
-    class MultiVariateMessageHandler : IMultiVariateMessageHandler
+    class TestingMessageHandler : ITestingMessageHandler
     {
         private IServiceLocator _serviceLocator;
         internal ITestManager _testManager;
 
         [ExcludeFromCodeCoverage]
-        public MultiVariateMessageHandler()
+        public TestingMessageHandler()
         {
             _serviceLocator = ServiceLocator.Current;
             _testManager = _serviceLocator.GetInstance<ITestManager>();
@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// Used specifically for unit tests.
         /// </summary>
         /// <param name="locator"></param>
-        internal MultiVariateMessageHandler(IServiceLocator locator)
+        internal TestingMessageHandler(IServiceLocator locator)
         {
             _serviceLocator = locator;
             _testManager = _serviceLocator.GetInstance<ITestManager>();

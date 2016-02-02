@@ -184,9 +184,9 @@
     <Compile Include="Core\ITestManager.cs" />
     <Compile Include="Core\TestManager.cs" />
     <Compile Include="Messaging\IMessagingManager.cs" />
-    <Compile Include="Messaging\IMultiVariateMessageHandler.cs" />
+    <Compile Include="Messaging\ITestingMessageHandler.cs" />
     <Compile Include="Messaging\MessagingManager.cs" />
-    <Compile Include="Messaging\MultiVariateMessageHandler.cs" />
+    <Compile Include="Messaging\TestingMessageHandler.cs" />
     <Compile Include="Messaging\UpdateConversionsMessage.cs" />
     <Compile Include="Messaging\UpdateViewsMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

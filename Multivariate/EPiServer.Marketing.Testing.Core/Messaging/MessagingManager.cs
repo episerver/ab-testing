@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         private MessageHandlerRegistry registry;
         private MessagingApplicationBuilder appBuilder;
         private InMemoryQueueStore _queueStore;
-        private IMultiVariateMessageHandler _handler;
+        private ITestingMessageHandler _handler;
 
         [ExcludeFromCodeCoverage]
         public MessagingManager()
@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// Used specifically for unit tests.
         /// </summary>
         /// <param name="locator"></param>
-        internal MessagingManager(IServiceLocator locator, IMultiVariateMessageHandler handler)
+        internal MessagingManager(IServiceLocator locator, ITestingMessageHandler handler)
         {
             _serviceLocator = locator;
             _handler = handler;
@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Messaging
 
             // register the handler for each message
             if (_handler == null)
-                _handler = new MultiVariateMessageHandler();
+                _handler = new TestingMessageHandler();
 
             registry.Register<UpdateViewsMessage>(_handler);
             registry.Register<UpdateConversionsMessage>(_handler);

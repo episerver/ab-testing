@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
     {
         private static Mock<IServiceLocator> _serviceLocator;
         private static Mock<ITestRepository> _testRepository;
-        private static Mock<IMultiVariateMessageHandler> _messageHandler;
+        private static Mock<ITestingMessageHandler> _messageHandler;
 
         private MessagingManager GetUnitUnderTest()
         {
@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
             {
                 _serviceLocator = new Mock<IServiceLocator>();
                 _testRepository = new Mock<ITestRepository>();
-                _messageHandler = new Mock<IMultiVariateMessageHandler>();
+                _messageHandler = new Mock<ITestingMessageHandler>();
                 _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
             }
 

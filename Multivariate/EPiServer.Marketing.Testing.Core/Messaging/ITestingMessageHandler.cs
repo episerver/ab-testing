@@ -2,7 +2,7 @@
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
-    public interface IMultiVariateMessageHandler :
+    public interface ITestingMessageHandler :
         IMessageHandler<UpdateViewsMessage>,
         IMessageHandler<UpdateConversionsMessage>
     {
