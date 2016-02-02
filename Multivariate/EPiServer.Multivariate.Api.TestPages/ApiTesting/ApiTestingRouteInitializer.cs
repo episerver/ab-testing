@@ -3,10 +3,10 @@ using System.Web.Routing;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 
-namespace EPiServer.Multivariate.Api.TestPages.TestLib
+namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
     [InitializableModule]
-    public class MultivariateTestRouteInitializer : IInitializableModule
+    public class ApiTestingRouteInitializer : IInitializableModule
     {
         public void Initialize(InitializationEngine context)
         {
@@ -18,8 +18,8 @@ namespace EPiServer.Multivariate.Api.TestPages.TestLib
         private static void MapMultivariateTestRoute(RouteCollection routes)
         {
             routes.MapRoute(name: "AB API Testing",
-               url: "MultivariateApiTesting/{action}/{state}",
-               defaults: new { controller = "MultivariateApiTesting", action = "Index", state = UrlParameter.Optional });
+               url: "ApiTesting/{action}/{state}",
+               defaults: new { controller = "ApiTesting", action = "Index", state = UrlParameter.Optional });
 
         }
 

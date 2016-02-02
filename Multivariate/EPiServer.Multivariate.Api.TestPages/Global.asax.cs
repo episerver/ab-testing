@@ -1,9 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace EPiServer.Multivariate.Api.TestPages
+namespace EPiServer.Marketing.Testing.TestPages
 {
-    public class EPiServerApplication : EPiServer.Global
+    public class EPiServerApplication : Global
     {
         protected void Application_Start()
         {

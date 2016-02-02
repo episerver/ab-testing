@@ -1,17 +1,9 @@
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<List<EPiServer.Marketing.Testing.Web.Models.ABTestViewModel>>" %>
-<%@ Import Namespace="System.Web.Mvc.Html" %>
-<%@ Import Namespace="EPiServer.Framework.Web.Mvc.Html" %>
-<%@ Import Namespace="EPiServer.Framework.Web.Resources" %>
-<%@ Import Namespace="EPiServer.Shell.Web.Mvc.Html" %>
 <%@ Import Namespace="EPiServer.Core" %>
-<%@ Import Namespace="EPiServer.ServiceLocation" %>
-<%@ Import Namespace="EPiServer.UI.Admin.MasterPages" %>
-<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Helpers" %>
-<%@ Import Namespace="EPiServer.Marketing.Testing.Web.Repositories" %>
-<%@ Import Namespace="EPiServer.Marketing.Multivariate" %>
 <%@ Import Namespace="EPiServer.Marketing.Testing.Model.Enums" %>
-<%@ Import Namespace="EPiServer.Framework.Localization" %>
-<%@ Register TagPrefix="EPiServerUI" Namespace="EPiServer.UI.WebControls" Assembly="EPiServer.UI" %>
+<%@ Import Namespace="EPiServer.Shell" %>
+<%@ Import Namespace="EPiServer.Web.PageExtensions" %>
+<%@ Import Namespace="EPiServer" %>
 
 <!DOCTYPE html>
 
@@ -22,17 +14,17 @@
     <asp:PlaceHolder runat="server">
         <%=Page.ClientResources("ShellCore")%>
         <%=Page.ClientResources("ShellCoreLightTheme")%>
-        <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.js"))%>
+        <%= Html.ScriptResource(Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.js"))%>
 
-        <%= Html.CssLink(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.css"))%>
-        <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "system.css"))%>
-        <%= Html.CssLink(EPiServer.Web.PageExtensions.ThemeUtility.GetCssThemeUrl(Page, "ToolButton.css"))%>
+        <%= Html.CssLink(Paths.ToClientResource("CMS", "ClientResources/BrokenLinks/BrokenLinks.css"))%>
+        <%= Html.CssLink(ThemeUtility.GetCssThemeUrl(Page, "system.css"))%>
+        <%= Html.CssLink(ThemeUtility.GetCssThemeUrl(Page, "ToolButton.css"))%>
 
-        <%= Html.ScriptResource(EPiServer.Shell.Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))%>
-        <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUtilBySettings("javascript/episerverscriptmanager.js"))%>
-        <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/system.js")) %>
-        <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/dialog.js")) %>
-        <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/system.aspx")) %>
+        <%= Html.ScriptResource(Paths.ToClientResource("CMS", "ClientResources/ReportCenter/ReportCenter.js"))%>
+        <%= Html.ScriptResource(UriSupport.ResolveUrlFromUtilBySettings("javascript/episerverscriptmanager.js"))%>
+        <%= Html.ScriptResource(UriSupport.ResolveUrlFromUIBySettings("javascript/system.js")) %>
+        <%= Html.ScriptResource(UriSupport.ResolveUrlFromUIBySettings("javascript/dialog.js")) %>
+        <%= Html.ScriptResource(UriSupport.ResolveUrlFromUIBySettings("javascript/system.aspx")) %>
 
         <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/smoothness/jquery-ui.min.css" rel="stylesheet">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

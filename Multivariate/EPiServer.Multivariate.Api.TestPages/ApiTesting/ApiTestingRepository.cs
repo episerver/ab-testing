@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
-using EPiServer.Marketing.Testing;
-using EPiServer.Multivariate.Api.TestPages.Models;
 
-namespace EPiServer.Multivariate.Api.TestPages.TestLib
+namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
-    public class MultivariateTestLib
+    public class ApiTestingRepository
     {
         private TestManager _mtm;
         private List<KeyPerformanceIndicator> Kpis;

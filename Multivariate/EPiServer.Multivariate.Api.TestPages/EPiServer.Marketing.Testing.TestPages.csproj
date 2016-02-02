@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Multivariate.Api.TestPages</RootNamespace>
-    <AssemblyName>EPiServer.Multivariate.Api.TestPages</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.Testing.TestPages</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.Testing.TestPages</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -275,14 +275,14 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ItemGroup>
-    <Compile Include="Controllers\MultivariateApiTestingController.cs" />
+    <Compile Include="Controllers\ApiTestingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestLib\MultivariateTestLib.cs" />
-    <Compile Include="TestLib\MultivariateTestRouteInitializer.cs" />
+    <Compile Include="ApiTesting\ApiTestingRepository.cs" />
+    <Compile Include="ApiTesting\ApiTestingRouteInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Business\" />
@@ -306,10 +306,10 @@
     </Content>
     <Content Include="modules\_protected\EPiServer.Packaging.UI\web.config" />
     <Content Include="modules\_protected\EPiServer.Packaging.UI\EPiServer.Packaging.UI.zip" />
-    <Content Include="Views\MultivariateApiTesting\CreateAbTest.cshtml" />
-    <Content Include="Views\MultivariateApiTesting\GetAbTestList.cshtml" />
-    <Content Include="Views\MultivariateApiTesting\Index.cshtml" />
-    <Content Include="Views\MultivariateApiTesting\TestDetails.cshtml" />
+    <Content Include="Views\ApiTesting\CreateAbTest.cshtml" />
+    <Content Include="Views\ApiTesting\GetAbTestList.cshtml" />
+    <Content Include="Views\ApiTesting\Index.cshtml" />
+    <Content Include="Views\ApiTesting\TestDetails.cshtml" />
     <Content Include="Package.nuspec" />
     <Content Include="modules\_protected\Shell\web.config" />
     <Content Include="modules\_protected\Shell\Shell.zip" />
@@ -364,12 +364,12 @@ IF exist "$(SolutionDir)MultivariateTestingDeployment\content" ( rmdir "$(Soluti
 
 mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Views"
 mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Controllers"
-mkdir "$(SolutionDir)MultivariateTestingDeployment\content\TestLib"
+mkdir "$(SolutionDir)MultivariateTestingDeployment\content\ApiTesting"
 mkdir "$(SolutionDir)MultivariateTestingDeployment\content\Models"
 
-xcopy "$(ProjectDir)"\Views\MultivariateApiTesting\*.cshtml "$(SolutionDir)MultivariateTestingDeployment\content\Views\MultivariateApiTesting\"  /I /F /R /Y
+xcopy "$(ProjectDir)"\Views\ApiTesting\*.cshtml "$(SolutionDir)MultivariateTestingDeployment\content\Views\ApiTesting\"  /I /F /R /Y
 xcopy "$(ProjectDir)"\Controllers\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\Controllers\" /I /F /R /Y
-xcopy "$(ProjectDir)"\TestLib\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\TestLib\"  /I /F /R /Y
+xcopy "$(ProjectDir)"\ApiTesting\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\ApiTesting\"  /I /F /R /Y
 xcopy "$(ProjectDir)"\Models\*.cs "$(SolutionDir)MultivariateTestingDeployment\content\Models\"  /I /F /R /Y
 
 

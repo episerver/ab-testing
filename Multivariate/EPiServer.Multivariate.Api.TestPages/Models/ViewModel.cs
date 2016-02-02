@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using EPiServer.Framework.Localization;
+﻿using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Testing.Web.Models;
-using EPiServer.Validation;
 
-namespace EPiServer.Multivariate.Api.TestPages.Models
+namespace EPiServer.Marketing.Testing.TestPages.Models
 {
     public class ViewModel
     {

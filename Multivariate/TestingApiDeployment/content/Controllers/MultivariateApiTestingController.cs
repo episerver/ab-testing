@@ -35,7 +35,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         [HttpGet]
         public ActionResult CreateAbTest()
         {
-            MultivariateTest multiVariateTest = new MultivariateTest();
+            ABTest multiVariateTest = new ABTest();
 
             multiVariateTest.OriginalItemId = Guid.NewGuid();
             multiVariateTest.Variants = new List<Variant>()
@@ -47,7 +47,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateABTest(MultivariateTest multivariateTestData)
+        public ActionResult CreateABTest(ABTest multivariateTestData)
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
             TestManager mtm = new TestManager();
@@ -65,7 +65,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult UpdateAbTest(string id)
         {
             TestManager mtm = new TestManager();
-            MultivariateTest multivariateTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
+            ABTest multivariateTest = mtm.Get(Guid.Parse(id)) as ABTest;
 
             return View("CreateAbTest", multivariateTest);
         }
@@ -74,14 +74,14 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
 
         [HttpPost]
-        public ActionResult UpdateAbTest(MultivariateTest dataToSave)
+        public ActionResult UpdateAbTest(ABTest dataToSave)
         {
             MultivariateTestLib testLib = new MultivariateTestLib();
             TestManager mtm = new TestManager();
             if (ModelState.IsValid)
             {
                 testLib.CreateAbTest(dataToSave);
-                MultivariateTest returnedTestData = mtm.Get(dataToSave.Id) as MultivariateTest;
+                ABTest returnedTestData = mtm.Get(dataToSave.Id) as ABTest;
 
                 return View("TestDetails", returnedTestData);
             }
@@ -91,7 +91,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         public ActionResult GetAbTestById(string id)
         {
             TestManager mtm = new TestManager();
-            MultivariateTest returnedTest = mtm.Get(Guid.Parse(id)) as MultivariateTest;
+            ABTest returnedTest = mtm.Get(Guid.Parse(id)) as ABTest;
 
             return View("TestDetails", returnedTest);
 
@@ -119,7 +119,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
 
 
-        public ActionResult TestDetails(MultivariateTest testDetails)
+        public ActionResult TestDetails(ABTest testDetails)
         {
             return View(testDetails);
         }
