@@ -7,6 +7,9 @@ using EPiServer.Editor;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Threading;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Http;
 
 namespace EPiServer.Marketing.Testing.Web.Initializer
 {
@@ -22,6 +25,15 @@ namespace EPiServer.Marketing.Testing.Web.Initializer
         {
             context.InitComplete += InitComplete;
             context.Locate.TemplateResolver().TemplateResolved += OnTemplateResolved;
+
+            GlobalConfiguration.Configure(config =>
+            {
+                config.Routes.MapHttpRoute(
+                name: "EPiServerContentOptimization",
+                routeTemplate: "api/episerver/testing/{action}",
+                defaults: new { controller = "Testing", action = "GetAllTests" }
+                );
+            });
         }
 
         /// <summary>
@@ -31,8 +43,8 @@ namespace EPiServer.Marketing.Testing.Web.Initializer
         /// <param name="e"></param>
         private void InitComplete(object sender, EventArgs e)
         {
-            // Great place to initialize the queue or other services that are not 
-            // automatically instantiated.
+            var routes = RouteTable.Routes;
+            Thread.Sleep(5000);
         }
 
         /// <summary>
