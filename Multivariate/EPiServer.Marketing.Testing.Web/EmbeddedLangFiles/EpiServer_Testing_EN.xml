@@ -3,7 +3,7 @@
   <language name="English" id="en">
    <multivariate>
      <settings>
-       <displayname>Multivariate Test List</displayname>
+       <displayname>Marketing Content Test List</displayname>
        <description>New Test Details</description>
        <testtitle>Name</testtitle>
        <owner>Owner</owner>
@@ -30,8 +30,23 @@
        <actions>Actions</actions>
        <delete>Delete</delete>
        <stop>Stop Test</stop>
+       <configurationview>
+         <testdetails>
+           <title>Title:</title>
+           <owner>Current Owner:</owner>
+           <created>Created:</created>
+           <modified>Last Modified:</modified>
+           <unmodified>Unmodified</unmodified>
+           <teststate>Status:</teststate>
+           <start>Start Date:</start>
+           <end>End Date:</end>
+           <testresults>
+             <tablecaption>Current Testing Results</tablecaption>
+           </testresults>
+         </testdetails>
+       </configurationview>
        <form>
-         <title>Multivariate Test</title>
+         <title>Marketing Content Test</title>
          <legendtitle>Test Information</legendtitle>
        </form>
    </settings>

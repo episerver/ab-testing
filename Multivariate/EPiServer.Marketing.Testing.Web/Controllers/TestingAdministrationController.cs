@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Testing.Model.Enums;
 
 namespace EPiServer.Marketing.Testing.Web
 {
-    [GuiPlugIn(DisplayName = "Multivariate Test Configuration", UrlFromModuleFolder = "TestingAdministration", Area = PlugInArea.AdminConfigMenu)]
+    [GuiPlugIn(DisplayName = "Marketing Content Test Configuration", UrlFromModuleFolder = "TestingAdministration", Area = PlugInArea.AdminConfigMenu)]
     public class TestingAdministrationController : Controller
     {
         private IServiceLocator _serviceLocator;
@@ -47,7 +42,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (testSettings == null)
             {
-                return View("Create", testSettings);
+                return View("Create");
             }
 
             // remove validation on all the fields except EndDate, because we allow 

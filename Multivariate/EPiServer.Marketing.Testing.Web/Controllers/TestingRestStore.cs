@@ -1,12 +1,11 @@
-﻿using EPiServer.Marketing.Testing.Messaging;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Web.Mvc;
+using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Newtonsoft.Json;
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Web.Mvc;
-using EPiServer.Marketing.Testing;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {

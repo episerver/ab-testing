@@ -20,7 +20,9 @@
     <div class="epi-contentArea" style="float: right">
 
         <table>
-            <caption class="detailsPadding" style="text-align: center; font-weight: bold">Current Multivariate Test Results</caption>
+            <caption class="detailsPadding" style="text-align: center; font-weight: bold">
+                <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/testresults/tablecaption")%>
+            </caption>
             <tr class="detailsPadding">
                 <th>Content</th>
                 <th style="padding-right: 15px">Link</th>
@@ -55,25 +57,35 @@
     <fieldset>
         <div class="epi-contentArea">
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Title:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/title")%>
+                </div>
                 <div class="display-field"><%= Html.Encode(Model.Title) %></div>
             </div>
 
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Current Owner:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/owner")%>
+                </div>
                 <div class="display-field"><%= Html.Encode(Model.Owner)%> </div>
             </div>
 
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Created:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/created")%>
+                </div>
                 <div class="display-field"><%= Html.Encode(Model.DateCreated.ToLocalTime()) %> by <%= Html.Encode(Model.Owner) %></div>
             </div>
 
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Last Modified:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/modified")%>
+                </div>
                 <% if (Model.DateModified == Model.DateCreated)
                     { %>
-                <div class="display-field" style="font-style: oblique">Unmodified</div>
+                <div class="display-field" style="font-style: oblique">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/unmodified")%>
+                </div>
                 <% }
                     else
                     { %>
@@ -82,17 +94,23 @@
             </div>
 
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Status:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/teststate")%>
+                </div>
                 <div class="display-field"><%= Html.Encode(Model.testState) %></div>
             </div>
 
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Start Date:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/start")%>
+                </div>
                 <div class="display-field"><%= Html.Encode(Model.StartDate) %></div>
             </div>
 
             <div class="epi-size15 detailsPadding">
-                <div class="display-label">Stop Date:</div>
+                <div class="display-label">
+                    <%= LanguageManager.Instance.Translate("/multivariate/settings/configurationview/testdetails/end")%>
+                </div>
                 <div class="display-field"><%= Html.Encode(Model.EndDate) %></div>
             </div>
 
