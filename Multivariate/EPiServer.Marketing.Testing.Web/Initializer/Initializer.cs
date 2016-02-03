@@ -43,8 +43,8 @@ namespace EPiServer.Marketing.Testing.Web.Initializer
         /// <param name="e"></param>
         private void InitComplete(object sender, EventArgs e)
         {
-            var routes = RouteTable.Routes;
-            Thread.Sleep(5000);
+            // Great place to initialize the queue or other services that are not 
+            // automatically instantiated.
         }
 
         /// <summary>
