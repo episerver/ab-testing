@@ -44,44 +44,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid CreateTest(ABTestViewModel testData)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-
-            //attempt to get a saved test based on incomming id
-            ABTest test = tm.Get(testData.id) as ABTest;
-
-
-            if (test == null) //no test exists
-            {
-                //if there isn't a test in the system just convert.
-                test = ConvertToMultivariateTest(testData);
-            }
-            else if (test.TestState == TestState.Inactive)
-            {
-                
-                //they could be changing any or all fields so easier
-                //to delete the existing test and let ef handle cleanup. 
-                //Then recreate test to avoid potenitally orphaning
-                //origin, variant and test result db entries
-
-                //Todo: Must rework this and move this functionality deeper.
-                DateTime preservedCreateDate = test.CreatedDate;
-                testData.LastModifiedBy = Security.PrincipalInfo.CurrentPrincipal.Identity.Name;
-                testData.DateModified = DateTime.UtcNow;
-                
-                tm.Delete(testData.id);
-                test = ConvertToMultivariateTest(testData);
-
-                tm.Save(test);
-                test.CreatedDate = preservedCreateDate; //This is to preserve original created date.
-                
-
-            }
-            if (test.TestState == TestState.Active)
-            {
-                //Per current rules, Active tests can only modify the end date.
-                test.EndDate = testData.EndDate;
-
-            } 
-
+            var test = ConvertToMultivariateTest(testData);
             return tm.Save(test);
         }
 

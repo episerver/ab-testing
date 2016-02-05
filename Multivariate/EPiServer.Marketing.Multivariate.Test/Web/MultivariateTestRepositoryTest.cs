@@ -208,19 +208,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         }
 
         [Fact]
-        public void CreateTest_WithTestStateInactive_CallsTestManagerDelete()
-        {
-            var repo = GetUnitUnderTest();
-
-            test.TestState = TestState.Inactive;
-            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
-            _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
-
-            repo.CreateTest(viewdata);
-            _testmanager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Once, "Create Test with Inactive Test State did not call Delete.");
-        }
-
-        [Fact]
         public void CreateTest_WithTestStateActive_SetsDateValue()
         {
             var repo = GetUnitUnderTest();

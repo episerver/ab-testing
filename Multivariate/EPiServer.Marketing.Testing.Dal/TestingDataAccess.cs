@@ -141,9 +141,10 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public Guid Save(IABTest testObject)
         {
-            var test = _repository.GetById(testObject.Id);
+            var test = _repository.GetById(testObject.Id) as ABTest;
             Guid id;
 
+            // if a test doesn't exist, add it to the db
             if (test == null)
             {
                 _repository.Add(testObject);
@@ -151,17 +152,107 @@ namespace EPiServer.Marketing.Testing.Dal
             }
             else
             {
-                test.Title = testObject.Title;
-                test.StartDate = testObject.StartDate;
-                test.EndDate = testObject.EndDate;
-                test.Owner = testObject.Owner;
-                test.LastModifiedBy = testObject.LastModifiedBy;
-                test.ModifiedDate = DateTime.UtcNow;
-                test.Conversions = testObject.Conversions;
-                test.Variants = testObject.Variants;
-                test.KeyPerformanceIndicators = testObject.KeyPerformanceIndicators;
-                test.MultivariateTestResults = testObject.MultivariateTestResults;
-                id = test.Id;
+                switch (test.TestState)
+                {
+                    case TestState.Inactive:
+                        // update test properties
+                        test.Title = testObject.Title;
+                        test.StartDate = testObject.StartDate;
+                        test.EndDate = testObject.EndDate;
+                        test.ModifiedDate = DateTime.UtcNow;
+                        test.LastModifiedBy = testObject.LastModifiedBy;
+                        test.TestState = testObject.TestState;
+
+                        // update original item and corresponding result record if different
+                        if (test.OriginalItemId != testObject.OriginalItemId)
+                        {
+                            var result =
+                                test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == test.OriginalItemId);
+                            if (null != result)
+                            {
+                                test.MultivariateTestResults.Remove(result);
+                                _repository.Delete(result);
+                            }
+
+                            test.OriginalItemId = testObject.OriginalItemId;
+                            test.MultivariateTestResults.Add(
+                                new TestResult()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    ItemId = testObject.OriginalItemId
+                                }
+                                );
+                        }
+
+                        // variant items and corresponding result records
+                        var removeVariant = true;
+                        var variantsToAdd = new List<Variant>(testObject.Variants);
+
+                        // loop over current variants to see if they are also the new variants
+                        // if so, leave them as is, if not, remove them from the test
+                        foreach (var currentVariant in test.Variants.ToArray())
+                        {
+                            foreach (var newVariant in
+                                testObject.Variants.Where(newVariant => currentVariant.VariantId == newVariant.VariantId)
+                                )
+                            {
+                                removeVariant = false;
+                                variantsToAdd.Remove(newVariant);
+                                break;
+                            }
+
+                            // if the currentVariant is not in the new testObject, then we need to remove it from the existing test along with its result
+                            if (removeVariant)
+                            {
+                                test.Variants.Remove(currentVariant);
+                                _repository.Delete(currentVariant);
+                                var result =
+                                    test.MultivariateTestResults.FirstOrDefault(
+                                        r => r.ItemId == currentVariant.VariantId);
+
+                                if (null != result)
+                                {
+                                    test.MultivariateTestResults.Remove(result);
+                                    _repository.Delete(result);
+                                }
+                            }
+
+                            removeVariant = true;
+                        }
+
+                        // add remaining new variants from testObject to the existing test along with their results
+                        foreach (var variant in variantsToAdd)
+                        {
+                            test.Variants.Add(variant);
+                            test.MultivariateTestResults.Add(
+                                new TestResult()
+                                {
+                                    Id = Guid.NewGuid(),
+                                    ItemId = variant.VariantId
+                                });
+                        }
+
+                        id = test.Id;
+                        break;
+                    case TestState.Active:
+                        if (testObject.TestState == TestState.Done)
+                        {
+                            test.TestState = TestState.Done;
+                        }
+                        test.EndDate = testObject.EndDate;
+                        id = test.Id;
+                        break;
+                    case TestState.Done:
+                        if (testObject.TestState == TestState.Archived)
+                        {
+                            test.TestState = TestState.Archived;
+                        }
+                        id = test.Id;
+                        break;
+                    default:
+                        id = test.Id;
+                        break;
+                }
             }
 
             _repository.SaveChanges();

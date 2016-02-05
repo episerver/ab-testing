@@ -237,6 +237,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
                 MultivariateTestResults = new List<TestResult>(),
+                Variants = new List<Variant>(),
                 OriginalItemId = itemId
             };
 
