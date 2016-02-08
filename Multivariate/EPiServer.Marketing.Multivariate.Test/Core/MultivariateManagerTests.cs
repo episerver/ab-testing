@@ -1,187 +1,220 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Dal;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
 {
-    [TestClass]
-    public class MultivariateManagerTests
+        public class MultivariateManagerTests
     {
-        private Mock<IMultivariateTestDal> dal;
-        private Mock<ICurrentUser> user;
-        private Mock<IMultivariateTest> testData;
-        private Mock<ICurrentSite> siteData;
-        private string testUsername = "TestUser";
-        private MultivariateTestManager GetUnitUnderTest()
-        {
-            dal = new Mock<IMultivariateTestDal>();
-            user = new Mock<ICurrentUser>();
-            siteData = new Mock<ICurrentSite>();
-            testData = new Mock<IMultivariateTest>();
+        private Mock<IServiceLocator> _serviceLocator;
+        private Mock<ITestingDataAccess> _dataAccessLayer;
 
-            user.Setup(u => u.GetDisplayName()).Returns(testUsername);
-            return new MultivariateTestManager(dal.Object, user.Object, siteData.Object);
+        private TestManager GetUnitUnderTest()
+        {
+            _serviceLocator = new Mock<IServiceLocator>();
+            _dataAccessLayer = new Mock<ITestingDataAccess>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
+
+            return new TestManager(_serviceLocator.Object);
         }
 
-        //[TestMethod]
-        //public void TestManager_Construction_Creates_Internal_Objects()
-        //{
-        //    var aTestManager = new MultivariateTestManager();
-
-        //    Assert.IsNotNull(aTestManager._log, "The logger should be created upon construction");
-        //    Assert.IsNotNull(aTestManager._dataAccess, "The data access object should be created upon construction");
-        //    Assert.IsNotNull(aTestManager._user, "The current user object should be created upon construction");
-        //}
-
-        [TestMethod]
-        public void Save_Adds_A_New_Test_Given_No_Id()
+        [Fact]
+        public void TestManager_CallsDataAccessGetWithGuid()
         {
-            var testManager = GetUnitUnderTest();
-            testData.SetupGet(td => td.Id).Returns(null);
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            tm.Get(theGuid);
 
-            var testGuid = Guid.NewGuid();
-            dal.Setup(d => d.Add(It.IsAny<MultivariateTestParameters>())).Returns(testGuid);
-            var retId = testManager.Save(testData.Object);
-
-            Assert.AreEqual(testGuid, retId, "The value returned was not equal to the expected Guid");
-            dal.Verify(d => d.Add(It.IsAny<MultivariateTestParameters>()), Times.Once, "Add should only be called once");
+            _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer get was never called or Guid did not match.");
         }
 
-        [TestMethod]
-        public void Save_Updates_A_Test_With_A_Given_Id()
+        [Fact]
+        public void TestManager_CallsDataAccessGetTestByItemId()
         {
-            var testManager = GetUnitUnderTest();
-            testData.SetupGet(td => td.Id).Returns(Guid.NewGuid());
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            tm.GetTestByItemId(theGuid);
 
-            dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-            var retId = testManager.Save(testData.Object);
-
-            dal.Verify(d => d.Update(It.IsAny<MultivariateTestParameters>()), Times.Once, "Update should only be called once");
+            _dataAccessLayer.Verify(da => da.GetTestByItemId(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
         }
 
-        [TestMethod]
-        public void Delete_Passes_The_Id_Of_The_Item_To_Delete()
+        [Fact]
+        public void TestManager_CallsGetTestListWithCritera()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
+            var critera = new TestCriteria();
+            var tm = GetUnitUnderTest();
+            tm.GetTestList(critera);
 
-            dal.Setup(d => d.Delete(It.IsAny<Guid>()));
-
-            testManager.Delete(testGuid);
-
-            dal.Verify(d => d.Delete(It.IsAny<Guid>()), Times.Once, "Delete should be called once");
-            dal.Verify(d => d.Delete(It.Is<Guid>(arg => arg == testGuid)), "The id passed in should be the same as the one passed to the DAL");
+            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<TestCriteria>(arg => arg.Equals(critera))),
+                "DataAcessLayer GetTestList was never called or criteria did not match.");
         }
 
-        [TestMethod]
-        public void Start_Saves_The_Test_State_To_Active()
+        [Fact]
+        public void TestManager_CallsDeleteWithGuid()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
-            dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-            dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { Id = testGuid });
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            tm.Delete(theGuid);
 
-            testManager.Start(testGuid);
-
-            dal.Verify(d => d.Update(It.Is<MultivariateTestParameters>(arg => arg.Id == testGuid && arg.State == "Active")));
+            _dataAccessLayer.Verify(da => da.Delete(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer Delete was never called or Guid did not match.");
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void Start_Throws_When_There_Is_A_Test_Active()
+        [Fact]
+        public void TestManager_CallsStartWithGuid()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
-            dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters());
-            dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters[1] { new MultivariateTestParameters() { State = "Active" } });
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            tm.Start(theGuid);
 
-            testManager.Start(testGuid);
+            _dataAccessLayer.Verify(da => da.Start(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer Start was never called or Guid did not match.");
         }
 
-
-        [TestMethod]
-        public void Stop_Sets_The_Test_State_To_Done()
+        [Fact]
+        public void TestManager_CallsStopWithGuid()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
-            dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-            dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { Id = testGuid });
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            tm.Stop(theGuid);
 
-            testManager.Stop(testGuid);
-
-            dal.Verify(d => d.Update(It.Is<MultivariateTestParameters>(arg => arg.Id == testGuid && arg.State == "Done")));
+            _dataAccessLayer.Verify(da => da.Stop(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer Stop was never called or Guid did not match.");
         }
 
-        [TestMethod]
-        public void Archive_Sets_The_Test_State_To_Archived()
+        [Fact]
+        public void TestManager_CallsArchiveWithGuid()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
-            dal.Setup(d => d.Update(It.IsAny<MultivariateTestParameters>()));
-            dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(new MultivariateTestParameters() { Id = testGuid });
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            tm.Archive(theGuid);
 
-            testManager.Archive(testGuid);
-
-            dal.Verify(d => d.Update(It.Is<MultivariateTestParameters>(arg => arg.Id == testGuid && arg.State == "Archived")));
+            _dataAccessLayer.Verify(da => da.Archive(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer Archive was never called or Guid did not match.");
         }
 
-        [TestMethod]
-        public void Get_Returns_The_Test_With_The_Passed_In_Id()
+        [Fact]
+        public void TestManager_CallsSaveWithProperArguments()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            ABTest test = new ABTest() { Id = theGuid };
+            tm.Save(test);
 
-            dal.Setup(d => d.Get(It.Is<Guid>(a => a == testGuid))).Returns(new MultivariateTestParameters() { Id = testGuid });
-
-            var actualTest = testManager.Get(testGuid);
-
-            Assert.AreEqual(actualTest.Id, testGuid, "The Id returned should match the one supplied to the get method.");
+            _dataAccessLayer.Verify(da => da.Save(It.Is<ABTest>(arg => arg.Equals(test))),
+                "DataAcessLayer Save was never called or object did not match.");
         }
 
-        [TestMethod]
-        public void GetTestByItemId_Returns_The_Test_With_The_Given_Original_Id()
+        [Fact]
+        public void TestManager_CallsIncrementCountWithProperArguments()
         {
-            var testManager = GetUnitUnderTest();
-            var itemGuid = Guid.NewGuid();
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var theTestItemGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
+            CountType type = CountType.Conversion;
 
-            dal.Setup(d => d.GetByOriginalItemId(It.IsAny<Guid>())).Returns(new MultivariateTestParameters[1] { new MultivariateTestParameters() { OriginalItemId = itemGuid } });
+            var tm = GetUnitUnderTest();
+            tm.IncrementCount(theGuid, theTestItemGuid, type);
 
-            var actualTest = testManager.GetTestByItemId(itemGuid);
-
-            Assert.AreEqual(actualTest[0].OriginalItemId, itemGuid, "The test returned should have the same OriginalItemId as was requested");
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<CountType>()),
+                "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<CountType>()),
+                "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<CountType>(arg => arg.Equals(CountType.Conversion))),
+                "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
-        [TestMethod]
-        public void IncrementCount_Calls_Into_Dal_To_Update_The_Counts()
+        [Fact]
+        public void TestManager_ReturnLandingPage_NoCache()
         {
-            var testManager = GetUnitUnderTest();
-            var testGuid = Guid.NewGuid();
-            var itemGuid = Guid.NewGuid();
+            // Make sure that the return landing page, calls data access layer if its not in the cache..
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
+            var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
+            var variantList = new List<Variant>() { new Variant { VariantId = vID } };
 
-            testManager.IncrementCount(testGuid, itemGuid, CountType.View);
-            testManager.IncrementCount(testGuid, itemGuid, CountType.Conversion);
+            var tm = GetUnitUnderTest();
+            _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
+                new ABTest()
+                {
+                    Id = theGuid,
+                    OriginalItemId = originalItemId,
+                    Variants = variantList
+                });
 
-            dal.Verify(d => d.UpdateViews(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items views");
-            dal.Verify(d => d.UpdateConversions(It.Is<Guid>(g => g == testGuid), It.Is<Guid>(g => g == itemGuid)), Times.Once, "Call to DAL should increment the tests given items conversions");
-        }
-
-        [TestMethod]
-        public void ReturnLandingPage_Returns_OriginalOrVariantPage_BasedOnRandomNumberGenerator()
-        {
-            var testManager = GetUnitUnderTest();
-            Guid testGuid = Guid.NewGuid(), origItemId = Guid.NewGuid(), varItemId = Guid.NewGuid();
-            var mockTest = new MultivariateTestParameters()
+            var count = 0;
+            var originalCalled = false;
+            var variantCalled = false;
+            // loop over call until all possible switch options are generated.
+            while (count < 2)
             {
-                Title = "Test 1",
-                OriginalItemId = origItemId,
-                VariantItemId = varItemId
-            };
+                // clear the cache if you have to (tm.clearCache() ?) - this test is supposed to verify that the 
+                // database layer is called.
+                var landingPage = tm.ReturnLandingPage(theGuid);
 
-            dal.Setup(d => d.Get(It.IsAny<Guid>())).Returns(mockTest);
+                if (landingPage == originalItemId && !originalCalled)
+                {
+                    count++;
+                    originalCalled = true;
+                }
 
-            var actualItemId = testManager.ReturnLandingPage(testGuid);
-            Assert.IsTrue((actualItemId == mockTest.OriginalItemId || actualItemId == mockTest.VariantItemId), "The value returned was not equal to the expected Guid");
+                if (landingPage == vID && !variantCalled)
+                {
+                    count++;
+                    variantCalled = true;
+                }
+
+                _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                    "DataAcessLayer get was never called or Guid did not match.");
+                Assert.True(landingPage.Equals(originalItemId) ||
+                              landingPage.Equals(vID), "landingPage is not the original quid or the variant quid");
+            }
+        }
+
+        [Fact]
+        public void TestManager_EmitUpdateConversion()
+        {
+            var testManager = GetUnitUnderTest();
+
+            // Mock up the message manager
+            Mock<IMessagingManager> messageManager = new Mock<IMessagingManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(messageManager.Object);
+
+            Guid original = Guid.NewGuid();
+            Guid testItemId = Guid.NewGuid();
+            testManager.EmitUpdateCount(original, testItemId, CountType.Conversion);
+
+            messageManager.Verify(mm => mm.EmitUpdateConversion(
+                It.Is<Guid>(arg => arg.Equals(original)),
+                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                "Guids are not correct or update conversion message not emmited");
+        }
+
+        [Fact]
+        public void TestManager_EmitUpdateView()
+        {
+            var testManager = GetUnitUnderTest();
+
+            // Mock up the message manager
+            Mock<IMessagingManager> messageManager = new Mock<IMessagingManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(messageManager.Object);
+
+            Guid original = Guid.NewGuid();
+            Guid testItemId = Guid.NewGuid();
+            testManager.EmitUpdateCount(original, testItemId, CountType.View);
+
+            messageManager.Verify(mm => mm.EmitUpdateViews(
+                It.Is<Guid>(arg => arg.Equals(original)),
+                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                "Guids are not correct or update View message not emmited");
         }
     }
 }
