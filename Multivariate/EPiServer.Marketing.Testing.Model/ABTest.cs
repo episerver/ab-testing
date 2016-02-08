@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Current state of the test.
         /// </summary>
-        public TestState TestState { get; set; }
+        public TestState State { get; set; }
 
         /// <summary>
         /// Date and time the test starts.
@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// List of results for the test.  There will be a MultivariateTestResult for the OriginalItem and each Variant item.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual IList<TestResult> MultivariateTestResults { get; set; }
+        public virtual IList<TestResult> TestResults { get; set; }
 
         /// <summary>
         /// List of KeyPerformanceIndicators.  These can be time on a page, form submission, etc.

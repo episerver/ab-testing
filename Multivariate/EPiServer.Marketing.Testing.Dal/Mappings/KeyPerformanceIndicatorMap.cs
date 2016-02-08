@@ -8,14 +8,14 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
     {
         public KeyPerformanceIndicatorMap()
         {
-            this.ToTable("tblKeyPerformanceIndicator");
+            this.ToTable("tblABKeyPerformanceIndicator");
 
             this.HasKey(hk => hk.Id);
 
             this.Property(m => m.KeyPerformanceIndicatorId)
                 .IsOptional();
 
-            this.HasRequired(m => m.MultivariateTest)
+            this.HasRequired(m => m.ABTest)
                 .WithMany(m => m.KeyPerformanceIndicators)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();

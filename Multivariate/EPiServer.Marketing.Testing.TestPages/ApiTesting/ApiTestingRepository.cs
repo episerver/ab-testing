@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
                 foreach (var filter in viewModel.Filters.Where(filter => filter.IsEnabled))
                 {
-                    if (filter.Property == MultivariateTestProperty.TestState)
+                    if (filter.Property == ABTestProperty.State)
                     {
                         var state = TestState.Active;
                         switch (filter.FilterValue.ToLower())
@@ -52,13 +52,13 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
                                 break;
                         }
 
-                        criteria.AddFilter(new MultivariateTestFilter(filter.Property,
+                        criteria.AddFilter(new ABTestFilter(filter.Property,
                             filter.OperatorValue.ToLower() == "and" ? FilterOperator.And : FilterOperator.Or,
                             state));
                     }
                     else
                     {
-                        criteria.AddFilter(new MultivariateTestFilter(filter.Property,
+                        criteria.AddFilter(new ABTestFilter(filter.Property,
                             filter.OperatorValue.ToLower() == "and" ? FilterOperator.And : FilterOperator.Or,
                             new Guid(filter.FilterValue)));
                     }
@@ -79,10 +79,10 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
                     new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
                 };
 
-            dataToSave.MultivariateTestResults = new List<TestResult>()
+            dataToSave.TestResults = new List<TestResult>()
             {
                 new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.OriginalItemId},
-                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].VariantId}
+                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].ItemId}
             };
 
             _mtm.Save(dataToSave);

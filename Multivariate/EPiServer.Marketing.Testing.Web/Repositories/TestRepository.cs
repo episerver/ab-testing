@@ -97,23 +97,23 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             // need to get content reference for pages from the view model item ids
             var originalItemRef = contentrepo.Get<IContent>(testToConvert.OriginalItemId);
-            var variantItemRef = contentrepo.Get<IContent>(testToConvert.Variants[0].VariantId);
+            var variantItemRef = contentrepo.Get<IContent>(testToConvert.Variants[0].ItemId);
 
             ABTestViewModel testModel = new ABTestViewModel()
             {
                 id = testToConvert.Id,
                 Title = testToConvert.Title,
                 Owner = testToConvert.Owner,
-                testState = testToConvert.TestState,
+                testState = testToConvert.State,
                 StartDate = testToConvert.StartDate,
                 OriginalItem = originalItemRef.ContentLink.ID,
                 OriginalItemDisplay = string.Format("{0} [{1}]", originalItemRef.Name,originalItemRef.ContentLink),
                 EndDate = testToConvert.EndDate,
                 OriginalItemId = testToConvert.OriginalItemId,
-                VariantItemId = testToConvert.Variants[0].VariantId,
+                VariantItemId = testToConvert.Variants[0].ItemId,
                 VariantItem = variantItemRef.ContentLink.ID,
                 VariantItemDisplay = string.Format("{0} [{1}]", variantItemRef.Name, variantItemRef.ContentLink),
-                TestResults = testToConvert.MultivariateTestResults,
+                TestResults = testToConvert.TestResults,
                 DateCreated = testToConvert.CreatedDate,
                 DateModified = testToConvert.ModifiedDate,
                 LastModifiedBy = testToConvert.LastModifiedBy
@@ -147,13 +147,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 EndDate = viewModelToConvert.EndDate,
                 Variants = new List<Variant>()
                 {
-                    new Variant() {Id = Guid.NewGuid(), VariantId = variantItemRef.ContentGuid}
+                    new Variant() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}
                 },
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 {
                     new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid()},
                 },
-                MultivariateTestResults = new List<TestResult>()
+                TestResults = new List<TestResult>()
                 {
                     new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemRef.ContentGuid},
                     new TestResult() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}

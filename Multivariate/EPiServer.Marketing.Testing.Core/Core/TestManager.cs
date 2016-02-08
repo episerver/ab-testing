@@ -89,7 +89,7 @@ namespace EPiServer.Marketing.Testing
                         activePage = currentTest.OriginalItemId;
                         break;
                     case 2:
-                        activePage = currentTest.Variants[0].VariantId;
+                        activePage = currentTest.Variants[0].ItemId;
                         break;
                 }
             }

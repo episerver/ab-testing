@@ -29,6 +29,6 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest MultivariateTest { get; set; }
+        public virtual ABTest ABTest { get; set; }
     }
 }

@@ -122,7 +122,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var orFilters = filters.Where(filter => filter.Operator == FilterOperator.Or);
 
 
-            var tests = TestContext.MultivariateTests.AsQueryable();
+            var tests = TestContext.ABTests.AsQueryable();
             var pe = Expression.Parameter(typeof(string), "test");
             Expression wholeExpression = null;
 

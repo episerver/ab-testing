@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                TestState = TestState.Active,
+                State = TestState.Active,
                 Owner = "Bert"
             };
 
@@ -58,12 +58,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
-            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
             Assert.Equal(2, list.Count());
@@ -81,7 +81,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
             Assert.Equal(1, list.Count());
@@ -94,12 +94,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[0].TestState = TestState.Archived;
+            tests[0].State = TestState.Archived;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Archived);
+            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -113,13 +113,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[1].TestState = TestState.Archived;
-            tests[2].TestState = TestState.Archived;
+            tests[1].State = TestState.Archived;
+            tests[2].State = TestState.Archived;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
+            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -132,13 +132,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
-            tests[1].TestState = TestState.Archived;
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].State = TestState.Archived;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
+            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -151,13 +151,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
-            tests[1].TestState = TestState.Active;
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].State = TestState.Active;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.Or, variantItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
+            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.Or, variantItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Active);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
 
@@ -195,31 +195,31 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
             _mtm.Start(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).TestState, TestState.Active);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Active);
         }
 
         [Fact]
         public void TestManagerStop()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].TestState = TestState.Active;
+            tests[0].State = TestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Stop(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).TestState, TestState.Done);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Done);
         }
 
         [Fact]
         public void TestManagerArchive()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].TestState = TestState.Active;
+            tests[0].State = TestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Archive(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).TestState, TestState.Archived);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Archived);
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
-                MultivariateTestResults = new List<TestResult>(),
+                TestResults = new List<TestResult>(),
                 Variants = new List<Variant>(),
                 OriginalItemId = itemId
             };
@@ -252,19 +252,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Conversions = 0
             };
 
-            test.MultivariateTestResults.Add(result);
+            test.TestResults.Add(result);
 
             _mtm.Save(test);
 
             // check that a result exists
-            Assert.Equal(test.MultivariateTestResults.Count(), 1);
+            Assert.Equal(test.TestResults.Count(), 1);
 
             _mtm.IncrementCount(testId, itemId, CountType.View);
             _mtm.IncrementCount(testId, itemId, CountType.Conversion);
 
             // check the result is incremented correctly
-            Assert.Equal(test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == itemId).Views, 1);
-            Assert.Equal(test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == itemId).Conversions, 1);
+            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId).Views, 1);
+            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId).Conversions, 1);
         }
 
         [Fact]
@@ -276,7 +276,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                TestState = TestState.Active,
+                State = TestState.Active,
                 Owner = "Bert"
             };
 
