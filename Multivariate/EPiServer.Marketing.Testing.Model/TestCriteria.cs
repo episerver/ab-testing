@@ -6,58 +6,60 @@ namespace EPiServer.Marketing.Testing.Model
     {
         public TestCriteria()
         {
-            filters = new List<MultivariateTestFilter>();
+            _filters = new List<ABTestFilter>();
         }
 
-        private List<MultivariateTestFilter> filters;
+        private List<ABTestFilter> _filters;
 
         /// <summary>
         /// Adds the given filter to the collection of criteria filters if the property on the filter doesn't exist
         /// If the filter exists the filter will not be added
         /// </summary>
         /// <param name="filter">the filter to add</param>
-        public void AddFilter(MultivariateTestFilter filter)
+        public void AddFilter(ABTestFilter filter)
         {
-            if(!filters.Exists(f => f.Property == filter.Property))
+            if(!_filters.Exists(f => f.Property == filter.Property))
             {
-                filters.Add(filter);
+                _filters.Add(filter);
             }
         }
 
-        public List<MultivariateTestFilter> GetFilters()
+        public List<ABTestFilter> GetFilters()
         {
-            return filters;
+            return _filters;
         }
     }
 
-    public class MultivariateTestFilter
+    public class ABTestFilter
     {
-        public MultivariateTestFilter(MultivariateTestProperty theProperty, FilterOperator theOperator, object theValue)
+        public ABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
         {
             Property = theProperty;
             Operator = theOperator;
             Value = theValue;
         }
 
-        public MultivariateTestFilter() { }
+        public ABTestFilter() { }
         
         /// <summary>
         /// The MultivariateTest property that will be filtered on
         /// </summary>
-        public MultivariateTestProperty Property { get; set; }
+        public ABTestProperty Property { get; set; }
+
         /// <summary>
         /// The operation that will be performed to filter the results set
         /// </summary>
         public FilterOperator Operator { get; set; }
+
         /// <summary>
         /// The limiter value that will be used to filter the result set
         /// </summary>
         public object Value { get; set; }
     }
 
-    public enum MultivariateTestProperty
+    public enum ABTestProperty
     {
-        TestState = 0,
+        State = 0,
         OriginalItemId = 1,
         VariantId = 2
     }

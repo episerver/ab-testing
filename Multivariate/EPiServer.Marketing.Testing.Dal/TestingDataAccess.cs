@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Dal
             foreach (var filter in filters)
             {
                 // if we are filtering on a single property(not an element in a list) create the expression
-                if (filter.Property != MultivariateTestProperty.VariantId)
+                if (filter.Property != ABTestProperty.VariantId)
                 {
                     var left = Expression.Property(pe, typeof (ABTest).GetProperty(filter.Property.ToString()));
                     var right = Expression.Constant(filter.Value);
@@ -84,7 +84,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 {
                     variantId = new Guid(filter.Value.ToString());
                     variantOperator = filter.Operator;
-                    variantResults = _repository.GetAll().Where(x => x.Variants.Any(v => v.VariantId == variantId));
+                    variantResults = _repository.GetAll().Where(x => x.Variants.Any(v => v.ItemId == variantId));
                 }
             }
 
@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 }
 
                 results = variantOperator == FilterOperator.And 
-                    ? results.Where(test => test.Variants.Any(v => v.VariantId == variantId)) 
+                    ? results.Where(test => test.Variants.Any(v => v.ItemId == variantId)) 
                     : results.Concat(variantResults).Distinct();
             }
 
@@ -125,7 +125,7 @@ namespace EPiServer.Marketing.Testing.Dal
         public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
         {
             var test = _repository.GetById(testId);
-            var result = test.MultivariateTestResults.FirstOrDefault(v => v.ItemId == testItemId);
+            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId);
 
             if (resultType == CountType.View)
             {
@@ -152,7 +152,7 @@ namespace EPiServer.Marketing.Testing.Dal
             }
             else
             {
-                switch (test.TestState)
+                switch (test.State)
                 {
                     case TestState.Inactive:
                         // update test properties
@@ -161,21 +161,21 @@ namespace EPiServer.Marketing.Testing.Dal
                         test.EndDate = testObject.EndDate;
                         test.ModifiedDate = DateTime.UtcNow;
                         test.LastModifiedBy = testObject.LastModifiedBy;
-                        test.TestState = testObject.TestState;
+                        test.State = testObject.State;
 
                         // update original item and corresponding result record if different
                         if (test.OriginalItemId != testObject.OriginalItemId)
                         {
                             var result =
-                                test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == test.OriginalItemId);
+                                test.TestResults.FirstOrDefault(r => r.ItemId == test.OriginalItemId);
                             if (null != result)
                             {
-                                test.MultivariateTestResults.Remove(result);
+                                test.TestResults.Remove(result);
                                 _repository.Delete(result);
                             }
 
                             test.OriginalItemId = testObject.OriginalItemId;
-                            test.MultivariateTestResults.Add(
+                            test.TestResults.Add(
                                 new TestResult()
                                 {
                                     Id = Guid.NewGuid(),
@@ -193,7 +193,7 @@ namespace EPiServer.Marketing.Testing.Dal
                         foreach (var currentVariant in test.Variants.ToArray())
                         {
                             foreach (var newVariant in
-                                testObject.Variants.Where(newVariant => currentVariant.VariantId == newVariant.VariantId)
+                                testObject.Variants.Where(newVariant => currentVariant.ItemId == newVariant.ItemId)
                                 )
                             {
                                 removeVariant = false;
@@ -207,12 +207,12 @@ namespace EPiServer.Marketing.Testing.Dal
                                 test.Variants.Remove(currentVariant);
                                 _repository.Delete(currentVariant);
                                 var result =
-                                    test.MultivariateTestResults.FirstOrDefault(
-                                        r => r.ItemId == currentVariant.VariantId);
+                                    test.TestResults.FirstOrDefault(
+                                        r => r.ItemId == currentVariant.ItemId);
 
                                 if (null != result)
                                 {
-                                    test.MultivariateTestResults.Remove(result);
+                                    test.TestResults.Remove(result);
                                     _repository.Delete(result);
                                 }
                             }
@@ -224,28 +224,28 @@ namespace EPiServer.Marketing.Testing.Dal
                         foreach (var variant in variantsToAdd)
                         {
                             test.Variants.Add(variant);
-                            test.MultivariateTestResults.Add(
+                            test.TestResults.Add(
                                 new TestResult()
                                 {
                                     Id = Guid.NewGuid(),
-                                    ItemId = variant.VariantId
+                                    ItemId = variant.ItemId
                                 });
                         }
 
                         id = test.Id;
                         break;
                     case TestState.Active:
-                        if (testObject.TestState == TestState.Done)
+                        if (testObject.State == TestState.Done)
                         {
-                            test.TestState = TestState.Done;
+                            test.State = TestState.Done;
                         }
                         test.EndDate = testObject.EndDate;
                         id = test.Id;
                         break;
                     case TestState.Done:
-                        if (testObject.TestState == TestState.Archived)
+                        if (testObject.State == TestState.Archived)
                         {
-                            test.TestState = TestState.Archived;
+                            test.State = TestState.Archived;
                         }
                         id = test.Id;
                         break;
@@ -278,14 +278,14 @@ namespace EPiServer.Marketing.Testing.Dal
         private bool IsTestActive(Guid originalItemId)
         {
             var tests = _repository.GetAll()
-                .Where(t => t.OriginalItemId == originalItemId && t.TestState == TestState.Active);
+                .Where(t => t.OriginalItemId == originalItemId && t.State == TestState.Active);
 
             return tests.Any();
         }
         private void SetTestState(Guid theTestId, TestState theState)
         {
             var aTest = _repository.GetById(theTestId);
-            aTest.TestState = theState;
+            aTest.State = theState;
             Save(aTest);
         }
     }

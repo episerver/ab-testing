@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         {
             Id = testGuid,
             Title = "SomeTest",
-            MultivariateTestResults = new List<TestResult>() {
+            TestResults = new List<TestResult>() {
                 new TestResult() { ItemId = original, Conversions = 5, Views = 10 },
                 new TestResult() { ItemId = varient, Conversions = 100, Views = 200 },
                 new TestResult() { }

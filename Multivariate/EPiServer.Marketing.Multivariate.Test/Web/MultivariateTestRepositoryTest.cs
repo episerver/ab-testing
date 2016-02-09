@@ -52,9 +52,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
-            TestState = TestState.Active,
-            Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), VariantId = varient } },
-            MultivariateTestResults = new List<TestResult>() {
+            State = TestState.Active,
+            Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), ItemId = varient } },
+            TestResults = new List<TestResult>() {
                     new TestResult() { Id = result1, ItemId = original },
                     new TestResult() { Id = result2, ItemId = varient }
                 }
@@ -186,10 +186,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             Assert.Equal(test.StartDate, ViewData.StartDate);
             Assert.Equal(test.EndDate, ViewData.EndDate);
             Assert.Equal(test.OriginalItemId, ViewData.OriginalItemId);
-            Assert.Equal(test.TestState, ViewData.testState);
-            Assert.Equal(test.Variants[0].VariantId, ViewData.VariantItemId);
-            Assert.Equal(test.MultivariateTestResults[0].Id, ViewData.TestResults[0].Id);
-            Assert.Equal(test.MultivariateTestResults[1].Id, ViewData.TestResults[1].Id);
+            Assert.Equal(test.State, ViewData.testState);
+            Assert.Equal(test.Variants[0].ItemId, ViewData.VariantItemId);
+            Assert.Equal(test.TestResults[0].Id, ViewData.TestResults[0].Id);
+            Assert.Equal(test.TestResults[1].Id, ViewData.TestResults[1].Id);
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         {
             var repo = GetUnitUnderTest();
 
-            test.TestState = TestState.Active;
+            test.State = TestState.Active;
             _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testmanager.Object);
             _testmanager.Setup(tm => tm.Get(It.IsAny<Guid>())).Returns(test);
             viewdata.EndDate = newEndDate;
@@ -247,7 +247,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 Times.Once, "CreateTest did not call save with correctly mapped EndDate");
             _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.OriginalItemId.Equals(viewdata.OriginalItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped OriginalItemId");
-            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Variants[0].VariantId.Equals(viewdata.VariantItemId))),
+            _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Variants[0].ItemId.Equals(viewdata.VariantItemId))),
                 Times.Once, "CreateTest did not call save with correctly mapped Variants[0].VariantId");
         }
     }

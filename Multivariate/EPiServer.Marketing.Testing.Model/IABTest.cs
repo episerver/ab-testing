@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Current state of the test.
         /// </summary>
-        TestState TestState { get; set; }
+        TestState State { get; set; }
 
         /// <summary>
         /// Date and time the test is scheduled to start.
@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// List of test results. There will be a MultivariateTestResult for the OriginalItem and each Variant item.
         /// </summary>
-        IList<TestResult> MultivariateTestResults { get; set; }
+        IList<TestResult> TestResults { get; set; }
 
         /// <summary>
         /// List of key performance indicators.  These can be time on a page, form submission, etc.

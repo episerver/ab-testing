@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     Owner = "Bert" + i,
-                    MultivariateTestResults = new List<TestResult>(),
+                    TestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
                     Conversions = new List<Conversion>()
 
@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     Owner = "Bert" + i,
-                    MultivariateTestResults = new List<TestResult>(),
+                    TestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
                     Conversions = new List<Conversion>()
                 };
@@ -77,7 +77,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 ItemId = itemId
             };
 
-            multivariateTest.MultivariateTestResults.Add(result);
+            multivariateTest.TestResults.Add(result);
             mtmManager.Save(multivariateTest);
         }
     }

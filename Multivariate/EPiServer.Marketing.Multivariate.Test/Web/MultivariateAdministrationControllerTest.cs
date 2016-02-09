@@ -54,9 +54,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             StartDate = DateTime.Today.AddDays(1),
             EndDate = DateTime.Today.AddDays(2),
             OriginalItemId = original,
-            TestState = TestState.Active,
+            State = TestState.Active,
             Variants = new List<Variant>() { new Variant() { Id = varient } },
-            MultivariateTestResults = new List<TestResult>() {
+            TestResults = new List<TestResult>() {
                     new TestResult() { Id = result1 },
                     new TestResult() { Id = result2 }
                 }

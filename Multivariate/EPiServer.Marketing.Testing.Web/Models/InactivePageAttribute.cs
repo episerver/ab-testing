@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Testing.Web.Models
 
                 // need to get guid for pages from the page picker content id's we get
                 var contentGuid = contentrepo.Get<PageData>(new ContentReference(itemValue)).ContentGuid;
-                if (testManagerRepo.GetTestByItemId(contentGuid).All(x => x.TestState != TestState.Active))
+                if (testManagerRepo.GetTestByItemId(contentGuid).All(x => x.State != TestState.Active))
                 {
                     return ValidationResult.Success;
                 }

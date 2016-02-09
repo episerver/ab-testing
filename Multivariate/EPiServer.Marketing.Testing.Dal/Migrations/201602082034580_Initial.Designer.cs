@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201601041747161_Initial"; }
+            get { return "201602082034580_Initial"; }
         }
         
         string IMigrationMetadata.Source

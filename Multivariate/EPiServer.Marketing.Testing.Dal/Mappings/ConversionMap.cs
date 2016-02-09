@@ -8,14 +8,14 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
     {
         public ConversionMap()
         {
-            this.ToTable("tblConversion");
+            this.ToTable("tblABConversion");
 
             this.HasKey(hk => hk.Id);
 
             this.Property(m => m.ConversionString)
                 .IsRequired();
 
-            this.HasRequired(m => m.MultivariateTest)
+            this.HasRequired(m => m.ABTest)
                 .WithMany(m => m.Conversions)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();

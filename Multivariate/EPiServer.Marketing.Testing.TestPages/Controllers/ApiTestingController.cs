@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             multiVariateTest.OriginalItemId = Guid.NewGuid();
             multiVariateTest.Variants = new List<Variant>()
             {
-                new Variant() {Id=Guid.NewGuid(),VariantId = Guid.NewGuid()}
+                new Variant() {Id=Guid.NewGuid(),ItemId = Guid.NewGuid()}
             };
 
             return View(multiVariateTest);

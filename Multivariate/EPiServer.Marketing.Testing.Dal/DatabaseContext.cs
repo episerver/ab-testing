@@ -25,9 +25,9 @@ namespace EPiServer.Marketing.Testing.Dal
 
         }
 
-        public DbSet<ABTest> MultivariateTests { get; set; }
+        public DbSet<ABTest> ABTests { get; set; }
 
-        public DbSet<TestResult> MultivariateTestsResults { get; set; }
+        public DbSet<TestResult> ABTestsResults { get; set; }
 
         public DbSet<Conversion> Conversions { get; set; }
 
@@ -41,8 +41,8 @@ namespace EPiServer.Marketing.Testing.Dal
             {
                 this._modelBuilder = modelBuilder;
 
-                _modelBuilder.Configurations.Add(new Mappings.MultivariateTestMap());
-                _modelBuilder.Configurations.Add(new Mappings.MultivariateTestResultMap());
+                _modelBuilder.Configurations.Add(new Mappings.ABTestMap());
+                _modelBuilder.Configurations.Add(new Mappings.ABTestResultMap());
                 _modelBuilder.Configurations.Add(new Mappings.ConversionMap());
                 _modelBuilder.Configurations.Add(new Mappings.VariantMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());

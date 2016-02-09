@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var newTests = AddMultivariateTests(_context, 2);
             _context.SaveChanges();
 
-            Assert.Equal(_context.MultivariateTests.Count(), 2);
+            Assert.Equal(_context.ABTests.Count(), 2);
         }
 
         [Fact]
@@ -36,10 +36,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var newTests = AddMultivariateTests(_context, 3);
             _context.SaveChanges();
 
-            _context.MultivariateTests.Remove(newTests[0]);
+            _context.ABTests.Remove(newTests[0]);
             _context.SaveChanges();
 
-            Assert.Equal(_context.MultivariateTests.Count(), 2);
+            Assert.Equal(_context.ABTests.Count(), 2);
         }
 
         [Fact]
@@ -53,21 +53,21 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Title = "Test",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                TestState = TestState.Active,
+                State = TestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow
             };
 
-            _context.MultivariateTests.Add(test);
+            _context.ABTests.Add(test);
             _context.SaveChanges();
 
             var newTitle = "NewTitle";
             test.Title = newTitle;
             _context.SaveChanges();
 
-            Assert.Equal(_context.MultivariateTests.Find(id).Title, newTitle);
+            Assert.Equal(_context.ABTests.Find(id).Title, newTitle);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Title = "Test",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                TestState = TestState.Active,
+                State = TestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
@@ -89,12 +89,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Variants = new List<Variant>()
             };
 
-            _context.MultivariateTests.Add(test);
+            _context.ABTests.Add(test);
 
             var variant = new Variant()
             {
                 Id = Guid.NewGuid(),
-                VariantId = Guid.NewGuid(),
+                ItemId = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -117,7 +117,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Title = "Test",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                TestState = TestState.Active,
+                State = TestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
@@ -125,7 +125,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Conversions = new List<Conversion>()
             };
 
-            _context.MultivariateTests.Add(test);
+            _context.ABTests.Add(test);
 
             var conversion = new Conversion()
             {
@@ -153,7 +153,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Title = "Test",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                TestState = TestState.Active,
+                State = TestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
@@ -161,7 +161,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
             };
 
-            _context.MultivariateTests.Add(test);
+            _context.ABTests.Add(test);
 
             var kpi = new KeyPerformanceIndicator()
             {
@@ -189,15 +189,15 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Title = "Test",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                TestState = TestState.Active,
+                State = TestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                MultivariateTestResults = new List<TestResult>()
+                TestResults = new List<TestResult>()
             };
 
-            _context.MultivariateTests.Add(test);
+            _context.ABTests.Add(test);
 
             var tr = new TestResult()
             {
@@ -208,12 +208,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Views = 1
             };
 
-            test.MultivariateTestResults.Add(tr);
+            test.TestResults.Add(tr);
             _context.SaveChanges();
 
-            Assert.Equal(1, test.MultivariateTestResults.Count());
+            Assert.Equal(1, test.TestResults.Count());
 
-            Assert.Equal(1, _context.MultivariateTestsResults.Count());
+            Assert.Equal(1, _context.ABTestsResults.Count());
         }
     }
 }

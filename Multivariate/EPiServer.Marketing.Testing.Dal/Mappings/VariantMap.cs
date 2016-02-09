@@ -8,14 +8,14 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
     {
         public VariantMap()
         {
-            this.ToTable("tblVariant");
+            this.ToTable("tblABVariant");
 
             this.HasKey(hk => hk.Id);
 
-            this.Property(m => m.VariantId)
+            this.Property(m => m.ItemId)
                 .IsRequired();
 
-            this.HasRequired(m => m.MultivariateTest)
+            this.HasRequired(m => m.ABTest)
                 .WithMany(m => m.Variants)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();

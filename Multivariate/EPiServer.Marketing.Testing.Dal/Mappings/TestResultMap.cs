@@ -5,11 +5,11 @@ using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class MultivariateTestResultMap : EntityTypeConfiguration<TestResult>
+    public class ABTestResultMap : EntityTypeConfiguration<TestResult>
     {
-        public MultivariateTestResultMap()
+        public ABTestResultMap()
         {
-            this.ToTable("tblMultivariateTestResult");
+            this.ToTable("tblABTestResult");
 
             this.HasKey(hk => hk.Id);
 
@@ -19,8 +19,8 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(s => s.ModifiedDate)
                 .IsRequired();
 
-            this.HasRequired(m => m.MultivariateTest)
-                .WithMany(m => m.MultivariateTestResults)
+            this.HasRequired(m => m.ABTest)
+                .WithMany(m => m.TestResults)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();
 

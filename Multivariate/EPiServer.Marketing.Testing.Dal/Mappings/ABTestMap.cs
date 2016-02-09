@@ -4,11 +4,11 @@ using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class MultivariateTestMap : EntityTypeConfiguration<ABTest>
+    public class ABTestMap : EntityTypeConfiguration<ABTest>
     {
-        public MultivariateTestMap()
+        public ABTestMap()
         {
-            this.ToTable("tblMultivariateTest");
+            this.ToTable("tblABTest");
 
             this.HasKey(hk => hk.Id);
 
@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.OriginalItemId)
                 .IsRequired();
 
-            this.Property(m => m.TestState)
+            this.Property(m => m.State)
                 .IsOptional();
 
             this.Property(m => m.StartDate)

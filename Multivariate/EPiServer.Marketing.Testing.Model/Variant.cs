@@ -14,11 +14,11 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Id of a variant to use instead of the original item for a test.
         /// </summary>
-        public Guid VariantId { get; set; }
+        public Guid ItemId { get; set; }
 
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest MultivariateTest { get; set; }
+        public virtual ABTest ABTest { get; set; }
     }
 }
