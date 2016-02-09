@@ -13,44 +13,41 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript">
         var updateView = function (testId, variantId) {
+            var dataJSON = { TestId: testId, VariantId: variantId };
             $.ajax({
                 type: 'POST',
                 url: '/api/episerver/testing/UpdateView',
+                //url: '@Url.Action("updateview", "testing")',
                 cache: false,
-                contentType: 'charset=utf-8',
-                data: 'testId=' + testId + '&variantId=' + variantId,
-                done: function () {
-                    alert('success!'); // TODO: Change it to something more informative
-                },
-                fail: function () {
-                    alert('fail!'); // TODO: Change it to something more informative
-                },
-                always: function () {
-                    // Reload the page after submission so that the
-                    // updated views and conversions are displayed on the page
-                    window.location.reload();
-                }
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(dataJSON)
+            }).done(function (data) {
+                alert('success!'); // TODO: Change it to something more informative
+            }).fail(function () {
+                alert('fail!'); // TODO: Change it to something more informative
+            }).always(function () {
+                // Reload the page after submission so that the
+                // updated views and conversions are displayed on the page
+                window.location.reload();
             });
         };
 
-	var updateConversion = function (testId, variantId) {
+        var updateConversion = function (testId, variantId) {
+            var dataJSON = { testId: testId, variantId: variantId };
             $.ajax({
                 type: 'POST',
                 url: '/api/episerver/testing/UpdateConversion/',
                 cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: { testId: testId, variantId: variantId },
-                done: function () {
-                    alert('success!'); // TODO: Change it to something more informative
-                },
-                fail: function () {
-                    alert('fail!'); // TODO: Change it to something more informative
-                },
-                always: function () {
-                    // Reload the page after submission so that the
-                    // updated views and conversions are displayed on the page
-                    window.location.reload();
-                }
+                contentType: 'application/x-www-form-urlencoded',
+                data: { testId: testId, variantId: variantId }
+            }).done(function (data) {
+                alert('success!'); // TODO: Change it to something more informative
+            }).fail(function () {
+                alert('fail!'); // TODO: Change it to something more informative
+            }).always(function () {
+                // Reload the page after submission so that the
+                // updated views and conversions are displayed on the page
+                window.location.reload();
             });
         };
     </script>

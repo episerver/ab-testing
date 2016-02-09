@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
@@ -68,24 +69,41 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
         }
 
-        // Get api/episerver/testing/UpdateView?testId=SomeGuid&variantId=SomeGuid
         [HttpPost]
-        public HttpResponseMessage UpdateView(string testId, string variantId)
+        public HttpResponseMessage UpdateView(TestArgs testArgs)
         {
-            var mm = _serviceLocator.GetInstance<IMessagingManager>();
-            mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId));
+            if (testArgs != null && !string.IsNullOrWhiteSpace(testArgs.TestId) && !string.IsNullOrWhiteSpace(testArgs.VariantId))
+            {
+                var mm = _serviceLocator.GetInstance<IMessagingManager>();
+                mm.EmitUpdateViews(Guid.Parse(testArgs.TestId), Guid.Parse(testArgs.VariantId));
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Args passed are not correct")); // TODO: Provide a better error message
         }
 
         // Get api/episerver/testing/UpdateConversion?testId=SomeGuid&variantId=SomeGuid
         [HttpPost]
-        public HttpResponseMessage UpdateConversion(string testId, string variantId)
+        public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
-            var mm = _serviceLocator.GetInstance<IMessagingManager>();
-            mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId));
+            var testId = data.Get("testId");
+            var variantId = data.Get("variantId");
+            if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
+            {
+                var mm = _serviceLocator.GetInstance<IMessagingManager>();
+                mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId));
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId could not be read")); // TODO: Provide a better error message   
         }
+    }
+
+    public class TestArgs
+    {
+        public string TestId { get; set; }
+        public string VariantId { get; set; }
     }
 }
