@@ -59,7 +59,7 @@
             @Html.DisplayFor(model => model.Id)
         </div>
         <div class="display-label">
-            @Html.DisplayNameFor(model => model.TestState) : @Html.DisplayFor(model => model.TestState)
+            @Html.DisplayNameFor(model => model.State) : @Html.DisplayFor(model => model.State)
         </div>
 
 
@@ -84,17 +84,17 @@
         </div>
 
         <div class="display-label">
-            @Html.DisplayNameFor(model => model.Variants[0].VariantId) : @Html.DisplayFor(model => model.Variants[0].VariantId)
+            @Html.DisplayNameFor(model => model.Variants[0].Id) : @Html.DisplayFor(model => model.Variants[0].Id)
         </div>
 
         <div class="display-label">
             @Html.DisplayNameFor(model => model.Conversions) : @Html.DisplayFor(model => model.Conversions)
         </div>
         <hr />
-        @if (Model.MultivariateTestResults != null)
+        @if (Model.TestResults != null)
         {
             <table style="width:50%">
-                @foreach (var result in Model.MultivariateTestResults)
+                @foreach (var result in Model.TestResults)
                 {
                     <tr><td> @Html.DisplayNameFor(resultItem => result.ItemId) </td><td> @Html.DisplayFor(resultItem => result.ItemId) </td></tr>
                     <tr>
