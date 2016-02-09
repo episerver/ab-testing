@@ -1,46 +1,45 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Messaging;
-using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.Marketing.Testing.Model;
 using System.Collections.Generic;
-using EPiServer.Marketing.Multivariate.Model.Enums;
+using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Messaging
 {
-    [TestClass]
     public class MultiVariateMessageHandlerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultivariateTestManager> _testManager;
+        private Mock<ITestManager> _testManager;
 
         static Guid testGuid = Guid.NewGuid();
         static Guid original = Guid.NewGuid();
         static Guid varient = Guid.NewGuid();
 
-        MultivariateTest test = new MultivariateTest()
+        ABTest test = new ABTest()
         {
             Id = testGuid,
             Title = "SomeTest",
-            MultivariateTestResults = new List<MultivariateTestResult>() {
-                new MultivariateTestResult() { ItemId = original, Conversions = 5, Views = 10 },
-                new MultivariateTestResult() { ItemId = varient, Conversions = 100, Views = 200 },
-                new MultivariateTestResult() { }
+            TestResults = new List<TestResult>() {
+                new TestResult() { ItemId = original, Conversions = 5, Views = 10 },
+                new TestResult() { ItemId = varient, Conversions = 100, Views = 200 },
+                new TestResult() { }
             }
         };
 
-        private MultiVariateMessageHandler GetUnitUnderTest()
+        private TestingMessageHandler GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testManager = new Mock<IMultivariateTestManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testManager.Object);
+            _testManager = new Mock<ITestManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
-            return new MultiVariateMessageHandler(_serviceLocator.Object);
+            return new TestingMessageHandler(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpdateConversionUpdatesCorrectValue()
         {
             var messageHandler = GetUnitUnderTest();
@@ -53,7 +52,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
                 Times.Once, "Repository save was not called or conversion value is not as expected") ;
         }
 
-        [TestMethod]
+        [Fact]
         public void UpdateViewUpdatesCorrectValue()
         {
             var messageHandler = GetUnitUnderTest();

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.Entity;
-using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Model;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
@@ -18,8 +18,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 base.OnModelCreating(modelBuilder);
 
-                modelBuilder.Entity<MultivariateTest>();
-                modelBuilder.Entity<MultivariateTestResult>();
+                modelBuilder.Entity<ABTest>();
+                modelBuilder.Entity<TestResult>();
                 modelBuilder.Entity<Conversion>();
                 modelBuilder.Entity<Variant>();
                 modelBuilder.Entity<KeyPerformanceIndicator>();

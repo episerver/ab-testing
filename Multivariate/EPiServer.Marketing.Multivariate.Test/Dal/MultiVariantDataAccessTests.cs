@@ -2,79 +2,76 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Multivariate.Test.Core;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
-    [TestClass]
     public class MultiVariantDataAccessTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;
-        private MultiVariantDataAccess _mtm;
-
-        [TestInitialize]
-        public void Initialization()
+        private TestingDataAccess _mtm;
+        public MultiVariantDataAccessTests()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
-            _mtm = new MultiVariantDataAccess(new Core.TestRepository(_context));
+            _mtm = new TestingDataAccess(new Core.TestRepository(_context));
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerGet()
+        [Fact]
+        public void TestManagerGet()
         {
             var id = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = id,
                 Title = "test",
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                TestState = TestState.Active,
+                State = TestState.Active,
                 Owner = "Bert"
             };
 
             _mtm.Save(test);
 
-            Assert.AreEqual(_mtm.Get(id), test);
+            Assert.Equal(_mtm.Get(id), test);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListNoFilter()
+        [Fact]
+        public void TestManagerGetTestListNoFilter()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 2);
 
-            var list = _mtm.GetTestList(new MultivariateTestCriteria());
-            Assert.AreEqual(2, list.Count());
+            var list = _mtm.GetTestList(new TestCriteria());
+            Assert.Equal(2, list.Count());
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListVariantFilter()
+        [Fact]
+        public void TestManagerGetTestListVariantFilter()
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
-            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var criteria = new TestCriteria();
+            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
-            Assert.AreEqual(2, list.Count());
+            Assert.Equal(2, list.Count());
         }
 
 
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListOneFilter()
+        [Fact]
+        public void TestManagerGetTestListOneFilter()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
@@ -83,155 +80,155 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             tests[2].OriginalItemId = originalItemId;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            var criteria = new TestCriteria();
+            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
-            Assert.AreEqual(1, list.Count());
+            Assert.Equal(1, list.Count());
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListTwoFiltersAnd()
-        {
-            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
-           
-            var tests = AddMultivariateTests(_context, 3);
-            tests[0].OriginalItemId = originalItemId;
-            tests[0].TestState = TestState.Archived;
-            _context.SaveChanges();
-            
-            var criteria = new MultivariateTestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Archived);
-            criteria.AddFilter(filter);
-            criteria.AddFilter(filter2);
-            var list = _mtm.GetTestList(criteria);
-            Assert.AreEqual(1, list.Count());
-        }
-
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListTwoFiltersOr()
+        [Fact]
+        public void TestManagerGetTestListTwoFiltersAnd()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[1].TestState = TestState.Archived;
-            tests[2].TestState = TestState.Archived;
+            tests[0].State = TestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
+            var criteria = new TestCriteria();
+            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
-            Assert.AreEqual(3, list.Count());
+            Assert.Equal(1, list.Count());
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListTwoFiltersAndVariant()
+        [Fact]
+        public void TestManagerGetTestListTwoFiltersOr()
+        {
+            var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
+
+            var tests = AddMultivariateTests(_context, 3);
+            tests[0].OriginalItemId = originalItemId;
+            tests[1].State = TestState.Archived;
+            tests[2].State = TestState.Archived;
+            _context.SaveChanges();
+
+            var criteria = new TestCriteria();
+            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
+            criteria.AddFilter(filter);
+            criteria.AddFilter(filter2);
+            var list = _mtm.GetTestList(criteria);
+            Assert.Equal(3, list.Count());
+        }
+
+        [Fact]
+        public void TestManagerGetTestListTwoFiltersAndVariant()
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
-            tests[1].TestState = TestState.Archived;
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].State = TestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new MultivariateTestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.And, variantItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.Or, TestState.Archived);
+            var criteria = new TestCriteria();
+            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
-            Assert.AreEqual(0, list.Count());
+            Assert.Equal(0, list.Count());
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerGetTestListTwoFiltersOrVariant()
+        [Fact]
+        public void TestManagerGetTestListTwoFiltersOrVariant()
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), VariantId = variantItemId });
-            tests[1].TestState = TestState.Active;
+            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].State = TestState.Active;
             _context.SaveChanges();
-            
-            var criteria = new MultivariateTestCriteria();
-            var filter = new MultivariateTestFilter(MultivariateTestProperty.VariantId, FilterOperator.Or, variantItemId);
-            var filter2 = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
+
+            var criteria = new TestCriteria();
+            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.Or, variantItemId);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Active);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
 
 
             var list = _mtm.GetTestList(criteria);
-            Assert.AreEqual(2, list.Count());
+            Assert.Equal(2, list.Count());
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerSave()
+        [Fact]
+        public void TestManagerSave()
         {
             var tests = AddMultivariateTests(_mtm, 1);
             var newTitle = "newTitle";
             tests[0].Title = newTitle;
             _mtm.Save(tests[0]);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).Title, newTitle);
+            Assert.Equal(_mtm.Get(tests[0].Id).Title, newTitle);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerDelete()
+        [Fact]
+        public void TestManagerDelete()
         {
             var tests = AddMultivariateTests(_mtm, 3);
 
             _mtm.Delete(tests[0].Id);
             _mtm._repository.SaveChanges();
 
-            Assert.AreEqual(_mtm._repository.GetAll().Count(), 2);
+            Assert.Equal(_mtm._repository.GetAll().Count(), 2);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerStart()
+        [Fact]
+        public void TestManagerStart()
         {
             var tests = AddMultivariateTests(_mtm, 1);
 
             _mtm.Start(tests[0].Id);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, TestState.Active);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Active);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerStop()
+        [Fact]
+        public void TestManagerStop()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].TestState = TestState.Active;
+            tests[0].State = TestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Stop(tests[0].Id);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, TestState.Done);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Done);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerArchive()
+        [Fact]
+        public void TestManagerArchive()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].TestState = TestState.Active;
+            tests[0].State = TestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Archive(tests[0].Id);
 
-            Assert.AreEqual(_mtm.Get(tests[0].Id).TestState, TestState.Archived);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Archived);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerIncrementCount()
+        [Fact]
+        public void TestManagerIncrementCount()
         {
             var testId = Guid.NewGuid();
             var itemId = Guid.NewGuid();
 
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Id = testId,
                 Title = "test",
@@ -239,13 +236,14 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
-                MultivariateTestResults = new List<MultivariateTestResult>(),
+                TestResults = new List<TestResult>(),
+                Variants = new List<Variant>(),
                 OriginalItemId = itemId
             };
 
             _mtm.Save(test);
 
-            var result = new MultivariateTestResult()
+            var result = new TestResult()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
@@ -254,57 +252,57 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Conversions = 0
             };
 
-            test.MultivariateTestResults.Add(result);
+            test.TestResults.Add(result);
 
             _mtm.Save(test);
 
             // check that a result exists
-            Assert.AreEqual(test.MultivariateTestResults.Count(), 1);
+            Assert.Equal(test.TestResults.Count(), 1);
 
             _mtm.IncrementCount(testId, itemId, CountType.View);
             _mtm.IncrementCount(testId, itemId, CountType.Conversion);
 
             // check the result is incremented correctly
-            Assert.AreEqual(test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == itemId).Views, 1);
-            Assert.AreEqual(test.MultivariateTestResults.FirstOrDefault(r => r.ItemId == itemId).Conversions, 1);
+            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId).Views, 1);
+            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId).Conversions, 1);
         }
 
-        [TestMethod]
-        public void MultivariateTestManagerAddNoId()
+        [Fact]
+        public void TestManagerAddNoId()
         {
-            var test = new MultivariateTest()
+            var test = new ABTest()
             {
                 Title = "test",
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                TestState = TestState.Active,
+                State = TestState.Active,
                 Owner = "Bert"
             };
 
             _mtm._repository.Add(test);
             _mtm._repository.SaveChanges();
 
-            Assert.AreEqual(_mtm._repository.GetAll().Count(), 1);
+            Assert.Equal(_mtm._repository.GetAll().Count(), 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariteTestManagerMultivariateDataAccess()
         {
-            MultiVariantDataAccess mda = new MultiVariantDataAccess();
-            Assert.IsNotNull(mda._repository);
+            TestingDataAccess mda = new TestingDataAccess();
+            Assert.NotNull(mda._repository);
         }
 
-        [TestMethod]
+        [Fact]
         public void MultivariteTestManagerGetTestByItemId()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 2);
             tests[0].OriginalItemId = originalItemId;
             _mtm.Save(tests[0]);
-            
+
             var list = _mtm.GetTestByItemId(originalItemId);
-            Assert.AreEqual(1, list.Count());
+            Assert.Equal(1, list.Count());
         }
     }
 }

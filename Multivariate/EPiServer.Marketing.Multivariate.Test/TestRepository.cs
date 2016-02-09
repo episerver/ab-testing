@@ -5,8 +5,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using EPiServer.Marketing.Multivariate.Dal;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Multivariate.Test.Dal;
 
 namespace EPiServer.Marketing.Multivariate.Test.Core
@@ -90,8 +90,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public void DeleteTest(object id)
         {
-            var test = TestContext.Set<MultivariateTest>().Find(id);
-            TestContext.Set<MultivariateTest>().Remove(test);
+            var test = TestContext.Set<ABTest>().Find(id);
+            TestContext.Set<ABTest>().Remove(test);
         }
 
         public T GetById<T>(object id) where T : class
@@ -99,9 +99,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             throw new NotImplementedException();
         }
 
-        public IMultivariateTest GetById(object id)
+        public IABTest GetById(object id)
         {
-            return TestContext.Set<MultivariateTest>().Find(id);
+            return TestContext.Set<ABTest>().Find(id);
         }
 
         public IQueryable<T> GetAll<T>() where T : class
@@ -109,12 +109,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return TestContext.Set<T>().AsQueryable();
         }
 
-        public IQueryable<IMultivariateTest> GetAll()
+        public IQueryable<IABTest> GetAll()
         {
-            return TestContext.Set<MultivariateTest>().AsQueryable();
+            return TestContext.Set<ABTest>().AsQueryable();
         }
 
-        public IQueryable<IMultivariateTest> GetTestList(MultivariateTestCriteria criteria)
+        public IQueryable<IABTest> GetTestList(TestCriteria criteria)
         {
             var filters = criteria.GetFilters();
 
@@ -122,7 +122,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var orFilters = filters.Where(filter => filter.Operator == FilterOperator.Or);
 
 
-            var tests = TestContext.MultivariateTests.AsQueryable();
+            var tests = TestContext.ABTests.AsQueryable();
             var pe = Expression.Parameter(typeof(string), "test");
             Expression wholeExpression = null;
 
@@ -149,10 +149,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 "Where",
                 new Type[] { tests.ElementType },
                 tests.Expression,
-                Expression.Lambda<Func<MultivariateTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
+                Expression.Lambda<Func<ABTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
                 );
 
-            IQueryable<MultivariateTest> results = tests.Provider.CreateQuery<MultivariateTest>(whereCallExpression);
+            IQueryable<ABTest> results = tests.Provider.CreateQuery<ABTest>(whereCallExpression);
             return results;
         }
 

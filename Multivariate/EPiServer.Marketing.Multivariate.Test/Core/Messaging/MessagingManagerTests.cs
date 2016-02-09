@@ -1,34 +1,33 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Threading;
-using EPiServer.Marketing.Multivariate.Messaging;
+using EPiServer.Marketing.Testing.Messaging;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Messaging
 {
-    [TestClass]
-    public class MessagingManagerTests
+        public class MessagingManagerTests
     {
         private static Mock<IServiceLocator> _serviceLocator;
-        private static Mock<IMultivariateTestRepository> _testRepository;
-        private static Mock<IMultiVariateMessageHandler> _messageHandler;
+        private static Mock<ITestRepository> _testRepository;
+        private static Mock<ITestingMessageHandler> _messageHandler;
 
         private MessagingManager GetUnitUnderTest()
         {
             if (_serviceLocator == null)
             {
                 _serviceLocator = new Mock<IServiceLocator>();
-                _testRepository = new Mock<IMultivariateTestRepository>();
-                _messageHandler = new Mock<IMultiVariateMessageHandler>();
-                _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
+                _testRepository = new Mock<ITestRepository>();
+                _messageHandler = new Mock<ITestingMessageHandler>();
+                _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
             }
 
             return new MessagingManager(_serviceLocator.Object, _messageHandler.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void EmitUpdateViewsEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();
@@ -39,7 +38,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
                 Times.AtLeastOnce, "MessageManager did not emit message or did not call handle for EmitUpdateViews");
         }
 
-        [TestMethod]
+        [Fact]
         public void EmitUpdateConversionEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();

@@ -1,30 +1,29 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EPiServer.ServiceLocation;
 using Moq;
-using EPiServer.Marketing.Multivariate.Web;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.Marketing.Multivariate.Model;
+using EPiServer.Marketing.Testing.Web;
+using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.Testing.Model;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-    [TestClass]
-    public class MultivariateGadgetControllerTest
+        public class TestingGadgetControllerTest
     {
         private Mock<IServiceLocator> _serviceLocator;
-        private Mock<IMultivariateTestRepository> _testRepository;
+        private Mock<ITestRepository> _testRepository;
 
-        private MultivariateGadgetController GetUnitUnderTest()
+        private TestingGadgetController GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testRepository = new Mock<IMultivariateTestRepository>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestRepository>()).Returns(_testRepository.Object);
+            _testRepository = new Mock<ITestRepository>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
 
-            return new MultivariateGadgetController(_serviceLocator.Object);
+            return new TestingGadgetController(_serviceLocator.Object);
         }
 
 
-        [TestMethod]
+        [Fact]
         public void GadgetControlCallsRepositoryForIndexAction()
         {
             var controller = GetUnitUnderTest();
@@ -32,12 +31,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             controller.Index();
 
             // Verify the testmanager was called by the repo with the proper argument
-            _testRepository.Verify(tr=> tr.GetTestList(It.IsAny<MultivariateTestCriteria>()),
+            _testRepository.Verify(tr=> tr.GetTestList(It.IsAny<TestCriteria>()),
                 Times.Once, "GadgetController did not call GetTestList");
 
         }
 
-        [TestMethod]
+        [Fact]
         public void GadgetControlCallsRepositoryForDetailsAction()
         {
             var controller = GetUnitUnderTest();

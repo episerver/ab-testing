@@ -1,42 +1,41 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Web.Controllers;
+using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Multivariate.Web.Repositories;
-using EPiServer.Marketing.Multivariate.Messaging;
-using EPiServer.Marketing.Multivariate.Web.Controllers;
-using EPiServer.Marketing.Multivariate.Model;
+using Moq;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
 {
-    [TestClass]
-    public class MultivariateRestStoreTest
+        public class TestingRestStoreTest
     {
         private static Mock<IServiceLocator> _serviceLocator;
-        private static Mock<IMultivariateTestManager> _testManager;
+        private static Mock<ITestManager> _testManager;
         private static Mock<IMessagingManager> _messageManager;
 
-        private MultivariateRestStore GetUnitUnderTest()
+        private TestingRestStore GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testManager = new Mock<IMultivariateTestManager>();
+            _testManager = new Mock<ITestManager>();
             _messageManager = new Mock<IMessagingManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IMultivariateTestManager>()).Returns(_testManager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(_messageManager.Object);
 
-            return new MultivariateRestStore(_serviceLocator.Object);
+            return new TestingRestStore(_serviceLocator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCallsGetTestList_WhenIDIsNull()
         {
             var unit = GetUnitUnderTest();
             unit.Get(null);
 
-            _testManager.Verify(tm => tm.GetTestList(It.IsAny<MultivariateTestCriteria>()), "Get did not call getTestList when id is null");
+            _testManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), "Get did not call getTestList when id is null");
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCallsGetWhenIDIsValidGuid()
         {
             Guid testGuid = Guid.NewGuid();
@@ -47,7 +46,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 "Get did not call TestManager.Get with proper Guid");
         }
 
-        [TestMethod]
+        [Fact]
         public void PostEmitsUpdateConversionWhenConversionIsNotNull()
         {
             var unit = GetUnitUnderTest();
@@ -57,7 +56,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
                 "MessageManager did not call EmitUpdateConversion when converson argument is not null");
         }
 
-        [TestMethod]
+        [Fact]
         public void PostEmitsUpdateViewWhenConversionIsNull()
         {
             var unit = GetUnitUnderTest();

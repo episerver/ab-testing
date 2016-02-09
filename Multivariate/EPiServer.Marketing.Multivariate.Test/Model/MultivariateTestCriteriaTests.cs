@@ -1,37 +1,35 @@
-﻿using EPiServer.Marketing.Multivariate.Model;
-using EPiServer.Marketing.Multivariate.Model.Enums;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
+﻿using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Model.Enums;
 using System.Linq;
+using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Model
 {
-    [TestClass]
-    public class MultivariateTestCriteriaTests
+    public class TestCriteriaTests
     {
-        [TestMethod]
+        [Fact]
         public void Get_And_Add_Filter_Methods_Operate_On_The_Collection()
         {
-            var testCriteria = new MultivariateTestCriteria();
-            var addedFilter = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
+            var testCriteria = new TestCriteria();
+            var addedFilter = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Active);
             testCriteria.AddFilter(addedFilter);
             var retFilters = testCriteria.GetFilters();
-            
-            Assert.IsTrue(retFilters.Count == 1, "The filter was not added to the criteria object");
-            Assert.AreEqual(addedFilter, retFilters.FirstOrDefault(), "The filter added was not the expected object");
+
+            Assert.Equal(1, retFilters.Count);
+            Assert.Equal(addedFilter, retFilters.FirstOrDefault());
         }
 
-        [TestMethod]
+        [Fact]
         public void AddFilter_Will_Not_Add_If_The_Property_Exists()
         {
-            var testCriteria = new MultivariateTestCriteria();
-            var dupeFilter = new MultivariateTestFilter(MultivariateTestProperty.TestState, FilterOperator.And, TestState.Active);
+            var testCriteria = new TestCriteria();
+            var dupeFilter = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Active);
 
             testCriteria.AddFilter(dupeFilter);
             testCriteria.AddFilter(dupeFilter);
             var retFilters = testCriteria.GetFilters();
-            Assert.IsTrue(retFilters.Count == 1, "Only one filter should be added to the criteria object");
-            Assert.AreEqual(dupeFilter, retFilters.FirstOrDefault(), "The filter added was not the expected object");
+            Assert.Equal(1, retFilters.Count);
+            Assert.Equal(dupeFilter, retFilters.FirstOrDefault());
         }
     }
 }
