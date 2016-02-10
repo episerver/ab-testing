@@ -1,4 +1,4 @@
-﻿@model EPiServer.Marketing.Testing.Model.ABTest
+@model EPiServer.Marketing.Testing.Model.ABTest
 
 @{
     Layout = null;
@@ -65,11 +65,11 @@
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.Variants[0].VariantId)
+                @Html.LabelFor(model => model.Variants[0].Id)
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.Variants[0].VariantId)
-                @Html.ValidationMessageFor(model => model.Variants[0].VariantId)
+                @Html.EditorFor(model => model.Variants[0].Id)
+                @Html.ValidationMessageFor(model => model.Variants[0].Id)
                 @Html.HiddenFor(model => model.Variants[0].Id)
 
 
