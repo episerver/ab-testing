@@ -69,21 +69,24 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
         }
 
+        // Post url: api/episerver/testing/updateview, data: { testId: testId, variantId: variantId },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
-        public HttpResponseMessage UpdateView(TestArgs testArgs)
+        public HttpResponseMessage UpdateView(FormDataCollection data)
         {
-            if (testArgs != null && !string.IsNullOrWhiteSpace(testArgs.TestId) && !string.IsNullOrWhiteSpace(testArgs.VariantId))
+            var testId = data.Get("testId");
+            var variantId = data.Get("variantId");
+            if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateViews(Guid.Parse(testArgs.TestId), Guid.Parse(testArgs.VariantId));
+                mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             else
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("Args passed are not correct")); // TODO: Provide a better error message
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
-        // Get api/episerver/testing/UpdateConversion?testId=SomeGuid&variantId=SomeGuid
+        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, variantId: variantId },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
@@ -97,13 +100,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             else
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId could not be read")); // TODO: Provide a better error message   
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
-    }
-
-    public class TestArgs
-    {
-        public string TestId { get; set; }
-        public string VariantId { get; set; }
     }
 }

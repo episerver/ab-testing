@@ -13,18 +13,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript">
         var updateView = function (testId, variantId) {
-            var dataJSON = { TestId: testId, VariantId: variantId };
             $.ajax({
                 type: 'POST',
-                url: '/api/episerver/testing/UpdateView',
-                //url: '@Url.Action("updateview", "testing")',
+                url: '/api/episerver/testing/updateview',
                 cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: JSON.stringify(dataJSON)
+                contentType: 'application/x-www-form-urlencoded',
+                data: { testId: testId, variantId: variantId }
             }).done(function (data) {
-                alert('success!'); // TODO: Change it to something more informative
+                alert('success!');
             }).fail(function () {
-                alert('fail!'); // TODO: Change it to something more informative
+                alert('fail!');
             }).always(function () {
                 // Reload the page after submission so that the
                 // updated views and conversions are displayed on the page
@@ -33,17 +31,16 @@
         };
 
         var updateConversion = function (testId, variantId) {
-            var dataJSON = { testId: testId, variantId: variantId };
             $.ajax({
                 type: 'POST',
-                url: '/api/episerver/testing/UpdateConversion/',
+                url: '/api/episerver/testing/updateconversion/',
                 cache: false,
                 contentType: 'application/x-www-form-urlencoded',
                 data: { testId: testId, variantId: variantId }
             }).done(function (data) {
-                alert('success!'); // TODO: Change it to something more informative
+                alert('success!');
             }).fail(function () {
-                alert('fail!'); // TODO: Change it to something more informative
+                alert('fail!');
             }).always(function () {
                 // Reload the page after submission so that the
                 // updated views and conversions are displayed on the page
