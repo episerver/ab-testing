@@ -29,8 +29,6 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<TestResult> ABTestsResults { get; set; }
 
-        public DbSet<Conversion> Conversions { get; set; }
-
         public DbSet<Variant> Variants { get; set; }
 
         public DbSet<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
@@ -43,7 +41,6 @@ namespace EPiServer.Marketing.Testing.Dal
 
                 _modelBuilder.Configurations.Add(new Mappings.ABTestMap());
                 _modelBuilder.Configurations.Add(new Mappings.ABTestResultMap());
-                _modelBuilder.Configurations.Add(new Mappings.ConversionMap());
                 _modelBuilder.Configurations.Add(new Mappings.VariantMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());
             }

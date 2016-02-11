@@ -64,14 +64,13 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="ITestingDataAccess.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="Mappings\ConversionMap.cs" />
     <Compile Include="Mappings\KeyPerformanceIndicatorMap.cs" />
     <Compile Include="Mappings\ABTestMap.cs" />
     <Compile Include="Mappings\TestResultMap.cs" />
     <Compile Include="Mappings\VariantMap.cs" />
-    <Compile Include="Migrations\201602082034580_Initial.cs" />
-    <Compile Include="Migrations\201602082034580_Initial.Designer.cs">
-      <DependentUpon>201602082034580_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201602112046201_Initial.cs" />
+    <Compile Include="Migrations\201602112046201_Initial.Designer.cs">
+      <DependentUpon>201602112046201_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="TestingDataAccess.cs" />
@@ -90,8 +89,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602082034580_Initial.resx">
-      <DependentUpon>201602082034580_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602112046201_Initial.resx">
+      <DependentUpon>201602112046201_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

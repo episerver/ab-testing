@@ -9,13 +9,13 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Id of the test this conversion is associated with.
         /// </summary>
-        public Guid TestId { get; set; }
+        public Guid? TestId { get; set; }
 
         /// <summary>
         /// Id of the kpi.
         /// </summary>
         public Guid KeyPerformanceIndicatorId { get; set; }
-
+         
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>

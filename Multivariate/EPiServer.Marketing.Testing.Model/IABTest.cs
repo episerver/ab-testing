@@ -54,11 +54,6 @@ namespace EPiServer.Marketing.Testing.Model
         DateTime ModifiedDate { get; set; }
 
         /// <summary>
-        /// List of possible conversions.
-        /// </summary>
-        IList<Conversion> Conversions { get; set; }
-
-        /// <summary>
         /// List of possible variant items.  These replace the OriginalItem during the test.
         /// </summary>
         IList<Variant> Variants { get; set; }

@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Conversion.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Enums\CountType.cs" />
     <Compile Include="Enums\TestState.cs" />

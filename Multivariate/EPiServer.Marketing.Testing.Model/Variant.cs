@@ -17,6 +17,11 @@ namespace EPiServer.Marketing.Testing.Model
         public Guid ItemId { get; set; }
 
         /// <summary>
+        /// Version of original item that is selected as a variant.
+        /// </summary>
+        public int? ItemVersion { get; set; }
+
+        /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual ABTest ABTest { get; set; }

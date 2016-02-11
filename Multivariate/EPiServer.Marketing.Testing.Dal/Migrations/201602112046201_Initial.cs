@@ -25,25 +25,11 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.tblABConversion",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        TestId = c.Guid(nullable: false),
-                        ConversionString = c.String(nullable: false),
-                        CreatedDate = c.DateTime(nullable: false),
-                        ModifiedDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.tblABTest", t => t.TestId, cascadeDelete: true)
-                .Index(t => t.TestId);
-            
-            CreateTable(
                 "dbo.tblABKeyPerformanceIndicator",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        TestId = c.Guid(nullable: false),
+                        TestId = c.Guid(),
                         KeyPerformanceIndicatorId = c.Guid(),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
@@ -75,6 +61,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                         Id = c.Guid(nullable: false),
                         TestId = c.Guid(nullable: false),
                         ItemId = c.Guid(nullable: false),
+                        ItemVersion = c.Int(),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
@@ -89,15 +76,12 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
             DropForeignKey("dbo.tblABVariant", "TestId", "dbo.tblABTest");
             DropForeignKey("dbo.tblABTestResult", "TestId", "dbo.tblABTest");
             DropForeignKey("dbo.tblABKeyPerformanceIndicator", "TestId", "dbo.tblABTest");
-            DropForeignKey("dbo.tblABConversion", "TestId", "dbo.tblABTest");
             DropIndex("dbo.tblABVariant", new[] { "TestId" });
             DropIndex("dbo.tblABTestResult", new[] { "TestId" });
             DropIndex("dbo.tblABKeyPerformanceIndicator", new[] { "TestId" });
-            DropIndex("dbo.tblABConversion", new[] { "TestId" });
             DropTable("dbo.tblABVariant");
             DropTable("dbo.tblABTestResult");
             DropTable("dbo.tblABKeyPerformanceIndicator");
-            DropTable("dbo.tblABConversion");
             DropTable("dbo.tblABTest");
         }
     }

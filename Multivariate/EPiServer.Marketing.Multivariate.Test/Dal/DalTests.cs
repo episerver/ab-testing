@@ -107,42 +107,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         }
 
         [Fact]
-        public void AddConversionToTest()
-        {
-            var id = Guid.NewGuid();
-
-            var test = new ABTest()
-            {
-                Id = id,
-                Title = "Test",
-                Owner = "me",
-                OriginalItemId = new Guid(),
-                State = TestState.Active,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.Now,
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Conversions = new List<Conversion>()
-            };
-
-            _context.ABTests.Add(test);
-
-            var conversion = new Conversion()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ConversionString = "testing"
-            };
-
-            test.Conversions.Add(conversion);
-            _context.SaveChanges();
-
-            Assert.Equal(test.Conversions.Count(), 1);
-
-            Assert.Equal(1, _context.Conversions.Count());
-        }
-
-        [Fact]
         public void AddKeyPerformanceIndicatorToTest()
         {
             var id = Guid.NewGuid();
