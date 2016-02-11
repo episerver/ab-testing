@@ -30,8 +30,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     Owner = "Bert" + i,
                     TestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
-                    Conversions = new List<Conversion>()
-
                 });
             };
 
@@ -56,7 +54,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                     Owner = "Bert" + i,
                     TestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
-                    Conversions = new List<Conversion>()
                 };
 
                 mtmManager.Save(test);

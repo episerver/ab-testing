@@ -84,9 +84,6 @@
             @Html.DisplayNameFor(model => model.Variants[0].Id) : @Html.DisplayFor(model => model.Variants[0].Id)
         </div>
 
-        <div class="display-label">
-            @Html.DisplayNameFor(model => model.Conversions) : @Html.DisplayFor(model => model.Conversions)
-        </div>
         <hr />
         @if (Model.TestResults != null)
         {
@@ -101,8 +98,6 @@
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="Update via REST" title="Update" onclick="updateView('@Model.Id','@result.ItemId');" /></td>
                     </tr>
                     <tr>
-                        <td>@Html.DisplayNameFor(resultItem => result.Conversions)</td>
-                        <td>@Html.DisplayFor(resultItem => result.Conversions)</td>
                         <td>@Html.ActionLink("Queue Update", "UpdateConversion", new { id = Model.Id, itemid = result.ItemId })</td>
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="Update via REST" title="Update" onclick="updateConversion('@Model.Id','@result.ItemId');" /></td>
                     </tr>

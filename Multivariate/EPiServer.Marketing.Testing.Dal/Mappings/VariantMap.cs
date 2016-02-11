@@ -15,6 +15,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.ItemId)
                 .IsRequired();
 
+            this.Property(m => m.ItemVersion)
+                .IsOptional();
+
             this.HasRequired(m => m.ABTest)
                 .WithMany(m => m.Variants)
                 .HasForeignKey(m => m.TestId)

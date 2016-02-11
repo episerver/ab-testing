@@ -44,9 +44,6 @@
             @Html.DisplayNameFor(model => model.Variants[0].VariantId) : @Html.DisplayFor(model => model.Variants[0].VariantId)
         </div>
 
-        <div class="display-label">
-            @Html.DisplayNameFor(model => model.Conversions) : @Html.DisplayFor(model => model.Conversions)
-        </div>
         <hr />
         @if (Model.MultivariateTestResults != null)
         {
@@ -57,9 +54,6 @@
                 </div>
                 <div class="display-label">
                     @Html.DisplayNameFor(resultItem => result.ItemId) : @Html.DisplayFor(resultItem => result.ItemId)
-                </div>
-                <div class="display-label">
-                    @Html.DisplayNameFor(resultItem => result.Conversions) : @Html.DisplayFor(resultItem => result.Conversions)
                 </div>
                 <br />
             }

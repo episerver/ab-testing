@@ -54,12 +54,6 @@ namespace EPiServer.Marketing.Testing.Model
         public string LastModifiedBy { get; set; }
 
         /// <summary>
-        /// List of conversions for the test.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual IList<Conversion> Conversions { get; set; }
-
-        /// <summary>
         /// List of variant items for the test.  These replace the OriginalItem during the test.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
