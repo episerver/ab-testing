@@ -9,6 +9,8 @@ using EPiServer.Marketing.Testing.Web.Models;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.KPI.Manager;
+using EPiServer.Marketing.Testing.KPI.Model;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
@@ -43,8 +45,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="testData"></param>
         public Guid CreateTest(ABTestViewModel testData)
         {
+            //KpiManager kpiManager = new KpiManager();
+            //var kpi = new Kpi() { Id = Guid.NewGuid(), Name = "MyKpi", Weight = 50, ParticipationPercentage = 25, ConversionPage = Guid.NewGuid(), Value = "Hello" };
+            //kpiManager.Save(kpi);
+            //var g = kpiManager.GetKpiList().FirstOrDefault(k => k.Name == "MyKpi");
+
             var tm = _serviceLocator.GetInstance<ITestManager>();
             var test = ConvertToMultivariateTest(testData);
+            //test.KeyPerformanceIndicators.Add(new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = kpi.Id});
             return tm.Save(test);
         }
 
@@ -149,10 +157,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 {
                     new Variant() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}
                 },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
-                {
-                    new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid()},
-                },
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 TestResults = new List<TestResult>()
                 {
                     new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemRef.ContentGuid},
