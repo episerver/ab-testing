@@ -1,4 +1,4 @@
-﻿@using System.Web.Optimization
+@using System.Web.Optimization
 @using EPiServer.Marketing.Testing.Model
 @using EPiServer.Marketing.Testing.Model.Enums
 @model EPiServer.Marketing.Testing.TestPages.Models.ViewModel
@@ -37,13 +37,16 @@
                         @Html.DisplayNameFor(model => Model.Tests[0].EndDate)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].TestState)
+                        @Html.DisplayNameFor(model => Model.Tests[0].State)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => Model.Tests[0].Variants)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => Model.Tests[0].Conversions)*@
                     </th>
                     <th colspan="2">
                         Test Results
@@ -66,7 +69,7 @@
                         @Html.DisplayFor(modelItem => item.EndDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TestState)
+                        @Html.DisplayFor(modelItem => item.State)
                     </td>
 
                     <td>
@@ -78,15 +81,18 @@
                         {
                             for (int i = 0; i < item.Variants.Count; i++)
                             {
-                                @Html.DisplayFor(modelItem => item.Variants[i].VariantId)
+                                @Html.DisplayFor(modelItem => item.Variants[i].Id)
                             }
 
                         }
 
                     </td>
-                    @if (item.MultivariateTestResults.Count > 0)
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.Conversions)*@
+                    </td>
+                    @if (item.TestResults.Count > 0)
                     {
-                        foreach (var result in item.MultivariateTestResults)
+                        foreach (var result in item.TestResults)
                         {
                             <td>
                                 Views:
@@ -99,7 +105,7 @@
                                 @Html.DisplayFor(resultItem => result.Conversions)
                             </td>
                         }
-                        if (item.MultivariateTestResults.Count == 1)
+                        if (item.TestResults.Count == 1)
                         {
                             <td></td>}
 
