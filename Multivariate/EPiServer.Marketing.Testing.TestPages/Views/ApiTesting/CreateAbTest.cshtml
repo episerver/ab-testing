@@ -12,9 +12,35 @@
     <title>SaveABTestData</title>
 </head>
 <body>
-    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script language="javascript" type="text/javascript">
+
+
+    function GetVersions(originalItem) {
+        var url = "/ApiTesting/GetPageVersions/";
+        $.ajax({
+            url: url,
+            data: { originalItem: originalItem },
+            cache: false,
+            type: "POST",
+            success: function(returnedData) {
+                $("#Variants_0_ItemVersion").empty();
+                $.each(returnedData, function(i, val) {
+                    $("#Variants_0_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                });
+                $('#Variants_0_ItemId').val($('#originalItem').val());
+            },
+            error: function(response) {
+                alert("error: " + response);
+            }
+        });
+    }
+
+
+    </script>
 
     @using (Html.BeginForm())
     {
@@ -60,17 +86,17 @@
                 @Html.LabelFor(model => model.OriginalItemId)
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.OriginalItemId)
-                @Html.ValidationMessageFor(model => model.OriginalItemId)
+                @Html.TextBoxFor(model => model.OriginalItemId, new { @id = "originalItem", @onchange = "javascript:GetVersions(this.value);" })
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.Variants[0].Id)
+                Available Versions:
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.Variants[0].Id)
-                @Html.ValidationMessageFor(model => model.Variants[0].Id)
-                @Html.HiddenFor(model => model.Variants[0].Id)
+                <select id="Variants_0_ItemVersion" name="Variants[0].ItemVersion"></select>
+                <input type="hidden" id="Variants_0_ItemId" name="Variants[0].ItemId" />
+                <input type="hidden" id="Variants_0_Id" name="Variants[0].Id" value="@Guid.NewGuid()" />
+
 
 
             </div>

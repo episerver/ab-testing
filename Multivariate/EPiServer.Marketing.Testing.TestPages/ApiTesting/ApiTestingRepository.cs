@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer.Core;
+using EPiServer.DataAbstraction;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
@@ -156,6 +159,18 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             }
 
             return _mtm.Get(testId);
+        }
+
+        public PageVersionCollection GetContentVersions(Guid originalPageReference)
+        {
+            IServiceLocator _serviceLocator = ServiceLocator.Current;
+            IContentRepository _contentRepository = _serviceLocator.GetInstance<IContentRepository>();
+
+            PageData originalContent = _contentRepository.Get<PageData>(originalPageReference);
+
+            DataFactory df = DataFactory.Instance;
+
+            return df.ListVersions(originalContent.PageLink);
         }
     }
 }
