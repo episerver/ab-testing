@@ -4,16 +4,35 @@ using EPiServer.Marketing.Testing.KPI.Model;
 
 namespace EPiServer.Marketing.Testing.KPI.Manager
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IKpiManager
     {
-        Kpi Get(Guid testObjectId);
+        /// <summary>
+        /// Returns a KPI object based on its Id.
+        /// </summary>
+        /// <param name="kpiId">Id of the KPI to retrieve.</param>
+        /// <returns>KPI object.</returns>
+        IKpi Get(Guid kpiId);
 
-        List<Kpi> GetKpiByItemId(Guid originalItemId);
+        /// <summary>
+        /// Gets the whole list of KPI objects.
+        /// </summary>
+        /// <returns>List of KPI objects.</returns>
+        List<IKpi> GetKpiList();
 
-        List<Kpi> GetKpiList();
+        /// <summary>
+        /// Adds or updates a KPI object.
+        /// </summary>
+        /// <param name="kpi">Id of the KPI to add/update.</param>
+        /// <returns>The Id of the KPI object that was added/updated.</returns>
+        Guid Save(IKpi kpi);
 
-        Guid Save(Kpi testObject);
-
-        void Delete(Guid testObjectId);
+        /// <summary>
+        /// Deletes KPI object from the db.
+        /// </summary>
+        /// <param name="kpiId">Id of the KPI to delete.</param>
+        void Delete(Guid kpiId);
     }
 }

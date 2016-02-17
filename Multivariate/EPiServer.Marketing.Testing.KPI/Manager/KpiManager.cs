@@ -25,28 +25,23 @@ namespace EPiServer.Marketing.Testing.KPI.Manager
             _dataAccess = _serviceLocator.GetInstance<IKpiDataAccess>();
         }
 
-        public Kpi Get(Guid testObjectId)
+        public IKpi Get(Guid kpiId)
         {
-            return _dataAccess.Get(testObjectId);
+            return _dataAccess.Get(kpiId);
         }
 
-        public List<Kpi> GetKpiByItemId(Guid originalItemId)
-        {
-            return _dataAccess.GetKpiByItemId(originalItemId);
-        }
-
-        public List<Kpi> GetKpiList()
+        public List<IKpi> GetKpiList()
         {
             return _dataAccess.GetKpiList();
         }
-        public Guid Save(Kpi multivariateTest)
+        public Guid Save(IKpi kpi)
         {
-            return _dataAccess.Save(multivariateTest);
+            return _dataAccess.Save(kpi);
         }
 
-        public void Delete(Guid testObjectId)
+        public void Delete(Guid kpiId)
         {
-            _dataAccess.Delete(testObjectId);
+            _dataAccess.Delete(kpiId);
         }
 
       

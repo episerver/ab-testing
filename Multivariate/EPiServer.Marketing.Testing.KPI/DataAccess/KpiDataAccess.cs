@@ -20,39 +20,58 @@ namespace EPiServer.Marketing.Testing.KPI.DataAccess
             _repository = repository;
         }
 
-        public void Delete(Guid kpiObjectId)
+        /// <summary>
+        /// Deletes KPI object from the db.
+        /// </summary>
+        /// <param name="kpiId">Id of the KPI to delete.</param>
+        public void Delete(Guid kpiId)
         {
-            _repository.DeleteKpi(kpiObjectId);
+            _repository.DeleteKpi(kpiId);
             _repository.SaveChanges();
         }
 
-        public Kpi Get(Guid kpiObjectId)
+        /// <summary>
+        /// Returns a KPI object based on its Id.
+        /// </summary>
+        /// <param name="kpiId">Id of the KPI to retrieve.</param>
+        /// <returns>KPI object.</returns>
+        public IKpi Get(Guid kpiId)
         {
-            return _repository.GetById(kpiObjectId);
+            return _repository.GetById(kpiId);
         }
 
-        public List<Kpi> GetKpiByItemId(Guid originalItemId)
+        /// <summary>
+        /// Gets the whole list of KPI objects.
+        /// </summary>
+        /// <returns>List of KPI objects.</returns>
+        public List<IKpi> GetKpiList()
         {
             return _repository.GetAll().ToList();
         }
 
-        public List<Kpi> GetKpiList()
-        {
-            return _repository.GetAll().ToList();
-        }
-
-        public Guid Save(Kpi kpiObject)
+        /// <summary>
+        /// Adds or updates a KPI object.
+        /// </summary>
+        /// <param name="kpiObject">Id of the KPI to add/update.</param>
+        /// <returns>The Id of the KPI object that was added/updated.</returns>
+        public Guid Save(IKpi kpiObject)
         {
             var kpi = _repository.GetById(kpiObject.Id) as Kpi;
             Guid id;
 
             // if a test doesn't exist, add it to the db
-            //if (kpi == null)
+            if (kpi == null)
             {
                 _repository.Add(kpiObject);
                 id = kpiObject.Id;
             }
- 
+            else
+            {
+                kpi.Name = kpiObject.Name;
+                kpi.Value = kpiObject.Value;
+
+                id = kpi.Id;
+            }
 
             _repository.SaveChanges();
 
