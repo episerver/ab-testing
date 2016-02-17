@@ -10,6 +10,8 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.KPI.Manager;
+using EPiServer.Marketing.Testing.KPI.Model;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
@@ -44,8 +46,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="testData"></param>
         public Guid CreateTest(ABTestViewModel testData)
         {
+            //KpiManager kpiManager = new KpiManager();
+            //var kpi = new Kpi() { Id = Guid.NewGuid(), Name = "MyKpi", Weight = 50, ParticipationPercentage = 25, ConversionPage = Guid.NewGuid(), Value = "Hello" };
+            //kpiManager.Save(kpi);
+            //var g = kpiManager.GetKpiList().FirstOrDefault(k => k.Name == "MyKpi");
+
             var tm = _serviceLocator.GetInstance<ITestManager>();
             var test = ConvertToMultivariateTest(testData);
+            //test.KeyPerformanceIndicators.Add(new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = kpi.Id});
             return tm.Save(test);
         }
 
@@ -108,19 +116,19 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 //testState = testToConvert.State,
                 //StartDate = testToConvert.StartDate,
                 //OriginalItem = originalItemRef.ContentLink.ID,
-                //OriginalItemDisplay = string.Format("{0} [{1}]", originalItemRef.Name, originalItemRef.ContentLink),
+                //OriginalItemDisplay = string.Format("{0} [{1}]", originalItemRef.Name,originalItemRef.ContentLink),
                 //EndDate = testToConvert.EndDate,
                 //OriginalItemId = testToConvert.OriginalItemId,
                 //VariantItemId = testToConvert.Variants[0].ItemId,
-                ////VariantItem = variantItemRef.ContentLink.ID,
-                ////VariantItemDisplay = string.Format("{0} [{1}]", variantItemRef.Name, variantItemRef.ContentLink),
+                //VariantItem = variantItemRef.ContentLink.ID,
+                //VariantItemDisplay = string.Format("{0} [{1}]", variantItemRef.Name, variantItemRef.ContentLink),
                 //TestResults = testToConvert.TestResults,
                 //DateCreated = testToConvert.CreatedDate,
                 //DateModified = testToConvert.ModifiedDate,
                 //LastModifiedBy = testToConvert.LastModifiedBy
-
+               
             };
-
+            
             return testModel;
         }
 
@@ -136,7 +144,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             // need to get guid for pages from the page picker content id's we get
             //var originalItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.OriginalItem));
-            //var variantItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.OriginalItem));
+            //var variantItemRef = contentrepo.Get<IContent>(new ContentReference(viewModelToConvert.VariantItem));
 
             var test = new ABTest
             {
@@ -148,12 +156,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 //EndDate = viewModelToConvert.EndDate,
                 //Variants = new List<Variant>()
                 //{
-                //    new Variant() {Id = Guid.NewGuid(), ItemId = viewModelToConvert.VariantItemId, ItemVersion = viewModelToConvert.VariantVersion}
+                //    new Variant() {Id = Guid.NewGuid(), ItemId = variantItemRef.ContentGuid}
                 //},
-                //KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
-                //{
-                //    new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid()},
-                //},
+                //KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 //TestResults = new List<TestResult>()
                 //{
                 //    new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemRef.ContentGuid},
@@ -167,22 +172,22 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public TestResult GetWinningTestResult(ABTestViewModel test)
         {
-                var winningTest = new TestResult(); // never return null
-            //    winningTest.ItemId = test.OriginalItemId;       // set it to something incase no test results
-            //                                                    // exist, i.e. the original is still winning!
-            //    var currentConversionRate = 0.0;
-            //    foreach (var result in test.TestResults)
+            var winningTest = new TestResult(); // never return null
+            //winningTest.ItemId = test.OriginalItemId;       // set it to something incase no test results
+            //                                                // exist, i.e. the original is still winning!
+            //var currentConversionRate = 0.0;
+            //foreach (var result in test.TestResults)
+            //{
+            //    if (result.Views != 0)
             //    {
-            //        if (result.Views != 0)
+            //        var rate = (int)(result.Conversions * 100.0 / result.Views);
+            //        if (rate > currentConversionRate)
             //        {
-            //            var rate = (int)(result.Conversions * 100.0 / result.Views);
-            //            if (rate > currentConversionRate)
-            //            {
-            //                currentConversionRate = rate;
-            //                winningTest = result;
-            //            }
+            //            currentConversionRate = rate;
+            //            winningTest = result;
             //        }
             //    }
+            //}
 
             return winningTest;
         }
@@ -196,9 +201,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
             tm.Stop(testGuid);
         }
-
         public PageVersionCollection GetContentVersions(Guid originalPageReference)
         {
+            IServiceLocator _serviceLocator = ServiceLocator.Current;
             IContentRepository _contentRepository = _serviceLocator.GetInstance<IContentRepository>();
 
             PageData originalContent = _contentRepository.Get<PageData>(originalPageReference);
