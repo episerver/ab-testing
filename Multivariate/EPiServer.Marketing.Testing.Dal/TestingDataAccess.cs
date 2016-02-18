@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using System.Reflection;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
     public class TestingDataAccess : ITestingDataAccess
     {
         internal IRepository _repository;
+        private Object thisLock = new Object();
 
         public TestingDataAccess()
         {
@@ -30,8 +29,11 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public void Delete(Guid testObjectId)
         {
-            _repository.DeleteTest(testObjectId);
-            _repository.SaveChanges();
+            lock (thisLock)
+            {
+                _repository.DeleteTest(testObjectId);
+                _repository.SaveChanges();
+            }
         }
 
         public IABTest Get(Guid testObjectId)
@@ -43,7 +45,6 @@ namespace EPiServer.Marketing.Testing.Dal
         {
             return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
         }
-
         public List<IABTest> GetTestList(TestCriteria criteria)
         {
             // if no filters are passed in, just return all tests
@@ -141,121 +142,124 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public Guid Save(IABTest testObject)
         {
-            var test = _repository.GetById(testObject.Id) as ABTest;
             Guid id;
+            lock (thisLock)
+            {
+                var test = _repository.GetById(testObject.Id) as ABTest;
 
-            // if a test doesn't exist, add it to the db
-            if (test == null)
-            {
-                _repository.Add(testObject);
-                id = testObject.Id;
-            }
-            else
-            {
-                switch (test.State)
+                // if a test doesn't exist, add it to the db
+                if (test == null)
                 {
-                    case TestState.Inactive:
-                        // update test properties
-                        test.Title = testObject.Title;
-                        test.StartDate = testObject.StartDate;
-                        test.EndDate = testObject.EndDate;
-                        test.ModifiedDate = DateTime.UtcNow;
-                        test.LastModifiedBy = testObject.LastModifiedBy;
-                        test.State = testObject.State;
+                    _repository.Add(testObject);
+                    id = testObject.Id;
+                }
+                else
+                {
+                    switch (test.State)
+                    {
+                        case TestState.Inactive:
+                            // update test properties
+                            test.Title = testObject.Title;
+                            test.StartDate = testObject.StartDate;
+                            test.EndDate = testObject.EndDate;
+                            test.ModifiedDate = DateTime.UtcNow;
+                            test.LastModifiedBy = testObject.LastModifiedBy;
+                            test.State = testObject.State;
 
-                        // update original item and corresponding result record if different
-                        if (test.OriginalItemId != testObject.OriginalItemId)
-                        {
-                            var result =
-                                test.TestResults.FirstOrDefault(r => r.ItemId == test.OriginalItemId);
-                            if (null != result)
+                            // update original item and corresponding result record if different
+                            if (test.OriginalItemId != testObject.OriginalItemId)
                             {
-                                test.TestResults.Remove(result);
-                                _repository.Delete(result);
-                            }
-
-                            test.OriginalItemId = testObject.OriginalItemId;
-                            test.TestResults.Add(
-                                new TestResult()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    ItemId = testObject.OriginalItemId
-                                }
-                                );
-                        }
-
-                        // variant items and corresponding result records
-                        var removeVariant = true;
-                        var variantsToAdd = new List<Variant>(testObject.Variants);
-
-                        // loop over current variants to see if they are also the new variants
-                        // if so, leave them as is, if not, remove them from the test
-                        foreach (var currentVariant in test.Variants.ToArray())
-                        {
-                            foreach (var newVariant in
-                                testObject.Variants.Where(newVariant => currentVariant.ItemId == newVariant.ItemId)
-                                )
-                            {
-                                removeVariant = false;
-                                variantsToAdd.Remove(newVariant);
-                                break;
-                            }
-
-                            // if the currentVariant is not in the new testObject, then we need to remove it from the existing test along with its result
-                            if (removeVariant)
-                            {
-                                test.Variants.Remove(currentVariant);
-                                _repository.Delete(currentVariant);
                                 var result =
-                                    test.TestResults.FirstOrDefault(
-                                        r => r.ItemId == currentVariant.ItemId);
-
+                                    test.TestResults.FirstOrDefault(r => r.ItemId == test.OriginalItemId);
                                 if (null != result)
                                 {
                                     test.TestResults.Remove(result);
                                     _repository.Delete(result);
                                 }
+
+                                test.OriginalItemId = testObject.OriginalItemId;
+                                test.TestResults.Add(
+                                    new TestResult()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        ItemId = testObject.OriginalItemId
+                                    }
+                                    );
                             }
 
-                            removeVariant = true;
-                        }
+                            // variant items and corresponding result records
+                            var removeVariant = true;
+                            var variantsToAdd = new List<Variant>(testObject.Variants);
 
-                        // add remaining new variants from testObject to the existing test along with their results
-                        foreach (var variant in variantsToAdd)
-                        {
-                            test.Variants.Add(variant);
-                            test.TestResults.Add(
-                                new TestResult()
+                            // loop over current variants to see if they are also the new variants
+                            // if so, leave them as is, if not, remove them from the test
+                            foreach (var currentVariant in test.Variants.ToArray())
+                            {
+                                foreach (var newVariant in
+                                    testObject.Variants.Where(newVariant => currentVariant.ItemId == newVariant.ItemId)
+                                    )
                                 {
-                                    Id = Guid.NewGuid(),
-                                    ItemId = variant.ItemId
-                                });
-                        }
+                                    removeVariant = false;
+                                    variantsToAdd.Remove(newVariant);
+                                    break;
+                                }
 
-                        id = test.Id;
-                        break;
-                    case TestState.Active:
-                        if (testObject.State == TestState.Done)
-                        {
-                            test.State = TestState.Done;
-                        }
-                        test.EndDate = testObject.EndDate;
-                        id = test.Id;
-                        break;
-                    case TestState.Done:
-                        if (testObject.State == TestState.Archived)
-                        {
-                            test.State = TestState.Archived;
-                        }
-                        id = test.Id;
-                        break;
-                    default:
-                        id = test.Id;
-                        break;
+                                // if the currentVariant is not in the new testObject, then we need to remove it from the existing test along with its result
+                                if (removeVariant)
+                                {
+                                    test.Variants.Remove(currentVariant);
+                                    _repository.Delete(currentVariant);
+                                    var result =
+                                        test.TestResults.FirstOrDefault(
+                                            r => r.ItemId == currentVariant.ItemId);
+
+                                    if (null != result)
+                                    {
+                                        test.TestResults.Remove(result);
+                                        _repository.Delete(result);
+                                    }
+                                }
+
+                                removeVariant = true;
+                            }
+
+                            // add remaining new variants from testObject to the existing test along with their results
+                            foreach (var variant in variantsToAdd)
+                            {
+                                test.Variants.Add(variant);
+                                test.TestResults.Add(
+                                    new TestResult()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        ItemId = variant.ItemId
+                                    });
+                            }
+
+                            id = test.Id;
+                            break;
+                        case TestState.Active:
+                            if (testObject.State == TestState.Done)
+                            {
+                                test.State = TestState.Done;
+                            }
+                            test.EndDate = testObject.EndDate;
+                            id = test.Id;
+                            break;
+                        case TestState.Done:
+                            if (testObject.State == TestState.Archived)
+                            {
+                                test.State = TestState.Archived;
+                            }
+                            id = test.Id;
+                            break;
+                        default:
+                            id = test.Id;
+                            break;
+                    }
                 }
-            }
 
-            _repository.SaveChanges();
+                _repository.SaveChanges();
+            }
 
             return id;
         }
