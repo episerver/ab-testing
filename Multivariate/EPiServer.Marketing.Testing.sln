@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPIServer.Marketing.Messagi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Messaging.Test", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.csproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{161B3773-B01D-4D63-BDE5-CA6A022DF4DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Templates.Alloy", "..\samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj", "{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,8 +68,15 @@ Global
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2} = {161B3773-B01D-4D63-BDE5-CA6A022DF4DD}
 	EndGlobalSection
 EndGlobal
