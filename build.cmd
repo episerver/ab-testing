@@ -1,1 +1,1 @@
-copy /Y build\resources\AlloyEPiServerDB.mdf \samples\EPiServer.Templates.Alloy\App_Data\AlloyEPiServerDB.mdf
+copy /Y build\resources\AlloyEPiServerDB.mdf samples\EPiServer.Templates.Alloy\App_Data\AlloyEPiServerDB.mdf
