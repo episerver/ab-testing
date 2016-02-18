@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Messagi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.KPI", "EPiServer.Marketing.Testing.KPI\EPiServer.Marketing.Testing.KPI.csproj", "{B89EB2B0-D652-4198-83FF-AC2C395D41E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.KPI.Test", "EPiServer.Marketing.Testing.KPI.Test\EPiServer.Marketing.Testing.KPI.Test.csproj", "{88A46470-32AC-4BF1-9945-54C2FAF9BDFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,10 @@ Global
 		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A46470-32AC-4BF1-9945-54C2FAF9BDFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A46470-32AC-4BF1-9945-54C2FAF9BDFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A46470-32AC-4BF1-9945-54C2FAF9BDFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A46470-32AC-4BF1-9945-54C2FAF9BDFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
