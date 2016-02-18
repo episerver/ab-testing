@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.Web", "EPiServer.Marketing.Testing.Web\EPiServer.Marketing.Testing.Web.csproj", "{CB8500E5-9999-4E35-97D6-142E87857E6A}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPIServer.Marketing.Messaging", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj", "{167D31D8-063C-48CA-84EC-0D136BAED1F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Messaging.Test", "EPiServer.Marketing.Messaging\EPIServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.csproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Testing.KPI", "EPiServer.Marketing.Testing.KPI\EPiServer.Marketing.Testing.KPI.csproj", "{B89EB2B0-D652-4198-83FF-AC2C395D41E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
