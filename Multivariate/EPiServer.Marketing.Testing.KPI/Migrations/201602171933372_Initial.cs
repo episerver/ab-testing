@@ -13,10 +13,11 @@ namespace EPiServer.Marketing.Testing.KPI.Migrations
                     {
                         Id = c.Guid(nullable: false),
                         Name = c.String(nullable: false),
-                        Weight = c.Int(nullable: false),
+                        Weight = c.Int(),
                         Value = c.String(nullable: false),
-                        ParticipationPercentage = c.Int(nullable: false),
-                        ConversionPage = c.Guid(nullable: false),
+                        ParticipationPercentage = c.Int(),
+                        LandingPage = c.Guid(nullable: false),
+                        RunAt = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             

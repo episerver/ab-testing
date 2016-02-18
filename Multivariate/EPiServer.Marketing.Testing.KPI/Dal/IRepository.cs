@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.Testing.KPI.Dal
         /// <returns>Entity corresponding to the given id in the repository</returns>
         T GetById<T>(object id) where T : class;
 
-        Kpi GetById(object id);
+        IKpi GetById(object id);
 
         /// <summary>
         /// Retrieves all entity objects of the given type from the repository
@@ -59,7 +59,7 @@ namespace EPiServer.Marketing.Testing.KPI.Dal
         /// <returns>IQueryable of all the entity object of the given type in the repository</returns>
         IQueryable<T> GetAll<T>() where T : class;
 
-        IQueryable<Kpi> GetAll();
+        IQueryable<IKpi> GetAll();
 
         /// <summary>
         /// Retrieves all entity objects of the given type from the repository as a list

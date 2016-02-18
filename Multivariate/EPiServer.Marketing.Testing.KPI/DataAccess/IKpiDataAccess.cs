@@ -6,13 +6,11 @@ namespace EPiServer.Marketing.Testing.KPI.DataAccess
 {
     public interface IKpiDataAccess
     {
-        Kpi Get(Guid kpiObjectId);
+        IKpi Get(Guid kpiObjectId);
 
-        List<Kpi> GetKpiByItemId(Guid originalItemId);
+        List<IKpi> GetKpiList();
 
-        List<Kpi> GetKpiList();
-
-        Guid Save(Kpi kpiObject);
+        Guid Save(IKpi kpiObject);
 
         void Delete(Guid kpiObjectId);
     }

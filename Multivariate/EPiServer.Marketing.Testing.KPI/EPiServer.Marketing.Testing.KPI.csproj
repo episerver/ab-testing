@@ -133,11 +133,13 @@
     <Compile Include="DataAccess\KpiDataAccess.cs" />
     <Compile Include="Manager\IKpiManager.cs" />
     <Compile Include="Manager\KpiManager.cs" />
-    <Compile Include="Migrations\201602161526113_Initial.cs" />
-    <Compile Include="Migrations\201602161526113_Initial.Designer.cs">
-      <DependentUpon>201602161526113_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201602171933372_Initial.cs" />
+    <Compile Include="Migrations\201602171933372_Initial.Designer.cs">
+      <DependentUpon>201602171933372_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Model\Enums\RunAt.cs" />
+    <Compile Include="Model\IKpi.cs" />
     <Compile Include="Model\Kpi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -146,8 +148,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602161526113_Initial.resx">
-      <DependentUpon>201602161526113_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602171933372_Initial.resx">
+      <DependentUpon>201602171933372_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

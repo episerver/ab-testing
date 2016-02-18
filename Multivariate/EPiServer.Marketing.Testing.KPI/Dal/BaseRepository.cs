@@ -69,12 +69,12 @@ namespace EPiServer.Marketing.Testing.KPI.Dal
             return records;
         }
 
-        public Kpi GetById(object id)
+        public IKpi GetById(object id)
         {
             return DatabaseContext.Set<Kpi>().Find(id);
         }
 
-        public IQueryable<Kpi> GetAll()
+        public IQueryable<IKpi> GetAll()
         {
             return DatabaseContext.Set<Kpi>().AsQueryable();
         } 
