@@ -1,4 +1,4 @@
-namespace EPiServer.Marketing.Testing.KPI.Migrations
+namespace EPiServer.Marketing.KPI.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

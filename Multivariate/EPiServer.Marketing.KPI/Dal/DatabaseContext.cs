@@ -2,9 +2,9 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Testing.KPI.Model;
+using EPiServer.Marketing.KPI.Model;
 
-namespace EPiServer.Marketing.Testing.KPI.Dal
+namespace EPiServer.Marketing.KPI.Dal
 {
     public class DatabaseContext : DbContext
     {

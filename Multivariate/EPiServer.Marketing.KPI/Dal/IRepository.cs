@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EPiServer.Marketing.Testing.KPI.Model;
+using EPiServer.Marketing.KPI.Model;
 
-namespace EPiServer.Marketing.Testing.KPI.Dal
+namespace EPiServer.Marketing.KPI.Dal
 {
     /// <summary>
     /// Interface for basic repository functionality

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.KPI.Model;
+using EPiServer.Marketing.KPI.Model;
 
-namespace EPiServer.Marketing.Testing.KPI.DataAccess
+namespace EPiServer.Marketing.KPI.DataAccess
 {
     public interface IKpiDataAccess
     {

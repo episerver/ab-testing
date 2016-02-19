@@ -1,15 +1,15 @@
-namespace EPiServer.Marketing.Testing.KPI.Migrations
+namespace EPiServer.Marketing.KPI.Migrations
 {
     using System.Data.Entity.Migrations;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.Testing.KPI.Dal.DatabaseContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.KPI.Dal.DatabaseContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(EPiServer.Marketing.Testing.KPI.Dal.DatabaseContext context)
+        protected override void Seed(EPiServer.Marketing.KPI.Dal.DatabaseContext context)
         {
             //  This method will be called after migrating to the latest version.
 

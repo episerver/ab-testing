@@ -1,7 +1,7 @@
 ﻿using System;
-using EPiServer.Marketing.Testing.KPI.Model.Enums;
+using EPiServer.Marketing.KPI.Model.Enums;
 
-namespace EPiServer.Marketing.Testing.KPI.Model
+namespace EPiServer.Marketing.KPI.Model
 {
     /// <summary>
     /// Interface for KPI objects.

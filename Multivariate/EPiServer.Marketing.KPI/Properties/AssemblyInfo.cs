@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EPiServer.Marketing.Testing.KeyPerformanceIndicator")]
+[assembly: AssemblyTitle("EPiServer.Marketing.KPI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EPiServer.Marketing.Testing.KeyPerformanceIndicator")]
+[assembly: AssemblyProduct("EPiServer.Marketing.KPI")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

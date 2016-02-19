@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Testing.KPI.Model;
-using EPiServer.Marketing.Testing.KPI.DataAccess;
+using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.ServiceLocation;
 
-namespace EPiServer.Marketing.Testing.KPI.Manager
+namespace EPiServer.Marketing.KPI.Manager
 {
     [ServiceConfiguration(ServiceType = typeof(IKpiManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiManager : IKpiManager

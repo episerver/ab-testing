@@ -7,8 +7,8 @@
     <ProjectGuid>{B89EB2B0-D652-4198-83FF-AC2C395D41E3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Marketing.Testing.KPI</RootNamespace>
-    <AssemblyName>EPiServer.Marketing.Testing.KPI</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.KPI</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.KPI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -144,7 +144,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EPiServer.Marketing.Testing.KPI.Dal;
-using EPiServer.Marketing.Testing.KPI.Model;
+using EPiServer.Marketing.KPI.Dal;
+using EPiServer.Marketing.KPI.Model;
 
-namespace EPiServer.Marketing.Testing.KPI.DataAccess
+namespace EPiServer.Marketing.KPI.DataAccess
 {
     public class KpiDataAccess : IKpiDataAccess
     {

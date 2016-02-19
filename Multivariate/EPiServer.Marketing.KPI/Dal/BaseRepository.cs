@@ -4,9 +4,9 @@ using System.Data.Entity;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Transactions;
-using EPiServer.Marketing.Testing.KPI.Model;
+using EPiServer.Marketing.KPI.Model;
 
-namespace EPiServer.Marketing.Testing.KPI.Dal
+namespace EPiServer.Marketing.KPI.Dal
 {
     [ExcludeFromCodeCoverage]
     public class BaseRepository : IRepository

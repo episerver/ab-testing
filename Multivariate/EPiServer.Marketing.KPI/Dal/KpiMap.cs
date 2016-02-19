@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity.ModelConfiguration;
-using EPiServer.Marketing.Testing.KPI.Model;
+using EPiServer.Marketing.KPI.Model;
 
-namespace EPiServer.Marketing.Testing.KPI.Dal
+namespace EPiServer.Marketing.KPI.Dal
 {
     public class KpiMap : EntityTypeConfiguration<Kpi>
     {

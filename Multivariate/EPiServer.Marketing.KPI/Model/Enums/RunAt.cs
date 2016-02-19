@@ -1,4 +1,4 @@
-﻿namespace EPiServer.Marketing.Testing.KPI.Model.Enums
+﻿namespace EPiServer.Marketing.KPI.Model.Enums
 {
     public enum RunAt
     {
