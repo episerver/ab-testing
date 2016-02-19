@@ -1,7 +1,6 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
-namespace EPiServer.Marketing.KeyPerformanceIndicator.Test
+namespace EPiServer.Marketing.KPI.Test
 {
     public class UnitTest1
     {
