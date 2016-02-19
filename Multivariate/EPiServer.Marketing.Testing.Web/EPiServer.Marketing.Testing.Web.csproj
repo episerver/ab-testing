@@ -282,7 +282,7 @@
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj">
       <Project>{b89eb2b0-d652-4198-83ff-ac2c395d41e3}</Project>
-      <Name>EPiServer.Marketing.Testing.KPI</Name>
+      <Name>EPiServer.Marketing.KPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Testing.Model\EPiServer.Marketing.Testing.Model.csproj">
       <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>

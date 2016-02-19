@@ -7,8 +7,8 @@
     <ProjectGuid>{5909B279-FD10-45D8-8208-95AB9A00090B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Marketing.KPI.Tests</RootNamespace>
-    <AssemblyName>EPiServer.Marketing.KPI.Tests</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.KPI.Test</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.KPI.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Messagi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.KPI", "EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj", "{B89EB2B0-D652-4198-83FF-AC2C395D41E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.KPI.Tests", "EPiServer.Marketing.KPI.Tests\EPiServer.Marketing.KPI.Tests.csproj", "{5909B279-FD10-45D8-8208-95AB9A00090B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.KPI.Test", "EPiServer.Marketing.KPI.Tests\EPiServer.Marketing.KPI.Test.csproj", "{5909B279-FD10-45D8-8208-95AB9A00090B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
