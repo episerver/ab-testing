@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Version of original item that is selected as a variant.
         /// </summary>
-        public int? ItemVersion { get; set; }
+        public int ItemVersion { get; set; }
 
         /// <summary>
         /// Reference to the test this is associated with.

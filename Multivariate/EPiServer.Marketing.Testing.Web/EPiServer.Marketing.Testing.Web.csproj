@@ -280,7 +280,7 @@
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Testing.Dal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EPiServer.Marketing.Testing.KPI\EPiServer.Marketing.Testing.KPI.csproj">
+    <ProjectReference Include="..\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj">
       <Project>{b89eb2b0-d652-4198-83ff-ac2c395d41e3}</Project>
       <Name>EPiServer.Marketing.Testing.KPI</Name>
     </ProjectReference>

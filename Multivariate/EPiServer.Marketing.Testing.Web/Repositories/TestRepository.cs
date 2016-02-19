@@ -10,8 +10,8 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.Testing.Model.Enums;
 using EPiServer.Marketing.Testing;
-using EPiServer.Marketing.Testing.KPI.Manager;
-using EPiServer.Marketing.Testing.KPI.Model;
+//using EPiServer.Marketing.KPI.Manager;
+//using EPiServer.Marketing.KPI.Model;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories

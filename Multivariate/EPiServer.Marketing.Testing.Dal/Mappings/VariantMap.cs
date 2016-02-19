@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
                 .IsRequired();
 
             this.Property(m => m.ItemVersion)
-                .IsOptional();
+                .IsRequired();
 
             this.HasRequired(m => m.ABTest)
                 .WithMany(m => m.Variants)

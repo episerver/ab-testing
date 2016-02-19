@@ -27,6 +27,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(s => s.ItemId)
                 .IsRequired();
 
+            this.Property(s => s.ItemVersion)
+                .IsRequired();
+
             this.Property(s => s.Views)
                 .IsRequired();
 

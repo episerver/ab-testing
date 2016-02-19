@@ -45,6 +45,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                         Id = c.Guid(nullable: false),
                         TestId = c.Guid(nullable: false),
                         ItemId = c.Guid(nullable: false),
+                        ItemVersion = c.Int(nullable: false),
                         Views = c.Int(nullable: false),
                         Conversions = c.Int(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
@@ -61,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                         Id = c.Guid(nullable: false),
                         TestId = c.Guid(nullable: false),
                         ItemId = c.Guid(nullable: false),
-                        ItemVersion = c.Int(),
+                        ItemVersion = c.Int(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
