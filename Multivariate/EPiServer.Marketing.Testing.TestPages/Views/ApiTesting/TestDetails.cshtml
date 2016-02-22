@@ -80,9 +80,7 @@
             @Html.DisplayNameFor(model => model.OriginalItemId) : @Html.DisplayFor(model => model.OriginalItemId)
         </div>
 
-        <div class="display-label">
-            @Html.DisplayNameFor(model => model.Variants[0].Id) : @Html.DisplayFor(model => model.Variants[0].Id)
-        </div>
+        
 
         <hr />
         @if (Model.TestResults != null)
@@ -90,7 +88,7 @@
             <table style="width:50%">
                 @foreach (var result in Model.TestResults)
                 {
-                    <tr><td> @Html.DisplayNameFor(resultItem => result.ItemId) </td><td> @Html.DisplayFor(resultItem => result.ItemId) </td></tr>
+                    <tr><td> @Html.DisplayNameFor(resultItem => result.ItemId)</td><td> @Html.DisplayFor(resultItem => result.ItemId) version: @Html.DisplayFor(resultItem => result.ItemVersion) </td></tr>
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => result.Views)</td>
                         <td>@Html.DisplayFor(resultItem => result.Views)</td>
@@ -98,8 +96,10 @@
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="Update via REST" title="Update" onclick="updateView('@Model.Id','@result.ItemId');" /></td>
                     </tr>
                     <tr>
-                        <td>@Html.ActionLink("Queue Update", "UpdateConversion", new { id = Model.Id, itemid = result.ItemId })</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="Update via REST" title="Update" onclick="updateConversion('@Model.Id','@result.ItemId');" /></td>
+                        <td>@Html.DisplayNameFor(resultItem => result.Conversions)</td>
+                        <td>@Html.DisplayFor(resultItem => result.Conversions)</td>
+                        <td>@Html.ActionLink("Queue Update", "UpdateConversion", new {id = Model.Id, itemid = result.ItemId})</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="Update via REST" title="Update" onclick="updateConversion('@Model.Id', '@result.ItemId');"/></td>
                     </tr>
                     <tr><td>&nbsp;</td></tr> }
             </table>
