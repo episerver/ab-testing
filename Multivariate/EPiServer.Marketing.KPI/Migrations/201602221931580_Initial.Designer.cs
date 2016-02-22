@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.KPI.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201602171933372_Initial"; }
+            get { return "201602221931580_Initial"; }
         }
         
         string IMigrationMetadata.Source

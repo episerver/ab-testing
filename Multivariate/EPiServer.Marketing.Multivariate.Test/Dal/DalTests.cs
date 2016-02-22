@@ -57,7 +57,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                ParticipationPercentage = 100
             };
 
             _context.ABTests.Add(test);
@@ -95,7 +96,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = Guid.NewGuid(),
                 ItemId = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                ItemVersion = 1
+
             };
 
             test.Variants.Add(variant);
@@ -169,7 +172,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 CreatedDate = DateTime.UtcNow,
                 ItemId = Guid.NewGuid(),
                 Conversions = 1,
-                Views = 1
+                Views = 1,
+                ItemVersion = 1
             };
 
             test.TestResults.Add(tr);

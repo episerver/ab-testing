@@ -174,34 +174,30 @@ namespace EPiServer.Marketing.Testing.Dal
                         }
                         else
                         {
-                            var foundAMatch = false;
-
-                            // originalItemId is unchanged, check to see if variant has changed
-                            foreach (var variant in test.Variants.ToArray())
+                            foreach (var variant in test.Variants)
                             {
-                                foreach (var newVariant in testObject.Variants.ToArray().Where(newVariant => variant.ItemId == newVariant.ItemId &&
-                                                                                                             variant.ItemVersion == newVariant.ItemVersion))
+                                foreach (
+                                    var newVariant in
+                                        testObject.Variants.Where(newVariant => variant.Id == newVariant.Id))
                                 {
-                                    foundAMatch = true;
-                                    testObject.Variants.Remove(newVariant);
+                                    variant.ItemId = newVariant.ItemId;
+                                    variant.ItemVersion = newVariant.ItemVersion;
+                                    variant.ModifiedDate = DateTime.Now;
                                     break;
                                 }
-
-                                if (foundAMatch)
-                                    continue;
-
-                                // get corresponding test result record to delete
-                                var testResult = test.TestResults.First(tr => tr.ItemId == variant.ItemId && tr.ItemVersion == variant.ItemVersion);
-                                test.Variants.Remove(variant);
-                                test.TestResults.Remove(testResult);
                             }
 
-                            // whatever is left in this variant list is new and needs to be added to the db as well as a result for the variant
-                            foreach (var newVariant in testObject.Variants)
+                            foreach (var result in test.TestResults)
                             {
-                                var testResult = testObject.TestResults.First(tr => tr.ItemId == newVariant.ItemId && tr.ItemVersion == newVariant.ItemVersion);
-                                test.Variants.Add(newVariant);
-                                test.TestResults.Add(testResult);
+                                foreach (
+                                    var newResult in
+                                        testObject.TestResults.Where(newResult => result.Id == newResult.Id))
+                                {
+                                    result.ItemId = newResult.ItemId;
+                                    result.ItemVersion = newResult.ItemVersion;
+                                    result.ModifiedDate = DateTime.Now;
+                                    break;
+                                }
                             }
                         }
                         id = test.Id;

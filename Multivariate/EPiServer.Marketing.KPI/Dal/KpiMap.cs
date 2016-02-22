@@ -20,14 +20,15 @@ namespace EPiServer.Marketing.KPI.Dal
             this.Property(m => m.Value)
                 .IsRequired();
 
-            this.Property(m => m.ParticipationPercentage)
-                .IsOptional();
-
             this.Property(m => m.LandingPage)
                 .IsRequired();
 
             this.Property(m => m.RunAt)
                 .IsRequired();
+
+            this.Property(m => m.ClientScripts)
+                .IsOptional();
+
         }
     }
 }

@@ -49,6 +49,11 @@ namespace EPiServer.Marketing.Testing.Model
         public DateTime? EndDate { get; set; }
 
         /// <summary>
+        /// Percentage of visitors that will be part of the test.
+        /// </summary>
+        public int ParticipationPercentage { get; set; }
+
+        /// <summary>
         /// Last person that modified the test.
         /// </summary>
         public string LastModifiedBy { get; set; }

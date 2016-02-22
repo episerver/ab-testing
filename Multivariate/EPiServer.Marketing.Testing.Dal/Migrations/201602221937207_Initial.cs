@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace EPiServer.Marketing.Testing.Dal.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
+    [ExcludeFromCodeCoverage]
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -18,6 +20,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                         State = c.Int(),
                         StartDate = c.DateTime(nullable: false),
                         EndDate = c.DateTime(nullable: false),
+                        ParticipationPercentage = c.Int(nullable: false),
                         LastModifiedBy = c.String(maxLength: 100),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),

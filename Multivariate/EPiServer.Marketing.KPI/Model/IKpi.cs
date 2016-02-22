@@ -32,5 +32,16 @@ namespace EPiServer.Marketing.KPI.Model
         /// Indicates whether this Kpi is run on the server side or client side.
         /// </summary>
         RunAt RunAt { get; set; }
+
+        /// <summary>
+        /// Paths to client scripts.  Single string that is comma deliminated.
+        /// </summary>
+        string ClientScripts { get; set; }
+
+        /// <summary>
+        /// Determines if a conversion has happened.
+        /// </summary>
+        /// <param name="theValues"></param>
+        void Success(object theValues);
     }
 }

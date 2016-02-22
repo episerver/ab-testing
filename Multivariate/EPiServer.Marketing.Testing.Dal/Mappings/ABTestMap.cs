@@ -32,6 +32,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.EndDate)
                 .IsRequired();
 
+            this.Property(m => m.ParticipationPercentage)
+                .IsRequired();
+
             this.Property(m => m.LastModifiedBy)
                 .HasMaxLength(100)
                 .IsOptional();
