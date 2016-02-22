@@ -1,1 +1,4 @@
-copy /Y build\resources\AlloyEPiServerDB.mdf samples\EPiServer.Templates.Alloy\App_Data\AlloyEPiServerDB.mdf
+@echo off
+setlocal
+
+powershell -File "build\build.ps1" %*
