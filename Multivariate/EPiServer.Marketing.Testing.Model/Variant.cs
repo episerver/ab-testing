@@ -9,7 +9,7 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// Id of the test this is associated with.
         /// </summary>
-        public Guid TestId { get; set; }
+        public Guid? TestId { get; set; }
 
         /// <summary>
         /// Id of a variant to use instead of the original item for a test.

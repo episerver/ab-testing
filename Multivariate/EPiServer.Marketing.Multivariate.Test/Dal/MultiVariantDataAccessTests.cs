@@ -81,7 +81,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
-            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
+            var filter = new ABTestFilter();
+            filter.Property = ABTestProperty.OriginalItemId;
+            filter.Operator = FilterOperator.And;
+            filter.Value = originalItemId;
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
             Assert.Equal(1, list.Count());
@@ -304,5 +307,53 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var list = _mtm.GetTestByItemId(originalItemId);
             Assert.Equal(1, list.Count());
         }
+
+        [Fact]
+        public void TestManagerSaveVariantUpdate()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
+            var originalItemId = Guid.NewGuid();
+            tests[0].OriginalItemId = originalItemId;
+            var variant = new Variant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1};
+            tests[0].Variants.Add(variant);
+
+            var result = new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1};
+            tests[0].TestResults.Add(result);
+            _mtm.Save(tests[0]);
+
+            variant.ItemVersion = 2;
+            _mtm.Save(tests[0]);
+
+            Assert.Equal(_mtm.Get(tests[0].Id).OriginalItemId, originalItemId);
+            Assert.Equal(_mtm.Get(tests[0].Id).Variants.First(v => v.ItemId == originalItemId).ItemVersion, 2);
+
+        }
+
+        [Fact]
+        public void TestManagerSaveAddVariantItem()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
+            var originalItemId = Guid.NewGuid();
+            tests[0].OriginalItemId = originalItemId;
+            var variant = new Variant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            tests[0].Variants.Add(variant);
+
+            var result = new TestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            tests[0].TestResults.Add(result);
+            _mtm.Save(tests[0]);
+
+            var variantItemId2 = Guid.NewGuid();
+            var variant2 = new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            tests[0].Variants.Add(variant2);
+
+            var result2 = new TestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            tests[0].TestResults.Add(result2);
+
+            _mtm.Save(tests[0]);
+
+            Assert.Equal(_mtm.Get(tests[0].Id).OriginalItemId, originalItemId);
+            Assert.Equal(_mtm.Get(tests[0].Id).Variants.Count, 2);
+        }
+
     }
 }

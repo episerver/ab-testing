@@ -35,12 +35,6 @@ namespace EPiServer.Marketing.KPI.Model
         public string Value { get; set; }
 
         /// <summary>
-        /// Percentage of visitors that will be part of the test.
-        /// </summary>
-        [DataMember]
-        public int ParticipationPercentage { get; set; }
-
-        /// <summary>
         /// Page to send user to if they meet the kpi requirement.
         /// </summary>
         [DataMember]
@@ -51,5 +45,18 @@ namespace EPiServer.Marketing.KPI.Model
         /// </summary>
         public RunAt RunAt { get; set; }
 
+        /// <summary>
+        /// Paths to client scripts.  Single string that is comma deliminated.
+        /// </summary>
+        public string ClientScripts { get; set; }
+
+        /// <summary>
+        /// Determines if a conversion has happened.
+        /// </summary>
+        /// <param name="theValues"></param>
+        public void Success(object theValues)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
