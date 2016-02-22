@@ -139,7 +139,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
-            var variantList = new List<Variant>() { new Variant { ItemId = vID } };
+            var variantList = new List<Variant>() { new Variant { Id = vID }, new Variant {Id = originalItemId} };
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
