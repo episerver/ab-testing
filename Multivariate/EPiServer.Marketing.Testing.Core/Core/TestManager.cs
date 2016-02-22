@@ -86,10 +86,10 @@ namespace EPiServer.Marketing.Testing
                 {
                     case 1:
                     default:
-                        activePage = currentTest.OriginalItemId;
+                        activePage = currentTest.Variants[0].Id;
                         break;
                     case 2:
-                        activePage = currentTest.Variants[0].ItemId;
+                        activePage = currentTest.Variants[1].Id;
                         break;
                 }
             }

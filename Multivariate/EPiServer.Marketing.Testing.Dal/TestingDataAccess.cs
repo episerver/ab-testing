@@ -122,10 +122,10 @@ namespace EPiServer.Marketing.Testing.Dal
         }
 
 
-        public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
+        public void IncrementCount(Guid testId, Guid resultItemId, CountType resultType)
         {
             var test = _repository.GetById(testId);
-            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId);
+            var result = test.TestResults.FirstOrDefault(v => v.ItemId == resultItemId);
 
             if (resultType == CountType.View)
             {
@@ -175,13 +175,13 @@ namespace EPiServer.Marketing.Testing.Dal
                             }
 
                             test.OriginalItemId = testObject.OriginalItemId;
-                            test.TestResults.Add(
-                                new TestResult()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    ItemId = testObject.OriginalItemId
-                                }
-                                );
+                            //test.TestResults.Add(
+                            //    new TestResult()
+                            //    {
+                            //        Id = Guid.NewGuid(),
+                            //        ItemId = testObject.OriginalItemId
+                            //    }
+                            //    );
                         }
 
                         // variant items and corresponding result records
