@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using System.Reflection;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
@@ -163,75 +161,49 @@ namespace EPiServer.Marketing.Testing.Dal
                         test.LastModifiedBy = testObject.LastModifiedBy;
                         test.State = testObject.State;
 
-                        // update original item and corresponding result record if different
+                        // if originalItemId is different, then so are any variants since they share the same guid - delete all variants and corresponding results
+                        // and add new ones
                         if (test.OriginalItemId != testObject.OriginalItemId)
                         {
-                            var result =
-                                test.TestResults.FirstOrDefault(r => r.ItemId == test.OriginalItemId);
-                            if (null != result)
-                            {
-                                test.TestResults.Remove(result);
-                                _repository.Delete(result);
-                            }
+                            test.TestResults.Clear();
+                            test.Variants.Clear();
 
                             test.OriginalItemId = testObject.OriginalItemId;
-                            test.TestResults.Add(
-                                new TestResult()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    ItemId = testObject.OriginalItemId
-                                }
-                                );
+                            test.Variants = testObject.Variants;
+                            test.TestResults = testObject.TestResults;
                         }
-
-                        // variant items and corresponding result records
-                        var removeVariant = true;
-                        var variantsToAdd = new List<Variant>(testObject.Variants);
-
-                        // loop over current variants to see if they are also the new variants
-                        // if so, leave them as is, if not, remove them from the test
-                        foreach (var currentVariant in test.Variants.ToArray())
+                        else
                         {
-                            foreach (var newVariant in
-                                testObject.Variants.Where(newVariant => currentVariant.ItemId == newVariant.ItemId)
-                                )
+                            var foundAMatch = false;
+
+                            // originalItemId is unchanged, check to see if variant has changed
+                            foreach (var variant in test.Variants.ToArray())
                             {
-                                removeVariant = false;
-                                variantsToAdd.Remove(newVariant);
-                                break;
+                                foreach (var newVariant in testObject.Variants.ToArray().Where(newVariant => variant.ItemId == newVariant.ItemId &&
+                                                                                                             variant.ItemVersion == newVariant.ItemVersion))
+                                {
+                                    foundAMatch = true;
+                                    testObject.Variants.Remove(newVariant);
+                                    break;
+                                }
+
+                                if (foundAMatch)
+                                    continue;
+
+                                // get corresponding test result record to delete
+                                var testResult = test.TestResults.First(tr => tr.ItemId == variant.ItemId && tr.ItemVersion == variant.ItemVersion);
+                                test.Variants.Remove(variant);
+                                test.TestResults.Remove(testResult);
                             }
 
-                            // if the currentVariant is not in the new testObject, then we need to remove it from the existing test along with its result
-                            if (removeVariant)
+                            // whatever is left in this variant list is new and needs to be added to the db as well as a result for the variant
+                            foreach (var newVariant in testObject.Variants)
                             {
-                                test.Variants.Remove(currentVariant);
-                                _repository.Delete(currentVariant);
-                                var result =
-                                    test.TestResults.FirstOrDefault(
-                                        r => r.ItemId == currentVariant.ItemId);
-
-                                if (null != result)
-                                {
-                                    test.TestResults.Remove(result);
-                                    _repository.Delete(result);
-                                }
+                                var testResult = testObject.TestResults.First(tr => tr.ItemId == newVariant.ItemId && tr.ItemVersion == newVariant.ItemVersion);
+                                test.Variants.Add(newVariant);
+                                test.TestResults.Add(testResult);
                             }
-
-                            removeVariant = true;
                         }
-
-                        // add remaining new variants from testObject to the existing test along with their results
-                        foreach (var variant in variantsToAdd)
-                        {
-                            test.Variants.Add(variant);
-                            test.TestResults.Add(
-                                new TestResult()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    ItemId = variant.ItemId
-                                });
-                        }
-
                         id = test.Id;
                         break;
                     case TestState.Active:
