@@ -19,7 +19,6 @@ switch -wildcard ($branchName) {
 }
 
 $packageFolders = @(
-	"ABTesting",
 	"Multivariate"
 )
 
