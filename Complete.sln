@@ -11,13 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multiva
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Marketing.Multivariate.Dal", "Multivariate\EPiServer.Marketing.Multivariate.Dal\EPiServer.Marketing.Multivariate.Dal.csproj", "{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C12C4E69-94F8-4650-BEAF-A5EBE04E7410}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{D8CB13FE-9720-4FE1-B7DB-1F6FDAA7E1A2}"
 	ProjectSection(SolutionItems) = preProject
 		MSBuild\buildpackage.ps1 = MSBuild\buildpackage.ps1

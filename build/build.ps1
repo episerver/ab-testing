@@ -12,8 +12,10 @@ pushd $cwd
 
 "Building $configuration"
 
-# TODO: 
 # Restore packages
+.\resources\nuget\NuGet.exe restore ..\Multivariate\EPiServer.Marketing.Testing.sln -PackagesDirectory ..\packages
+# TODO: 
+# Restore packages for xprojs
 # Build all xprojs
 
 # Get the latest msbuild version
