@@ -24,7 +24,7 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 }
 
 # Build msbuild projects
-&"$msbuild" ..\Multivariate\EPiServer.Marketing.Testing.sln -p:Configuration=$configuration -p:Platform="Any CPU" 
+&"$msbuild" ..\Multivariate\EPiServer.Marketing.Testing.sln /p:Configuration=$configuration /p:Platform="Any CPU\"
 
 # TODO: 
 # Build the Client Resources
