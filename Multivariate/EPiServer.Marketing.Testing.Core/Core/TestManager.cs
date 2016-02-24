@@ -171,8 +171,6 @@ namespace EPiServer.Marketing.Testing
                 EndDate = theManagerTest.EndDate,
                 ParticipationPercentage = theManagerTest.ParticipationPercentage,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
-                CreatedDate = theManagerTest.CreatedDate,
-                ModifiedDate = theManagerTest.ModifiedDate,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators)
             };
