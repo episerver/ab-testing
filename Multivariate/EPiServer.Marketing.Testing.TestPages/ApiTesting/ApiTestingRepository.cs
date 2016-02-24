@@ -84,8 +84,8 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             dataToSave.TestResults = new List<TestResult>()
             {
-                new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.OriginalItemId},
-                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[0].ItemId}
+                new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.Variants[0].Id,ItemVersion = dataToSave.Variants[0].ItemVersion},
+                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[1].Id,ItemVersion = dataToSave.Variants[1].ItemVersion}
             };
 
             _mtm.Save(dataToSave);
