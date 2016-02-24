@@ -264,10 +264,6 @@
       <Project>{7d24a24a-c116-4665-86d2-8b7b6b4eec8a}</Project>
       <Name>EPiServer.Marketing.Testing.Dal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EPiServer.Marketing.Testing.Model\EPiServer.Marketing.Testing.Model.csproj">
-      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
-      <Name>EPiServer.Marketing.Testing.Model</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Marketing.Testing.Web\EPiServer.Marketing.Testing.Web.csproj">
       <Project>{cb8500e5-9999-4e35-97d6-142e87857e6a}</Project>
       <Name>EPiServer.Marketing.Testing.Web</Name>

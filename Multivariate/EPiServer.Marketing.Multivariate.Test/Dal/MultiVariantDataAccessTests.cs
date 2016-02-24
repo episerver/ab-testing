@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Test.Core;
+using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Test;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Testing.Dal
 {

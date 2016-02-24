@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 
-namespace EPiServer.Marketing.Testing.Model
+namespace EPiServer.Marketing.Testing.Data
 {
-    public class TestResult : EntityBase
+    public class Variant
     {
         public Guid Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Testing.Model
         public Guid? TestId { get; set; }
 
         /// <summary>
-        /// Id of the item that replaces the original item in the test.
+        /// Id of a variant to use instead of the original item for a test.
         /// </summary>
         public Guid ItemId { get; set; }
 
@@ -20,16 +20,6 @@ namespace EPiServer.Marketing.Testing.Model
         /// Version of original item that is selected as a variant.
         /// </summary>
         public int ItemVersion { get; set; }
-
-        /// <summary>
-        /// Number of views this item has had.
-        /// </summary>
-        public int Views { get; set; }
-
-        /// <summary>
-        /// Number of conversions this item has had.
-        /// </summary>
-        public int Conversions { get; set; }
 
         /// <summary>
         /// Reference to the test this is associated with.

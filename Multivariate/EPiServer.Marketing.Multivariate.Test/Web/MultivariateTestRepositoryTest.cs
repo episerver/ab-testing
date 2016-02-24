@@ -1,6 +1,6 @@
 ﻿using EPiServer.Core;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;

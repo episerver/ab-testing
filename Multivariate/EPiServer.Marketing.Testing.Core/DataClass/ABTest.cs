@@ -1,18 +1,11 @@
-using EPiServer.Marketing.Testing.Model.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Data.Enums;
 
-namespace EPiServer.Marketing.Testing.Model
+namespace EPiServer.Marketing.Testing.Data
 {
-    public class ABTest : EntityBase, IABTest
+    public class ABTest : IMarketingTest
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ABTest()
-        {
-            CreatedDate = DateTime.UtcNow;
-            ModifiedDate = DateTime.UtcNow;
-        }
-
         /// <summary>
         /// Id
         /// </summary>
@@ -61,18 +54,19 @@ namespace EPiServer.Marketing.Testing.Model
         /// <summary>
         /// List of variant items for the test.  These replace the OriginalItem during the test.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual IList<Variant> Variants { get; set; }
+        public List<Variant> Variants { get; set; }
 
         /// <summary>
         /// List of results for the test.  There will be a MultivariateTestResult for the OriginalItem and each Variant item.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual IList<TestResult> TestResults { get; set; }
+        public List<TestResult> TestResults { get; set; }
 
         /// <summary>
         /// List of KeyPerformanceIndicators.  These can be time on a page, form submission, etc.
         /// </summary>
-        public virtual IList<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+        public List<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
@@ -14,11 +14,6 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
 
             this.Property(m => m.KeyPerformanceIndicatorId)
                 .IsOptional();
-
-            this.HasOptional(m => m.ABTest)
-                .WithMany(m => m.KeyPerformanceIndicators)
-                .HasForeignKey(m => m.TestId)
-                .WillCascadeOnDelete();
         }
     }
 }

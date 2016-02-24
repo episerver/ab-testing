@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Testing.Model
+namespace EPiServer.Marketing.Testing.Dal.Entity
 {
     public class KeyPerformanceIndicator : EntityBase
     {
@@ -15,10 +15,10 @@ namespace EPiServer.Marketing.Testing.Model
         /// Id of the kpi.
         /// </summary>
         public Guid KeyPerformanceIndicatorId { get; set; }
-         
+
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest ABTest { get; set; }
+        public virtual ABTest MultivariateTest { get; set; }
     }
 }

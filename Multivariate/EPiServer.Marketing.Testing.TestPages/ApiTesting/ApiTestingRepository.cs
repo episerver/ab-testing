@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -20,10 +20,10 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         private List<Variant> variantsToSave;
         private List<TestResult> testResults = new List<TestResult>();
 
-        public List<IABTest> GetTests(ViewModel viewModel = null)
+        public List<IMarketingTest> GetTests(ViewModel viewModel = null)
         {
             TestManager mtm = new TestManager();
-            List<IABTest> discoveredTests = new List<IABTest>();
+            List<IMarketingTest> discoveredTests = new List<IMarketingTest>();
             ITestRepository testRepo = new TestRepository();
 
             if (viewModel == null)
@@ -101,7 +101,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         ///     test supplied test data
         /// </summary>
         /// <returns>List of IABTest containing</returns>
-        public List<IABTest> GetAbTestList(string originalItemId)
+        public List<IMarketingTest> GetAbTestList(string originalItemId)
         {
             var itemId = new Guid(originalItemId);
             _mtm = new TestManager();
@@ -109,7 +109,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             return _mtm.GetTestList(new TestCriteria()).Where(t => t.OriginalItemId == itemId).ToList();
         }
 
-        public IABTest SetAbState(Guid testId, TestState? state)
+        public IMarketingTest SetAbState(Guid testId, TestState? state)
         {
             _mtm = new TestManager();
             switch (state)
@@ -129,7 +129,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             return _mtm.Get(testId);
         }
 
-        public IABTest RunTests(Guid testId)
+        public IMarketingTest RunTests(Guid testId)
         {
             _mtm = new TestManager();
             _mtm.Start(testId);
@@ -146,7 +146,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             return _mtm.Get(testId);
         }
 
-        public IABTest StartTest(Guid testId)
+        public IMarketingTest StartTest(Guid testId)
         {
             _mtm = new TestManager();
             _mtm.Start(testId);

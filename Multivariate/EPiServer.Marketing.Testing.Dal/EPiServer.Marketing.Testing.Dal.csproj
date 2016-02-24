@@ -62,6 +62,15 @@
     </Compile>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="EntityModel\ABTest.cs" />
+    <Compile Include="EntityModel\EntityBase.cs" />
+    <Compile Include="EntityModel\Enums\CountType.cs" />
+    <Compile Include="EntityModel\Enums\TestState.cs" />
+    <Compile Include="EntityModel\IABTest.cs" />
+    <Compile Include="EntityModel\KeyPerformanceIndicator.cs" />
+    <Compile Include="EntityModel\TestCriteria.cs" />
+    <Compile Include="EntityModel\TestResult.cs" />
+    <Compile Include="EntityModel\Variant.cs" />
     <Compile Include="ITestingDataAccess.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Mappings\KeyPerformanceIndicatorMap.cs" />
@@ -81,12 +90,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EPiServer.Marketing.Testing.Model\EPiServer.Marketing.Testing.Model.csproj">
-      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
-      <Name>EPiServer.Marketing.Testing.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201602221937207_Initial.resx">

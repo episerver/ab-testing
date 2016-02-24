@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Testing.Model
+namespace EPiServer.Marketing.Testing.Dal.Entity
 {
     public class EntityBase
     {

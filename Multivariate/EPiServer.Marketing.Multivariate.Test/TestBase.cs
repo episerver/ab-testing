@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Dal.Entity;
 using EPiServer.Marketing.Multivariate.Test.Dal;
 using EPiServer.Marketing.Testing.Dal;
 
-namespace EPiServer.Marketing.Multivariate.Test.Core
+namespace EPiServer.Marketing.Testing.Test
 {
     public class TestBase
     {
@@ -40,7 +39,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
         public IList<ABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
         {
-            var newMultivariateTests = new List<ABTest>();
+            var newABTests = new List<ABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
@@ -57,10 +56,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 };
 
                 mtmManager.Save(test);
-                newMultivariateTests.Add(test);
+                newABTests.Add(test);
             }
 
-            return newMultivariateTests;
+            return newABTests;
         }
 
         public void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)

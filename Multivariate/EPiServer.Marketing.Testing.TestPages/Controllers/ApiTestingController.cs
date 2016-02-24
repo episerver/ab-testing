@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.ApiTesting;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult GetAbTestList(string id)
         {
             ApiTestingRepository testLib = new ApiTestingRepository();
-            List<IABTest> returnedTestList = testLib.GetAbTestList(id);
+            List<IMarketingTest> returnedTestList = testLib.GetAbTestList(id);
 
             return View(returnedTestList);
         }

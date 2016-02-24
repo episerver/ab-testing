@@ -3,7 +3,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Testing.Web;
 using EPiServer.Marketing.Testing.Web.Repositories;
-using EPiServer.Marketing.Testing.Model;
+
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Web
