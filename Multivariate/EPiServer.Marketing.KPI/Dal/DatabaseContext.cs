@@ -1,11 +1,15 @@
 using System.Data.Common;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.KPI.Model;
 
 namespace EPiServer.Marketing.KPI.Dal
 {
+    using System;
+    using System.Data.Entity;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+
     public class DatabaseContext : DbContext
     {
         [ExcludeFromCodeCoverage]

@@ -39,6 +39,16 @@ namespace EPiServer.Marketing.KPI.Model
         string ClientScripts { get; set; }
 
         /// <summary>
+        /// Date the kpi was created.
+        /// </summary>
+        DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// The last time the kpi was modified.
+        /// </summary>
+        DateTime ModifiedDate { get; set; }
+
+        /// <summary>
         /// Determines if a conversion has happened.
         /// </summary>
         /// <param name="theValues"></param>

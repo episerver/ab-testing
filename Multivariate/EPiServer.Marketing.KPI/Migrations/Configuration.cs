@@ -1,7 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace EPiServer.Marketing.KPI.Migrations
 {
     using System.Data.Entity.Migrations;
 
+    [ExcludeFromCodeCoverage]
     internal sealed class Configuration : DbMigrationsConfiguration<EPiServer.Marketing.KPI.Dal.DatabaseContext>
     {
         public Configuration()
