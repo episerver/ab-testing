@@ -172,6 +172,7 @@ namespace EPiServer.Marketing.Testing
                 ParticipationPercentage = theManagerTest.ParticipationPercentage,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
+                TestResults = AdaptToDalResults(theManagerTest.TestResults),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators)
             };
             return aTest;
