@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Core;
+using EPiServer.DataAbstraction;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.ApiTesting;
 using EPiServer.Marketing.Testing.TestPages.Models;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
 {
@@ -111,7 +114,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult GetAbTestList(string id)
         {
             ApiTestingRepository testLib = new ApiTestingRepository();
-            List<IABTest> returnedTestList = testLib.GetAbTestList(id);
+            List<IMarketingTest> returnedTestList = testLib.GetAbTestList(id);
 
             return View(returnedTestList);
         }
@@ -183,6 +186,36 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
+        }
+
+        public JsonResult GetPageVersions(string originalItem)
+        {
+            ApiTestingRepository apiRepo = new ApiTestingRepository();
+
+
+            PageVersionCollection pageVersions = apiRepo.GetContentVersions(Guid.Parse(originalItem));
+
+            List<VersionData> versions = new List<VersionData>();
+            foreach (PageVersion v in pageVersions)
+            {
+
+                IServiceLocator serviceLocator = ServiceLocator.Current;
+                IContentRepository contentRepository = serviceLocator.GetInstance<IContentRepository>();
+
+                PageData pageData = contentRepository.Get<PageData>(v.ContentLink);
+
+
+                versions.Add(new VersionData() { Name = pageData.PageName, Version = pageData.WorkPageID.ToString(), Reference = pageData.ContentLink.ToString() });
+            }
+
+            return Json(versions);
+        }
+
+        private class VersionData
+        {
+            public string Name { get; set; }
+            public string Version { get; set; }
+            public string Reference { get; set; }
         }
     }
 }

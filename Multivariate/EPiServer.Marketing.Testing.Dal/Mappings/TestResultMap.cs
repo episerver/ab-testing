@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
@@ -25,6 +25,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
                 .WillCascadeOnDelete();
 
             this.Property(s => s.ItemId)
+                .IsRequired();
+
+            this.Property(s => s.ItemVersion)
                 .IsRequired();
 
             this.Property(s => s.Views)

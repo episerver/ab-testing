@@ -1,9 +1,9 @@
-﻿using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+﻿using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using System.Linq;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Model
+namespace EPiServer.Marketing.Testing.Data.Tests
 {
     public class TestCriteriaTests
     {

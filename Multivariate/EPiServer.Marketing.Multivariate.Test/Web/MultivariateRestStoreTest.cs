@@ -1,5 +1,4 @@
 ﻿using System;
-using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Messaging;
@@ -7,7 +6,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Web
+namespace EPiServer.Marketing.Testing.Web.Tests
 {
         public class TestingRestStoreTest
     {
@@ -32,7 +31,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
             var unit = GetUnitUnderTest();
             unit.Get(null);
 
-            _testManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), "Get did not call getTestList when id is null");
+            _testManager.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), "Get did not call getTestList when id is null");
         }
 
         [Fact]

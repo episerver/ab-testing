@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
@@ -13,6 +13,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.HasKey(hk => hk.Id);
 
             this.Property(m => m.ItemId)
+                .IsRequired();
+
+            this.Property(m => m.ItemVersion)
                 .IsRequired();
 
             this.HasRequired(m => m.ABTest)

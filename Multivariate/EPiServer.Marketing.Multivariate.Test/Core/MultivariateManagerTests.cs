@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
@@ -25,11 +26,32 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             return new TestManager(_serviceLocator.Object);
         }
 
+        private Testing.Dal.Entity.ABTest GetDalTest()
+        {
+            return new Testing.Dal.Entity.ABTest()
+            {
+                Variants = new List<Testing.Dal.Entity.Variant>(),
+                KeyPerformanceIndicators = new List<Testing.Dal.Entity.KeyPerformanceIndicator>(),
+                TestResults = new List<Testing.Dal.Entity.TestResult>()
+            };
+        }
+
+        private ABTest GetManagerTest()
+        {
+            return new ABTest()
+            {
+                Variants = new List<Variant>(),
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                TestResults = new List<TestResult>()
+            };
+        }
+
         [Fact]
         public void TestManager_CallsDataAccessGetWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
+            _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
             tm.Get(theGuid);
 
             _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
@@ -41,6 +63,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
+            var dalList = new List<Testing.Dal.Entity.IABTest>();
+            dalList.Add(GetDalTest());
+            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
             tm.GetTestByItemId(theGuid);
 
             _dataAccessLayer.Verify(da => da.GetTestByItemId(It.Is<Guid>(arg => arg.Equals(theGuid))),
@@ -50,12 +75,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         [Fact]
         public void TestManager_CallsGetTestListWithCritera()
         {
-            var critera = new TestCriteria();
+            var critera = new Testing.Data.TestCriteria();
+            var testFilter = new Testing.Data.ABTestFilter() { Operator = Testing.Data.FilterOperator.And, Property = Testing.Data.ABTestProperty.OriginalItemId, Value = "Test" };
+            critera.AddFilter(testFilter);
             var tm = GetUnitUnderTest();
+            var dalList = new List<Testing.Dal.Entity.IABTest>();
+            dalList.Add(GetDalTest());
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<Testing.Dal.TestCriteria>())).Returns(dalList);
             tm.GetTestList(critera);
 
-            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<TestCriteria>(arg => arg.Equals(critera))),
-                "DataAcessLayer GetTestList was never called or criteria did not match.");
+            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<Testing.Dal.TestCriteria>(arg => arg.GetFilters().First().Operator == Testing.Dal.FilterOperator.And &&
+            arg.GetFilters().First().Property == Testing.Dal.ABTestProperty.OriginalItemId &&
+            arg.GetFilters().First().Value == testFilter.Value)),
+            "DataAcessLayer GetTestList was never called or criteria did not match.");
         }
 
         [Fact]
@@ -107,10 +139,15 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            ABTest test = new ABTest() { Id = theGuid };
+            ABTest test = new ABTest()
+            {
+                Id = theGuid,
+                Variants = new List<Variant>(),
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+            };
             tm.Save(test);
 
-            _dataAccessLayer.Verify(da => da.Save(It.Is<ABTest>(arg => arg.Equals(test))),
+            _dataAccessLayer.Verify(da => da.Save(It.Is<Testing.Dal.Entity.ABTest>(arg => arg.Id == theGuid)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
 
@@ -124,11 +161,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var tm = GetUnitUnderTest();
             tm.IncrementCount(theGuid, theTestItemGuid, type);
 
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
                 "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<CountType>(arg => arg.Equals(CountType.Conversion))),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<Testing.Dal.Entity.Enums.CountType>(arg => arg.Equals(Testing.Dal.Entity.Enums.CountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
@@ -139,11 +176,11 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
-            var variantList = new List<Variant>() { new Variant { ItemId = vID } };
+            var variantList = new List<Testing.Dal.Entity.Variant>() { new Testing.Dal.Entity.Variant { Id = vID }, new Testing.Dal.Entity.Variant {Id = originalItemId} };
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
-                new ABTest()
+                new Testing.Dal.Entity.ABTest()
                 {
                     Id = theGuid,
                     OriginalItemId = originalItemId,

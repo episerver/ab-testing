@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Data;
 
 namespace EPiServer.Marketing.Testing.TestPages.Models
 {
@@ -7,16 +7,16 @@ namespace EPiServer.Marketing.Testing.TestPages.Models
     {
         public ViewModel()
         {
-            var filter1 = new FilterView(ABTestProperty.OriginalItemId, Marketing.Testing.Model.FilterOperator.And, null, false, "and");
-            var filter2 = new FilterView(ABTestProperty.VariantId, Marketing.Testing.Model.FilterOperator.Or, null, false, "or");
-            var filter3 = new FilterView(ABTestProperty.State, Marketing.Testing.Model.FilterOperator.And, null, false, "and");
+            var filter1 = new FilterView(ABTestProperty.OriginalItemId, FilterOperator.And, null, false, "and");
+            var filter2 = new FilterView(ABTestProperty.VariantId, FilterOperator.Or, null, false, "or");
+            var filter3 = new FilterView(ABTestProperty.State, FilterOperator.And, null, false, "and");
 
             Filters = new List<FilterView>() {filter1, filter2, filter3};
         }
 
-        public IList<IABTest> Tests { get; set; }
+        public List<IMarketingTest> Tests { get; set; }
 
-        public IList<FilterView> Filters { get; set; } 
+        public List<FilterView> Filters { get; set; } 
     }
 
     public class FilterView : ABTestFilter

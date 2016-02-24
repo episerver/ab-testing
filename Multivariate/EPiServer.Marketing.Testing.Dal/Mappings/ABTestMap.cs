@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
@@ -30,6 +30,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
                 .IsRequired();
 
             this.Property(m => m.EndDate)
+                .IsRequired();
+
+            this.Property(m => m.ParticipationPercentage)
                 .IsRequired();
 
             this.Property(m => m.LastModifiedBy)

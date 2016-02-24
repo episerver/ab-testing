@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Test.Core;
+using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Test;
 using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
@@ -57,7 +57,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                ParticipationPercentage = 100
             };
 
             _context.ABTests.Add(test);
@@ -95,7 +96,9 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = Guid.NewGuid(),
                 ItemId = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                ItemVersion = 1
+
             };
 
             test.Variants.Add(variant);
@@ -104,42 +107,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             Assert.Equal(test.Variants.Count(), 1);
 
             Assert.Equal(1, _context.Variants.Count());
-        }
-
-        [Fact]
-        public void AddConversionToTest()
-        {
-            var id = Guid.NewGuid();
-
-            var test = new ABTest()
-            {
-                Id = id,
-                Title = "Test",
-                Owner = "me",
-                OriginalItemId = new Guid(),
-                State = TestState.Active,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.Now,
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                Conversions = new List<Conversion>()
-            };
-
-            _context.ABTests.Add(test);
-
-            var conversion = new Conversion()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ConversionString = "testing"
-            };
-
-            test.Conversions.Add(conversion);
-            _context.SaveChanges();
-
-            Assert.Equal(test.Conversions.Count(), 1);
-
-            Assert.Equal(1, _context.Conversions.Count());
         }
 
         [Fact]
@@ -205,7 +172,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 CreatedDate = DateTime.UtcNow,
                 ItemId = Guid.NewGuid(),
                 Conversions = 1,
-                Views = 1
+                Views = 1,
+                ItemVersion = 1
             };
 
             test.TestResults.Add(tr);
