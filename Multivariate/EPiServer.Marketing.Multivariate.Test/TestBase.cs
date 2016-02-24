@@ -6,7 +6,7 @@ using EPiServer.Marketing.Testing.Dal;
 
 namespace EPiServer.Marketing.Testing.Test
 {
-    public class TestBase
+    internal class TestBase
     {
         public void AddObjectsToContext<T>(TestContext context, IList<T> data) where T : class
         {

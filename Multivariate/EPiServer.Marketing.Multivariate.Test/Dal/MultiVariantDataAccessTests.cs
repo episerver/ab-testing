@@ -10,7 +10,7 @@ using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
-    public class MultiVariantDataAccessTests : TestBase
+    internal class MultiVariantDataAccessTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;
