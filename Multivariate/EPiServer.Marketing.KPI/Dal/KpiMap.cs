@@ -29,6 +29,12 @@ namespace EPiServer.Marketing.KPI.Dal
             this.Property(m => m.ClientScripts)
                 .IsOptional();
 
+            this.Property(m => m.CreatedDate)
+                .IsRequired();
+
+            this.Property(m => m.ModifiedDate)
+                .IsRequired();
+
         }
     }
 }

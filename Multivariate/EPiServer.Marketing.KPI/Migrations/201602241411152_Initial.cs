@@ -1,10 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace EPiServer.Marketing.KPI.Migrations
 {
+    using System;
     using System.Data.Entity.Migrations;
-
-    [ExcludeFromCodeCoverage]
+    
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -20,6 +18,8 @@ namespace EPiServer.Marketing.KPI.Migrations
                         LandingPage = c.Guid(nullable: false),
                         RunAt = c.Int(nullable: false),
                         ClientScripts = c.String(),
+                        CreatedDate = c.DateTime(nullable: false),
+                        ModifiedDate = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             

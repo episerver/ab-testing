@@ -10,6 +10,12 @@ namespace EPiServer.Marketing.KPI.Model
     [DataContract]
     public class Kpi : IKpi
     {
+        public Kpi()
+        {
+            CreatedDate = DateTime.UtcNow;
+            ModifiedDate = DateTime.UtcNow;
+        }
+
         /// <summary>
         /// Id of Kpi.
         /// </summary>
@@ -49,6 +55,16 @@ namespace EPiServer.Marketing.KPI.Model
         /// Paths to client scripts.  Single string that is comma deliminated.
         /// </summary>
         public string ClientScripts { get; set; }
+
+        /// <summary>
+        /// Date the kpi was created.
+        /// </summary>
+        public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// The last time the kpi was modified.
+        /// </summary>
+        public DateTime ModifiedDate { get; set; }
 
         /// <summary>
         /// Determines if a conversion has happened.
