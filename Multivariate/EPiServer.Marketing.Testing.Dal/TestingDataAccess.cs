@@ -139,60 +139,38 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public Guid Save(IABTest testObject)
         {
-            var test = _repository.GetById(testObject.Id) as ABTest;
-            Guid id;
+            var id = testObject.Id;
 
             // if a test doesn't exist, add it to the db
+            var test = _repository.GetById(testObject.Id) as ABTest;
             if (test == null)
             {
                 _repository.Add(testObject);
-                id = testObject.Id;
             }
             else
             {
-                switch (test.State)
+                if (test.State == TestState.Inactive)
                 {
-                    case TestState.Inactive:
-                        // clear out old values and replace with new
-                        test.TestResults.Clear();
-                        test.Variants.Clear();
-                        test.KeyPerformanceIndicators.Clear();
-
-                        // update test properties
-                        test.Title = testObject.Title;
-                        test.OriginalItemId = testObject.OriginalItemId;
-                        test.StartDate = testObject.StartDate;
-                        test.EndDate = testObject.EndDate;
-                        test.ModifiedDate = DateTime.UtcNow;
-                        test.LastModifiedBy = testObject.LastModifiedBy;
-                        test.State = testObject.State;
-                        test.Variants = testObject.Variants;
-                        test.TestResults = testObject.TestResults;
-                        test.KeyPerformanceIndicators = testObject.KeyPerformanceIndicators;
-
-                        id = test.Id;
-                        break;
-                    case TestState.Active:
-                        if (testObject.State == TestState.Done)
-                        {
-                            test.State = TestState.Done;
-                        }
-                        test.EndDate = testObject.EndDate;
-                        id = test.Id;
-                        break;
-                    case TestState.Done:
-                        if (testObject.State == TestState.Archived)
-                        {
-                            test.State = TestState.Archived;
-                        }
-                        id = test.Id;
-                        break;
-                    default:
-                        id = test.Id;
-                        break;
+                    var kpis = new List<KeyPerformanceIndicator>(testObject.KeyPerformanceIndicators);
+                    test.KeyPerformanceIndicators.Clear();
+                    foreach (var keyPerformanceIndicator in kpis)
+                    {
+                        test.KeyPerformanceIndicators.Add(keyPerformanceIndicator);
+                    }
+                    var results = new List<TestResult>(testObject.TestResults);
+                    test.TestResults.Clear();
+                    foreach (var keyPerformanceIndicator in results)
+                    {
+                        test.TestResults.Add(keyPerformanceIndicator);
+                    }
+                    var variants = new List<Variant>(testObject.Variants);
+                    test.Variants.Clear();
+                    foreach (var keyPerformanceIndicator in variants)
+                    {
+                        test.Variants.Add(keyPerformanceIndicator);
+                    }
                 }
             }
-
             _repository.SaveChanges();
 
             return id;

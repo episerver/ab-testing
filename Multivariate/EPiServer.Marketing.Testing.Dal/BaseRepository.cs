@@ -60,124 +60,21 @@ namespace EPiServer.Marketing.Testing.Dal
             bool retrySave = false;
             // save off retry count to potentially retry if there is an exception
             _retryCount = retryCount;
-            try
+
+            if (DatabaseContext != null)
             {
-                if (DatabaseContext != null)
-                {
-                    using (var scope = new TransactionScope(
-                        TransactionScopeOption.Required,
-                        new TransactionOptions()
-                        {
-                            IsolationLevel = IsolationLevel.ReadCommitted
-                        }))
+                using (var scope = new TransactionScope(
+                    TransactionScopeOption.Required,
+                    new TransactionOptions()
                     {
-                        records = DatabaseContext.SaveChanges();
-                        scope.Complete();
-                    }
-                }
-            }
-            catch (EntityCommandExecutionException commandException)
-            {
-                var exception = String.Format(CultureInfo.InvariantCulture,
-                                              "Database save failed with command exception error.  Exception: {0}",
-                                              commandException.ToString());
-                retrySave = false;
-            }
-            catch (EntityException entityException)
-            {
-                //TraceErr("Database save failed with entity exception error. Exception: {0}", entityException.ToString());
-                //Wait half a second before moving on - these exceptions include connectivity issues
-                Thread.Sleep(500);
-                retrySave = true;
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                        IsolationLevel = IsolationLevel.ReadCommitted
+                    }))
                 {
-                    // mark entity as unchanged so we can retry if there are errors
-                    if (validationErrors.Entry.State != EntityState.Added)
-                    {
-                        validationErrors.Entry.State = EntityState.Unchanged;
-                    }
-
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        //DataProcessingLog.TraceErr("Database save failed with validation error.  Property: {0} Error: {1}",validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-                retrySave = true;
-            }
-            catch (DbUpdateConcurrencyException concurrencyException)
-            {
-                var exception = String.Format(CultureInfo.InvariantCulture,
-                                              "Database save failed with concurrency exception. Exception: {0}",
-                                              concurrencyException.ToString());
-
-                var entries = concurrencyException.Entries;
-                foreach (var entry in entries)
-                {
-                    //Refresh the object from the context, save again in retry
-                    exception += String.Format(CultureInfo.InvariantCulture,
-                                               "Refreshing entity from the context due to concurrency exception {0}.",
-                                               entry.Entity.GetType().ToString());
-
-                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
-                }
-               // DataProcessingLog.TraceErr("{0}", exception);
-                retrySave = true;
-            }
-            catch (OptimisticConcurrencyException concurrencyException)
-            {
-                var exception = String.Format(CultureInfo.InvariantCulture,
-                                              "Database save failed with optimistic concurrency exception, retrying entire set of events. Exception: {0}",
-                                              concurrencyException.ToString());
-                //DataProcessingLog.TraceErr("{0}", exception);
-                throw new Exception("Database save failed with optimistic concurrency exception, retrying entire set of events");
-            }
-            catch (DbUpdateException updateException)
-            {
-                var exception = String.Format(CultureInfo.InvariantCulture,
-                                              "Database save failed with db update exception error.  Exception: {0}",
-                                              updateException.ToString());
-
-                //possible exceptions - primary key constraints violation - somebody else is trying to insert the same record at the same time
-                var entries = updateException.Entries;
-                foreach (var entry in entries)
-                {
-                    entry.State = EntityState.Unchanged;
-                    exception += String.Format(CultureInfo.InvariantCulture,
-                                               "-- Unable to update entity {0}.",
-                                               entry.Entity.GetType().ToString());
-                }
-
-                var innerUpdateException = updateException.InnerException as UpdateException;
-                if (innerUpdateException != null)
-                {
-                    var sqlException = innerUpdateException.InnerException as SqlException;
-                    //We are now categorically dealing with a primary key violation (2627 is always the type)
-                    const int primaryKeySqlError = 2627;
-                    if (sqlException != null && sqlException.Number == primaryKeySqlError)
-                    {
-                        throw new Exception("Duplicate primary key detected - reprocessing.");
-                    }
-                }
-
-                var concurrencyException = updateException.InnerException as OptimisticConcurrencyException;
-                if (concurrencyException != null)
-                {
-                    throw new Exception("OptimisticConcurrencyException detected within the update exception handler.  Reprocessing set of events.");
-                }
-
-                retrySave = true;
-            }
-            finally
-            {
-                if (_retryCount > 0 && retrySave)
-                {
-                    _retryCount--;
-                    SaveChanges(_retryCount);
+                    records = DatabaseContext.SaveChanges();
+                    scope.Complete();
                 }
             }
+            
             return records;
         }
 
