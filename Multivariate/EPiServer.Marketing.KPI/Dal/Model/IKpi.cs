@@ -1,7 +1,7 @@
 ﻿using System;
-using EPiServer.Marketing.KPI.Model.Enums;
+using EPiServer.Marketing.KPI.Dal.Model.Enums;
 
-namespace EPiServer.Marketing.KPI.Model
+namespace EPiServer.Marketing.KPI.Dal.Model
 {
     /// <summary>
     /// Interface for KPI objects.

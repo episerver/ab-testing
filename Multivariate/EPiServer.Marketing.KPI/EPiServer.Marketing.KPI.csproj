@@ -131,6 +131,9 @@
     <Compile Include="Dal\KpiMap.cs" />
     <Compile Include="DataAccess\IKpiDataAccess.cs" />
     <Compile Include="DataAccess\KpiDataAccess.cs" />
+    <Compile Include="Manager\DataClass\Enums\RunAt.cs" />
+    <Compile Include="Manager\DataClass\IKpi.cs" />
+    <Compile Include="Manager\DataClass\Kpi.cs" />
     <Compile Include="Manager\IKpiManager.cs" />
     <Compile Include="Manager\KpiManager.cs" />
     <Compile Include="Migrations\201602241411152_Initial.cs" />
@@ -138,9 +141,9 @@
       <DependentUpon>201602241411152_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Model\Enums\RunAt.cs" />
-    <Compile Include="Model\IKpi.cs" />
-    <Compile Include="Model\Kpi.cs" />
+    <Compile Include="Dal\Model\Enums\RunAt.cs" />
+    <Compile Include="Dal\Model\IKpi.cs" />
+    <Compile Include="Dal\Model\Kpi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

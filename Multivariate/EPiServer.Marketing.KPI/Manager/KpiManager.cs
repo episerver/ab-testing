@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.KPI.Model;
 using EPiServer.Marketing.KPI.DataAccess;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.KPI.Manager
@@ -45,5 +45,7 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
       
+        //public 
+
     }
 }

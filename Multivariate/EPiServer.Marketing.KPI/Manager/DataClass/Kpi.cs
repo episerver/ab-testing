@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using EPiServer.Marketing.KPI.Model.Enums;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
-namespace EPiServer.Marketing.KPI.Model
+namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
     /// <summary>
     /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)

@@ -1,11 +1,10 @@
-﻿using EPiServer.Marketing.KPI.Model;
-using EPiServer.Marketing.KPI.Manager;
+﻿using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.DataAccess;
 using Moq;
 using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Dal;
-using EPiServer.Marketing.KPI.Model.Enums;
+using EPiServer.Marketing.KPI.Dal.Model;
 using Xunit;
 using EPiServer.ServiceLocation;
 

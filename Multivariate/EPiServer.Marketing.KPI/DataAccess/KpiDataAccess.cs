@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal;
-using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.DataAccess
 {

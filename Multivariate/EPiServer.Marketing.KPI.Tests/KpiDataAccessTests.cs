@@ -2,8 +2,6 @@
 using System.Data.Common;
 using System.Linq;
 using EPiServer.Marketing.KPI.DataAccess;
-using EPiServer.Marketing.KPI.Model;
-using EPiServer.Marketing.KPI.Model.Enums;
 using Xunit;
 
 namespace EPiServer.Marketing.KPI.Test

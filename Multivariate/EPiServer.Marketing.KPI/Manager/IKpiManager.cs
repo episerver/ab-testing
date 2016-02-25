@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Manager
 {

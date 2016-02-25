@@ -1,7 +1,7 @@
 using System.Data.Common;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Dal
 {
