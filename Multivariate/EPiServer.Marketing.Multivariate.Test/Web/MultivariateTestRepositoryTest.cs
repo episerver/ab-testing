@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Web
+namespace EPiServer.Marketing.Testing.Tests.Web
 {
     [ExcludeFromCodeCoverage]
     public class MultivariateTestRepositoryTest

@@ -12,4 +12,4 @@ $assemblyVersionFile = "AssemblyVersionAuto.cs"
 $match = (Select-String -Path $SolutionDir$assemblyVersionFile -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
 $assemblyVersion = $match.Groups[1].Value
 
-Invoke-Expression '..\.nuget\nuget.exe pack Package.nuspec -Version $assemblyVersion'
+Invoke-Expression $SolutionDir'\..\build\resources\nuget\nuget.exe pack Package.nuspec -Version $assemblyVersion'

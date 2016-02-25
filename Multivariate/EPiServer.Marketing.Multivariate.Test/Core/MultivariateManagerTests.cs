@@ -9,7 +9,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Core
+namespace EPiServer.Marketing.Testing.Tests.Core
 {
         public class MultivariateManagerTests
     {

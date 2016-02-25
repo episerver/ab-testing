@@ -69,11 +69,11 @@ mkdir "$(SolutionDir)MessagingDeployment\lib"
 xcopy "$(TargetDir)"\$(TargetName)*dll "$(SolutionDir)MessagingDeployment\lib\"  /I /F /R /Y
 
 IF exist "$(SolutionDir)MessagingDeployment\*.nuspec" ( del "$(SolutionDir)MessagingDeployment\*.nuspec" /s /q )
-xcopy "$(ProjectDir)"..\MSBuild\EPiServer.Messaging.nuspec "$(SolutionDir)MessagingDeployment\"  /I /F /R /Y
+xcopy "$(ProjectDir)"EPiServer.Messaging.nuspec "$(SolutionDir)MessagingDeployment\"  /I /F /R /Y
 
 cd "$(SolutionDir)MessagingDeployment\" 
 rename EPiServer.Messaging.nuspec Package.nuspec
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\..\MSBuild\buildpackage.ps1" "$(SolutionDir)MessagingDeployment" "$(ProjectDir)..\..\\"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\..\build\buildpackage.ps1" "$(SolutionDir)MessagingDeployment" "$(ProjectDir)..\..\\"
 
 xcopy "*nupkg" "$(SolutionDir)Deployment"  /I /F /R /Y
 </PostBuildEvent>

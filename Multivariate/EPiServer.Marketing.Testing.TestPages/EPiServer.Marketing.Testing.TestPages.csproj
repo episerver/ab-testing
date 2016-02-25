@@ -377,7 +377,7 @@ IF exist "$(SolutionDir)MultivariateTestingDeployment\*.nuspec" ( del "$(Solutio
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)MultivariateTestingDeployment\"  /I /F /R /Y
 
 cd "$(SolutionDir)MultivariateTestingDeployment\" 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\MSBuild\buildpackage.ps1" "$(SolutionDir)MultivariateTestingDeployment" "$(ProjectDir)..\\"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\build\buildpackage.ps1" "$(SolutionDir)MultivariateTestingDeployment" "$(ProjectDir)..\\"
 xcopy "*nupkg" "$(SolutionDir)Deployment"  /I /F /R /Y
 </PostBuildEvent>
   </PropertyGroup>

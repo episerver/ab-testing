@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0"?>
 <package >
   <metadata>
-    <id>EPiServer.Marketing.Multivariate.Testing</id>
-    <title>EPiServer Marketing Multivariate Testing</title>
+    <id>EPiServer.Marketing.Testing.TestPages</id>
+    <title>EPiServer Marketing Testing Test Pages</title>
     <version>1.0.0.10</version>
     <authors>EPiServer</authors>
     <owners>EPiServer</owners>

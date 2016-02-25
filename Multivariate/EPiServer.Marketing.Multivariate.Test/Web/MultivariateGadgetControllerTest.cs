@@ -6,7 +6,7 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.Testing.Model;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Web
+namespace EPiServer.Marketing.Testing.Tests.Web
 {
         public class TestingGadgetControllerTest
     {
