@@ -1,5 +1,5 @@
-﻿using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+﻿using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 using System;
 using System.Collections.Generic;
 

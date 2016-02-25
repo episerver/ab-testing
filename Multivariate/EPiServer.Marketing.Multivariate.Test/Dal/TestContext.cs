@@ -2,7 +2,7 @@
 using System.Data.Common;
 using System.Data.Entity;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
@@ -20,7 +20,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
                 modelBuilder.Entity<ABTest>();
                 modelBuilder.Entity<TestResult>();
-                modelBuilder.Entity<Conversion>();
                 modelBuilder.Entity<Variant>();
                 modelBuilder.Entity<KeyPerformanceIndicator>();
             }

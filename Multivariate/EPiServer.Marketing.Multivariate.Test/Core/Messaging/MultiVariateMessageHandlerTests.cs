@@ -2,9 +2,9 @@
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Testing.Model;
+using EPiServer.Marketing.Testing.Data;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
 using Xunit;
 

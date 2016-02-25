@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
+using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Testing.Model;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Newtonsoft.Json;

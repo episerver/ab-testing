@@ -62,16 +62,24 @@
     </Compile>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="DatabaseContext.cs" />
+    <Compile Include="EntityModel\ABTest.cs" />
+    <Compile Include="EntityModel\EntityBase.cs" />
+    <Compile Include="EntityModel\Enums\CountType.cs" />
+    <Compile Include="EntityModel\Enums\TestState.cs" />
+    <Compile Include="EntityModel\IABTest.cs" />
+    <Compile Include="EntityModel\KeyPerformanceIndicator.cs" />
+    <Compile Include="EntityModel\TestCriteria.cs" />
+    <Compile Include="EntityModel\TestResult.cs" />
+    <Compile Include="EntityModel\Variant.cs" />
     <Compile Include="ITestingDataAccess.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="Mappings\ConversionMap.cs" />
     <Compile Include="Mappings\KeyPerformanceIndicatorMap.cs" />
     <Compile Include="Mappings\ABTestMap.cs" />
     <Compile Include="Mappings\TestResultMap.cs" />
     <Compile Include="Mappings\VariantMap.cs" />
-    <Compile Include="Migrations\201602082034580_Initial.cs" />
-    <Compile Include="Migrations\201602082034580_Initial.Designer.cs">
-      <DependentUpon>201602082034580_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201602221937207_Initial.cs" />
+    <Compile Include="Migrations\201602221937207_Initial.Designer.cs">
+      <DependentUpon>201602221937207_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="TestingDataAccess.cs" />
@@ -84,14 +92,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EPiServer.Marketing.Testing.Model\EPiServer.Marketing.Testing.Model.csproj">
-      <Project>{bf1b7106-7b84-4692-bbd2-22dd3d6b6ad8}</Project>
-      <Name>EPiServer.Marketing.Testing.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201602082034580_Initial.resx">
-      <DependentUpon>201602082034580_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602221937207_Initial.resx">
+      <DependentUpon>201602221937207_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

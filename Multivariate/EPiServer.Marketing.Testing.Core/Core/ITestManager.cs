@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Model;
-using EPiServer.Marketing.Testing.Model.Enums;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 
 namespace EPiServer.Marketing.Testing
 {
     public interface ITestManager
     {
-        IABTest Get(Guid testObjectId);
+        IMarketingTest Get(Guid testObjectId);
 
-        List<IABTest> GetTestByItemId(Guid originalItemId);
+        List<IMarketingTest> GetTestByItemId(Guid originalItemId);
 
-        List<IABTest> GetTestList(TestCriteria criteria);
+        List<IMarketingTest> GetTestList(TestCriteria criteria);
 
-        Guid Save(IABTest testObject);
+        Guid Save(IMarketingTest testObject);
 
         void Delete(Guid testObjectId);
 

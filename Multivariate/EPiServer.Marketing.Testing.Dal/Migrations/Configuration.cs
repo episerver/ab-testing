@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
     /// 
     /// Add-Migration Initial  -- creates internal migration info for upgrading to the next release for future schema changes
     /// Add-Migration Version2 -- creates a new migration based off the previous one
-    /// 
+    /// Update-Database -Script -SourceMigration: $InitialDatabase 
     /// Update-Database -Script -SourceMigration:Initial  -- generates the final sql script for creating the db once schema design is done
     /// -SourceMigration:'migration name to come from' flag is to generate sql script from previous version to current schema (i.e. only creates sql for new schema changes)
     /// </summary>
