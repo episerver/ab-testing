@@ -153,53 +153,23 @@ namespace EPiServer.Marketing.Testing.Dal
                 switch (test.State)
                 {
                     case TestState.Inactive:
+                        // clear out old values and replace with new
+                        test.TestResults.Clear();
+                        test.Variants.Clear();
+                        test.KeyPerformanceIndicators.Clear();
+
                         // update test properties
                         test.Title = testObject.Title;
+                        test.OriginalItemId = testObject.OriginalItemId;
                         test.StartDate = testObject.StartDate;
                         test.EndDate = testObject.EndDate;
                         test.ModifiedDate = DateTime.UtcNow;
                         test.LastModifiedBy = testObject.LastModifiedBy;
                         test.State = testObject.State;
+                        test.Variants = testObject.Variants;
+                        test.TestResults = testObject.TestResults;
+                        test.KeyPerformanceIndicators = testObject.KeyPerformanceIndicators;
 
-                        // if originalItemId is different, then so are any variants since they share the same guid - delete all variants and corresponding results
-                        // and add new ones
-                        if (test.OriginalItemId != testObject.OriginalItemId)
-                        {
-                            test.TestResults.Clear();
-                            test.Variants.Clear();
-
-                            test.OriginalItemId = testObject.OriginalItemId;
-                            test.Variants = testObject.Variants;
-                            test.TestResults = testObject.TestResults;
-                        }
-                        else
-                        {
-                            foreach (var variant in test.Variants)
-                            {
-                                foreach (
-                                    var newVariant in
-                                        testObject.Variants.Where(newVariant => variant.Id == newVariant.Id))
-                                {
-                                    variant.ItemId = newVariant.ItemId;
-                                    variant.ItemVersion = newVariant.ItemVersion;
-                                    variant.ModifiedDate = DateTime.Now;
-                                    break;
-                                }
-                            }
-
-                            foreach (var result in test.TestResults)
-                            {
-                                foreach (
-                                    var newResult in
-                                        testObject.TestResults.Where(newResult => result.Id == newResult.Id))
-                                {
-                                    result.ItemId = newResult.ItemId;
-                                    result.ItemVersion = newResult.ItemVersion;
-                                    result.ModifiedDate = DateTime.Now;
-                                    break;
-                                }
-                            }
-                        }
                         id = test.Id;
                         break;
                     case TestState.Active:

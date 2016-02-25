@@ -323,7 +323,6 @@ namespace EPiServer.Marketing.Testing
             var retResult = new Dal.Entity.TestResult()
             {
                 Id = managerResult.Id,
-                TestId = managerResult.TestId,
                 ItemId = managerResult.ItemId,
                 ItemVersion = managerResult.ItemVersion,
                 Views = managerResult.Views,
@@ -352,7 +351,6 @@ namespace EPiServer.Marketing.Testing
             var retKPI = new Data.KeyPerformanceIndicator()
             {
                 Id = dalKPI.Id,
-                TestId = dalKPI.TestId,
                 KeyPerformanceIndicatorId = dalKPI.KeyPerformanceIndicatorId
             };
             return retKPI;
@@ -376,7 +374,6 @@ namespace EPiServer.Marketing.Testing
             var retKPI = new Dal.Entity.KeyPerformanceIndicator()
             {
                 Id = managerKPI.Id,
-                TestId = managerKPI.TestId,
                 KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId
             };
             return retKPI;

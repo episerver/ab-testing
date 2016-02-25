@@ -19,6 +19,6 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest MultivariateTest { get; set; }
+        public virtual ABTest ABTest { get; set; }
     }
 }

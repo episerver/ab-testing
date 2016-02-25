@@ -241,15 +241,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Owner = "Bert",
                 TestResults = new List<TestResult>(),
                 Variants = new List<Variant>(),
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                ParticipationPercentage = 100,
+                LastModifiedBy = "me",
                 OriginalItemId = itemId
             };
 
-            _mtm.Save(test);
+            //_mtm.Save(test);
 
             var result = new TestResult()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
+                ItemVersion = 1,
                 CreatedDate = DateTime.UtcNow,
                 Views = 0,
                 Conversions = 0
