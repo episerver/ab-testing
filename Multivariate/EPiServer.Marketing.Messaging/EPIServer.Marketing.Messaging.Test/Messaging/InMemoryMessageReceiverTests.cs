@@ -6,7 +6,7 @@ using System.Threading;
 using Moq;
 using Xunit;
 
-namespace EPiServer.Marketing.Test.Messaging
+namespace EPiServer.Marketing.Messaging.Tests
 {
     public class InMemoryMessageReceiverTests
     {

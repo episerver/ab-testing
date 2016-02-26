@@ -1,8 +1,4 @@
-
-#$PackageDir = 'C:\Users\ansud\Source\Repos\episerver.social\Comments\DeploymentModeration' 
 $PackageDir = $args[0] 
-
-#$SolutionDir = 'C:\Users\ansud\Source\Repos\episerver.social\Comments\'
 $SolutionDir = $args[1]
 
 Set-Location $PackageDir\

@@ -3,7 +3,7 @@ using EPiServer.Marketing.Messaging.InMemory;
 using System.Collections.Concurrent;
 using Xunit;
 
-namespace EPiServer.Marketing.Test.Messaging.InMemory
+namespace EPiServer.Marketing.Messaging.Tests.InMemory
 {
     public class InMemoryQueueStoreTests
     {

@@ -1,5 +1,6 @@
 param ([string]$configuration = "Release",
     [string]$runTests = "false",
+	[string]$runtestmode = "",
     [string]$pack = "false")
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
@@ -28,5 +29,11 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 
 # TODO: 
 # Build the Client Resources
+
 # Run tests
+if([System.Convert]::ToBoolean($runTests) -eq $true) {
+    .\test.ps1 $configuration $runtestmode
+    pushd ..
+}
+
 # Create packages

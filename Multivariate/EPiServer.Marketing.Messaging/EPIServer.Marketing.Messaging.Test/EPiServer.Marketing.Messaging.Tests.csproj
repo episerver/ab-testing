@@ -7,8 +7,8 @@
     <ProjectGuid>{FB9CF5F7-4982-4710-B13E-BC6A982501D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPiServer.Marketing.Messaging.Test</RootNamespace>
-    <AssemblyName>EPiServer.Marketing.Messaging.Test</AssemblyName>
+    <RootNamespace>EPiServer.Marketing.Messaging.Tests</RootNamespace>
+    <AssemblyName>EPiServer.Marketing.Messaging.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

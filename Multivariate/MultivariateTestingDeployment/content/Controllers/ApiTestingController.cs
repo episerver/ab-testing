@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Testing;
-using EPiServer.Multivariate.Api.TestPages.Models;
-using EPiServer.Multivariate.Api.TestPages.TestLib;
+using EPiServer.Marketing.Testing.TestPages.ApiTesting;
+using EPiServer.Marketing.Testing.TestPages.Models;
 
-namespace EPiServer.Multivariate.Api.TestPages.Controllers
+namespace EPiServer.Marketing.Testing.TestPages.Controllers
 {
-    public class MultivariateApiTestingController : Controller
+    
+    public class ApiTestingController : Controller
     {
 
         public ActionResult Index()
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             ViewModel vm = new ViewModel
             {
                 Tests = testLib.GetTests()
@@ -23,10 +23,11 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             return View(vm);
         }
 
+        //Generates index with filters applied.
         [HttpPost]
         public ActionResult FilteredTests(ViewModel viewModel)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             //ViewModel vm = new ViewModel { Tests = testLib.GetTests(viewModel)};
             viewModel.Tests = testLib.GetTests(viewModel);
             return View("Index", viewModel);
@@ -40,7 +41,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
             multiVariateTest.OriginalItemId = Guid.NewGuid();
             multiVariateTest.Variants = new List<Variant>()
             {
-                new Variant() {Id=Guid.NewGuid(),VariantId = Guid.NewGuid()}
+                new Variant() {Id=Guid.NewGuid(),ItemId = Guid.NewGuid()}
             };
 
             return View(multiVariateTest);
@@ -49,7 +50,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         [HttpPost]
         public ActionResult CreateABTest(ABTest multivariateTestData)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             TestManager mtm = new TestManager();
             if (ModelState.IsValid)
             {
@@ -76,7 +77,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         [HttpPost]
         public ActionResult UpdateAbTest(ABTest dataToSave)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             TestManager mtm = new TestManager();
             if (ModelState.IsValid)
             {
@@ -109,7 +110,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
         /// <returns></returns>
         public ActionResult GetAbTestList(string id)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             List<IABTest> returnedTestList = testLib.GetAbTestList(id);
 
             return View(returnedTestList);
@@ -135,7 +136,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult RunAbTests(string id)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             var multiVariateTest = testLib.RunTests(Guid.Parse(id));
 
             return View("TestDetails", multiVariateTest);
@@ -143,7 +144,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult StartAbTest(string id)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             var multiVariateTest = testLib.StartTest(Guid.Parse(id));
 
             return View("TestDetails", multiVariateTest);
@@ -151,7 +152,7 @@ namespace EPiServer.Multivariate.Api.TestPages.Controllers
 
         public ActionResult StartTest(string id)
         {
-            MultivariateTestLib testLib = new MultivariateTestLib();
+            ApiTestingRepository testLib = new ApiTestingRepository();
             var multiVariateTest = testLib.StartTest(Guid.Parse(id));
 
             return View("TestDetails", multiVariateTest);
