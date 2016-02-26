@@ -14,6 +14,11 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
 
             this.Property(m => m.KeyPerformanceIndicatorId)
                 .IsOptional();
+
+            this.HasRequired(m => m.ABTest)
+                .WithMany(m => m.KeyPerformanceIndicators)
+                .HasForeignKey(m => m.TestId)
+                .WillCascadeOnDelete();
         }
     }
 }

@@ -9,13 +9,6 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
     /// </summary>
     public class ABTest : EntityBase, IABTest
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ABTest()
-        {
-            CreatedDate = DateTime.UtcNow;
-            ModifiedDate = DateTime.UtcNow;
-        }
-
         /// <summary>
         /// Id
         /// </summary>

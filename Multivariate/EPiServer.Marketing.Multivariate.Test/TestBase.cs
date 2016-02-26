@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Dal.Entity;
 using EPiServer.Marketing.Multivariate.Test.Dal;
 using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
 namespace EPiServer.Marketing.Testing.Test
 {
@@ -26,9 +27,15 @@ namespace EPiServer.Marketing.Testing.Test
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    LastModifiedBy = "me",
                     Owner = "Bert" + i,
+                    OriginalItemId = Guid.NewGuid(),
+                    State = TestState.Inactive,
+                    ParticipationPercentage = 100,
                     TestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
+                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 });
             };
 
@@ -50,9 +57,15 @@ namespace EPiServer.Marketing.Testing.Test
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow,
+                    State = TestState.Inactive,
+                    ParticipationPercentage = 100,
+                    LastModifiedBy = "me",
+                    OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,
                     TestResults = new List<TestResult>(),
                     Variants = new List<Variant>(),
+                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 };
 
                 mtmManager.Save(test);

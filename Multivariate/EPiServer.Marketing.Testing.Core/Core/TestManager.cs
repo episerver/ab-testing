@@ -171,9 +171,8 @@ namespace EPiServer.Marketing.Testing
                 EndDate = theManagerTest.EndDate,
                 ParticipationPercentage = theManagerTest.ParticipationPercentage,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
-                CreatedDate = theManagerTest.CreatedDate,
-                ModifiedDate = theManagerTest.ModifiedDate,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
+                TestResults = AdaptToDalResults(theManagerTest.TestResults),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators)
             };
             return aTest;
@@ -324,11 +323,11 @@ namespace EPiServer.Marketing.Testing
             var retResult = new Dal.Entity.TestResult()
             {
                 Id = managerResult.Id,
-                TestId = managerResult.TestId,
                 ItemId = managerResult.ItemId,
                 ItemVersion = managerResult.ItemVersion,
                 Views = managerResult.Views,
-                Conversions = managerResult.Conversions
+                Conversions = managerResult.Conversions,
+                TestId = managerResult.TestId
             };
 
             return retResult;
@@ -353,7 +352,6 @@ namespace EPiServer.Marketing.Testing
             var retKPI = new Data.KeyPerformanceIndicator()
             {
                 Id = dalKPI.Id,
-                TestId = dalKPI.TestId,
                 KeyPerformanceIndicatorId = dalKPI.KeyPerformanceIndicatorId
             };
             return retKPI;
@@ -377,8 +375,8 @@ namespace EPiServer.Marketing.Testing
             var retKPI = new Dal.Entity.KeyPerformanceIndicator()
             {
                 Id = managerKPI.Id,
-                TestId = managerKPI.TestId,
-                KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId
+                KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId,
+                TestId = managerKPI.TestId
             };
             return retKPI;
         }

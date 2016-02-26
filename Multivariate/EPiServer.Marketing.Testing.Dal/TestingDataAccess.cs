@@ -134,92 +134,108 @@ namespace EPiServer.Marketing.Testing.Dal
                 result.Conversions++;
             }
 
-            Save(test);
+            _repository.SaveChanges();
         }
 
         public Guid Save(IABTest testObject)
         {
-            var test = _repository.GetById(testObject.Id) as ABTest;
-            Guid id;
+            var id = testObject.Id;
 
             // if a test doesn't exist, add it to the db
+            var test = _repository.GetById(testObject.Id) as ABTest;
             if (test == null)
             {
                 _repository.Add(testObject);
-                id = testObject.Id;
             }
             else
             {
-                switch (test.State)
+                if (test.State == TestState.Inactive)
                 {
-                    case TestState.Inactive:
-                        // update test properties
-                        test.Title = testObject.Title;
-                        test.StartDate = testObject.StartDate;
-                        test.EndDate = testObject.EndDate;
-                        test.ModifiedDate = DateTime.UtcNow;
-                        test.LastModifiedBy = testObject.LastModifiedBy;
-                        test.State = testObject.State;
+                    test.Title = testObject.Title;
+                    test.OriginalItemId = testObject.OriginalItemId;
+                    test.LastModifiedBy = testObject.LastModifiedBy;
+                    test.StartDate = testObject.StartDate;
+                    test.EndDate = testObject.EndDate;
+                    test.ModifiedDate = DateTime.UtcNow;
 
-                        // if originalItemId is different, then so are any variants since they share the same guid - delete all variants and corresponding results
-                        // and add new ones
-                        if (test.OriginalItemId != testObject.OriginalItemId)
+                    // remove any existing kpis that are not part of the new test
+                    foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
+                    {
+                        if (testObject.KeyPerformanceIndicators.All(k => k.Id != existingKpi.Id))
                         {
-                            test.TestResults.Clear();
-                            test.Variants.Clear();
+                            _repository.Delete(existingKpi);
+                        }
+                    }
 
-                            test.OriginalItemId = testObject.OriginalItemId;
-                            test.Variants = testObject.Variants;
-                            test.TestResults = testObject.TestResults;
+                    // update existing kpis that are still around and add any that are new
+                    foreach (var newKpi in testObject.KeyPerformanceIndicators)
+                    {
+                        var existingKpi = test.KeyPerformanceIndicators.SingleOrDefault(k => k.Id == newKpi.Id);
+
+                        if (existingKpi != null)
+                        {
+                            existingKpi.KeyPerformanceIndicatorId = newKpi.KeyPerformanceIndicatorId;
+                            existingKpi.ModifiedDate = DateTime.UtcNow;
                         }
                         else
                         {
-                            foreach (var variant in test.Variants)
-                            {
-                                foreach (
-                                    var newVariant in
-                                        testObject.Variants.Where(newVariant => variant.Id == newVariant.Id))
-                                {
-                                    variant.ItemId = newVariant.ItemId;
-                                    variant.ItemVersion = newVariant.ItemVersion;
-                                    variant.ModifiedDate = DateTime.Now;
-                                    break;
-                                }
-                            }
+                            test.KeyPerformanceIndicators.Add(newKpi);
+                        }
+                    }
 
-                            foreach (var result in test.TestResults)
-                            {
-                                foreach (
-                                    var newResult in
-                                        testObject.TestResults.Where(newResult => result.Id == newResult.Id))
-                                {
-                                    result.ItemId = newResult.ItemId;
-                                    result.ItemVersion = newResult.ItemVersion;
-                                    result.ModifiedDate = DateTime.Now;
-                                    break;
-                                }
-                            }
-                        }
-                        id = test.Id;
-                        break;
-                    case TestState.Active:
-                        if (testObject.State == TestState.Done)
+                    // remove any existing results that are not part of the new test
+                    foreach (var existingResult in test.TestResults.ToList())
+                    {
+                        if (testObject.TestResults.All(k => k.Id != existingResult.Id))
                         {
-                            test.State = TestState.Done;
+                            _repository.Delete(existingResult);
                         }
-                        test.EndDate = testObject.EndDate;
-                        id = test.Id;
-                        break;
-                    case TestState.Done:
-                        if (testObject.State == TestState.Archived)
+                    }
+
+                    // update existing results that are still around and add any that are new
+                    foreach (var newResult in testObject.TestResults)
+                    {
+                        var existingResult = test.TestResults.SingleOrDefault(k => k.Id == newResult.Id);
+
+                        if (existingResult != null)
                         {
-                            test.State = TestState.Archived;
+                            existingResult.Conversions = newResult.Conversions;
+                            existingResult.Views = newResult.Views;
+                            existingResult.ItemId = newResult.ItemId;
+                            existingResult.ItemVersion = newResult.ItemVersion;
+                            existingResult.ModifiedDate = DateTime.UtcNow;
                         }
-                        id = test.Id;
-                        break;
-                    default:
-                        id = test.Id;
-                        break;
+                        else
+                        {
+                            test.TestResults.Add(newResult);
+                        }
+                    }
+
+                    // remove any existing variants that are not part of the new test
+                    foreach (var existingVariant in test.Variants.ToList())
+                    {
+                        if (testObject.Variants.All(k => k.Id != existingVariant.Id))
+                        {
+                            _repository.Delete(existingVariant);
+                        }
+                    }
+
+                    // update existing variants that are still around and add any that are new
+                    foreach (var newVariant in testObject.Variants)
+                    {
+                        var existingVariant = test.Variants.SingleOrDefault(k => k.Id == newVariant.Id);
+
+                        if (existingVariant != null)
+                        {
+                            existingVariant.ItemId = newVariant.ItemId;
+                            existingVariant.ItemVersion = newVariant.ItemVersion;
+                            existingVariant.ModifiedDate = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            test.Variants.Add(newVariant);
+                        }
+                    }
                 }
             }
 
@@ -254,7 +270,7 @@ namespace EPiServer.Marketing.Testing.Dal
         {
             var aTest = _repository.GetById(theTestId);
             aTest.State = theState;
-            Save(aTest);
+            _repository.SaveChanges();
         }
     }
 }

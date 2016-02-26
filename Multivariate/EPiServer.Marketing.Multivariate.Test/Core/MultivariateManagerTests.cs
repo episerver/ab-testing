@@ -144,6 +144,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
                 Id = theGuid,
                 Variants = new List<Variant>(),
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                TestResults = new List<TestResult>()
             };
             tm.Save(test);
 

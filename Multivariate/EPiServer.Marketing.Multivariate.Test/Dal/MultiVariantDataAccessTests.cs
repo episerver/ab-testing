@@ -35,7 +35,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 State = TestState.Active,
-                Owner = "Bert"
+                Owner = "Bert",
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                TestResults = new List<TestResult>(),
+                Variants = new List<Variant>()
             };
 
             _mtm.Save(test);
@@ -241,15 +244,19 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Owner = "Bert",
                 TestResults = new List<TestResult>(),
                 Variants = new List<Variant>(),
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                ParticipationPercentage = 100,
+                LastModifiedBy = "me",
                 OriginalItemId = itemId
             };
 
-            _mtm.Save(test);
+            //_mtm.Save(test);
 
             var result = new TestResult()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
+                ItemVersion = 1,
                 CreatedDate = DateTime.UtcNow,
                 Views = 0,
                 Conversions = 0
@@ -312,12 +319,15 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         public void TestManagerSaveVariantUpdate()
         {
             var tests = AddMultivariateTests(_mtm, 1);
+
             var originalItemId = Guid.NewGuid();
+
             tests[0].OriginalItemId = originalItemId;
-            var variant = new Variant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1};
+
+            var variant = new Variant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].Variants.Add(variant);
 
-            var result = new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1};
+            var result = new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].TestResults.Add(result);
             _mtm.Save(tests[0]);
 
