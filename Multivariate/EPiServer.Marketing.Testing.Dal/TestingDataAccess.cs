@@ -134,7 +134,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 result.Conversions++;
             }
 
-            Save(test);
+            _repository.SaveChanges();
         }
 
         public Guid Save(IABTest testObject)
@@ -151,26 +151,94 @@ namespace EPiServer.Marketing.Testing.Dal
             {
                 if (test.State == TestState.Inactive)
                 {
-                    var kpis = new List<KeyPerformanceIndicator>(testObject.KeyPerformanceIndicators);
-                    test.KeyPerformanceIndicators.Clear();
-                    foreach (var keyPerformanceIndicator in kpis)
+                    test.Title = testObject.Title;
+                    test.OriginalItemId = testObject.OriginalItemId;
+                    test.LastModifiedBy = testObject.LastModifiedBy;
+                    test.StartDate = testObject.StartDate;
+                    test.EndDate = testObject.EndDate;
+                    test.ModifiedDate = DateTime.UtcNow;
+
+                    // remove any existing kpis that are not part of the new test
+                    foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
                     {
-                        test.KeyPerformanceIndicators.Add(keyPerformanceIndicator);
+                        if (testObject.KeyPerformanceIndicators.All(k => k.Id != existingKpi.Id))
+                        {
+                            _repository.Delete(existingKpi);
+                        }
                     }
-                    var results = new List<TestResult>(testObject.TestResults);
-                    test.TestResults.Clear();
-                    foreach (var keyPerformanceIndicator in results)
+
+                    // update existing kpis that are still around and add any that are new
+                    foreach (var newKpi in testObject.KeyPerformanceIndicators)
                     {
-                        test.TestResults.Add(keyPerformanceIndicator);
+                        var existingKpi = test.KeyPerformanceIndicators.SingleOrDefault(k => k.Id == newKpi.Id);
+
+                        if (existingKpi != null)
+                        {
+                            existingKpi.KeyPerformanceIndicatorId = newKpi.KeyPerformanceIndicatorId;
+                            existingKpi.ModifiedDate = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            test.KeyPerformanceIndicators.Add(newKpi);
+                        }
                     }
-                    var variants = new List<Variant>(testObject.Variants);
-                    test.Variants.Clear();
-                    foreach (var keyPerformanceIndicator in variants)
+
+                    // remove any existing results that are not part of the new test
+                    foreach (var existingResult in test.TestResults.ToList())
                     {
-                        test.Variants.Add(keyPerformanceIndicator);
+                        if (testObject.TestResults.All(k => k.Id != existingResult.Id))
+                        {
+                            _repository.Delete(existingResult);
+                        }
+                    }
+
+                    // update existing results that are still around and add any that are new
+                    foreach (var newResult in testObject.TestResults)
+                    {
+                        var existingResult = test.TestResults.SingleOrDefault(k => k.Id == newResult.Id);
+
+                        if (existingResult != null)
+                        {
+                            existingResult.Conversions = newResult.Conversions;
+                            existingResult.Views = newResult.Views;
+                            existingResult.ItemId = newResult.ItemId;
+                            existingResult.ItemVersion = newResult.ItemVersion;
+                            existingResult.ModifiedDate = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            test.TestResults.Add(newResult);
+                        }
+                    }
+
+                    // remove any existing variants that are not part of the new test
+                    foreach (var existingVariant in test.Variants.ToList())
+                    {
+                        if (testObject.Variants.All(k => k.Id != existingVariant.Id))
+                        {
+                            _repository.Delete(existingVariant);
+                        }
+                    }
+
+                    // update existing variants that are still around and add any that are new
+                    foreach (var newVariant in testObject.Variants)
+                    {
+                        var existingVariant = test.Variants.SingleOrDefault(k => k.Id == newVariant.Id);
+
+                        if (existingVariant != null)
+                        {
+                            existingVariant.ItemId = newVariant.ItemId;
+                            existingVariant.ItemVersion = newVariant.ItemVersion;
+                            existingVariant.ModifiedDate = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            test.Variants.Add(newVariant);
+                        }
                     }
                 }
             }
+
             _repository.SaveChanges();
 
             return id;
@@ -202,7 +270,7 @@ namespace EPiServer.Marketing.Testing.Dal
         {
             var aTest = _repository.GetById(theTestId);
             aTest.State = theState;
-            Save(aTest);
+            _repository.SaveChanges();
         }
     }
 }
