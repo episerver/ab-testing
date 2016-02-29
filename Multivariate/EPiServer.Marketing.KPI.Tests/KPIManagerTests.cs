@@ -15,6 +15,11 @@ namespace EPiServer.Marketing.KPI.Test
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IKpiDataAccess> _kpiDataAccess;
 
+        private Kpi GetDalKpi()
+        {
+            return new Kpi();
+        }
+
         private KpiManager GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
@@ -27,21 +32,29 @@ namespace EPiServer.Marketing.KPI.Test
         [Fact]
         public void Get_Calls_Into_DataAccess()
         {
-            var aGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
-            var manager = GetUnitUnderTest();
-            manager.Get(aGuid);
-            _kpiDataAccess.Verify(kpiDa => kpiDa.Get(It.Is<Guid>(arg => arg.Equals(aGuid))), "Data access was not called with the expected GUID");
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            _kpiDataAccess.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalKpi());
+            tm.Get(theGuid);
+
+            _kpiDataAccess.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
+                "DataAcessLayer get was never called or Guid did not match.");
         }
 
         [Fact]
         public void KpiTestManager_CallsSaveWithKpi()
         {
-            var kpi = new Kpi();
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
+            var kpi = new Manager.DataClass.Kpi()
+            {
+                Id = theGuid,
+                Name = "kpiTest"
+            };
             tm.Save(kpi);
 
-            _kpiDataAccess.Verify(da => da.Save(It.Is<Kpi>(arg => arg.Equals(kpi))),
-                "DataAcessLayer Save was never called or kpi did not match.");
+            _kpiDataAccess.Verify(da => da.Save(It.Is<Kpi>(arg => arg.Id == theGuid)),
+                "DataAcessLayer Save was never called or object did not match.");
         }
 
         [Fact]

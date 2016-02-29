@@ -120,10 +120,10 @@ namespace EPiServer.Marketing.Testing.Dal
         }
 
 
-        public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
+        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
         {
             var test = _repository.GetById(testId);
-            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId);
+            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
             if (resultType == CountType.View)
             {

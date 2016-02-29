@@ -90,10 +90,10 @@ namespace EPiServer.Marketing.Testing
             _dataAccess.Archive(testObjectId);
         }
 
-        public void IncrementCount(Guid testId, Guid testItemId, Data.Enums.CountType resultType)
+        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, Data.Enums.CountType resultType)
         {
             
-            _dataAccess.IncrementCount(testId, testItemId, AdaptToDalCount(resultType));
+            _dataAccess.IncrementCount(testId, testItemId, itemVersion, AdaptToDalCount(resultType));
         }
 
 

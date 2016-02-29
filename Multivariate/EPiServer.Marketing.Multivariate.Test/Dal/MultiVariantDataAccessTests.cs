@@ -230,6 +230,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
         {
             var testId = Guid.NewGuid();
             var itemId = Guid.NewGuid();
+            var itemVersion = 1;
 
             var test = new ABTest()
             {
@@ -252,7 +253,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 Views = 0,
-                Conversions = 0
+                Conversions = 0,
+                ItemVersion = itemVersion
             };
 
             test.TestResults.Add(result);
@@ -262,12 +264,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             // check that a result exists
             Assert.Equal(test.TestResults.Count(), 1);
 
-            _mtm.IncrementCount(testId, itemId, CountType.View);
-            _mtm.IncrementCount(testId, itemId, CountType.Conversion);
+            _mtm.IncrementCount(testId, itemId, itemVersion, CountType.View);
+            _mtm.IncrementCount(testId, itemId, itemVersion, CountType.Conversion);
 
             // check the result is incremented correctly
-            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId).Views, 1);
-            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId).Conversions, 1);
+            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views, 1);
+            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Conversions, 1);
         }
 
         [Fact]

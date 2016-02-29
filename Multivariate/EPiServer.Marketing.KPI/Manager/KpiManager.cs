@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using EPiServer.Marketing.KPI.Dal.Model;
+using EPiServer.Marketing.KPI.Dal.Model.Enums;
 using EPiServer.Marketing.KPI.DataAccess;
-using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
+using IKpi = EPiServer.Marketing.KPI.Manager.DataClass.IKpi;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -27,16 +30,17 @@ namespace EPiServer.Marketing.KPI.Manager
 
         public IKpi Get(Guid kpiId)
         {
-            return _dataAccess.Get(kpiId);
+            return ConvertToManagerKpi(_dataAccess.Get(kpiId));
         }
 
         public List<IKpi> GetKpiList()
         {
-            return _dataAccess.GetKpiList();
+            return _dataAccess.GetKpiList().Select(dalTest => ConvertToManagerKpi(dalTest)).ToList();
         }
+
         public Guid Save(IKpi kpi)
         {
-            return _dataAccess.Save(kpi);
+            return _dataAccess.Save(ConvertToDalTest(kpi));
         }
 
         public void Delete(Guid kpiId)
@@ -44,8 +48,41 @@ namespace EPiServer.Marketing.KPI.Manager
             _dataAccess.Delete(kpiId);
         }
 
-      
-        //public 
 
+        private Dal.Model.IKpi ConvertToDalTest(IKpi kpi)
+        {
+            var dalKpi = new Kpi()
+            {
+                Id = kpi.Id,
+                Name = kpi.Name,
+                Weight = kpi.Weight,
+                CreatedDate = kpi.CreatedDate,
+                ModifiedDate = kpi.ModifiedDate,
+                LandingPage = kpi.LandingPage,
+                Value = kpi.Value,
+                RunAt = (RunAt)kpi.RunAt,
+                ClientScripts = kpi.ClientScripts
+            };
+
+            return dalKpi;
+        }
+
+        private IKpi ConvertToManagerKpi(Dal.Model.IKpi kpi)
+        {
+            var managerKpi = new DataClass.Kpi()
+            {
+                Id = kpi.Id,
+                Name = kpi.Name,
+                Weight = kpi.Weight,
+                CreatedDate = kpi.CreatedDate,
+                ModifiedDate = kpi.ModifiedDate,
+                LandingPage = kpi.LandingPage,
+                Value = kpi.Value,
+                RunAt = (DataClass.Enums.RunAt)kpi.RunAt,
+                ClientScripts = kpi.ClientScripts
+            };
+
+            return managerKpi;
+        }
     }
 }

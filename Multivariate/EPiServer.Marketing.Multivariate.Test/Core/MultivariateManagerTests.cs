@@ -156,16 +156,17 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var theTestItemGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
+            var theItemVersion = 1;
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.IncrementCount(theGuid, theTestItemGuid, type);
+            tm.IncrementCount(theGuid, theTestItemGuid, theItemVersion, type);
 
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
                 "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<Testing.Dal.Entity.Enums.CountType>(arg => arg.Equals(Testing.Dal.Entity.Enums.CountType.Conversion))),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.Is<Testing.Dal.Entity.Enums.CountType>(arg => arg.Equals(Testing.Dal.Entity.Enums.CountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 

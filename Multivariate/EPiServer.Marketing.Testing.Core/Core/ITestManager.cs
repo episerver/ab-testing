@@ -23,7 +23,8 @@ namespace EPiServer.Marketing.Testing
 
         void Archive(Guid testObjectId);
 
-        void IncrementCount(Guid testId, Guid testItemId, CountType resultType);
+        void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
+
         void EmitUpdateCount(Guid testId, Guid testItemId, CountType resultType);
 
         Guid ReturnLandingPage(Guid testId);

@@ -19,6 +19,11 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         string Name { get; set; }
 
         /// <summary>
+        /// Wieght of kpi compared to other kpis.
+        /// </summary>
+        int Weight { get; set; }
+
+        /// <summary>
         /// The condition to be met for the kpi to be met by a user.
         /// </summary>
         string Value { get; set; }

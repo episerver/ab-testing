@@ -34,12 +34,12 @@ namespace EPiServer.Marketing.Testing.Messaging
 
         public void Handle(UpdateViewsMessage message)
         {
-            _testManager.IncrementCount(message.TestId, message.VariantId, CountType.View);
+            _testManager.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.View);
         }
 
         public void Handle(UpdateConversionsMessage message)
         {
-            _testManager.IncrementCount(message.TestId, message.VariantId, CountType.Conversion);
+            _testManager.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.Conversion);
         }
     }
 }
