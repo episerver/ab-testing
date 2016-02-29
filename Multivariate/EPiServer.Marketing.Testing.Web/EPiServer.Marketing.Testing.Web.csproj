@@ -340,7 +340,7 @@ IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketin
 xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\"  /I /F /R /Y
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\build\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
-xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+xcopy "$(SolutionDir)Deployment\*nupkg" "$(SolutionDir)..\artifacts" /I /F /R /Y</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

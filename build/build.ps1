@@ -37,3 +37,7 @@ if([System.Convert]::ToBoolean($runTests) -eq $true) {
 }
 
 # Create packages
+if([System.Convert]::ToBoolean($pack) -eq $true) {
+    .\pack.ps1 configuration $configuration
+    pushd ..
+}

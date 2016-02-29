@@ -75,7 +75,7 @@ cd "$(SolutionDir)MessagingDeployment\"
 rename EPiServer.Messaging.nuspec Package.nuspec
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\..\build\buildpackage.ps1" "$(SolutionDir)MessagingDeployment" "$(ProjectDir)..\..\\"
 
-xcopy "*nupkg" "$(SolutionDir)Deployment"  /I /F /R /Y
+xcopy "*nupkg" "$(SolutionDir)..\artifacts"  /I /F /R /Y
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
