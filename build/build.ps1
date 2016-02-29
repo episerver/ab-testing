@@ -33,9 +33,11 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 # Run tests
 if([System.Convert]::ToBoolean($runTests) -eq $true) {
     .\test.ps1 $configuration $runtestmode
+    pushd ..
 }
 
 # Create packages
 if([System.Convert]::ToBoolean($pack) -eq $true) {
     .\pack.ps1 configuration $configuration
+    pushd ..
 }

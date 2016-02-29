@@ -4,6 +4,8 @@ param ([string]$configuration = "Release")
 $cwd = Split-Path -parent $PSCommandPath
 pushd $cwd
 
+Write-Host "Pack artifacts"
+
 $root = Resolve-Path ".."
 $artifactsPath = Resolve-Path "..\artifacts"
 
