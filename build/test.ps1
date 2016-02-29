@@ -4,12 +4,15 @@ param ([string]$configuration = "Release",
 $cwd = Split-Path -parent $PSCommandPath
 pushd $cwd
 
-Write-Host "Run net45 xunit tests"
+Write-Host "Run xunit tests"
 Write-Host $configuration
 Write-Host $teamcity
 
+Write-Host "InvocationName:" $MyInvocation.InvocationName
+Write-Host "Path:" $MyInvocation.MyCommand.Path
+
 #find console test runner
-Set-Location ..\packages
+Set-Location "$cwd\..\packages"
 $runner = Get-ChildItem -Recurse -Filter 'xunit.console.exe'
 
 Set-Location ..\

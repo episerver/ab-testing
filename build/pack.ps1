@@ -5,9 +5,9 @@ $cwd = Split-Path -parent $PSCommandPath
 pushd $cwd
 
 Write-Host "Pack artifacts"
+Write-Host $configuration
 
-$root = Resolve-Path ".."
-$artifactsPath = Resolve-Path "..\artifacts"
+$artifactsPath = Resolve-Path "$cwd\..\artifacts"
 
 if (!(Test-Path $artifactsPath))
 {
@@ -27,4 +27,4 @@ if (Test-Path $artifactsPath\DailySite.zip)
 
 Copy-Item .\resources\AlloyEPiServerDB.mdf ..\samples\EPiServer.Templates.Alloy\App_Data
 
-.\buildzip.ps1 $root\samples\EPiServer.Templates.Alloy $artifactsPath\DailySite.zip
+.\buildzip.ps1 $cwd\..\samples\EPiServer.Templates.Alloy $artifactsPath\DailySite.zip
