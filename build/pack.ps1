@@ -19,7 +19,7 @@ if (!(Test-Path $artifactsPath))
 
 # Creating daily site package.
 # Copying database file to the site folder:
-
+Write-Host "Pack daily site files"
 if (Test-Path $artifactsPath\DailySite.zip)
 {
 	Remove-Item $artifactsPath\DailySite.zip -Force
