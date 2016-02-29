@@ -228,11 +228,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, CountType.Conversion);
+            testManager.EmitUpdateCount(original, testItemId, 1, CountType.Conversion);
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                It.Is<Guid>(arg => arg.Equals(testItemId)),
+                It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update conversion message not emmited");
         }
 
@@ -247,11 +248,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, CountType.View);
+            testManager.EmitUpdateCount(original, testItemId, 1, CountType.View);
 
             messageManager.Verify(mm => mm.EmitUpdateViews(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                It.Is<Guid>(arg => arg.Equals(testItemId)),
+                It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update View message not emmited");
         }
     }

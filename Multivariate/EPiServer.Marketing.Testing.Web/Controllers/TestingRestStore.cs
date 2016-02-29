@@ -61,9 +61,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             var mm = _serviceLocator.GetInstance<IMessagingManager>();
             if( conversion == null )
-                mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId));
+                mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId), 1);
             else
-                mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId));
+                mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId), 1);
 
             return Rest(true);
         }

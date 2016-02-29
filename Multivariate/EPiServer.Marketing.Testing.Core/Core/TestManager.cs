@@ -127,13 +127,13 @@ namespace EPiServer.Marketing.Testing
             return _r.Next(1, 3);
         }
 
-        public void EmitUpdateCount(Guid testId, Guid testItemId, Data.Enums.CountType resultType)
+        public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, Data.Enums.CountType resultType)
         {
             var messaging = _serviceLocator.GetInstance<IMessagingManager>();
             if (resultType == Data.Enums.CountType.Conversion)
-                messaging.EmitUpdateConversion(testId, testItemId);
+                messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
             else if (resultType == Data.Enums.CountType.View)
-                messaging.EmitUpdateViews(testId, testItemId);
+                messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
         private IMarketingTest ConvertToManagerTest(IABTest theDalTest)

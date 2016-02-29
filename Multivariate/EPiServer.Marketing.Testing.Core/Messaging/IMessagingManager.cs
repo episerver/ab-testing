@@ -9,13 +9,13 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="TestId">the test id to work with</param>
         /// <param name="VariantId">the Guid of the cms item that was viewed</param>
-        void EmitUpdateViews(Guid TestId, Guid VariantId);
+        void EmitUpdateViews(Guid TestId, Guid VariantId, int itemVersion);
 
         /// <summary>
         /// Emits the asynchronous message to update a conversion result for the specified VariantId
         /// </summary>
         /// <param name="TestId"></param>
         /// <param name="VariantId">the Guid of the cms item that caused a converion</param>
-        void EmitUpdateConversion(Guid TestId, Guid VariantId);
+        void EmitUpdateConversion(Guid TestId, Guid VariantId, int itemVersion);
     }
 }
