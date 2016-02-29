@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Transactions;
 using EPiServer.Marketing.Testing.Dal.Entity;
 
@@ -50,8 +56,11 @@ namespace EPiServer.Marketing.Testing.Dal
         /// <returns>Number of rows affected</returns>
         public int SaveChanges(int retryCount)
         {
-            var records = 0;
-      
+            int records = 0;
+            bool retrySave = false;
+            // save off retry count to potentially retry if there is an exception
+            _retryCount = retryCount;
+
             if (DatabaseContext != null)
             {
                 using (var scope = new TransactionScope(
@@ -218,6 +227,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         #region Private Member Variables
         private bool _disposed;
+        private int _retryCount = 0;
         #endregion
 
         #region Internal Members
