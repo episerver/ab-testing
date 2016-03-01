@@ -1,0 +1,22 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETFramework,Version=v4.6": {},
+    ".NETFramework,Version=v4.6/win7-x86": {},
+    ".NETFramework,Version=v4.6/win7-x64": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "": [],
+    ".NETFramework,Version=v4.6": [
+      "fx/System ",
+      "fx/System.Core ",
+      "fx/System.Xml.Linq ",
+      "fx/System.Data.DataSetExtensions ",
+      "fx/Microsoft.CSharp ",
+      "fx/System.Data ",
+      "fx/System.Xml "
+    ]
+  }
+}

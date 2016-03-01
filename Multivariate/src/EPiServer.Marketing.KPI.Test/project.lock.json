@@ -1,0 +1,1145 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETFramework,Version=v4.6": {
+      "Effort.EF6/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.0.0, 7.0.0)",
+          "NMemory": "[1.0.1, 2.0.0)"
+        },
+        "compile": {
+          "lib/net45/Effort.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Effort.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.Framework/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc": "[4.0.20710, 6.0.0)",
+          "Newtonsoft.Json": "[6.0.8, 9.0.0)",
+          "structuremap.web-signed": "[3.1.6.186, 4.0.0)",
+          "structuremap-signed": "[3.1.6.186, 4.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "Microsoft.AspNet.Mvc/4.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.AspNet.WebPages": "[2.0.20710, 2.1.0)"
+        },
+        "compile": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Razor/2.0.20710": {
+        "type": "package",
+        "compile": {
+          "lib/net40/System.Web.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebPages/2.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.Web.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        }
+      },
+      "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        }
+      },
+      "Moq/4.2.1502.911": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Moq.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Moq.dll": {}
+        }
+      },
+      "Newtonsoft.Json/6.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "NMemory/1.0.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Transactions"
+        ],
+        "compile": {
+          "lib/net45/NMemory.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NMemory.dll": {}
+        }
+      },
+      "structuremap.web-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.Web.dll": {}
+        }
+      },
+      "structuremap-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        }
+      },
+      "xunit/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.assert": "[2.1.0]",
+          "xunit.core": "[2.1.0]"
+        }
+      },
+      "xunit.abstractions/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/xunit.abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/net35/xunit.abstractions.dll": {}
+        }
+      },
+      "xunit.assert/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/dotnet/xunit.assert.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.assert.dll": {}
+        }
+      },
+      "xunit.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]",
+          "xunit.extensibility.execution": "[2.1.0]"
+        }
+      },
+      "xunit.extensibility.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.abstractions": "[2.0.0]"
+        },
+        "compile": {
+          "lib/dotnet/xunit.core.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.core.dll": {},
+          "lib/dotnet/xunit.runner.tdnet.dll": {},
+          "lib/dotnet/xunit.runner.utility.desktop.dll": {}
+        }
+      },
+      "xunit.extensibility.execution/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]"
+        },
+        "compile": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        },
+        "runtime": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        }
+      },
+      "xunit.runner.visualstudio/2.1.0": {
+        "type": "package"
+      }
+    },
+    ".NETFramework,Version=v4.6/win7-x86": {
+      "Effort.EF6/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.0.0, 7.0.0)",
+          "NMemory": "[1.0.1, 2.0.0)"
+        },
+        "compile": {
+          "lib/net45/Effort.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Effort.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.Framework/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc": "[4.0.20710, 6.0.0)",
+          "Newtonsoft.Json": "[6.0.8, 9.0.0)",
+          "structuremap.web-signed": "[3.1.6.186, 4.0.0)",
+          "structuremap-signed": "[3.1.6.186, 4.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "Microsoft.AspNet.Mvc/4.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.AspNet.WebPages": "[2.0.20710, 2.1.0)"
+        },
+        "compile": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Razor/2.0.20710": {
+        "type": "package",
+        "compile": {
+          "lib/net40/System.Web.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebPages/2.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.Web.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        }
+      },
+      "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        }
+      },
+      "Moq/4.2.1502.911": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Moq.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Moq.dll": {}
+        }
+      },
+      "Newtonsoft.Json/6.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "NMemory/1.0.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Transactions"
+        ],
+        "compile": {
+          "lib/net45/NMemory.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NMemory.dll": {}
+        }
+      },
+      "structuremap.web-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.Web.dll": {}
+        }
+      },
+      "structuremap-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        }
+      },
+      "xunit/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.assert": "[2.1.0]",
+          "xunit.core": "[2.1.0]"
+        }
+      },
+      "xunit.abstractions/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/xunit.abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/net35/xunit.abstractions.dll": {}
+        }
+      },
+      "xunit.assert/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/dotnet/xunit.assert.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.assert.dll": {}
+        }
+      },
+      "xunit.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]",
+          "xunit.extensibility.execution": "[2.1.0]"
+        }
+      },
+      "xunit.extensibility.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.abstractions": "[2.0.0]"
+        },
+        "compile": {
+          "lib/dotnet/xunit.core.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.core.dll": {},
+          "lib/dotnet/xunit.runner.tdnet.dll": {},
+          "lib/dotnet/xunit.runner.utility.desktop.dll": {}
+        }
+      },
+      "xunit.extensibility.execution/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]"
+        },
+        "compile": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        },
+        "runtime": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        }
+      },
+      "xunit.runner.visualstudio/2.1.0": {
+        "type": "package"
+      }
+    },
+    ".NETFramework,Version=v4.6/win7-x64": {
+      "Effort.EF6/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "[6.0.0, 7.0.0)",
+          "NMemory": "[1.0.1, 2.0.0)"
+        },
+        "compile": {
+          "lib/net45/Effort.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Effort.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.Framework/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc": "[4.0.20710, 6.0.0)",
+          "Newtonsoft.Json": "[6.0.8, 9.0.0)",
+          "structuremap.web-signed": "[3.1.6.186, 4.0.0)",
+          "structuremap-signed": "[3.1.6.186, 4.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.6",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "Microsoft.AspNet.Mvc/4.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.AspNet.WebPages": "[2.0.20710, 2.1.0)"
+        },
+        "compile": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Razor/2.0.20710": {
+        "type": "package",
+        "compile": {
+          "lib/net40/System.Web.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebPages/2.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.Web.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        }
+      },
+      "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        }
+      },
+      "Moq/4.2.1502.911": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Moq.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Moq.dll": {}
+        }
+      },
+      "Newtonsoft.Json/6.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "NMemory/1.0.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System",
+          "System.Transactions"
+        ],
+        "compile": {
+          "lib/net45/NMemory.dll": {}
+        },
+        "runtime": {
+          "lib/net45/NMemory.dll": {}
+        }
+      },
+      "structuremap.web-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.Web.dll": {}
+        }
+      },
+      "structuremap-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        }
+      },
+      "xunit/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.assert": "[2.1.0]",
+          "xunit.core": "[2.1.0]"
+        }
+      },
+      "xunit.abstractions/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net35/xunit.abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/net35/xunit.abstractions.dll": {}
+        }
+      },
+      "xunit.assert/2.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/dotnet/xunit.assert.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.assert.dll": {}
+        }
+      },
+      "xunit.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]",
+          "xunit.extensibility.execution": "[2.1.0]"
+        }
+      },
+      "xunit.extensibility.core/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.abstractions": "[2.0.0]"
+        },
+        "compile": {
+          "lib/dotnet/xunit.core.dll": {}
+        },
+        "runtime": {
+          "lib/dotnet/xunit.core.dll": {},
+          "lib/dotnet/xunit.runner.tdnet.dll": {},
+          "lib/dotnet/xunit.runner.utility.desktop.dll": {}
+        }
+      },
+      "xunit.extensibility.execution/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.1.0]"
+        },
+        "compile": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        },
+        "runtime": {
+          "lib/net45/xunit.execution.desktop.dll": {}
+        }
+      },
+      "xunit.runner.visualstudio/2.1.0": {
+        "type": "package"
+      }
+    }
+  },
+  "libraries": {
+    "EPiServer.Marketing.KPI/1.0.0": {
+      "type": "project",
+      "path": "../EPiServer.Marketing.KPI/project.json"
+    },
+    "Effort.EF6/1.1.4": {
+      "type": "package",
+      "sha512": "IahdSh6bAs5WZaWYxfsuS3JDa3iG3oK57LbDDO3XQyxLGrhvGPqm4dq42G98BmNaBZ9afy4gMBlIL1V6v7BIZw==",
+      "files": [
+        "Effort.EF6.1.1.4.nupkg",
+        "Effort.EF6.1.1.4.nupkg.sha512",
+        "Effort.EF6.nuspec",
+        "lib/net40/Effort.dll",
+        "lib/net40/Effort.xml",
+        "lib/net45/Effort.dll",
+        "lib/net45/Effort.xml"
+      ]
+    },
+    "EntityFramework/6.1.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "2xzFHAF3VVdmTR3//MygtQpwfbDjeaq+nQwCcokLzen7MKHOojPaxNPQPa4diHY1QtcR7zlHAJHNRqPB7W2Syw==",
+      "files": [
+        "content/App.config.transform",
+        "content/Web.config.transform",
+        "EntityFramework.6.1.3.nupkg",
+        "EntityFramework.6.1.3.nupkg.sha512",
+        "EntityFramework.nuspec",
+        "lib/net40/EntityFramework.dll",
+        "lib/net40/EntityFramework.SqlServer.dll",
+        "lib/net40/EntityFramework.SqlServer.xml",
+        "lib/net40/EntityFramework.xml",
+        "lib/net45/EntityFramework.dll",
+        "lib/net45/EntityFramework.SqlServer.dll",
+        "lib/net45/EntityFramework.SqlServer.xml",
+        "lib/net45/EntityFramework.xml",
+        "tools/about_EntityFramework.help.txt",
+        "tools/EntityFramework.PowerShell.dll",
+        "tools/EntityFramework.PowerShell.Utility.dll",
+        "tools/EntityFramework.psd1",
+        "tools/EntityFramework.psm1",
+        "tools/init.ps1",
+        "tools/install.ps1",
+        "tools/migrate.exe"
+      ]
+    },
+    "EPiServer.Framework/9.6.1": {
+      "type": "package",
+      "sha512": "ePgimTCwM9DYtbA5Hn+5vlz7vPEnWPsmJBXQxuricNrfKx5r6RvfuwZ35OwN80+OdIN5kGBzES197W6/G1oKUw==",
+      "files": [
+        "EPiServer.Framework.9.6.1.nupkg",
+        "EPiServer.Framework.9.6.1.nupkg.sha512",
+        "EPiServer.Framework.nuspec",
+        "lib/net45/EPiServer.ApplicationModules.dll",
+        "lib/net45/EPiServer.Data.Cache.dll",
+        "lib/net45/EPiServer.Data.dll",
+        "lib/net45/EPiServer.Data.xml",
+        "lib/net45/EPiServer.Events.dll",
+        "lib/net45/EPiServer.Events.xml",
+        "lib/net45/EPiServer.Framework.dll",
+        "lib/net45/EPiServer.Framework.xml",
+        "lib/net45/EPiServer.Licensing.dll",
+        "lib/net45/EPiServer.Shell.dll",
+        "lib/net45/EPiServer.Shell.xml",
+        "tools/ConvertDatabaseToUtc.psm1",
+        "tools/epideploy.exe",
+        "tools/init.ps1",
+        "tools/Install.ps1",
+        "tools/Upgrade.psm1"
+      ]
+    },
+    "Microsoft.AspNet.Mvc/4.0.20710": {
+      "type": "package",
+      "sha512": "h6oV6Zh+jM20v+lgnU1oL7JlVqI6Q+k7FN3VYXnY7wjqU3wTBfest+iNdAUZ2OYTo62hfI286LyqRyGDaXHmAA==",
+      "files": [
+        "lib/net40/System.Web.Mvc.dll",
+        "lib/net40/System.Web.Mvc.xml",
+        "Microsoft.AspNet.Mvc.4.0.20710.nupkg",
+        "Microsoft.AspNet.Mvc.4.0.20710.nupkg.sha512",
+        "Microsoft.AspNet.Mvc.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.Razor/2.0.20710": {
+      "type": "package",
+      "sha512": "JkaLdzjXnjcd8JAaAAtahMtqORdBfX2pOlVdv7khq2hKBLqjdP+5q2LVLmbLecFGxoW9inDNjZKvwdVuiwFbZg==",
+      "files": [
+        "lib/net40/System.Web.Razor.dll",
+        "lib/net40/System.Web.Razor.xml",
+        "Microsoft.AspNet.Razor.2.0.20710.nupkg",
+        "Microsoft.AspNet.Razor.2.0.20710.nupkg.sha512",
+        "Microsoft.AspNet.Razor.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.WebPages/2.0.20710": {
+      "type": "package",
+      "sha512": "bpWbVKW0RpM/XtTwZL7pjhuVqpaB/cHutR7W4YXLIXFMHHXilqzVxpFmyzwoIZVO1xmSdoelbDRBncIA5D24EA==",
+      "files": [
+        "lib/net40/System.Web.Helpers.dll",
+        "lib/net40/System.Web.Helpers.xml",
+        "lib/net40/System.Web.WebPages.Deployment.dll",
+        "lib/net40/System.Web.WebPages.Deployment.xml",
+        "lib/net40/System.Web.WebPages.dll",
+        "lib/net40/System.Web.WebPages.Razor.dll",
+        "lib/net40/System.Web.WebPages.Razor.xml",
+        "lib/net40/System.Web.WebPages.xml",
+        "Microsoft.AspNet.WebPages.2.0.20710.nupkg",
+        "Microsoft.AspNet.WebPages.2.0.20710.nupkg.sha512",
+        "Microsoft.AspNet.WebPages.nuspec"
+      ]
+    },
+    "Microsoft.Web.Infrastructure/1.0.0": {
+      "type": "package",
+      "sha512": "FNmvLn5m2LTU/Rs2KWVo0SIIh9Ek+U0ojex7xeDaSHw/zgEP77A8vY5cVWgUtBGS8MJfDGNn8rpXJWEIQaPwTg==",
+      "files": [
+        "lib/net40/Microsoft.Web.Infrastructure.dll",
+        "Microsoft.Web.Infrastructure.1.0.0.nupkg",
+        "Microsoft.Web.Infrastructure.1.0.0.nupkg.sha512",
+        "Microsoft.Web.Infrastructure.nuspec"
+      ]
+    },
+    "Moq/4.2.1502.911": {
+      "type": "package",
+      "sha512": "Ng1jKw2jlwaBEh16+AeIfoS7jj9Hd9Zzf7OafgTsl9fIRv0bICqhAsmLaPHTsnpd4ReJyMMUyNGUGKpyp+mqkg==",
+      "files": [
+        "lib/net35/Moq.dll",
+        "lib/net35/Moq.xml",
+        "lib/net40/Moq.dll",
+        "lib/net40/Moq.xml",
+        "lib/sl4/Moq.Silverlight.dll",
+        "lib/sl4/Moq.Silverlight.xml",
+        "Moq.4.2.1502.911.nupkg",
+        "Moq.4.2.1502.911.nupkg.sha512",
+        "Moq.nuspec"
+      ]
+    },
+    "Newtonsoft.Json/6.0.8": {
+      "type": "package",
+      "sha512": "7ut47NDedTW19EbL0JpFDYUP62fcuz27hJrehCDNajdCS5NtqL+E39+7Um3OkNc2wl2ym7K8Ln5eNuLus6mVGQ==",
+      "files": [
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netcore45/Newtonsoft.Json.dll",
+        "lib/netcore45/Newtonsoft.Json.xml",
+        "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.xml",
+        "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.dll",
+        "lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.xml",
+        "Newtonsoft.Json.6.0.8.nupkg",
+        "Newtonsoft.Json.6.0.8.nupkg.sha512",
+        "Newtonsoft.Json.nuspec",
+        "tools/install.ps1"
+      ]
+    },
+    "NMemory/1.0.1": {
+      "type": "package",
+      "sha512": "8raRY9h4xtyeVIbJh1yhBPaQBbyw/1mg/tVpBMy1MA41axLZlfZrII+dwRu0LByIg3YZ46b1/3m5xhgbQTQncA==",
+      "files": [
+        "lib/net40/NMemory.dll",
+        "lib/net40/NMemory.xml",
+        "lib/net45/NMemory.dll",
+        "lib/net45/NMemory.xml",
+        "NMemory.1.0.1.nupkg",
+        "NMemory.1.0.1.nupkg.sha512",
+        "NMemory.nuspec"
+      ]
+    },
+    "structuremap.web-signed/3.1.6.186": {
+      "type": "package",
+      "sha512": "mjUFpWfQYvK9X6Gve7CKbKnELNzIeqrXATqY2dbir06Tnj4pzvwW3E9XgmBBBG7qJHNzR5yKQ9DSm4amufY0Ug==",
+      "files": [
+        "lib/net40/StructureMap.Web.dll",
+        "lib/net40/StructureMap.Web.pdb",
+        "structuremap.web-signed.3.1.6.186.nupkg",
+        "structuremap.web-signed.3.1.6.186.nupkg.sha512",
+        "structuremap.web-signed.nuspec"
+      ]
+    },
+    "structuremap-signed/3.1.6.186": {
+      "type": "package",
+      "sha512": "Ca8wLO763lN3Vx2cjV+orqqcje+wGyQ8085E3IH7hqq4kslmZBVvp9CFWiP3Twr0R2+KK/LVDOj7nZx/bVaGtg==",
+      "files": [
+        "lib/net40/StructureMap.dll",
+        "lib/net40/StructureMap.Net4.dll",
+        "lib/net40/StructureMap.Net4.pdb",
+        "lib/net40/StructureMap.pdb",
+        "lib/net40/StructureMap.xml",
+        "lib/portable-net45+win+wp81/StructureMap.dll",
+        "lib/portable-net45+win+wp81/StructureMap.pdb",
+        "lib/portable-net45+win+wp81/StructureMap.xml",
+        "lib/portable-win+net40+wp8/StructureMap.dll",
+        "lib/portable-win+net40+wp8/StructureMap.pdb",
+        "lib/portable-win+net40+wp8/StructureMap.xml",
+        "lib/wp80/StructureMap.dll",
+        "lib/wp80/StructureMap.pdb",
+        "lib/wp80/StructureMap.xml",
+        "lib/wp81/StructureMap.dll",
+        "lib/wp81/StructureMap.pdb",
+        "lib/wp81/StructureMap.xml",
+        "structuremap-signed.3.1.6.186.nupkg",
+        "structuremap-signed.3.1.6.186.nupkg.sha512",
+        "structuremap-signed.nuspec"
+      ]
+    },
+    "xunit/2.1.0": {
+      "type": "package",
+      "sha512": "u/7VQSOSXa7kSG4iK6Lcn7RqKZQ3hk7cnyMNVMpXHSP0RI5VQEtc44hvkG3LyWOVsx1dhUDD3rPAHAxyOUDQJw==",
+      "files": [
+        "xunit.2.1.0.nupkg",
+        "xunit.2.1.0.nupkg.sha512",
+        "xunit.nuspec"
+      ]
+    },
+    "xunit.abstractions/2.0.0": {
+      "type": "package",
+      "sha512": "NAdxKQRzuLnCZ0g++x6i87/8rMBpQoRiRlRNLAqfODm2zJPbteHRoSER3DXfxnqrHXyBJT8rFaZ8uveBeQyaMA==",
+      "files": [
+        "lib/net35/xunit.abstractions.dll",
+        "lib/net35/xunit.abstractions.xml",
+        "lib/portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS/xunit.abstractions.dll",
+        "lib/portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS/xunit.abstractions.xml",
+        "xunit.abstractions.2.0.0.nupkg",
+        "xunit.abstractions.2.0.0.nupkg.sha512",
+        "xunit.abstractions.nuspec"
+      ]
+    },
+    "xunit.assert/2.1.0": {
+      "type": "package",
+      "sha512": "Hhhw+YaTe+BGhbr57dxVE+6VJk8BfThqFFii1XIsSZ4qx+SSCixprJC10JkiLRVSTfWyT8W/4nAf6NQgIrmBxA==",
+      "files": [
+        "lib/dotnet/xunit.assert.dll",
+        "lib/dotnet/xunit.assert.pdb",
+        "lib/dotnet/xunit.assert.xml",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.assert.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.assert.pdb",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.assert.xml",
+        "xunit.assert.2.1.0.nupkg",
+        "xunit.assert.2.1.0.nupkg.sha512",
+        "xunit.assert.nuspec"
+      ]
+    },
+    "xunit.core/2.1.0": {
+      "type": "package",
+      "sha512": "jlbYdPbnkPIRwJllcT/tQZCNsSElVDEymdpJfH79uTUrPARkELVYw9o/zhAjKZXmeikGqGK5C2Yny4gTNoEu0Q==",
+      "files": [
+        "build/_desktop/xunit.execution.desktop.dll",
+        "build/dnx451/_._",
+        "build/monoandroid/_._",
+        "build/monotouch/_._",
+        "build/net45/_._",
+        "build/portable-net45+win8+wp8+wpa81/xunit.core.props",
+        "build/win8/_._",
+        "build/win81/xunit.core.props",
+        "build/wp8/_._",
+        "build/wpa81/xunit.core.props",
+        "build/xamarinios/_._",
+        "xunit.core.2.1.0.nupkg",
+        "xunit.core.2.1.0.nupkg.sha512",
+        "xunit.core.nuspec"
+      ]
+    },
+    "xunit.extensibility.core/2.1.0": {
+      "type": "package",
+      "sha512": "ANWM3WxeaeHjACLRlmrv+xOc0WAcr3cvIiJE+gqbdzTv1NCH4p1VDyT+8WmmdCc9db0WFiJLaDy4YTYsL1wWXw==",
+      "files": [
+        "lib/dotnet/xunit.core.dll",
+        "lib/dotnet/xunit.core.dll.tdnet",
+        "lib/dotnet/xunit.core.pdb",
+        "lib/dotnet/xunit.core.xml",
+        "lib/dotnet/xunit.runner.tdnet.dll",
+        "lib/dotnet/xunit.runner.utility.desktop.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.dll.tdnet",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.pdb",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.core.xml",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.runner.tdnet.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.runner.utility.desktop.dll",
+        "xunit.extensibility.core.2.1.0.nupkg",
+        "xunit.extensibility.core.2.1.0.nupkg.sha512",
+        "xunit.extensibility.core.nuspec"
+      ]
+    },
+    "xunit.extensibility.execution/2.1.0": {
+      "type": "package",
+      "sha512": "tAoNafoVknKa3sZJPMvtZRnhOSk3gasEGeceSm7w/gyGwsR/OXFxndWJB1xSHeoy33d3Z6jFqn4A3j+pWCF0Ew==",
+      "files": [
+        "lib/dnx451/xunit.execution.dotnet.dll",
+        "lib/dnx451/xunit.execution.dotnet.pdb",
+        "lib/dnx451/xunit.execution.dotnet.xml",
+        "lib/dotnet/xunit.execution.dotnet.dll",
+        "lib/dotnet/xunit.execution.dotnet.pdb",
+        "lib/dotnet/xunit.execution.dotnet.xml",
+        "lib/monoandroid/xunit.execution.dotnet.dll",
+        "lib/monoandroid/xunit.execution.dotnet.pdb",
+        "lib/monoandroid/xunit.execution.dotnet.xml",
+        "lib/monotouch/xunit.execution.dotnet.dll",
+        "lib/monotouch/xunit.execution.dotnet.pdb",
+        "lib/monotouch/xunit.execution.dotnet.xml",
+        "lib/net45/xunit.execution.desktop.dll",
+        "lib/net45/xunit.execution.desktop.pdb",
+        "lib/net45/xunit.execution.desktop.xml",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.execution.dotnet.dll",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.execution.dotnet.pdb",
+        "lib/portable-net45+win8+wp8+wpa81/xunit.execution.dotnet.xml",
+        "lib/win8/xunit.execution.dotnet.dll",
+        "lib/win8/xunit.execution.dotnet.pdb",
+        "lib/win8/xunit.execution.dotnet.xml",
+        "lib/wp8/xunit.execution.dotnet.dll",
+        "lib/wp8/xunit.execution.dotnet.pdb",
+        "lib/wp8/xunit.execution.dotnet.xml",
+        "lib/wpa81/xunit.execution.dotnet.dll",
+        "lib/wpa81/xunit.execution.dotnet.pdb",
+        "lib/wpa81/xunit.execution.dotnet.xml",
+        "lib/xamarinios/xunit.execution.dotnet.dll",
+        "lib/xamarinios/xunit.execution.dotnet.pdb",
+        "lib/xamarinios/xunit.execution.dotnet.xml",
+        "xunit.extensibility.execution.2.1.0.nupkg",
+        "xunit.extensibility.execution.2.1.0.nupkg.sha512",
+        "xunit.extensibility.execution.nuspec"
+      ]
+    },
+    "xunit.runner.visualstudio/2.1.0": {
+      "type": "package",
+      "sha512": "44vJFEQopk8SHfPMjgzn4QevRNfITO7zRZBo9lb+OPhID7v/q2gFaOgyEUomKilq2rwWUQ0m9yquBOzJL4L4aA==",
+      "files": [
+        "build/_common/xunit.abstractions.dll",
+        "build/_common/xunit.runner.utility.desktop.dll",
+        "build/_common/xunit.runner.utility.dotnet.dll",
+        "build/_common/xunit.runner.visualstudio.testadapter.dll",
+        "build/monoandroid/_._",
+        "build/monotouch/_._",
+        "build/net20/xunit.runner.visualstudio.props",
+        "build/portable-net45+win8+wp8+wpa81/xunit.runner.visualstudio.props",
+        "build/uap10.0/xunit.runner.visualstudio.props",
+        "build/uap10.0/xunit.runner.visualstudio.targets",
+        "build/uap10.0/xunit.runner.visualstudio.uwp.dll",
+        "build/uap10.0/xunit.runner.visualstudio.uwp.pri",
+        "build/win8/_._",
+        "build/win81/xunit.runner.visualstudio.props",
+        "build/win81/xunit.runner.visualstudio.targets",
+        "build/win81/xunit.runner.visualstudio.win81.dll",
+        "build/win81/xunit.runner.visualstudio.win81.pri",
+        "build/wp8/_._",
+        "build/wpa81/xunit.runner.visualstudio.props",
+        "build/wpa81/xunit.runner.visualstudio.targets",
+        "build/wpa81/xunit.runner.visualstudio.wpa81.dll",
+        "build/wpa81/xunit.runner.visualstudio.wpa81.pri",
+        "build/xamarinios/_._",
+        "xunit.runner.visualstudio.2.1.0.nupkg",
+        "xunit.runner.visualstudio.2.1.0.nupkg.sha512",
+        "xunit.runner.visualstudio.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "Effort.EF6 >= 1.1.4",
+      "EntityFramework >= 6.1.3",
+      "EPiServer.Framework >= 9.6.1",
+      "Microsoft.AspNet.Mvc >= 4.0.20710",
+      "Microsoft.AspNet.Razor >= 2.0.20710",
+      "Microsoft.AspNet.WebPages >= 2.0.20710",
+      "Microsoft.Web.Infrastructure >= 1.0.0",
+      "Moq >= 4.2.1502.911",
+      "Newtonsoft.Json >= 6.0.8",
+      "NMemory >= 1.0.1",
+      "structuremap.web-signed >= 3.1.6.186",
+      "structuremap-signed >= 3.1.6.186",
+      "xunit >= 2.1.0",
+      "xunit.abstractions >= 2.0.0",
+      "xunit.assert >= 2.1.0",
+      "xunit.core >= 2.1.0",
+      "xunit.extensibility.core >= 2.1.0",
+      "xunit.extensibility.execution >= 2.1.0",
+      "xunit.runner.visualstudio >= 2.1.0",
+      "EPiServer.Marketing.KPI "
+    ],
+    ".NETFramework,Version=v4.6": [
+      "fx/Microsoft.CSharp ",
+      "fx/System ",
+      "fx/System.ComponentModel.DataAnnotations ",
+      "fx/System.Configuration ",
+      "fx/System.Core ",
+      "fx/System.Data ",
+      "fx/System.Runtime >= 4.0.20",
+      "fx/System.Threading.Tasks >= 4.0.10",
+      "fx/System.Transactions ",
+      "fx/System.Web ",
+      "fx/System.Web.ApplicationServices ",
+      "fx/System.Web.Extensions ",
+      "fx/System.Web.Abstractions ",
+      "fx/System.Web.Routing ",
+      "fx/System.Xml ",
+      "fx/System.Xml.Linq "
+    ]
+  }
+}

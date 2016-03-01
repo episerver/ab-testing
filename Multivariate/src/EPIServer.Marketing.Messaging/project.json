@@ -1,0 +1,17 @@
+{
+  "dependencies": {},
+  "frameworks": {
+    "net46": {
+      "dependencies": {},
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Xml.Linq": "",
+        "System.Data.DataSetExtensions": "",
+        "Microsoft.CSharp": "",
+        "System.Data": "",
+        "System.Xml": ""
+      }
+    }
+  }
+}

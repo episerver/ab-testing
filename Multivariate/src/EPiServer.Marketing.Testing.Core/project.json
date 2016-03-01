@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "Castle.Core": "3.3.3",
+    "Castle.Windsor": "3.3.0",
+    "EPiServer.CMS.Core": "9.6.1",
+    "EPiServer.Framework": "9.6.1",
+    "Microsoft.AspNet.Mvc": "4.0.20710.0",
+    "Microsoft.AspNet.Razor": "2.0.20710.0",
+    "Microsoft.AspNet.WebPages": "2.0.20710.0",
+    "Microsoft.Web.Infrastructure": "1.0.0.0",
+    "Newtonsoft.Json": "6.0.8",
+    "structuremap.web-signed": "3.1.6.186",
+    "structuremap-signed": "3.1.6.186",
+    "EPIServer.Marketing.Messaging": "",
+    "EPiServer.Marketing.Testing.Dal": ""
+  },
+  "frameworks": {
+    "net46": {
+      "dependencies": {},
+      "frameworkAssemblies": {
+        "System": "",
+        "System.ComponentModel.DataAnnotations": "",
+        "System.configuration": "",
+        "System.Core": "",
+        "System.Transactions": "",
+        "System.Web": "",
+        "System.Xml.Linq": "",
+        "System.Data.DataSetExtensions": "",
+        "Microsoft.CSharp": "",
+        "System.Data": "",
+        "System.Xml": ""
+      }
+    }
+  }
+}
