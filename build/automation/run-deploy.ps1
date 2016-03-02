@@ -101,8 +101,7 @@ function Deploy-Nuget {
         )
 
     #Install the nuget package into the $SitePath
-	# TODO: use nuget
-    &"C:\Stash\EPiServer.Marketing.Multivariate\build\resources\nuget\nuget.exe" install $PackageName -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
+    nuget install $PackageName -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
 }
 
 function Deploy-Zip {
