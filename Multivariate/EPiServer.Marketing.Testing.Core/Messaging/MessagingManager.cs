@@ -2,6 +2,7 @@
 using EPiServer.Marketing.Messaging.InMemory;
 using EPiServer.ServiceLocation;
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Messaging
@@ -11,7 +12,7 @@ namespace EPiServer.Marketing.Testing.Messaging
     /// conversion data for a specific test. Since its a service it can be loaded via the standard service 
     /// locator methods found in Epi
     /// </summary>
-    [ServiceConfiguration(ServiceType = typeof(IMessagingManager))]
+    [ServiceConfiguration(ServiceType = typeof(IMessagingManager), Lifecycle = ServiceInstanceScope.Singleton)]
     class MessagingManager : IMessagingManager
     {
         private string QueName = "MultiVariantQueue";
@@ -20,6 +21,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         private MessagingApplicationBuilder appBuilder;
         private InMemoryQueueStore _queueStore;
         private ITestingMessageHandler _handler;
+        private BlockingCollection<object> _queue;
 
         [ExcludeFromCodeCoverage]
         public MessagingManager()
@@ -59,12 +61,17 @@ namespace EPiServer.Marketing.Testing.Messaging
             // Create the dispatcher, queue store, and the memory reciever
             var messageDispatcher = new FanOutMessageDispatcher(registry);
             _queueStore = new InMemoryQueueStore(AppDomain.CurrentDomain);
-            var queue = _queueStore.Get( QueName );
-            var messageReceiver = new InMemoryMessageReceiver(messageDispatcher, queue);
+            _queue = _queueStore.Get( QueName );
+            var messageReceiver = new InMemoryMessageReceiver(messageDispatcher, _queue);
 
             // Initialize the message application builder
             appBuilder.Add(messageReceiver);
             appBuilder.App.Start();
+        }
+
+        public int Count { get {
+                return _queue.Count;
+            }
         }
 
         /// <summary>
