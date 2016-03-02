@@ -1,7 +1,6 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0ACC9772-A4A0-4B7D-B3E6-CC1D3D696F82}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F14B56FE-FF5
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing.Web", "src\EPiServer.Marketing.Testing.Web\EPiServer.Marketing.Testing.Web.xproj", "{CB8500E5-9999-4E35-97D6-142E87857E6A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing.Test", "src\EPiServer.Marketing.Testing.Test\EPiServer.Marketing.Testing.Test.xproj", "{5391A93B-A17B-425E-B511-71CBA13E710F}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing.Test", "test\EPiServer.Marketing.Testing.Test\EPiServer.Marketing.Testing.Test.xproj", "{5391A93B-A17B-425E-B511-71CBA13E710F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CB8500E5-9999-4E35-97D6-142E87857E6A} = {CB8500E5-9999-4E35-97D6-142E87857E6A}
 	EndProjectSection
@@ -28,11 +27,13 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPIServer.Marketing.Messaging", "src\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.xproj", "{167D31D8-063C-48CA-84EC-0D136BAED1F8}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Messaging.Test", "src\EPiServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.xproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Messaging.Test", "test\EPiServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.xproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.KPI", "src\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.xproj", "{B89EB2B0-D652-4198-83FF-AC2C395D41E3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.KPI.Test", "src\EPiServer.Marketing.KPI.Test\EPiServer.Marketing.KPI.Test.xproj", "{5909B279-FD10-45D8-8208-95AB9A00090B}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.KPI.Test", "test\EPiServer.Marketing.KPI.Test\EPiServer.Marketing.KPI.Test.xproj", "{5909B279-FD10-45D8-8208-95AB9A00090B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4DCCE100-6879-491C-BCC9-85A6DA6B0EE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

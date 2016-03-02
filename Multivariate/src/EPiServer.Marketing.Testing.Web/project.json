@@ -1,4 +1,10 @@
 {
+  "version": "1.0.0-*",
+  "description": "",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
   "dependencies": {
     "AutoMapper": "4.1.1",
     "Castle.Core": "3.3.3",
@@ -7,6 +13,9 @@
     "EPiServer.CMS.Core": "9.6.1",
     "EPiServer.CMS.UI.Core": "9.3.8",
     "EPiServer.Framework": "9.6.1",
+    "EPiServer.Marketing.KPI": "1.0.0.9000",
+    "EPiServer.Marketing.Testing.Core": "1.0.0.9000",
+    "EPiServer.Marketing.Testing.Dal": "1.0.0.9000",
     "Microsoft.AspNet.Mvc": "4.0.20710.0",
     "Microsoft.AspNet.Razor": "2.0.20710.0",
     "Microsoft.AspNet.WebApi": "5.2.3",
@@ -17,26 +26,23 @@
     "Microsoft.Web.Infrastructure": "1.0.0.0",
     "Newtonsoft.Json": "6.0.8",
     "structuremap.web-signed": "3.1.6.186",
-    "structuremap-signed": "3.1.6.186",
-    "EPiServer.Marketing.Testing.Core": "",
-    "EPiServer.Marketing.Testing.Dal": "",
-    "EPiServer.Marketing.KPI": ""
+    "structuremap-signed": "3.1.6.186"
   },
   "frameworks": {
-    "net46": {
-      "dependencies": {},
+    "net45": {
+      "dependencies": { },
       "frameworkAssemblies": {
+        "Microsoft.CSharp": "",
         "System": "",
         "System.ComponentModel.DataAnnotations": "",
         "System.Core": "",
+        "System.Data": "",
+        "System.Data.DataSetExtensions": "",
         "System.Net.Http": "",
         "System.Web": "",
         "System.Web.ApplicationServices": "",
-        "System.Xml.Linq": "",
-        "System.Data.DataSetExtensions": "",
-        "Microsoft.CSharp": "",
-        "System.Data": "",
-        "System.Xml": ""
+        "System.Xml": "",
+        "System.Xml.Linq": ""
       }
     }
   }

@@ -8,6 +8,7 @@
     "EPiServer.CMS.UI.Core": "9.3.8",
     "EPiServer.Framework": "9.6.1",
     "EPiServer.Logging.Log4Net": "2.0.0",
+    "EPIServer.Marketing.Messaging": "1.0.0.9000",
     "log4net": "2.0.3",
     "Microsoft.AspNet.Mvc": "4.0.20710.0",
     "Microsoft.AspNet.Razor": "2.0.20710.0",
@@ -15,8 +16,8 @@
     "Microsoft.Web.Infrastructure": "1.0.0.0",
     "Moq": "4.2.1502.0911",
     "Newtonsoft.Json": "6.0.8",
-    "structuremap-signed": "3.1.6.186",
     "structuremap.web-signed": "3.1.6.186",
+    "structuremap-signed": "3.1.6.186",
     "xunit": "2.1.0",
     "xunit.abstractions": "2.0.0",
     "xunit.assert": "2.1.0",
@@ -25,22 +26,26 @@
     "xunit.extensibility.execution": "2.1.0",
     "xunit.runner.console": "2.1.0",
     "xunit.runner.visualstudio": "2.1.0",
-    "EPIServer.Marketing.Messaging": ""
+    "xunit.runners": "2.0.0",
+    "xunit.runner.dnx": "2.1.0-rc1-build204"
   },
   "frameworks": {
-    "net46": {
-      "dependencies": {},
+    "dnx451": {
+      "dependencies": { },
       "frameworkAssemblies": {
-        "System": "",
-        "System.Configuration": "",
-        "System.Data": "",
-        "System.Drawing": "",
-        "System.Runtime": "4.0.20.0",
-        "System.Runtime.Caching": "",
-        "System.Web": "",
-        "System.Windows.Forms": "",
-        "System.Xml": ""
+        "System": "4.0.0.0",
+        "System.Configuration": "4.0.0.0",
+        "System.Data": "4.0.0.0",
+        "System.Drawing": "4.0.0.0",
+        "System.Runtime": "4.0.0.0",
+        "System.Runtime.Caching": "4.0.0.0",
+        "System.Web": "4.0.0.0",
+        "System.Windows.Forms": "4.0.0.0",
+        "System.Xml": "4.0.0.0"
       }
     }
+  },
+  "commands": {
+    "test": "xunit.runner.dnx"
   }
 }

@@ -2,7 +2,7 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETFramework,Version=v4.6": {
+    ".NETFramework,Version=v4.5": {
       "AutoMapper/4.1.1": {
         "type": "package",
         "compile": {
@@ -122,7 +122,7 @@
       },
       "EPiServer.Marketing.KPI/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
           "EPiServer.Framework": "9.6.1",
@@ -150,7 +150,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -163,14 +163,14 @@
       },
       "EPiServer.Marketing.Testing.Core/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
-          "EPIServer.Marketing.Messaging": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPIServer.Marketing.Messaging": "1.0.0.9000",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0.9000",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebPages": "2.0.20710",
@@ -183,7 +183,7 @@
           "Microsoft.CSharp",
           "System",
           "System.ComponentModel.DataAnnotations",
-          "System.configuration",
+          "System.Configuration",
           "System.Core",
           "System.Data",
           "System.Data.DataSetExtensions",
@@ -195,7 +195,7 @@
       },
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -338,7 +338,7 @@
         }
       }
     },
-    ".NETFramework,Version=v4.6/win7-x86": {
+    ".NETFramework,Version=v4.5/win7-x86": {
       "AutoMapper/4.1.1": {
         "type": "package",
         "compile": {
@@ -458,7 +458,7 @@
       },
       "EPiServer.Marketing.KPI/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
           "EPiServer.Framework": "9.6.1",
@@ -486,7 +486,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -499,14 +499,14 @@
       },
       "EPiServer.Marketing.Testing.Core/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
-          "EPIServer.Marketing.Messaging": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPIServer.Marketing.Messaging": "1.0.0.9000",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0.9000",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebPages": "2.0.20710",
@@ -519,7 +519,7 @@
           "Microsoft.CSharp",
           "System",
           "System.ComponentModel.DataAnnotations",
-          "System.configuration",
+          "System.Configuration",
           "System.Core",
           "System.Data",
           "System.Data.DataSetExtensions",
@@ -531,7 +531,7 @@
       },
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -674,7 +674,7 @@
         }
       }
     },
-    ".NETFramework,Version=v4.6/win7-x64": {
+    ".NETFramework,Version=v4.5/win7-x64": {
       "AutoMapper/4.1.1": {
         "type": "package",
         "compile": {
@@ -794,7 +794,7 @@
       },
       "EPiServer.Marketing.KPI/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
           "EPiServer.Framework": "9.6.1",
@@ -822,7 +822,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -835,14 +835,14 @@
       },
       "EPiServer.Marketing.Testing.Core/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
-          "EPIServer.Marketing.Messaging": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPIServer.Marketing.Messaging": "1.0.0.9000",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0.9000",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebPages": "2.0.20710",
@@ -855,7 +855,7 @@
           "Microsoft.CSharp",
           "System",
           "System.ComponentModel.DataAnnotations",
-          "System.configuration",
+          "System.Configuration",
           "System.Core",
           "System.Data",
           "System.Data.DataSetExtensions",
@@ -867,7 +867,7 @@
       },
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.6",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -1407,6 +1407,9 @@
       "EPiServer.CMS.Core >= 9.6.1",
       "EPiServer.CMS.UI.Core >= 9.3.8",
       "EPiServer.Framework >= 9.6.1",
+      "EPiServer.Marketing.KPI >= 1.0.0.9000",
+      "EPiServer.Marketing.Testing.Core >= 1.0.0.9000",
+      "EPiServer.Marketing.Testing.Dal >= 1.0.0.9000",
       "Microsoft.AspNet.Mvc >= 4.0.20710",
       "Microsoft.AspNet.Razor >= 2.0.20710",
       "Microsoft.AspNet.WebApi >= 5.2.3",
@@ -1417,23 +1420,20 @@
       "Microsoft.Web.Infrastructure >= 1.0.0",
       "Newtonsoft.Json >= 6.0.8",
       "structuremap.web-signed >= 3.1.6.186",
-      "structuremap-signed >= 3.1.6.186",
-      "EPiServer.Marketing.Testing.Core ",
-      "EPiServer.Marketing.Testing.Dal ",
-      "EPiServer.Marketing.KPI "
+      "structuremap-signed >= 3.1.6.186"
     ],
-    ".NETFramework,Version=v4.6": [
+    ".NETFramework,Version=v4.5": [
+      "fx/Microsoft.CSharp ",
       "fx/System ",
       "fx/System.ComponentModel.DataAnnotations ",
       "fx/System.Core ",
+      "fx/System.Data ",
+      "fx/System.Data.DataSetExtensions ",
       "fx/System.Net.Http ",
       "fx/System.Web ",
       "fx/System.Web.ApplicationServices ",
-      "fx/System.Xml.Linq ",
-      "fx/System.Data.DataSetExtensions ",
-      "fx/Microsoft.CSharp ",
-      "fx/System.Data ",
-      "fx/System.Xml "
+      "fx/System.Xml ",
+      "fx/System.Xml.Linq "
     ]
   }
 }
