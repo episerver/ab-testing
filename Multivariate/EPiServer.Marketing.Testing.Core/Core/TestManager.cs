@@ -174,7 +174,8 @@ namespace EPiServer.Marketing.Testing
                 CreatedDate = theManagerTest.CreatedDate,
                 ModifiedDate = theManagerTest.ModifiedDate,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
-                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators)
+                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators),
+                TestResults = AdaptToDalResults(theManagerTest.TestResults)
             };
             return aTest;
         }
