@@ -7,7 +7,7 @@ using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
-    public class TestingDataAccess : ITestingDataAccess
+    internal class TestingDataAccess : ITestingDataAccess
     {
         internal IRepository _repository;
 
