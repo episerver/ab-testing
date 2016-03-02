@@ -17,5 +17,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <param name="TestId"></param>
         /// <param name="VariantId">the Guid of the cms item that caused a converion</param>
         void EmitUpdateConversion(Guid TestId, Guid VariantId);
+
+        /// <summary>
+        /// Returns the number of items in the queue
+        /// </summary>
+        int Count { get; }
     }
 }

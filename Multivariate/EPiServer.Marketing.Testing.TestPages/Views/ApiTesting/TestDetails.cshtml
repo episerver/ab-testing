@@ -1,5 +1,4 @@
 @model EPiServer.Marketing.Testing.Data.ABTest
-
 @{
     Layout = null;
 }
@@ -12,40 +11,65 @@
     <title>TestDetails</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript">
-        var updateView = function (testId, variantId) {
-            $.ajax({
-                type: 'POST',
-                url: '/api/episerver/testing/updateview',
-                cache: false,
-                contentType: 'application/x-www-form-urlencoded',
-                data: { testId: testId, variantId: variantId }
-            }).done(function (data) {
-                alert('success!');
-            }).fail(function () {
-                alert('fail!');
-            }).always(function () {
-                // Reload the page after submission so that the
-                // updated views and conversions are displayed on the page
-                window.location.reload();
-            });
+        var updateBoth = function (testId, variantId) {
+		for (i = 0; i < 100; i++) {         
+		    $.ajax({
+			type: 'POST',
+			url: '/api/episerver/testing/updateview',
+			cache: false,
+			contentType: 'application/x-www-form-urlencoded',
+			data: { testId: testId, variantId: variantId }
+		    }).done(function (data) {
+		    }).fail(function () {
+		    }).always(function () {
+			setTimeout(function(){ window.location.reload(); }, 2000);            
+		    });
+		    
+		    $.ajax({
+			type: 'POST',
+			url: '/api/episerver/testing/updateconversion/',
+			cache: false,
+			contentType: 'application/x-www-form-urlencoded',
+			data: { testId: testId, variantId: variantId }
+		    }).done(function (data) {
+		    }).fail(function () {
+		    }).always(function () {
+			setTimeout(function(){ window.location.reload(); }, 2000);            
+		    });
+		    
+		}
         };
-
+        
+        var updateView = function (testId, variantId) {
+		for (i = 0; i < 100; i++) {         
+		    $.ajax({
+			type: 'POST',
+			url: '/api/episerver/testing/updateview',
+			cache: false,
+			contentType: 'application/x-www-form-urlencoded',
+			data: { testId: testId, variantId: variantId }
+		    }).done(function (data) {
+		    }).fail(function () {
+		    }).always(function () {
+			setTimeout(function(){ window.location.reload(); }, 2000);            
+		    });
+		}
+        };
+    
         var updateConversion = function (testId, variantId) {
-            $.ajax({
-                type: 'POST',
-                url: '/api/episerver/testing/updateconversion/',
-                cache: false,
-                contentType: 'application/x-www-form-urlencoded',
-                data: { testId: testId, variantId: variantId }
-            }).done(function (data) {
-                alert('success!');
-            }).fail(function () {
-                alert('fail!');
-            }).always(function () {
-                // Reload the page after submission so that the
-                // updated views and conversions are displayed on the page
-                window.location.reload();
-            });
+		for (i = 0; i < 100; i++) {         
+		    $.ajax({
+			type: 'POST',
+			url: '/api/episerver/testing/updateconversion/',
+			cache: false,
+			contentType: 'application/x-www-form-urlencoded',
+			data: { testId: testId, variantId: variantId }
+		    }).done(function (data) {
+		    }).fail(function () {
+		    }).always(function () {
+			setTimeout(function(){ window.location.reload(); }, 2000);            
+		    });
+		}
         };
     </script>
 </head>
@@ -92,14 +116,14 @@
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => result.Views)</td>
                         <td>@Html.DisplayFor(resultItem => result.Views)</td>
-                        <td>@Html.ActionLink("Queue Update", "UpdateView", new { id = Model.Id, itemid = result.ItemId })</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="Update via REST" title="Update" onclick="updateView('@Model.Id','@result.ItemId');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@result.ItemId');" /></td>
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => result.Conversions)</td>
                         <td>@Html.DisplayFor(resultItem => result.Conversions)</td>
-                        <td>@Html.ActionLink("Queue Update", "UpdateConversion", new {id = Model.Id, itemid = result.ItemId})</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="Update via REST" title="Update" onclick="updateConversion('@Model.Id', '@result.ItemId');"/></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@result.ItemId');"/></td>
+                        <td>&nbsp;</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@result.ItemId');"/></td>
                     </tr>
                     <tr><td>&nbsp;</td></tr> }
             </table>
