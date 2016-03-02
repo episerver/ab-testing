@@ -21,36 +21,36 @@
     </p>
     <div class="container">
         <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].Title)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].Owner)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].StartDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].EndDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].State)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => Model.Tests[0].Variants)
-                    </th>
-                    <th>
-                        @*@Html.DisplayNameFor(model => Model.Tests[0].Conversions)*@
-                    </th>
-                    <th colspan="2">
-                        Test Results
-                    </th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].Owner)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].EndDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.Tests[0].Variants)
+                </th>
+                <th>
+                    @*@Html.DisplayNameFor(model => Model.Tests[0].Conversions)*@
+                </th>
+                <th colspan="2">
+                    Test Results
+                </th>
+                <th></th>
+            </tr>
             @foreach (var item in Model.Tests)
             {
                 <tr>
@@ -71,7 +71,7 @@
                     </td>
 
                     <td>
-                        @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new {id = item.OriginalItemId})
+                        @Html.ActionLink(item.OriginalItemId.ToString(), "GetAbTestList", new { id = item.OriginalItemId })
                     </td>
                     <td>
 
@@ -95,10 +95,10 @@
                             <td>
                                 Views:
                                 @Html.DisplayFor(resultItem => result.Views)
-                                <br/>
+                                <br />
                                 Item Id:
                                 @Html.DisplayFor(resultItem => result.ItemId)
-                                <br/>
+                                <br />
                                 Conversions:
                                 @Html.DisplayFor(resultItem => result.Conversions)
                             </td>
@@ -116,9 +116,9 @@
                     }
 
                     <td>
-                        @Html.ActionLink("Edit", "UpdateAbTest", new {id = item.Id}) |
-                        @Html.ActionLink("Details", "GetAbTestById", new {id = item.Id}) |
-                        @Html.ActionLink("Delete", "DeleteAbTest", new {id = item.Id})
+                        @Html.ActionLink("Edit", "UpdateAbTest", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "GetAbTestById", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteAbTest", new { id = item.Id })
                     </td>
                 </tr>
             }
@@ -128,7 +128,8 @@
 
     <div>
         <p>
-            <span class="btn">@Html.ActionLink("Create New", "CreateAbTest")</span>
+            <span class="btn">@Html.ActionLink("Manualy Create ABTest", "CreateAbTest")</span>
+            <span class="btn">@Html.ActionLink("Auto Create ABTests", "AutoCreateAbTest")</span>
         </p>
         <p>
             @using (Html.BeginForm("FilteredTests", "MultivariateApiTesting", FormMethod.Post))
@@ -138,8 +139,8 @@
                     {
                         <tr>
                             <td>
-                                @Html.CheckBoxFor(f => Model.Filters[i].IsEnabled, new {@checked = Model.Filters[i].IsEnabled})@Html.Label(Model.Filters[i].Property.ToString())
-                                @Html.HiddenFor(f => Model.Filters[i].Property, new {@value = Model.Filters[i].Property})
+                                @Html.CheckBoxFor(f => Model.Filters[i].IsEnabled, new { @checked = Model.Filters[i].IsEnabled })@Html.Label(Model.Filters[i].Property.ToString())
+                                @Html.HiddenFor(f => Model.Filters[i].Property, new { @value = Model.Filters[i].Property })
                             </td>
                             <td>
                                 @Html.TextBoxFor(f => Model.Filters[i].FilterValue)
@@ -158,4 +159,3 @@
     </div>
 </body>
 </html>
-
