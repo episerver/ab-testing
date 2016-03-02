@@ -2079,7 +2079,6 @@
       "fx/System.Web.DynamicData >= 4.0.0",
       "fx/System.Web.Entity >= 4.0.0",
       "fx/System.Web.Extensions >= 4.0.0",
-      "fx/System.Web.Mvc >= 4.0.0",
       "fx/System.Web.Routing >= 4.0.0",
       "fx/System.Web.Services >= 4.0.0",
       "fx/System.Xml >= 4.0.0",

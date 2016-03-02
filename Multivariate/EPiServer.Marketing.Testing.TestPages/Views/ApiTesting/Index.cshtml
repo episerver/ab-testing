@@ -128,7 +128,8 @@
 
     <div>
         <p>
-            <span class="btn">@Html.ActionLink("Create New", "CreateAbTest")</span>
+            <span class="btn">@Html.ActionLink("Manualy Create ABTest", "CreateAbTest")</span>
+            <span class="btn">@Html.ActionLink("Auto Create ABTests", "AutoCreateAbTest")</span>
         </p>
         <p>
             @using (Html.BeginForm("FilteredTests", "MultivariateApiTesting", FormMethod.Post))
