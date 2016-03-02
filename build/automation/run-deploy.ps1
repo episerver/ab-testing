@@ -1,9 +1,9 @@
 Param(
     $SiteName = "episerver-test", 
+	$Version = "", 
     $SitePath = "c:\episerver\$SiteName", 
     $SiteZip = "DailySite.zip", 
-	[String[]] $Packages = @("EPiServer.Marketing.Messaging", "EPiServer.Marketing.Testing", "EPiServer.Marketing.Testing.TestPages"), 
-    $PackageVersion = "", 
+	[String[]] $Packages = @("EPiServer.Marketing.Messaging", "EPiServer.Marketing.Testing", "EPiServer.Marketing.Testing.TestPages"),     
     [bool]$DeleteSite = $true, 
     [bool]$CreateSite = $true, 
     $NugetFeed = "http://10.99.101.110/guestAuth/app/nuget/v1/FeedService.svc/",
@@ -20,7 +20,7 @@ $SitePath = "c:\episerver\$SiteName"
 "SiteName: $SiteName"
 
 $tmpFolder = [System.IO.Path]::GetTempPath() + [guid]::NewGuid().ToString()
-$tmpPackageFolder = "$tmpFolder\$SiteZip.$PackageVersion"
+$tmpPackageFolder = "$tmpFolder\$SiteZip.$Version"
 
 $FrameworkDir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory())
 Set-Alias aspnet_regsql (Join-Path $FrameworkDir "aspnet_regsql.exe")
@@ -96,12 +96,13 @@ function Create-Site {
 function Deploy-Nuget {
     param (
             $PackageName,
+			$PackageVersion,
             $SitePath,
             $NugetFeed
         )
 
     #Install the nuget package into the $SitePath
-    nuget install $PackageName -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
+    nuget install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
 }
 
 function Deploy-Zip {
@@ -181,7 +182,7 @@ if ($CreateSite -eq $true) {
 	
 	Foreach ($package in $Packages)
 	{
-		Deploy-Nuget $package $SitePath $NugetFeed
+		Deploy-Nuget $package $Version $SitePath $NugetFeed
 	}
 	
     Copy-Item $LicenseFile $SitePath

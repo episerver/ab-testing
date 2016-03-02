@@ -35,7 +35,7 @@ foreach ($item in Get-ChildItem -Recurse -Filter 'AssemblyVersionAuto.cs')
     "AssemblyInformationalVersion: $informationalVersion"
 
     # Publish the packageVersion parameter to team city
-    #"##teamcity[setParameter name='packageVersion' value='$informationalVersion']"
+    "##teamcity[setParameter name='packageVersion' value='$informationalVersion']"
 
     # Replace the existing AssemblyInformationalVersion with the calculated one
     $fileContent = Get-Content $assemblyVersionFile | ForEach-Object { $_ -replace ".*AssemblyInformationalVersion.*", "" }
