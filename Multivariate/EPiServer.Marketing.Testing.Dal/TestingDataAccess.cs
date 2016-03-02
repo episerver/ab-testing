@@ -119,22 +119,25 @@ namespace EPiServer.Marketing.Testing.Dal
             return results.ToList<IABTest>();
         }
 
-
+        private static Object thisLock = new Object();
         public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
         {
-            var test = _repository.GetById(testId);
-            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId);
-
-            if (resultType == CountType.View)
+            lock (thisLock)
             {
-                result.Views++;
-            }
-            else
-            {
-                result.Conversions++;
-            }
+                var test = _repository.GetById(testId);
+                var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId);
 
-            _repository.SaveChanges();
+                if (resultType == CountType.View)
+                {
+                    result.Views++;
+                }
+                else
+                {
+                    result.Conversions++;
+                }
+
+                _repository.SaveChanges();
+            }
         }
 
         public Guid Save(IABTest testObject)
