@@ -1,9 +1,11 @@
 IF exist "..\Deployment\lib\" ( rd "..\Deployment\lib" /s /q )
 md "..\Deployment\lib"
-xcopy "..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net46\EPiServer.Marketing.Testing.Web.dll" "..\Deployment\lib\"  /I /F /R /Y
-xcopy "..\artifacts\bin\EPiServer.Marketing.Testing.DAL\Debug\net46\EPiServer.Marketing.Testing.DAL.dll" "..\Deployment\lib\"  /I /F /R /Y
-xcopy "..\artifacts\bin\EPiServer.Marketing.Testing.Core\Debug\net46\EPiServer.Marketing.Testing.Core.dll" "..\Deployment\lib\"  /I /F /R /Y
-rem xcopy "..\artifacts\bin\EPiServer.Marketing.Testing.Model\Debug\net46\EPiServer.Marketing.Testing.Model.dll" "..\Deployment\lib\"  /I /F /R /Y
+
+IF "%1"=="Debug" (set Configuration=Debug) ELSE (set Configuration=Release)
+xcopy "..\artifacts\"%Configuration%"\net45\EPiServer.Marketing.Testing.Web.dll" "..\Deployment\lib\"  /I /F /R /Y
+xcopy "..\artifacts\"%Configuration%"\net45\EPiServer.Marketing.Testing.DAL.dll" "..\Deployment\lib\"  /I /F /R /Y
+xcopy "..\artifacts\"%Configuration%"\net45\EPiServer.Marketing.Testing.Core.dll" "..\Deployment\lib\"  /I /F /R /Y
+rem xcopy "..\artifacts\Release\net45\EPiServer.Marketing.Testing.Model.dll" "..\Deployment\lib\"  /I /F /R /Y
 
 IF exist "..\Deployment\*.nuspec" ( del "..\Deployment\*.nuspec" /s /q )
 xcopy "..\src\EPiServer.Marketing.Testing.Web\*.nuspec" "..\Deployment\"  /I /F /R /Y
@@ -54,5 +56,4 @@ xcopy "..\src\EPiServer.Marketing.Testing.Web\module.config" "..\Deployment\cont
 rem "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "..\src\EPiServer.Marketing.Testing.Web\..\..\build\buildpackage.ps1" "..\src\EPiServer.Marketing.Testing.Web\..\Deployment" "..\src\EPiServer.Marketing.Testing.Web\..\\"
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "..\Deployment" "..\src\\" 
 
-xcopy "..\Deployment\*.nupkg" "..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net46\" /I /F /R /Y
-Pause
+rem xcopy "..\Deployment\*.nupkg" "..\artifacts\Release\net45\" /I /F /R /Y

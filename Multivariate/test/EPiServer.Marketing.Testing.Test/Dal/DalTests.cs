@@ -9,7 +9,7 @@ using Xunit;
 
 namespace EPiServer.Marketing.Multivariate.Test.Dal
 {
-    internal class DalTests : TestBase
+    public class DalTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;

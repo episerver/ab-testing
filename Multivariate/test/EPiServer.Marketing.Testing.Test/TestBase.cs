@@ -7,7 +7,7 @@ using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
 namespace EPiServer.Marketing.Testing.Test
 {
-    internal class TestBase
+    public class TestBase
     {
         public void AddObjectsToContext<T>(TestContext context, IList<T> data) where T : class
         {
@@ -44,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Test
             return newMultivariateTests;
         }
 
-        public IList<ABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
+        internal IList<ABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
         {
             var newABTests = new List<ABTest>();
 
@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Test
             return newABTests;
         }
 
-        public void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)
+        internal void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)
         {
             var result = new TestResult()
             {
