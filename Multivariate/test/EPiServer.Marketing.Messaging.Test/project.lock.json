@@ -470,9 +470,6 @@
       },
       "xunit.runner.visualstudio/2.1.0": {
         "type": "package"
-      },
-      "xunit.runners/2.0.0": {
-        "type": "package"
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
@@ -943,9 +940,6 @@
       },
       "xunit.runner.visualstudio/2.1.0": {
         "type": "package"
-      },
-      "xunit.runners/2.0.0": {
-        "type": "package"
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
@@ -1415,9 +1409,6 @@
         }
       },
       "xunit.runner.visualstudio/2.1.0": {
-        "type": "package"
-      },
-      "xunit.runners/2.0.0": {
         "type": "package"
       }
     }
@@ -2083,16 +2074,6 @@
         "xunit.runner.visualstudio.2.1.0.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
-    },
-    "xunit.runners/2.0.0": {
-      "type": "package",
-      "sha512": "+dUmiiGf5IkoOreRr2MKqirWYPCa4MHQ4rEzUxSR7LiyQYko47DKz5x/fwFJCgfHTG5ClA+yuGDa6RYAvkDJjw==",
-      "files": [
-        "readme.txt",
-        "xunit.runners.2.0.0.nupkg",
-        "xunit.runners.2.0.0.nupkg.sha512",
-        "xunit.runners.nuspec"
-      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -2123,7 +2104,6 @@
       "xunit.extensibility.execution >= 2.1.0",
       "xunit.runner.console >= 2.1.0",
       "xunit.runner.visualstudio >= 2.1.0",
-      "xunit.runners >= 2.0.0",
       "xunit.runner.dnx >= 2.1.0-rc1-build204"
     ],
     "DNX,Version=v4.5.1": [

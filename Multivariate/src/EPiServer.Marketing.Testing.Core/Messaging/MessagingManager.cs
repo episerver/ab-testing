@@ -57,11 +57,11 @@ namespace EPiServer.Marketing.Testing.Messaging
 
             registry.Register<UpdateViewsMessage>(_handler);
             registry.Register<UpdateConversionsMessage>(_handler);
-            
+
             // Create the dispatcher, queue store, and the memory reciever
             var messageDispatcher = new FanOutMessageDispatcher(registry);
             _queueStore = new InMemoryQueueStore(AppDomain.CurrentDomain);
-            _queue = _queueStore.Get( QueName );
+            _queue = _queueStore.Get(QueName);
             var messageReceiver = new InMemoryMessageReceiver(messageDispatcher, _queue);
 
             // Initialize the message application builder
@@ -69,7 +69,10 @@ namespace EPiServer.Marketing.Testing.Messaging
             appBuilder.App.Start();
         }
 
-        public int Count { get {
+        public int Count
+        {
+            get
+            {
                 return _queue.Count;
             }
         }
@@ -82,7 +85,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void EmitUpdateViews(Guid TestId, Guid VariantId)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, VariantId = VariantId});
+            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, VariantId = VariantId });
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void EmitUpdateConversion(Guid TestId, Guid VariantId)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, VariantId=VariantId } );
+            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() { TestId = TestId, VariantId = VariantId });
         }
     }
 }

@@ -1,3 +1,4 @@
+@using System.Web.Optimization
 @model EPiServer.Marketing.Testing.Data.ABTest
 
 @{
@@ -10,10 +11,13 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>SaveABTestData</title>
+    @Styles.Render("~/bundles/css")
+    @Scripts.Render("~/bundles/js")
+
 </head>
 <body>
-    <script src="~/wwwroot/js/jquery.validate.min.js"></script>
-    <script src="~/wwwroot/js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
     <script language="javascript" type="text/javascript">
@@ -138,4 +142,3 @@
     </div>
 </body>
 </html>
-

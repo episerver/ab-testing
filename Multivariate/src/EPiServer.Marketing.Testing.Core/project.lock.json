@@ -904,28 +904,28 @@
       "Castle.Windsor >= 3.3.0",
       "EPiServer.CMS.Core >= 9.6.1",
       "EPiServer.Framework >= 9.6.1",
+      "EPIServer.Marketing.Messaging >= 1.0.0.9000",
+      "EPiServer.Marketing.Testing.Dal >= 1.0.0.9000",
       "Microsoft.AspNet.Mvc >= 4.0.20710",
       "Microsoft.AspNet.Razor >= 2.0.20710",
       "Microsoft.AspNet.WebPages >= 2.0.20710",
       "Microsoft.Web.Infrastructure >= 1.0.0",
       "Newtonsoft.Json >= 6.0.8",
       "structuremap.web-signed >= 3.1.6.186",
-      "structuremap-signed >= 3.1.6.186",
-      "EPIServer.Marketing.Messaging >= 1.0.0.9000",
-      "EPiServer.Marketing.Testing.Dal >= 1.0.0.9000"
+      "structuremap-signed >= 3.1.6.186"
     ],
     ".NETFramework,Version=v4.5": [
+      "fx/Microsoft.CSharp >= 4.0.0",
       "fx/System >= 4.0.0",
       "fx/System.ComponentModel.DataAnnotations >= 4.0.0",
       "fx/System.Configuration >= 4.0.0",
       "fx/System.Core >= 4.0.0",
+      "fx/System.Data >= 4.0.0",
+      "fx/System.Data.DataSetExtensions >= 4.0.0",
       "fx/System.Transactions >= 4.0.0",
       "fx/System.Web >= 4.0.0",
-      "fx/System.Xml.Linq >= 4.0.0",
-      "fx/System.Data.DataSetExtensions >= 4.0.0",
-      "fx/Microsoft.CSharp >= 4.0.0",
-      "fx/System.Data >= 4.0.0",
-      "fx/System.Xml >= 4.0.0"
+      "fx/System.Xml >= 4.0.0",
+      "fx/System.Xml.Linq >= 4.0.0"
     ]
   }
 }

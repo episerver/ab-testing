@@ -18,4 +18,4 @@ rem cd "..\MultivariateTestingDeployment\"
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "..\MultivariateTestingDeployment" "..\src\\"
 cd "..\MultivariateTestingDeployment\"
 xcopy "*nupkg" "..\Deployment"  /I /F /R /Y
-Pause
+
