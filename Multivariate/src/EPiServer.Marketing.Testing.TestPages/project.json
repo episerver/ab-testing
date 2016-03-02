@@ -50,7 +50,6 @@
         "System.Web.DynamicData": "4.0.0.0",
         "System.Web.Entity": "4.0.0.0",
         "System.Web.Extensions": "4.0.0.0",
-        "System.Web.Mvc": "4.0.0.0",
         "System.Web.Routing": "4.0.0.0",
         "System.Web.Services": "4.0.0.0",
         "System.Xml": "4.0.0.0",
