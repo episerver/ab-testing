@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         public void EmitUpdateViewsEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();
-            messageManager.EmitUpdateViews(Guid.Empty, Guid.NewGuid());
+            messageManager.EmitUpdateViews(Guid.Empty, Guid.NewGuid(), 1);
             Thread.Sleep(1000);
 
             _messageHandler.Verify(mh => mh.Handle(It.IsAny<UpdateViewsMessage>()),
@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         public void EmitUpdateConversionEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();
-            messageManager.EmitUpdateConversion(Guid.Empty, Guid.NewGuid());
+            messageManager.EmitUpdateConversion(Guid.Empty, Guid.NewGuid(), 1);
             Thread.Sleep(1000);
             _messageHandler.Verify(mh => mh.Handle(It.IsAny<UpdateConversionsMessage>()),
                 Times.AtLeastOnce, "MessageManager did not emit message or did not call handle for UpdateConversionsMessage");

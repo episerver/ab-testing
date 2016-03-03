@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.KPI.Dal.Model;
+using EPiServer.Marketing.KPI.Dal.Model.Enums;
 using EPiServer.Marketing.KPI.DataAccess;
-using EPiServer.Marketing.KPI.Model;
-using EPiServer.Marketing.KPI.Model.Enums;
 
 namespace EPiServer.Marketing.KPI.Test
 {

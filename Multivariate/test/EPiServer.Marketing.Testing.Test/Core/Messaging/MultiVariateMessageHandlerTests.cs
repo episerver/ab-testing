@@ -18,6 +18,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         static Guid testGuid = Guid.NewGuid();
         static Guid original = Guid.NewGuid();
         static Guid varient = Guid.NewGuid();
+        private static int itemVersion = 1;
 
         ABTest test = new ABTest()
         {
@@ -44,11 +45,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         {
             var messageHandler = GetUnitUnderTest();
 
-            messageHandler.Handle( new UpdateConversionsMessage() { TestId = testGuid, VariantId = varient } );
+            messageHandler.Handle( new UpdateConversionsMessage() { TestId = testGuid, VariantId = varient, ItemVersion = itemVersion} );
 
             // Verify that save is called and conversion value is correct
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>( gg =>  gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<CountType>(ct => ct.Equals(CountType.Conversion))) ,
+                It.Is<Guid>(gg => gg.Equals(varient)),
+                It.Is<int>(gg => gg.Equals(itemVersion)), 
+                It.Is<CountType>(ct => ct.Equals(CountType.Conversion))) ,
                 Times.Once, "Repository save was not called or conversion value is not as expected") ;
         }
 
@@ -57,11 +60,13 @@ namespace EPiServer.Marketing.Multivariate.Test.Messaging
         {
             var messageHandler = GetUnitUnderTest();
 
-            messageHandler.Handle(new UpdateViewsMessage() { TestId = testGuid, VariantId = varient });
+            messageHandler.Handle(new UpdateViewsMessage() { TestId = testGuid, VariantId = varient, ItemVersion = itemVersion});
             // Verify that save is called and conversion value is correct
 
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>(gg => gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)), It.Is<CountType>(ct => ct.Equals(CountType.View))),
+                It.Is<Guid>(gg => gg.Equals(varient)),
+                It.Is<int>(gg => gg.Equals(itemVersion)), 
+                It.Is<CountType>(ct => ct.Equals(CountType.View))),
                 Times.Once, "Repository save was not called or view value is not as expected");
 
         }

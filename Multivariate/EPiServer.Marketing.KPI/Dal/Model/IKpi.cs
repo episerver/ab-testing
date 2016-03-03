@@ -1,7 +1,7 @@
 ﻿using System;
-using EPiServer.Marketing.KPI.Model.Enums;
+using EPiServer.Marketing.KPI.Dal.Model.Enums;
 
-namespace EPiServer.Marketing.KPI.Model
+namespace EPiServer.Marketing.KPI.Dal.Model
 {
     /// <summary>
     /// Interface for KPI objects.
@@ -17,6 +17,11 @@ namespace EPiServer.Marketing.KPI.Model
         /// Name of Kpi. 
         /// </summary>
         string Name { get; set; }
+
+        /// <summary>
+        /// Wieght of kpi compared to other kpis.
+        /// </summary>
+        int Weight { get; set; }
 
         /// <summary>
         /// The condition to be met for the kpi to be met by a user.

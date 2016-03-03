@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 using System.Data.Entity;
 using EPiServer.Marketing.KPI.Dal;
-using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Test
 {

@@ -157,16 +157,17 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var theTestItemGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
+            var theItemVersion = 1;
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.IncrementCount(theGuid, theTestItemGuid, type);
+            tm.IncrementCount(theGuid, theTestItemGuid, theItemVersion, type);
 
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
                 "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.Is<Testing.Dal.Entity.Enums.CountType>(arg => arg.Equals(Testing.Dal.Entity.Enums.CountType.Conversion))),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.Is<Testing.Dal.Entity.Enums.CountType>(arg => arg.Equals(Testing.Dal.Entity.Enums.CountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
@@ -228,11 +229,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, CountType.Conversion);
+            testManager.EmitUpdateCount(original, testItemId, 1, CountType.Conversion);
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                It.Is<Guid>(arg => arg.Equals(testItemId)),
+                It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update conversion message not emmited");
         }
 
@@ -247,11 +249,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, CountType.View);
+            testManager.EmitUpdateCount(original, testItemId, 1, CountType.View);
 
             messageManager.Verify(mm => mm.EmitUpdateViews(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId))),
+                It.Is<Guid>(arg => arg.Equals(testItemId)),
+                It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update View message not emmited");
         }
     }

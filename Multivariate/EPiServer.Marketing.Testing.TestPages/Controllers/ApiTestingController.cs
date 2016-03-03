@@ -319,19 +319,19 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateView(string id, string itemid)
+        public ActionResult UpdateView(string id, string itemid, int itemVersion)
         {
             TestManager mtm = new TestManager();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.View);
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), itemVersion, CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateConversion(string id, string itemid)
+        public ActionResult UpdateConversion(string id, string itemid, int itemVersion)
         {
             TestManager mtm = new TestManager();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), CountType.Conversion);
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), itemVersion, CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);

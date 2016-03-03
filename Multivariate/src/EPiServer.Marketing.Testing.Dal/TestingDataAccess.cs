@@ -120,24 +120,24 @@ namespace EPiServer.Marketing.Testing.Dal
         }
 
         private static Object thisLock = new Object();
-        public void IncrementCount(Guid testId, Guid testItemId, CountType resultType)
+        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
         {
             lock (thisLock)
             {
-                var test = _repository.GetById(testId);
-                var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId);
+            var test = _repository.GetById(testId);
+            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
-                if (resultType == CountType.View)
-                {
-                    result.Views++;
-                }
-                else
-                {
-                    result.Conversions++;
-                }
+            if (resultType == CountType.View)
+            {
+                result.Views++;
+            }
+            else
+            {
+                result.Conversions++;
+            }
 
                 _repository.SaveChanges();
-            }
+        }
         }
 
         public Guid Save(IABTest testObject)
@@ -154,16 +154,16 @@ namespace EPiServer.Marketing.Testing.Dal
             {
                 if (test.State == TestState.Inactive)
                 {
-                    test.Title = testObject.Title;
+                        test.Title = testObject.Title;
                     test.OriginalItemId = testObject.OriginalItemId;
                     test.LastModifiedBy = testObject.LastModifiedBy;
-                    test.StartDate = testObject.StartDate;
-                    test.EndDate = testObject.EndDate;
-                    test.ModifiedDate = DateTime.UtcNow;
+                        test.StartDate = testObject.StartDate;
+                        test.EndDate = testObject.EndDate;
+                        test.ModifiedDate = DateTime.UtcNow;
 
                     // remove any existing kpis that are not part of the new test
                     foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
-                    {
+                        {
                         if (testObject.KeyPerformanceIndicators.All(k => k.Id != existingKpi.Id))
                         {
                             _repository.Delete(existingKpi);
@@ -188,12 +188,12 @@ namespace EPiServer.Marketing.Testing.Dal
 
                     // remove any existing results that are not part of the new test
                     foreach (var existingResult in test.TestResults.ToList())
-                    {
+                            {
                         if (testObject.TestResults.All(k => k.Id != existingResult.Id))
-                        {
+                                {
                             _repository.Delete(existingResult);
-                        }
-                    }
+                                }
+                            }
 
                     // update existing results that are still around and add any that are new
                     foreach (var newResult in testObject.TestResults)
@@ -201,7 +201,7 @@ namespace EPiServer.Marketing.Testing.Dal
                         var existingResult = test.TestResults.SingleOrDefault(k => k.Id == newResult.Id);
 
                         if (existingResult != null)
-                        {
+                            {
                             existingResult.Conversions = newResult.Conversions;
                             existingResult.Views = newResult.Views;
                             existingResult.ItemId = newResult.ItemId;
@@ -209,10 +209,10 @@ namespace EPiServer.Marketing.Testing.Dal
                             existingResult.ModifiedDate = DateTime.UtcNow;
                         }
                         else
-                        {
+                                {
                             test.TestResults.Add(newResult);
                         }
-                    }
+                                }
 
                     // remove any existing variants that are not part of the new test
                     foreach (var existingVariant in test.Variants.ToList())
@@ -220,8 +220,8 @@ namespace EPiServer.Marketing.Testing.Dal
                         if (testObject.Variants.All(k => k.Id != existingVariant.Id))
                         {
                             _repository.Delete(existingVariant);
+                            }
                         }
-                    }
 
                     // update existing variants that are still around and add any that are new
                     foreach (var newVariant in testObject.Variants)
@@ -238,7 +238,7 @@ namespace EPiServer.Marketing.Testing.Dal
                         {
                             test.Variants.Add(newVariant);
                         }
-                    }
+                        }
                 }
             }
 

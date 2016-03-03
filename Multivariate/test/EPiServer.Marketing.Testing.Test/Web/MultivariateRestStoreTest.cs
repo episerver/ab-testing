@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Web.Tests
             var unit = GetUnitUnderTest();
             unit.Post(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), 1);
 
-            _messageManager.Verify(mm => mm.EmitUpdateConversion(It.IsAny<Guid>(), It.IsAny<Guid>()),
+            _messageManager.Verify(mm => mm.EmitUpdateConversion(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>()),
                 "MessageManager did not call EmitUpdateConversion when converson argument is not null");
         }
 
@@ -61,7 +61,7 @@ namespace EPiServer.Marketing.Testing.Web.Tests
             var unit = GetUnitUnderTest();
             unit.Post(Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), null);
 
-            _messageManager.Verify(mm => mm.EmitUpdateViews(It.IsAny<Guid>(), It.IsAny<Guid>()),
+            _messageManager.Verify(mm => mm.EmitUpdateViews(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>()),
                 "MessageManager did not call EmitUpdateViews when converson argument is null");
         }
     }
