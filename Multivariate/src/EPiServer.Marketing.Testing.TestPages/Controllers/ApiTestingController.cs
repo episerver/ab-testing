@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Core;
@@ -14,7 +14,7 @@ using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
 {
-    
+
     public class ApiTestingController : Controller
     {
         public static IntegrationTestModel AutoCreateModel = new IntegrationTestModel()
@@ -98,8 +98,8 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                                     new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 2}
                                 }
                 };
-                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[0].Id });
-                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[1].Id });
+                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[0].Id, ItemVersion = 1});
+                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[1].Id, ItemVersion = 2});
 
                 testManager.Save(test);
             }
@@ -132,7 +132,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
                     IMessagingManager mm = ServiceLocator.Current.GetInstance<IMessagingManager>();
                     AutoCreateModel.QueueCount = mm.Count;
-                    if(AutoCreateModel.QueueCount == 0)
+                    if (AutoCreateModel.QueueCount == 0)
                     {
                         messageQueueWatch.Start();
                         done = true;
@@ -165,13 +165,13 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 {
                     for (int x = 0; x < _model.Views; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id, CountType.View);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, CountType.View);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id, 1, CountType.View);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 1, CountType.View);
                     }
                     for (int x = 0; x < _model.Conversions; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id, CountType.Conversion);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, CountType.Conversion);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id, 1, CountType.Conversion);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 1, CountType.Conversion);
                     }
 
                     IMessagingManager mm = ServiceLocator.Current.GetInstance<IMessagingManager>();
@@ -319,19 +319,19 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateView(string id, string itemid, int itemVersion)
+        public ActionResult UpdateView(string id, string itemid)
         {
             TestManager mtm = new TestManager();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), itemVersion, CountType.View);
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateConversion(string id, string itemid, int itemVersion)
+        public ActionResult UpdateConversion(string id, string itemid)
         {
             TestManager mtm = new TestManager();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), itemVersion, CountType.Conversion);
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
