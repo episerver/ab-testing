@@ -8,7 +8,7 @@
     "EPiServer.CMS.UI.Core": "9.3.8",
     "EPiServer.Framework": "9.6.1",
     "EPiServer.Logging.Log4Net": "2.0.0",
-    "EPIServer.Marketing.Messaging": "1.0.0-*",
+    "EPIServer.Marketing.Messaging": "",
     "log4net": "2.0.3",
     "Microsoft.AspNet.Mvc": "4.0.20710.0",
     "Microsoft.AspNet.Razor": "2.0.20710.0",
