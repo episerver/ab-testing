@@ -1,5 +1,5 @@
 {
-  
+  "version": "1.0.0-*",
   "description": "",
   "authors": [ "" ],
   "tags": [ "" ],
@@ -29,6 +29,22 @@
     "structuremap-signed": "3.1.6.186"
   },
   "frameworks": {
+    "dnx451": {
+      "dependencies": { },
+      "frameworkAssemblies": {
+        "Microsoft.CSharp": "",
+        "System": "",
+        "System.ComponentModel.DataAnnotations": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Data.DataSetExtensions": "",
+        "System.Net.Http": "",
+        "System.Web": "",
+        "System.Web.ApplicationServices": "",
+        "System.Xml": "",
+        "System.Xml.Linq": ""
+      }
+    },
     "net45": {
       "dependencies": { },
       "frameworkAssemblies": {

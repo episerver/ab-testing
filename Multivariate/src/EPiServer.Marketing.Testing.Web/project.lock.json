@@ -2,6 +2,342 @@
   "locked": false,
   "version": 2,
   "targets": {
+    "DNX,Version=v4.5.1": {
+      "AutoMapper/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/net45/AutoMapper.dll": {}
+        }
+      },
+      "Castle.Core/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Castle.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Core.dll": {}
+        }
+      },
+      "Castle.Windsor/3.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "3.3.0"
+        },
+        "frameworkAssemblies": [
+          "System.Core",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Castle.Windsor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Windsor.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.CMS.Core/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "[3.3.3, 4.0.0)",
+          "Castle.Windsor": "[3.3.0, 4.0.0)",
+          "EPiServer.Framework": "[9.6.1]"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        }
+      },
+      "EPiServer.CMS.UI.Core/9.3.8": {
+        "type": "package",
+        "dependencies": {
+          "EPiServer.CMS.Core": "[9.5.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Cms.Shell.UI.dll": {},
+          "lib/net45/EPiServer.Shell.UI.dll": {},
+          "lib/net45/EPiServer.UI.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Cms.Shell.UI.dll": {},
+          "lib/net45/EPiServer.Shell.UI.dll": {},
+          "lib/net45/EPiServer.UI.dll": {}
+        }
+      },
+      "EPiServer.Framework/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc": "[4.0.20710, 6.0.0)",
+          "Newtonsoft.Json": "[6.0.8, 9.0.0)",
+          "structuremap.web-signed": "[3.1.6.186, 4.0.0)",
+          "structuremap-signed": "[3.1.6.186, 4.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPIServer.Marketing.Messaging/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPiServer.Marketing.Testing.Core/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "Castle.Core": "3.3.3",
+          "Castle.Windsor": "3.3.0",
+          "EPiServer.CMS.Core": "9.6.1",
+          "EPiServer.Framework": "9.6.1",
+          "EPIServer.Marketing.Messaging": null,
+          "EPiServer.Marketing.Testing.Dal": null,
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Transactions",
+          "System.Web",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPiServer.Marketing.Testing.Dal/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "EntityFramework": "6.1.3"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Runtime.Serialization",
+          "System.Security",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "Microsoft.AspNet.Mvc/4.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.AspNet.WebPages": "[2.0.20710, 2.1.0)"
+        },
+        "compile": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Razor/2.0.20710": {
+        "type": "package",
+        "compile": {
+          "lib/net40/System.Web.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.WebHost": "[5.2.3, 5.3.0)"
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "6.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ],
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Core/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.3"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.WebHost/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Core": "[5.2.3, 5.3.0)"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.WebHost.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.WebHost.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebPages/2.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.Web.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        }
+      },
+      "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        }
+      },
+      "Newtonsoft.Json/6.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "structuremap.web-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.Web.dll": {}
+        }
+      },
+      "structuremap-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        }
+      }
+    },
     ".NETFramework,Version=v4.5": {
       "AutoMapper/4.1.1": {
         "type": "package",
@@ -196,6 +532,678 @@
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
+        "dependencies": {
+          "EntityFramework": "6.1.3"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Runtime.Serialization",
+          "System.Security",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "Microsoft.AspNet.Mvc/4.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.AspNet.WebPages": "[2.0.20710, 2.1.0)"
+        },
+        "compile": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Razor/2.0.20710": {
+        "type": "package",
+        "compile": {
+          "lib/net40/System.Web.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.WebHost": "[5.2.3, 5.3.0)"
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "6.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ],
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Core/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.3"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.WebHost/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Core": "[5.2.3, 5.3.0)"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.WebHost.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.WebHost.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebPages/2.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.Web.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        }
+      },
+      "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        }
+      },
+      "Newtonsoft.Json/6.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "structuremap.web-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.Web.dll": {}
+        }
+      },
+      "structuremap-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x86": {
+      "AutoMapper/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/net45/AutoMapper.dll": {}
+        }
+      },
+      "Castle.Core/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Castle.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Core.dll": {}
+        }
+      },
+      "Castle.Windsor/3.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "3.3.0"
+        },
+        "frameworkAssemblies": [
+          "System.Core",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Castle.Windsor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Windsor.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.CMS.Core/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "[3.3.3, 4.0.0)",
+          "Castle.Windsor": "[3.3.0, 4.0.0)",
+          "EPiServer.Framework": "[9.6.1]"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        }
+      },
+      "EPiServer.CMS.UI.Core/9.3.8": {
+        "type": "package",
+        "dependencies": {
+          "EPiServer.CMS.Core": "[9.5.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Cms.Shell.UI.dll": {},
+          "lib/net45/EPiServer.Shell.UI.dll": {},
+          "lib/net45/EPiServer.UI.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Cms.Shell.UI.dll": {},
+          "lib/net45/EPiServer.Shell.UI.dll": {},
+          "lib/net45/EPiServer.UI.dll": {}
+        }
+      },
+      "EPiServer.Framework/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc": "[4.0.20710, 6.0.0)",
+          "Newtonsoft.Json": "[6.0.8, 9.0.0)",
+          "structuremap.web-signed": "[3.1.6.186, 4.0.0)",
+          "structuremap-signed": "[3.1.6.186, 4.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPIServer.Marketing.Messaging/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPiServer.Marketing.Testing.Core/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "Castle.Core": "3.3.3",
+          "Castle.Windsor": "3.3.0",
+          "EPiServer.CMS.Core": "9.6.1",
+          "EPiServer.Framework": "9.6.1",
+          "EPIServer.Marketing.Messaging": null,
+          "EPiServer.Marketing.Testing.Dal": null,
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Transactions",
+          "System.Web",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPiServer.Marketing.Testing.Dal/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "EntityFramework": "6.1.3"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Runtime.Serialization",
+          "System.Security",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "Microsoft.AspNet.Mvc/4.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.AspNet.WebPages": "[2.0.20710, 2.1.0)"
+        },
+        "compile": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Mvc.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Razor/2.0.20710": {
+        "type": "package",
+        "compile": {
+          "lib/net40/System.Web.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Razor.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.WebHost": "[5.2.3, 5.3.0)"
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "6.0.4"
+        },
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ],
+        "compile": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Net.Http.Formatting.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Core/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.3"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.WebHost/5.2.3": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Core": "[5.2.3, 5.3.0)"
+        },
+        "compile": {
+          "lib/net45/System.Web.Http.WebHost.dll": {}
+        },
+        "runtime": {
+          "lib/net45/System.Web.Http.WebHost.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebPages/2.0.20710": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor": "[2.0.20710, 2.1.0)",
+          "Microsoft.Web.Infrastructure": "1.0.0"
+        },
+        "compile": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net40/System.Web.Helpers.dll": {},
+          "lib/net40/System.Web.WebPages.Deployment.dll": {},
+          "lib/net40/System.Web.WebPages.dll": {},
+          "lib/net40/System.Web.WebPages.Razor.dll": {}
+        }
+      },
+      "Microsoft.Web.Infrastructure/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Microsoft.Web.Infrastructure.dll": {}
+        }
+      },
+      "Newtonsoft.Json/6.0.8": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "structuremap.web-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.Web.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.Web.dll": {}
+        }
+      },
+      "structuremap-signed/3.1.6.186": {
+        "type": "package",
+        "compile": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        },
+        "runtime": {
+          "lib/net40/StructureMap.dll": {},
+          "lib/net40/StructureMap.Net4.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x64": {
+      "AutoMapper/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net45/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/net45/AutoMapper.dll": {}
+        }
+      },
+      "Castle.Core/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Castle.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Core.dll": {}
+        }
+      },
+      "Castle.Windsor/3.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "3.3.0"
+        },
+        "frameworkAssemblies": [
+          "System.Core",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Castle.Windsor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Windsor.dll": {}
+        }
+      },
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.CMS.Core/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "[3.3.3, 4.0.0)",
+          "Castle.Windsor": "[3.3.0, 4.0.0)",
+          "EPiServer.Framework": "[9.6.1]"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        }
+      },
+      "EPiServer.CMS.UI.Core/9.3.8": {
+        "type": "package",
+        "dependencies": {
+          "EPiServer.CMS.Core": "[9.5.1, 10.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Cms.Shell.UI.dll": {},
+          "lib/net45/EPiServer.Shell.UI.dll": {},
+          "lib/net45/EPiServer.UI.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Cms.Shell.UI.dll": {},
+          "lib/net45/EPiServer.Shell.UI.dll": {},
+          "lib/net45/EPiServer.UI.dll": {}
+        }
+      },
+      "EPiServer.Framework/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc": "[4.0.20710, 6.0.0)",
+          "Newtonsoft.Json": "[6.0.8, 9.0.0)",
+          "structuremap.web-signed": "[3.1.6.186, 4.0.0)",
+          "structuremap-signed": "[3.1.6.186, 4.0.0)"
+        },
+        "compile": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.ApplicationModules.dll": {},
+          "lib/net45/EPiServer.Data.Cache.dll": {},
+          "lib/net45/EPiServer.Data.dll": {},
+          "lib/net45/EPiServer.Events.dll": {},
+          "lib/net45/EPiServer.Framework.dll": {},
+          "lib/net45/EPiServer.Licensing.dll": {},
+          "lib/net45/EPiServer.Shell.dll": {}
+        }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPIServer.Marketing.Messaging/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPiServer.Marketing.Testing.Core/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "Castle.Core": "3.3.3",
+          "Castle.Windsor": "3.3.0",
+          "EPiServer.CMS.Core": "9.6.1",
+          "EPiServer.Framework": "9.6.1",
+          "EPIServer.Marketing.Messaging": null,
+          "EPiServer.Marketing.Testing.Dal": null,
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Configuration",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Transactions",
+          "System.Web",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
+      "EPiServer.Marketing.Testing.Dal/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -1421,6 +2429,19 @@
       "Newtonsoft.Json >= 6.0.8",
       "structuremap.web-signed >= 3.1.6.186",
       "structuremap-signed >= 3.1.6.186"
+    ],
+    "DNX,Version=v4.5.1": [
+      "fx/Microsoft.CSharp ",
+      "fx/System ",
+      "fx/System.ComponentModel.DataAnnotations ",
+      "fx/System.Core ",
+      "fx/System.Data ",
+      "fx/System.Data.DataSetExtensions ",
+      "fx/System.Net.Http ",
+      "fx/System.Web ",
+      "fx/System.Web.ApplicationServices ",
+      "fx/System.Xml ",
+      "fx/System.Xml.Linq "
     ],
     ".NETFramework,Version=v4.5": [
       "fx/Microsoft.CSharp ",

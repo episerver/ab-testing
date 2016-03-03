@@ -127,7 +127,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5",
+        "framework": "DNX,Version=v4.5.1",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -597,7 +597,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5",
+        "framework": "DNX,Version=v4.5.1",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -1067,7 +1067,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": ".NETFramework,Version=v4.5",
+        "framework": "DNX,Version=v4.5.1",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",

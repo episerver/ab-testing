@@ -2,7 +2,55 @@
   "locked": false,
   "version": 2,
   "targets": {
+    "DNX,Version=v4.5.1": {
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      }
+    },
     ".NETFramework,Version=v4.5": {
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x86": {
+      "EntityFramework/6.1.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.ComponentModel.DataAnnotations"
+        ],
+        "compile": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EntityFramework.dll": {},
+          "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x64": {
       "EntityFramework/6.1.3": {
         "type": "package",
         "frameworkAssemblies": [
@@ -84,6 +132,19 @@
   "projectFileDependencyGroups": {
     "": [
       "EntityFramework >= 6.1.3"
+    ],
+    "DNX,Version=v4.5.1": [
+      "fx/Microsoft.CSharp >= 4.0.0",
+      "fx/System >= 4.0.0",
+      "fx/System.ComponentModel.DataAnnotations >= 4.0.0",
+      "fx/System.Core >= 4.0.0",
+      "fx/System.Data >= 4.0.0",
+      "fx/System.Data.DataSetExtensions >= 4.0.0",
+      "fx/System.Runtime.Serialization >= 4.0.0",
+      "fx/System.Security >= 4.0.0",
+      "fx/System.Transactions >= 4.0.0",
+      "fx/System.Xml >= 4.0.0",
+      "fx/System.Xml.Linq >= 4.0.0"
     ],
     ".NETFramework,Version=v4.5": [
       "fx/Microsoft.CSharp >= 4.0.0",
