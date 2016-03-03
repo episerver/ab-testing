@@ -7,18 +7,6 @@
   "licenseUrl": "",
   "dependencies": { },
   "frameworks": {
-    "dnx451": {
-      "dependencies": { },
-      "frameworkAssemblies": {
-        "Microsoft.CSharp": "4.0.0.0",
-        "System": "4.0.0.0",
-        "System.Core": "4.0.0.0",
-        "System.Data": "4.0.0.0",
-        "System.Data.DataSetExtensions": "4.0.0.0",
-        "System.Xml": "4.0.0.0",
-        "System.Xml.Linq": "4.0.0.0"
-      }
-    },
     "net45": {
       "dependencies": { },
       "frameworkAssemblies": {

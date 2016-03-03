@@ -135,7 +135,7 @@
       },
       "EPiServer.Marketing.KPI/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
           "EPiServer.Framework": "9.6.1",
@@ -163,7 +163,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -176,14 +176,14 @@
       },
       "EPiServer.Marketing.Testing.Core/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
-          "EPIServer.Marketing.Messaging": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPIServer.Marketing.Messaging": "1.0.0",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebPages": "2.0.20710",
@@ -208,7 +208,7 @@
       },
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -228,7 +228,7 @@
       },
       "EPiServer.Marketing.Testing.Web/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "AutoMapper": "4.1.1",
           "Castle.Core": "3.3.3",
@@ -237,9 +237,9 @@
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.CMS.UI.Core": "9.3.8",
           "EPiServer.Framework": "9.6.1",
-          "EPiServer.Marketing.KPI": null,
-          "EPiServer.Marketing.Testing.Core": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPiServer.Marketing.KPI": "1.0.0",
+          "EPiServer.Marketing.Testing.Core": "1.0.0",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebApi": "5.2.3",
@@ -779,7 +779,7 @@
       },
       "EPiServer.Marketing.KPI/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
           "EPiServer.Framework": "9.6.1",
@@ -807,7 +807,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -820,14 +820,14 @@
       },
       "EPiServer.Marketing.Testing.Core/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
-          "EPIServer.Marketing.Messaging": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPIServer.Marketing.Messaging": "1.0.0",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebPages": "2.0.20710",
@@ -852,7 +852,7 @@
       },
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -872,7 +872,7 @@
       },
       "EPiServer.Marketing.Testing.Web/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "AutoMapper": "4.1.1",
           "Castle.Core": "3.3.3",
@@ -881,9 +881,9 @@
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.CMS.UI.Core": "9.3.8",
           "EPiServer.Framework": "9.6.1",
-          "EPiServer.Marketing.KPI": null,
-          "EPiServer.Marketing.Testing.Core": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPiServer.Marketing.KPI": "1.0.0",
+          "EPiServer.Marketing.Testing.Core": "1.0.0",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebApi": "5.2.3",
@@ -1423,7 +1423,7 @@
       },
       "EPiServer.Marketing.KPI/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
           "EPiServer.Framework": "9.6.1",
@@ -1451,7 +1451,7 @@
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "frameworkAssemblies": [
           "Microsoft.CSharp",
           "System",
@@ -1464,14 +1464,14 @@
       },
       "EPiServer.Marketing.Testing.Core/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
-          "EPIServer.Marketing.Messaging": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPIServer.Marketing.Messaging": "1.0.0",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebPages": "2.0.20710",
@@ -1496,7 +1496,7 @@
       },
       "EPiServer.Marketing.Testing.Dal/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3"
         },
@@ -1516,7 +1516,7 @@
       },
       "EPiServer.Marketing.Testing.Web/1.0.0": {
         "type": "project",
-        "framework": "DNX,Version=v4.5.1",
+        "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "AutoMapper": "4.1.1",
           "Castle.Core": "3.3.3",
@@ -1525,9 +1525,9 @@
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.CMS.UI.Core": "9.3.8",
           "EPiServer.Framework": "9.6.1",
-          "EPiServer.Marketing.KPI": null,
-          "EPiServer.Marketing.Testing.Core": null,
-          "EPiServer.Marketing.Testing.Dal": null,
+          "EPiServer.Marketing.KPI": "1.0.0",
+          "EPiServer.Marketing.Testing.Core": "1.0.0",
+          "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
           "Microsoft.AspNet.WebApi": "5.2.3",
@@ -2675,6 +2675,7 @@
       "EntityFramework >= 6.1.3",
       "EPiServer.CMS.Core >= 9.6.1",
       "EPiServer.Framework >= 9.6.1",
+      "EPiServer.Marketing.Testing.Web >= 1.0.0-*",
       "Microsoft.AspNet.Mvc >= 4.0.20710",
       "Microsoft.AspNet.Razor >= 2.0.20710",
       "Microsoft.AspNet.WebPages >= 2.0.20710",
@@ -2690,9 +2691,8 @@
       "xunit.core >= 2.1.0",
       "xunit.extensibility.core >= 2.1.0",
       "xunit.extensibility.execution >= 2.1.0",
-      "xunit.runner.visualstudio >= 2.1.0",
       "xunit.runner.dnx >= 2.1.0-rc1-build204",
-      "EPiServer.Marketing.Testing.Web >= 1.0.0"
+      "xunit.runner.visualstudio >= 2.1.0"
     ],
     "DNX,Version=v4.5.1": [
       "fx/System >= 4.0.0",

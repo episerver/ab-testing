@@ -13,9 +13,9 @@
     "EPiServer.CMS.Core": "9.6.1",
     "EPiServer.CMS.UI.Core": "9.3.8",
     "EPiServer.Framework": "9.6.1",
-    "EPiServer.Marketing.KPI": "",
-    "EPiServer.Marketing.Testing.Core": "",
-    "EPiServer.Marketing.Testing.Dal": "",
+    "EPiServer.Marketing.KPI": "1.0.0-*",
+    "EPiServer.Marketing.Testing.Core": "1.0.0-*",
+    "EPiServer.Marketing.Testing.Dal": "1.0.0-*",
     "Microsoft.AspNet.Mvc": "4.0.20710.0",
     "Microsoft.AspNet.Razor": "2.0.20710.0",
     "Microsoft.AspNet.WebApi": "5.2.3",
@@ -29,22 +29,6 @@
     "structuremap-signed": "3.1.6.186"
   },
   "frameworks": {
-    "dnx451": {
-      "dependencies": { },
-      "frameworkAssemblies": {
-        "Microsoft.CSharp": "",
-        "System": "",
-        "System.ComponentModel.DataAnnotations": "",
-        "System.Core": "",
-        "System.Data": "",
-        "System.Data.DataSetExtensions": "",
-        "System.Net.Http": "",
-        "System.Web": "",
-        "System.Web.ApplicationServices": "",
-        "System.Xml": "",
-        "System.Xml.Linq": ""
-      }
-    },
     "net45": {
       "dependencies": { },
       "frameworkAssemblies": {
