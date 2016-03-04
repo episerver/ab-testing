@@ -131,14 +131,15 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
         public IMarketingTest RunTests(Guid testId)
         {
+            var itemVersion = 1;
             _mtm = new TestManager();
             _mtm.Start(testId);
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, CountType.View);
+                _mtm.IncrementCount(testId, result, itemVersion, CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, itemVersion, CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -148,14 +149,15 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
         public IMarketingTest StartTest(Guid testId)
         {
+            var itemVersion = 1;
             _mtm = new TestManager();
             _mtm.Start(testId);
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, CountType.View);
+                _mtm.IncrementCount(testId, result, itemVersion, CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, itemVersion, CountType.Conversion);
             }
 
             return _mtm.Get(testId);

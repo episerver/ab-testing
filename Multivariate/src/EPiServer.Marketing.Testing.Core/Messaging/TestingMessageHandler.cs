@@ -30,13 +30,13 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void Handle(UpdateViewsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.VariantId, CountType.View);
+            tm.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.View);
         }
 
         public void Handle(UpdateConversionsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.VariantId, CountType.Conversion);
+            tm.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.Conversion);
         }
     }
 }

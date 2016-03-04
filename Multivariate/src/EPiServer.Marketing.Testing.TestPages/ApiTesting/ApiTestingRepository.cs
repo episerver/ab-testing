@@ -84,8 +84,8 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             dataToSave.TestResults = new List<TestResult>()
             {
-                new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.Variants[0].Id,ItemVersion = dataToSave.Variants[0].ItemVersion},
-                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[1].Id,ItemVersion = dataToSave.Variants[1].ItemVersion}
+                new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.Variants[0].Id, ItemVersion = dataToSave.Variants[0].ItemVersion},
+                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[1].Id, ItemVersion = dataToSave.Variants[1].ItemVersion}
             };
 
             _mtm.Save(dataToSave);
@@ -136,9 +136,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, CountType.View);
+                _mtm.IncrementCount(testId, result, 1, CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, 1, CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -153,9 +153,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, CountType.View);
+                _mtm.IncrementCount(testId, result, 1, CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, 1, CountType.Conversion);
             }
 
             return _mtm.Get(testId);

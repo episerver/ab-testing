@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.DataAccess
 {

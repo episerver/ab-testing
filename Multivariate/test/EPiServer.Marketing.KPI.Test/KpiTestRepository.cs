@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Transactions;
 using EPiServer.Marketing.KPI.Dal;
-using EPiServer.Marketing.KPI.Model;
+using EPiServer.Marketing.KPI.Dal.Model;
 
 
 namespace EPiServer.Marketing.KPI.Test

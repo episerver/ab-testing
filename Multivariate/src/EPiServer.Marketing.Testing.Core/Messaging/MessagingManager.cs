@@ -57,7 +57,7 @@ namespace EPiServer.Marketing.Testing.Messaging
 
             registry.Register<UpdateViewsMessage>(_handler);
             registry.Register<UpdateConversionsMessage>(_handler);
-
+            
             // Create the dispatcher, queue store, and the memory reciever
             var messageDispatcher = new FanOutMessageDispatcher(registry);
             _queueStore = new InMemoryQueueStore(AppDomain.CurrentDomain);
@@ -82,10 +82,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="TestId">the test id to work with</param>
         /// <param name="VariantId">the Guid of the cms item that was viewed</param>
-        public void EmitUpdateViews(Guid TestId, Guid VariantId)
+        public void EmitUpdateViews(Guid TestId, Guid VariantId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, VariantId = VariantId });
+            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, VariantId = VariantId, ItemVersion = itemVersion});
         }
 
         /// <summary>
@@ -93,10 +93,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="TestId"></param>
         /// <param name="VariantId">the Guid of the cms item that caused a converion</param>
-        public void EmitUpdateConversion(Guid TestId, Guid VariantId)
+        public void EmitUpdateConversion(Guid TestId, Guid VariantId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() { TestId = TestId, VariantId = VariantId });
+            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, VariantId=VariantId, ItemVersion = itemVersion } );
         }
     }
 }

@@ -75,10 +75,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             var testId = data.Get("testId");
             var variantId = data.Get("variantId");
+            var itemVersion = data.Get("itemVersion");
             if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId));
+                mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId), Convert.ToInt16(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -92,10 +93,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             var testId = data.Get("testId");
             var variantId = data.Get("variantId");
+            var itemVersion = data.Get("itemVersion");
             if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId));
+                mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId), Convert.ToInt16(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }

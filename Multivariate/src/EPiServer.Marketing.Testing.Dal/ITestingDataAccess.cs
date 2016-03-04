@@ -23,6 +23,6 @@ namespace EPiServer.Marketing.Testing.Dal
 
         void Archive(Guid testObjectId);
 
-        void IncrementCount(Guid testId, Guid testItemId, CountType resultType);
+        void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
     }
 }
