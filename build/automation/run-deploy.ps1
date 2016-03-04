@@ -15,6 +15,9 @@ Param(
 	$LicenseFile = "C:\LicenseFiles\EPiServer 7\License.config"
 )
 
+$cwd = Split-Path -parent $PSCommandPath
+pushd $cwd
+
 $SiteName = $SiteName -replace "\W+", "-"
 $SitePath = "c:\episerver\$SiteName"
 "SiteName: $SiteName"
