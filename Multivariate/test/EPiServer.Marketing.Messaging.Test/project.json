@@ -8,7 +8,7 @@
     "EPiServer.CMS.UI.Core": "9.3.8",
     "EPiServer.Framework": "9.6.1",
     "EPiServer.Logging.Log4Net": "2.0.0",
-    "EPIServer.Marketing.Messaging": "1.0.0.9000",
+    "EPIServer.Marketing.Messaging": "1.0.0-*",
     "log4net": "2.0.3",
     "Microsoft.AspNet.Mvc": "4.0.20710.0",
     "Microsoft.AspNet.Razor": "2.0.20710.0",
@@ -25,8 +25,8 @@
     "xunit.extensibility.core": "2.1.0",
     "xunit.extensibility.execution": "2.1.0",
     "xunit.runner.console": "2.1.0",
-    "xunit.runner.visualstudio": "2.1.0",
-    "xunit.runner.dnx": "2.1.0-rc1-build204"
+    "xunit.runner.dnx": "2.1.0-rc1-build204",
+    "xunit.runner.visualstudio": "2.1.0"
   },
   "frameworks": {
     "dnx451": {

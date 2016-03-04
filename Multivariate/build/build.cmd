@@ -14,6 +14,7 @@ ECHO Building in %Configuration%
 
 CALL dnu restore --quiet
 CD ..
+RMDIR artifacts /s /q
 CALL dnu build **\project.json --quiet --configuration "%Configuration%" --out artifacts
 IF %ERRORLEVEL% NEQ 0 (
 		ECHO BUILD failed
