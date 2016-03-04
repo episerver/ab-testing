@@ -15,7 +15,7 @@ Param(
 	$LicenseFile = "C:\LicenseFiles\EPiServer 7\License.config"
 )
 
-$cwd = Split-Path -parent $PSCommandPath
+$cwd = split-path -parent $MyInvocation.MyCommand.Definition
 pushd $cwd
 
 $SiteName = $SiteName -replace "\W+", "-"
