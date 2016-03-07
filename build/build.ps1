@@ -1,7 +1,8 @@
 param ([string]$configuration = "Release",
     [string]$runTests = "false",
 	[string]$runtestmode = "",
-    [string]$pack = "false")
+    [string]$pack = "false",
+	[string]$packageVersion = "")
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
 $cwd = Split-Path -parent $PSCommandPath
@@ -38,5 +39,11 @@ if([System.Convert]::ToBoolean($runTests) -eq $true) {
 
 # Create packages
 if([System.Convert]::ToBoolean($pack) -eq $true) {
-    &"$cwd\pack.ps1" $configuration $configuration
+	# make sure that we have some package version
+	if (!$packageVersion) {
+		$match = (Select-String -Path $cwd\..\Multivariate\AssemblyVersionAuto.cs -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
+		$packageVersion = $match.Groups[1].Value
+	}
+	
+    &"$cwd\pack.ps1" $configuration $pack $packageVersion	
 }
