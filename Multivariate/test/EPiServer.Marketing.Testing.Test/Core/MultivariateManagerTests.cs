@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -10,7 +11,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Core
+namespace EPiServer.Marketing.Testing.Test.Core
 {
         public class MultivariateManagerTests
     {
@@ -30,9 +31,18 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             return new Testing.Dal.Entity.ABTest()
             {
-                Variants = new List<Testing.Dal.Entity.Variant>(),
-                KeyPerformanceIndicators = new List<Testing.Dal.Entity.KeyPerformanceIndicator>(),
+                Variants = new List<Testing.Dal.Entity.Variant>()
+                {
+                    new Testing.Dal.Entity.Variant() {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
+                },
+                KeyPerformanceIndicators = new List<Testing.Dal.Entity.KeyPerformanceIndicator>()
+                {
+                    new Testing.Dal.Entity.KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() }
+                },
                 TestResults = new List<Testing.Dal.Entity.TestResult>()
+                {
+                    new Testing.Dal.Entity.TestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 }
+                }
             };
         }
 
@@ -40,7 +50,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
         {
             return new ABTest()
             {
-                Variants = new List<Variant>(),
+                Variants = new List<Testing.Data.Variant>(),
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 TestResults = new List<TestResult>()
             };
@@ -142,9 +152,10 @@ namespace EPiServer.Marketing.Multivariate.Test.Core
             ABTest test = new ABTest()
             {
                 Id = theGuid,
-                Variants = new List<Variant>(),
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
-                TestResults = new List<TestResult>()
+                ModifiedDate = DateTime.UtcNow,
+                Variants = new List<Testing.Data.Variant>() { new Testing.Data.Variant() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } },
+                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>() { new Testing.Data.KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() } },
+                TestResults = new List<TestResult>() { new Testing.Data.TestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } }
             };
             tm.Save(test);
 

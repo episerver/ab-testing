@@ -7,7 +7,7 @@ using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 using EPiServer.Marketing.Testing.Test;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Dal
+namespace EPiServer.Marketing.Testing.Test.Dal
 {
     public class DalTests : TestBase
     {

@@ -8,7 +8,7 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Messaging
+namespace EPiServer.Marketing.Testing.Test.Core.Messaging
 {
     public class MultiVariateMessageHandlerTests
     {
