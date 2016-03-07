@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Application\MessagingApplication.cs" />
     <Compile Include="Application\MessagingApplicationBuilder.cs" />
+    <Compile Include="AssemblyVersionAuto.cs" />
     <Compile Include="FanOutMessageDispatcher.cs" />
     <Compile Include="IMessageDispatcher.cs" />
     <Compile Include="IMessageEmitter.cs" />

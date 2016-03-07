@@ -214,6 +214,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AssemblyVersionAuto.cs" />
     <Compile Include="Messaging\FanOutMessageDispatcherTests.cs" />
     <Compile Include="Messaging\InMemoryMessageReceiverTests.cs" />
     <Compile Include="Messaging\InMemory\InMemoryMessageEmitterTests.cs" />
