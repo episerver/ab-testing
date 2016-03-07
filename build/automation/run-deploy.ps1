@@ -190,7 +190,7 @@ if ($CreateSite -eq $true) {
 	
 	Foreach ($package in $Packages)
 	{
-		Deploy-Nuget $package $Version $SitePath $artifactPath
+		Deploy-Nuget $package $Version $SitePath $NugetFeed
 	}
 	
     Copy-Item $LicenseFile $SitePath

@@ -37,5 +37,5 @@ Copy-Item .\resources\AlloyEPiServerDB.mdf ..\samples\EPiServer.Templates.Alloy\
 
 if([System.Convert]::ToBoolean($publishPackages) -eq $true) {
 	Write-Host "Publishing artifacts"
-	Copy-Item "$artifactsPath\*Daily*.nupkg" -destination "\\T3\I$\Nuget"
+	Copy-Item "$artifactsPath\*.nupkg" -destination "\\T3\I$\Nuget"
 }
