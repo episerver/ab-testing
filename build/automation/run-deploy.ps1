@@ -7,7 +7,7 @@ Param(
 	[String[]] $Packages = @("EPiServer.Marketing.Messaging", "EPiServer.Marketing.Testing", "EPiServer.Marketing.Testing.TestPages"),     
     [bool]$DeleteSite = $true, 
     [bool]$CreateSite = $true, 
-    $NugetFeed = "http://10.99.101.110/guestAuth/app/nuget/v1/FeedService.svc/",
+    $NugetFeed = "http://10.99.101.110/guestAuth/app/nuget/v1/FeedService.svc/;http://nuget.episerver.com/feed/packages.svc/;https://www.nuget.org/api/v2",
     $DbServer = "(local)", 
     $DbUsername = "Deployer",
     $DbPassword = "aj3YpcmkDVEuLSiL", 
