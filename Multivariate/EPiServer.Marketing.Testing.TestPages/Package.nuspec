@@ -3,7 +3,7 @@
   <metadata>
     <id>EPiServer.Marketing.Testing.TestPages</id>
     <title>EPiServer Marketing Testing Test Pages</title>
-    <version>1.0.0.10</version>
+    <version>$version$</version>
     <authors>EPiServer</authors>
     <owners>EPiServer</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
