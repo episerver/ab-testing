@@ -3,6 +3,7 @@ Param(
 	$Version = "", 
     $SitePath = "c:\episerver\$SiteName", 
     $SiteZip = "DailySite.zip", 
+	$SitePackage = "EPiServer.Marketing.Testing.DailySite", 
 	[String[]] $Packages = @("EPiServer.Marketing.Messaging", "EPiServer.Marketing.Testing", "EPiServer.Marketing.Testing.TestPages"),     
     [bool]$DeleteSite = $true, 
     [bool]$CreateSite = $true, 
@@ -15,18 +16,18 @@ Param(
 	$LicenseFile = "C:\LicenseFiles\EPiServer 7\License.config"
 )
 
-$cwd = split-path -parent $MyInvocation.MyCommand.Definition
-pushd $cwd
-
 $SiteName = $SiteName -replace "\W+", "-"
 $SitePath = "c:\episerver\$SiteName"
 "SiteName: $SiteName"
 
 $tmpFolder = [System.IO.Path]::GetTempPath() + [guid]::NewGuid().ToString()
-$tmpPackageFolder = "$tmpFolder\$SiteZip.$Version"
+$tmpPackageFolder = "$tmpFolder\$SitePackage.$Version"
 
 $FrameworkDir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory())
 Set-Alias aspnet_regsql (Join-Path $FrameworkDir "aspnet_regsql.exe")
+
+$artifactPath = "$tmpPackageFolder\content"
+
 
 #http://www.iis.net/learn/manage/powershell/powershell-snap-in-creating-web-sites-web-applications-virtual-directories-and-application-pools
 Import-Module WebAdministration
@@ -103,9 +104,10 @@ function Deploy-Nuget {
             $SitePath,
             $NugetFeed
         )
-
+		
     #Install the nuget package into the $SitePath
-    nuget install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
+	nuget install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
+    #&"C:\Stash\EPiServer.Marketing.Multivariate\build\resources\nuget\nuget.exe" install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache
 }
 
 function Deploy-Zip {
@@ -176,7 +178,10 @@ if ($DeleteSite -eq $true) {
 
 if ($CreateSite -eq $true) {
     Create-Site  $SiteName $SitePath
-	Deploy-Zip  $SiteZip $SitePath
+	
+	Deploy-Nuget $SitePackage $Version $tmpFolder $NugetFeed
+	
+	Deploy-Zip  $artifactPath\$SiteZip $SitePath
     
 	#$DbPath = $SitePath + "\App_Data\AlloyEPiServerDB.mdf"    
 	#Attach-Database $DbPath $SiteName $DbServer $DbSiteUser $DbSitePassword	
@@ -185,7 +190,7 @@ if ($CreateSite -eq $true) {
 	
 	Foreach ($package in $Packages)
 	{
-		Deploy-Nuget $package $Version $SitePath $NugetFeed
+		Deploy-Nuget $package $Version $SitePath $artifactPath
 	}
 	
     Copy-Item $LicenseFile $SitePath
