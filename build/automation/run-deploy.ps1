@@ -1,9 +1,9 @@
 Param(
     $SiteName = "episerver-test", 
-    $SitePath = "c:\episerver\$SiteName", 
-    $SiteZip = "DailySite.zip", 
-	$PackageName = "EPiServer.Marketing.Testing.DailySite", 
 	$PackageVersion = "", 	
+	$PackageName = "EPiServer.Marketing.Testing.DailySite", 
+    $SitePath = "c:\episerver\$SiteName", 
+    $SiteZip = "DailySite.zip", 	
     [bool]$DeleteSite = $true, 
     [bool]$CreateSite = $true, 
     $NugetFeed = "http://10.99.101.110/guestAuth/app/nuget/v1/FeedService.svc/;http://nuget.episerver.com/feed/packages.svc/;https://www.nuget.org/api/v2",
