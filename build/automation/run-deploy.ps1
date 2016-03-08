@@ -1,10 +1,9 @@
 Param(
     $SiteName = "episerver-test", 
-	$Version = "", 
     $SitePath = "c:\episerver\$SiteName", 
     $SiteZip = "DailySite.zip", 
-	$SitePackage = "EPiServer.Marketing.Testing.DailySite", 
-	[String[]] $Packages = @("EPiServer.Marketing.Messaging", "EPiServer.Marketing.Testing", "EPiServer.Marketing.Testing.TestPages"),     
+	$PackageName = "EPiServer.Marketing.Testing.DailySite", 
+	$PackageVersion = "", 	
     [bool]$DeleteSite = $true, 
     [bool]$CreateSite = $true, 
     $NugetFeed = "http://10.99.101.110/guestAuth/app/nuget/v1/FeedService.svc/;http://nuget.episerver.com/feed/packages.svc/;https://www.nuget.org/api/v2",
@@ -21,7 +20,7 @@ $SitePath = "c:\episerver\$SiteName"
 "SiteName: $SiteName"
 
 $tmpFolder = [System.IO.Path]::GetTempPath() + [guid]::NewGuid().ToString()
-$tmpPackageFolder = "$tmpFolder\$SitePackage.$Version"
+$tmpPackageFolder = "$tmpFolder\$PackageName.$PackageVersion"
 
 $FrameworkDir = $([System.Runtime.InteropServices.RuntimeEnvironment]::GetRuntimeDirectory())
 Set-Alias aspnet_regsql (Join-Path $FrameworkDir "aspnet_regsql.exe")
@@ -73,8 +72,6 @@ function Create-Site {
     if(!(Test-Path($SitePath))) {
         "Creating folder: $SitePath"
         md $SitePath
-        "Creating folder: $SitePath\AppData"
-        md "$Sitepath\AppData"
     }
 
     if(!(Test-Path($site))) {
@@ -97,7 +94,7 @@ function Create-Site {
     }
 }
 
-function Deploy-Nuget {
+function Install-Nuget {
     param (
             $PackageName,
 			$PackageVersion,
@@ -109,6 +106,43 @@ function Deploy-Nuget {
 	nuget install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
     #&"C:\Stash\EPiServer.Marketing.Multivariate\build\resources\nuget\nuget.exe" install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache
 }
+
+function Deploy-Nuget {
+    param (
+            $PackagePath,
+            $SitePath,
+			$SiteName,
+			$DbServer, 
+			$DbUsername, 
+			$DbPassword,
+            $TmpFolder
+        )
+		
+    [System.Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')
+	
+	$tmpPackagePath = "$TmpFolder\" + [guid]::NewGuid().ToString()
+    "Extracting $PackagePath to $tmpPackagePath"
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($PackagePath, $tmpPackagePath)
+    
+	"Copying package content..."
+    Copy-Item "$tmpPackagePath\content" $SitePath -recurse
+	
+	"Copying package assemblies..."
+	Copy-Item "$tmpPackagePath\lib\*.dll" "$SitePath\bin"	
+	
+	if (Test-Path "$tmpPackagePath\tools\epiupdates\sql") {
+		$sqlScript = "$tmpPackagePath\setup\Script.sql"				
+		foreach ($script in Get-ChildItem "$tmpPackagePath\tools\epiupdates\sql" -Filter '*.sql')
+		{
+			Add-Content -Path $sqlScript -Value (Get-Content $script.FullName)			
+		}
+		
+		"Executing package SQL scripts..."
+		Execute-Sql $sqlScript, $SiteName, $DbServer, $DbUsername, $DbPassword
+	}
+	
+}
+
 
 function Deploy-Zip {
     param (
@@ -127,7 +161,7 @@ function Attach-Database {
         $SiteName,
         $DbServer,
         $DbSiteUser,
-        $DbSitePassword
+        $DbSitePassword		
     )
     $DbName = "daily-" + $SiteName
 
@@ -136,7 +170,25 @@ function Attach-Database {
     Invoke-SqlCmd -Query "EXEC sp_addlogin @loginame='$DbSiteUser', @passwd='$DbSitePassword', @defdb='$DbName'" -ServerInstance $DbServer
     Invoke-SqlCmd -Query "USE [$DbName]; EXEC sp_adduser @loginame='$DbSiteUser'" -ServerInstance $DbServer
     Invoke-SqlCmd -Query "USE [$DbName]; EXEC sp_addrolemember N'db_owner', N'$DbSiteUser'" -ServerInstance $DbServer
-    Invoke-SqlCmd -Query "EXEC sp_addsrvrolemember '$DbSiteUser', 'dbcreator'" -ServerInstance $DbServer
+    Invoke-SqlCmd -Query "EXEC sp_addsrvrolemember '$DbSiteUser', 'dbcreator'" -ServerInstance $DbServer	
+}
+
+function Execute-Sql {
+    param (
+        $sqlScriptPath,
+        $SiteName,
+        $DbServer, 
+        $DbUsername, 
+        $DbPassword
+    )
+
+    "Create Testing database structures"
+	
+	$DbName = "daily-" + $SiteName
+    
+	$var1 = "DBName=$DbName"
+    $varCollection = $var1
+    Invoke-Sqlcmd -InputFile $sqlScript -Variable $varCollection -ServerInstance $DbServer -Username $DbUserName -Password $DbPassword
 }
 
 function Detach-Database {
@@ -166,31 +218,29 @@ function Transform-Config {
 
     "Transform config files"
     Update-EPiXmlFile -TargetFilePath "$SitePath\connectionStrings.config" -ModificationFilePath "$TmpPackageFolder\Setup\connectionStrings.transform" -Replaces "{DbServer}=$DbServer;{DbDatabase}=$SiteName;{DbUserName}=$DbSiteUser;{DbPassword}=$DbSitePassword;"
-    Update-EPiXmlFile -TargetFilePath "$SitePath\EPiServerFramework.config" -ModificationFilePath "$TmpPackageFolder\Setup\EPiServerFramework.transform" -Replaces "{basePath}=$SitePath\appData;"
 
     Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath "$TmpPackageFolder\Setup\Web.transform" -Replaces "{siteName}=$SiteName;"
 }
 
 if ($DeleteSite -eq $true) {
-    #Detach-Database $SiteName $DbServer $DbSiteUser
+    Detach-Database $SiteName $DbServer $DbSiteUser
 	Delete-Site $SiteName $SitePath
 }
 
 if ($CreateSite -eq $true) {
     Create-Site  $SiteName $SitePath
 	
-	Deploy-Nuget $SitePackage $Version $tmpFolder $NugetFeed
+	Install-Nuget $PackageName $PackageVersion $tmpFolder $NugetFeed
 	
 	Deploy-Zip  $artifactPath\$SiteZip $SitePath
     
-	#$DbPath = $SitePath + "\App_Data\AlloyEPiServerDB.mdf"    
-	#Attach-Database $DbPath $SiteName $DbServer $DbSiteUser $DbSitePassword	
+	$DbPath = $SitePath + "\App_Data\AlloyEPiServerDB.mdf"    
+	Attach-Database $DbPath $SiteName $DbServer $DbSiteUser $DbSitePassword	
 	
 	#Transform-Config $tmpPackageFolder $SitePath $DbServer $SiteName $DbSiteUser $DbSitePassword
 	
-	Foreach ($package in $Packages)
-	{
-		Deploy-Nuget $package $Version $SitePath $NugetFeed
+	foreach ($package in Get-ChildItem "$artifactPath" -Filter '*.nupkg') {
+		Deploy-Nuget $package.FullName $SitePath $SiteName $DbServer $DbSiteUser $DbSitePassword	$tmpFolder
 	}
 	
     Copy-Item $LicenseFile $SitePath

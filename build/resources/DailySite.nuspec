@@ -14,6 +14,7 @@
         <tags>EPiServer DailySite</tags>
     </metadata>
     <files>
+      <file src="*.nupkg" target="content" />
       <file src="DailySite.zip" target="content" />
     </files>
 </package>
