@@ -142,6 +142,7 @@ namespace EPiServer.Marketing.Testing
             {
                 Id = theDalTest.Id,
                 Title = theDalTest.Title,
+                Description = theDalTest.Description,
                 Owner = theDalTest.Owner,
                 OriginalItemId = theDalTest.OriginalItemId,
                 State = AdaptToManagerState(theDalTest.State),
@@ -164,6 +165,7 @@ namespace EPiServer.Marketing.Testing
             {
                 Id = theManagerTest.Id,
                 Title = theManagerTest.Title,
+                Description = theManagerTest.Description,
                 Owner = theManagerTest.Owner,
                 OriginalItemId = theManagerTest.OriginalItemId,
                 State = AdaptToDalState(theManagerTest.State),

@@ -155,6 +155,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 if (test.State == TestState.Inactive)
                 {
                         test.Title = testObject.Title;
+                    test.Description = testObject.Description;
                     test.OriginalItemId = testObject.OriginalItemId;
                     test.LastModifiedBy = testObject.LastModifiedBy;
                         test.StartDate = testObject.StartDate;

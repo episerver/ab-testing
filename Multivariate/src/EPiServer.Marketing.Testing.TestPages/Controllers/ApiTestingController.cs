@@ -92,7 +92,8 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     StartDate = DateTime.Now.AddDays(1),
                     State = TestState.Active,
                     TestResults = new List<TestResult>(),
-                    Title = "Automation_" + TestID++,
+                    Title = "Automation_" + TestID,
+                    Description = "Description_" + TestID++,
                     Variants = new List<Variant>() {
                                     new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 1},
                                     new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 2}

@@ -15,6 +15,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                     {
                         Id = c.Guid(nullable: false),
                         Title = c.String(nullable: false, maxLength: 255),
+                        Description = c.String(nullable: false, maxLength: 255),
                         Owner = c.String(nullable: false, maxLength: 100),
                         OriginalItemId = c.Guid(nullable: false),
                         State = c.Int(),

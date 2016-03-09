@@ -20,6 +20,11 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         public string Title { get; set; }
 
         /// <summary>
+        /// Test Title
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Person that created the test
         /// </summary>
         public string Owner { get; set; }

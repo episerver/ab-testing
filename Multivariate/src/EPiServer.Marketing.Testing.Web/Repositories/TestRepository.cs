@@ -111,6 +111,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 //id = testToConvert.Id,
                 //Title = testToConvert.Title,
+                //Description = testToConvert.Description,
                 //Owner = testToConvert.Owner,
                 //testState = testToConvert.State,
                 //StartDate = testToConvert.StartDate,
@@ -125,7 +126,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 //DateCreated = testToConvert.CreatedDate,
                 //DateModified = testToConvert.ModifiedDate,
                 //LastModifiedBy = testToConvert.LastModifiedBy
-               
+
             };
             
             return testModel;
@@ -149,6 +150,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 //Id = viewModelToConvert.id,
                 //Title = viewModelToConvert.Title,
+                //Description = viewModelToConvert.Description,
                 //Owner = Security.PrincipalInfo.CurrentPrincipal.Identity.Name,
                 //OriginalItemId = originalItemRef.ContentGuid,
                 //StartDate = viewModelToConvert.StartDate,

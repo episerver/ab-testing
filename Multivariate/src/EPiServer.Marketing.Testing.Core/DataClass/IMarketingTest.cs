@@ -14,6 +14,11 @@ namespace EPiServer.Marketing.Testing.Data
         string Title { get; set; }
 
         /// <summary>
+        /// Test name.
+        /// </summary>
+        string Description { get; set; }
+
+        /// <summary>
         /// Creator of the test.
         /// </summary>
         string Owner { get; set; }

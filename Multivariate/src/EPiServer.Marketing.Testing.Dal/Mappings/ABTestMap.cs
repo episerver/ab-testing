@@ -16,6 +16,10 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
                 .HasMaxLength(255)
                 .IsRequired();
 
+            this.Property(m => m.Description)
+                .HasMaxLength(255)
+                .IsOptional();
+
             this.Property(m => m.Owner)
                 .HasMaxLength(100)
                 .IsRequired();

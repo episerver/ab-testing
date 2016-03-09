@@ -1628,7 +1628,7 @@
     },
     "EPiServer.CMS/9.6.1": {
       "type": "package",
-      "sha512": "L7/MLb7w2ugIQ2j1+SEHHFs/N/z1p1diNyXktq4TtppLQ1rsXsy9NgdbCE8E0UET9DOlpDQnY3I3EImToBTWzQ==",
+      "sha512": "56rCfL6093Hd69wif0Vi2Q4qIpZ/KY1bcH0V8CgkOdMfhhkVapzHiyvr0PrxxbrZxtrCBr7vXZ15ur0MW5kCVQ==",
       "files": [
         "content/App_Data/GeoLiteCity.dat",
         "EPiServer.CMS.9.6.1.nupkg",

@@ -31,6 +31,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = id,
                 Title = "test",
+                Description = "description",
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
@@ -178,9 +179,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var tests = AddMultivariateTests(_mtm, 1);
             var newTitle = "newTitle";
             tests[0].Title = newTitle;
+            var newDescription = "newDescription";
+            tests[0].Description = newDescription;
             _mtm.Save(tests[0]);
 
             Assert.Equal(_mtm.Get(tests[0].Id).Title, newTitle);
+            Assert.Equal(_mtm.Get(tests[0].Id).Description, newDescription);
         }
 
         [Fact]
@@ -247,7 +251,6 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
                 Variants = new List<Variant>(),
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 ParticipationPercentage = 100,
-                LastModifiedBy = "me",
                 OriginalItemId = itemId
             };
 
@@ -284,6 +287,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             var test = new ABTest()
             {
                 Title = "test",
+                Description = "Description",
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
