@@ -24,6 +24,7 @@ namespace EPiServer.Marketing.Testing.Test
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
+                    Description = "description" + i,
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
@@ -54,6 +55,7 @@ namespace EPiServer.Marketing.Testing.Test
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
+                    Description = "description" + i,
                     CreatedDate = DateTime.UtcNow,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,

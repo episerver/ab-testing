@@ -51,6 +51,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = id,
                 Title = "Test",
+                Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
                 State = TestState.Active,
@@ -66,9 +67,12 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
 
             var newTitle = "NewTitle";
             test.Title = newTitle;
+            var newDesc = "NewDescription";
+            test.Description = newDesc;
             _context.SaveChanges();
 
             Assert.Equal(_context.ABTests.Find(id).Title, newTitle);
+            Assert.Equal(_context.ABTests.Find(id).Description, newDesc);
         }
 
         [Fact]
@@ -80,6 +84,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = id,
                 Title = "Test",
+                Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
                 State = TestState.Active,
@@ -118,6 +123,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = id,
                 Title = "Test",
+                Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
                 State = TestState.Active,
@@ -154,6 +160,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Dal
             {
                 Id = id,
                 Title = "Test",
+                Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
                 State = TestState.Active,

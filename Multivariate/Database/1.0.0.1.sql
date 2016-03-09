@@ -29,6 +29,7 @@ BEGIN
     CREATE TABLE [dbo].[tblABTest] (
         [Id] [uniqueidentifier] NOT NULL,
         [Title] [nvarchar](255) NOT NULL,
+        [Description] [nvarchar](255),
         [Owner] [nvarchar](100) NOT NULL,
         [OriginalItemId] [uniqueidentifier] NOT NULL,
         [State] [int],

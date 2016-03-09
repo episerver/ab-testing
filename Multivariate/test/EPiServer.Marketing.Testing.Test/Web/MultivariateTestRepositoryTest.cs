@@ -182,6 +182,7 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         //    // Verify the testmanager was called by the repo with the proper argument
         //    Assert.Equal(test.Id, ViewData.id);
         //    Assert.Equal(test.Title, ViewData.Title);
+        //    Assert.Equal(test.Description, ViewData.Description);
         //    Assert.Equal(test.Owner, ViewData.Owner);
         //    Assert.Equal(test.StartDate, ViewData.StartDate);
         //    Assert.Equal(test.EndDate, ViewData.EndDate);
@@ -239,6 +240,8 @@ namespace EPiServer.Marketing.Multivariate.Test.Web
         //        Times.Once, "CreateTest did not call save with correctly mapped ID");
         //    _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Title.Equals(viewdata.Title))),
         //        Times.Once, "CreateTest did not call save with correctly mapped Title");
+        //    _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Description.Equals(viewdata.Description))),
+        //        Times.Once, "CreateTest did not call save with correctly mapped Description");
         //    _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.Owner.Equals(viewdata.Owner))),
         //        Times.Once, "CreateTest did not call save with correctly mapped Owner");
         //    _testmanager.Verify(tm => tm.Save(It.Is<ABTest>(tc => tc.StartDate.Equals(viewdata.StartDate))),
