@@ -219,10 +219,14 @@ function Transform-Config {
         $DbSiteUser,
         $DbSitePassword
     )
-
-    "Transform config files"
-    Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath "$TmpPackageFolder\ConnectionString.xmlupdate" -Replaces "{DbServer}=$DbServer;{DbDatabase}=$SiteName;{DbUserName}=$DbSiteUser;{DbPassword}=$DbSitePassword;"
+    $DbName = "daily-" + $SiteName
+    
+	"Transform config files $SitePath\web.config"
+	
+    Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath "$tmpPackageFolder\ConnectionString.xmlupdate" -Replaces "{ConnectionStringName}=EPiServerDB;{SqlDataSource}=$DbServer;{DatabaseName}=$DbName;{DatabaseUser}=$DbSiteUser;{DatabasePassword}=$DbSitePassword;"
 }
+
+
 
 if ($DeleteSite -eq $true) {
     Detach-Database $SiteName $DbServer $DbSiteUser
