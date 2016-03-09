@@ -124,21 +124,25 @@ function Deploy-Nuget {
     "Extracting $PackagePath to $tmpPackagePath"
     [System.IO.Compression.ZipFile]::ExtractToDirectory($PackagePath, $tmpPackagePath)
     
-	"Copying package content..."
-    Copy-Item "$tmpPackagePath\content" $SitePath -recurse
+	if (Test-Path "$tmpPackagePath\content") {
+		"Copying package content..."
+		Copy-Item "$tmpPackagePath\content\*" $SitePath -recurse -ErrorAction SilentlyContinue
+	}
 	
-	"Copying package assemblies..."
-	Copy-Item "$tmpPackagePath\lib\*.dll" "$SitePath\bin"	
+	if (Test-Path "$tmpPackagePath\lib") {
+		"Copying package assemblies..."
+		Copy-Item "$tmpPackagePath\lib\*.dll" "$SitePath\bin"	
+	}
 	
 	if (Test-Path "$tmpPackagePath\tools\epiupdates\sql") {
-		$sqlScript = "$tmpPackagePath\setup\Script.sql"				
+		$sqlScript = "$tmpPackagePath\Script.sql"				
 		foreach ($script in Get-ChildItem "$tmpPackagePath\tools\epiupdates\sql" -Filter '*.sql')
 		{
 			Add-Content -Path $sqlScript -Value (Get-Content $script.FullName)			
 		}
 		
 		"Executing package SQL scripts..."
-		Execute-Sql $sqlScript, $SiteName, $DbServer, $DbUsername, $DbPassword
+		Execute-Sql $sqlScript $SiteName $DbServer $DbUsername $DbPassword
 	}
 	
 }
@@ -175,20 +179,20 @@ function Attach-Database {
 
 function Execute-Sql {
     param (
-        $sqlScriptPath,
+        $SqlScript,
         $SiteName,
         $DbServer, 
         $DbUsername, 
         $DbPassword
     )
 
-    "Create Testing database structures"
+    "Create Testing database structures: $SqlScript"
 	
-	$DbName = "daily-" + $SiteName
+	$DbName = "daily-$SiteName"
     
 	$var1 = "DBName=$DbName"
     $varCollection = $var1
-    Invoke-Sqlcmd -InputFile $sqlScript -Variable $varCollection -ServerInstance $DbServer -Username $DbUserName -Password $DbPassword
+    Invoke-Sqlcmd -InputFile $SqlScript -Variable $varCollection -ServerInstance $DbServer -Username $DbUserName -Password $DbPassword
 }
 
 function Detach-Database {
