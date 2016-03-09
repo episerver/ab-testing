@@ -1,7 +1,7 @@
 ﻿using EPiServer.Marketing.Messaging;
 using Xunit;
 
-namespace EPiServer.Marketing.Test.Messaging
+namespace EPiServer.Marketing.Messaging.Tests
 {
     public class FanOutMessageDispatcherTests
     {

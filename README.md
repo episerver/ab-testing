@@ -12,8 +12,9 @@ We make use of the NuGet *package restore* functionality to fetch our dependenci
 
 
 ### Setup
-1. Run setup/build script in the root folder:
+1. Run setup and build script in the root folder:
 ```
+setup
 build
 ```
 2. Run /samples/EPiServer.Templates.Alloy test site in Visual Studio.

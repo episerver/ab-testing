@@ -297,51 +297,50 @@ xcopy "$(TargetDir)"\EPiServer.Marketing.Testing.Model*dll "$(SolutionDir)Deploy
 IF exist "$(SolutionDir)Deployment\*.nuspec" ( del "$(SolutionDir)Deployment\*.nuspec" /s /q )
 xcopy "$(ProjectDir)"\*.nuspec "$(SolutionDir)Deployment\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration"
-xcopy "$(ProjectDir)"\Views\TestingAdministration\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingAdministration\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingAdministration" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingAdministration" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingAdministration"
+xcopy "$(ProjectDir)"\Views\TestingAdministration\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingAdministration\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget"
-xcopy "$(ProjectDir)"\Views\TestingGadget\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Views\TestingGadget\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingGadget" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingGadget" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingGadget"
+xcopy "$(ProjectDir)"\Views\TestingGadget\*.ascx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingGadget\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Web" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"
-xcopy "$(ProjectDir)"MultivariateConfiguration.aspx "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"  /I /F /R /Y
-xcopy "$(ProjectDir)"module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Web" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Web" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing"
+xcopy "$(ProjectDir)"module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 
 IF exist "$(SolutionDir)Deployment\tools\epiupdates\sql" ( del "$(SolutionDir)Deployment\tools\epiupdates\sql" /s /q )
 xcopy "$(SolutionDir)"\Database\*.sql "$(SolutionDir)Deployment\tools\epiupdates\sql"  /I /F /R 
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles"
-xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Testing_EN.xml "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\EmbeddedLangFiles\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles"
+xcopy "$(ProjectDir)"\EmbeddedLangFiles\EPiServer_Testing_EN.xml "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles\"  /I /F /R /Y
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"
-xcopy "$(ProjectDir)"\Scripts "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Scripts"  /I /F /R /Y /S
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Scripts" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Scripts" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Scripts"
+xcopy "$(ProjectDir)"\Scripts "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Scripts"  /I /F /R /Y /S
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images" /s /q )
-mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images"
-xcopy "$(ProjectDir)"\Images "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\Images"  /I /F /R /Y /S
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Images" ( rmdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Images" /s /q )
+mkdir "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Images"
+xcopy "$(ProjectDir)"\Images "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\Images"  /I /F /R /Y /S
 
 IF exist "$(SolutionDir)Deployment\temp\" ( rmdir "$(SolutionDir)Deployment\temp" /s /q )
 mkdir "$(SolutionDir)Deployment\temp"
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)\Scripts\buildzip.ps1" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate" "$(SolutionDir)Deployment\temp\EPiServer.Multivariate.zip"
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" Unblock-File "$(SolutionDir)Deployment\temp\EPiServer.Multivariate.zip"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(SolutionDir)\Scripts\buildzip.ps1" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing" "$(SolutionDir)Deployment\temp\EPiServer.Marketing.Testing.zip"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" Unblock-File "$(SolutionDir)Deployment\temp\EPiServer.Marketing.Testing.zip"
 
-for /d %25%25i in ("$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\*") do rd /s /q "%25%25i"
-del /q "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\*.*"
+for /d %25%25i in ("$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\*") do rd /s /q "%25%25i"
+del /q "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\*.*"
 
-xcopy "$(SolutionDir)Deployment\temp\*.zip" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\"  /I /F /R /Y
+xcopy "$(SolutionDir)Deployment\temp\*.zip" "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\"  /I /F /R /Y
 rmdir "$(SolutionDir)Deployment\temp" /s /q
 
-IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\module.config" ( del "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\module.config" /s /q )
-xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Multivariate\"  /I /F /R /Y
+IF exist "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\module.config" ( del "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\module.config" /s /q )
+xcopy "$(ProjectDir)"\module.config "$(SolutionDir)Deployment\content\modules\_protected\EPiServer.Marketing.Testing\"  /I /F /R /Y
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\MSBuild\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
-xcopy "$(SolutionDir)Deployment\*nupkg" "$(TargetDir)" /I /F /R /Y</PostBuildEvent>
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "$(ProjectDir)..\..\build\buildpackage.ps1" "$(ProjectDir)..\Deployment" "$(ProjectDir)..\\"
+xcopy "$(SolutionDir)Deployment\*nupkg" "$(SolutionDir)..\artifacts" /I /F /R /Y</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

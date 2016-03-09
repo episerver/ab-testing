@@ -5,7 +5,7 @@ using EPiServer.Core;
 using System;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Web
+namespace EPiServer.Marketing.Testing.Tests.Web
 {
     public class UIHelperTests
     {

@@ -19,4 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 
-[assembly: InternalsVisibleTo("EPiServer.Marketing.Messaging.Test")]
+[assembly: InternalsVisibleTo("EPiServer.Marketing.Messaging.Tests")]

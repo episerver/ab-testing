@@ -13,7 +13,7 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Web
+namespace EPiServer.Marketing.Testing.Tests.Web
 {
         [ExcludeFromCodeCoverage]
     public class TestingAdministrationControllerTest

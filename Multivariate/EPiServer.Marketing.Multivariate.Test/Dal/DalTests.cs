@@ -4,10 +4,10 @@ using System.Data.Common;
 using System.Linq;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Test.Core;
+using EPiServer.Marketing.Testing.Tests.Core;
 using Xunit;
 
-namespace EPiServer.Marketing.Multivariate.Test.Dal
+namespace EPiServer.Marketing.Testing.Tests.Dal
 {
     public class DalTests : TestBase
     {

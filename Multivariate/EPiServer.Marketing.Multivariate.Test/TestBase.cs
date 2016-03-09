@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Model;
 using EPiServer.Marketing.Testing.Model.Enums;
-using EPiServer.Marketing.Multivariate.Test.Dal;
+using EPiServer.Marketing.Testing.Tests.Dal;
 using EPiServer.Marketing.Testing.Dal;
 
-namespace EPiServer.Marketing.Multivariate.Test.Core
+namespace EPiServer.Marketing.Testing.Tests.Core
 {
     public class TestBase
     {

@@ -4,7 +4,7 @@ using System.Data.Entity;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Model;
 
-namespace EPiServer.Marketing.Multivariate.Test.Dal
+namespace EPiServer.Marketing.Testing.Tests.Dal
 {
     public class TestContext : DatabaseContext
     {

@@ -133,7 +133,7 @@
             <span class="btn">@Html.ActionLink("Create New", "CreateAbTest")</span>
         </p>
         <p>
-            @using (Html.BeginForm("FilteredTests", "MultivariateApiTesting", FormMethod.Post))
+            @using (Html.BeginForm("FilteredTests", "ApiTesting", FormMethod.Post))
             {
                 <table class="table">
                     @for (var i = 0; i < Model.Filters.Count; i++)
