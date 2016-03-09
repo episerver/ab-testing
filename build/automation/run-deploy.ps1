@@ -104,7 +104,6 @@ function Install-Nuget {
 		
     #Install the nuget package into the $SitePath
 	nuget install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache 
-    #&"C:\Stash\EPiServer.Marketing.Multivariate\build\resources\nuget\nuget.exe" install $PackageName -Version $PackageVersion -Prerelease -OutputDirectory $SitePath -Source $NugetFeed -NoCache
 }
 
 function Deploy-Nuget {
@@ -143,8 +142,7 @@ function Deploy-Nuget {
 		
 		"Executing package SQL scripts..."
 		Execute-Sql $sqlScript $SiteName $DbServer $DbUsername $DbPassword
-	}
-	
+	}	
 }
 
 
