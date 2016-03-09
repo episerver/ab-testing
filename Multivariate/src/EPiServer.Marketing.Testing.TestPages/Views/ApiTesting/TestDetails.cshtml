@@ -11,14 +11,14 @@
     <title>TestDetails</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript">
-        var updateBoth = function (testId, variantId) {
+        var updateBoth = function (testId, variantId, itemVersion) {
 		for (i = 0; i < 100; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateview',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId }
+			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -30,7 +30,7 @@
 			url: '/api/episerver/testing/updateconversion/',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId }
+			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -40,14 +40,14 @@
 		}
         };
 
-        var updateView = function (testId, variantId) {
+        var updateView = function (testId, variantId, itemVersion) {
 		for (i = 0; i < 100; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateview',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId }
+			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -56,14 +56,14 @@
 		}
         };
 
-        var updateConversion = function (testId, variantId) {
+        var updateConversion = function (testId, variantId, itemVersion) {
 		for (i = 0; i < 100; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateconversion/',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId }
+			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -119,14 +119,14 @@
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => result.Views)</td>
                         <td>@Html.DisplayFor(resultItem => result.Views)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@result.ItemId');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@result.ItemId','@result.ItemVersion');" /></td>
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => result.Conversions)</td>
                         <td>@Html.DisplayFor(resultItem => result.Conversions)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@result.ItemId');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@result.ItemId','@result.ItemVersion');" /></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@result.ItemId');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@result.ItemId','@result.ItemVersion' );" /></td>
                     </tr>
                     <tr><td>&nbsp;</td></tr> }
             </table>

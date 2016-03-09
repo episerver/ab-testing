@@ -166,13 +166,17 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 {
                     for (int x = 0; x < _model.Views; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id, 1, CountType.View);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 1, CountType.View);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
+                            test.Variants[0].ItemVersion, CountType.View);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 
+                            test.Variants[1].ItemVersion, CountType.View);
                     }
                     for (int x = 0; x < _model.Conversions; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id, 1, CountType.Conversion);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 1, CountType.Conversion);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
+                            test.Variants[0].ItemVersion, CountType.Conversion);
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id,
+                            test.Variants[1].ItemVersion, CountType.Conversion);
                     }
 
                     IMessagingManager mm = ServiceLocator.Current.GetInstance<IMessagingManager>();
