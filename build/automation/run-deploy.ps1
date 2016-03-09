@@ -221,9 +221,7 @@ function Transform-Config {
     )
 
     "Transform config files"
-    Update-EPiXmlFile -TargetFilePath "$SitePath\connectionStrings.config" -ModificationFilePath "$TmpPackageFolder\Setup\connectionStrings.transform" -Replaces "{DbServer}=$DbServer;{DbDatabase}=$SiteName;{DbUserName}=$DbSiteUser;{DbPassword}=$DbSitePassword;"
-
-    Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath "$TmpPackageFolder\Setup\Web.transform" -Replaces "{siteName}=$SiteName;"
+    Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath "$TmpPackageFolder\ConnectionString.xmlupdate" -Replaces "{DbServer}=$DbServer;{DbDatabase}=$SiteName;{DbUserName}=$DbSiteUser;{DbPassword}=$DbSitePassword;"
 }
 
 if ($DeleteSite -eq $true) {
@@ -241,7 +239,7 @@ if ($CreateSite -eq $true) {
 	$DbPath = $SitePath + "\App_Data\AlloyEPiServerDB.mdf"    
 	Attach-Database $DbPath $SiteName $DbServer $DbSiteUser $DbSitePassword	
 	
-	#Transform-Config $tmpPackageFolder $SitePath $DbServer $SiteName $DbSiteUser $DbSitePassword
+	Transform-Config $artifactPath $SitePath $DbServer $SiteName $DbSiteUser $DbSitePassword
 	
 	foreach ($package in Get-ChildItem "$artifactPath" -Filter '*.nupkg') {
 		Deploy-Nuget $package.FullName $SitePath $SiteName $DbServer $DbSiteUser $DbSitePassword	$tmpFolder
