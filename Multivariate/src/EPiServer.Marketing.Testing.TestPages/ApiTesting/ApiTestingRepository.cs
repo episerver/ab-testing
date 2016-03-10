@@ -4,10 +4,10 @@ using System.Linq;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
 namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             if (viewModel == null)
             {
-                discoveredTests = mtm.GetTestList(new TestCriteria());
+                discoveredTests = mtm.GetTestList(new Data.TestCriteria());
             }
             else
             {
@@ -136,9 +136,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, 1, CountType.View);
+                _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, 1, CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -153,9 +153,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, 1, CountType.View);
+                _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, 1, CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.Conversion);
             }
 
             return _mtm.Get(testId);
