@@ -3,7 +3,7 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using System.Linq;
 using Xunit;
 
-namespace EPiServer.Marketing.Testing.Tests.Data
+namespace EPiServer.Marketing.Testing.Test.Data
 {
     public class TestCriteriaTests
     {

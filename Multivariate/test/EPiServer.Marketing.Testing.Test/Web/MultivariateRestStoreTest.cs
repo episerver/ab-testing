@@ -6,7 +6,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 
-namespace EPiServer.Marketing.Testing.Tests.Web
+namespace EPiServer.Marketing.Testing.Test.Web
 {
         public class TestingRestStoreTest
     {

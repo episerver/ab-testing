@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Tests.Dal;
+using EPiServer.Marketing.Testing.Test.Dal;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
-namespace EPiServer.Marketing.Testing.Tests
+namespace EPiServer.Marketing.Testing.Test
 {
     public class TestBase
     {

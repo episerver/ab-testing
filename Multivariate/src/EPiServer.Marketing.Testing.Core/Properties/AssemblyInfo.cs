@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 
-[assembly: InternalsVisibleTo("EPiServer.Marketing.Testing.Tests")]
+[assembly: InternalsVisibleTo("EPiServer.Marketing.Testing.Test")]

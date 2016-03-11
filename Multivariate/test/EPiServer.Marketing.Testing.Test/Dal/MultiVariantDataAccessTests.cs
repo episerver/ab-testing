@@ -5,10 +5,10 @@ using System.Linq;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.Entity;
 using EPiServer.Marketing.Testing.Dal.Entity.Enums;
-using EPiServer.Marketing.Testing.Tests;
+using EPiServer.Marketing.Testing.Test;
 using Xunit;
 
-namespace EPiServer.Marketing.Testing.Tests.Dal
+namespace EPiServer.Marketing.Testing.Test.Dal
 {
     public class MultiVariantDataAccessTests : TestBase
     {
