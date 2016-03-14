@@ -315,6 +315,14 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
+        public ActionResult StopTest(string id)
+        {
+            ApiTestingRepository testLib = new ApiTestingRepository();
+            var multiVariateTest = testLib.StopTest(Guid.Parse(id));
+
+            return View("TestDetails", multiVariateTest);
+        }
+
         public ActionResult ArchiveAbTest(string id)
         {
             TestManager mtm = new TestManager();

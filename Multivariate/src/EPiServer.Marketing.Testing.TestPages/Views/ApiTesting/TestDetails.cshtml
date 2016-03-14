@@ -133,10 +133,37 @@
         }
     </fieldset>
     <p>
-        @Html.ActionLink("Start & Stop Test", "RunAbTests", new { id = Model.Id }) |
-        @Html.ActionLink("Start", "StartTest", new { id = Model.Id })
-        @Html.ActionLink("Archive", "ArchiveAbTest", new { id = Model.Id }) |
-        @Html.ActionLink("Edit", "UpdateAbTest", new { id = Model.Id }) |
+        <div>
+            <fieldset>
+                <legend>Test Functions</legend>
+                <div>
+                    <em>
+                        The <strong>Start & Stop Test</strong> and <strong>"Start"</strong>functions are hard coded to run a specified<br />
+                        number of simulated views. Each view has a 5% chance of being a conversion. The values can currently only be modified<br />
+                        in the ApiTestingRespository methods.
+                    </em>
+                    <br />
+                    <br />
+                </div>
+                <div>
+                    @Html.ActionLink("Start & Stop Test", "RunAbTests", new { id = Model.Id }) &nbsp;&nbsp;<em>Runs a simulated test, randomly returning variants and updating the views & conversions (By default it will simulate 50 tests). </em>
+                </div>
+                <div>
+                    @Html.ActionLink("Start", "StartTest", new { id = Model.Id }) |
+                    @Html.ActionLink("Stop", "StopTest", new { id = Model.Id })
+                    &nbsp;&nbsp;<em>Toggles the state of the test between active and done. Start will simulate, by default, 5 views.</em>
+                </div>
+                <div>
+                    @Html.ActionLink("Archive", "ArchiveAbTest", new { id = Model.Id }) &nbsp;&nbsp;<em>Sets the current test state to "Archived"</em>
+                </div>
+                <div>
+                    @Html.ActionLink("Edit", "UpdateAbTest", new { id = Model.Id }) &nbsp;&nbsp;<em>Brings up the edit form for the current state</em>
+                </div>
+                <div></div>
+            </fieldset>
+
+        </div>
+        <br />
         @Html.ActionLink("Back to List", "Index")
     </p>
 </body>

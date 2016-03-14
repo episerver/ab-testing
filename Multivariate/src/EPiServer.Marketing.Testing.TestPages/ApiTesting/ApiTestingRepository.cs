@@ -133,12 +133,16 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         {
             _mtm = new TestManager();
             _mtm.Start(testId);
-            for (int x = 0; x < 5; x++)
+            var test = _mtm.Get(testId);
+
+            for (int x = 0; x < 50; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.View);
+
+                var version = test.Variants.First(v => v.Id == result);
+                _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -150,13 +154,24 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         {
             _mtm = new TestManager();
             _mtm.Start(testId);
+            var test = _mtm.Get(testId);
             for (int x = 0; x < 5; x++)
             {
                 Guid result = _mtm.ReturnLandingPage(testId);
-                _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.View);
+                var version = test.Variants.First(v => v.Id == result);
+                _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, 1, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
+
+            return _mtm.Get(testId);
+        }
+
+        public IMarketingTest StopTest(Guid testId)
+        {
+            _mtm = new TestManager();
+            _mtm.Stop(testId);
+
 
             return _mtm.Get(testId);
         }
