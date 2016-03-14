@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Multivariate.Test.Dal;
+using EPiServer.Marketing.Testing.Test.Dal;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 

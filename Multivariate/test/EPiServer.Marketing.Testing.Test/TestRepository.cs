@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Multivariate.Test.Dal;
+using EPiServer.Marketing.Testing.Test.Dal;
 
-namespace EPiServer.Marketing.Multivariate.Test.Core
+namespace EPiServer.Marketing.Testing.Test.Core
 {
     public class TestRepository : IRepository
     {
