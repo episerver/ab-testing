@@ -24,7 +24,7 @@ md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"
 xcopy "%ProjectPath%\Web\MultivariateConfiguration.aspx" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 
-xcopy "..\Database"\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
+xcopy "..\src\Database"\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles"
 xcopy "%ProjectPath%\EmbeddedLangFiles\EPiServer_Testing_EN.xml" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles\"  /I /F /R /Y
