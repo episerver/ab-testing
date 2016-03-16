@@ -4,6 +4,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0ACC9772-A4A0-4B7D-B3E6-CC1D3D696F82}"
 	ProjectSection(SolutionItems) = preProject
+		AssemblyVersionAuto.cs = AssemblyVersionAuto.cs
 		global.json = global.json
 	EndProjectSection
 EndProject
@@ -21,7 +22,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing.Dal", "src\EPiServer.Marketing.Testing.Dal\EPiServer.Marketing.Testing.Dal.xproj", "{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing.TestPages", "src\EPiServer.Marketing.Testing.TestPages\EPiServer.Marketing.Testing.TestPages.xproj", "{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.Testing.TestPages", "samples\EPiServer.Marketing.Testing.TestPages\EPiServer.Marketing.Testing.TestPages.xproj", "{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPIServer.Marketing.Messaging", "src\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.xproj", "{167D31D8-063C-48CA-84EC-0D136BAED1F8}"
 EndProject
@@ -31,7 +32,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.KPI", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{161B3773-B01D-4D63-BDE5-CA6A022DF4DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Templates.Alloy", "..\samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj", "{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Templates.Alloy", "samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj", "{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EPiServer.Marketing.KPI.Test", "test\EPiServer.Marketing.KPI.Test\EPiServer.Marketing.KPI.Test.xproj", "{5909B279-FD10-45D8-8208-95AB9A00090B}"
 EndProject

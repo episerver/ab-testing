@@ -14,7 +14,7 @@
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[9.0.3,10)" />
       <dependency id="EPiServer.CMS.UI" version="[9.2,10)" />
-      <dependency id="EPiServer.Marketing.Multivariate" version="[1,2]" />
+      <dependency id="EPiServer.Marketing.Testing" version="$version$" />
       <dependency id="EPiServer.Logging.Log4Net" version="[2,3)" />
     </dependencies>
   </metadata>

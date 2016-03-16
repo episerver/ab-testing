@@ -1488,23 +1488,23 @@
   "libraries": {
     "EPiServer.Marketing.KPI/1.0.0": {
       "type": "project",
-      "path": "../EPiServer.Marketing.KPI/project.json"
+      "path": "../../src/EPiServer.Marketing.KPI/project.json"
     },
     "EPIServer.Marketing.Messaging/1.0.0": {
       "type": "project",
-      "path": "../EPIServer.Marketing.Messaging/project.json"
+      "path": "../../src/EPIServer.Marketing.Messaging/project.json"
     },
     "EPiServer.Marketing.Testing.Core/1.0.0": {
       "type": "project",
-      "path": "../EPiServer.Marketing.Testing.Core/project.json"
+      "path": "../../src/EPiServer.Marketing.Testing.Core/project.json"
     },
     "EPiServer.Marketing.Testing.Dal/1.0.0": {
       "type": "project",
-      "path": "../EPiServer.Marketing.Testing.Dal/project.json"
+      "path": "../../src/EPiServer.Marketing.Testing.Dal/project.json"
     },
     "EPiServer.Marketing.Testing.Web/1.0.0": {
       "type": "project",
-      "path": "../EPiServer.Marketing.Testing.Web/project.json"
+      "path": "../../src/EPiServer.Marketing.Testing.Web/project.json"
     },
     "Antlr/3.4.1.9004": {
       "type": "package",

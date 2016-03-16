@@ -8,20 +8,21 @@ Write-Host "Run xunit tests"
 Write-Host $configuration
 Write-Host $teamcity
 
-Write-Host "InvocationName:" $MyInvocation.InvocationName
-Write-Host "Path:" $MyInvocation.MyCommand.Path
+$ENV:Path = "$cwd\;" + $ENV:Path
 
-#find console test runner
-Set-Location "$cwd\..\packages"
-$runner = Get-ChildItem -Recurse -Filter 'xunit.console.exe'
+# Install runtime dependencies
+dnvm update-self
+dnvm install "1.0.0-rc1-update1" -runtime CLR -arch x86 -alias default
+dnvm use default
 
-Set-Location ..\
-#find all tests dlls
-foreach ($item in Get-ChildItem -Recurse -Filter '*.tests.dll' | Where-Object {$_.FullName -like '*bin*'})
-{
-    &$runner.FullName $item.FullName $runtestmode
-	if ($lastexitcode -eq 1) {
-		Write-Host "TEST failed" -foreground "red"
-		exit $lastexitcode
-	}	
+# Run tests for all test projects
+Get-ChildItem "$cwd\..\test" -Filter "*Test"  | ForEach-Object {
+	pushd "$cwd\..\test\$_"
+    dnx --configuration $configuration test
+    if ($lastexitcode -eq 1) {
+        popd
+        Write-Host "TEST failed" -foreground "red"
+        exit $lastexitcode
+    }
+    popd
 }

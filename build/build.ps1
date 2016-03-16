@@ -8,17 +8,34 @@ param ([string]$configuration = "Release",
 $cwd = Split-Path -parent $PSCommandPath
 pushd $cwd
 
-# TODO: 
+
 # Install runtime dependencies
+$ENV:Path = "$cwd;" + $ENV:Path
+
+# Install runtime dependencies
+dnvm update-self
+dnvm install "1.0.0-rc1-update1" -runtime CLR -arch x86 -alias default
+dnvm use default
+
 # Install node dependencies
 
 "Building $configuration"
 
 # Restore packages
-&"$cwd\resources\nuget\NuGet.exe" restore ..\Multivariate\EPiServer.Marketing.Testing.sln -PackagesDirectory ..\packages
-# TODO: 
-# Restore packages for xprojs
+dnu restore ..\ --quiet
+if ($lastexitcode -eq 1) {
+    Write-Host "RESTORE failed" -foreground "red"
+    exit $lastexitcode
+}
+
+&"$cwd\resources\nuget\NuGet.exe" restore ..\samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj -PackagesDirectory ..\packages
+
 # Build all xprojs
+dnu build ..\** --quiet --configuration $configuration --out ..\artifacts
+if ($lastexitcode -eq 1) {
+    Write-Host "BUILD failed" -foreground "red"
+    exit $lastexitcode
+}
 
 # Get the latest msbuild version
 Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
@@ -26,7 +43,7 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 }
 
 # Build msbuild projects
-&"$msbuild" ..\Multivariate\EPiServer.Marketing.Testing.sln /p:Configuration=$configuration /p:Platform="Any CPU\"
+&"$msbuild" ..\samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj /p:Configuration=$configuration /p:Platform="AnyCPU"
 
 
 # TODO: 
@@ -41,7 +58,7 @@ if([System.Convert]::ToBoolean($runTests) -eq $true) {
 if([System.Convert]::ToBoolean($pack) -eq $true) {
 	# make sure that we have some package version
 	if (!$packageVersion) {
-		$match = (Select-String -Path $cwd\..\Multivariate\AssemblyVersionAuto.cs -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
+		$match = (Select-String -Path $cwd\..\AssemblyVersionAuto.cs -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
 		$packageVersion = $match.Groups[1].Value
 	}
 	
