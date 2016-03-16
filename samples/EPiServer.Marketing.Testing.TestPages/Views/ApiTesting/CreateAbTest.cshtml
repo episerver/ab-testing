@@ -61,14 +61,18 @@
             <legend>IMultivariateTest</legend>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.Title)
+                Test Title
+                <span style="color:red">*</span>
+
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Title)
                 @Html.ValidationMessageFor(model => model.Title)
             </div>
             <div class="editor-label">
-                @Html.LabelFor(model => model.Description)
+                Test Description
+                <span style="color:red">*</span>
+
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Description)
@@ -76,7 +80,9 @@
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.Owner)
+                Test Owner
+                <span style="color:red">*</span>
+
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Owner)
@@ -84,7 +90,9 @@
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.StartDate)
+                Start Date
+                <span style="color:red">*</span>
+
             </div>
             <div class="editor-field">
                 <input type="date" name="StartDate" value="@Model.StartDate" />
@@ -92,7 +100,9 @@
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.EndDate)
+                End Date
+                <span style="color:red">*</span>
+
             </div>
             <div class="editor-field">
                 <input type="date" name="EndDate" value="@Model.EndDate" />
@@ -100,7 +110,10 @@
             </div>
 
             <div class="editor-label">
-                @Html.LabelFor(model => model.OriginalItemId)
+
+                Orginal Item Id (Guid)
+                <span style="color:red">*</span>
+
             </div>
             <div class="editor-field">
                 @Html.TextBoxFor(model => model.OriginalItemId, new { @id = "originalItem", @onchange = "javascript:GetVersions(this.value);" })
@@ -110,6 +123,7 @@
                 <div class="editor-field" style="float: left">
                     <div class="editor-label">
                         Version A:
+                        <span style="color:red">*</span>
                     </div>
                     <select id="Variants_0_ItemVersion" name="Variants[0].ItemVersion">
                         <option>No Available Versions</option>
@@ -120,6 +134,7 @@
                 <div class="editor-field">
                     <div class="editor-label">
                         Version B
+                        <span style="color:red">*</span>
                     </div>
                     <select id="Variants_1_ItemVersion" name="Variants[1].ItemVersion">
                         <option>No Available Versions</option>
@@ -147,5 +162,6 @@
     <div>
         @Html.ActionLink("Back to List", "Index")
     </div>
+
 </body>
 </html>

@@ -6,7 +6,7 @@ using System.Threading;
 using EPiServer.Marketing.Testing.Messaging;
 using Xunit;
 
-namespace EPiServer.Marketing.Testing.Test.Messaging
+namespace EPiServer.Marketing.Testing.Test.Core.Messaging
 {
         public class MessagingManagerTests
     {

@@ -4,13 +4,13 @@ using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.ApiTesting;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
 using System.Threading;
 using System.Diagnostics;
 using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
 {
@@ -90,7 +90,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     OriginalItemId = startpage.ContentGuid,
                     Owner = "Automation",
                     StartDate = DateTime.Now.AddDays(1),
-                    State = TestState.Active,
+                    State = Data.Enums.TestState.Inactive,
                     TestResults = new List<TestResult>(),
                     Title = "Automation_" + TestID,
                     Description = "Description_" + TestID++,
@@ -167,16 +167,16 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     for (int x = 0; x < _model.Views; x++)
                     {
                         testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
-                            test.Variants[0].ItemVersion, CountType.View);
+                            test.Variants[0].ItemVersion, Data.Enums.CountType.View);
                         testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 
-                            test.Variants[1].ItemVersion, CountType.View);
+                            test.Variants[1].ItemVersion, Data.Enums.CountType.View);
                     }
                     for (int x = 0; x < _model.Conversions; x++)
                     {
                         testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
-                            test.Variants[0].ItemVersion, CountType.Conversion);
+                            test.Variants[0].ItemVersion, Data.Enums.CountType.Conversion);
                         testManager.EmitUpdateCount(test.Id, test.Variants[1].Id,
-                            test.Variants[1].ItemVersion, CountType.Conversion);
+                            test.Variants[1].ItemVersion, Data.Enums.CountType.Conversion);
                     }
 
                     IMessagingManager mm = ServiceLocator.Current.GetInstance<IMessagingManager>();
@@ -315,6 +315,14 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
+        public ActionResult StopTest(string id)
+        {
+            ApiTestingRepository testLib = new ApiTestingRepository();
+            var multiVariateTest = testLib.StopTest(Guid.Parse(id));
+
+            return View("TestDetails", multiVariateTest);
+        }
+
         public ActionResult ArchiveAbTest(string id)
         {
             TestManager mtm = new TestManager();
@@ -327,7 +335,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateView(string id, string itemid)
         {
             TestManager mtm = new TestManager();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, CountType.View);
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
@@ -336,7 +344,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateConversion(string id, string itemid)
         {
             TestManager mtm = new TestManager();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, CountType.Conversion);
+            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
