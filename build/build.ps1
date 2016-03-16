@@ -28,7 +28,7 @@ if ($lastexitcode -eq 1) {
     exit $lastexitcode
 }
 
-&"$cwd\resources\nuget\NuGet.exe" restore ..\samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj -PackagesDirectory ..\packages
+&"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
 
 # Build all xprojs
 dnu build ..\** --quiet --configuration $configuration --out ..\artifacts
@@ -43,7 +43,7 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 }
 
 # Build msbuild projects
-&"$msbuild" ..\samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj /p:Configuration=$configuration /p:Platform="AnyCPU"
+&"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
 
 # TODO: 
