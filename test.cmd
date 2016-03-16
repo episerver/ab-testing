@@ -1,0 +1,1 @@
+powershell -File "build\test.ps1" %*
