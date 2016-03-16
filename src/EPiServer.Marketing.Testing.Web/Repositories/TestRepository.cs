@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             //var g = kpiManager.GetKpiList().FirstOrDefault(k => k.Name == "MyKpi");
 
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            var test = ConvertToMultivariateTest(testData);
+            var test = ConvertToTest(testData);
             //test.KeyPerformanceIndicators.Add(new KeyPerformanceIndicator() {Id = Guid.NewGuid(), KeyPerformanceIndicatorId = kpi.Id});
             return tm.Save(test);
         }
@@ -138,7 +138,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// </summary>
         /// <param name="viewModelToConvert"></param>
         /// <returns>MulviaraiteTestViewmodel</returns>
-        public ABTest ConvertToMultivariateTest(ABTestViewModel viewModelToConvert)
+        public ABTest ConvertToTest(ABTestViewModel viewModelToConvert)
         {
             IContentRepository contentrepo = _serviceLocator.GetInstance<IContentRepository>();
 

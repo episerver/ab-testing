@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         IList<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of test results. There will be a MultivariateTestResult for the OriginalItem and each Variant item.
+        /// List of test results. There will be a TestResults for the OriginalItem and each Variant item.
         /// </summary>
         IList<TestResult> TestResults { get; set; }
 

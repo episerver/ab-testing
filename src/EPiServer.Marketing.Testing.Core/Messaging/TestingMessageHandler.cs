@@ -6,7 +6,7 @@ namespace EPiServer.Marketing.Testing.Messaging
 {
     /// <summary>
     /// The message handler simply handles the messages and passes them on the registered
-    /// IMultivariateTestRepository which in turn handles the cache and database layer.
+    /// ITestingMessageHandler which in turn handles the cache and database layer.
     /// </summary>
     class TestingMessageHandler : ITestingMessageHandler
     {

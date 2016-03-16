@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.Testing.Dal
         public ABTestFilter() { }
         
         /// <summary>
-        /// The MultivariateTest property that will be filtered on
+        /// The ABTestProperty that will be filtered on
         /// </summary>
         public ABTestProperty Property { get; set; }
 

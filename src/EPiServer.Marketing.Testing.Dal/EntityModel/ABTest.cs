@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         public virtual IList<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of results for the test.  There will be a MultivariateTestResult for the OriginalItem and each Variant item.
+        /// List of results for the test.  There will be a TestResults for the OriginalItem and each Variant item.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual IList<TestResult> TestResults { get; set; }

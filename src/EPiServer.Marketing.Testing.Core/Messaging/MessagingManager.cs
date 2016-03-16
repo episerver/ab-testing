@@ -15,7 +15,7 @@ namespace EPiServer.Marketing.Testing.Messaging
     [ServiceConfiguration(ServiceType = typeof(IMessagingManager), Lifecycle = ServiceInstanceScope.Singleton)]
     class MessagingManager : IMessagingManager
     {
-        private string QueName = "MultiVariantQueue";
+        private string QueName = "TestingQueue";
         private IServiceLocator _serviceLocator;
         private MessageHandlerRegistry registry;
         private MessagingApplicationBuilder appBuilder;
@@ -43,7 +43,7 @@ namespace EPiServer.Marketing.Testing.Messaging
 
         /// <summary>
         /// Initializes queue internals and registers the supported messages,
-        /// note that the IMultiVariateMessageHandler is retrieved from service locator
+        /// note that the ITestingMessageHandler is retrieved from service locator
         /// so that we can mock it in tests.
         /// </summary>
         internal void Init()

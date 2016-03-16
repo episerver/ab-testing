@@ -62,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Data
         public List<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of results for the test.  There will be a MultivariateTestResult for the OriginalItem and each Variant item.
+        /// List of results for the test.  There will be a TestResult for the OriginalItem and each Variant item.
         /// </summary>
         public List<TestResult> TestResults { get; set; }
 

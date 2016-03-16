@@ -5,7 +5,7 @@ using System.Web;
 namespace EPiServer.Marketing.Testing.Web.Models
 {
     /// <summary>
-    ///     Validation attribute for multivariate test Start Date which
+    ///     Validation attribute for test Start Date which
     ///     verifies the start date is not set to a value later than the end date.
     /// </summary>
     public class EndDateAttribute : ValidationAttribute

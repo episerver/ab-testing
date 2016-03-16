@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
-    [RestStore("multivariatetests")]
+    [RestStore("abtests")]
     public class TestingRestStore : RestControllerBase
     {
         private IServiceLocator _serviceLocator;

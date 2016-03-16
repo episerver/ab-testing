@@ -30,7 +30,7 @@
         <%= Html.ScriptResource(EPiServer.UriSupport.ResolveUrlFromUIBySettings("javascript/system.aspx")) %>
 
         <%  
-            // Get the relative path of the app i.e. /{PROTECTED_PATH}/EPiServer.Multivariate/
+            // Get the relative path of the app i.e. /{PROTECTED_PATH}/EPiServer.Marketing.Testing/
             UIHelper helper = new UIHelper();
             string appUrl = helper.GetAppRelativePath();
         %>

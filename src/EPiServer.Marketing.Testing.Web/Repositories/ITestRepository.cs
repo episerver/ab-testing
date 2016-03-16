@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         List<ABTestViewModel> GetTestList(TestCriteria criteria);
         ABTestViewModel GetTestById(Guid testId);
         ABTestViewModel ConvertToViewModel(IMarketingTest testToConvert);
-        ABTest ConvertToMultivariateTest(ABTestViewModel viewModelToConvert);
+        ABTest ConvertToTest(ABTestViewModel viewModelToConvert);
 
         TestResult GetWinningTestResult(ABTestViewModel test);
         void StopTest(Guid tetsGuid);
