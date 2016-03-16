@@ -18,8 +18,12 @@ if (!(Test-Path $artifactsPath))
 	New-Item -ItemType directory -Path $artifactsPath
 }
 
-# TODO:
 # Creating NuGet packages
+#TODO: refactor to Powershell scripts
+& "$cwd\generatepackages"
+& "$cwd\generatepackagesformessaging"
+& "$cwd\generatepackagesfortestpages"
+
 
 # Creating daily site package.
 # Copying database file to the site folder:

@@ -1,11 +1,11 @@
 $PackageDir = $args[0] 
 $SolutionDir = $args[1]
 
-Set-Location $PackageDir\
+$assemblyInfoPath = Join-Path $SolutionDir "AssemblyVersionAuto.cs"
+$nugetPath = Join-Path $SolutionDir "build\resources\nuget\nuget.exe"
+$nuspecPath = Join-Path $PackageDir "Package.nuspec"
 
-$assemblyVersionFile = "AssemblyVersionAuto.cs"
-
-$match = (Select-String -Path $SolutionDir$assemblyVersionFile -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
+$match = (Select-String -Path $assemblyInfoPath -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
 $assemblyVersion = $match.Groups[1].Value
 
-Invoke-Expression $SolutionDir'\..\build\resources\nuget\nuget.exe pack Package.nuspec -Version $assemblyVersion'
+Invoke-Expression "$nugetPath pack $nuspecPath -Version $assemblyVersion -BasePath $PackageDir -OutputDirectory $PackageDir"
