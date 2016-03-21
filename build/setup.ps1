@@ -11,7 +11,7 @@ pushd $cwd
 $EPiServerInstallCommon1Path = Resolve-Path "$cwd\resources\EPiServerInstall.Common.1.dll"
 Import-Module WebAdministration
 Import-Module sqlps -DisableNameChecking
-#[System.Reflection.Assembly]::LoadFrom($EPiServerInstallCommon1Path) | Import-Module  -DisableNameChecking
+[System.Reflection.Assembly]::LoadFrom($EPiServerInstallCommon1Path) | Import-Module  -DisableNameChecking
 
 
 function Attach-Database {
@@ -45,16 +45,14 @@ function Execute-Sql {
 function Transform-Config {
     param (
         $XmlUpdatePath,
-        $SitePath,
-        $DbServer,
-        $SiteName,
-        $DbSiteUser,
-        $DbSitePassword
+        $SitePath
     )
 
-    Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath $XmlUpdatePath -Replaces "{ConnectionStringName}=EPiServerDB;{SqlDataSource}=$DbServer;{DatabaseName}=$DbName;{DatabaseUser}=$DbSiteUser;{DatabasePassword}=$DbSitePassword;"
+    Update-EPiXmlFile -TargetFilePath "$SitePath\Web.config" -ModificationFilePath $XmlUpdatePath -Namespaces "d=urn:schemas-microsoft-com:asm.v1"
 }
 
+
+$SitePath = Resolve-Path "$cwd\..\samples\EPiServer.Templates.Alloy"
 
 # Clean
 if([System.Convert]::ToBoolean($clean) -eq $true) {
@@ -65,7 +63,7 @@ if([System.Convert]::ToBoolean($clean) -eq $true) {
 &"$cwd\build.ps1" $configuration
 
 # Setup database
-$databasePath = Resolve-Path "$cwd\..\samples\EPiServer.Templates.Alloy\App_Data"
+$databasePath = Join-Path $SitePath "App_Data"
 Detach-Database $DbName $DbServer
 Remove-Item "$databasePath\*" -include *.mdf,*.ldf
 
@@ -76,7 +74,7 @@ Attach-Database $databaseFilePath $DbName $DbServer
 
 # Create database structure
 $sqlScriptsPath = Resolve-Path "$cwd\..\src\Database"
-$sqlScript = Resolve-Path "$cwd\SqlScript.sql"
+$sqlScript = "$cwd\SqlScript.sql"
 if (Test-Path $sqlScript) {
 	Remove-Item $sqlScript
 }
@@ -97,4 +95,5 @@ Detach-Database $DbName $DbServer
 
 # TODO:
 # Setup virtual paths for modules
-#Transform-Config ...
+$xmlUpdatePath = Resolve-Path "$cwd\resources\AlloyDevelopmentConfig.xmlupdate"
+Transform-Config  $xmlUpdatePath $SitePath
