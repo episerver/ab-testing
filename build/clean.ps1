@@ -35,7 +35,6 @@ function Delete-Site {
 
     DeleteIfExists $site
     DeleteIfExists $appPoolName
-    DeleteIfExists $SitePath
 }
 
 function Detach-Database {
@@ -51,6 +50,8 @@ function Detach-Database {
 
 $SitePath = Resolve-Path "$cwd\..\samples\EPiServer.Templates.Alloy"
 
+&sqllocaldb stop v11.0
+
 # Detach database
 $databasePath = Join-Path $SitePath "App_Data"
 Detach-Database $DbName $DbServer
@@ -58,8 +59,6 @@ Remove-Item "$databasePath\*" -include *.mdf,*.ldf
 
 # Remove IIS site
 Delete-Site $SiteName $SitePath
-
-&sqllocaldb stop v11.0
 
 # Git clean
 &git clean -d -x -f
