@@ -86,11 +86,9 @@ foreach ($script in Get-ChildItem $sqlScriptsPath -Filter '*.sql')
 if (Test-Path  $sqlScript) {
 	"Executing package SQL scripts..."
 	Execute-Sql $sqlScript $DbName $DbServer
-}
-
-if (Test-Path $sqlScript) {
 	Remove-Item $sqlScript
 }
+
 Detach-Database $DbName $DbServer
 
 # TODO:
