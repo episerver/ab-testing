@@ -11,11 +11,10 @@ We make use of the NuGet *package restore* functionality to fetch our dependenci
 * The *Package Restore* setting needs to be enabled
 
 
-### Setup
-1. Run setup and build script in the root folder:
+### Development Environment Setup
+1. Run setup script in the root folder in order to clean, build and configure development environment:
 ```
 setup
-build
 ```
 2. Run /samples/EPiServer.Templates.Alloy test site in Visual Studio.
 
@@ -35,4 +34,4 @@ EPiServer.Templates.Alloy/*
 Update-EPiDatabase
 ```
 4. Copy database file from /samples/EPiServer.Templates.Alloy/App_Data to /build/resources folder. Don't run Alloy site before doing it.
-5. Commit your changes and discard changes in /samples/.gitignore
+5. Commit your changes and discard editing of /samples/.gitignore
