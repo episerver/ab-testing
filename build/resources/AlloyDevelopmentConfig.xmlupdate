@@ -18,4 +18,8 @@
 	  <add name="TestingPages" virtualPath="~/Views/ApiTesting" physicalPath="..\EPiServer.Marketing.Testing.TestPages\Views\ApiTesting" type="EPiServer.Web.Hosting.VirtualPathNonUnifiedProvider, EPiServer.Framework" __keyAttributes="name" />
   </add>
   
+  <add path="/configuration/episerver.framework/virtualPathProviders">
+	  <add name="Testing" virtualPath="~/EPiServer/EPiServer.Marketing.Testing" physicalPath="..\..\src\EPiServer.Marketing.Testing.Web" type="EPiServer.Web.Hosting.VirtualPathNonUnifiedProvider, EPiServer.Framework" __keyAttributes="name" />
+  </add>
+  
 </modifications>
