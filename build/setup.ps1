@@ -1,7 +1,7 @@
 param ([string]$configuration = "Debug",
     [string]$clean = "true",
 	[string]$DbName = "AlloyEPiServerDB",
-	[string]$DbServer = "(local)")
+	[string]$DbServer = "(localdb)\v11.0")
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
 $cwd = Split-Path -parent $PSCommandPath
@@ -56,7 +56,7 @@ $SitePath = Resolve-Path "$cwd\..\samples\EPiServer.Templates.Alloy"
 
 # Clean
 if([System.Convert]::ToBoolean($clean) -eq $true) {
-    &"$cwd\..\clean.cmd"
+    &"$cwd\clean.ps1"
 }
 
 # Build 
@@ -79,8 +79,7 @@ if (Test-Path $sqlScript) {
 	Remove-Item $sqlScript
 }
 
-foreach ($script in Get-ChildItem $sqlScriptsPath -Filter '*.sql')
-{
+foreach ($script in Get-ChildItem $sqlScriptsPath -Filter '*.sql') {
 	Add-Content -Path $sqlScript -Value (Get-Content $script.FullName)			
 }
 if (Test-Path  $sqlScript) {
