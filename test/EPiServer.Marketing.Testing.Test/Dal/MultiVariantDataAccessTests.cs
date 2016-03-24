@@ -33,6 +33,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 Title = "test",
                 Description = "description",
                 CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 State = TestState.Active,

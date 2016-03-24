@@ -22,6 +22,11 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         public int ItemVersion { get; set; }
 
         /// <summary>
+        /// True if variant won the test, false otherwise.
+        /// </summary>
+        public bool IsWinner { get; set; }
+
+        /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual ABTest ABTest { get; set; }

@@ -59,7 +59,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                ParticipationPercentage = 100
+                ParticipationPercentage = 100,
+                ExpectedVisitorCount = 100,
+                ActualVisitorCount = 50,
+                IsSignificant = false,
+                ZScore = .5,
+                ConfidenceLevel = .95
             };
 
             _context.ABTests.Add(test);
@@ -102,8 +107,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 Id = Guid.NewGuid(),
                 ItemId = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ItemVersion = 1
-
+                ItemVersion = 1,
+                IsWinner = false
             };
 
             test.Variants.Add(variant);

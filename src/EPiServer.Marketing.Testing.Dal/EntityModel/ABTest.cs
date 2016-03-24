@@ -60,6 +60,32 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         public string LastModifiedBy { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public int? ExpectedVisitorCount { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int ActualVisitorCount { get; set; }
+
+        /// <summary>
+        /// Percentage of accuracy required.
+        /// Default: 95 %
+        /// </summary>
+        public double ConfidenceLevel { get; set; }
+
+        /// <summary>
+        /// Calculated z-score to determine statistical significance.
+        /// </summary>
+        public double ZScore { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsSignificant { get; set; }
+
+        /// <summary>
         /// List of variant items for the test.  These replace the OriginalItem during the test.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

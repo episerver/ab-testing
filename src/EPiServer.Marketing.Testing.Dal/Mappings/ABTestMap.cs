@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+﻿using System.Data.Entity.ModelConfiguration;
 using EPiServer.Marketing.Testing.Dal.Entity;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
@@ -42,6 +41,21 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.LastModifiedBy)
                 .HasMaxLength(100)
                 .IsOptional();
+
+            this.Property(m => m.ExpectedVisitorCount)
+                .IsOptional();
+
+            this.Property(m => m.ActualVisitorCount)
+                .IsRequired();
+
+            this.Property(m => m.ConfidenceLevel)
+                .IsRequired();
+
+            this.Property(m => m.ZScore)
+                .IsRequired();
+
+            this.Property(m => m.IsSignificant)
+                .IsRequired();
 
             this.Property(m => m.CreatedDate)
                 .IsRequired();
