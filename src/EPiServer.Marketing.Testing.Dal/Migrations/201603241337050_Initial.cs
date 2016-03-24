@@ -1,10 +1,8 @@
-using System.Diagnostics.CodeAnalysis;
-
-namespace EPiServer.Marketing.Testing.Dal.Migrations
+namespace Testing.Migrations
 {
+    using System;
     using System.Data.Entity.Migrations;
-
-    [ExcludeFromCodeCoverage]
+    
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -15,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                     {
                         Id = c.Guid(nullable: false),
                         Title = c.String(nullable: false, maxLength: 255),
-                        Description = c.String(nullable: false, maxLength: 255),
+                        Description = c.String(maxLength: 255),
                         Owner = c.String(nullable: false, maxLength: 100),
                         OriginalItemId = c.Guid(nullable: false),
                         State = c.Int(),
@@ -23,6 +21,11 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                         EndDate = c.DateTime(nullable: false),
                         ParticipationPercentage = c.Int(nullable: false),
                         LastModifiedBy = c.String(maxLength: 100),
+                        ExpectedVisitorCount = c.Int(),
+                        ActualVisitorCount = c.Int(nullable: false),
+                        ConfidenceLevel = c.Double(nullable: false),
+                        ZScore = c.Double(nullable: false),
+                        IsSignificant = c.Boolean(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
@@ -33,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        TestId = c.Guid(),
+                        TestId = c.Guid(nullable: false),
                         KeyPerformanceIndicatorId = c.Guid(),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
@@ -67,6 +70,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
                         TestId = c.Guid(nullable: false),
                         ItemId = c.Guid(nullable: false),
                         ItemVersion = c.Int(nullable: false),
+                        IsWinner = c.Boolean(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
