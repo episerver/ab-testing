@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Test
                     ParticipationPercentage = 100,
                     TestResults = new List<DalTestResult>(),
                     Variants = new List<DalVariant>(),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 });
             };
 
@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Test
                     Owner = "Bert" + i,
                     TestResults = new List<DalTestResult>(),
                     Variants = new List<DalVariant>(),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 };
 
                 mtmManager.Save(test);

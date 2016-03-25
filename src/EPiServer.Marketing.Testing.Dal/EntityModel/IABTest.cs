@@ -76,6 +76,6 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// List of key performance indicators.  These can be time on a page, form submission, etc.
         /// </summary>
-        IList<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+        IList<DalKeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 EndDate = DateTime.UtcNow,
                 State = DalTestState.Active,
                 Owner = "Bert",
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
                 TestResults = new List<DalTestResult>(),
                 Variants = new List<DalVariant>()
             };
@@ -250,7 +250,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 Owner = "Bert",
                 TestResults = new List<DalTestResult>(),
                 Variants = new List<DalVariant>(),
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
                 ParticipationPercentage = 100,
                 OriginalItemId = itemId
             };

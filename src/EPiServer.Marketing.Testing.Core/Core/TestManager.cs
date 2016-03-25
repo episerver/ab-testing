@@ -12,7 +12,6 @@ using ABTestFilter = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestFilter;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using DalCountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalCountType;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
-using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 using DalTestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalTestState;
 
@@ -344,7 +343,7 @@ namespace EPiServer.Marketing.Testing
         #endregion ResultsConversion
 
         #region KPIConversion
-        private List<Data.KeyPerformanceIndicator> AdaptToManagerKPI(IList<KeyPerformanceIndicator> theDalKPIs)
+        private List<Data.KeyPerformanceIndicator> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
         {
             var retList = new List<Data.KeyPerformanceIndicator>();
 
@@ -356,7 +355,7 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Data.KeyPerformanceIndicator ConvertToManagerKPI(KeyPerformanceIndicator dalKPI)
+        private Data.KeyPerformanceIndicator ConvertToManagerKPI(DalKeyPerformanceIndicator dalKPI)
         {
             var retKPI = new Data.KeyPerformanceIndicator()
             {
@@ -367,9 +366,9 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private IList<KeyPerformanceIndicator> AdaptToDalKPI(IList<Data.KeyPerformanceIndicator> keyPerformanceIndicators)
+        private IList<DalKeyPerformanceIndicator> AdaptToDalKPI(IList<Data.KeyPerformanceIndicator> keyPerformanceIndicators)
         {
-            var retList = new List<KeyPerformanceIndicator>();
+            var retList = new List<DalKeyPerformanceIndicator>();
 
             foreach (var managerKPI in keyPerformanceIndicators)
             {
@@ -379,9 +378,9 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private KeyPerformanceIndicator ConvertToDalKPI(Data.KeyPerformanceIndicator managerKPI)
+        private DalKeyPerformanceIndicator ConvertToDalKPI(Data.KeyPerformanceIndicator managerKPI)
         {
-            var retKPI = new KeyPerformanceIndicator()
+            var retKPI = new DalKeyPerformanceIndicator()
             {
                 Id = managerKPI.Id,
                 KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId,

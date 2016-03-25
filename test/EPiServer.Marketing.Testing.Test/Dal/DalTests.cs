@@ -136,12 +136,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
             };
 
             _context.ABTests.Add(test);
 
-            var kpi = new KeyPerformanceIndicator()
+            var kpi = new DalKeyPerformanceIndicator()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

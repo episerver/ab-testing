@@ -2,7 +2,7 @@
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class KeyPerformanceIndicator : EntityBase
+    public class DalKeyPerformanceIndicator : EntityBase
     {
         public Guid Id { get; set; }
 

@@ -4,7 +4,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class KeyPerformanceIndicatorMap : EntityTypeConfiguration<KeyPerformanceIndicator>
+    public class KeyPerformanceIndicatorMap : EntityTypeConfiguration<DalKeyPerformanceIndicator>
     {
         public KeyPerformanceIndicatorMap()
         {

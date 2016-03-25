@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<DalVariant> Variants { get; set; }
 
-        public DbSet<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+        public DbSet<DalKeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

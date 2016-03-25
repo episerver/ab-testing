@@ -14,7 +14,6 @@ using Xunit;
 using ABTest = EPiServer.Marketing.Testing.Data.ABTest;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
-using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 
 namespace EPiServer.Marketing.Testing.Test.Core
@@ -41,9 +40,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 {
                     new DalVariant() {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
                 },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 {
-                    new KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() }
+                    new DalKeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() }
                 },
                 TestResults = new List<DalTestResult>()
                 {
