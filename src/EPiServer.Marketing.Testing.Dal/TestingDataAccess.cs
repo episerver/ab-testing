@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public void Archive(Guid testObjectId)
         {
-            SetTestState(testObjectId, TestState.Archived);
+            SetTestState(testObjectId, DalTestState.Archived);
         }
 
         public void Delete(Guid testObjectId)
@@ -120,14 +120,14 @@ namespace EPiServer.Marketing.Testing.Dal
         }
 
         private static Object thisLock = new Object();
-        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
+        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
         {
             lock (thisLock)
             {
             var test = _repository.GetById(testId);
             var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
-            if (resultType == CountType.View)
+            if (resultType == DalCountType.View)
             {
                 result.Views++;
             }
@@ -152,7 +152,7 @@ namespace EPiServer.Marketing.Testing.Dal
             }
             else
             {
-                if (test.State == TestState.Inactive)
+                if (test.State == DalTestState.Inactive)
                 {
                         test.Title = testObject.Title;
                     test.Description = testObject.Description;
@@ -256,21 +256,21 @@ namespace EPiServer.Marketing.Testing.Dal
                 throw new Exception("The test page already has an Active test");
             }
 
-            SetTestState(testObjectId, TestState.Active);
+            SetTestState(testObjectId, DalTestState.Active);
         }
 
         public void Stop(Guid testObjectId)
         {
-            SetTestState(testObjectId, TestState.Done);
+            SetTestState(testObjectId, DalTestState.Done);
         }
         private bool IsTestActive(Guid originalItemId)
         {
             var tests = _repository.GetAll()
-                .Where(t => t.OriginalItemId == originalItemId && t.State == TestState.Active);
+                .Where(t => t.OriginalItemId == originalItemId && t.State == DalTestState.Active);
 
             return tests.Any();
         }
-        private void SetTestState(Guid theTestId, TestState theState)
+        private void SetTestState(Guid theTestId, DalTestState theState)
         {
             var aTest = _repository.GetById(theTestId);
             aTest.State = theState;

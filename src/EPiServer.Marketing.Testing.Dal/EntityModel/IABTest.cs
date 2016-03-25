@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// Current state of the test.
         /// </summary>
-        TestState State { get; set; }
+        DalTestState State { get; set; }
 
         /// <summary>
         /// Date and time the test is scheduled to start.

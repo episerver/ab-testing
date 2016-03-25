@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ModifiedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                State = TestState.Active,
+                State = DalTestState.Active,
                 Owner = "Bert",
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 TestResults = new List<TestResult>(),
@@ -102,12 +102,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[0].State = TestState.Archived;
+            tests[0].State = DalTestState.Archived;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
             var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Archived);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -121,13 +121,13 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[1].State = TestState.Archived;
-            tests[2].State = TestState.Archived;
+            tests[1].State = DalTestState.Archived;
+            tests[2].State = DalTestState.Archived;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
             var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -141,12 +141,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].State = TestState.Archived;
+            tests[1].State = DalTestState.Archived;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
             var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -160,12 +160,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].State = TestState.Active;
+            tests[1].State = DalTestState.Active;
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
             var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.Or, variantItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Active);
+            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, DalTestState.Active);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
 
@@ -206,31 +206,31 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             _mtm.Start(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Active);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Active);
         }
 
         [Fact]
         public void TestManagerStop()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].State = TestState.Active;
+            tests[0].State = DalTestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Stop(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Done);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Done);
         }
 
         [Fact]
         public void TestManagerArchive()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].State = TestState.Active;
+            tests[0].State = DalTestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Archive(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Archived);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Archived);
         }
 
         [Fact]
@@ -274,8 +274,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             // check that a result exists
             Assert.Equal(test.TestResults.Count(), 1);
 
-            _mtm.IncrementCount(testId, itemId, itemVersion, CountType.View);
-            _mtm.IncrementCount(testId, itemId, itemVersion, CountType.Conversion);
+            _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.View);
+            _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.Conversion);
 
             // check the result is incremented correctly
             Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views, 1);
@@ -292,7 +292,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                State = TestState.Active,
+                State = DalTestState.Active,
                 Owner = "Bert"
             };
 

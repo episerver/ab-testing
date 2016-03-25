@@ -1,6 +1,6 @@
 ﻿namespace EPiServer.Marketing.Testing.Dal.EntityModel.Enums
 {
-    public enum CountType
+    public enum DalCountType
     {
         View,
         Conversion

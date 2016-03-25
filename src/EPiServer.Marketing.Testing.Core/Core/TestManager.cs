@@ -10,12 +10,12 @@ using EPiServer.Marketing.Testing.Messaging;
 using ABTest = EPiServer.Marketing.Testing.Dal.EntityModel.ABTest;
 using ABTestFilter = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestFilter;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
-using CountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.CountType;
+using DalCountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalCountType;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 using TestResult = EPiServer.Marketing.Testing.Dal.EntityModel.TestResult;
-using TestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.TestState;
+using DalTestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalTestState;
 using Variant = EPiServer.Marketing.Testing.Dal.EntityModel.Variant;
 
 namespace EPiServer.Marketing.Testing
@@ -190,18 +190,18 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private Data.Enums.TestState AdaptToManagerState(TestState theDalState)
+        private Data.Enums.TestState AdaptToManagerState(DalTestState theDalState)
         {
             var retState = Data.Enums.TestState.Inactive;
             switch(theDalState)
             {
-                case TestState.Active:
+                case DalTestState.Active:
                     retState = Data.Enums.TestState.Active;
                     break;
-                case TestState.Done:
+                case DalTestState.Done:
                     retState = Data.Enums.TestState.Done;
                     break;
-                case TestState.Archived:
+                case DalTestState.Archived:
                     retState = Data.Enums.TestState.Archived;
                     break;
                 default:
@@ -212,22 +212,22 @@ namespace EPiServer.Marketing.Testing
             return retState;
         }
 
-        private TestState AdaptToDalState(Data.Enums.TestState theManagerState)
+        private DalTestState AdaptToDalState(Data.Enums.TestState theManagerState)
         {
-            var retState = TestState.Inactive;
+            var retState = DalTestState.Inactive;
             switch (theManagerState)
             {
                 case Data.Enums.TestState.Active:
-                    retState = TestState.Active;
+                    retState = DalTestState.Active;
                     break;
                 case Data.Enums.TestState.Done:
-                    retState = TestState.Done;
+                    retState = DalTestState.Done;
                     break;
                 case Data.Enums.TestState.Archived:
-                    retState = TestState.Archived;
+                    retState = DalTestState.Archived;
                     break;
                 default:
-                    retState = TestState.Inactive;
+                    retState = DalTestState.Inactive;
                     break;
             }
 
@@ -455,12 +455,12 @@ namespace EPiServer.Marketing.Testing
         }
         #endregion
 
-        private CountType AdaptToDalCount(Data.Enums.CountType resultType)
+        private DalCountType AdaptToDalCount(Data.Enums.CountType resultType)
         {
-            var dalCountType = CountType.View;
+            var dalCountType = DalCountType.View;
 
-            if (resultType == Data.Enums.CountType.Conversion)
-                dalCountType = CountType.Conversion;
+            if (resultType == CountType.Conversion)
+                dalCountType = DalCountType.Conversion;
 
             return dalCountType;
         }
