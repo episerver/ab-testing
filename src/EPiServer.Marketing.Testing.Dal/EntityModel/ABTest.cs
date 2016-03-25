@@ -89,10 +89,10 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// List of variant items for the test.  These replace the OriginalItem during the test.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual IList<Variant> Variants { get; set; }
+        public virtual IList<DalVariant> Variants { get; set; }
 
         /// <summary>
-        /// List of results for the test.  There will be a TestResults for the OriginalItem and each Variant item.
+        /// List of results for the test.  There will be a TestResults for the OriginalItem and each DalVariant item.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual IList<TestResult> TestResults { get; set; }

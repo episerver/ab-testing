@@ -40,7 +40,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 Owner = "Bert",
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 TestResults = new List<TestResult>(),
-                Variants = new List<Variant>()
+                Variants = new List<DalVariant>()
             };
 
             _mtm.Save(test);
@@ -63,8 +63,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
             _context.SaveChanges();
 
             var criteria = new TestCriteria();
@@ -140,7 +140,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
             tests[1].State = DalTestState.Archived;
             _context.SaveChanges();
 
@@ -159,7 +159,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
             tests[1].State = DalTestState.Active;
             _context.SaveChanges();
 
@@ -249,7 +249,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
                 TestResults = new List<TestResult>(),
-                Variants = new List<Variant>(),
+                Variants = new List<DalVariant>(),
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 ParticipationPercentage = 100,
                 OriginalItemId = itemId
@@ -330,7 +330,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             tests[0].OriginalItemId = originalItemId;
 
-            var variant = new Variant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
+            var variant = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].Variants.Add(variant);
 
             var result = new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
@@ -351,7 +351,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var tests = AddMultivariateTests(_mtm, 1);
             var originalItemId = Guid.NewGuid();
             tests[0].OriginalItemId = originalItemId;
-            var variant = new Variant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            var variant = new DalVariant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
             tests[0].Variants.Add(variant);
 
             var result = new TestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
@@ -359,7 +359,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _mtm.Save(tests[0]);
 
             var variantItemId2 = Guid.NewGuid();
-            var variant2 = new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            var variant2 = new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
             tests[0].Variants.Add(variant2);
 
             var result2 = new TestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };

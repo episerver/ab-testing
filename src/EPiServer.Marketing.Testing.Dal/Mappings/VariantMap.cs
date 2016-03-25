@@ -4,7 +4,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class VariantMap : EntityTypeConfiguration<Variant>
+    public class VariantMap : EntityTypeConfiguration<DalVariant>
     {
         public VariantMap()
         {

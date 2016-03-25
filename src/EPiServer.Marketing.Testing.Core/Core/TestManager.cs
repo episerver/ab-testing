@@ -16,7 +16,6 @@ using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyP
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 using TestResult = EPiServer.Marketing.Testing.Dal.EntityModel.TestResult;
 using DalTestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalTestState;
-using Variant = EPiServer.Marketing.Testing.Dal.EntityModel.Variant;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -235,7 +234,7 @@ namespace EPiServer.Marketing.Testing
         }
 
         #region VariantConversion
-        private List<Data.Variant> AdaptToManagerVariant(IList<Variant> theVariantList)
+        private List<Data.Variant> AdaptToManagerVariant(IList<DalVariant> theVariantList)
         {
             var retList = new List<Data.Variant>();
 
@@ -247,7 +246,7 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Data.Variant ConvertToManagerVariant(Variant theDalVariant)
+        private Data.Variant ConvertToManagerVariant(DalVariant theDalVariant)
         {
             var retVariant = new Data.Variant()
             {
@@ -261,9 +260,9 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private IList<Variant> AdaptToDalVariant(IList<Data.Variant> variants)
+        private IList<DalVariant> AdaptToDalVariant(IList<Data.Variant> variants)
         {
-            var retList = new List<Variant>();
+            var retList = new List<DalVariant>();
 
             foreach(var managerVariant in variants)
             {
@@ -273,9 +272,9 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Variant ConvertToDalVariant(Data.Variant managerVariant)
+        private DalVariant ConvertToDalVariant(Data.Variant managerVariant)
         {
-            var retVariant = new Variant()
+            var retVariant = new DalVariant()
             {
                 Id = managerVariant.Id,
                 TestId = managerVariant.TestId,

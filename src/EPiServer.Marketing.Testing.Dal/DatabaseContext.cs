@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<TestResult> ABTestsResults { get; set; }
 
-        public DbSet<Variant> Variants { get; set; }
+        public DbSet<DalVariant> Variants { get; set; }
 
         public DbSet<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
 

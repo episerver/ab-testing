@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
                 modelBuilder.Entity<ABTest>();
                 modelBuilder.Entity<TestResult>();
-                modelBuilder.Entity<Variant>();
+                modelBuilder.Entity<DalVariant>();
                 modelBuilder.Entity<KeyPerformanceIndicator>();
             }
         }

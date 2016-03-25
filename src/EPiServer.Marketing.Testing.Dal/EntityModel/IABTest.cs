@@ -66,10 +66,10 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// List of possible variant items.  These replace the OriginalItem during the test.
         /// </summary>
-        IList<Variant> Variants { get; set; }
+        IList<DalVariant> Variants { get; set; }
 
         /// <summary>
-        /// List of test results. There will be a TestResults for the OriginalItem and each Variant item.
+        /// List of test results. There will be a TestResults for the OriginalItem and each DalVariant item.
         /// </summary>
         IList<TestResult> TestResults { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class Variant : EntityBase
+    public class DalVariant : EntityBase
     {
         public Guid Id { get; set; }
 

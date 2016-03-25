@@ -17,7 +17,6 @@ using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperato
 using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 using TestResult = EPiServer.Marketing.Testing.Dal.EntityModel.TestResult;
-using Variant = EPiServer.Marketing.Testing.Dal.EntityModel.Variant;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -39,9 +38,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             return new Testing.Dal.EntityModel.ABTest()
             {
-                Variants = new List<Variant>()
+                Variants = new List<DalVariant>()
                 {
-                    new Variant() {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
+                    new DalVariant() {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
                 },
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 {
@@ -197,7 +196,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
-            var variantList = new List<Variant>() { new Variant { Id = vID }, new Variant {Id = originalItemId} };
+            var variantList = new List<DalVariant>() { new DalVariant { Id = vID }, new DalVariant {Id = originalItemId} };
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(

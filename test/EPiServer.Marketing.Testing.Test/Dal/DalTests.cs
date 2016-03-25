@@ -97,12 +97,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                Variants = new List<Variant>()
+                Variants = new List<DalVariant>()
             };
 
             _context.ABTests.Add(test);
 
-            var variant = new Variant()
+            var variant = new DalVariant()
             {
                 Id = Guid.NewGuid(),
                 ItemId = Guid.NewGuid(),

@@ -35,7 +35,7 @@ namespace EPiServer.Marketing.Testing.Test
                     State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
                     TestResults = new List<TestResult>(),
-                    Variants = new List<Variant>(),
+                    Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 });
             };
@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Testing.Test
                     OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,
                     TestResults = new List<TestResult>(),
-                    Variants = new List<Variant>(),
+                    Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 };
 

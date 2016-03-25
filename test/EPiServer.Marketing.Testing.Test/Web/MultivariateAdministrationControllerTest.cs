@@ -55,7 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     //        EndDate = DateTime.Today.AddDays(2),
     //        OriginalItemId = original,
     //        State = TestState.Active,
-    //        Variants = new List<Variant>() { new Variant() { Id = varient } },
+    //        Variants = new List<Variant>() { new DalVariant() { Id = varient } },
     //        TestResults = new List<TestResult>() {
     //                new TestResult() { Id = result1 },
     //                new TestResult() { Id = result2 }
