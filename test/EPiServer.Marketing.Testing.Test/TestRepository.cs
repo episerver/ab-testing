@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             return TestContext.Set<DalABTest>().AsQueryable();
         }
 
-        public IQueryable<IABTest> GetTestList(TestCriteria criteria)
+        public IQueryable<IABTest> GetTestList(DalTestCriteria criteria)
         {
             var filters = criteria.GetFilters();
 

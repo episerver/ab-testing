@@ -14,7 +14,6 @@ using Xunit;
 using ABTest = EPiServer.Marketing.Testing.Data.ABTest;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
-using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -96,10 +95,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var tm = GetUnitUnderTest();
             var dalList = new List<IABTest>();
             dalList.Add(GetDalTest());
-            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<TestCriteria>())).Returns(dalList);
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             tm.GetTestList(critera);
 
-            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<TestCriteria>(arg => arg.GetFilters().First().Operator == FilterOperator.And &&
+            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<DalTestCriteria>(arg => arg.GetFilters().First().Operator == FilterOperator.And &&
             arg.GetFilters().First().Property == ABTestProperty.OriginalItemId &&
             arg.GetFilters().First().Value == testFilter.Value)),
             "DataAcessLayer GetTestList was never called or criteria did not match.");

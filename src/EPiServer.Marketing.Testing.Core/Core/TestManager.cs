@@ -11,7 +11,6 @@ using ABTestFilter = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestFilter;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using DalCountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalCountType;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
-using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
 using DalTestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalTestState;
 
 namespace EPiServer.Marketing.Testing
@@ -391,9 +390,9 @@ namespace EPiServer.Marketing.Testing
 
         #region CriteriaConversion
 
-        private TestCriteria ConvertToDalCriteria(Data.TestCriteria criteria)
+        private DalTestCriteria ConvertToDalCriteria(Data.TestCriteria criteria)
         {
-            var dalCriteria = new TestCriteria();
+            var dalCriteria = new DalTestCriteria();
 
             foreach(var managerFilters in criteria.GetFilters())
             {

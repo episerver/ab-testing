@@ -2,9 +2,9 @@
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class TestCriteria
+    public class DalTestCriteria
     {
-        public TestCriteria()
+        public DalTestCriteria()
         {
             _filters = new List<ABTestFilter>();
         }
