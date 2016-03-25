@@ -90,8 +90,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         public void DeleteTest(object id)
         {
-            var test = TestContext.Set<ABTest>().Find(id);
-            TestContext.Set<ABTest>().Remove(test);
+            var test = TestContext.Set<DalABTest>().Find(id);
+            TestContext.Set<DalABTest>().Remove(test);
         }
 
         public T GetById<T>(object id) where T : class
@@ -101,7 +101,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         public IABTest GetById(object id)
         {
-            return TestContext.Set<ABTest>().Find(id);
+            return TestContext.Set<DalABTest>().Find(id);
         }
 
         public IQueryable<T> GetAll<T>() where T : class
@@ -111,7 +111,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         public IQueryable<IABTest> GetAll()
         {
-            return TestContext.Set<ABTest>().AsQueryable();
+            return TestContext.Set<DalABTest>().AsQueryable();
         }
 
         public IQueryable<IABTest> GetTestList(TestCriteria criteria)
@@ -149,10 +149,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 "Where",
                 new Type[] { tests.ElementType },
                 tests.Expression,
-                Expression.Lambda<Func<ABTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
+                Expression.Lambda<Func<DalABTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
                 );
 
-            IQueryable<ABTest> results = tests.Provider.CreateQuery<ABTest>(whereCallExpression);
+            IQueryable<DalABTest> results = tests.Provider.CreateQuery<DalABTest>(whereCallExpression);
             return results;
         }
 

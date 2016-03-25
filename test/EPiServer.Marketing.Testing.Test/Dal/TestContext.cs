@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             {
                 base.OnModelCreating(modelBuilder);
 
-                modelBuilder.Entity<ABTest>();
+                modelBuilder.Entity<DalABTest>();
                 modelBuilder.Entity<DalTestResult>();
                 modelBuilder.Entity<DalVariant>();
                 modelBuilder.Entity<DalKeyPerformanceIndicator>();

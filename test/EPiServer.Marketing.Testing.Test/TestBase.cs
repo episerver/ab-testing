@@ -14,13 +14,13 @@ namespace EPiServer.Marketing.Testing.Test
             context.Set<T>().AddRange(data);
         }
 
-        public IList<ABTest> AddMultivariateTests(TestContext context, int numberOfTests)
+        public IList<DalABTest> AddMultivariateTests(TestContext context, int numberOfTests)
         {
-            var newMultivariateTests = new List<ABTest>();
+            var newMultivariateTests = new List<DalABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                newMultivariateTests.Add(new ABTest()
+                newMultivariateTests.Add(new DalABTest()
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
@@ -45,13 +45,13 @@ namespace EPiServer.Marketing.Testing.Test
             return newMultivariateTests;
         }
 
-        internal IList<ABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
+        internal IList<DalABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
         {
-            var newABTests = new List<ABTest>();
+            var newABTests = new List<DalABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                var test = new ABTest()
+                var test = new DalABTest()
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
@@ -77,7 +77,7 @@ namespace EPiServer.Marketing.Testing.Test
             return newABTests;
         }
 
-        internal void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)
+        internal void AddMultivariateTestResults(TestingDataAccess mtmManager, DalABTest multivariateTest, Guid itemId)
         {
             var result = new DalTestResult()
             {

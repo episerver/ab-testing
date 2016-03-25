@@ -34,6 +34,6 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest ABTest { get; set; }
+        public virtual DalABTest DalABTest { get; set; }
     }
 }

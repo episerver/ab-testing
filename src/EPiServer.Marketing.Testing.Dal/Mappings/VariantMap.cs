@@ -21,7 +21,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.IsWinner)
                 .IsRequired();
 
-            this.HasRequired(m => m.ABTest)
+            this.HasRequired(m => m.DalABTest)
                 .WithMany(m => m.Variants)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();

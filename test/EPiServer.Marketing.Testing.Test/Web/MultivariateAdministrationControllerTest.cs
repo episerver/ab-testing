@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     //            }
     //    };
 
-    //    ABTest test = new ABTest()
+    //    DalABTest test = new DalABTest()
     //    {
     //        Id = theGuid,
     //        Title = "Title",

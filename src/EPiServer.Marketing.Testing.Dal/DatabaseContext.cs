@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         }
 
-        public DbSet<ABTest> ABTests { get; set; }
+        public DbSet<DalABTest> ABTests { get; set; }
 
         public DbSet<DalTestResult> ABTestsResults { get; set; }
 

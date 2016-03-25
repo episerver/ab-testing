@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "test",
@@ -240,7 +240,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var itemId = Guid.NewGuid();
             var itemVersion = 1;
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = testId,
                 Title = "test",
@@ -285,7 +285,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         [Fact]
         public void TestManagerAddNoId()
         {
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Title = "test",
                 Description = "Description",

@@ -80,18 +80,18 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public IABTest GetById(object id)
         {
-            return DatabaseContext.Set<ABTest>().Find(id);
+            return DatabaseContext.Set<DalABTest>().Find(id);
         }
 
         public IQueryable<IABTest> GetAll()
         {
-            return DatabaseContext.Set<ABTest>().AsQueryable();
+            return DatabaseContext.Set<DalABTest>().AsQueryable();
         } 
 
         public void DeleteTest(object id)
         {
-            var test = DatabaseContext.Set<ABTest>().Find(id);
-            DatabaseContext.Set<ABTest>().Remove(test);
+            var test = DatabaseContext.Set<DalABTest>().Find(id);
+            DatabaseContext.Set<DalABTest>().Remove(test);
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(s => s.ModifiedDate)
                 .IsRequired();
 
-            this.HasRequired(m => m.ABTest)
+            this.HasRequired(m => m.DalABTest)
                 .WithMany(m => m.TestResults)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();

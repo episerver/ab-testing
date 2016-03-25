@@ -7,7 +7,6 @@ using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
-using ABTest = EPiServer.Marketing.Testing.Dal.EntityModel.ABTest;
 using ABTestFilter = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestFilter;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using DalCountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalCountType;
@@ -167,7 +166,7 @@ namespace EPiServer.Marketing.Testing
 
         private IABTest ConvertToDalTest(IMarketingTest theManagerTest)
         {
-            var aTest = new ABTest()
+            var aTest = new DalABTest()
             {
                 Id = theManagerTest.Id,
                 Title = theManagerTest.Title,

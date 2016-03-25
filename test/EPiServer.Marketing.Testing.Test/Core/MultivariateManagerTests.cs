@@ -32,9 +32,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
             return new TestManager(_serviceLocator.Object);
         }
 
-        private Testing.Dal.EntityModel.ABTest GetDalTest()
+        private Testing.Dal.EntityModel.DalABTest GetDalTest()
         {
-            return new Testing.Dal.EntityModel.ABTest()
+            return new Testing.Dal.EntityModel.DalABTest()
             {
                 Variants = new List<DalVariant>()
                 {
@@ -164,7 +164,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             };
             tm.Save(test);
 
-            _dataAccessLayer.Verify(da => da.Save(It.Is<Testing.Dal.EntityModel.ABTest>(arg => arg.Id == theGuid)),
+            _dataAccessLayer.Verify(da => da.Save(It.Is<Testing.Dal.EntityModel.DalABTest>(arg => arg.Id == theGuid)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
 
@@ -198,7 +198,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
-                new Testing.Dal.EntityModel.ABTest()
+                new Testing.Dal.EntityModel.DalABTest()
                 {
                     Id = theGuid,
                     OriginalItemId = originalItemId,

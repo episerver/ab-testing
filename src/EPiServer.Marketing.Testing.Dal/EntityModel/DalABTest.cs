@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
     /// <summary>
     /// Entity framework model class
     /// </summary>
-    public class ABTest : EntityBase, IABTest
+    public class DalABTest : EntityBase, IABTest
     {
         /// <summary>
         /// Id

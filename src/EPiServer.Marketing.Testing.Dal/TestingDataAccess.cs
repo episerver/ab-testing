@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Dal
             var variantOperator = FilterOperator.And;
             IQueryable<IABTest> variantResults = null;
             var variantId = Guid.Empty;
-            var pe = Expression.Parameter(typeof(ABTest), "test");
+            var pe = Expression.Parameter(typeof(DalABTest), "test");
             Expression wholeExpression = null;
 
             // build up expression tree based on the filters that are passed in
@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 // if we are filtering on a single property(not an element in a list) create the expression
                 if (filter.Property != ABTestProperty.VariantId)
                 {
-                    var left = Expression.Property(pe, typeof (ABTest).GetProperty(filter.Property.ToString()));
+                    var left = Expression.Property(pe, typeof (DalABTest).GetProperty(filter.Property.ToString()));
                     var right = Expression.Constant(filter.Value);
                     var expression = Expression.Equal(left, right);
 
@@ -97,10 +97,10 @@ namespace EPiServer.Marketing.Testing.Dal
                     "Where",
                     new Type[] {tests.ElementType},
                     tests.Expression,
-                    Expression.Lambda<Func<ABTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
+                    Expression.Lambda<Func<DalABTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
                     );
 
-                results = tests.Provider.CreateQuery<ABTest>(whereCallExpression);
+                results = tests.Provider.CreateQuery<DalABTest>(whereCallExpression);
             }
 
             // if we are also filtering against a variantId, include those results
@@ -145,7 +145,7 @@ namespace EPiServer.Marketing.Testing.Dal
             var id = testObject.Id;
 
             // if a test doesn't exist, add it to the db
-            var test = _repository.GetById(testObject.Id) as ABTest;
+            var test = _repository.GetById(testObject.Id) as DalABTest;
             if (test == null)
             {
                 _repository.Add(testObject);

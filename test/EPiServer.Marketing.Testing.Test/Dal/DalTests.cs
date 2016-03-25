@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -85,7 +85,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -124,7 +124,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
@@ -161,7 +161,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
