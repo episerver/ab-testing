@@ -398,7 +398,7 @@ namespace EPiServer.Marketing.Testing
             return dalCriteria;
         }
 
-        private DalABTestFilter AdaptToDalFilter(Data.ABTestFilter managerFilter)
+        private DalABTestFilter AdaptToDalFilter(ABTestFilter managerFilter)
         {
             var dalFilter = new DalABTestFilter
             {
@@ -410,16 +410,16 @@ namespace EPiServer.Marketing.Testing
             return dalFilter;
         }
 
-        private DalFilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
+        private DalFilterOperator AdaptToDalOperator(FilterOperator theOperator)
         {
             var aOperator = DalFilterOperator.And;
 
             switch(theOperator)
             {
-                case Data.FilterOperator.Or:
+                case FilterOperator.Or:
                     aOperator = DalFilterOperator.Or;
                     break;
-                case Data.FilterOperator.And:
+                case FilterOperator.And:
                     aOperator = DalFilterOperator.And;
                     break;
             }
@@ -427,18 +427,18 @@ namespace EPiServer.Marketing.Testing
             return aOperator;
         }
 
-        private DalABTestProperty AdaptToDalTestProperty(Data.ABTestProperty property)
+        private DalABTestProperty AdaptToDalTestProperty(ABTestProperty property)
         {
             var aProperty = DalABTestProperty.OriginalItemId;
             switch(property)
             {
-                case Data.ABTestProperty.State:
+                case ABTestProperty.State:
                     aProperty = DalABTestProperty.State;
                     break;
-                case Data.ABTestProperty.VariantId:
+                case ABTestProperty.VariantId:
                     aProperty = DalABTestProperty.VariantId;
                     break;
-                case Data.ABTestProperty.OriginalItemId:
+                case ABTestProperty.OriginalItemId:
                     aProperty = DalABTestProperty.OriginalItemId;
                     break;
             }
