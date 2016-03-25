@@ -6,17 +6,17 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
     {
         public DalTestCriteria()
         {
-            _filters = new List<ABTestFilter>();
+            _filters = new List<DalABTestFilter>();
         }
 
-        private List<ABTestFilter> _filters;
+        private List<DalABTestFilter> _filters;
 
         /// <summary>
         /// Adds the given filter to the collection of criteria filters if the property on the filter doesn't exist
         /// If the filter exists the filter will not be added
         /// </summary>
         /// <param name="filter">the filter to add</param>
-        public void AddFilter(ABTestFilter filter)
+        public void AddFilter(DalABTestFilter filter)
         {
             if(!_filters.Exists(f => f.Property == filter.Property))
             {
@@ -24,22 +24,22 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
             }
         }
 
-        public List<ABTestFilter> GetFilters()
+        public List<DalABTestFilter> GetFilters()
         {
             return _filters;
         }
     }
 
-    public class ABTestFilter
+    public class DalABTestFilter
     {
-        public ABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
+        public DalABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
         {
             Property = theProperty;
             Operator = theOperator;
             Value = theValue;
         }
 
-        public ABTestFilter() { }
+        public DalABTestFilter() { }
         
         /// <summary>
         /// The ABTestProperty that will be filtered on

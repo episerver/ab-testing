@@ -8,7 +8,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using ABTestFilter = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestFilter;
 using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 
@@ -401,9 +400,9 @@ namespace EPiServer.Marketing.Testing
             return dalCriteria;
         }
 
-        private ABTestFilter AdaptToDalFilter(Data.ABTestFilter managerFilter)
+        private DalABTestFilter AdaptToDalFilter(Data.ABTestFilter managerFilter)
         {
-            var dalFilter = new ABTestFilter
+            var dalFilter = new DalABTestFilter
             {
                 Property = AdaptToDalTestProperty(managerFilter.Property),
                 Operator = AdaptToDalOperator(managerFilter.Operator),
