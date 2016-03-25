@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _context.SaveChanges();
 
             var criteria = new DalTestCriteria();
-            var filter = new DalABTestFilter(DalABTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var filter = new DalABTestFilter(DalABTestProperty.VariantId, DalFilterOperator.And, variantItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
             Assert.Equal(2, list.Count());
@@ -88,7 +88,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var criteria = new DalTestCriteria();
             var filter = new DalABTestFilter();
             filter.Property = DalABTestProperty.OriginalItemId;
-            filter.Operator = FilterOperator.And;
+            filter.Operator = DalFilterOperator.And;
             filter.Value = originalItemId;
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
@@ -106,8 +106,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _context.SaveChanges();
 
             var criteria = new DalTestCriteria();
-            var filter = new DalABTestFilter(DalABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
-            var filter2 = new DalABTestFilter(DalABTestProperty.State, FilterOperator.And, DalTestState.Archived);
+            var filter = new DalABTestFilter(DalABTestProperty.OriginalItemId, DalFilterOperator.And, originalItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.And, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -126,8 +126,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _context.SaveChanges();
 
             var criteria = new DalTestCriteria();
-            var filter = new DalABTestFilter(DalABTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
-            var filter2 = new DalABTestFilter(DalABTestProperty.State, FilterOperator.Or, DalTestState.Archived);
+            var filter = new DalABTestFilter(DalABTestProperty.OriginalItemId, DalFilterOperator.Or, originalItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.Or, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -145,8 +145,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _context.SaveChanges();
 
             var criteria = new DalTestCriteria();
-            var filter = new DalABTestFilter(DalABTestProperty.VariantId, FilterOperator.And, variantItemId);
-            var filter2 = new DalABTestFilter(DalABTestProperty.State, FilterOperator.Or, DalTestState.Archived);
+            var filter = new DalABTestFilter(DalABTestProperty.VariantId, DalFilterOperator.And, variantItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.Or, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -164,8 +164,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _context.SaveChanges();
 
             var criteria = new DalTestCriteria();
-            var filter = new DalABTestFilter(DalABTestProperty.VariantId, FilterOperator.Or, variantItemId);
-            var filter2 = new DalABTestFilter(DalABTestProperty.State, FilterOperator.And, DalTestState.Active);
+            var filter = new DalABTestFilter(DalABTestProperty.VariantId, DalFilterOperator.Or, variantItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.And, DalTestState.Active);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
 

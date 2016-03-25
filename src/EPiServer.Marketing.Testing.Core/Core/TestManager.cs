@@ -8,7 +8,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -411,17 +410,17 @@ namespace EPiServer.Marketing.Testing
             return dalFilter;
         }
 
-        private FilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
+        private DalFilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
         {
-            var aOperator = FilterOperator.And;
+            var aOperator = DalFilterOperator.And;
 
             switch(theOperator)
             {
                 case Data.FilterOperator.Or:
-                    aOperator = FilterOperator.Or;
+                    aOperator = DalFilterOperator.Or;
                     break;
                 case Data.FilterOperator.And:
-                    aOperator = FilterOperator.And;
+                    aOperator = DalFilterOperator.And;
                     break;
             }
 

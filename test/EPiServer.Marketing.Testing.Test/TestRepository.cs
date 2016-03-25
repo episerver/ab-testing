@@ -118,8 +118,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var filters = criteria.GetFilters();
 
-            var andFilters = filters.Where(filter => filter.Operator == FilterOperator.And);
-            var orFilters = filters.Where(filter => filter.Operator == FilterOperator.Or);
+            var andFilters = filters.Where(filter => filter.Operator == DalFilterOperator.And);
+            var orFilters = filters.Where(filter => filter.Operator == DalFilterOperator.Or);
 
 
             var tests = TestContext.ABTests.AsQueryable();
@@ -140,7 +140,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 }
 
                 // each subsequent iteration we check to see if the filter is for an AND or OR and append accordingly
-                wholeExpression = filter.Operator == FilterOperator.And
+                wholeExpression = filter.Operator == DalFilterOperator.And
                     ? Expression.And(wholeExpression, e) : Expression.Or(wholeExpression, e);
             }
 

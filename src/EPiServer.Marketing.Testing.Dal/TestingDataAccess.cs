@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 return _repository.GetAll().ToList();
             }
 
-            var variantOperator = FilterOperator.And;
+            var variantOperator = DalFilterOperator.And;
             IQueryable<IABTest> variantResults = null;
             var variantId = Guid.Empty;
             var pe = Expression.Parameter(typeof(DalABTest), "test");
@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Dal
                     }
 
                     // each subsequent iteration we check to see if the filter is for an AND or OR and append accordingly
-                    wholeExpression = filter.Operator == FilterOperator.And
+                    wholeExpression = filter.Operator == DalFilterOperator.And
                         ? Expression.And(wholeExpression, expression) : Expression.Or(wholeExpression, expression);
                 }
                 else // if we are filtering on an item in a list, then generate simple results that we can lump in at the end
@@ -111,7 +111,7 @@ namespace EPiServer.Marketing.Testing.Dal
                     return variantResults.ToList();
                 }
 
-                results = variantOperator == FilterOperator.And 
+                results = variantOperator == DalFilterOperator.And 
                     ? results.Where(test => test.Variants.Any(v => v.ItemId == variantId)) 
                     : results.Concat(variantResults).Distinct();
             }
