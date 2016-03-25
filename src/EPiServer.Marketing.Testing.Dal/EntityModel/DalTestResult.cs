@@ -2,7 +2,7 @@ using System;
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class TestResult : EntityBase
+    public class DalTestResult : EntityBase
     {
         public Guid Id { get; set; }
 

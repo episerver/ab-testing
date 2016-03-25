@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Test
                     OriginalItemId = Guid.NewGuid(),
                     State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
-                    TestResults = new List<TestResult>(),
+                    TestResults = new List<DalTestResult>(),
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 });
@@ -65,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Test
                     LastModifiedBy = "me",
                     OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,
-                    TestResults = new List<TestResult>(),
+                    TestResults = new List<DalTestResult>(),
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
                 };
@@ -79,7 +79,7 @@ namespace EPiServer.Marketing.Testing.Test
 
         internal void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)
         {
-            var result = new TestResult()
+            var result = new DalTestResult()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

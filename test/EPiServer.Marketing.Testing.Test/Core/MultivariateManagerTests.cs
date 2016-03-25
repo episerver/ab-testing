@@ -16,7 +16,6 @@ using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestPropert
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
-using TestResult = EPiServer.Marketing.Testing.Dal.EntityModel.TestResult;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -46,9 +45,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 {
                     new KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() }
                 },
-                TestResults = new List<TestResult>()
+                TestResults = new List<DalTestResult>()
                 {
-                    new TestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 }
+                    new DalTestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 }
                 }
             };
         }

@@ -14,7 +14,6 @@ using DalCountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalCountT
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
 using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
-using TestResult = EPiServer.Marketing.Testing.Dal.EntityModel.TestResult;
 using DalTestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.DalTestState;
 
 namespace EPiServer.Marketing.Testing
@@ -288,7 +287,7 @@ namespace EPiServer.Marketing.Testing
         #endregion VariantConversion
 
         #region ResultsConversion
-        private List<Data.TestResult> AdaptToManagerResults(IList<TestResult> theResultList)
+        private List<Data.TestResult> AdaptToManagerResults(IList<DalTestResult> theResultList)
         {
             var retList = new List<Data.TestResult>();
 
@@ -300,7 +299,7 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Data.TestResult ConvertToManagerResult(TestResult dalResult)
+        private Data.TestResult ConvertToManagerResult(DalTestResult dalResult)
         {
             var retResult = new Data.TestResult()
             {
@@ -316,9 +315,9 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private IList<TestResult> AdaptToDalResults(IList<Data.TestResult> testResults)
+        private IList<DalTestResult> AdaptToDalResults(IList<Data.TestResult> testResults)
         {
-            var retList = new List<TestResult>();
+            var retList = new List<DalTestResult>();
 
             foreach (var managerResult in testResults)
             {
@@ -328,9 +327,9 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private TestResult ConvertToDalResult(Data.TestResult managerResult)
+        private DalTestResult ConvertToDalResult(Data.TestResult managerResult)
         {
-            var retResult = new TestResult()
+            var retResult = new DalTestResult()
             {
                 Id = managerResult.Id,
                 ItemId = managerResult.ItemId,

@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// List of test results. There will be a TestResults for the OriginalItem and each DalVariant item.
         /// </summary>
-        IList<TestResult> TestResults { get; set; }
+        IList<DalTestResult> TestResults { get; set; }
 
         /// <summary>
         /// List of key performance indicators.  These can be time on a page, form submission, etc.

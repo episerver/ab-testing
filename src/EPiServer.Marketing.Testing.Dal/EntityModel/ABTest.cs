@@ -95,7 +95,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// List of results for the test.  There will be a TestResults for the OriginalItem and each DalVariant item.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual IList<TestResult> TestResults { get; set; }
+        public virtual IList<DalTestResult> TestResults { get; set; }
 
         /// <summary>
         /// List of KeyPerformanceIndicators.  These can be time on a page, form submission, etc.

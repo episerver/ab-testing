@@ -3,7 +3,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class ABTestResultMap : EntityTypeConfiguration<TestResult>
+    public class ABTestResultMap : EntityTypeConfiguration<DalTestResult>
     {
         public ABTestResultMap()
         {

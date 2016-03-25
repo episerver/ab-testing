@@ -173,12 +173,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                TestResults = new List<TestResult>()
+                TestResults = new List<DalTestResult>()
             };
 
             _context.ABTests.Add(test);
 
-            var tr = new TestResult()
+            var tr = new DalTestResult()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

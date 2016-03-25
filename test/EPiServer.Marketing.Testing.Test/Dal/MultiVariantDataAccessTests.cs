@@ -39,7 +39,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 State = DalTestState.Active,
                 Owner = "Bert",
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
-                TestResults = new List<TestResult>(),
+                TestResults = new List<DalTestResult>(),
                 Variants = new List<DalVariant>()
             };
 
@@ -248,7 +248,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
-                TestResults = new List<TestResult>(),
+                TestResults = new List<DalTestResult>(),
                 Variants = new List<DalVariant>(),
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
                 ParticipationPercentage = 100,
@@ -257,7 +257,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             //_mtm.Save(test);
 
-            var result = new TestResult()
+            var result = new DalTestResult()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
@@ -333,7 +333,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variant = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].Variants.Add(variant);
 
-            var result = new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
+            var result = new DalTestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].TestResults.Add(result);
             _mtm.Save(tests[0]);
 
@@ -354,7 +354,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variant = new DalVariant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
             tests[0].Variants.Add(variant);
 
-            var result = new TestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            var result = new DalTestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
             tests[0].TestResults.Add(result);
             _mtm.Save(tests[0]);
 
@@ -362,7 +362,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variant2 = new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
             tests[0].Variants.Add(variant2);
 
-            var result2 = new TestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            var result2 = new DalTestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
             tests[0].TestResults.Add(result2);
 
             _mtm.Save(tests[0]);
