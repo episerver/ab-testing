@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
 
     public class DalABTestFilter
     {
-        public DalABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
+        public DalABTestFilter(DalABTestProperty theProperty, FilterOperator theOperator, object theValue)
         {
             Property = theProperty;
             Operator = theOperator;
@@ -42,9 +42,9 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public DalABTestFilter() { }
         
         /// <summary>
-        /// The ABTestProperty that will be filtered on
+        /// The DalABTestProperty that will be filtered on
         /// </summary>
-        public ABTestProperty Property { get; set; }
+        public DalABTestProperty Property { get; set; }
 
         /// <summary>
         /// The operation that will be performed to filter the results set
@@ -57,7 +57,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public object Value { get; set; }
     }
 
-    public enum ABTestProperty
+    public enum DalABTestProperty
     {
         State = 0,
         OriginalItemId = 1,

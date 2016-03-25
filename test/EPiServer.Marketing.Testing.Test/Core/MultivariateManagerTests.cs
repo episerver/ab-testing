@@ -12,7 +12,6 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 using ABTest = EPiServer.Marketing.Testing.Data.ABTest;
-using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 
 namespace EPiServer.Marketing.Testing.Test.Core
@@ -99,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             tm.GetTestList(critera);
 
             _dataAccessLayer.Verify(da => da.GetTestList(It.Is<DalTestCriteria>(arg => arg.GetFilters().First().Operator == FilterOperator.And &&
-            arg.GetFilters().First().Property == ABTestProperty.OriginalItemId &&
+            arg.GetFilters().First().Property == DalABTestProperty.OriginalItemId &&
             arg.GetFilters().First().Value == testFilter.Value)),
             "DataAcessLayer GetTestList was never called or criteria did not match.");
         }

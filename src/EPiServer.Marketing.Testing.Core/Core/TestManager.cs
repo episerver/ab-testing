@@ -8,7 +8,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
 using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
 
 namespace EPiServer.Marketing.Testing
@@ -429,19 +428,19 @@ namespace EPiServer.Marketing.Testing
             return aOperator;
         }
 
-        private ABTestProperty AdaptToDalTestProperty(Data.ABTestProperty property)
+        private DalABTestProperty AdaptToDalTestProperty(Data.ABTestProperty property)
         {
-            var aProperty = ABTestProperty.OriginalItemId;
+            var aProperty = DalABTestProperty.OriginalItemId;
             switch(property)
             {
                 case Data.ABTestProperty.State:
-                    aProperty = ABTestProperty.State;
+                    aProperty = DalABTestProperty.State;
                     break;
                 case Data.ABTestProperty.VariantId:
-                    aProperty = ABTestProperty.VariantId;
+                    aProperty = DalABTestProperty.VariantId;
                     break;
                 case Data.ABTestProperty.OriginalItemId:
-                    aProperty = ABTestProperty.OriginalItemId;
+                    aProperty = DalABTestProperty.OriginalItemId;
                     break;
             }
             return aProperty;

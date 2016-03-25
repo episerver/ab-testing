@@ -61,7 +61,7 @@ namespace EPiServer.Marketing.Testing.Dal
             foreach (var filter in filters)
             {
                 // if we are filtering on a single property(not an element in a list) create the expression
-                if (filter.Property != ABTestProperty.VariantId)
+                if (filter.Property != DalABTestProperty.VariantId)
                 {
                     var left = Expression.Property(pe, typeof (DalABTest).GetProperty(filter.Property.ToString()));
                     var right = Expression.Constant(filter.Value);
