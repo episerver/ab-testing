@@ -10,7 +10,6 @@ using EPiServer.ServiceLocation;
 using System.Threading;
 using System.Diagnostics;
 using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace EPiServer.Marketing.Testing.Dal.Entity.Enums
+﻿namespace EPiServer.Marketing.Testing.Dal.EntityModel.Enums
 {
     public enum CountType
     {

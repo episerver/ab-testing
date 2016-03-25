@@ -1,8 +1,8 @@
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
-namespace EPiServer.Marketing.Testing.Dal.Entity
+namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
     /// <summary>
     /// Entity framework model class

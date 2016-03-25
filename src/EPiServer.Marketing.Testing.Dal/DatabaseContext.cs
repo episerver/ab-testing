@@ -1,7 +1,7 @@
 using System.Data.Common;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 
 namespace EPiServer.Marketing.Testing.Dal

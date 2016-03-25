@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Dal
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Test.Dal;
 
 namespace EPiServer.Marketing.Testing.Test.Core

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Testing.Dal
+namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
     public class TestCriteria
     {

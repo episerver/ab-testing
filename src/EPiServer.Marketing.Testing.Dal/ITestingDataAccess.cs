@@ -1,7 +1,7 @@
-﻿using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Dal
 {

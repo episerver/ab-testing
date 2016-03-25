@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Transactions;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal
 {

@@ -1,6 +1,5 @@
 ﻿using System.Data.Entity.ModelConfiguration;
-
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {

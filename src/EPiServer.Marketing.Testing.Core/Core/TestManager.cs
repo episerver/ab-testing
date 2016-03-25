@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using ABTest = EPiServer.Marketing.Testing.Dal.EntityModel.ABTest;
+using ABTestFilter = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestFilter;
+using ABTestProperty = EPiServer.Marketing.Testing.Dal.EntityModel.ABTestProperty;
+using CountType = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.CountType;
+using FilterOperator = EPiServer.Marketing.Testing.Dal.EntityModel.FilterOperator;
+using KeyPerformanceIndicator = EPiServer.Marketing.Testing.Dal.EntityModel.KeyPerformanceIndicator;
+using TestCriteria = EPiServer.Marketing.Testing.Dal.EntityModel.TestCriteria;
+using TestResult = EPiServer.Marketing.Testing.Dal.EntityModel.TestResult;
+using TestState = EPiServer.Marketing.Testing.Dal.EntityModel.Enums.TestState;
+using Variant = EPiServer.Marketing.Testing.Dal.EntityModel.Variant;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -161,7 +170,7 @@ namespace EPiServer.Marketing.Testing
 
         private IABTest ConvertToDalTest(IMarketingTest theManagerTest)
         {
-            var aTest = new Dal.Entity.ABTest()
+            var aTest = new ABTest()
             {
                 Id = theManagerTest.Id,
                 Title = theManagerTest.Title,
@@ -181,18 +190,18 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private Data.Enums.TestState AdaptToManagerState(Dal.Entity.Enums.TestState theDalState)
+        private Data.Enums.TestState AdaptToManagerState(TestState theDalState)
         {
             var retState = Data.Enums.TestState.Inactive;
             switch(theDalState)
             {
-                case Dal.Entity.Enums.TestState.Active:
+                case TestState.Active:
                     retState = Data.Enums.TestState.Active;
                     break;
-                case Dal.Entity.Enums.TestState.Done:
+                case TestState.Done:
                     retState = Data.Enums.TestState.Done;
                     break;
-                case Dal.Entity.Enums.TestState.Archived:
+                case TestState.Archived:
                     retState = Data.Enums.TestState.Archived;
                     break;
                 default:
@@ -203,22 +212,22 @@ namespace EPiServer.Marketing.Testing
             return retState;
         }
 
-        private Dal.Entity.Enums.TestState AdaptToDalState(Data.Enums.TestState theManagerState)
+        private TestState AdaptToDalState(Data.Enums.TestState theManagerState)
         {
-            var retState = Dal.Entity.Enums.TestState.Inactive;
+            var retState = TestState.Inactive;
             switch (theManagerState)
             {
                 case Data.Enums.TestState.Active:
-                    retState = Dal.Entity.Enums.TestState.Active;
+                    retState = TestState.Active;
                     break;
                 case Data.Enums.TestState.Done:
-                    retState = Dal.Entity.Enums.TestState.Done;
+                    retState = TestState.Done;
                     break;
                 case Data.Enums.TestState.Archived:
-                    retState = Dal.Entity.Enums.TestState.Archived;
+                    retState = TestState.Archived;
                     break;
                 default:
-                    retState = Dal.Entity.Enums.TestState.Inactive;
+                    retState = TestState.Inactive;
                     break;
             }
 
@@ -226,7 +235,7 @@ namespace EPiServer.Marketing.Testing
         }
 
         #region VariantConversion
-        private List<Data.Variant> AdaptToManagerVariant(IList<Dal.Entity.Variant> theVariantList)
+        private List<Data.Variant> AdaptToManagerVariant(IList<Variant> theVariantList)
         {
             var retList = new List<Data.Variant>();
 
@@ -238,7 +247,7 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Data.Variant ConvertToManagerVariant(Dal.Entity.Variant theDalVariant)
+        private Data.Variant ConvertToManagerVariant(Variant theDalVariant)
         {
             var retVariant = new Data.Variant()
             {
@@ -252,9 +261,9 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private IList<Dal.Entity.Variant> AdaptToDalVariant(IList<Data.Variant> variants)
+        private IList<Variant> AdaptToDalVariant(IList<Data.Variant> variants)
         {
-            var retList = new List<Dal.Entity.Variant>();
+            var retList = new List<Variant>();
 
             foreach(var managerVariant in variants)
             {
@@ -264,9 +273,9 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Dal.Entity.Variant ConvertToDalVariant(Data.Variant managerVariant)
+        private Variant ConvertToDalVariant(Data.Variant managerVariant)
         {
-            var retVariant = new Dal.Entity.Variant()
+            var retVariant = new Variant()
             {
                 Id = managerVariant.Id,
                 TestId = managerVariant.TestId,
@@ -280,7 +289,7 @@ namespace EPiServer.Marketing.Testing
         #endregion VariantConversion
 
         #region ResultsConversion
-        private List<Data.TestResult> AdaptToManagerResults(IList<Dal.Entity.TestResult> theResultList)
+        private List<Data.TestResult> AdaptToManagerResults(IList<TestResult> theResultList)
         {
             var retList = new List<Data.TestResult>();
 
@@ -292,7 +301,7 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Data.TestResult ConvertToManagerResult(Dal.Entity.TestResult dalResult)
+        private Data.TestResult ConvertToManagerResult(TestResult dalResult)
         {
             var retResult = new Data.TestResult()
             {
@@ -308,9 +317,9 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private IList<Dal.Entity.TestResult> AdaptToDalResults(IList<Data.TestResult> testResults)
+        private IList<TestResult> AdaptToDalResults(IList<Data.TestResult> testResults)
         {
-            var retList = new List<Dal.Entity.TestResult>();
+            var retList = new List<TestResult>();
 
             foreach (var managerResult in testResults)
             {
@@ -320,9 +329,9 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Dal.Entity.TestResult ConvertToDalResult(Data.TestResult managerResult)
+        private TestResult ConvertToDalResult(Data.TestResult managerResult)
         {
-            var retResult = new Dal.Entity.TestResult()
+            var retResult = new TestResult()
             {
                 Id = managerResult.Id,
                 ItemId = managerResult.ItemId,
@@ -337,7 +346,7 @@ namespace EPiServer.Marketing.Testing
         #endregion ResultsConversion
 
         #region KPIConversion
-        private List<Data.KeyPerformanceIndicator> AdaptToManagerKPI(IList<Dal.Entity.KeyPerformanceIndicator> theDalKPIs)
+        private List<Data.KeyPerformanceIndicator> AdaptToManagerKPI(IList<KeyPerformanceIndicator> theDalKPIs)
         {
             var retList = new List<Data.KeyPerformanceIndicator>();
 
@@ -349,7 +358,7 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Data.KeyPerformanceIndicator ConvertToManagerKPI(Dal.Entity.KeyPerformanceIndicator dalKPI)
+        private Data.KeyPerformanceIndicator ConvertToManagerKPI(KeyPerformanceIndicator dalKPI)
         {
             var retKPI = new Data.KeyPerformanceIndicator()
             {
@@ -360,9 +369,9 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        private IList<Dal.Entity.KeyPerformanceIndicator> AdaptToDalKPI(IList<Data.KeyPerformanceIndicator> keyPerformanceIndicators)
+        private IList<KeyPerformanceIndicator> AdaptToDalKPI(IList<Data.KeyPerformanceIndicator> keyPerformanceIndicators)
         {
-            var retList = new List<Dal.Entity.KeyPerformanceIndicator>();
+            var retList = new List<KeyPerformanceIndicator>();
 
             foreach (var managerKPI in keyPerformanceIndicators)
             {
@@ -372,9 +381,9 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private Dal.Entity.KeyPerformanceIndicator ConvertToDalKPI(Data.KeyPerformanceIndicator managerKPI)
+        private KeyPerformanceIndicator ConvertToDalKPI(Data.KeyPerformanceIndicator managerKPI)
         {
-            var retKPI = new Dal.Entity.KeyPerformanceIndicator()
+            var retKPI = new KeyPerformanceIndicator()
             {
                 Id = managerKPI.Id,
                 KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId,
@@ -386,9 +395,9 @@ namespace EPiServer.Marketing.Testing
 
         #region CriteriaConversion
 
-        private Dal.TestCriteria ConvertToDalCriteria(Data.TestCriteria criteria)
+        private TestCriteria ConvertToDalCriteria(Data.TestCriteria criteria)
         {
-            var dalCriteria = new Dal.TestCriteria();
+            var dalCriteria = new TestCriteria();
 
             foreach(var managerFilters in criteria.GetFilters())
             {
@@ -398,9 +407,9 @@ namespace EPiServer.Marketing.Testing
             return dalCriteria;
         }
 
-        private Dal.ABTestFilter AdaptToDalFilter(Data.ABTestFilter managerFilter)
+        private ABTestFilter AdaptToDalFilter(Data.ABTestFilter managerFilter)
         {
-            var dalFilter = new Dal.ABTestFilter()
+            var dalFilter = new ABTestFilter()
             {
                 Property = AdaptToDalTestProperty(managerFilter.Property),
                 Operator = AdaptToDalOperator(managerFilter.Operator),
@@ -410,48 +419,48 @@ namespace EPiServer.Marketing.Testing
             return dalFilter;
         }
 
-        private Dal.FilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
+        private FilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
         {
-            var aOperator = Dal.FilterOperator.And;
+            var aOperator = FilterOperator.And;
 
             switch(theOperator)
             {
                 case Data.FilterOperator.Or:
-                    aOperator = Dal.FilterOperator.Or;
+                    aOperator = FilterOperator.Or;
                     break;
                 case Data.FilterOperator.And:
-                    aOperator = Dal.FilterOperator.And;
+                    aOperator = FilterOperator.And;
                     break;
             }
 
             return aOperator;
         }
 
-        private Dal.ABTestProperty AdaptToDalTestProperty(Data.ABTestProperty property)
+        private ABTestProperty AdaptToDalTestProperty(Data.ABTestProperty property)
         {
-            var aProperty = Dal.ABTestProperty.OriginalItemId;
+            var aProperty = ABTestProperty.OriginalItemId;
             switch(property)
             {
                 case Data.ABTestProperty.State:
-                    aProperty = Dal.ABTestProperty.State;
+                    aProperty = ABTestProperty.State;
                     break;
                 case Data.ABTestProperty.VariantId:
-                    aProperty = Dal.ABTestProperty.VariantId;
+                    aProperty = ABTestProperty.VariantId;
                     break;
                 case Data.ABTestProperty.OriginalItemId:
-                    aProperty = Dal.ABTestProperty.OriginalItemId;
+                    aProperty = ABTestProperty.OriginalItemId;
                     break;
             }
             return aProperty;
         }
         #endregion
 
-        private Dal.Entity.Enums.CountType AdaptToDalCount(Data.Enums.CountType resultType)
+        private CountType AdaptToDalCount(Data.Enums.CountType resultType)
         {
-            var dalCountType = Dal.Entity.Enums.CountType.View;
+            var dalCountType = CountType.View;
 
             if (resultType == Data.Enums.CountType.Conversion)
-                dalCountType = Dal.Entity.Enums.CountType.Conversion;
+                dalCountType = CountType.Conversion;
 
             return dalCountType;
         }
