@@ -39,6 +39,7 @@
         "System.Data": "",
         "System.Data.DataSetExtensions": "",
         "System.Net.Http": "",
+        "System.Runtime.Caching": "4.0.0.0",
         "System.Web": "",
         "System.Web.ApplicationServices": "",
         "System.Xml": "",
