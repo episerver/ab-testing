@@ -189,7 +189,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
-            var variantList = new List<Testing.Dal.Entity.Variant>() { new Testing.Dal.Entity.Variant { Id = vID }, new Testing.Dal.Entity.Variant {Id = originalItemId} };
+            var variantList = new List<Testing.Dal.Entity.Variant>() { new Testing.Dal.Entity.Variant { Id = vID }, new Testing.Dal.Entity.Variant { Id = originalItemId } };
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
@@ -210,13 +210,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 // database layer is called.
                 var landingPage = tm.ReturnLandingPage(theGuid);
 
-                if (landingPage == originalItemId && !originalCalled)
+                if (landingPage.Id == originalItemId && !originalCalled)
                 {
                     count++;
                     originalCalled = true;
                 }
 
-                if (landingPage == vID && !variantCalled)
+                if (landingPage.Id == vID && !variantCalled)
                 {
                     count++;
                     variantCalled = true;
@@ -224,8 +224,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
                 _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
                     "DataAcessLayer get was never called or Guid did not match.");
-                Assert.True(landingPage.Equals(originalItemId) ||
-                              landingPage.Equals(vID), "landingPage is not the original quid or the variant quid");
+                Assert.True(landingPage.Id.Equals(originalItemId) ||
+                              landingPage.Id.Equals(vID), "landingPage is not the original quid or the variant quid");
             }
         }
 

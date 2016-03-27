@@ -98,21 +98,20 @@ namespace EPiServer.Marketing.Testing
 
 
 
-        public Guid ReturnLandingPage(Guid testId)
+        public Data.Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
-            var activePage = Guid.Empty;
-
+            var activePage = new Data.Variant();
             if (currentTest != null)
             {
                 switch (GetRandomNumber())
                 {
                     case 1:
                     default:
-                        activePage = currentTest.Variants[0].Id;
+                        activePage = ConvertToManagerVariant(currentTest.Variants[0]);
                         break;
                     case 2:
-                        activePage = currentTest.Variants[1].Id;
+                        activePage = ConvertToManagerVariant(currentTest.Variants[1]);
                         break;
                 }
             }
