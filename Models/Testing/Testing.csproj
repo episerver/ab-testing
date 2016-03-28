@@ -56,32 +56,32 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\DatabaseContext.cs">
       <Link>DatabaseContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\ABTest.cs">
-      <Link>EntityModel\ABTest.cs</Link>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalABTest.cs">
+      <Link>EntityModel\DalABTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyPerformanceIndicator.cs">
+      <Link>EntityModel\DalKeyPerformanceIndicator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestCriteria.cs">
+      <Link>EntityModel\DalTestCriteria.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestResult.cs">
+      <Link>EntityModel\DalTestResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalVariant.cs">
+      <Link>EntityModel\DalVariant.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\EntityBase.cs">
       <Link>EntityModel\EntityBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Enums\CountType.cs">
-      <Link>EntityModel\Enums\CountType.cs</Link>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Enums\DalCountType.cs">
+      <Link>EntityModel\Enums\DalCountType.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Enums\TestState.cs">
-      <Link>EntityModel\Enums\TestState.cs</Link>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Enums\DalTestState.cs">
+      <Link>EntityModel\Enums\DalTestState.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\IABTest.cs">
       <Link>EntityModel\IABTest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\KeyPerformanceIndicator.cs">
-      <Link>EntityModel\KeyPerformanceIndicator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\TestCriteria.cs">
-      <Link>EntityModel\TestCriteria.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\TestResult.cs">
-      <Link>EntityModel\TestResult.cs</Link>
-    </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Variant.cs">
-      <Link>EntityModel\Variant.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\IRepository.cs">
       <Link>IRepository.cs</Link>
