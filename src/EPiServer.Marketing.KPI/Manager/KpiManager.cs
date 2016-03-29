@@ -54,14 +54,9 @@ namespace EPiServer.Marketing.KPI.Manager
             var dalKpi = new Kpi()
             {
                 Id = kpi.Id,
-                Name = kpi.Name,
-                Weight = kpi.Weight,
+                Properties = kpi.Properties,
                 CreatedDate = kpi.CreatedDate,
-                ModifiedDate = kpi.ModifiedDate,
-                LandingPage = kpi.LandingPage,
-                Value = kpi.Value,
-                RunAt = (RunAt)kpi.RunAt,
-                ClientScripts = kpi.ClientScripts
+                ModifiedDate = kpi.ModifiedDate
             };
 
             return dalKpi;
@@ -72,14 +67,9 @@ namespace EPiServer.Marketing.KPI.Manager
             var managerKpi = new DataClass.Kpi()
             {
                 Id = kpi.Id,
-                Name = kpi.Name,
-                Weight = kpi.Weight,
+                Properties = kpi.Properties,
                 CreatedDate = kpi.CreatedDate,
-                ModifiedDate = kpi.ModifiedDate,
-                LandingPage = kpi.LandingPage,
-                Value = kpi.Value,
-                RunAt = (DataClass.Enums.RunAt)kpi.RunAt,
-                ClientScripts = kpi.ClientScripts
+                ModifiedDate = kpi.ModifiedDate
             };
 
             return managerKpi;

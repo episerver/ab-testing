@@ -1,6 +1,6 @@
-﻿namespace EPiServer.Marketing.Testing.Dal.Entity.Enums
+﻿namespace EPiServer.Marketing.Testing.Dal.EntityModel.Enums
 {
-    public enum TestState
+    public enum DalTestState
     {
         Inactive = 0,
         Active = 1,

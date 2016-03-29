@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 
-namespace EPiServer.Marketing.Testing.Dal.Entity
+namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class TestResult : EntityBase
+    public class DalVariant : EntityBase
     {
         public Guid Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         public Guid? TestId { get; set; }
 
         /// <summary>
-        /// Id of the item that replaces the original item in the test.
+        /// Id of a variant to use instead of the original item for a test.
         /// </summary>
         public Guid ItemId { get; set; }
 
@@ -22,18 +22,13 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         public int ItemVersion { get; set; }
 
         /// <summary>
-        /// Number of views this item has had.
+        /// True if variant won the test, false otherwise.
         /// </summary>
-        public int Views { get; set; }
-
-        /// <summary>
-        /// Number of conversions this item has had.
-        /// </summary>
-        public int Conversions { get; set; }
+        public bool IsWinner { get; set; }
 
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest ABTest { get; set; }
+        public virtual DalABTest DalABTest { get; set; }
     }
 }

@@ -22,12 +22,7 @@ namespace EPiServer.Marketing.KPI.Test
                 kpis.Add(new Kpi()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "test" + i,
-                    Weight = 100,
-                    ClientScripts = "testing...",
-                    RunAt = RunAt.Server,
-                    Value = "TestValue",
-                    LandingPage = Guid.NewGuid()
+                    Properties = "test"
                     
                 });
             };
@@ -46,12 +41,7 @@ namespace EPiServer.Marketing.KPI.Test
                 var test = new Kpi()
                 {
                     Id = Guid.NewGuid(),
-                    Name = "test" + i,
-                    Weight = 100,
-                    ClientScripts = "testing...",
-                    RunAt = RunAt.Server,
-                    Value = "TestValue",
-                    LandingPage = Guid.NewGuid()
+                    Properties = "test"
                 };
 
                 mtmManager.Save(test);

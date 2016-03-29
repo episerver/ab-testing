@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.KPI.Test
             var kpi = new Manager.DataClass.Kpi()
             {
                 Id = theGuid,
-                Name = "kpiTest"
+                Properties = "test"
             };
             tm.Save(kpi);
 
@@ -72,7 +72,7 @@ namespace EPiServer.Marketing.KPI.Test
         public void Kpi_Success_Throws_Exception()
         {
             var kpi = new Kpi();
-            Assert.Throws<NotImplementedException>(() => kpi.Success(new object()));
+            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(new object()));
         }
 
     }

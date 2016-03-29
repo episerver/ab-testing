@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Test.Core;
 using Xunit;
 
@@ -47,19 +47,24 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
                 Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                State = TestState.Active,
+                State = DalTestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                ParticipationPercentage = 100
+                ParticipationPercentage = 100,
+                ExpectedVisitorCount = 100,
+                ActualVisitorCount = 50,
+                IsSignificant = false,
+                ZScore = .5,
+                ConfidenceLevel = .95
             };
 
             _context.ABTests.Add(test);
@@ -80,30 +85,30 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
                 Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                State = TestState.Active,
+                State = DalTestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                Variants = new List<Variant>()
+                Variants = new List<DalVariant>()
             };
 
             _context.ABTests.Add(test);
 
-            var variant = new Variant()
+            var variant = new DalVariant()
             {
                 Id = Guid.NewGuid(),
                 ItemId = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ItemVersion = 1
-
+                ItemVersion = 1,
+                IsWinner = false
             };
 
             test.Variants.Add(variant);
@@ -119,24 +124,24 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
                 Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                State = TestState.Active,
+                State = DalTestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
             };
 
             _context.ABTests.Add(test);
 
-            var kpi = new KeyPerformanceIndicator()
+            var kpi = new DalKeyPerformanceIndicator()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -156,24 +161,24 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "Test",
                 Description = "Description",
                 Owner = "me",
                 OriginalItemId = new Guid(),
-                State = TestState.Active,
+                State = DalTestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                TestResults = new List<TestResult>()
+                TestResults = new List<DalTestResult>()
             };
 
             _context.ABTests.Add(test);
 
-            var tr = new TestResult()
+            var tr = new DalTestResult()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

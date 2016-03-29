@@ -1,7 +1,7 @@
-﻿using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         List<IABTest> GetTestByItemId(Guid originalItemId);
 
-        List<IABTest> GetTestList(TestCriteria criteria);
+        List<IABTest> GetTestList(DalTestCriteria criteria);
 
         Guid Save(IABTest testObject);
 
@@ -23,6 +23,6 @@ namespace EPiServer.Marketing.Testing.Dal
 
         void Archive(Guid testObjectId);
 
-        void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
+        void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType);
     }
 }

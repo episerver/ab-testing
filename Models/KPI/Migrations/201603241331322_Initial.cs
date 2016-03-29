@@ -1,4 +1,4 @@
-namespace EPiServer.Marketing.KPI.Migrations
+namespace KPI.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -12,12 +12,7 @@ namespace EPiServer.Marketing.KPI.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Name = c.String(nullable: false),
-                        Weight = c.Int(),
-                        Value = c.String(nullable: false),
-                        LandingPage = c.Guid(nullable: false),
-                        RunAt = c.Int(nullable: false),
-                        ClientScripts = c.String(),
+                        Properties = c.String(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
