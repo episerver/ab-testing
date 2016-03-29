@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Dal.Entity;
 using EPiServer.Marketing.Testing.Test.Dal;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Test
 {
@@ -14,13 +14,13 @@ namespace EPiServer.Marketing.Testing.Test
             context.Set<T>().AddRange(data);
         }
 
-        public IList<ABTest> AddMultivariateTests(TestContext context, int numberOfTests)
+        public IList<DalABTest> AddMultivariateTests(TestContext context, int numberOfTests)
         {
-            var newMultivariateTests = new List<ABTest>();
+            var newMultivariateTests = new List<DalABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                newMultivariateTests.Add(new ABTest()
+                newMultivariateTests.Add(new DalABTest()
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
@@ -32,11 +32,11 @@ namespace EPiServer.Marketing.Testing.Test
                     LastModifiedBy = "me",
                     Owner = "Bert" + i,
                     OriginalItemId = Guid.NewGuid(),
-                    State = TestState.Inactive,
+                    State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
-                    TestResults = new List<TestResult>(),
-                    Variants = new List<Variant>(),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                    TestResults = new List<DalTestResult>(),
+                    Variants = new List<DalVariant>(),
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 });
             };
 
@@ -45,13 +45,13 @@ namespace EPiServer.Marketing.Testing.Test
             return newMultivariateTests;
         }
 
-        internal IList<ABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
+        internal IList<DalABTest> AddMultivariateTests(TestingDataAccess mtmManager, int numberOfTests)
         {
-            var newABTests = new List<ABTest>();
+            var newABTests = new List<DalABTest>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                var test = new ABTest()
+                var test = new DalABTest()
                 {
                     Id = Guid.NewGuid(),
                     Title = "test" + i,
@@ -60,14 +60,14 @@ namespace EPiServer.Marketing.Testing.Test
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow,
                     ModifiedDate = DateTime.UtcNow,
-                    State = TestState.Inactive,
+                    State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
                     LastModifiedBy = "me",
                     OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,
-                    TestResults = new List<TestResult>(),
-                    Variants = new List<Variant>(),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+                    TestResults = new List<DalTestResult>(),
+                    Variants = new List<DalVariant>(),
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 };
 
                 mtmManager.Save(test);
@@ -77,9 +77,9 @@ namespace EPiServer.Marketing.Testing.Test
             return newABTests;
         }
 
-        internal void AddMultivariateTestResults(TestingDataAccess mtmManager, ABTest multivariateTest, Guid itemId)
+        internal void AddMultivariateTestResults(TestingDataAccess mtmManager, DalABTest multivariateTest, Guid itemId)
         {
-            var result = new TestResult()
+            var result = new DalTestResult()
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

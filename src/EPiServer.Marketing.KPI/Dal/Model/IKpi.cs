@@ -1,5 +1,4 @@
 ﻿using System;
-using EPiServer.Marketing.KPI.Dal.Model.Enums;
 
 namespace EPiServer.Marketing.KPI.Dal.Model
 {
@@ -14,34 +13,9 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         Guid Id { get; set; }
 
         /// <summary>
-        /// Name of Kpi. 
-        /// </summary>
-        string Name { get; set; }
-
-        /// <summary>
-        /// Wieght of kpi compared to other kpis.
-        /// </summary>
-        int Weight { get; set; }
-
-        /// <summary>
         /// The condition to be met for the kpi to be met by a user.
         /// </summary>
-        string Value { get; set; }
-
-        /// <summary>
-        /// Page to direct user to upon successful conversion.
-        /// </summary>
-        Guid LandingPage { get; set; }
-
-        /// <summary>
-        /// Indicates whether this Kpi is run on the server side or client side.
-        /// </summary>
-        RunAt RunAt { get; set; }
-
-        /// <summary>
-        /// Paths to client scripts.  Single string that is comma deliminated.
-        /// </summary>
-        string ClientScripts { get; set; }
+        string Properties { get; set; }
 
         /// <summary>
         /// Date the kpi was created.
@@ -54,9 +28,11 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         DateTime ModifiedDate { get; set; }
 
         /// <summary>
-        /// Determines if a conversion has happened.
+        /// 
         /// </summary>
         /// <param name="theValues"></param>
-        void Success(object theValues);
+        /// <returns></returns>
+        bool Evaluate(object theValues);
+
     }
 }

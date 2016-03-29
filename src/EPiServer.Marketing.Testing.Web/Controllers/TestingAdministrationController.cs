@@ -4,8 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.PlugIn;

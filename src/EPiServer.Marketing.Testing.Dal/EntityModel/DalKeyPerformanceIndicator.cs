@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Testing.Dal.Entity
+namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class KeyPerformanceIndicator : EntityBase
+    public class DalKeyPerformanceIndicator : EntityBase
     {
         public Guid Id { get; set; }
 
@@ -19,6 +19,6 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
-        public virtual ABTest ABTest { get; set; }
+        public virtual DalABTest DalABTest { get; set; }
     }
 }

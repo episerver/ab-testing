@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
-namespace EPiServer.Marketing.Testing.Dal.Entity
+namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
     public interface IABTest
     {
@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         /// <summary>
         /// Current state of the test.
         /// </summary>
-        TestState State { get; set; }
+        DalTestState State { get; set; }
 
         /// <summary>
         /// Date and time the test is scheduled to start.
@@ -66,16 +66,16 @@ namespace EPiServer.Marketing.Testing.Dal.Entity
         /// <summary>
         /// List of possible variant items.  These replace the OriginalItem during the test.
         /// </summary>
-        IList<Variant> Variants { get; set; }
+        IList<DalVariant> Variants { get; set; }
 
         /// <summary>
-        /// List of test results. There will be a TestResults for the OriginalItem and each Variant item.
+        /// List of test results. There will be a TestResults for the OriginalItem and each DalVariant item.
         /// </summary>
-        IList<TestResult> TestResults { get; set; }
+        IList<DalTestResult> TestResults { get; set; }
 
         /// <summary>
         /// List of key performance indicators.  These can be time on a page, form submission, etc.
         /// </summary>
-        IList<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+        IList<DalKeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
     }
 }

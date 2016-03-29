@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public void Archive(Guid testObjectId)
         {
-            SetTestState(testObjectId, TestState.Archived);
+            SetTestState(testObjectId, DalTestState.Archived);
         }
 
         public void Delete(Guid testObjectId)
@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.Testing.Dal
             return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
         }
 
-        public List<IABTest> GetTestList(TestCriteria criteria)
+        public List<IABTest> GetTestList(DalTestCriteria criteria)
         {
             // if no filters are passed in, just return all tests
             var filters = criteria.GetFilters();
@@ -51,19 +51,19 @@ namespace EPiServer.Marketing.Testing.Dal
                 return _repository.GetAll().ToList();
             }
 
-            var variantOperator = FilterOperator.And;
+            var variantOperator = DalFilterOperator.And;
             IQueryable<IABTest> variantResults = null;
             var variantId = Guid.Empty;
-            var pe = Expression.Parameter(typeof(ABTest), "test");
+            var pe = Expression.Parameter(typeof(DalABTest), "test");
             Expression wholeExpression = null;
 
             // build up expression tree based on the filters that are passed in
             foreach (var filter in filters)
             {
                 // if we are filtering on a single property(not an element in a list) create the expression
-                if (filter.Property != ABTestProperty.VariantId)
+                if (filter.Property != DalABTestProperty.VariantId)
                 {
-                    var left = Expression.Property(pe, typeof (ABTest).GetProperty(filter.Property.ToString()));
+                    var left = Expression.Property(pe, typeof (DalABTest).GetProperty(filter.Property.ToString()));
                     var right = Expression.Constant(filter.Value);
                     var expression = Expression.Equal(left, right);
 
@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Dal
                     }
 
                     // each subsequent iteration we check to see if the filter is for an AND or OR and append accordingly
-                    wholeExpression = filter.Operator == FilterOperator.And
+                    wholeExpression = filter.Operator == DalFilterOperator.And
                         ? Expression.And(wholeExpression, expression) : Expression.Or(wholeExpression, expression);
                 }
                 else // if we are filtering on an item in a list, then generate simple results that we can lump in at the end
@@ -97,10 +97,10 @@ namespace EPiServer.Marketing.Testing.Dal
                     "Where",
                     new Type[] {tests.ElementType},
                     tests.Expression,
-                    Expression.Lambda<Func<ABTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
+                    Expression.Lambda<Func<DalABTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
                     );
 
-                results = tests.Provider.CreateQuery<ABTest>(whereCallExpression);
+                results = tests.Provider.CreateQuery<DalABTest>(whereCallExpression);
             }
 
             // if we are also filtering against a variantId, include those results
@@ -111,7 +111,7 @@ namespace EPiServer.Marketing.Testing.Dal
                     return variantResults.ToList();
                 }
 
-                results = variantOperator == FilterOperator.And 
+                results = variantOperator == DalFilterOperator.And 
                     ? results.Where(test => test.Variants.Any(v => v.ItemId == variantId)) 
                     : results.Concat(variantResults).Distinct();
             }
@@ -120,14 +120,14 @@ namespace EPiServer.Marketing.Testing.Dal
         }
 
         private static Object thisLock = new Object();
-        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
+        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
         {
             lock (thisLock)
             {
             var test = _repository.GetById(testId);
             var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
-            if (resultType == CountType.View)
+            if (resultType == DalCountType.View)
             {
                 result.Views++;
             }
@@ -145,14 +145,14 @@ namespace EPiServer.Marketing.Testing.Dal
             var id = testObject.Id;
 
             // if a test doesn't exist, add it to the db
-            var test = _repository.GetById(testObject.Id) as ABTest;
+            var test = _repository.GetById(testObject.Id) as DalABTest;
             if (test == null)
             {
                 _repository.Add(testObject);
             }
             else
             {
-                if (test.State == TestState.Inactive)
+                if (test.State == DalTestState.Inactive)
                 {
                         test.Title = testObject.Title;
                     test.Description = testObject.Description;
@@ -256,21 +256,21 @@ namespace EPiServer.Marketing.Testing.Dal
                 throw new Exception("The test page already has an Active test");
             }
 
-            SetTestState(testObjectId, TestState.Active);
+            SetTestState(testObjectId, DalTestState.Active);
         }
 
         public void Stop(Guid testObjectId)
         {
-            SetTestState(testObjectId, TestState.Done);
+            SetTestState(testObjectId, DalTestState.Done);
         }
         private bool IsTestActive(Guid originalItemId)
         {
             var tests = _repository.GetAll()
-                .Where(t => t.OriginalItemId == originalItemId && t.State == TestState.Active);
+                .Where(t => t.OriginalItemId == originalItemId && t.State == DalTestState.Active);
 
             return tests.Any();
         }
-        private void SetTestState(Guid theTestId, TestState theState)
+        private void SetTestState(Guid theTestId, DalTestState theState)
         {
             var aTest = _repository.GetById(theTestId);
             aTest.State = theState;

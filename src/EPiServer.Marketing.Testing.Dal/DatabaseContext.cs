@@ -1,7 +1,7 @@
 using System.Data.Common;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 
 namespace EPiServer.Marketing.Testing.Dal
@@ -26,13 +26,13 @@ namespace EPiServer.Marketing.Testing.Dal
 
         }
 
-        public DbSet<ABTest> ABTests { get; set; }
+        public DbSet<DalABTest> ABTests { get; set; }
 
-        public DbSet<TestResult> ABTestsResults { get; set; }
+        public DbSet<DalTestResult> ABTestsResults { get; set; }
 
-        public DbSet<Variant> Variants { get; set; }
+        public DbSet<DalVariant> Variants { get; set; }
 
-        public DbSet<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+        public DbSet<DalKeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
