@@ -22,7 +22,7 @@
             //define our store
             var commandRegistry = dependency.resolve("epi.globalcommandregistry"),
                 testingStorePath = routes.getRestPath({
-                    moduleArea: "EPiServer.Multivariate",
+                    moduleArea: "EPiServer.Marketing.Testing",
                     storeName: "MarketingTestingStore"
                 });
 

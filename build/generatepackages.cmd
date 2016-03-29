@@ -14,14 +14,9 @@ rem xcopy "..\artifacts\Release\net45\EPiServer.Marketing.Testing.Model.dll" "%P
 
 xcopy "%ProjectPath%\*.nuspec" "%PackagePath%\"  /I /F /R /Y
 
-md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingAdministration"
-xcopy "%ProjectPath%\Views\TestingAdministration"\*.ascx "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingAdministration\"  /I /F /R /Y
+md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources"
+xcopy "%ProjectPath%\ClientResources"\* "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\"  /S /I /F /R /Y
 
-md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingGadget"
-xcopy "%ProjectPath%\Views\TestingGadget"\*.ascx "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Views\TestingGadget\"  /I /F /R /Y
-
-md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"
-xcopy "%ProjectPath%\Web\MultivariateConfiguration.aspx" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 
 xcopy "..\src\Database"\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
