@@ -57,7 +57,7 @@
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this)).otherwise(function (result) {
-                    console.log("Bad Result");
+                    console.log("Query did not return valid result");
                 });
         },
 
@@ -75,7 +75,7 @@
             }).then(function () {
                 topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {
-                console.log("something went wrong");
+                console.log("Error occured while creating Marketing Test - Unable to create test");
             });
         }
     });
