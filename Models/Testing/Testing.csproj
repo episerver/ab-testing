@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{66875448-9F9D-4A1C-B0D5-0CD5B6388419}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Testing</RootNamespace>
+    <AssemblyName>Testing</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\BaseRepository.cs">
+      <Link>BaseRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\DatabaseContext.cs">
+      <Link>DatabaseContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalABTest.cs">
+      <Link>EntityModel\DalABTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyPerformanceIndicator.cs">
+      <Link>EntityModel\DalKeyPerformanceIndicator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestCriteria.cs">
+      <Link>EntityModel\DalTestCriteria.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestResult.cs">
+      <Link>EntityModel\DalTestResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalVariant.cs">
+      <Link>EntityModel\DalVariant.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\EntityBase.cs">
+      <Link>EntityModel\EntityBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Enums\DalCountType.cs">
+      <Link>EntityModel\Enums\DalCountType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\Enums\DalTestState.cs">
+      <Link>EntityModel\Enums\DalTestState.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\IABTest.cs">
+      <Link>EntityModel\IABTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\IRepository.cs">
+      <Link>IRepository.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\ABTestMap.cs">
+      <Link>Mappings\ABTestMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyPerformanceIndicatorMap.cs">
+      <Link>Mappings\KeyPerformanceIndicatorMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\TestResultMap.cs">
+      <Link>Mappings\TestResultMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\VariantMap.cs">
+      <Link>Mappings\VariantMap.cs</Link>
+    </Compile>
+    <Compile Include="Migrations\201603241337050_Initial.cs" />
+    <Compile Include="Migrations\201603241337050_Initial.Designer.cs">
+      <DependentUpon>201603241337050_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201603241337050_Initial.resx">
+      <DependentUpon>201603241337050_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
