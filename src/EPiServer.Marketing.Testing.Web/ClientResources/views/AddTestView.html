@@ -63,11 +63,13 @@
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <!-- Test Title -->
                     <li>
-                        <label for="testTitle">Title</label>
-                        <input id="testTitle"
-                               data-dojo-type="dijit/form/TextBox"
-                               data-dojo-attachpoint="testTitle"
-                               data-dojo-attach-event="onChange: _onTestTitleChanged" />
+                        <label for="textTitle">Title</label>
+                        <input id="textTitle"
+                               data-dojo-type="dijit/form/ValidationTextBox"
+                               data-dojo-props="trim:true,value:'Default Test Title'"
+                               data-dojo-attachpoint="titleText"
+                               data-dojo-attach-event="onChange: _onTestTitleChanged"
+                               required="true" />
                     </li>
                     <!-- Test Description -->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
@@ -112,6 +114,7 @@
                         <label for="percentageSpinner">What percentage of visitors should participate in this A/B test?</label><br>
                         <div id="percentageSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
+                             data-dojo-props="constraints:{min:5,max:95},value:50"
                              data-dojo-attach-point="participationPercentText"
                              data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
                         </div> %
@@ -123,6 +126,7 @@
                         <label for="durationSpinner"></label><br>
                         <div id="durationSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
+                             data-dojo-props="constraints:{min:7,max:365},value:30"
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
                         </div>

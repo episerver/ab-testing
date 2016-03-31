@@ -21,9 +21,10 @@ namespace EPiServer.Marketing.Testing.Web
                 OriginalItemId = testData.testContentId,
                 Owner = "tbd",
                 Description = testData.testDescription,
-                Title = "My Title",
-                StartDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(testData.startDate)).ToLocalTime(),
-                EndDate = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(testData.startDate)).ToLocalTime().AddDays(testData.testDuration),
+                Title = testData.testTitle,
+                StartDate = DateTime.Parse(testData.startDate).ToLocalTime(),
+                EndDate = GetEndDate(testData.startDate,testData.testDuration),
+                ParticipationPercentage = testData.participationPercent,
                 Variants = new List<Variant>
                 {
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.testContentId,ItemVersion = testData.publishedVersion},
@@ -45,6 +46,12 @@ namespace EPiServer.Marketing.Testing.Web
             TestManager tm = new TestManager();
             tm.Save(test);
             return new RestStatusCodeResult((int)HttpStatusCode.Created);
+        }
+
+        private DateTime? GetEndDate(string startDate, int testDuration)
+        {
+            DateTime endDate = DateTime.Parse(startDate).ToLocalTime();
+            return endDate.AddDays(testDuration);
         }
     }
 }

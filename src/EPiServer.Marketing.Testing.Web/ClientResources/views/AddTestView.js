@@ -40,13 +40,14 @@
     viewCurrentVersion: null;
 
 
+
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
         templateString: template,
 
         //set bindings to view model properties
         modelBindingMap: {
             publishedVersion: ["viewPublishedVersion"],
-            currentVersion: ["viewCurrentVersion"]
+            currentVersion: ["viewCurrentVersion"],
         },
 
         //sets views starting data from view model
@@ -61,8 +62,10 @@
             this.model.testDescription = this.descriptionText.value;
             this.model.participationPercent = this.participationPercentText.value;
             this.model.testDuration = this.durationText.value;
+            this.model.testTitle = "Default Test Title";
             var _startDate = Date();
             this.model.startDate = new Date(_startDate).toUTCString();
+
         },
 
         //setters for bound properties
