@@ -78,20 +78,20 @@ namespace EPiServer.Marketing.KPI.Test
             return records;
         }
 
-        public IKpi GetById(object id)
+        public IDalKpi GetById(object id)
         {
-            return DatabaseContext.Set<Kpi>().Find(id);
+            return DatabaseContext.Set<DalKpi>().Find(id);
         }
 
-        public IQueryable<IKpi> GetAll()
+        public IQueryable<IDalKpi> GetAll()
         {
-            return DatabaseContext.Set<Kpi>().AsQueryable();
+            return DatabaseContext.Set<DalKpi>().AsQueryable();
         }
 
         public void DeleteKpi(object id)
         {
-            var test = DatabaseContext.Set<Kpi>().Find(id);
-            DatabaseContext.Set<Kpi>().Remove(test);
+            var test = DatabaseContext.Set<DalKpi>().Find(id);
+            DatabaseContext.Set<DalKpi>().Remove(test);
         }
 
         /// <summary>

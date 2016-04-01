@@ -7,6 +7,7 @@ using EPiServer.Marketing.KPI.Dal;
 using EPiServer.Marketing.KPI.Dal.Model;
 using Xunit;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Test
 {
@@ -15,9 +16,9 @@ namespace EPiServer.Marketing.KPI.Test
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IKpiDataAccess> _kpiDataAccess;
 
-        private Kpi GetDalKpi()
+        private DalKpi GetDalKpi()
         {
-            return new Kpi();
+            return new DalKpi();
         }
 
         private KpiManager GetUnitUnderTest()
@@ -53,7 +54,7 @@ namespace EPiServer.Marketing.KPI.Test
             };
             tm.Save(kpi);
 
-            _kpiDataAccess.Verify(da => da.Save(It.Is<Kpi>(arg => arg.Id == theGuid)),
+            _kpiDataAccess.Verify(da => da.Save(It.Is<DalKpi>(arg => arg.Id == theGuid)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
 
