@@ -1,5 +1,4 @@
 ﻿using System;
-using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -32,6 +31,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Determines if a conversion has happened.
         /// </summary>
         /// <param name="theValues"></param>
-        void Success(object theValues);
+        void Evaluate(object theValues);
     }
 }

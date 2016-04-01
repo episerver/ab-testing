@@ -1,0 +1,24 @@
+{
+  "name": "episerver.marketing.multivariate",
+  "version": "1.0.0",
+  "description": "AB Testing Build",
+  "main": "gulpfile.js",
+  "scripts": {
+    "start": "gulp --tasks-simple",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash.ep.se:7999/nas/episerver.marketing.multivariate.git"
+  },
+  "author": "Episerver AB",
+  "private": true,
+  "devDependencies": {
+    "command": "0.0.5",
+    "gulp": "^3.9.0",
+    "gulp-decompress": "^1.2.0",
+    "gulp-util": "^3.0.7",
+    "mocha-teamcity-reporter": "^1.0.0",
+    "test-runner": "file:build/resources/test-runner"
+  }
+}
