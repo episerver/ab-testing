@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.ServiceLocation;
 
-namespace EPiServer.Marketing.Testing.Web
+namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestDataCookieHelper : ITestDataCookieHelper
     {

@@ -1,6 +1,6 @@
 using EPiServer.Marketing.Testing.Core.DataClass;
 
-namespace EPiServer.Marketing.Testing.Web
+namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public interface ITestDataCookieHelper
     {
