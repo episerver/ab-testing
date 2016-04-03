@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -17,12 +14,10 @@ namespace EPiServer.Marketing.Testing.Web
         public TestHandlerInitializer()
         {
             _testHandler = new TestHandler();
-
         }
         public void Initialize(InitializationEngine context)
         {
             _testHandler.Initialize();
-
         }
 
         public void Uninitialize(InitializationEngine context)
@@ -40,8 +35,6 @@ namespace EPiServer.Marketing.Testing.Web
         private void EndRequest(object sender, EventArgs e)
         {
             _testHandler.ProcessedContentList.Clear();
-
-
         }
     }
 }
