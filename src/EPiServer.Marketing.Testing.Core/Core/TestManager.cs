@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.Caching;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.Entity;
 using EPiServer.ServiceLocation;
@@ -8,6 +11,8 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
+using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -117,6 +122,95 @@ namespace EPiServer.Marketing.Testing
             }
 
             return activePage;
+        }
+
+        public void CreateCacheVariant(Guid contentGuid)
+        {
+            var _marketingTestCache = MemoryCache.Default;
+            var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+            if (_marketingTestCache.Get(contentGuid.ToString()) == null)
+            {
+                if (test != null)
+                {
+                    var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+
+                    var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
+                    if (testContent != null)
+                    {
+                        var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
+                        foreach (var variant in test.Variants)
+                        {
+                            if (variant.ItemVersion != contentVersion)
+                            {
+                                var contentToCache = CreateVariantPageData(contentLoader, testContent, variant);
+
+                                contentToCache.Status = VersionStatus.Published;
+                                contentToCache.StartPublish = DateTime.Now.AddDays(-1);
+                                contentToCache.MakeReadOnly();
+
+                                var cacheItemPolicy = new CacheItemPolicy
+                                {
+                                    AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
+                                };
+                                _marketingTestCache.Add(contentGuid.ToString(), contentToCache, cacheItemPolicy);
+
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        public List<IMarketingTest> CreateActiveTestCache()
+        {
+            var activeTestList = new List<IMarketingTest>();
+            var _marketingTestCache = MemoryCache.Default;
+
+
+            if (_marketingTestCache.Get("TestContentList") == null)
+            {
+                var activeTestCriteria = new Data.TestCriteria();
+
+                var activeTestStateFilter = new Data.ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = Data.FilterOperator.And,
+                    Value = TestState.Active
+                };
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+
+                try
+                {
+                    activeTestList = GetTestList(activeTestCriteria);
+
+                }
+                catch (Exception ex)
+                {
+                    activeTestList = new List<IMarketingTest>();
+                }
+                finally
+                {
+                    var cacheItemPolicy = new CacheItemPolicy
+                    {
+                        AbsoluteExpiration = DateTimeOffset.Parse(DateTime.Now.AddMinutes(1).ToString())
+                    };
+                    _marketingTestCache.Add("TestContentList", activeTestList, cacheItemPolicy);
+                }
+            }
+
+            return _marketingTestCache.Get("TestContentList") as List<IMarketingTest>;
+        }
+
+        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Data.Variant variant)
+        {
+            var contentToSave = d.ContentLink.CreateWritableClone();
+            contentToSave.WorkID = variant.ItemVersion;
+            var newContent = contentLoader.Get<IContent>(contentToSave) as ContentData;
+
+            var contentToCache = newContent?.CreateWritableClone() as PageData;
+            return contentToCache;
         }
 
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
@@ -399,14 +493,47 @@ namespace EPiServer.Marketing.Testing
 
         private Dal.ABTestFilter AdaptToDalFilter(Data.ABTestFilter managerFilter)
         {
-            var dalFilter = new Dal.ABTestFilter()
+            var dalFilter = new Dal.ABTestFilter();
+            dalFilter.Property = AdaptToDalTestProperty(managerFilter.Property);
+            dalFilter.Operator = AdaptToDalOperator(managerFilter.Operator);
+
+            if (managerFilter.Property == ABTestProperty.State)
             {
-                Property = AdaptToDalTestProperty(managerFilter.Property),
-                Operator = AdaptToDalOperator(managerFilter.Operator),
-                Value = managerFilter.Value
-            };
+                dalFilter.Value = ConvertToDalValue(managerFilter.Value);
+            }
+            else
+            {
+                dalFilter.Value = managerFilter.Value;
+            }
+            
+
+            
 
             return dalFilter;
+        }
+
+        private Dal.Entity.Enums.TestState ConvertToDalValue(object value)
+        {
+            var aValue = Dal.Entity.Enums.TestState.Inactive;
+           
+                switch ((TestState)value)
+                {
+                    case TestState.Active:
+                        aValue = Dal.Entity.Enums.TestState.Active;
+                        break;
+                    case TestState.Archived:
+                        aValue = Dal.Entity.Enums.TestState.Archived;
+                        break;
+                    case TestState.Done:
+                        aValue = Dal.Entity.Enums.TestState.Done;
+                        break;
+                    case TestState.Inactive:
+                        aValue = Dal.Entity.Enums.TestState.Inactive;
+                        break;
+                }
+            
+
+            return aValue;
         }
 
         private Dal.FilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
