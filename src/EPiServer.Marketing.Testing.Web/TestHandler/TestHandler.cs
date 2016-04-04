@@ -4,6 +4,7 @@ using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Web;
 using EPiServer.Editor;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data;
@@ -37,7 +38,6 @@ namespace EPiServer.Marketing.Testing.Web
         private void LoadedContent(object sender, ContentEventArgs e)
         {
             ProcessedContentList.Add(e.ContentLink);
-            PageData variant = _marketingTestCache.Get(e.Content.ContentGuid.ToString()) as PageData;
 
 
             _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Web
                 if (_testData.ShowVariant)
                 {
                     //swap it with the cached version
-                    Swap(variant, e);
+                    Swap(e);
                 }
             }
             else if (e.Content is PageData
@@ -60,11 +60,7 @@ namespace EPiServer.Marketing.Testing.Web
               && !PageEditing.PageIsInEditMode)
             {
                 //get the cached content variant in case we need it.
-                if (variant == null)
-                {
-                    _testManager.CreateCacheVariant(e.Content.ContentGuid);
-                    variant = _marketingTestCache.Get(e.Content.ContentGuid.ToString()) as PageData;
-                }
+               
 
                 //get a new random variant. 
                 Variant newVariant = GetVariant(e.Content.ContentGuid);
@@ -81,12 +77,13 @@ namespace EPiServer.Marketing.Testing.Web
                         contentVersion = newVariant.ItemVersion;
 
                         _testData.ShowVariant = true;
-
-                        Swap(variant, e);
+                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
+                        Swap(e);
                     }
                     else
                     {
                         _testData.ShowVariant = false;
+                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
                     }
 
                     CalculateView(contentVersion);
@@ -96,14 +93,16 @@ namespace EPiServer.Marketing.Testing.Web
                     _testData.TestVariantId = Guid.Empty;
                 }
 
-                _testDataCookieHelper.SaveTestDataToCookie(_testData);
             }
         }
 
-        private void Swap(PageData variant, ContentEventArgs activeContent)
+        private void Swap(ContentEventArgs activeContent)
         {
+           
+
             if (_testData.ShowVariant)
             {
+               var variant = _testManager.CreateCacheVariant(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
                 if (variant != null)
                 {
@@ -114,7 +113,7 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         private void CalculateView(int contentVersion)
-        {
+        {  
             //increment view if not already done
             if (_testData.Viewed == false)
             {
@@ -123,6 +122,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
             //set viewed = true in testdata
             _testData.Viewed = true;
+            _testDataCookieHelper.UpdateTestDataCookie(_testData);
         }
 
         private Guid GetActiveTestGuid(Guid contentGuid)
