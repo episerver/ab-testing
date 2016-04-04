@@ -102,7 +102,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (_testData.ShowVariant)
             {
-               var variant = _testManager.CreateCacheVariant(activeContent.Content.ContentGuid, ProcessedContentList);
+               var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
                 if (variant != null)
                 {

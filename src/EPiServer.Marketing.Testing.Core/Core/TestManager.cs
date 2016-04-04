@@ -125,17 +125,17 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
-        public PageData CreateCacheVariant(Guid contentGuid, List<ContentReference> processedList)
+        public PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList)
         {
 
-            var _marketingTestCache = MemoryCache.Default;
+            var marketingTestCache = MemoryCache.Default;
 
-            if (_marketingTestCache.Get(contentGuid.ToString()) == null)
+            if (marketingTestCache.Get(contentGuid.ToString()) == null)
             {
 
                 var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
 
-                if (_marketingTestCache.Get("epi"+contentGuid) == null && processedList.Count == 1)
+                if (marketingTestCache.Get("epi"+contentGuid) == null && processedList.Count == 1)
                 {
                     if (test != null)
                     {
@@ -161,7 +161,7 @@ namespace EPiServer.Marketing.Testing
                                     {
                                         AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
                                     };
-                                    _marketingTestCache.Add("epi"+contentGuid, contentToCache, cacheItemPolicy);
+                                    marketingTestCache.Add("epi"+contentGuid, contentToCache, cacheItemPolicy);
 
                                 }
                             }
@@ -169,7 +169,7 @@ namespace EPiServer.Marketing.Testing
                     }
                 }
             }
-        return _marketingTestCache.Get("epi"+contentGuid.ToString()) as PageData;
+        return marketingTestCache.Get("epi"+contentGuid.ToString()) as PageData;
     }
 
     public List<IMarketingTest> CreateActiveTestCache()
