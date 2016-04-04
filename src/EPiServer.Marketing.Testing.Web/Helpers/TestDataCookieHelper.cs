@@ -52,6 +52,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             HttpContext.Current.Response.Cookies.Add(cookieData);
         }
 
+        public void UpdateTestDataCookie(TestDataCookie testData)
+        {
+            HttpContext.Current.Response.Cookies.Remove(testData.TestContentId.ToString());
+            SaveTestDataToCookie(testData);
+        }
+
         public TestDataCookie GetTestDataFromCookie(string testContentId)
         {
             HttpCookie testDataCookie = HttpContext.Current.Request.Cookies.Get(testContentId);
