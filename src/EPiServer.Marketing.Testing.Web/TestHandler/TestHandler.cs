@@ -12,7 +12,7 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web
 {
-    public class TestHandler
+    internal class TestHandler
     {
         internal List<ContentReference> ProcessedContentList;
         private TestDataCookie _testData;
@@ -137,7 +137,7 @@ namespace EPiServer.Marketing.Testing.Web
             return contentUnderTest.Any(x => x.OriginalItemId == contentGuid);
         }
 
-        public Variant GetVariant(Guid targetContentGuid)
+        private Variant GetVariant(Guid targetContentGuid)
         {
             var test = _testManager.GetTestByItemId(targetContentGuid).First(x => x.State.Equals(TestState.Active));
             return _testManager.ReturnLandingPage(test.Id);
