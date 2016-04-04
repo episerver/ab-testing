@@ -44,8 +44,7 @@ namespace EPiServer.Marketing.Testing.Web
 
 
             if (_testDataCookieHelper.HasTestData(_testData)
-                && _testDataCookieHelper.IsTestParticipant(_testData)
-                && !PageEditing.PageIsInEditMode)
+                && _testDataCookieHelper.IsTestParticipant(_testData))
             {
                 if (_testData.ShowVariant)
                 {
@@ -56,8 +55,7 @@ namespace EPiServer.Marketing.Testing.Web
             else if (e.Content is PageData
               && ContentUnderTest(e.Content.ContentGuid)
               && ProcessedContentList.Count == 1
-              && !_testDataCookieHelper.HasTestData(_testData)
-              && !PageEditing.PageIsInEditMode)
+              && !_testDataCookieHelper.HasTestData(_testData))
             {
                 //get the cached content variant in case we need it.
                
