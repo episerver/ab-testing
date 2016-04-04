@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.KPI.Common
             get { return _ContentGuid.ToString();  }
         }
 
-        public Boolean Evaluate(IContent content)
+        new public Boolean Evaluate(IContent content)
         {
             return _ContentGuid.Equals(content.ContentGuid);
         }

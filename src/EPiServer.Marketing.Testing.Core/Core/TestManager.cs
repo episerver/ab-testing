@@ -8,6 +8,9 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using EPiServer.Core;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -134,6 +137,34 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
             else if (resultType == CountType.View)
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
+        }
+
+        /// <summary>
+        /// Given a specific test id and the content, iterates over the Kpi objects and returns 
+        /// the list of Kpis that evaluated as true.
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <param name="content"></param>
+        /// <returns>list - can be empty, never null</returns>
+        public IList<IKpi> EvaluateKPIs(Guid testId, IContent content)
+        {
+            List<IKpi> kpis = new List<IKpi>();
+
+            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
+            var currentTest = _dataAccess.Get(testId);
+
+            // todo - Brian is putting in changes so that the test 
+            // kpis are objects and we dont ahve to load them from kpi manager in a separate
+            // step.
+            foreach( var k in currentTest.KeyPerformanceIndicators )
+            {
+                var kpi = kpiManager.Get(k.Id);
+                if(kpi.Evaluate(content) )
+                {
+                    kpis.Add(kpi);
+                }
+            }
+            return kpis;
         }
 
         private IMarketingTest ConvertToManagerTest(IABTest theDalTest)
