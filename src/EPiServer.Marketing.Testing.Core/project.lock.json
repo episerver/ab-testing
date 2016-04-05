@@ -95,6 +95,36 @@
           "lib/net45/EPiServer.Shell.dll": {}
         }
       },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Web",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
@@ -300,6 +330,36 @@
           "lib/net45/EPiServer.Licensing.dll": {},
           "lib/net45/EPiServer.Shell.dll": {}
         }
+      },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Web",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
       },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
@@ -507,6 +567,36 @@
           "lib/net45/EPiServer.Shell.dll": {}
         }
       },
+      "EPiServer.Marketing.KPI/1.0.0": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5",
+        "dependencies": {
+          "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
+          "EPiServer.Framework": "9.6.1",
+          "Microsoft.AspNet.Mvc": "4.0.20710",
+          "Microsoft.AspNet.Razor": "2.0.20710",
+          "Microsoft.AspNet.WebPages": "2.0.20710",
+          "Microsoft.Web.Infrastructure": "1.0.0",
+          "Newtonsoft.Json": "6.0.8",
+          "structuremap.web-signed": "3.1.6.186",
+          "structuremap-signed": "3.1.6.186"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "System",
+          "System.ComponentModel.DataAnnotations",
+          "System.Core",
+          "System.Data",
+          "System.Data.DataSetExtensions",
+          "System.Net.Http",
+          "System.Runtime.Serialization",
+          "System.Transactions",
+          "System.Web",
+          "System.Xml",
+          "System.Xml.Linq"
+        ]
+      },
       "EPIServer.Marketing.Messaging/1.0.0": {
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
@@ -622,6 +712,10 @@
     }
   },
   "libraries": {
+    "EPiServer.Marketing.KPI/1.0.0": {
+      "type": "project",
+      "path": "../EPiServer.Marketing.KPI/project.json"
+    },
     "EPIServer.Marketing.Messaging/1.0.0": {
       "type": "project",
       "path": "../EPIServer.Marketing.Messaging/project.json"
@@ -904,6 +998,7 @@
       "Castle.Windsor >= 3.3.0",
       "EPiServer.CMS.Core >= 9.6.1",
       "EPiServer.Framework >= 9.6.1",
+      "EPiServer.Marketing.KPI >= 1.0.0-*",
       "EPIServer.Marketing.Messaging >= 1.0.0-*",
       "EPiServer.Marketing.Testing.Dal >= 1.0.0-*",
       "Microsoft.AspNet.Mvc >= 4.0.20710",
