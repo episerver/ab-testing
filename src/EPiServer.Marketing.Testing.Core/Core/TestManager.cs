@@ -130,13 +130,14 @@ namespace EPiServer.Marketing.Testing
 
             var marketingTestCache = MemoryCache.Default;
 
-            if (marketingTestCache.Get(contentGuid.ToString()) == null)
+            if (marketingTestCache.Get("epi"+contentGuid) == null)
             {
 
-                var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
 
-                if (marketingTestCache.Get("epi"+contentGuid) == null && processedList.Count == 1)
+                if (processedList.Count == 1)
                 {
+                    var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
                     if (test != null)
                     {
                         var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
