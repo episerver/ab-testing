@@ -13,7 +13,7 @@ namespace KPI.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201603241331322_Initial"; }
+            get { return "201604051658334_Initial"; }
         }
         
         string IMigrationMetadata.Source

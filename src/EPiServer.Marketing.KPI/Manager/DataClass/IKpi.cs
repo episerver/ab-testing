@@ -31,6 +31,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Determines if a conversion has happened.
         /// </summary>
         /// <param name="theValues"></param>
-        void Evaluate(object theValues);
+        bool Evaluate(object theObject);
     }
 }

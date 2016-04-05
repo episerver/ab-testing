@@ -18,6 +18,8 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         /// </summary>
         public Guid Id { get; set; }
 
+        public string ClassName { get; set; }
+
         /// <summary>
         /// The condition to be met for the DalKpi to be completed by a user.
         /// </summary>
