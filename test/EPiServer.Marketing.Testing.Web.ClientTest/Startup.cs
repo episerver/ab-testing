@@ -11,7 +11,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EPiServer.Marketing.Testing.Web.Test
+namespace EPiServer.Marketing.Testing.Web.ClientTest
 {
     public class Startup
     {
