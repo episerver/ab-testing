@@ -13,105 +13,113 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web
 {
-    internal class TestHandler
+    internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
         private TestDataCookie _testData;
         private TestDataCookieHelper _testDataCookieHelper;
-        private readonly MemoryCache _marketingTestCache = MemoryCache.Default;
+        private MemoryCache _marketingTestCache = MemoryCache.Default;
         private readonly TestManager _testManager = new TestManager();
+        internal bool SwapEnabled;
+
+        public TestHandler()
+        {
+            
+        }
+
+        internal TestHandler(List<ContentReference> processedList,bool swapEnabled )
+        {
+            ProcessedContentList = processedList;
+            SwapEnabled = swapEnabled;
+
+        }
+        
 
 
-
-        internal void Initialize()
+        public void Initialize()
         {
             _testData = new TestDataCookie();
             _testDataCookieHelper = new TestDataCookieHelper();
             ProcessedContentList = new List<ContentReference>();
-
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
-
         }
 
+       
+       
 
-        private void LoadedContent(object sender, ContentEventArgs e)
+        public void LoadedContent(object sender, ContentEventArgs e)
         {
             ProcessedContentList.Add(e.ContentLink);
 
 
             _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
 
-
-            if (_testDataCookieHelper.HasTestData(_testData)
-                && _testDataCookieHelper.IsTestParticipant(_testData))
+            if (ContentUnderTest(e.Content.ContentGuid) && !SwapEnabled)
             {
-                if (_testData.ShowVariant)
+                if (_testDataCookieHelper.HasTestData(_testData)
+                    && _testDataCookieHelper.IsTestParticipant(_testData))
                 {
-                    //swap it with the cached version
-                    Swap(e);
-                }
-            }
-            else if (e.Content is PageData
-              && ContentUnderTest(e.Content.ContentGuid)
-              && ProcessedContentList.Count == 1
-              && !_testDataCookieHelper.HasTestData(_testData))
-            {
-                //get the cached content variant in case we need it.
-               
-
-                //get a new random variant. 
-                Variant newVariant = GetVariant(e.Content.ContentGuid);
-                _testData.TestId = GetActiveTestGuid(e.Content.ContentGuid);
-                _testData.TestContentId = e.Content.ContentGuid;
-                _testData.TestVariantId = newVariant.Id;
-
-                if (newVariant.Id != Guid.Empty)
-                {
-                    var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-
-                    if (newVariant.ItemVersion != contentVersion)
+                    if (_testData.ShowVariant)
                     {
-                        contentVersion = newVariant.ItemVersion;
-
-                        _testData.ShowVariant = true;
-                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
                         Swap(e);
+                    }
+                }
+                else if (e.Content is PageData
+                         && ProcessedContentList.Count == 1
+                         && !_testDataCookieHelper.HasTestData(_testData))
+                {
+                    //get a new random variant. 
+                    Variant newVariant = GetVariant(e.Content.ContentGuid);
+                    _testData.TestId = GetActiveTestGuid(e.Content.ContentGuid);
+                    _testData.TestContentId = e.Content.ContentGuid;
+                    _testData.TestVariantId = newVariant.Id;
+
+                    if (newVariant.Id != Guid.Empty)
+                    {
+                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+
+                        if (newVariant.ItemVersion != contentVersion)
+                        {
+                            contentVersion = newVariant.ItemVersion;
+
+                            _testData.ShowVariant = true;
+                            _testDataCookieHelper.SaveTestDataToCookie(_testData);
+                            Swap(e);
+                        }
+                        else
+                        {
+                            _testData.ShowVariant = false;
+                            _testDataCookieHelper.SaveTestDataToCookie(_testData);
+                        }
+
+                        CalculateView(contentVersion);
                     }
                     else
                     {
-                        _testData.ShowVariant = false;
-                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
+                        _testData.TestVariantId = Guid.Empty;
                     }
-
-                    CalculateView(contentVersion);
                 }
-                else
-                {
-                    _testData.TestVariantId = Guid.Empty;
-                }
-
             }
         }
 
         private void Swap(ContentEventArgs activeContent)
         {
-           
-
-            if (_testData.ShowVariant)
-            {
-               var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid, ProcessedContentList);
-                //swap it with the cached version
-                if (variant != null)
+                if (_testData.ShowVariant)
                 {
-                    activeContent.ContentLink = variant.ContentLink;
-                    activeContent.Content = variant;
+                    var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid,
+                        ProcessedContentList);
+                    //swap it with the cached version
+                    if (variant != null)
+                    {
+                        activeContent.ContentLink = variant.ContentLink;
+                        activeContent.Content = variant;
+                    }
                 }
-            }
         }
 
         private void CalculateView(int contentVersion)
-        {  
+        {
             //increment view if not already done
             if (_testData.Viewed == false)
             {
