@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal.Model;
-using EPiServer.Marketing.KPI.Dal.Model.Enums;
 using EPiServer.Marketing.KPI.DataAccess;
-using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -49,7 +48,7 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
 
-        private Dal.Model.IDalKpi ConvertToDalTest(IKpi kpi)
+        private IDalKpi ConvertToDalTest(IKpi kpi)
         {
             var dalKpi = new DalKpi()
             {
@@ -64,7 +63,7 @@ namespace EPiServer.Marketing.KPI.Manager
 
         private IKpi ConvertToManagerKpi(IDalKpi dalKpi)
         {
-            var managerKpi = new DataClass.Kpi()
+            var managerKpi = new Kpi()
             {
                 Id = dalKpi.Id,
                 Properties = dalKpi.Properties,
