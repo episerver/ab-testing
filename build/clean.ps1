@@ -7,7 +7,7 @@ pushd $cwd
 
 $SitePath = Resolve-Path "$cwd\..\samples\EPiServer.Templates.Alloy"
 
-&sqllocaldb stop v11.0
+&sqllocaldb stop MSSQLLocalDB
 
 # Remove database
 Remove-Item "$SitePath\App_Data\*" -include *.mdf,*.ldf -Force
@@ -39,4 +39,4 @@ if (Test-Path $artifacts) {
 # Git clean
 &git clean -d -x -f ..\
 
-&sqllocaldb start v11.0
+&sqllocaldb start MSSQLLocalDB

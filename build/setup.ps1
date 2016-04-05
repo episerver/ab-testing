@@ -1,7 +1,7 @@
 param ([string]$configuration = "Debug",
     [string]$clean = "false",
 	[string]$DbName = "AlloyEPiServerDB",
-	[string]$DbServer = "(localdb)\v11.0")
+	[string]$DbServer = "(localdb)\MSSQLLocalDB")
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
 $cwd = Split-Path -parent $PSCommandPath
