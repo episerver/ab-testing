@@ -12,12 +12,25 @@ $ENV:Path = "$cwd\;" + $ENV:Path
 
 # Install runtime dependencies
 dnvm update-self
-dnvm install "1.0.0-rc1-update1" -runtime CLR -arch x86 -alias default
+dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
 dnvm use default
 
+# Install node dependencies
+npm install ..
+if ($lastexitcode -eq 1) {
+    Write-Host "Node dependencies install failed" -foreground "red"
+    exit $lastexitcode
+}
+
+gulp test 
+if ($lastexitcode -eq 1) {
+    Write-Host "Running JS tests failed" -foreground "red"
+    exit $lastexitcode
+}
+
 # Run tests for all test projects
-Get-ChildItem "$cwd\..\test" -Filter "*Test"  | ForEach-Object {
-	pushd "$cwd\..\test\$_"
+Get-ChildItem "$cwd\..\test" -Filter "*Test" -Exclude "*ClientTest" | ForEach-Object {
+	pushd "$_"
     dnx --configuration $configuration test
     if ($lastexitcode -eq 1) {
         popd

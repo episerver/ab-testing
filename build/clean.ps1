@@ -10,9 +10,33 @@ $SitePath = Resolve-Path "$cwd\..\samples\EPiServer.Templates.Alloy"
 &sqllocaldb stop v11.0
 
 # Remove database
-Remove-Item "$databasePath\*" -include *.mdf,*.ldf
+Remove-Item "$SitePath\App_Data\*" -include *.mdf,*.ldf -Force
+
+# Remove client resources
+$dtkBinaries = "$cwd\..\test\DtkBinaries"
+if (Test-Path $dtkBinaries) {
+	Remove-Item $dtkBinaries -Force -Recurse
+}
+
+# Remove node modules
+$nodeModules = "$cwd\..\node_modules"
+if (Test-Path $nodeModules) {
+	Remove-Item $nodeModules -Force -Recurse
+}
+
+# Remove NuGet packages
+$packages = "$cwd\..\packages"
+if (Test-Path $packages) {
+	Remove-Item $packages -Force -Recurse
+}
+
+# Remove artifacts
+$artifacts = "$cwd\..\artifacts"
+if (Test-Path $artifacts) {
+	Remove-Item $artifacts -Force -Recurse
+}
 
 # Git clean
-&git clean -d -x -f
+&git clean -d -x -f ..\
 
 &sqllocaldb start v11.0

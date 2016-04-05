@@ -14,12 +14,15 @@ $ENV:Path = "$cwd;" + $ENV:Path
 
 # Install runtime dependencies
 dnvm update-self
-dnvm install "1.0.0-rc1-update1" -runtime CLR -arch x86 -alias default
+dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
 dnvm use default
 
 # Install node dependencies
-
-"Building $configuration"
+npm install ..
+if ($lastexitcode -eq 1) {
+    Write-Host "Node dependencies install failed" -foreground "red"
+    exit $lastexitcode
+}
 
 # Restore packages
 dnu restore ..\ --quiet
@@ -30,6 +33,7 @@ if ($lastexitcode -eq 1) {
 
 &"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
 
+"Building $configuration"
 # Build all xprojs
 dnu build ..\** --quiet --configuration $configuration --out ..\artifacts
 if ($lastexitcode -eq 1) {

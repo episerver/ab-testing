@@ -1,5 +1,5 @@
 param ([string]$configuration = "Debug",
-    [string]$clean = "true",
+    [string]$clean = "false",
 	[string]$DbName = "AlloyEPiServerDB",
 	[string]$DbServer = "(localdb)\v11.0")
 
@@ -8,9 +8,8 @@ $cwd = Split-Path -parent $PSCommandPath
 pushd $cwd
 
 # Load dependencies
-$EPiServerInstallCommon1Path = Resolve-Path "$cwd\resources\EPiServerInstall.Common.1.dll"
-Import-Module WebAdministration
 Import-Module sqlps -DisableNameChecking
+$EPiServerInstallCommon1Path = Resolve-Path "$cwd\resources\EPiServerInstall.Common.1.dll"
 [System.Reflection.Assembly]::LoadFrom($EPiServerInstallCommon1Path) | Import-Module  -DisableNameChecking
 
 

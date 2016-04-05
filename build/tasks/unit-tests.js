@@ -53,7 +53,7 @@ let tasks = (reporter, port)=> {
     };
 
     gulp.task('run-js-tests', ['extract-js-sources'], (done) => {
-        start(path.join(__dirname, '../../test/EPiServer.Marketing.Testing.Web.Test'), port, done);
+        start(path.join(__dirname, '../../test/EPiServer.Marketing.Testing.Web.ClientTest'), port, done);
     });
 };
 
