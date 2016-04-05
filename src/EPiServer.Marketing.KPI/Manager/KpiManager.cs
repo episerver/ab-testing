@@ -53,6 +53,7 @@ namespace EPiServer.Marketing.KPI.Manager
             var dalKpi = new DalKpi()
             {
                 Id = kpi.Id,
+                ClassName = kpi.GetType().AssemblyQualifiedName,
                 Properties = kpi.Properties,
                 CreatedDate = kpi.CreatedDate,
                 ModifiedDate = kpi.ModifiedDate
@@ -63,13 +64,15 @@ namespace EPiServer.Marketing.KPI.Manager
 
         private IKpi ConvertToManagerKpi(IDalKpi dalKpi)
         {
-            var managerKpi = new Kpi()
-            {
-                Id = dalKpi.Id,
-                Properties = dalKpi.Properties,
-                CreatedDate = dalKpi.CreatedDate,
-                ModifiedDate = dalKpi.ModifiedDate
-            };
+            var parts = dalKpi.ClassName.Split(',');
+
+            var kpi = Activator.CreateInstance(parts[1], parts[0]);
+            var managerKpi = (IKpi)kpi.Unwrap();
+
+            managerKpi.Id = dalKpi.Id;
+            managerKpi.Properties = dalKpi.Properties;
+            managerKpi.CreatedDate = dalKpi.CreatedDate;
+            managerKpi.ModifiedDate = dalKpi.ModifiedDate;
 
             return managerKpi;
         }
