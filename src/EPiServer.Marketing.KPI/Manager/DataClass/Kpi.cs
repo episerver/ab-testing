@@ -22,7 +22,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// 
         /// </summary>
-        public string Properties { get; set; }
+        public virtual string Properties { get; set; }
 
         /// <summary>
         /// Date the kpi was created.
@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Determines if a conversion has happened.
         /// </summary>
         /// <param name="content"></param>
-        public Boolean Evaluate(IContent content)
+        public virtual Boolean Evaluate(IContent content)
         {
             throw new NotImplementedException();
         }

@@ -11,8 +11,6 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Core;
-using EPiServer.Marketing.KPI.Manager;
-using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -141,26 +139,17 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
-        /// <summary>
-        /// Given a specific test id and the content, iterates over the Kpi objects and returns 
-        /// the list of Kpis that evaluated as true.
-        /// </summary>
-        /// <param name="testId"></param>
-        /// <param name="content"></param>
-        /// <returns>list - can be empty, never null</returns>
-        public IList<IKpi> EvaluateKPIs(Guid testId, IContent content)
+        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
         {
-            List<IKpi> kpis = new List<IKpi>();
-            var test = Get(testId);
-
-            foreach( var kpi in test.KpiInstances )
+            List<Guid> guids = new List<Guid>();
+            foreach (var kpi in kpis)
             {
-                if(kpi.Evaluate(content) )
+                if (kpi.Evaluate(content))
                 {
-                    kpis.Add(kpi);
+                    guids.Add(kpi.Id);
                 }
             }
-            return kpis;
+            return guids;
         }
 
         private IMarketingTest ConvertToManagerTest(IABTest theDalTest)

@@ -32,6 +32,13 @@ namespace EPiServer.Marketing.Testing
 
         Guid ReturnLandingPage(Guid testId);
 
-        IList<IKpi> EvaluateKPIs(Guid testId, IContent content);
+        /// <summary>
+        /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
+        /// the list of Kpi Guids that evaluated as true.
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <param name="content"></param>
+        /// <returns>list - can be empty, never null</returns>
+        IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content);
     }
 }

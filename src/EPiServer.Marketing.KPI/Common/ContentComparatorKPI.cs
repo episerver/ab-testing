@@ -15,12 +15,12 @@ namespace EPiServer.Marketing.KPI.Common
             Properties = contentGuid.ToString();
         }
 
-        new public string Properties {
+        public override string Properties {
             set { _ContentGuid = Guid.Parse(value);  }
             get { return _ContentGuid.ToString();  }
         }
 
-        new public Boolean Evaluate(IContent content)
+        public override Boolean Evaluate(IContent content)
         {
             return _ContentGuid.Equals(content.ContentGuid);
         }
