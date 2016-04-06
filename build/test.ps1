@@ -22,13 +22,13 @@ if ($lastexitcode -eq 1) {
     Write-Host "Node dependencies install failed" -foreground "red"
     exit $lastexitcode
 }
-pushd $cwd
 
-gulp test 
+&"$cwd\npm.cmd" run test #--silent
 if ($lastexitcode -eq 1) {
     Write-Host "Running JS tests failed" -foreground "red"
     exit $lastexitcode
 }
+pushd $cwd
 
 # Run tests for all test projects
 Get-ChildItem "$cwd\..\test" -Filter "*Test" -Exclude "*ClientTest" | ForEach-Object {
