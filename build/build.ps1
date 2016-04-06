@@ -18,11 +18,13 @@ dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
 dnvm use default
 
 # Install node dependencies
-npm install ..
+pushd ..
+&"$cwd\npm.cmd" install #--silent
 if ($lastexitcode -eq 1) {
     Write-Host "Node dependencies install failed" -foreground "red"
     exit $lastexitcode
 }
+pushd $cwd
 
 # Restore packages
 dnu restore ..\ --quiet
