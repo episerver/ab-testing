@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.KPI.Test
             context.Set<T>().AddRange(data);
         }
 
-        public IList<DalKpi> AddMultivariateTests(KpiTestContext context, int numberOfTests)
+        public IList<DalKpi> AddKpis(KpiTestContext context, int numberOfTests)
         {
             var kpis = new List<DalKpi>();
 
@@ -22,6 +22,7 @@ namespace EPiServer.Marketing.KPI.Test
                 kpis.Add(new DalKpi()
                 {
                     Id = Guid.NewGuid(),
+                    ClassName = "className",
                     Properties = "test"
                     
                 });
@@ -32,7 +33,7 @@ namespace EPiServer.Marketing.KPI.Test
             return kpis;
         }
 
-        public IList<DalKpi> AddMultivariateTests(KpiDataAccess mtmManager, int numberOfTests)
+        public IList<DalKpi> AddKpis(KpiDataAccess mtmManager, int numberOfTests)
         {
             var kpis = new List<DalKpi>();
 
@@ -41,6 +42,7 @@ namespace EPiServer.Marketing.KPI.Test
                 var test = new DalKpi()
                 {
                     Id = Guid.NewGuid(),
+                    ClassName = "className",
                     Properties = "test"
                 };
 

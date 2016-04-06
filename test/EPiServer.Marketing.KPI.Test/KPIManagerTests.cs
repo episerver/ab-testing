@@ -19,7 +19,10 @@ namespace EPiServer.Marketing.KPI.Test
 
         private DalKpi GetDalKpi()
         {
-            return new DalKpi();
+            return new DalKpi()
+            {
+                ClassName = "EPiServer.Marketing.KPI.Manager.DataClass.Kpi, EPiServer.Marketing.KPI"
+            };
         }
 
         private KpiManager GetUnitUnderTest()

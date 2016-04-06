@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Testing.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
+    [ExcludeFromCodeCoverage]
     public partial class Initial : DbMigration
     {
         public override void Up()

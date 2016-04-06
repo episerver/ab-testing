@@ -11,6 +11,9 @@ namespace EPiServer.Marketing.KPI.Dal
 
             this.HasKey(hk => hk.Id);
 
+            this.Property(m => m.ClassName)
+                .IsRequired();
+
             this.Property(m => m.Properties)
                 .IsRequired();
 
