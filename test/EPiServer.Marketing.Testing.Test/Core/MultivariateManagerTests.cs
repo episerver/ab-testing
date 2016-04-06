@@ -11,6 +11,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -265,6 +266,52 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update View message not emmited");
+        }
+
+        [Fact]
+        public void TestManager_EvaluateKpisReturnsEmptyIDList()
+        {
+            var testManager = GetUnitUnderTest();
+            IList<IKpi> kpis = new List<IKpi>();
+            Mock<IContent> content = new Mock<IContent>();
+            IContent c = content.Object;
+            c.ContentGuid = Guid.NewGuid();
+            var retList = testManager.EvaluateKPIs(kpis, c);
+            Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
+            Assert.True(retList.Count() == 0, "EvaluateKPI method returned a list but it was not empty");
+        }
+
+        [Fact]
+        public void TestManager_EvaluateKpisReturnsOneIDInList()
+        {
+            var testManager = GetUnitUnderTest();
+
+            IList<IKpi> kpis = new List<IKpi>() {
+                new TestKpi(Guid.NewGuid()),
+                new TestKpi(Guid.Empty),
+                new TestKpi(Guid.NewGuid())
+            };
+
+            Mock<IContent> content = new Mock<IContent>();
+            IContent c = content.Object;
+            c.ContentGuid = Guid.NewGuid();
+            var retList = testManager.EvaluateKPIs(kpis, c);
+            Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
+            Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list but it was not empty");
+        }
+    }
+
+    class TestKpi : Kpi
+    {
+        Guid _g;
+        public TestKpi(Guid g) { _g = g; }
+
+        override public Boolean Evaluate(IContent content)
+        {
+            if (_g == Guid.Empty)
+                return true;
+            else
+                return false;
         }
     }
 }

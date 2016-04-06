@@ -8,6 +8,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 using Xunit;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.KPI.Test
 {
@@ -76,7 +77,8 @@ namespace EPiServer.Marketing.KPI.Test
         public void Kpi_Success_Throws_Exception()
         {
             var kpi = new Kpi();
-            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(new object()));
+            var content = new Mock<IContent>();
+            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(content.Object));
         }
 
     }

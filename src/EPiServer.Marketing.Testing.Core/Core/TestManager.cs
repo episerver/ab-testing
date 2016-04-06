@@ -10,6 +10,7 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -136,6 +137,19 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
             else if (resultType == CountType.View)
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
+        }
+
+        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
+        {
+            List<Guid> guids = new List<Guid>();
+            foreach (var kpi in kpis)
+            {
+                if (kpi.Evaluate(content))
+                {
+                    guids.Add(kpi.Id);
+                }
+            }
+            return guids;
         }
 
         private IMarketingTest ConvertToManagerTest(IABTest theDalTest)

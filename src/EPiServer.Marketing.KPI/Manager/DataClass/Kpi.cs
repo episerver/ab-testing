@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPiServer.Core;
+using System;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -36,8 +37,8 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Determines if a conversion has happened.
         /// </summary>
-        /// <param name="theValues"></param>
-        public virtual bool Evaluate(object theValues)
+        /// <param name="content"></param>
+        public virtual Boolean Evaluate(IContent content)
         {
             throw new NotImplementedException();
         }
