@@ -10,6 +10,8 @@ namespace EPiServer.Marketing.KPI.Common
     {
         private Guid _ContentGuid;
 
+        public ContentComparatorKPI() { }
+
         public ContentComparatorKPI(Guid contentGuid)
         {
             Properties = contentGuid.ToString();
