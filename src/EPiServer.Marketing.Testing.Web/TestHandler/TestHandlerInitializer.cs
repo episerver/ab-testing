@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (IsRequestToRoot())
             {
-                _testHandler.SwapEnabled = true;
+                _testHandler.SwapDisabled = true;
             }
             
 
@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (IsRequestToRoot())
             {
-                _testHandler.SwapEnabled = false;
+                _testHandler.SwapDisabled = false;
             }
             _testHandler.ProcessedContentList.Clear();
         }
