@@ -16,21 +16,27 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        private TestDataCookie _testData;
-        private TestDataCookieHelper _testDataCookieHelper;
-        private MemoryCache _marketingTestCache = MemoryCache.Default;
-        private readonly TestManager _testManager = new TestManager();
         internal bool SwapEnabled;
+
+        private TestDataCookie _testData;
+        private MemoryCache _marketingTestCache = MemoryCache.Default;
+
+        private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
+        private ITestManager _testManager;
+
 
         public TestHandler()
         {
             
         }
 
-        internal TestHandler(List<ContentReference> processedList,bool swapEnabled )
+        internal TestHandler(IServiceLocator sl, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList,bool swapEnabled, TestDataCookie testData )
         {
+            _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
             SwapEnabled = swapEnabled;
+            _testManager = sl.GetInstance<ITestManager>();
+            _testData = testData;
 
         }
         
@@ -39,10 +45,12 @@ namespace EPiServer.Marketing.Testing.Web
         public void Initialize()
         {
             _testData = new TestDataCookie();
-            _testDataCookieHelper = new TestDataCookieHelper();
             ProcessedContentList = new List<ContentReference>();
+            _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
+            
         }
 
        
@@ -65,8 +73,7 @@ namespace EPiServer.Marketing.Testing.Web
                         Swap(e);
                     }
                 }
-                else if (e.Content is PageData
-                         && ProcessedContentList.Count == 1
+                else if (ProcessedContentList.Count == 1
                          && !_testDataCookieHelper.HasTestData(_testData))
                 {
                     //get a new random variant. 
