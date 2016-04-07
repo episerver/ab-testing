@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        internal bool SwapEnabled;
+        internal bool SwapDisabled;
 
         private TestDataCookie _testData;
         private MemoryCache _marketingTestCache = MemoryCache.Default;
@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
-            SwapEnabled = swapEnabled;
+            SwapDisabled = swapEnabled;
             _testManager = sl.GetInstance<ITestManager>();
             _testData = testData;
 
@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
 
-            if (ContentUnderTest(e.Content.ContentGuid) && !SwapEnabled)
+            if (ContentUnderTest(e.Content.ContentGuid) && !SwapDisabled)
             {
                 if (_testDataCookieHelper.HasTestData(_testData)
                     && _testDataCookieHelper.IsTestParticipant(_testData))
@@ -105,6 +105,7 @@ namespace EPiServer.Marketing.Testing.Web
                     else
                     {
                         _testData.TestVariantId = Guid.Empty;
+                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
                     }
                 }
             }
