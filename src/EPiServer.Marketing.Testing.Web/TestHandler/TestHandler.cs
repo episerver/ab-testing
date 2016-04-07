@@ -4,8 +4,6 @@ using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Web;
-using EPiServer.Editor;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -30,12 +28,12 @@ namespace EPiServer.Marketing.Testing.Web
             
         }
 
-        internal TestHandler(IServiceLocator sl, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList,bool swapEnabled, TestDataCookie testData )
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList,bool swapEnabled, TestDataCookie testData )
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
             SwapEnabled = swapEnabled;
-            _testManager = sl.GetInstance<ITestManager>();
+            _testManager = testManager;
             _testData = testData;
 
         }
@@ -44,13 +42,10 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void Initialize()
         {
-            _testData = new TestDataCookie();
             ProcessedContentList = new List<ContentReference>();
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
-
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
-            
         }
 
        
@@ -59,27 +54,22 @@ namespace EPiServer.Marketing.Testing.Web
         public void LoadedContent(object sender, ContentEventArgs e)
         {
             ProcessedContentList.Add(e.ContentLink);
-
-
             _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+            var activeTest = _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
 
-            if (ContentUnderTest(e.Content.ContentGuid) && !SwapEnabled)
+            if (!SwapEnabled && activeTest != null)
             {
-                if (_testDataCookieHelper.HasTestData(_testData)
-                    && _testDataCookieHelper.IsTestParticipant(_testData))
+                var hasTestData = _testDataCookieHelper.HasTestData(_testData);
+                if (hasTestData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                 {
-                    if (_testData.ShowVariant)
-                    {
-                        Swap(e);
-                    }
+                    Swap(e);
                 }
-                else if (ProcessedContentList.Count == 1
-                         && !_testDataCookieHelper.HasTestData(_testData))
+                else if (!hasTestData && ProcessedContentList.Count == 1)
                 {
                     //get a new random variant. 
-                    Variant newVariant = GetVariant(e.Content.ContentGuid);
-                    _testData.TestId = GetActiveTestGuid(e.Content.ContentGuid);
-                    _testData.TestContentId = e.Content.ContentGuid;
+                    var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
+                    _testData.TestId = activeTest.Id;
+                    _testData.TestContentId = activeTest.OriginalItemId;
                     _testData.TestVariantId = newVariant.Id;
 
                     if (newVariant.Id != Guid.Empty)
@@ -89,17 +79,15 @@ namespace EPiServer.Marketing.Testing.Web
                         if (newVariant.ItemVersion != contentVersion)
                         {
                             contentVersion = newVariant.ItemVersion;
-
                             _testData.ShowVariant = true;
-                            _testDataCookieHelper.SaveTestDataToCookie(_testData);
                             Swap(e);
                         }
                         else
                         {
                             _testData.ShowVariant = false;
-                            _testDataCookieHelper.SaveTestDataToCookie(_testData);
                         }
 
+                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
                         CalculateView(contentVersion);
                     }
                     else
@@ -112,17 +100,16 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void Swap(ContentEventArgs activeContent)
         {
-                if (_testData.ShowVariant)
+            if (_testData.ShowVariant)
+            {
+                var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid, ProcessedContentList);
+                //swap it with the cached version
+                if (variant != null)
                 {
-                    var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid,
-                        ProcessedContentList);
-                    //swap it with the cached version
-                    if (variant != null)
-                    {
-                        activeContent.ContentLink = variant.ContentLink;
-                        activeContent.Content = variant;
-                    }
+                    activeContent.ContentLink = variant.ContentLink;
+                    activeContent.Content = variant;
                 }
+            }
         }
 
         private void CalculateView(int contentVersion)
@@ -136,24 +123,6 @@ namespace EPiServer.Marketing.Testing.Web
             //set viewed = true in testdata
             _testData.Viewed = true;
             _testDataCookieHelper.UpdateTestDataCookie(_testData);
-        }
-
-        private Guid GetActiveTestGuid(Guid contentGuid)
-        {
-            Guid activeTestGuid = _testManager.GetTestByItemId(contentGuid).Where(x => x.OriginalItemId == contentGuid).Where(x => x.State == TestState.Active).Select(x => x.Id).First();
-            return activeTestGuid;
-        }
-
-        private bool ContentUnderTest(Guid contentGuid)
-        {
-            var contentUnderTest = _testManager.CreateActiveTestCache();
-            return contentUnderTest.Any(x => x.OriginalItemId == contentGuid);
-        }
-
-        private Variant GetVariant(Guid targetContentGuid)
-        {
-            var test = _testManager.GetTestByItemId(targetContentGuid).First(x => x.State.Equals(TestState.Active));
-            return _testManager.ReturnLandingPage(test.Id);
         }
 
         public void Uninitialize()

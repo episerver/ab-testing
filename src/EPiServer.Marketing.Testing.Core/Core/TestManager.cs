@@ -129,88 +129,70 @@ namespace EPiServer.Marketing.Testing
         {
 
             var marketingTestCache = MemoryCache.Default;
-
-            if (marketingTestCache.Get("epi"+contentGuid) == null)
+            var retData = marketingTestCache.Get("epi" + contentGuid) as PageData;
+            if (retData == null)
             {
-
-
                 if (processedList.Count == 1)
                 {
                     var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
 
                     if (test != null)
                     {
-                        var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-
+                        var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
                         var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
+
                         if (testContent != null)
                         {
-                            var contentVersion = testContent.WorkPageID == 0
-                                ? testContent.ContentLink.ID
-                                : testContent.WorkPageID;
+                            var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
                             foreach (var variant in test.Variants)
                             {
                                 if (variant.ItemVersion != contentVersion)
                                 {
-                                    var contentToCache = CreateVariantPageData(contentLoader, testContent, variant);
-
-                                    contentToCache.Status = VersionStatus.Published;
-                                    contentToCache.StartPublish = DateTime.Now.AddDays(-1);
-                                    contentToCache.MakeReadOnly();
+                                    retData = CreateVariantPageData(contentLoader, testContent, variant);
+                                    retData.Status = VersionStatus.Published;
+                                    retData.StartPublish = DateTime.Now.AddDays(-1);
+                                    retData.MakeReadOnly();
 
                                     var cacheItemPolicy = new CacheItemPolicy
                                     {
                                         AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
                                     };
-                                    marketingTestCache.Add("epi"+contentGuid, contentToCache, cacheItemPolicy);
-
+                                    marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
                                 }
                             }
                         }
                     }
                 }
             }
-        return marketingTestCache.Get("epi"+contentGuid.ToString()) as PageData;
-    }
+            return retData;
+        }
 
-    public List<IMarketingTest> CreateActiveTestCache()
+        public List<IMarketingTest> CreateActiveTestCache()
         {
-            var activeTestList = new List<IMarketingTest>();
             var _marketingTestCache = MemoryCache.Default;
+            var retTestList = _marketingTestCache.Get("TestContentList") as List<IMarketingTest>;
 
-
-            if (_marketingTestCache.Get("TestContentList") == null)
+            if (retTestList == null)
             {
                 var activeTestCriteria = new Data.TestCriteria();
-
                 var activeTestStateFilter = new Data.ABTestFilter()
                 {
                     Property = ABTestProperty.State,
                     Operator = Data.FilterOperator.And,
                     Value = TestState.Active
                 };
+
                 activeTestCriteria.AddFilter(activeTestStateFilter);
+                retTestList = GetTestList(activeTestCriteria);
 
-                try
+                var cacheItemPolicy = new CacheItemPolicy
                 {
-                    activeTestList = GetTestList(activeTestCriteria);
-
-                }
-                catch (Exception ex)
-                {
-                    activeTestList = new List<IMarketingTest>();
-                }
-                finally
-                {
-                    var cacheItemPolicy = new CacheItemPolicy
-                    {
-                        AbsoluteExpiration = DateTimeOffset.Parse(DateTime.Now.AddMinutes(1).ToString())
-                    };
-                    _marketingTestCache.Add("TestContentList", activeTestList, cacheItemPolicy);
-                }
+                    AbsoluteExpiration = DateTimeOffset.Parse(DateTime.Now.AddMinutes(1).ToString())
+                };
+                _marketingTestCache.Add("TestContentList", retTestList, cacheItemPolicy);
             }
 
-            return _marketingTestCache.Get("TestContentList") as List<IMarketingTest>;
+            return retTestList;
         }
 
         private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Data.Variant variant)

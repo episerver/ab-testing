@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(td => td.GetTestDataFromCookie(It.Is<string>(x => x.Contains(noAssociatedTestGuid.ToString()))))
                 .Returns(new TestDataCookie());
 
-            return new TestHandler(_serviceLocator.Object, _tdc.Object, contentList, swapState, testData);
+            return new TestHandler(_testManager.Object, _tdc.Object, contentList, swapState, testData);
         }
 
         [Fact]

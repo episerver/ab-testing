@@ -36,9 +36,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-            ITestManager _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+            ITestManager _testManager = _serviceLocator.GetInstance<ITestManager>();
 
-            HttpCookie cookieData = new HttpCookie(testData.TestContentId.ToString())
+            var cookieData = new HttpCookie(testData.TestContentId.ToString())
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
@@ -60,24 +60,21 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public TestDataCookie GetTestDataFromCookie(string testContentId)
         {
-            HttpCookie testDataCookie = HttpContext.Current.Request.Cookies.Get(testContentId);
+            var retCookie = new TestDataCookie();
+            var testDataCookie = HttpContext.Current.Request.Cookies.Get(testContentId);
 
             if (testDataCookie != null)
             {
-                var cookieData = new TestDataCookie()
-                {
-                    TestId = Guid.Parse(testDataCookie["TestId"]),
-                    ShowVariant = bool.Parse(testDataCookie["ShowVariant"]),
-                    TestContentId = Guid.Parse(testDataCookie["TestContentId"]),
-                    TestParticipant = bool.Parse(testDataCookie["TestParticipant"]),
-                    TestVariantId = Guid.Parse(testDataCookie["TestVariantId"]),
-                    Viewed = bool.Parse(testDataCookie["Viewed"]),
-                    Converted = bool.Parse(testDataCookie["Converted"])
-
-                };
-                return cookieData;
+                retCookie.TestId = Guid.Parse(testDataCookie["TestId"]);
+                retCookie.ShowVariant = bool.Parse(testDataCookie["ShowVariant"]);
+                retCookie.TestContentId = Guid.Parse(testDataCookie["TestContentId"]);
+                retCookie.TestParticipant = bool.Parse(testDataCookie["TestParticipant"]);
+                retCookie.TestVariantId = Guid.Parse(testDataCookie["TestVariantId"]);
+                retCookie.Viewed = bool.Parse(testDataCookie["Viewed"]);
+                retCookie.Converted = bool.Parse(testDataCookie["Converted"]);
             }
-            return new TestDataCookie();
+
+            return retCookie;
         }
     }
 }
