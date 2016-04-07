@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference(6, 0);
+            content.ContentLink = new ContentReference(0, 0);
 
             IMarketingTest test = new ABTest()
             {
@@ -124,7 +124,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = _associatedTestGuid
             };
-            _contentReferenceList.Add(content.ContentLink);
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
 
@@ -154,12 +153,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_ContentUnderTest_and_SwapEnabled_NoData_SetsUpNewTestData_WithOutVariant_AndDoesNotSwap()
         {
-
-
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference(0, 0);
-            _contentReferenceList.Add(content.ContentLink);
 
             IMarketingTest test = new ABTest()
             {
