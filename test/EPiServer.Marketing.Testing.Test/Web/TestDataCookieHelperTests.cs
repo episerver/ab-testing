@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.ServiceLocation;
 using Moq;
@@ -14,6 +16,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
     public class TestDataCookieHelperTest : IDisposable
     {
         private Mock<IServiceLocator> _serviceLocator;
+        private Mock<ITestManager> _testManager;
+
+        private Guid _testId = Guid.Parse("a194bde9-af3c-40fa-9635-338d02f5dea4");
+        private Guid _testContentGuid = Guid.Parse("6d532659-006d-453b-b7f4-62a94b2f3a3c");
+        private Guid _testVariantGuid = Guid.Parse("9226a971-605c-4fd7-8a5c-aa7873e1e818");
+        private DateTime _testEndDateTime = DateTime.Parse("5/5/2050");
+
+        private IMarketingTest test;
 
 
         public TestDataCookieHelperTest()
@@ -28,6 +38,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private TestDataCookieHelper GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
+            _testManager = new Mock<ITestManager>();
+            _serviceLocator.Setup(call => call.GetInstance<ITestManager>()).Returns(_testManager.Object);
+
+            test = new ABTest()
+             {
+                 Id = _testId,
+                 EndDate = _testEndDateTime
+             };
+
+            _testManager.Setup(call => call.Get(_testId)).Returns(test);
+
             return new TestDataCookieHelper(_serviceLocator.Object);
         }
 
@@ -156,6 +177,93 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(returnCookieData.TestVariantId == Guid.Empty);
             Assert.True(returnCookieData.Viewed == false);
             Assert.True(returnCookieData.Converted == false);
+
+
+        }
+
+        [Fact]
+        public void SaveTestDataToCookie_ProperlySavesToContext()
+        {
+            var mockTesteDataCookiehelper = GetUnitUnderTest();
+
+            
+
+            TestDataCookie tdCookie = new TestDataCookie()
+            {
+                TestId = test.Id,
+                TestContentId = _testContentGuid,
+                TestVariantId = _testVariantGuid,
+                TestParticipant = false,
+                ShowVariant = true,
+                Viewed = true,
+                Converted = false
+            };
+
+           
+            
+            mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
+            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get(tdCookie.TestContentId.ToString());
+
+            Assert.True(cookieValue != null);
+            Assert.True(Guid.Parse(cookieValue["TestId"]) == tdCookie.TestId);
+            Assert.True(Guid.Parse(cookieValue["TestContentId"]) == tdCookie.TestContentId);
+            Assert.True(Guid.Parse(cookieValue["TestVariantId"]) == tdCookie.TestVariantId);
+            Assert.True(bool.Parse(cookieValue["TestParticipant"]) == tdCookie.TestParticipant);
+            Assert.True(bool.Parse(cookieValue["ShowVariant"]) == tdCookie.ShowVariant);
+            Assert.True(bool.Parse(cookieValue["Viewed"]) == tdCookie.Viewed);
+            Assert.True(bool.Parse(cookieValue["Converted"]) == tdCookie.Converted);
+            
+
+
+        }
+
+
+        [Fact]
+        public void UpdateTestDataCookie_ProperlyUpdatesCookie()
+        {
+            var mockTesteDataCookiehelper = GetUnitUnderTest();
+            
+
+
+            TestDataCookie originalCookie = new TestDataCookie()
+            {
+                TestId = test.Id,
+                TestContentId = _testContentGuid,
+                TestVariantId = _testVariantGuid,
+                TestParticipant = false,
+                ShowVariant = true,
+                Viewed = true,
+                Converted = false
+            };
+
+            TestDataCookie updatedCookie = new TestDataCookie()
+            {
+                TestId = test.Id,
+                TestContentId = _testContentGuid,
+                TestVariantId = _testVariantGuid,
+                TestParticipant = true,
+                ShowVariant = false,
+                Viewed = false,
+                Converted = true
+
+            };
+            
+            mockTesteDataCookiehelper.SaveTestDataToCookie(originalCookie);
+            mockTesteDataCookiehelper.UpdateTestDataCookie(updatedCookie);
+
+
+
+            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get(updatedCookie.TestContentId.ToString());
+
+            Assert.True(cookieValue != null);
+            Assert.True(Guid.Parse(cookieValue["TestId"]) == updatedCookie.TestId);
+            Assert.True(Guid.Parse(cookieValue["TestContentId"]) == updatedCookie.TestContentId);
+            Assert.True(Guid.Parse(cookieValue["TestVariantId"]) == updatedCookie.TestVariantId);
+            Assert.True(bool.Parse(cookieValue["TestParticipant"]) == updatedCookie.TestParticipant);
+            Assert.True(bool.Parse(cookieValue["ShowVariant"]) == updatedCookie.ShowVariant);
+            Assert.True(bool.Parse(cookieValue["Viewed"]) == updatedCookie.Viewed);
+            Assert.True(bool.Parse(cookieValue["Converted"]) == updatedCookie.Converted);
+
 
 
         }

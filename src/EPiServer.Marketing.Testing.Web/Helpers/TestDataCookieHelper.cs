@@ -8,6 +8,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     public class TestDataCookieHelper : ITestDataCookieHelper
     {
         private IServiceLocator _serviceLocator;
+        private ITestManager _testManager;
 
         public TestDataCookieHelper()
         {
@@ -36,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-            ITestManager _testManager = _serviceLocator.GetInstance<ITestManager>();
+            _testManager = _serviceLocator.GetInstance<ITestManager>();
 
             var cookieData = new HttpCookie(testData.TestContentId.ToString())
             {
