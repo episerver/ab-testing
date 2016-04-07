@@ -14,7 +14,7 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        internal bool SwapEnabled;
+        internal bool SwapDisabled;
 
         private TestDataCookie _testData;
         private MemoryCache _marketingTestCache = MemoryCache.Default;
@@ -28,14 +28,11 @@ namespace EPiServer.Marketing.Testing.Web
             
         }
 
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList,bool swapEnabled, TestDataCookie testData )
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList)
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
-            SwapEnabled = swapEnabled;
             _testManager = testManager;
-            _testData = testData;
-
         }
         
 
@@ -57,14 +54,13 @@ namespace EPiServer.Marketing.Testing.Web
             _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
             var activeTest = _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
 
-            if (!SwapEnabled && activeTest != null)
+            if (!SwapDisabled && activeTest != null)
             {
-                var hasTestData = _testDataCookieHelper.HasTestData(_testData);
-                if (hasTestData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
+                if (_testDataCookieHelper.HasTestData(_testData) && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                 {
                     Swap(e);
                 }
-                else if (!hasTestData && ProcessedContentList.Count == 1)
+                else if (ProcessedContentList.Count == 1)
                 {
                     //get a new random variant. 
                     var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
@@ -86,14 +82,13 @@ namespace EPiServer.Marketing.Testing.Web
                         {
                             _testData.ShowVariant = false;
                         }
-
-                        _testDataCookieHelper.SaveTestDataToCookie(_testData);
                         CalculateView(contentVersion);
                     }
                     else
                     {
                         _testData.TestVariantId = Guid.Empty;
                     }
+                    _testDataCookieHelper.SaveTestDataToCookie(_testData);
                 }
             }
         }

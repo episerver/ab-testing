@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using EPiServer.Marketing.Testing.Web;
 using Moq;
 using Xunit;
-using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data;
@@ -17,14 +14,24 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
-    public class TestHandlerTests
+    public class TestHandlerTests : IDisposable
     {
+
+        public TestHandlerTests()
+        {
+            _contentReferenceList = new List<ContentReference>();
+        }
+
+        public void Dispose()
+        {
+            _contentReferenceList.Clear();
+        }
+
         private Mock<ITestDataCookieHelper> _tdc;
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestManager> _testManager;
 
-        private TestDataCookie _testData;
-        private List<ContentReference> _contentRef;
+        private List<ContentReference> _contentReferenceList;
 
         private Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -32,93 +39,74 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Guid _matchingVariantId = Guid.Parse("c6c08d71-2e61-4768-8549-7bdcc43af083");
 
 
-        private TestHandler GetUnitUnderTest(List<ContentReference> contentList, bool swapState, TestDataCookie testData)
+        private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
         {
             _tdc = new Mock<ITestDataCookieHelper>();
-            _tdc.Setup(td => td.GetTestDataFromCookie(It.Is<string>(x => x.Contains(_noAssociatedTestGuid.ToString()))))
-                .Returns(new TestDataCookie());
-
-            _serviceLocator = new Mock<IServiceLocator>();
             _testManager = new Mock<ITestManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
-            _testData = new TestDataCookie();
-            _contentRef = new List<ContentReference>();
-
-            
-
-            
-
-            return new TestHandler(_serviceLocator.Object, _tdc.Object, contentList, swapState, testData);
+            return new TestHandler(_testManager.Object, _tdc.Object, contentList);
         }
 
         [Fact]
         public void TestHandler_ContentNotUnderTest_and_SwapDisabled_FallsThroughProcess()
         {
-            IContent content = new BasicContent();
+            var content = new BasicContent();
             content.ContentGuid = _noAssociatedTestGuid;
-            _contentRef.Add(content.ContentLink);
+            content.ContentLink = new ContentReference();
+            _contentReferenceList.Add(content.ContentLink);
 
-            var testHandler = GetUnitUnderTest(_contentRef, true, _testData);
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            
+            testHandler.SwapDisabled = true;
+
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _testManager.Verify(call=>call.CreateVariantPageDataCache(It.IsAny<Guid>(),It.IsAny<List<ContentReference>>()),Times.Never,"Content should not have triggered Create Variant Page Cache call");
-            _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
-                "Content should have triggered call to get cookie data");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(),
-                "Content should not have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(),
-                "Content should not have triggered call to update cookie data");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
+
+            Assert.Equal(content, args.Content); 
+            Assert.Equal(content.ContentLink, args.ContentLink); 
        }
 
         [Fact]
         public void TestHandler_ContentUnderTest_and_SwapDisabled_FallsThroughProcess()
         {
-
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            _contentRef.Add(content.ContentLink);
+            content.ContentLink = new ContentReference();
+            _contentReferenceList.Add(content.ContentLink);
 
             List<IMarketingTest> testList = new List<IMarketingTest>()
             {
                 new ABTest() {OriginalItemId = _associatedTestGuid}
             };
 
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            testHandler.SwapDisabled = true;
 
-
-            var testHandler = GetUnitUnderTest(_contentRef, true,_testData);
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _testManager.Verify(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>()), Times.Never, "Content should not have triggered Create Variant Page Cache call");
-            _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
-                "Content should have triggered call to get cookie data");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(),
-                "Content should not have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(),
-                "Content should not have triggered call to update cookie data");
+            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(), "Content should have triggered call to get cookie data");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
 
+            Assert.Equal(content, args.Content);
+            Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
-       [Fact]
+        [Fact]
         public void TestHandler_ContentUnderTest_and_SwapEnabled_NoData_SetsUpNewTestData_WithVariant_AndSwaps()
         {
 
-
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference(6,0);
-
-
-
-
+            content.ContentLink = new ContentReference(6, 0);
 
             IMarketingTest test = new ABTest()
             {
@@ -136,31 +124,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = _associatedTestGuid
             };
+            _contentReferenceList.Add(content.ContentLink);
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            testHandler.SwapDisabled = false;
 
-          
-            
-
-
-
-
-            var testHandler = GetUnitUnderTest(_contentRef, false, _testData);
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
-           _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(),It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
-            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(testData);
+            _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             //_tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
-
-
-
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
             _testManager.Verify(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>()), Times.Once, "Content should have triggered Create Variant Page Cache call");
             _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
-            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(),It.IsAny<Guid>(),It.IsAny<int>(),CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
+            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
 
             _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
                 "Content should have triggered call to get cookie data");
@@ -168,7 +149,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 "Content should have triggered call to save cookie data");
             _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(),
                 "Content should have triggered call to update cookie data");
-
         }
 
         [Fact]
@@ -179,10 +159,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference(0, 0);
-
-
-
-
+            _contentReferenceList.Add(content.ContentLink);
 
             IMarketingTest test = new ABTest()
             {
@@ -201,23 +178,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = _associatedTestGuid
             };
 
+            var x = GetUnitUnderTest(_contentReferenceList);
+            x.SwapDisabled = false;
 
-
-
-
-
-
-            var x = GetUnitUnderTest(_contentRef, false, _testData);
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
             _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
-            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(testData);
+            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
-
-
-
 
             ContentEventArgs args = new ContentEventArgs(content);
             x.LoadedContent(new object(), args);
@@ -238,11 +208,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_ContentUnderTest_and_SwapDisabled_WithData_Count2_FallsThrough()
         {
-            _contentRef.Add(new ContentReference());
+            _contentReferenceList.Add(new ContentReference());
 
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            _contentRef.Add(content.ContentLink);
+            _contentReferenceList.Add(content.ContentLink);
 
             List<IMarketingTest> testList = new List<IMarketingTest>()
             {
@@ -251,7 +221,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
 
-            var x = GetUnitUnderTest(_contentRef, false, _testData);
+            var x = GetUnitUnderTest(_contentReferenceList);
+            x.SwapDisabled = false;
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -272,16 +243,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_ContentUnderTest_and_SwapEnabled_NoData_SetsUpNewTestData_WithEmptyVariant_AndDoesNotSwap()
         {
-
-
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference(0, 0);
-
-
-
-
-
+            
             IMarketingTest test = new ABTest()
             {
                 Id = _activeTestGuid,
@@ -298,24 +263,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = Guid.Empty
             };
+            
+            var x = GetUnitUnderTest(_contentReferenceList);
+            x.SwapDisabled = false;
 
-
-
-
-
-
-
-            var x = GetUnitUnderTest(_contentRef, false, _testData);
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
             _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
-            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(testData);
+            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
-
-
-
 
             ContentEventArgs args = new ContentEventArgs(content);
             x.LoadedContent(new object(), args);
@@ -328,12 +286,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 "Content should have triggered call to get cookie data");
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(),
                 "Content should have triggered call to save cookie data");
-            
-
         }
-
-
     }
-
-
 }
