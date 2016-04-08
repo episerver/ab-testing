@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
+using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Shell.Services.Rest;
@@ -33,7 +34,8 @@ namespace EPiServer.Marketing.Testing.Web
                 },
                 KpiInstances = new List<IKpi>
                 {
-                    new Kpi() { Id = Guid.NewGuid(), Properties = "test", CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
+                    new Kpi() { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow },
+                    new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
                 },
                 TestResults = new List<TestResult>
                 {

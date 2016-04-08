@@ -21,7 +21,8 @@ namespace EPiServer.Marketing.KPI.Test
         {
             return new DalKpi()
             {
-                ClassName = "EPiServer.Marketing.KPI.Manager.DataClass.Kpi, EPiServer.Marketing.KPI"
+                ClassName = "EPiServer.Marketing.KPI.Manager.DataClass.Kpi, EPiServer.Marketing.KPI",
+                Properties = "{ \"Id\":\"fa76a408-1fb4-44a9-9231-954961f0676b\", \"CreatedDate\":\"2016-04-08T18:24:30.3161712Z\", \"ModifiedDate\":\"2016-04-08T18:24:30.3161712Z\" }"
             };
         }
 
@@ -51,10 +52,9 @@ namespace EPiServer.Marketing.KPI.Test
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            var kpi = new Manager.DataClass.Kpi()
+            var kpi = new Kpi()
             {
-                Id = theGuid,
-                Properties = "test"
+                Id = theGuid
             };
             tm.Save(kpi);
 
