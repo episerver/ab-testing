@@ -81,19 +81,18 @@ namespace EPiServer.Marketing.Testing.Web
                         {
                             contentVersion = newVariant.ItemVersion;
                             _testData.ShowVariant = true;
+                            _testDataCookieHelper.SaveTestDataToCookie(_testData);
+
                             Swap(e);
                         }
                         else
                         {
                             _testData.ShowVariant = false;
                         }
+
                         CalculateView(contentVersion);
                     }
-                    else
-                    {
-                        _testData.TestVariantId = Guid.Empty;
-                    }
-                    _testDataCookieHelper.SaveTestDataToCookie(_testData);
+                    
                 }
             }
         }
