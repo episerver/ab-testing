@@ -14,11 +14,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         Guid Id { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        string Properties { get; set; }
-
-        /// <summary>
         /// Date the kpi was created.
         /// </summary>
         DateTime CreatedDate { get; set; }
@@ -32,6 +27,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Determines if a conversion has happened.
         /// </summary>
         /// <param name="content"></param>
-        Boolean Evaluate(IContent content);
+        bool Evaluate(IContent content);
     }
 }

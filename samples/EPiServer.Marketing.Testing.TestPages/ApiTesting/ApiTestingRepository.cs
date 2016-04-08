@@ -80,7 +80,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             dataToSave.KpiInstances = new List<IKpi>()
                 {
-                    new Kpi() { Id = Guid.NewGuid(), Properties = "test", CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
+                    new Kpi() { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
                 };
 
             dataToSave.TestResults = new List<TestResult>()

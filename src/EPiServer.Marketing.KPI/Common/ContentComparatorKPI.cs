@@ -1,30 +1,28 @@
 ﻿using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System;
+using System.Runtime.Serialization;
 
 namespace EPiServer.Marketing.KPI.Common
 {
     /// Common KPI class that can be used to compare IContent Guid values 
     /// 
+    [DataContract]
     public class ContentComparatorKPI : Kpi
     {
-        private Guid _ContentGuid;
+        [DataMember]
+        public Guid ContentGuid;
 
         public ContentComparatorKPI() { }
 
         public ContentComparatorKPI(Guid contentGuid)
         {
-            Properties = contentGuid.ToString();
+            ContentGuid = contentGuid;
         }
 
-        public override string Properties {
-            set { _ContentGuid = Guid.Parse(value);  }
-            get { return _ContentGuid.ToString();  }
-        }
-
-        public override Boolean Evaluate(IContent content)
+        public override bool Evaluate(IContent content)
         {
-            return _ContentGuid.Equals(content.ContentGuid);
+            return ContentGuid.Equals(content.ContentGuid);
         }
     }
 }

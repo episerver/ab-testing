@@ -153,7 +153,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 Id = theGuid,
                 ModifiedDate = DateTime.UtcNow,
                 Variants = new List<Variant> { new Variant { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } },
-                KpiInstances = new List<IKpi> { new Kpi { Id = Guid.NewGuid(), Properties = "test", CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow } },
+                KpiInstances = new List<IKpi> { new Kpi { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow } },
                 TestResults = new List<TestResult> { new TestResult { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } }
             };
             tm.Save(test);

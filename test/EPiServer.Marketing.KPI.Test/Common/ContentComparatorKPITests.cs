@@ -24,6 +24,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var result = kpi.Evaluate(_content.Object);
             Assert.True(result, "Evaluate should have returned true");
         }
+
         [Fact]
         public void Call_Evaluate_ReturnsFalse()
         {
@@ -32,11 +33,23 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var result = kpi.Evaluate(_content.Object);
             Assert.False(result, "Evaluate should have returned false");
         }
+
         [Fact]
         public void VerifyGet()
         {
             var kpi = GetUnitUnderTest();
-            Assert.True( kpi.Properties.Equals(LandingPageGuid.ToString()));
+            Assert.True( kpi.ContentGuid.Equals(LandingPageGuid));
+        }
+
+        [Fact]
+        public void VerifyGetDefaultConstructor()
+        {
+            var kpi = new ContentComparatorKPI()
+            {
+                ContentGuid = LandingPageGuid
+            };
+
+            Assert.True(kpi.ContentGuid.Equals(LandingPageGuid));
         }
     }
 }
