@@ -6,7 +6,6 @@ using EPiServer.ServiceLocation;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 
@@ -61,11 +60,12 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (!SwapDisabled && activeTest != null)
             {
-                if (_testDataCookieHelper.HasTestData(_testData) && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
+                var hasData = _testDataCookieHelper.HasTestData(_testData);
+                if (hasData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                 {
                     Swap(e);
                 }
-                else if (ProcessedContentList.Count == 1)
+                else if (!hasData && ProcessedContentList.Count == 1)
                 {
                     //get a new random variant. 
                     var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
