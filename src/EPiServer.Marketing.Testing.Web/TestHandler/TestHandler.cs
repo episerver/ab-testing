@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
@@ -23,11 +24,13 @@ namespace EPiServer.Marketing.Testing.Web
         private ITestManager _testManager;
 
 
+        [ExcludeFromCodeCoverage]
         public TestHandler()
         {
             
         }
 
+        [ExcludeFromCodeCoverage]
         internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList)
         {
             _testDataCookieHelper = cookieHelper;
@@ -36,22 +39,24 @@ namespace EPiServer.Marketing.Testing.Web
         }
         
 
-
+        [ExcludeFromCodeCoverage]
         public void Initialize()
         {
+            _testManager = new TestManager();
             ProcessedContentList = new List<ContentReference>();
-            _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
+
         }
 
-       
-       
+
+
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
             ProcessedContentList.Add(e.ContentLink);
             _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+
             var activeTest = _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
 
             if (!SwapDisabled && activeTest != null)
@@ -97,6 +102,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (_testData.ShowVariant)
             {
+
                 var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
                 if (variant != null)
@@ -109,6 +115,8 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void CalculateView(int contentVersion)
         {
+
+
             //increment view if not already done
             if (_testData.Viewed == false)
             {

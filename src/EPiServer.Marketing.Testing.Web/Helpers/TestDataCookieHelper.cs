@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.WebSockets;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.ServiceLocation;
 
@@ -12,6 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public TestDataCookieHelper()
         {
+            _testManager = new TestManager();
             _serviceLocator = ServiceLocator.Current;
         }
 
@@ -37,7 +39,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-            _testManager = _serviceLocator.GetInstance<ITestManager>();
 
             var cookieData = new HttpCookie(testData.TestContentId.ToString())
             {
