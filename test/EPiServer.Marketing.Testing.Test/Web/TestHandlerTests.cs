@@ -47,13 +47,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
             return new TestHandler(_testManager.Object, _tdc.Object, contentList);
         }
 
+
+
+
+
         [Fact]
         public void TestHandler_ContentNotUnderTest_and_SwapDisabled_FallsThroughProcess()
         {
             var content = new BasicContent();
             content.ContentGuid = _noAssociatedTestGuid;
             content.ContentLink = new ContentReference();
-            _contentReferenceList.Add(content.ContentLink);
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             
@@ -106,7 +109,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference(0, 0);
+            content.ContentLink = new ContentReference();
 
             IMarketingTest test = new ABTest()
             {
@@ -155,7 +158,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference(0, 0);
+            content.ContentLink = new ContentReference();
 
             IMarketingTest test = new ABTest()
             {
@@ -241,7 +244,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference(0, 0);
+            content.ContentLink = new ContentReference();
             
             IMarketingTest test = new ABTest()
             {
@@ -283,5 +286,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(),
                 "Content should have triggered call to save cookie data");
         }
+
+
+       
+
+
     }
 }
