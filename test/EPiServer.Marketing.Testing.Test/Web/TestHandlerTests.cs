@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
         private Guid _activeTestGuid = Guid.Parse("d9866579-ea05-4c74-a508-ab1c95766660");
         private Guid _matchingVariantId = Guid.Parse("c6c08d71-2e61-4768-8549-7bdcc43af083");
-
+        private Guid _variantContentGuid = Guid.Parse("00000000-0000-0000-0000-7bdcc43af083");
 
         private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
         {
@@ -46,13 +46,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             return new TestHandler(_testManager.Object, _tdc.Object, contentList);
         }
-
-
-
-
-
+        
         [Fact]
-        public void TestHandler_ContentNotUnderTest_and_SwapDisabled_FallsThroughProcess()
+        public void TestHandler_Page_Not_In_A_Test_Load_As_Normal()
         {
             var content = new BasicContent();
             content.ContentGuid = _noAssociatedTestGuid;
@@ -75,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
        }
 
         [Fact]
-        public void TestHandler_ContentUnderTest_and_SwapDisabled_FallsThroughProcess()
+        public void TestHandler_Disabling_The_Page_Swap_Returns_The_Published_Page()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -95,7 +91,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(), "Content should have triggered call to get cookie data");
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
             _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
 
@@ -104,13 +99,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_ContentUnderTest_and_SwapEnabled_NoData_SetsUpNewTestData_WithVariant_AndSwaps()
+        public void TestHandler_Returns_A_Variant_To_User_Who_Gets_Included_In_A_Test_And_Is_Flagged_As_Seeing_The_Variant()
         {
 
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference();
+            content.ContentLink = new ContentReference() { ID = 1, WorkID = 1 };
 
+            var pageRef = new PageReference() { ID = 2, WorkID = 2 };
+            var variantPage = new PageData(pageRef);
+            
             IMarketingTest test = new ABTest()
             {
                 Id = _activeTestGuid,
@@ -133,28 +131,23 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
-            _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
-            //_tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _testManager.Verify(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>()), Times.Once, "Content should have triggered Create Variant Page Cache call");
-            _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
-            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to save cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
 
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
-                "Content should have triggered call to get cookie data");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(),
-                "Content should have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(),
-                "Content should have triggered call to update cookie data");
+            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
+            Assert.Equal(variantPage, args.Content);
+            Assert.Equal(variantPage.ContentLink, args.ContentLink);
         }
 
         [Fact]
-        public void TestHandler_ContentUnderTest_and_SwapEnabled_NoData_SetsUpNewTestData_WithOutVariant_AndDoesNotSwap()
+        public void TestHandler_ContentUnderTest_New_User_Marked_As_Included_In_Test_Seeing_Published_Version_Does_Not_Get_The_Variant()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -191,34 +184,28 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             x.LoadedContent(new object(), args);
 
-            _testManager.Verify(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>()), Times.Never, "Content should not have triggered Create Variant Page Cache call");
-            _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to save cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
 
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
-                "Content should have triggered call to get cookie data");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(),
-                "Content should have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(),
-                "Content should have triggered call to update cookie data");
-
+            Assert.Equal(content, args.Content);
+            Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
         [Fact]
-        public void TestHandler_ContentUnderTest_and_SwapDisabled_WithData_Count2_FallsThrough()
+        public void TestHandler_ContentUnderTest_Returning_User_Included_In_A_Test_Marked_As_Seeing_Published_Gets_The_Published_Page_But_Does_Not_Count_As_A_View()
         {
             _contentReferenceList.Add(new ContentReference());
 
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
+            content.ContentLink = new ContentReference();
             _contentReferenceList.Add(content.ContentLink);
 
             List<IMarketingTest> testList = new List<IMarketingTest>()
             {
                 new ABTest() {OriginalItemId = _associatedTestGuid}
             };
-
-
 
             var x = GetUnitUnderTest(_contentReferenceList);
             x.SwapDisabled = false;
@@ -227,20 +214,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             x.LoadedContent(new object(), args);
 
-            _testManager.Verify(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>()), Times.Never, "Content should not have triggered Create Variant Page Cache call");
-            _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
-                "Content should have triggered call to get cookie data");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(),
-                "Content should not have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(),
-                "Content should not have triggered call to update cookie data");
+            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
 
+            Assert.Equal(content, args.Content);
+            Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
 
         [Fact]
-        public void TestHandler_ContentUnderTest_and_SwapEnabled_NoData_SetsUpNewTestData_WithEmptyVariant_AndDoesNotSwap()
+        public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -277,19 +261,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             x.LoadedContent(new object(), args);
 
-            _testManager.Verify(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>()), Times.Never, "Content should not have triggered Create Variant Page Cache call");
-            _testManager.Verify(call => call.CreateActiveTestCache(), Times.Once, "Content should have triggered Create Active Test call");
-            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should have triggered IncrementCount View call");
+            _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
 
-            _tdc.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Once(),
-                "Content should have triggered call to get cookie data");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(),
-                "Content should have triggered call to save cookie data");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to save cookie data");
+
+            Assert.Equal(content, args.Content);
+            Assert.Equal(content.ContentLink, args.ContentLink);
         }
-
-
-       
-
-
     }
 }

@@ -5,7 +5,6 @@ using EPiServer.ServiceLocation;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 
