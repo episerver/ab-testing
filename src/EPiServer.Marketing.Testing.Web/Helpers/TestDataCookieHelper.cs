@@ -8,22 +8,20 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestDataCookieHelper : ITestDataCookieHelper
     {
-        private IServiceLocator _serviceLocator;
         private ITestManager _testManager;
 
         public TestDataCookieHelper()
         {
             _testManager = new TestManager();
-            _serviceLocator = ServiceLocator.Current;
         }
 
         /// <summary>
         /// unit tests should use this contructor and add needed services to the service locator as needed
         /// </summary>
         /// <param name="locator"></param>
-        internal TestDataCookieHelper(IServiceLocator locator)
+        internal TestDataCookieHelper(ITestManager mockTestManager)
         {
-            _serviceLocator = locator;
+            _testManager = mockTestManager;
         }
 
 
