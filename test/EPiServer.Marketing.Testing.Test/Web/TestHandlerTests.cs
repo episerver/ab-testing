@@ -185,7 +185,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             x.LoadedContent(new object(), args);
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to save cookie data");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
             _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
 
             Assert.Equal(content, args.Content);
@@ -263,7 +263,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
 
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to save cookie data");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
 
             Assert.Equal(content, args.Content);
             Assert.Equal(content.ContentLink, args.ContentLink);

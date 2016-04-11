@@ -15,7 +15,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class TestDataCookieHelperTest : IDisposable
     {
-        private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestManager> _testManager;
 
         private Guid _testId = Guid.Parse("a194bde9-af3c-40fa-9635-338d02f5dea4");
@@ -37,9 +36,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestDataCookieHelper GetUnitUnderTest()
         {
-            _serviceLocator = new Mock<IServiceLocator>();
             _testManager = new Mock<ITestManager>();
-            _serviceLocator.Setup(call => call.GetInstance<ITestManager>()).Returns(_testManager.Object);
 
             test = new ABTest()
              {
@@ -49,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.Get(_testId)).Returns(test);
 
-            return new TestDataCookieHelper(_serviceLocator.Object);
+            return new TestDataCookieHelper(_testManager.Object);
         }
 
         [Fact]
