@@ -1,6 +1,6 @@
 param ([string]$configuration = "Release",
     [string]$runTests = "false",
-	[string]$runtestmode = "",
+	[string]$jsreporter = "",
     [string]$pack = "false",
 	[string]$packageVersion = "")
 
@@ -19,7 +19,7 @@ dnvm use default
 
 # Install node dependencies
 pushd ..
-&"$cwd\npm.cmd" install #--silent
+&"$cwd\npm.cmd" install --silent
 if ($lastexitcode -eq 1) {
     Write-Host "Node dependencies install failed" -foreground "red"
     exit $lastexitcode
@@ -57,7 +57,7 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 
 # Run tests
 if([System.Convert]::ToBoolean($runTests) -eq $true) {
-    &"$cwd\test.ps1" $configuration $runtestmode
+    &"$cwd\test.ps1" $configuration $jsreporter
 }
 
 # Create packages
