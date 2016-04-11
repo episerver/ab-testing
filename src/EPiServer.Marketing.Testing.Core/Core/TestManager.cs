@@ -11,7 +11,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
 using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
 using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
 
@@ -486,7 +485,7 @@ namespace EPiServer.Marketing.Testing
 
         private DalABTestFilter AdaptToDalFilter(ABTestFilter managerFilter)
         {
-            var dalFilter = new Dal.ABTestFilter();
+            var dalFilter = new DalABTestFilter();
             dalFilter.Property = AdaptToDalTestProperty(managerFilter.Property);
             dalFilter.Operator = AdaptToDalOperator(managerFilter.Operator);
 
@@ -505,23 +504,23 @@ namespace EPiServer.Marketing.Testing
             return dalFilter;
         }
 
-        private Dal.Entity.Enums.TestState ConvertToDalValue(object value)
+        private DalTestState ConvertToDalValue(object value)
         {
-            var aValue = Dal.Entity.Enums.TestState.Inactive;
+            var aValue = DalTestState.Inactive;
            
                 switch ((TestState)value)
                 {
                     case TestState.Active:
-                        aValue = Dal.Entity.Enums.TestState.Active;
+                        aValue = DalTestState.Active;
                         break;
                     case TestState.Archived:
-                        aValue = Dal.Entity.Enums.TestState.Archived;
+                        aValue = DalTestState.Archived;
                         break;
                     case TestState.Done:
-                        aValue = Dal.Entity.Enums.TestState.Done;
+                        aValue = DalTestState.Done;
                         break;
                     case TestState.Inactive:
-                        aValue = Dal.Entity.Enums.TestState.Inactive;
+                        aValue = DalTestState.Inactive;
                         break;
                 }
             
@@ -529,7 +528,7 @@ namespace EPiServer.Marketing.Testing
             return aValue;
         }
 
-        private Dal.FilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
+        private DalFilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
         {
             var aOperator = DalFilterOperator.And;
 
