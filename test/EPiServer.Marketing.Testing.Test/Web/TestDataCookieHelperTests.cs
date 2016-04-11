@@ -100,7 +100,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var TestId = Guid.NewGuid();
             var ShowVariant = true;
-            var TestParticipant = true;
             var TestVariantId = Guid.NewGuid();
             var Viewed = false;
             var Converted = false;
@@ -112,7 +111,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestId"] = TestId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
                 ["TestContentId"] = TestContentId.ToString(),
-                ["TestParticipant"] = TestParticipant.ToString(),
                 ["TestVariantId"] = TestVariantId.ToString(),
                 ["Viewed"] = Viewed.ToString(),
                 ["Converted"] = Converted.ToString(),
@@ -125,7 +123,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(returnCookieData.TestId == TestId);
             Assert.True(returnCookieData.TestContentId == TestContentId);
             Assert.True(returnCookieData.ShowVariant == ShowVariant);
-            Assert.True(returnCookieData.TestParticipant == TestParticipant);
             Assert.True(returnCookieData.TestVariantId == TestVariantId);
             Assert.True(returnCookieData.Viewed == Viewed);
             Assert.True(returnCookieData.Converted == Converted);
@@ -145,7 +142,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var TestId = Guid.NewGuid();
             var ShowVariant = true;
-            var TestParticipant = true;
             var TestVariantId = Guid.NewGuid();
             var Viewed = false;
             var Converted = false;
@@ -157,7 +153,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestId"] = TestId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
                 ["TestContentId"] = TestContentId.ToString(),
-                ["TestParticipant"] = TestParticipant.ToString(),
                 ["TestVariantId"] = TestVariantId.ToString(),
                 ["Viewed"] = Viewed.ToString(),
                 ["Converted"] = Converted.ToString(),
@@ -170,7 +165,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(returnCookieData.TestId == Guid.Empty);
             Assert.True(returnCookieData.TestContentId == Guid.Empty);
             Assert.True(returnCookieData.ShowVariant == false);
-            Assert.True(returnCookieData.TestParticipant == false);
             Assert.True(returnCookieData.TestVariantId == Guid.Empty);
             Assert.True(returnCookieData.Viewed == false);
             Assert.True(returnCookieData.Converted == false);
@@ -190,7 +184,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = test.Id,
                 TestContentId = _testContentGuid,
                 TestVariantId = _testVariantGuid,
-                TestParticipant = false,
                 ShowVariant = true,
                 Viewed = true,
                 Converted = false
@@ -205,7 +198,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(Guid.Parse(cookieValue["TestId"]) == tdCookie.TestId);
             Assert.True(Guid.Parse(cookieValue["TestContentId"]) == tdCookie.TestContentId);
             Assert.True(Guid.Parse(cookieValue["TestVariantId"]) == tdCookie.TestVariantId);
-            Assert.True(bool.Parse(cookieValue["TestParticipant"]) == tdCookie.TestParticipant);
             Assert.True(bool.Parse(cookieValue["ShowVariant"]) == tdCookie.ShowVariant);
             Assert.True(bool.Parse(cookieValue["Viewed"]) == tdCookie.Viewed);
             Assert.True(bool.Parse(cookieValue["Converted"]) == tdCookie.Converted);
@@ -227,7 +219,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = test.Id,
                 TestContentId = _testContentGuid,
                 TestVariantId = _testVariantGuid,
-                TestParticipant = false,
                 ShowVariant = true,
                 Viewed = true,
                 Converted = false
@@ -238,7 +229,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = test.Id,
                 TestContentId = _testContentGuid,
                 TestVariantId = _testVariantGuid,
-                TestParticipant = true,
                 ShowVariant = false,
                 Viewed = false,
                 Converted = true
@@ -256,7 +246,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(Guid.Parse(cookieValue["TestId"]) == updatedCookie.TestId);
             Assert.True(Guid.Parse(cookieValue["TestContentId"]) == updatedCookie.TestContentId);
             Assert.True(Guid.Parse(cookieValue["TestVariantId"]) == updatedCookie.TestVariantId);
-            Assert.True(bool.Parse(cookieValue["TestParticipant"]) == updatedCookie.TestParticipant);
             Assert.True(bool.Parse(cookieValue["ShowVariant"]) == updatedCookie.ShowVariant);
             Assert.True(bool.Parse(cookieValue["Viewed"]) == updatedCookie.Viewed);
             Assert.True(bool.Parse(cookieValue["Converted"]) == updatedCookie.Converted);

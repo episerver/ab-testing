@@ -43,7 +43,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
                 ["TestContentId"] = testData.TestContentId.ToString(),
-                ["TestParticipant"] = testData.TestParticipant.ToString(),
                 ["TestVariantId"] = testData.TestVariantId.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
@@ -68,7 +67,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.TestId = Guid.Parse(testDataCookie["TestId"]);
                 retCookie.ShowVariant = bool.Parse(testDataCookie["ShowVariant"]);
                 retCookie.TestContentId = Guid.Parse(testDataCookie["TestContentId"]);
-                retCookie.TestParticipant = bool.Parse(testDataCookie["TestParticipant"]);
                 retCookie.TestVariantId = Guid.Parse(testDataCookie["TestVariantId"]);
                 retCookie.Viewed = bool.Parse(testDataCookie["Viewed"]);
                 retCookie.Converted = bool.Parse(testDataCookie["Converted"]);
