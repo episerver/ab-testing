@@ -3,7 +3,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Dal
 {
-    public class KpiMap : EntityTypeConfiguration<Kpi>
+    public class KpiMap : EntityTypeConfiguration<DalKpi>
     {
         public KpiMap()
         {
@@ -11,23 +11,8 @@ namespace EPiServer.Marketing.KPI.Dal
 
             this.HasKey(hk => hk.Id);
 
-            this.Property(m => m.Name)
+            this.Property(m => m.Properties)
                 .IsRequired();
-
-            this.Property(m => m.Weight)
-                .IsOptional();
-
-            this.Property(m => m.Value)
-                .IsRequired();
-
-            this.Property(m => m.LandingPage)
-                .IsRequired();
-
-            this.Property(m => m.RunAt)
-                .IsRequired();
-
-            this.Property(m => m.ClientScripts)
-                .IsOptional();
 
             this.Property(m => m.CreatedDate)
                 .IsRequired();

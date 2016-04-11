@@ -6,7 +6,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.Dal.Model.Enums;
 using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.ServiceLocation;
-using IKpi = EPiServer.Marketing.KPI.Manager.DataClass.IKpi;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -49,37 +49,27 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
 
-        private Dal.Model.IKpi ConvertToDalTest(IKpi kpi)
+        private Dal.Model.IDalKpi ConvertToDalTest(IKpi kpi)
         {
-            var dalKpi = new Kpi()
+            var dalKpi = new DalKpi()
             {
                 Id = kpi.Id,
-                Name = kpi.Name,
-                Weight = kpi.Weight,
+                Properties = kpi.Properties,
                 CreatedDate = kpi.CreatedDate,
-                ModifiedDate = kpi.ModifiedDate,
-                LandingPage = kpi.LandingPage,
-                Value = kpi.Value,
-                RunAt = (RunAt)kpi.RunAt,
-                ClientScripts = kpi.ClientScripts
+                ModifiedDate = kpi.ModifiedDate
             };
 
             return dalKpi;
         }
 
-        private IKpi ConvertToManagerKpi(Dal.Model.IKpi kpi)
+        private IKpi ConvertToManagerKpi(IDalKpi dalKpi)
         {
             var managerKpi = new DataClass.Kpi()
             {
-                Id = kpi.Id,
-                Name = kpi.Name,
-                Weight = kpi.Weight,
-                CreatedDate = kpi.CreatedDate,
-                ModifiedDate = kpi.ModifiedDate,
-                LandingPage = kpi.LandingPage,
-                Value = kpi.Value,
-                RunAt = (DataClass.Enums.RunAt)kpi.RunAt,
-                ClientScripts = kpi.ClientScripts
+                Id = dalKpi.Id,
+                Properties = dalKpi.Properties,
+                CreatedDate = dalKpi.CreatedDate,
+                ModifiedDate = dalKpi.ModifiedDate
             };
 
             return managerKpi;

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Dal.Entity;
-using EPiServer.Marketing.Testing.Dal.Entity.Enums;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Test;
 using Xunit;
 
@@ -27,19 +27,20 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var id = Guid.NewGuid();
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = id,
                 Title = "test",
                 Description = "description",
                 CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                State = TestState.Active,
+                State = DalTestState.Active,
                 Owner = "Bert",
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
-                TestResults = new List<TestResult>(),
-                Variants = new List<Variant>()
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                TestResults = new List<DalTestResult>(),
+                Variants = new List<DalVariant>()
             };
 
             _mtm.Save(test);
@@ -53,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 2);
 
-            var list = _mtm.GetTestList(new TestCriteria());
+            var list = _mtm.GetTestList(new DalTestCriteria());
             Assert.Equal(2, list.Count());
         }
 
@@ -62,12 +63,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
             _context.SaveChanges();
 
-            var criteria = new TestCriteria();
-            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
+            var criteria = new DalTestCriteria();
+            var filter = new DalABTestFilter(DalABTestProperty.VariantId, DalFilterOperator.And, variantItemId);
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
             Assert.Equal(2, list.Count());
@@ -84,10 +85,10 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             tests[2].OriginalItemId = originalItemId;
             _context.SaveChanges();
 
-            var criteria = new TestCriteria();
-            var filter = new ABTestFilter();
-            filter.Property = ABTestProperty.OriginalItemId;
-            filter.Operator = FilterOperator.And;
+            var criteria = new DalTestCriteria();
+            var filter = new DalABTestFilter();
+            filter.Property = DalABTestProperty.OriginalItemId;
+            filter.Operator = DalFilterOperator.And;
             filter.Value = originalItemId;
             criteria.AddFilter(filter);
             var list = _mtm.GetTestList(criteria);
@@ -101,12 +102,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[0].State = TestState.Archived;
+            tests[0].State = DalTestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new TestCriteria();
-            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.And, originalItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Archived);
+            var criteria = new DalTestCriteria();
+            var filter = new DalABTestFilter(DalABTestProperty.OriginalItemId, DalFilterOperator.And, originalItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.And, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -120,13 +121,13 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var tests = AddMultivariateTests(_context, 3);
             tests[0].OriginalItemId = originalItemId;
-            tests[1].State = TestState.Archived;
-            tests[2].State = TestState.Archived;
+            tests[1].State = DalTestState.Archived;
+            tests[2].State = DalTestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new TestCriteria();
-            var filter = new ABTestFilter(ABTestProperty.OriginalItemId, FilterOperator.Or, originalItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
+            var criteria = new DalTestCriteria();
+            var filter = new DalABTestFilter(DalABTestProperty.OriginalItemId, DalFilterOperator.Or, originalItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.Or, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -139,13 +140,13 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].State = TestState.Archived;
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].State = DalTestState.Archived;
             _context.SaveChanges();
 
-            var criteria = new TestCriteria();
-            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.And, variantItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.Or, TestState.Archived);
+            var criteria = new DalTestCriteria();
+            var filter = new DalABTestFilter(DalABTestProperty.VariantId, DalFilterOperator.And, variantItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.Or, DalTestState.Archived);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
             var list = _mtm.GetTestList(criteria);
@@ -158,13 +159,13 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
 
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].State = TestState.Active;
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[1].State = DalTestState.Active;
             _context.SaveChanges();
 
-            var criteria = new TestCriteria();
-            var filter = new ABTestFilter(ABTestProperty.VariantId, FilterOperator.Or, variantItemId);
-            var filter2 = new ABTestFilter(ABTestProperty.State, FilterOperator.And, TestState.Active);
+            var criteria = new DalTestCriteria();
+            var filter = new DalABTestFilter(DalABTestProperty.VariantId, DalFilterOperator.Or, variantItemId);
+            var filter2 = new DalABTestFilter(DalABTestProperty.State, DalFilterOperator.And, DalTestState.Active);
             criteria.AddFilter(filter);
             criteria.AddFilter(filter2);
 
@@ -205,31 +206,31 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             _mtm.Start(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Active);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Active);
         }
 
         [Fact]
         public void TestManagerStop()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].State = TestState.Active;
+            tests[0].State = DalTestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Stop(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Done);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Done);
         }
 
         [Fact]
         public void TestManagerArchive()
         {
             var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].State = TestState.Active;
+            tests[0].State = DalTestState.Active;
             _mtm.Save(tests[0]);
 
             _mtm.Archive(tests[0].Id);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, TestState.Archived);
+            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Archived);
         }
 
         [Fact]
@@ -239,7 +240,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var itemId = Guid.NewGuid();
             var itemVersion = 1;
 
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Id = testId,
                 Title = "test",
@@ -247,16 +248,16 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
-                TestResults = new List<TestResult>(),
-                Variants = new List<Variant>(),
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                TestResults = new List<DalTestResult>(),
+                Variants = new List<DalVariant>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
                 ParticipationPercentage = 100,
                 OriginalItemId = itemId
             };
 
             //_mtm.Save(test);
 
-            var result = new TestResult()
+            var result = new DalTestResult()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
@@ -273,8 +274,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             // check that a result exists
             Assert.Equal(test.TestResults.Count(), 1);
 
-            _mtm.IncrementCount(testId, itemId, itemVersion, CountType.View);
-            _mtm.IncrementCount(testId, itemId, itemVersion, CountType.Conversion);
+            _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.View);
+            _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.Conversion);
 
             // check the result is incremented correctly
             Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views, 1);
@@ -284,14 +285,14 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         [Fact]
         public void TestManagerAddNoId()
         {
-            var test = new ABTest()
+            var test = new DalABTest()
             {
                 Title = "test",
                 Description = "Description",
                 CreatedDate = DateTime.UtcNow,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
-                State = TestState.Active,
+                State = DalTestState.Active,
                 Owner = "Bert"
             };
 
@@ -329,10 +330,10 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             tests[0].OriginalItemId = originalItemId;
 
-            var variant = new Variant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
+            var variant = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].Variants.Add(variant);
 
-            var result = new TestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
+            var result = new DalTestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].TestResults.Add(result);
             _mtm.Save(tests[0]);
 
@@ -350,18 +351,18 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var tests = AddMultivariateTests(_mtm, 1);
             var originalItemId = Guid.NewGuid();
             tests[0].OriginalItemId = originalItemId;
-            var variant = new Variant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            var variant = new DalVariant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
             tests[0].Variants.Add(variant);
 
-            var result = new TestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            var result = new DalTestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
             tests[0].TestResults.Add(result);
             _mtm.Save(tests[0]);
 
             var variantItemId2 = Guid.NewGuid();
-            var variant2 = new Variant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            var variant2 = new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
             tests[0].Variants.Add(variant2);
 
-            var result2 = new TestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            var result2 = new DalTestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
             tests[0].TestResults.Add(result2);
 
             _mtm.Save(tests[0]);

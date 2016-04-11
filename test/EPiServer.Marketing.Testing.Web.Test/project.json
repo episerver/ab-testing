@@ -1,0 +1,30 @@
+{
+    "version": "1.0.0-*",
+    "compilationOptions": {
+        "emitEntryPoint": true,
+        "warningsAsErrors": true
+    },
+
+    "dependencies": {
+        "EPiServer.ClientTDDSupport": "9.3.8-beta",
+        "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final"
+    },
+
+    "commands": {
+        "web": "Microsoft.AspNet.Server.Kestrel --server.urls=http://*:5000/",
+        "web-test": "Microsoft.AspNet.Server.Kestrel"
+    },
+
+    "frameworks": {
+        "dnx451": { }
+    },
+
+    "exclude": [
+        "wwwroot",
+        "node_modules"
+    ],
+    "publishExclude": [
+        "**.user",
+        "**.vspscc"
+    ]
+}

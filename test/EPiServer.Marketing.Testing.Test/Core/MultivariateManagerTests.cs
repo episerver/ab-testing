@@ -6,10 +6,12 @@ using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
+using ABTest = EPiServer.Marketing.Testing.Data.ABTest;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -27,21 +29,21 @@ namespace EPiServer.Marketing.Testing.Test.Core
             return new TestManager(_serviceLocator.Object);
         }
 
-        private Testing.Dal.Entity.ABTest GetDalTest()
+        private Testing.Dal.EntityModel.DalABTest GetDalTest()
         {
-            return new Testing.Dal.Entity.ABTest()
+            return new Testing.Dal.EntityModel.DalABTest()
             {
-                Variants = new List<Testing.Dal.Entity.Variant>()
+                Variants = new List<DalVariant>()
                 {
-                    new Testing.Dal.Entity.Variant() {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
+                    new DalVariant() {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
                 },
-                KeyPerformanceIndicators = new List<Testing.Dal.Entity.KeyPerformanceIndicator>()
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 {
-                    new Testing.Dal.Entity.KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() }
+                    new DalKeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() }
                 },
-                TestResults = new List<Testing.Dal.Entity.TestResult>()
+                TestResults = new List<DalTestResult>()
                 {
-                    new Testing.Dal.Entity.TestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 }
+                    new DalTestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 }
                 }
             };
         }
@@ -51,8 +53,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
             return new ABTest()
             {
                 Variants = new List<Testing.Data.Variant>(),
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
-                TestResults = new List<TestResult>()
+                KeyPerformanceIndicators = new List<Data.KeyPerformanceIndicator>(),
+                TestResults = new List<Data.TestResult>()
             };
         }
 
@@ -73,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            var dalList = new List<Testing.Dal.Entity.IABTest>();
+            var dalList = new List<IABTest>();
             dalList.Add(GetDalTest());
             _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
             tm.GetTestByItemId(theGuid);
@@ -89,13 +91,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var testFilter = new Testing.Data.ABTestFilter() { Operator = Testing.Data.FilterOperator.And, Property = Testing.Data.ABTestProperty.OriginalItemId, Value = "Test" };
             critera.AddFilter(testFilter);
             var tm = GetUnitUnderTest();
-            var dalList = new List<Testing.Dal.Entity.IABTest>();
+            var dalList = new List<IABTest>();
             dalList.Add(GetDalTest());
-            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<Testing.Dal.TestCriteria>())).Returns(dalList);
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             tm.GetTestList(critera);
 
-            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<Testing.Dal.TestCriteria>(arg => arg.GetFilters().First().Operator == Testing.Dal.FilterOperator.And &&
-            arg.GetFilters().First().Property == Testing.Dal.ABTestProperty.OriginalItemId &&
+            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<DalTestCriteria>(arg => arg.GetFilters().First().Operator == DalFilterOperator.And &&
+            arg.GetFilters().First().Property == DalABTestProperty.OriginalItemId &&
             arg.GetFilters().First().Value == testFilter.Value)),
             "DataAcessLayer GetTestList was never called or criteria did not match.");
         }
@@ -153,13 +155,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
             {
                 Id = theGuid,
                 ModifiedDate = DateTime.UtcNow,
-                Variants = new List<Testing.Data.Variant>() { new Testing.Data.Variant() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>() { new Testing.Data.KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() } },
-                TestResults = new List<TestResult>() { new Testing.Data.TestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } }
+                Variants = new List<Data.Variant>() { new Data.Variant() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } },
+                KeyPerformanceIndicators = new List<Data.KeyPerformanceIndicator>() { new Data.KeyPerformanceIndicator() { Id = Guid.NewGuid(), KeyPerformanceIndicatorId = Guid.NewGuid() } },
+                TestResults = new List<Data.TestResult>() { new Data.TestResult() { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } }
             };
             tm.Save(test);
 
-            _dataAccessLayer.Verify(da => da.Save(It.Is<Testing.Dal.Entity.ABTest>(arg => arg.Id == theGuid)),
+            _dataAccessLayer.Verify(da => da.Save(It.Is<Testing.Dal.EntityModel.DalABTest>(arg => arg.Id == theGuid)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
 
@@ -174,11 +176,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var tm = GetUnitUnderTest();
             tm.IncrementCount(theGuid, theTestItemGuid, theItemVersion, type);
 
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<Testing.Dal.EntityModel.Enums.DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(), It.IsAny<Testing.Dal.Entity.Enums.CountType>()),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(), It.IsAny<Testing.Dal.EntityModel.Enums.DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.Is<Testing.Dal.Entity.Enums.CountType>(arg => arg.Equals(Testing.Dal.Entity.Enums.CountType.Conversion))),
+            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.Is<Testing.Dal.EntityModel.Enums.DalCountType>(arg => arg.Equals(Testing.Dal.EntityModel.Enums.DalCountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
@@ -193,7 +195,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
-                new Testing.Dal.Entity.ABTest()
+                new Testing.Dal.EntityModel.DalABTest()
                 {
                     Id = theGuid,
                     OriginalItemId = originalItemId,

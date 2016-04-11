@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid CreateTest(ABTestViewModel testData)
         {
             //KpiManager kpiManager = new KpiManager();
-            //var kpi = new Kpi() { Id = Guid.NewGuid(), Name = "MyKpi", Weight = 50, ParticipationPercentage = 25, ConversionPage = Guid.NewGuid(), Value = "Hello" };
+            //var DalKpi = new Kpi() { Id = Guid.NewGuid(), Name = "MyKpi", Weight = 50, ParticipationPercentage = 25, ConversionPage = Guid.NewGuid(), Value = "Hello" };
             //kpiManager.Save(kpi);
             //var g = kpiManager.GetKpiList().FirstOrDefault(k => k.Name == "MyKpi");
 

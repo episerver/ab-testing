@@ -2,7 +2,7 @@
 using System.Data.Common;
 using System.Data.Entity;
 using EPiServer.Marketing.Testing.Dal;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
@@ -18,10 +18,10 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             {
                 base.OnModelCreating(modelBuilder);
 
-                modelBuilder.Entity<ABTest>();
-                modelBuilder.Entity<TestResult>();
-                modelBuilder.Entity<Variant>();
-                modelBuilder.Entity<KeyPerformanceIndicator>();
+                modelBuilder.Entity<DalABTest>();
+                modelBuilder.Entity<DalTestResult>();
+                modelBuilder.Entity<DalVariant>();
+                modelBuilder.Entity<DalKeyPerformanceIndicator>();
             }
         }
     }

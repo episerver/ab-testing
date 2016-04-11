@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.KPI.Test
             {
                 base.OnModelCreating(modelBuilder);
 
-                modelBuilder.Entity<Kpi>();
+                modelBuilder.Entity<DalKpi>();
             }
         }
     }

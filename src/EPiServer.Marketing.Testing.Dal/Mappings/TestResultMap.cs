@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
-
-using EPiServer.Marketing.Testing.Dal.Entity;
+﻿using System.Data.Entity.ModelConfiguration;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class ABTestResultMap : EntityTypeConfiguration<TestResult>
+    public class ABTestResultMap : EntityTypeConfiguration<DalTestResult>
     {
         public ABTestResultMap()
         {
@@ -19,7 +17,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(s => s.ModifiedDate)
                 .IsRequired();
 
-            this.HasRequired(m => m.ABTest)
+            this.HasRequired(m => m.DalABTest)
                 .WithMany(m => m.TestResults)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();

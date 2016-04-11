@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using EPiServer.Marketing.Testing.Dal.Entity;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class KeyPerformanceIndicatorMap : EntityTypeConfiguration<KeyPerformanceIndicator>
+    public class KeyPerformanceIndicatorMap : EntityTypeConfiguration<DalKeyPerformanceIndicator>
     {
         public KeyPerformanceIndicatorMap()
         {
@@ -15,7 +15,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.KeyPerformanceIndicatorId)
                 .IsOptional();
 
-            this.HasRequired(m => m.ABTest)
+            this.HasRequired(m => m.DalABTest)
                 .WithMany(m => m.KeyPerformanceIndicators)
                 .HasForeignKey(m => m.TestId)
                 .WillCascadeOnDelete();
