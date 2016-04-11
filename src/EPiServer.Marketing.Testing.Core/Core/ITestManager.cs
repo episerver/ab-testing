@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 
@@ -27,6 +28,8 @@ namespace EPiServer.Marketing.Testing
 
         void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
 
-        Guid ReturnLandingPage(Guid testId);
+        Variant ReturnLandingPage(Guid testId);
+        PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
+        List<IMarketingTest> CreateActiveTestCache();
     }
 }
