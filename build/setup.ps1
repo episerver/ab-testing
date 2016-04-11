@@ -1,16 +1,15 @@
 param ([string]$configuration = "Debug",
-    [string]$clean = "true",
+    [string]$clean = "false",
 	[string]$DbName = "AlloyEPiServerDB",
-	[string]$DbServer = "(localdb)\v11.0")
+	[string]$DbServer = "(localdb)\MSSQLLocalDB")
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
 $cwd = Split-Path -parent $PSCommandPath
 pushd $cwd
 
 # Load dependencies
-$EPiServerInstallCommon1Path = Resolve-Path "$cwd\resources\EPiServerInstall.Common.1.dll"
-Import-Module WebAdministration
 Import-Module sqlps -DisableNameChecking
+$EPiServerInstallCommon1Path = Resolve-Path "$cwd\resources\EPiServerInstall.Common.1.dll"
 [System.Reflection.Assembly]::LoadFrom($EPiServerInstallCommon1Path) | Import-Module  -DisableNameChecking
 
 
