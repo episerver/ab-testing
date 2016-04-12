@@ -306,7 +306,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         public void MultivariteTestManagerMultivariateDataAccess()
         {
             TestingDataAccess mda = new TestingDataAccess();
-            Assert.NotNull(mda._repository);
+            Assert.True(mda._UseEntityFramework);
         }
 
         [Fact]
