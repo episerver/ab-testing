@@ -297,7 +297,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             c.ContentGuid = Guid.NewGuid();
             var retList = testManager.EvaluateKPIs(kpis, c);
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
-            Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list but it was not empty");
+            Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list that did not have one item in it");
         }
     }
 
