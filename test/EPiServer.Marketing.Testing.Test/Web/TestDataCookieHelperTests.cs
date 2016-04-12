@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 
@@ -106,7 +101,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
 
-            HttpCookie testCookie = new HttpCookie(TestContentId.ToString())
+            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
             {
                 ["TestId"] = TestId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
@@ -192,7 +187,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
            
             
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
-            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get(tdCookie.TestContentId.ToString());
+            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + tdCookie.TestContentId.ToString());
 
             Assert.True(cookieValue != null);
             Assert.True(Guid.Parse(cookieValue["TestId"]) == tdCookie.TestId);
@@ -240,7 +235,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
 
-            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get(updatedCookie.TestContentId.ToString());
+            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + updatedCookie.TestContentId.ToString());
 
             Assert.True(cookieValue != null);
             Assert.True(Guid.Parse(cookieValue["TestId"]) == updatedCookie.TestId);

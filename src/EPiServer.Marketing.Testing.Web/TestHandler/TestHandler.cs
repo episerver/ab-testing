@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
-using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
@@ -14,13 +13,27 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        internal bool SwapDisabled;
+        private readonly TestingContextHelper _contextHelper = new TestingContextHelper();
+        private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
 
         private TestDataCookie _testData;
-        private MemoryCache _marketingTestCache = MemoryCache.Default;
-
-        private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
         private ITestManager _testManager;
+
+        private bool? _swapDisabled;
+        public bool? SwapDisabled
+        {
+            set { _swapDisabled = value; }
+
+            get
+            {
+                if (_swapDisabled == null)
+                {
+                    return _contextHelper.IsInSystemFolder();
+
+                }
+                return _swapDisabled;
+            }
+        }
 
 
         [ExcludeFromCodeCoverage]
@@ -30,11 +43,13 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         [ExcludeFromCodeCoverage]
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList)
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, bool? isSwapDisabled)
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
             _testManager = testManager;
+            SwapDisabled = isSwapDisabled;
+
         }
         
 
@@ -48,18 +63,19 @@ namespace EPiServer.Marketing.Testing.Web
 
         }
 
-
-
+       
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
+            if (!SwapDisabled==true) { 
             ProcessedContentList.Add(e.ContentLink);
-            _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
 
             var activeTest = _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
 
-            if (!SwapDisabled && activeTest != null)
+            if (activeTest != null)
             {
+                _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+
                 var hasData = _testDataCookieHelper.HasTestData(_testData);
                 if (hasData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                 {
@@ -93,7 +109,7 @@ namespace EPiServer.Marketing.Testing.Web
                         CalculateView(contentVersion);
                     }
                     
-                }
+                }}
             }
         }
 

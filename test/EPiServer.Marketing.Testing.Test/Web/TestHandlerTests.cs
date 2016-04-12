@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Web;
 using EPiServer.Marketing.Testing.Web;
 using Moq;
 using Xunit;
@@ -39,12 +41,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Guid _matchingVariantId = Guid.Parse("c6c08d71-2e61-4768-8549-7bdcc43af083");
         private Guid _variantContentGuid = Guid.Parse("00000000-0000-0000-0000-7bdcc43af083");
 
-        private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
+        private TestHandler GetUnitUnderTest(List<ContentReference> contentList, bool? swapEnabled)
         {
             _tdc = new Mock<ITestDataCookieHelper>();
             _testManager = new Mock<ITestManager>();
+            
 
-            return new TestHandler(_testManager.Object, _tdc.Object, contentList);
+            return new TestHandler(_testManager.Object, _tdc.Object, contentList, swapEnabled);
         }
         
         [Fact]
@@ -54,9 +57,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             content.ContentGuid = _noAssociatedTestGuid;
             content.ContentLink = new ContentReference();
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            HttpContext.Current = null;
+
+            var testHandler = GetUnitUnderTest(_contentReferenceList,false);
             
-            testHandler.SwapDisabled = true;
+           // testHandler.SwapDisabled = true;
 
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
 
@@ -82,9 +87,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 new ABTest() {OriginalItemId = _associatedTestGuid}
             };
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-            testHandler.SwapDisabled = true;
+            HttpContext.Current = null;
+    
+            var testHandler = GetUnitUnderTest(_contentReferenceList, true);
+         //   testHandler.SwapDisabled = true;
 
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
 
@@ -125,8 +131,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = _associatedTestGuid
             };
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-            testHandler.SwapDisabled = false;
+
+
+            HttpContext.Current = new HttpContext(
+     new HttpRequest("", "http://tempuri.org", ""),
+     new HttpResponse(new StringWriter())
+     );
+            var testHandler = GetUnitUnderTest(_contentReferenceList, false);
+       //     testHandler.SwapDisabled = false;
 
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
@@ -170,8 +182,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = _associatedTestGuid
             };
 
-            var x = GetUnitUnderTest(_contentReferenceList);
-            x.SwapDisabled = false;
+
+            HttpContext.Current = null;
+            var testHandler = GetUnitUnderTest(_contentReferenceList, false);
+       
+
+   
 
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
@@ -182,7 +198,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(content);
-            x.LoadedContent(new object(), args);
+            testHandler.LoadedContent(new object(), args);
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
@@ -207,12 +223,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new ABTest() {OriginalItemId = _associatedTestGuid}
             };
 
-            var x = GetUnitUnderTest(_contentReferenceList);
-            x.SwapDisabled = false;
+            HttpContext.Current = null;
+            var testHandler = GetUnitUnderTest(_contentReferenceList, false);
+
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
 
             ContentEventArgs args = new ContentEventArgs(content);
-            x.LoadedContent(new object(), args);
+            testHandler.LoadedContent(new object(), args);
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
@@ -246,9 +263,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = Guid.Empty
             };
-            
-            var x = GetUnitUnderTest(_contentReferenceList);
-            x.SwapDisabled = false;
+
+            HttpContext.Current = null;
+            var testHandler = GetUnitUnderTest(_contentReferenceList,false);
 
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
@@ -259,7 +276,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(content);
-            x.LoadedContent(new object(), args);
+            testHandler.LoadedContent(new object(), args);
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
 

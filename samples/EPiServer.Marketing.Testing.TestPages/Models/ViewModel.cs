@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 
 namespace EPiServer.Marketing.Testing.TestPages.Models
@@ -36,5 +37,12 @@ namespace EPiServer.Marketing.Testing.TestPages.Models
 
         public bool IsEnabled { get; set; }
     }
+
+    public class CacheTestingViewModel
+    {
+        public List<PageData> CachedVersionPageData { get; set; }
+        public List<IMarketingTest> ActiveTestCache { get; set; }
+    }
+
 
 }

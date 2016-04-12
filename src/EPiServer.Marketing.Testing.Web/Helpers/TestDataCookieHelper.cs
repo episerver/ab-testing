@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
 
-            var cookieData = new HttpCookie(testData.TestContentId.ToString())
+            var cookieData = new HttpCookie("EPI-MAR-"+testData.TestContentId.ToString())
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
@@ -53,14 +53,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public void UpdateTestDataCookie(TestDataCookie testData)
         {
-            HttpContext.Current.Response.Cookies.Remove(testData.TestContentId.ToString());
+            HttpContext.Current.Response.Cookies.Remove("EPI-MAR-" + testData.TestContentId.ToString());
             SaveTestDataToCookie(testData);
         }
 
         public TestDataCookie GetTestDataFromCookie(string testContentId)
         {
             var retCookie = new TestDataCookie();
-            var testDataCookie = HttpContext.Current.Request.Cookies.Get(testContentId);
+            var testDataCookie = HttpContext.Current.Request.Cookies.Get("EPI-MAR-" + testContentId);
 
             if (testDataCookie != null)
             {
