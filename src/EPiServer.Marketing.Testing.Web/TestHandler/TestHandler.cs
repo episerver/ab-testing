@@ -14,13 +14,28 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        internal bool SwapDisabled;
+        private readonly TestingContextHelper _contextHelper = new TestingContextHelper();
+        private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
 
         private TestDataCookie _testData;
-        private MemoryCache _marketingTestCache = MemoryCache.Default;
-
-        private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
         private ITestManager _testManager;
+
+        private bool? _swapDisabled;
+        public bool? SwapDisabled
+        {
+            set { _swapDisabled = value; }
+
+            get
+            {
+                if (_swapDisabled == null)
+                {
+                    return _contextHelper.IsInSystemFolder();
+
+                }
+                return _swapDisabled;
+            }
+        }
+
 
 
         [ExcludeFromCodeCoverage]

@@ -29,38 +29,19 @@ namespace EPiServer.Marketing.Testing.Web
         public void InitializeHttpEvents(HttpApplication application)
         {
             application.EndRequest += EndRequest;
-            application.BeginRequest += BeginRequest;
 
         }
 
-        private void BeginRequest(object sender, EventArgs e)
-        {
-            if (IsRequestToRoot())
-            {
-                _testHandler.SwapDisabled = true;
-            }
-            
-
-        }
+       
 
         private void EndRequest(object sender, EventArgs e)
         {
-            if (IsRequestToRoot())
-            {
-                _testHandler.SwapDisabled = false;
-            }
+           
             _testHandler.ProcessedContentList.Clear();
         }
 
 
-        private bool IsRequestToRoot()
-        {
-            return
-                HttpContext.Current.Request.Url.AbsoluteUri.ToLower()
-                    .Contains(EPiServer.Shell.Paths.ProtectedRootPath.ToLower());
-
-
-        }
+      
 
     }
 }
