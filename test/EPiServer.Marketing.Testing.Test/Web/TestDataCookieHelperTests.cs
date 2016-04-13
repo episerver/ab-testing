@@ -136,32 +136,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
             var mockTesteDataCookiehelper = GetUnitUnderTest();
-            var TestContentId = Guid.NewGuid();
-            var InvalidTesetContentId = Guid.NewGuid();
-            DateTime ExpireDate = DateTime.Now.AddDays(2);
-
-            var TestId = Guid.NewGuid();
-            var ShowVariant = true;
-            var TestVariantId = Guid.NewGuid();
-            var Viewed = false;
-            var Converted = false;
+            var invalidTesetContentId = Guid.NewGuid();
 
 
 
-            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
-            {
-                ["TestId"] = TestId.ToString(),
-                ["ShowVariant"] = ShowVariant.ToString(),
-                ["TestContentId"] = TestContentId.ToString(),
-                ["TestVariantId"] = TestVariantId.ToString(),
-                ["Viewed"] = Viewed.ToString(),
-                ["Converted"] = Converted.ToString(),
-                Expires = ExpireDate
-            };
 
-            HttpContext.Current.Request.Cookies.Add(testCookie);
-
-            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie("EPI-MAR-" + InvalidTesetContentId.ToString());
+            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie("EPI-MAR-" + invalidTesetContentId.ToString());
             Assert.True(returnCookieData.TestId == Guid.Empty);
             Assert.True(returnCookieData.TestContentId == Guid.Empty);
             Assert.True(returnCookieData.ShowVariant == false);
@@ -192,7 +172,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
            
             
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
-            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + tdCookie.TestContentId.ToString());
+            var cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + tdCookie.TestContentId.ToString());
 
             Assert.True(cookieValue != null);
             Assert.True(Guid.Parse(cookieValue["TestId"]) == tdCookie.TestId);
