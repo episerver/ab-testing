@@ -53,46 +53,51 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
-            ProcessedContentList.Add(e.ContentLink);
-            _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
-
-            var activeTest = _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
-
-            if (!SwapDisabled && activeTest != null)
+            if (!SwapDisabled == true)
             {
-                var hasData = _testDataCookieHelper.HasTestData(_testData);
-                if (hasData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
-                {
-                    Swap(e);
-                }
-                else if (!hasData && ProcessedContentList.Count == 1)
-                {
-                    //get a new random variant. 
-                    var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
-                    _testData.TestId = activeTest.Id;
-                    _testData.TestContentId = activeTest.OriginalItemId;
-                    _testData.TestVariantId = newVariant.Id;
+                ProcessedContentList.Add(e.ContentLink);
 
-                    if (newVariant.Id != Guid.Empty)
+                var activeTest =
+                    _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
+
+                if (activeTest != null)
+                {
+                    _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+
+                    var hasData = _testDataCookieHelper.HasTestData(_testData);
+                    if (hasData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                     {
-                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-
-                        if (newVariant.ItemVersion != contentVersion)
-                        {
-                            contentVersion = newVariant.ItemVersion;
-                            _testData.ShowVariant = true;
-                            _testDataCookieHelper.SaveTestDataToCookie(_testData);
-
-                            Swap(e);
-                        }
-                        else
-                        {
-                            _testData.ShowVariant = false;
-                        }
-
-                        CalculateView(contentVersion);
+                        Swap(e);
                     }
-                    
+                    else if (!hasData && ProcessedContentList.Count == 1)
+                    {
+                        //get a new random variant. 
+                        var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
+                        _testData.TestId = activeTest.Id;
+                        _testData.TestContentId = activeTest.OriginalItemId;
+                        _testData.TestVariantId = newVariant.Id;
+
+                        if (newVariant.Id != Guid.Empty)
+                        {
+                            var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+
+                            if (newVariant.ItemVersion != contentVersion)
+                            {
+                                contentVersion = newVariant.ItemVersion;
+                                _testData.ShowVariant = true;
+                                _testDataCookieHelper.SaveTestDataToCookie(_testData);
+
+                                Swap(e);
+                            }
+                            else
+                            {
+                                _testData.ShowVariant = false;
+                            }
+
+                            CalculateView(contentVersion);
+                        }
+
+                    }
                 }
             }
         }
