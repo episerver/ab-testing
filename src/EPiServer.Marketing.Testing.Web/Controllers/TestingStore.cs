@@ -33,6 +33,7 @@ namespace EPiServer.Marketing.Testing.Web
             var content = _locator.GetInstance<IContentLoader>().Get<IContent>(testData.testContentId);
             var kpi = new ContentComparatorKPI(content.ContentGuid)
             {
+                Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow
             };

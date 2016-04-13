@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing
 
         public Guid Save(IMarketingTest multivariateTest)
         {
-            // Todo : We should probably check to see if item quid is empty or null and
+            // Todo : We should probably check to see if item Guid is empty or null and
             // create a new unique guid here?
             // 
 
@@ -79,7 +79,7 @@ namespace EPiServer.Marketing.Testing
             var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             foreach (var kpi in multivariateTest.KpiInstances)
             {
-                kpi.Id = kpiManager.Save(kpi); // note that the method returns the quid of the object 
+                kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
             return _dataAccess.Save(ConvertToDalTest(multivariateTest));
