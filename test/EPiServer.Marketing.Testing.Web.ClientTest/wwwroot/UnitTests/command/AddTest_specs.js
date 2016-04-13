@@ -140,5 +140,27 @@
             aCommand._onModelChange();
             expect(aCommand.canExecute).to.be.false;
         });
+
+        it("switches to the AddTestView when executed", function () {
+            var me = this, aCommand = new AddTestCommand();
+            aCommand._topic = {
+                publish: function (action, view, data) {
+                    me.retAction = action;
+                    me.retView = view;
+                    me.retData = data;
+                }
+            }
+            aCommand.model = {
+                contentData: {
+                    title: "ContentTitle"
+                },
+                languageContext: {}
+            };
+            aCommand._execute()
+
+            expect(me.retView).to.equal('AddTestView');
+            expect(me.retAction).to.equal('/epi/shell/action/changeview');
+            expect(me.retData.contentData).to.deep.equal(aCommand.model.contentData);
+        });
     });
 });

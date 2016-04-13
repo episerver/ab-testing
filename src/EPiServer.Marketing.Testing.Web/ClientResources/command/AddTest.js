@@ -15,10 +15,12 @@ function (declare, topic, _ContentCommandBase, ContentActionSupport) {
         iconClass: "", //Define your own icon css class here.
 
         _contentActionSupport: ContentActionSupport,
+        _topic: topic,
 
         _execute: function () {
+            var me = this;
             //if not part of a test
-            topic.publish("/epi/shell/action/changeview", "AddTestView", { contentData: this.model.contentData, languageContext: this.model.languageContext });
+            me._topic.publish("/epi/shell/action/changeview", "AddTestView", { contentData: me.model.contentData, languageContext: me.model.languageContext });
 
             //if part of active test
             // change to active test context
