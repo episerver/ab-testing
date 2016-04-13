@@ -65,8 +65,8 @@
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
-                publishedVersion: parseVersion(this.publishedVersion.contentLink),
-                variantVersion: parseVersion(this.currentVersion.contentLink),
+                publishedVersion: parseVersion(this.publishedVersion.contentLink,false),
+                variantVersion: parseVersion(this.currentVersion.contentLink,true),
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,
                 conversionPage: this.conversionPage,
@@ -80,8 +80,14 @@
         }
     });
 
-    function parseVersion(contentlink) {
+    
+    function parseVersion(contentlink, version) {
         var linkinfo = contentlink.split('_');
-        return linkinfo[1];
+        if (version) {
+            return linkinfo[1];
+        } else {
+            return linkinfo[0];
+        }
+        
     }
 });
