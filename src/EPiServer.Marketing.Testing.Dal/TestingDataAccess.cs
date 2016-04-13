@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -10,11 +11,12 @@ namespace EPiServer.Marketing.Testing.Dal
     internal class TestingDataAccess : ITestingDataAccess
     {
         internal IRepository _repository;
+        internal bool _UseEntityFramework;
 
         public TestingDataAccess()
         {
+            _UseEntityFramework = true;
             // TODO : Load repository from service locator.
-            _repository = new BaseRepository(new DatabaseContext());
         }
         internal TestingDataAccess(IRepository repository)
         {
@@ -28,27 +30,148 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public void Delete(Guid testObjectId)
         {
-            _repository.DeleteTest(testObjectId);
-            _repository.SaveChanges();
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    DeleteHelper(repository, testObjectId);
+                }
+            }
+            else
+            {
+                DeleteHelper(_repository, testObjectId);
+            }
+
         }
 
         public IABTest Get(Guid testObjectId)
         {
-            return _repository.GetById(testObjectId);
+            IABTest test;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    test = repository.GetById(testObjectId);
+                }
+            }
+            else
+            {
+                test = _repository.GetById(testObjectId);
+            }
+
+            return test;
         }
 
         public List<IABTest> GetTestByItemId(Guid originalItemId)
         {
-            return _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
+            List<IABTest> tests;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    tests = repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
+                }
+            }
+            else
+            {
+                tests = _repository.GetAll().Where(t => t.OriginalItemId == originalItemId).ToList();
+            }
+
+            return tests;
         }
 
         public List<IABTest> GetTestList(DalTestCriteria criteria)
+        {
+            List<IABTest> tests;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    tests = GetTestListHelper(repository, criteria);
+                }
+            }
+            else
+            {
+                tests = GetTestListHelper(_repository, criteria);
+            }
+
+            return tests;
+        }
+
+        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
+        {
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    IncrementCountHelper(repository, testId, testItemId, itemVersion, resultType);
+                }
+            }
+            else
+            {
+                IncrementCountHelper(_repository, testId, testItemId, itemVersion, resultType);
+            }
+        }
+
+        public Guid Save(IABTest testObject)
+        {
+            Guid id;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    id = SaveHelper(repository, testObject);
+                }
+            }
+            else
+            {
+                id = SaveHelper(_repository, testObject);
+            }
+
+            return id;
+        }
+
+        public void Start(Guid testObjectId)
+        {
+            if (IsTestActive(testObjectId))
+            {
+                throw new Exception("The test page already has an Active test");
+            }
+
+            SetTestState(testObjectId, DalTestState.Active);
+        }
+
+        public void Stop(Guid testObjectId)
+        {
+            SetTestState(testObjectId, DalTestState.Done);
+        }
+
+
+
+        #region Private Helpers
+        private void DeleteHelper(IRepository repo, Guid testId)
+        {
+            repo.DeleteTest(testId);
+            repo.SaveChanges();
+        }
+
+        private List<IABTest> GetTestListHelper(IRepository repo, DalTestCriteria criteria)
         {
             // if no filters are passed in, just return all tests
             var filters = criteria.GetFilters();
             if (!filters.Any())
             {
-                return _repository.GetAll().ToList();
+                return repo.GetAll().ToList();
             }
 
             var variantOperator = DalFilterOperator.And;
@@ -63,7 +186,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 // if we are filtering on a single property(not an element in a list) create the expression
                 if (filter.Property != DalABTestProperty.VariantId)
                 {
-                    var left = Expression.Property(pe, typeof (DalABTest).GetProperty(filter.Property.ToString()));
+                    var left = Expression.Property(pe, typeof(DalABTest).GetProperty(filter.Property.ToString()));
                     var right = Expression.Constant(filter.Value);
                     var expression = Expression.Equal(left, right);
 
@@ -76,28 +199,30 @@ namespace EPiServer.Marketing.Testing.Dal
 
                     // each subsequent iteration we check to see if the filter is for an AND or OR and append accordingly
                     wholeExpression = filter.Operator == DalFilterOperator.And
-                        ? Expression.And(wholeExpression, expression) : Expression.Or(wholeExpression, expression);
+                        ? Expression.And(wholeExpression, expression)
+                        : Expression.Or(wholeExpression, expression);
                 }
-                else // if we are filtering on an item in a list, then generate simple results that we can lump in at the end
+                else
+                // if we are filtering on an item in a list, then generate simple results that we can lump in at the end
                 {
                     variantId = new Guid(filter.Value.ToString());
                     variantOperator = filter.Operator;
-                    variantResults = _repository.GetAll().Where(x => x.Variants.Any(v => v.ItemId == variantId));
+                    variantResults = repo.GetAll().Where(x => x.Variants.Any(v => v.ItemId == variantId));
                 }
             }
 
             IQueryable<IABTest> results = null;
-            var tests = _repository.GetAll().AsQueryable();
+            var tests = repo.GetAll().AsQueryable();
 
             // if we have created an expression tree, then execute it against the tests to get the results
             if (wholeExpression != null)
             {
                 var whereCallExpression = Expression.Call(
-                    typeof (Queryable),
+                    typeof(Queryable),
                     "Where",
-                    new Type[] {tests.ElementType},
+                    new Type[] { tests.ElementType },
                     tests.Expression,
-                    Expression.Lambda<Func<DalABTest, bool>>(wholeExpression, new ParameterExpression[] {pe})
+                    Expression.Lambda<Func<DalABTest, bool>>(wholeExpression, new ParameterExpression[] { pe })
                     );
 
                 results = tests.Provider.CreateQuery<DalABTest>(whereCallExpression);
@@ -111,20 +236,17 @@ namespace EPiServer.Marketing.Testing.Dal
                     return variantResults.ToList();
                 }
 
-                results = variantOperator == DalFilterOperator.And 
-                    ? results.Where(test => test.Variants.Any(v => v.ItemId == variantId)) 
+                results = variantOperator == DalFilterOperator.And
+                    ? results.Where(test => test.Variants.Any(v => v.ItemId == variantId))
                     : results.Concat(variantResults).Distinct();
             }
 
             return results.ToList<IABTest>();
         }
 
-        private static Object thisLock = new Object();
-        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
+        private void IncrementCountHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
         {
-            lock (thisLock)
-            {
-            var test = _repository.GetById(testId);
+            var test = repo.GetById(testId);
             var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
             if (resultType == DalCountType.View)
@@ -136,38 +258,37 @@ namespace EPiServer.Marketing.Testing.Dal
                 result.Conversions++;
             }
 
-                _repository.SaveChanges();
-        }
+            repo.SaveChanges();
         }
 
-        public Guid Save(IABTest testObject)
+        private Guid SaveHelper(IRepository repo, IABTest testObject)
         {
             var id = testObject.Id;
 
             // if a test doesn't exist, add it to the db
-            var test = _repository.GetById(testObject.Id) as DalABTest;
+            var test = repo.GetById(testObject.Id) as DalABTest;
             if (test == null)
             {
-                _repository.Add(testObject);
+                repo.Add(testObject);
             }
             else
             {
                 if (test.State == DalTestState.Inactive)
                 {
-                        test.Title = testObject.Title;
+                    test.Title = testObject.Title;
                     test.Description = testObject.Description;
                     test.OriginalItemId = testObject.OriginalItemId;
                     test.LastModifiedBy = testObject.LastModifiedBy;
-                        test.StartDate = testObject.StartDate;
-                        test.EndDate = testObject.EndDate;
-                        test.ModifiedDate = DateTime.UtcNow;
+                    test.StartDate = testObject.StartDate;
+                    test.EndDate = testObject.EndDate;
+                    test.ModifiedDate = DateTime.UtcNow;
 
                     // remove any existing kpis that are not part of the new test
                     foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
-                        {
+                    {
                         if (testObject.KeyPerformanceIndicators.All(k => k.Id != existingKpi.Id))
                         {
-                            _repository.Delete(existingKpi);
+                            repo.Delete(existingKpi);
                         }
                     }
 
@@ -189,12 +310,12 @@ namespace EPiServer.Marketing.Testing.Dal
 
                     // remove any existing results that are not part of the new test
                     foreach (var existingResult in test.TestResults.ToList())
-                            {
+                    {
                         if (testObject.TestResults.All(k => k.Id != existingResult.Id))
-                                {
-                            _repository.Delete(existingResult);
-                                }
-                            }
+                        {
+                            repo.Delete(existingResult);
+                        }
+                    }
 
                     // update existing results that are still around and add any that are new
                     foreach (var newResult in testObject.TestResults)
@@ -202,7 +323,7 @@ namespace EPiServer.Marketing.Testing.Dal
                         var existingResult = test.TestResults.SingleOrDefault(k => k.Id == newResult.Id);
 
                         if (existingResult != null)
-                            {
+                        {
                             existingResult.Conversions = newResult.Conversions;
                             existingResult.Views = newResult.Views;
                             existingResult.ItemId = newResult.ItemId;
@@ -210,19 +331,19 @@ namespace EPiServer.Marketing.Testing.Dal
                             existingResult.ModifiedDate = DateTime.UtcNow;
                         }
                         else
-                                {
+                        {
                             test.TestResults.Add(newResult);
                         }
-                                }
+                    }
 
                     // remove any existing variants that are not part of the new test
                     foreach (var existingVariant in test.Variants.ToList())
                     {
                         if (testObject.Variants.All(k => k.Id != existingVariant.Id))
                         {
-                            _repository.Delete(existingVariant);
-                            }
+                            repo.Delete(existingVariant);
                         }
+                    }
 
                     // update existing variants that are still around and add any that are new
                     foreach (var newVariant in testObject.Variants)
@@ -239,42 +360,67 @@ namespace EPiServer.Marketing.Testing.Dal
                         {
                             test.Variants.Add(newVariant);
                         }
-                        }
+                    }
                 }
             }
 
-            _repository.SaveChanges();
+            repo.SaveChanges();
 
             return id;
         }
 
-        public void Start(Guid testObjectId)
+        private bool IsTestActive(Guid testId)
         {
-            var test = _repository.GetById(testObjectId);
-            if (IsTestActive(test.OriginalItemId))
+            bool isActive;
+
+            if (_UseEntityFramework)
             {
-                throw new Exception("The test page already has an Active test");
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    isActive = IsTestActiveHelper(repository, testId);
+                }
+            }
+            else
+            {
+                isActive = IsTestActiveHelper(_repository, testId);
             }
 
-            SetTestState(testObjectId, DalTestState.Active);
+            return isActive;
         }
 
-        public void Stop(Guid testObjectId)
+        private bool IsTestActiveHelper(IRepository repo, Guid testId)
         {
-            SetTestState(testObjectId, DalTestState.Done);
-        }
-        private bool IsTestActive(Guid originalItemId)
-        {
-            var tests = _repository.GetAll()
-                .Where(t => t.OriginalItemId == originalItemId && t.State == DalTestState.Active);
+            var test = repo.GetById(testId);
+            var tests = repo.GetAll()
+                        .Where(t => t.OriginalItemId == test.OriginalItemId && t.State == DalTestState.Active);
 
             return tests.Any();
         }
+
         private void SetTestState(Guid theTestId, DalTestState theState)
         {
-            var aTest = _repository.GetById(theTestId);
-            aTest.State = theState;
-            _repository.SaveChanges();
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    SetTestStateHelper(repository, theTestId, theState);
+                }
+            }
+            else
+            {
+                SetTestStateHelper(_repository, theTestId, theState);
+            }
+
         }
+
+        private void SetTestStateHelper(IRepository repo, Guid theTestId, DalTestState theState)
+        {
+            var aTest = repo.GetById(theTestId);
+            aTest.State = theState;
+            repo.SaveChanges();
+        }
+        #endregion
     }
 }

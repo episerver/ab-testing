@@ -19,115 +19,117 @@
     <p>
 
     </p>
-    <div class="container">
-        <table class="table">
+<div class="container">
+    <span class="btn">@Html.ActionLink("View Test Cache", "ViewMarketingTestCacheData")</span>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].Owner)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => Model.Tests[0].Variants)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => Model.Tests[0].Conversions)*@
+            </th>
+            <th colspan="2">
+                Test Results
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Tests)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].Owner)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].StartDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].EndDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].State)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => Model.Tests[0].Variants)
-                </th>
-                <th>
-                    @*@Html.DisplayNameFor(model => Model.Tests[0].Conversions)*@
-                </th>
-                <th colspan="2">
-                    Test Results
-                </th>
-                <th></th>
-            </tr>
-            @foreach (var item in Model.Tests)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Owner)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State)
-                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Owner)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OriginalItemId)
-                    </td>
-                    <td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OriginalItemId)
+                </td>
+                <td>
 
-                        @if (item.Variants != null)
-                        {
-                            for (int i = 0; i < item.Variants.Count; i++)
-                            {
-                                <p>@Html.DisplayFor(modelItem => item.Variants[i].Id)</p>
-                            }
-                        }
-                    </td>
-                    <td>
-                        @*@Html.DisplayFor(modelItem => item.Conversions)*@
-                    </td>
-                    @if (item.TestResults.Count > 0)
+                    @if (item.Variants != null)
                     {
-                        foreach (var result in item.TestResults)
+                        for (int i = 0; i < item.Variants.Count; i++)
                         {
-                            <td>
-                                Views:
-                                @Html.DisplayFor(resultItem => result.Views)
-                                <br />
-                                Conversions:
-                                @Html.DisplayFor(resultItem => result.Conversions)
-                                <br />
-                                Item Id:
-                                @Html.DisplayFor(resultItem => result.ItemId)
-                            </td>
-                        }
-                        if (item.TestResults.Count == 1)
-                        {
-                            <td></td>
+                            <p>@Html.DisplayFor(modelItem => item.Variants[i].Id)</p>
                         }
                     }
-                    else
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Conversions)*@
+                </td>
+                @if (item.TestResults.Count > 0)
+                {
+                    foreach (var result in item.TestResults)
                     {
-                        <td>No Page Conversion Test Results Found </td>
+                        <td>
+                            Views:
+                            @Html.DisplayFor(resultItem => result.Views)
+                            <br/>
+                            Conversions:
+                            @Html.DisplayFor(resultItem => result.Conversions)
+                            <br/>
+                            Item Id:
+                            @Html.DisplayFor(resultItem => result.ItemId)
+                        </td>
+                    }
+                    if (item.TestResults.Count == 1)
+                    {
                         <td></td>
                     }
+                }
+                else
+                {
+                    <td>No Page Conversion Test Results Found </td>
+                    <td></td>
+                }
 
-                    <td>
-                        @Html.ActionLink("Edit", "UpdateAbTest", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "GetAbTestById", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "DeleteAbTest", new { id = item.Id })
-                    </td>
-                </tr>
-            }
+                <td>
+                    @Html.ActionLink("Edit", "UpdateAbTest", new {id = item.Id}) |
+                    @Html.ActionLink("Details", "GetAbTestById", new {id = item.Id}) |
+                    @Html.ActionLink("Delete", "DeleteAbTest", new {id = item.Id})
+                </td>
+            </tr>
+        }
 
-        </table>
-    </div>
+    </table>
+</div>
 
     <div>
         <p>

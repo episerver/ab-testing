@@ -1017,6 +1017,7 @@
       "fx/System.Core >= 4.0.0",
       "fx/System.Data >= 4.0.0",
       "fx/System.Data.DataSetExtensions >= 4.0.0",
+      "fx/System.Runtime.Caching >= 4.0.0",
       "fx/System.Transactions >= 4.0.0",
       "fx/System.Web >= 4.0.0",
       "fx/System.Xml >= 4.0.0",

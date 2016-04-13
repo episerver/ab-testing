@@ -74,19 +74,27 @@ namespace EPiServer.Marketing.Testing.Dal
                     scope.Complete();
                 }
             }
-            
+
             return records;
         }
 
         public IABTest GetById(object id)
         {
-            return DatabaseContext.Set<DalABTest>().Find(id);
+            return DatabaseContext.ABTests
+                        .Include(r => r.TestResults)
+                        .Include(t => t.Variants)
+                        .Include(t => t.KeyPerformanceIndicators)
+                        .FirstOrDefault(t => t.Id == (Guid)id);
         }
 
         public IQueryable<IABTest> GetAll()
         {
-            return DatabaseContext.Set<DalABTest>().AsQueryable();
-        } 
+            return DatabaseContext.ABTests
+                .Include(r => r.TestResults)
+                .Include(t => t.Variants)
+                .Include(t => t.KeyPerformanceIndicators)
+                .AsQueryable();
+        }
 
         public void DeleteTest(object id)
         {
