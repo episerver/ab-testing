@@ -13,7 +13,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using EPiServer.Core;
 using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
 using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
 
@@ -75,6 +74,13 @@ namespace EPiServer.Marketing.Testing
             // Todo : We should probably check to see if item quid is empty or null and
             // create a new unique guid here?
             // 
+
+            // Save the kpi objects first
+            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
+            foreach (var kpi in multivariateTest.KpiInstances)
+            {
+                kpi.Id = kpiManager.Save(kpi); // note that the method returns the quid of the object 
+            }
 
             return _dataAccess.Save(ConvertToDalTest(multivariateTest));
         }

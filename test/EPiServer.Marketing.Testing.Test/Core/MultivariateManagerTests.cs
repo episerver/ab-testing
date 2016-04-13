@@ -12,6 +12,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -156,8 +157,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 KpiInstances = new List<IKpi> { new Kpi { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow } },
                 TestResults = new List<TestResult> { new TestResult { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } }
             };
+
+            Mock<IKpiManager> kpiManager = new Mock<IKpiManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(kpiManager.Object);
+
             tm.Save(test);
 
+            kpiManager.Verify(km => km.Save(It.IsAny<IKpi>()), "KpiManager save was never called");
             _dataAccessLayer.Verify(da => da.Save(It.Is<DalABTest>(arg => arg.Id == theGuid)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
