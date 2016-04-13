@@ -16,7 +16,7 @@ using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
-        public class MultivariateManagerTests
+    public class MultivariateManagerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestingDataAccess> _dataAccessLayer;
