@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
 
-            HttpCookie testCookie = new HttpCookie(TestContentId.ToString())
+            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
             {
                 ["TestId"] = TestId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
@@ -148,7 +148,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
 
-            HttpCookie testCookie = new HttpCookie(TestContentId.ToString())
+            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
             {
                 ["TestId"] = TestId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
@@ -161,7 +161,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             HttpContext.Current.Request.Cookies.Add(testCookie);
 
-            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(InvalidTesetContentId.ToString());
+            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie("EPI-MAR-" + InvalidTesetContentId.ToString());
             Assert.True(returnCookieData.TestId == Guid.Empty);
             Assert.True(returnCookieData.TestContentId == Guid.Empty);
             Assert.True(returnCookieData.ShowVariant == false);
@@ -192,7 +192,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
            
             
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
-            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get(tdCookie.TestContentId.ToString());
+            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + tdCookie.TestContentId.ToString());
 
             Assert.True(cookieValue != null);
             Assert.True(Guid.Parse(cookieValue["TestId"]) == tdCookie.TestId);
@@ -240,7 +240,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
 
-            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get(updatedCookie.TestContentId.ToString());
+            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + updatedCookie.TestContentId.ToString());
 
             Assert.True(cookieValue != null);
             Assert.True(Guid.Parse(cookieValue["TestId"]) == updatedCookie.TestId);
