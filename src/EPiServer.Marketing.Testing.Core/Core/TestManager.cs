@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
@@ -11,6 +13,7 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using EPiServer.Core;
 using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
 using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
 
@@ -221,6 +224,19 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
+        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
+        {
+            List<Guid> guids = new List<Guid>();
+            foreach (var kpi in kpis)
+            {
+                if (kpi.Evaluate(content))
+                {
+                    guids.Add(kpi.Id);
+                }
+            }
+            return guids;
+        }
+
         private IMarketingTest ConvertToManagerTest(IABTest theDalTest)
         {
             var aTest = new ABTest
@@ -239,7 +255,7 @@ namespace EPiServer.Marketing.Testing
                 ModifiedDate = theDalTest.ModifiedDate,
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
                 TestResults = AdaptToManagerResults(theDalTest.TestResults),
-                KeyPerformanceIndicators = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
+                KpiInstances = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
             };
             return aTest;
         }
@@ -259,7 +275,7 @@ namespace EPiServer.Marketing.Testing
                 ParticipationPercentage = theManagerTest.ParticipationPercentage,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
-                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators),
+                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
                 TestResults = AdaptToDalResults(theManagerTest.TestResults)
             };
             return aTest;
@@ -422,9 +438,9 @@ namespace EPiServer.Marketing.Testing
         #endregion ResultsConversion
 
         #region KPIConversion
-        private List<KeyPerformanceIndicator> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
+        private List<IKpi> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
         {
-            var retList = new List<KeyPerformanceIndicator>();
+            var retList = new List<IKpi>();
 
             foreach(var dalKPI in theDalKPIs)
             {
@@ -434,36 +450,33 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private KeyPerformanceIndicator ConvertToManagerKPI(DalKeyPerformanceIndicator dalKPI)
-        {
-            var retKPI = new KeyPerformanceIndicator
+        private IKpi ConvertToManagerKPI(DalKeyPerformanceIndicator dalKpi)
             {
-                Id = dalKPI.Id,
-                KeyPerformanceIndicatorId = dalKPI.KeyPerformanceIndicatorId
-            };
-            return retKPI;
+            var kpiManager = new KpiManager();
+
+            return kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
         }
 
 
-        private IList<DalKeyPerformanceIndicator> AdaptToDalKPI(IList<KeyPerformanceIndicator> keyPerformanceIndicators)
+        private IList<DalKeyPerformanceIndicator> AdaptToDalKPI(Guid testId, IList<IKpi> keyPerformanceIndicators)
         {
             var retList = new List<DalKeyPerformanceIndicator>();
 
-            foreach (var managerKPI in keyPerformanceIndicators)
+            foreach (var managerKpi in keyPerformanceIndicators)
             {
-                retList.Add(ConvertToDalKPI(managerKPI));
+                retList.Add(ConvertToDalKPI(testId, managerKpi));
             }
 
             return retList;
         }
 
-        private DalKeyPerformanceIndicator ConvertToDalKPI(KeyPerformanceIndicator managerKPI)
+        private DalKeyPerformanceIndicator ConvertToDalKPI(Guid testId, IKpi managerKpi)
         {
             var retKPI = new DalKeyPerformanceIndicator
             {
-                Id = managerKPI.Id,
-                KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId,
-                TestId = managerKPI.TestId
+                Id = Guid.NewGuid(),
+                KeyPerformanceIndicatorId = managerKpi.Id,
+                TestId = testId
             };
             return retKPI;
         }

@@ -9,6 +9,7 @@ using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
 using System.Threading;
 using System.Diagnostics;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Messaging;
@@ -85,7 +86,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     Id = testId,
                     CreatedDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(5),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                    KpiInstances = new List<IKpi>(),
                     LastModifiedBy = "Automation",
                     ModifiedDate = DateTime.Now,
                     OriginalItemId = startpage.ContentGuid,

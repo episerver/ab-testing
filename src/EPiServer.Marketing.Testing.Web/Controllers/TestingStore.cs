@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Shell.Services.Rest;
 
@@ -30,9 +32,10 @@ namespace EPiServer.Marketing.Testing.Web
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.testContentId,ItemVersion = testData.publishedVersion},
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.testContentId,ItemVersion = testData.variantVersion}
                 },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>
+                KpiInstances = new List<IKpi>
                 {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid() }
+                    new Kpi() { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow },
+                    new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
                 },
                 TestResults = new List<TestResult>
                 {

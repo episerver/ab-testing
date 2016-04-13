@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPiServer.Core;
+using System;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -13,11 +14,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         Guid Id { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        string Properties { get; set; }
-
-        /// <summary>
         /// Date the kpi was created.
         /// </summary>
         DateTime CreatedDate { get; set; }
@@ -30,7 +26,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Determines if a conversion has happened.
         /// </summary>
-        /// <param name="theValues"></param>
-        void Evaluate(object theValues);
+        /// <param name="content"></param>
+        bool Evaluate(IContent content);
     }
 }

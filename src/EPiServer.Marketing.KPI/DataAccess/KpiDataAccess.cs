@@ -67,6 +67,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
             }
             else
             {
+                kpi.ClassName = kpiObject.ClassName;
                 kpi.Properties = kpiObject.Properties;
                 id = kpi.Id;
             }

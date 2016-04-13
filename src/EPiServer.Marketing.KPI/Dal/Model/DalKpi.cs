@@ -19,7 +19,12 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         public Guid Id { get; set; }
 
         /// <summary>
-        /// The condition to be met for the DalKpi to be completed by a user.
+        /// The AssemblyFullyQaulified info for a Kpi object.  This is parsed out to create a new instance of said kpi from the db.
+        /// </summary>
+        public string ClassName { get; set; }
+
+        /// <summary>
+        /// Json serialized string storing all necessary properties of a Kpi.
         /// </summary>
         public string Properties { get; set; }
 

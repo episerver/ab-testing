@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Core;
+using System.Collections;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -31,5 +34,14 @@ namespace EPiServer.Marketing.Testing
         Variant ReturnLandingPage(Guid testId);
         PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
         List<IMarketingTest> CreateActiveTestCache();
+
+        /// <summary>
+        /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
+        /// the list of Kpi Guids that evaluated as true.
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <param name="content"></param>
+        /// <returns>list - can be empty, never null</returns>
+        IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content);
     }
 }
