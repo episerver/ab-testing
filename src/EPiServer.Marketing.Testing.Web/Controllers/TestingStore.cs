@@ -13,9 +13,9 @@ namespace EPiServer.Marketing.Testing.Web
         [HttpPost]
         public ActionResult Post(TestingStoreModel testData)
         {
+            ABTest test;
 
-
-            ABTest test = new ABTest
+            test = new ABTest
             {
                 Id = Guid.NewGuid(),
                 OriginalItemId = testData.testContentId,
@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Web
                 Description = testData.testDescription,
                 Title = testData.testTitle,
                 StartDate = DateTime.Parse(testData.startDate).ToLocalTime(),
-                EndDate = GetEndDate(testData.startDate,testData.testDuration),
+                EndDate = GetEndDate(testData.startDate, testData.testDuration),
                 ParticipationPercentage = testData.participationPercent,
                 Variants = new List<Variant>
                 {
@@ -33,13 +33,23 @@ namespace EPiServer.Marketing.Testing.Web
                 KeyPerformanceIndicators = new List<KeyPerformanceIndicator>
                 {
                     new KeyPerformanceIndicator() {Id=Guid.NewGuid() }
-                },
-                TestResults = new List<TestResult>
-                {
-                    new TestResult() {Id=Guid.NewGuid(),ItemId=testData.testContentId,ItemVersion = testData.publishedVersion},
-                    new TestResult() {Id=Guid.NewGuid(),ItemId = testData.testContentId,ItemVersion = testData.variantVersion}
                 }
+            };
 
+            test.TestResults = new List<TestResult>()
+            {
+                new TestResult()
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = test.Variants[0].Id,
+                    ItemVersion = test.Variants[0].ItemVersion
+                },
+                new TestResult()
+                {
+                    Id = Guid.NewGuid(),
+                    ItemId = test.Variants[1].Id,
+                    ItemVersion = test.Variants[1].ItemVersion
+                }
             };
 
 
