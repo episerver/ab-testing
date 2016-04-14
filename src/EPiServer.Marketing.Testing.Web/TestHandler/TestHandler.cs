@@ -8,6 +8,7 @@ using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -70,13 +71,14 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (!SwapDisabled == true)
             {
-                ProcessedContentList.Add(e.ContentLink);
+                
 
                 var activeTest =
                     _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
 
                 if (activeTest != null)
                 {
+                    ProcessedContentList.Add(e.ContentLink);
                     _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
 
                     var hasData = _testDataCookieHelper.HasTestData(_testData);
