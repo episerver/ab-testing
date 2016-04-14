@@ -1,4 +1,4 @@
-﻿define(["command/AddTest"],
+﻿define(["marketing-testing/command/AddTest"],
     function (AddTestCommand) {
         describe("AddTest command", function () {
         var contentActionSupport = {
