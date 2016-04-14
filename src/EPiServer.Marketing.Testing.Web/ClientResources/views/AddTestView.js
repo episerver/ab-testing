@@ -36,11 +36,8 @@
     dom
 
 ) {
-
     viewPublishedVersion: null;
     viewCurrentVersion: null;
-
-
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
         templateString: template,
@@ -66,8 +63,6 @@
             this.model.testTitle = "Default Test Title";
             var _startDate = Date();
             this.model.startDate = new Date(_startDate).toUTCString();
-
-
         },
 
         //setters for bound properties
@@ -90,7 +85,6 @@
             this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
             this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
             this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
-
         },
 
         //EVENT HANDLERS
