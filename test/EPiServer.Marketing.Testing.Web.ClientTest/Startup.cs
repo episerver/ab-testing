@@ -28,9 +28,11 @@ namespace EPiServer.Marketing.Testing.Web.ClientTest
 
             // Create a physical file provider to serve the javascript source as static files
             var sourcePath = Path.Combine(environment.WebRootPath, @"..\..\..\src\EPiServer.Marketing.Testing.Web\ClientResources");
+
             builder.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(sourcePath)
+                FileProvider = new PhysicalFileProvider(sourcePath),
+                RequestPath = new Microsoft.AspNet.Http.PathString("/marketing-testing")
             });
 
             builder.UseLocalization(localizationService, "epi", typeof(InitializationModule).Assembly);

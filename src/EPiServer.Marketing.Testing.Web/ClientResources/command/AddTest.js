@@ -1,12 +1,11 @@
 ﻿define([
     "dojo/_base/declare",
-    "epi/dependency",
     "dojo/topic",
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport",
 ],
 
-function (declare, dependcy, topic, _ContentCommandBase, ContentActionSupport) {
+function (declare, topic, _ContentCommandBase, ContentActionSupport) {
 
     return declare([_ContentCommandBase], {
 
@@ -15,9 +14,13 @@ function (declare, dependcy, topic, _ContentCommandBase, ContentActionSupport) {
         tooltip: "Create AB test from my changes",
         iconClass: "", //Define your own icon css class here.
 
+        _contentActionSupport: ContentActionSupport,
+        _topic: topic,
+
         _execute: function () {
+            var me = this;
             //if not part of a test
-            topic.publish("/epi/shell/action/changeview", "AddTestView", { contentData: this.model.contentData, languageContext: this.model.languageContext });
+            me._topic.publish("/epi/shell/action/changeview", "AddTestView", { contentData: me.model.contentData, languageContext: me.model.languageContext });
 
             //if part of active test
             // change to active test context
@@ -28,13 +31,9 @@ function (declare, dependcy, topic, _ContentCommandBase, ContentActionSupport) {
         },
 
         _onModelChange: function () {
-            var contentData = this.model.contentData,
+            var me = this, contentData = me.model.contentData,
                 status = contentData.status,
-                versionStatus = ContentActionSupport.versionStatus;
-
-            //check content for tests
-           
-
+                versionStatus = me._contentActionSupport.versionStatus;
 
             //Available when content is a draft
             var isAvailable = (status === versionStatus.CheckedOut) ||
@@ -47,10 +46,11 @@ function (declare, dependcy, topic, _ContentCommandBase, ContentActionSupport) {
         },
 
         _getCanExecute: function (contentData, versionStatus) {
+            var me = this;
             return contentData.publishedBy !== null && contentData.publishedBy !== undefined && // This condition indicates that the content has published version.
                 contentData.status !== versionStatus.Published &&
                 contentData.status !== versionStatus.Expired &&     // Expired content is basically Published content with a expireDate set to the past
-                ContentActionSupport.hasAccess(contentData.accessMask, ContentActionSupport.accessLevel.Publish); // Ensure has delete action to the user
+                me._contentActionSupport.hasAccess(contentData.accessMask, me._contentActionSupport.accessLevel.Publish); // Ensure has delete action to the user
         }
     });
 });
