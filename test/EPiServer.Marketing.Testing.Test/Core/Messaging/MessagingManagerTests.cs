@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
         public class MessagingManagerTests
     {
         private static Mock<IServiceLocator> _serviceLocator;
-        private static Mock<ITestRepository> _testRepository;
+        private static Mock<IMarketingTestRepository> _testRepository;
         private static Mock<ITestingMessageHandler> _messageHandler;
 
         private MessagingManager GetUnitUnderTest()
@@ -19,9 +19,9 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             if (_serviceLocator == null)
             {
                 _serviceLocator = new Mock<IServiceLocator>();
-                _testRepository = new Mock<ITestRepository>();
+                _testRepository = new Mock<IMarketingTestRepository>();
                 _messageHandler = new Mock<ITestingMessageHandler>();
-                _serviceLocator.Setup(sl => sl.GetInstance<ITestRepository>()).Returns(_testRepository.Object);
+                _serviceLocator.Setup(sl => sl.GetInstance<IMarketingTestRepository>()).Returns(_testRepository.Object);
             }
 
             return new MessagingManager(_serviceLocator.Object, _messageHandler.Object);

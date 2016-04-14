@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 
 namespace EPiServer.Marketing.Testing.Web
@@ -10,58 +12,38 @@ namespace EPiServer.Marketing.Testing.Web
     [RestStore("MarketingTestingStore")]
     public class TestingStore : RestControllerBase
     {
+        private IServiceLocator _serviceLocator;
+        private IMarketingTestRepository _marketingTestRepository;
+
+        public TestingStore()
+        {
+            _serviceLocator = ServiceLocator.Current;
+            _marketingTestRepository = _serviceLocator.GetInstance<IMarketingTestRepository>();
+        }
+
+        internal TestingStore(IServiceLocator serviceLocator)
+        {
+            _serviceLocator = serviceLocator;
+
+        }
+
         [HttpPost]
         public ActionResult Post(TestingStoreModel testData)
         {
-            ABTest test;
+            RestStatusCodeResult createTestRestStatus = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
 
-            test = new ABTest
+            if (_marketingTestRepository.CreateMarketingTest(testData) != Guid.Empty)
             {
-                Id = Guid.NewGuid(),
-                OriginalItemId = testData.testContentId,
-                Owner = "tbd",
-                Description = testData.testDescription,
-                Title = testData.testTitle,
-                StartDate = DateTime.Parse(testData.startDate).ToLocalTime(),
-                EndDate = GetEndDate(testData.startDate, testData.testDuration),
-                ParticipationPercentage = testData.participationPercent,
-                Variants = new List<Variant>
-                {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.testContentId,ItemVersion = testData.publishedVersion},
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.testContentId,ItemVersion = testData.variantVersion}
-                },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>
-                {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid() }
-                }
-            };
-
-            test.TestResults = new List<TestResult>()
-            {
-                new TestResult()
-                {
-                    Id = Guid.NewGuid(),
-                    ItemId = test.Variants[0].Id,
-                    ItemVersion = test.Variants[0].ItemVersion
-                },
-                new TestResult()
-                {
-                    Id = Guid.NewGuid(),
-                    ItemId = test.Variants[1].Id,
-                    ItemVersion = test.Variants[1].ItemVersion
-                }
-            };
+                createTestRestStatus = new RestStatusCodeResult((int)HttpStatusCode.Created);
+            }
 
 
-            TestManager tm = new TestManager();
-            tm.Save(test);
-            return new RestStatusCodeResult((int)HttpStatusCode.Created);
+           
+
+          
+            return createTestRestStatus;
         }
 
-        private DateTime? GetEndDate(string startDate, int testDuration)
-        {
-            DateTime endDate = DateTime.Parse(startDate).ToLocalTime();
-            return endDate.AddDays(testDuration);
-        }
+      
     }
 }
