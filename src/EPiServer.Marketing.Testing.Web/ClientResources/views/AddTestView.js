@@ -15,6 +15,7 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/SimpleTextarea',
+    'epi-cms/widget/Breadcrumb',
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
@@ -66,6 +67,7 @@
             var _startDate = Date();
             this.model.startDate = new Date(_startDate).toUTCString();
 
+
         },
 
         //setters for bound properties
@@ -87,6 +89,8 @@
             this.currentVersionReference.textContent = this.contentData.name + "[" + this.contentData.contentLink + "]";
             this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
             this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
+            this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
+
         },
 
         //EVENT HANDLERS

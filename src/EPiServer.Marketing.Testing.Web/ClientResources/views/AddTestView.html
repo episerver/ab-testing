@@ -2,20 +2,20 @@
     <!-- Button Bar -->
     <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
         <div class="epi-toolbarGroupContainer">
-            <div class="epi-toolbarLeading epi-toolbarGroup">
-                <div class="epi-toolbarGroupContainer">
-                    <!-- Breadcrumb? -->
-                    <div class="epi-toolbarGroup epi-toolbarLeading">
-                        <ul data-dojo-type="epi-cms/widget/Breadcrumb"></ul>
-                    </div>
-                    <div class="epi-toolbarGroup epi-toolbarCenter"></div>
-                    <!-- Start and Cancel Buttons -->
-                    <div class="epi-toolbarGroup epi-toolbarTrailing">
-                        <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">Start Test</button>
-                        <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">Cancel</button>
-                    </div>
+
+            <!-- Breadcrumb -->
+            <div class="epi-toolbarGroup epi-toolbarLeading">
+                <div id="breadcrumb"
+                     data-dojo-type="epi-cms/widget/Breadcrumb" data-dojo-attach-point="breadcrumbWidget">
                 </div>
             </div>
+            <div class="epi-toolbarGroup epi-toolbarCenter"></div>
+            <!-- Start and Cancel Buttons -->
+            <div class="epi-toolbarGroup epi-toolbarTrailing">
+                <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">Start Test</button>
+                <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">Cancel</button>
+            </div>
+
         </div>
     </div>
 
