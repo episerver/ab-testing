@@ -62,11 +62,12 @@
         },
 
         createTest: function () {
+            var version = this.currentVersion.contentLink.split('_');
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
-                publishedVersion: parseVersion(this.publishedVersion.contentLink),
-                variantVersion: parseVersion(this.currentVersion.contentLink),
+                publishedVersion: version[0],
+                variantVersion: version[1],
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,
                 conversionPage: this.conversionPage,
@@ -80,8 +81,4 @@
         }
     });
 
-    function parseVersion(contentlink) {
-        var linkinfo = contentlink.split('_');
-        return linkinfo[1];
-    }
 });

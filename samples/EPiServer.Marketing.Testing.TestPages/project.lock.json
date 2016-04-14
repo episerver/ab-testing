@@ -2073,6 +2073,7 @@
       "fx/System.Data.DataSetExtensions >= 4.0.0",
       "fx/System.Drawing >= 4.0.0",
       "fx/System.EnterpriseServices >= 4.0.0",
+      "fx/System.Runtime.Caching >= 4.0.0",
       "fx/System.Web >= 4.0.0",
       "fx/System.Web.Abstractions >= 4.0.0",
       "fx/System.Web.ApplicationServices >= 4.0.0",
