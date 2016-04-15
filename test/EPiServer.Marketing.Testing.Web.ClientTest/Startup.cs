@@ -35,6 +35,12 @@ namespace EPiServer.Marketing.Testing.Web.ClientTest
                 RequestPath = new Microsoft.AspNet.Http.PathString("/marketing-testing")
             });
 
+            var epiPath = Path.Combine(environment.WebRootPath, @"..\..\DtkBinaries\dojo-release-1.8.9-src\epi");
+            builder.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(epiPath)
+            });
+
             builder.UseLocalization(localizationService, "epi", typeof(InitializationModule).Assembly);
             builder.UseLocalization(localizationService, "epi-cms", typeof(InitializableModule).Assembly, typeof(EPiServerUIInitialization).Assembly);
         }

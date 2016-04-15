@@ -13,7 +13,7 @@
 
         initialize: function () {
             // summary:
-            //      Initializes the favorite module.
+            //      Initializes the AB Testing module.
             // tags:
             //      public
             //get epi's store registry which we will add our own store to.
