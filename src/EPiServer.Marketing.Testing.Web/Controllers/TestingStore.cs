@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Web.Mvc;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
@@ -12,19 +11,18 @@ namespace EPiServer.Marketing.Testing.Web
     [RestStore("MarketingTestingStore")]
     public class TestingStore : RestControllerBase
     {
-        private IServiceLocator _serviceLocator;
-        private IMarketingTestRepository _marketingTestRepository;
+        private readonly IMarketingTestingWebRepository _marketingTestRepository;
 
+        [ExcludeFromCodeCoverage]
         public TestingStore()
         {
-            _serviceLocator = ServiceLocator.Current;
-            _marketingTestRepository = _serviceLocator.GetInstance<IMarketingTestRepository>();
+            var serviceLocator = ServiceLocator.Current;
+            _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
         }
 
         internal TestingStore(IServiceLocator serviceLocator)
         {
-            _serviceLocator = serviceLocator;
-
+            _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
         }
 
         [HttpPost]
@@ -36,14 +34,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 createTestRestStatus = new RestStatusCodeResult((int)HttpStatusCode.Created);
             }
-
-
-           
-
-          
             return createTestRestStatus;
         }
-
-      
     }
 }
