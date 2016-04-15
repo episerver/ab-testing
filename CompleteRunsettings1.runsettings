@@ -50,9 +50,7 @@ Included items must then not match any entries in the exclude list to remain inc
               <Exclude>
                 <!--removes xunit dlls from coverage results-->
                 <ModulePath>.*xunit.*</ModulePath>
-                <!--removes testing.web.dll from coverage results-->
-                <ModulePath>.*episerver.marketing.testing.web.dll</ModulePath>
-              </Exclude>
+                              </Exclude>
             </ModulePaths>
 
             <!-- Match fully qualified names of functions: -->
