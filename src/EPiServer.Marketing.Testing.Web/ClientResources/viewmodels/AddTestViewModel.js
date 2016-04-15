@@ -43,26 +43,30 @@
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
-            this.store = dependency.resolve("epi.storeregistry").get("marketing.testing");
+            this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testing");
+            this.topic = this.topic || topic;
         },
 
         setupContentData: function () {
             //get published version
-            this._contentVersionStore = dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
-            this._contentVersionStore.query({ contentLink: this.contentData.contentLink, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
+            this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+            this._contentVersionStore
+                .query({ contentLink: this.contentData.contentLink, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
                 .then(function (result) {
                     var publishedVersion = result;
                     this.set("publishedVersion", publishedVersion);
                     this.set("currentVersion", this.contentData);
                     console.log(result);
                     console.log(this.contentData);
-                }.bind(this)).otherwise(function (result) {
+                }.bind(this))
+                .otherwise(function (result) {
                     console.log("Query did not return valid result");
                 });
         },
 
         createTest: function () {
             var version = this.currentVersion.contentLink.split('_');
+            var me = this;
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
@@ -74,7 +78,7 @@
                 testTitle: this.testTitle,
                 startDate: this.startDate
             }).then(function () {
-                topic.publish("/epi/shell/action/changeview/back");
+                me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");
             });
