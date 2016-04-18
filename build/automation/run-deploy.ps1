@@ -19,6 +19,11 @@ $SiteName = $SiteName -replace "\W+", "-"
 $SitePath = "c:\episerver\$SiteName"
 "SiteName: $SiteName"
 
+if($DbSiteUser -eq "") {
+    "No site username provided, using '$SiteName'"
+    $DbSiteUser = $SiteName;
+}
+
 $tmpFolder = [System.IO.Path]::GetTempPath() + [guid]::NewGuid().ToString()
 $tmpPackageFolder = "$tmpFolder\$PackageName.$PackageVersion"
 
