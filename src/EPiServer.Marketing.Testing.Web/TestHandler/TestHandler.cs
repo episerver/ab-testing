@@ -4,11 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
-using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -37,8 +35,6 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-
-
         [ExcludeFromCodeCoverage]
         public TestHandler()
         {
@@ -52,7 +48,6 @@ namespace EPiServer.Marketing.Testing.Web
             ProcessedContentList = processedList;
             _testManager = testManager;
         }
-        
 
         [ExcludeFromCodeCoverage]
         public void Initialize()
@@ -61,11 +56,7 @@ namespace EPiServer.Marketing.Testing.Web
             ProcessedContentList = new List<ContentReference>();
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
-
         }
-
-
-
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
@@ -112,7 +103,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                             CalculateView(contentVersion);
                         }
-
                     }
                 }
                 else if(hasData)
@@ -126,7 +116,6 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (_testData.ShowVariant)
             {
-
                 var variant = _testManager.CreateVariantPageDataCache(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
                 if (variant != null)
@@ -139,8 +128,6 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void CalculateView(int contentVersion)
         {
-
-
             //increment view if not already done
             if (_testData.Viewed == false)
             {
@@ -156,6 +143,4 @@ namespace EPiServer.Marketing.Testing.Web
         {
         }
     }
-
-
 }
