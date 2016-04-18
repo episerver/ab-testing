@@ -10,7 +10,7 @@ Param(
     $DbServer = "(local)", 
     $DbUsername = "Deployer",
     $DbPassword = "aj3YpcmkDVEuLSiL", 
-    $DbSiteUser = "episerver-site",
+    $DbSiteUser = "",
     $DbSitePassword = "PLeg3BiD9-uJMkpY",
 	$LicenseFile = "C:\LicenseFiles\EPiServer 7\License.config"
 )
