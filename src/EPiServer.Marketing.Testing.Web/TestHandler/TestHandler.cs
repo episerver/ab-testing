@@ -71,17 +71,16 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (!SwapDisabled == true)
             {
-                
-
                 var activeTest =
                     _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
+
+                _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+                var hasData = _testDataCookieHelper.HasTestData(_testData);
 
                 if (activeTest != null)
                 {
                     ProcessedContentList.Add(e.ContentLink);
-                    _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
-
-                    var hasData = _testDataCookieHelper.HasTestData(_testData);
+                    
                     if (hasData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                     {
                         Swap(e);
@@ -115,6 +114,10 @@ namespace EPiServer.Marketing.Testing.Web
                         }
 
                     }
+                }
+                else if(hasData)
+                {
+                    _testDataCookieHelper.ExpireTestDataCookie(_testData);
                 }
             }
         }

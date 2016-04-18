@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using System.Web;
 using System.Web.WebSockets;
 using EPiServer.Marketing.Testing.Core.DataClass;
@@ -9,6 +10,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     public class TestDataCookieHelper : ITestDataCookieHelper
     {
         private ITestManager _testManager;
+        private const string COOKIE_PREFIX = "EPI-MAR-";
 
         public TestDataCookieHelper()
         {
@@ -38,7 +40,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
 
-            var cookieData = new HttpCookie("EPI-MAR-"+testData.TestContentId.ToString())
+            var cookieData = new HttpCookie(COOKIE_PREFIX+testData.TestContentId.ToString())
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
@@ -53,14 +55,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public void UpdateTestDataCookie(TestDataCookie testData)
         {
-            HttpContext.Current.Response.Cookies.Remove("EPI-MAR-"+testData.TestContentId.ToString());
+            HttpContext.Current.Response.Cookies.Remove(COOKIE_PREFIX + testData.TestContentId.ToString());
             SaveTestDataToCookie(testData);
         }
 
         public TestDataCookie GetTestDataFromCookie(string testContentId)
         {
             var retCookie = new TestDataCookie();
-            var testDataCookie = HttpContext.Current.Request.Cookies.Get("EPI-MAR-" + testContentId);
+            var testDataCookie = HttpContext.Current.Request.Cookies.Get(COOKIE_PREFIX + testContentId);
 
             if (testDataCookie != null)
             {
@@ -73,6 +75,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
 
             return retCookie;
+        }
+
+        public void ExpireTestDataCookie(TestDataCookie testData)
+        {
+            HttpContext.Current.Response.Cookies.Remove(COOKIE_PREFIX + testData.TestContentId.ToString());
+            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId);
+            expiredCookie.Expires = DateTime.Now.AddDays(-1d);
+            HttpContext.Current.Response.Cookies.Add(expiredCookie);
+
         }
     }
 }

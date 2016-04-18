@@ -9,5 +9,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         void SaveTestDataToCookie(TestDataCookie testData);
         TestDataCookie GetTestDataFromCookie(string testContentId);
         void UpdateTestDataCookie(TestDataCookie testData);
+        void ExpireTestDataCookie(TestDataCookie testData);
     }
 }
