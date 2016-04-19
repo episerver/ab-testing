@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
-using EPiServer.Marketing.Testing.Test;
 using Xunit;
+using EPiServer.ServiceLocation;
+using Moq;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
@@ -15,11 +17,19 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         private TestContext _context;
         private DbConnection _dbConnection;
         private TestingDataAccess _mtm;
+        private TestManager _tm;
+        private Mock<IServiceLocator> _serviceLocator;
+
         public MultiVariantDataAccessTests()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
             _mtm = new TestingDataAccess(new Core.TestRepository(_context));
+
+            _serviceLocator = new Mock<IServiceLocator>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_mtm);
+
+            _tm = new TestManager(_serviceLocator.Object);
         }
 
         [Fact]
@@ -46,6 +56,110 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _mtm.Save(test);
 
             Assert.Equal(_mtm.Get(id), test);
+        }
+
+        [Fact]
+        public void TestManager_CreateActiveTestCache()
+        {
+            var id = Guid.NewGuid();
+
+            var test = new DalABTest()
+            {
+                Id = id,
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                State = DalTestState.Active,
+                Owner = "Bert",
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                TestResults = new List<DalTestResult>(),
+                Variants = new List<DalVariant>()
+            };
+
+            var test2 = new DalABTest()
+            {
+                Id = Guid.NewGuid(),
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                State = DalTestState.Inactive,
+                Owner = "Ernie",
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                TestResults = new List<DalTestResult>(),
+                Variants = new List<DalVariant>()
+            };
+
+            _mtm.Save(test);
+            _mtm.Save(test2);
+
+            var tests = _tm.CreateActiveTestCache();
+
+            Assert.Equal(1, tests.Count);
+        }
+
+        [Fact]
+        public void TestManager_CreateVariantPageDataCache()
+        {
+            var id = Guid.NewGuid();
+            var itemId = Guid.NewGuid();
+
+            var testVariant = new DalVariant()
+            {
+                Id = Guid.NewGuid(),
+                ItemVersion = 0,
+                ItemId = itemId
+            };
+
+            var testVariant2 = new DalVariant()
+            {
+                Id = Guid.NewGuid(),
+                ItemVersion = 2,
+                ItemId = itemId
+            };
+
+            var test = new DalABTest()
+            {
+                Id = id,
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                State = DalTestState.Active,
+                OriginalItemId = itemId,
+                Owner = "Bert",
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                TestResults = new List<DalTestResult>(),
+                Variants = new List<DalVariant>() { testVariant, testVariant2 }
+            };
+           
+            _mtm.Save(test);
+
+            var pageRef = new PageReference() { ID = 2, WorkID = 2 };
+            var variantPage = new PageData(pageRef);
+            var references = new List<ContentReference>() {new ContentReference() {ID = 3, WorkID = 3, ProviderName = "TestProvider"} };
+            var contentLoader = new Mock<IContentLoader>();
+
+            _serviceLocator.Setup(call => call.GetInstance<IContentLoader>()).Returns(contentLoader.Object);
+            contentLoader.Setup(call => call.Get<IContent>(itemId)).Returns(variantPage);
+
+            var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
+            var contentData = new PageData(pageRef2) as IContent;
+            
+            contentData.Property.Add(new PropertyNumber() {Name = "PageWorkStatus"});
+            contentData.Property.Add(new PropertyDate() { Name = "PageStartPublish"});
+            contentLoader.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(contentData);
+
+            var pd = _tm.CreateVariantPageDataCache(itemId, references);
+
+            Assert.Equal(VersionStatus.Published, pd.Status);
         }
 
         [Fact]
