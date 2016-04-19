@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
-using System.Web.WebSockets;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.ServiceLocation;
+using System.Data.Entity.Core;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -48,6 +48,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 ["Converted"] = testData.Converted.ToString(),
                 Expires = _testManager.Get(testData.TestId).EndDate.GetValueOrDefault()
             };
+            foreach (var kpi in testData.KpiConversionDictionary)
+            {
+                cookieData[kpi.Key.ToString() + "-Flag"] = kpi.Value.ToString();
+            }
+
             HttpContext.Current.Response.Cookies.Add(cookieData);
         }
 
@@ -70,9 +75,41 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.TestVariantId = Guid.Parse(testDataCookie["TestVariantId"]);
                 retCookie.Viewed = bool.Parse(testDataCookie["Viewed"]);
                 retCookie.Converted = bool.Parse(testDataCookie["Converted"]);
+
+                try
+                {
+                    var t = _testManager.Get(retCookie.TestId);
+                    foreach (var kpi in t.KpiInstances)
+                    {
+                        bool converted = bool.Parse(testDataCookie[kpi.Id + "-Flag"]);
+                        retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
+                    }
+                }
+                catch (ObjectNotFoundException)
+                {
+                    // test doesnt exist but this user had a cookie for it so delete the cookie
+                    HttpCookie delCookie = new HttpCookie("EPI-MAR-" + testContentId);
+                    delCookie.Expires = DateTime.Now.AddDays(-1d);
+                    HttpContext.Current.Response.Cookies.Add(delCookie);
+                }
             }
 
             return retCookie;
+        }
+
+        public IList<TestDataCookie> getTestDataFromCookies()
+        {
+            List<TestDataCookie> tdcList = new List<TestDataCookie>();
+
+            foreach( var name in HttpContext.Current.Request.Cookies.AllKeys )
+            {
+                if( name.Contains("EPI-MAR-") )
+                {
+                    tdcList.Add(GetTestDataFromCookie(name.Substring("EPI-MAR-".Length)));
+                }
+            }
+
+            return tdcList;
         }
     }
 }

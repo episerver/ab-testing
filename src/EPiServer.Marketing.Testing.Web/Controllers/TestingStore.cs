@@ -31,7 +31,8 @@ namespace EPiServer.Marketing.Testing.Web
         {
             ABTest test;
             // Get the content so we have access to the Guid
-            var content = _locator.GetInstance<IContentLoader>().Get<IContent>(testData.testContentId);
+            var content = _locator.GetInstance<IContentLoader>().Get<IContent>(
+                new ContentReference( testData.conversionPage ));
             var kpi = new ContentComparatorKPI(content.ContentGuid)
             {
                 Id = Guid.NewGuid(),
