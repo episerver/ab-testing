@@ -76,18 +76,13 @@ namespace EPiServer.Marketing.Testing.Web
                     var test = _testManager.Get(testdata.TestId);
 
                     // optimization : create the list of kpis that have not evaluated 
-                    // to true and evaluate them
+                    // to true and then evaluate them
                     var kpis = new List<IKpi>();
                     foreach( var kpi in test.KpiInstances )
                     {
-                        foreach(var kvp in testdata.KpiConversionDictionary)
-                        {
-                            if( kpi.Id == kvp.Key && !kvp.Value )
-                            {
-                                kpis.Add(kpi);
-                                break;
-                            }
-                        }
+                        var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
+                        if( !converted )
+                            kpis.Add(kpi);
                     }
 
                     var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
@@ -101,30 +96,16 @@ namespace EPiServer.Marketing.Testing.Web
                         }
 
                         // now check to see if all kpi objects have evalated
-                        // if we find one that did not evaluated, dont convert yet
-                        testdata.Converted = true;
-                        foreach( var kvp in testdata.KpiConversionDictionary )
-                        {
-                            if( kvp.Value == false) 
-                            {
-                                testdata.Converted = false;
-                                break;
-                            }
-                        }
+                        testdata.Converted = !testdata.KpiConversionDictionary.Where(x => x.Value == false).Any();
+
+                        // now save the testdata to the cookie
                         _testDataCookieHelper.SaveTestDataToCookie(testdata);
 
-                        // now if we have converted, fire the converted message
+                        // now if we have converted, fire the converted message 
+                        // note : we wouldnt be here if we already converted on a previous loop
                         if(testdata.Converted)
                         {
-                            Variant varUserSees = test.Variants[0];
-                            foreach (var v in test.Variants)
-                            {
-                                if(v.Id == testdata.TestVariantId)
-                                {
-                                    varUserSees = v;
-                                }
-
-                            }
+                            Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
                             _testManager.EmitUpdateCount(test.Id, varUserSees.Id, varUserSees.ItemVersion, CountType.Conversion);
                         }
                     }
