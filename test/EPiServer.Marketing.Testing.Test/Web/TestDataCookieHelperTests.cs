@@ -5,6 +5,8 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using Moq;
 using Xunit;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -34,9 +36,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager = new Mock<ITestManager>();
 
             test = new ABTest()
-             {
-                 Id = _testId,
-                 EndDate = _testEndDateTime
+            {
+                Id = _testId,
+                EndDate = _testEndDateTime,
+                KpiInstances = new List<IKpi>()
              };
 
             _testManager.Setup(call => call.Get(_testId)).Returns(test);
@@ -87,35 +90,31 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void GetTestDataFromCookie_Returns_Correct_Values_From_Populated_Cookie()
         {
-
-
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var TestContentId = Guid.NewGuid();
             DateTime ExpireDate = DateTime.Now.AddDays(2);
 
-            var TestId = Guid.NewGuid();
             var ShowVariant = true;
             var TestVariantId = Guid.NewGuid();
             var Viewed = false;
             var Converted = false;
 
-
-
             HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
             {
-                ["TestId"] = TestId.ToString(),
+                ["TestId"] = _testId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
                 ["TestContentId"] = TestContentId.ToString(),
                 ["TestVariantId"] = TestVariantId.ToString(),
                 ["Viewed"] = Viewed.ToString(),
                 ["Converted"] = Converted.ToString(),
-                Expires = ExpireDate
+                Expires = ExpireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
 
             HttpContext.Current.Request.Cookies.Add(testCookie);
 
             TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(TestContentId.ToString());
-            Assert.True(returnCookieData.TestId == TestId);
+            Assert.True(returnCookieData.TestId == _testId);
             Assert.True(returnCookieData.TestContentId == TestContentId);
             Assert.True(returnCookieData.ShowVariant == ShowVariant);
             Assert.True(returnCookieData.TestVariantId == TestVariantId);

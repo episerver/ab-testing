@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using EPiServer.Marketing.Testing.Web;
 using Moq;
@@ -12,7 +11,7 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.ServiceLocation;
-
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -44,9 +43,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private TestHandler GetUnitUnderTest(List<ContentReference> contentList, bool? swapEnabled)
         {
             _tdc = new Mock<ITestDataCookieHelper>();
+            _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
+            _tdc.Setup(call => call.getTestDataFromCookies()).Returns( new List<TestDataCookie>() { new TestDataCookie() });
+
             _testManager = new Mock<ITestManager>();
             
-
             return new TestHandler(_testManager.Object, _tdc.Object, contentList, swapEnabled);
         }
         
@@ -119,7 +120,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
-                State = TestState.Active
+                State = TestState.Active,
+                KpiInstances = new List<IKpi>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -169,7 +171,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
-                State = TestState.Active
+                State = TestState.Active,
+                KpiInstances = new List<IKpi>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -182,13 +185,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = _associatedTestGuid
             };
 
-
             HttpContext.Current = null;
             var testHandler = GetUnitUnderTest(_contentReferenceList, false);
        
-
-   
-
             _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
@@ -220,7 +219,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             List<IMarketingTest> testList = new List<IMarketingTest>()
             {
-                new ABTest() {OriginalItemId = _associatedTestGuid}
+                new ABTest()
+                {
+                    OriginalItemId = _associatedTestGuid,
+                    KpiInstances = new List<IKpi>()
+                }
             };
 
             HttpContext.Current = null;
@@ -251,7 +254,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
-                State = TestState.Active
+                State = TestState.Active,
+                KpiInstances = new List<IKpi>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
