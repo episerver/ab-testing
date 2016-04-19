@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             return new TestHandler(_testManager.Object, _tdc.Object, contentList);
         }
-        
+
         [Fact]
         public void TestHandler_Page_Not_In_A_Test_Load_As_Normal()
         {
@@ -55,7 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             content.ContentLink = new ContentReference();
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
-            
+
             testHandler.SwapDisabled = true;
 
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
@@ -66,9 +66,28 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
             _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
 
-            Assert.Equal(content, args.Content); 
-            Assert.Equal(content.ContentLink, args.ContentLink); 
-       }
+            Assert.Equal(content, args.Content);
+            Assert.Equal(content.ContentLink, args.ContentLink);
+        }
+
+        [Fact]
+        public void TestHandler_System_With_Valid_TestData_Cookie_And_No_Active_Test_Calls_Expire_Cookie()
+        {
+            var content = new BasicContent();
+            content.ContentGuid = _noAssociatedTestGuid;
+            content.ContentLink = new ContentReference();
+
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            testHandler.SwapDisabled = false;
+
+            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
+            _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
+            
+            ContentEventArgs args = new ContentEventArgs(content);
+            testHandler.LoadedContent(new object(), args);
+            _tdc.Verify(call=>call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()),Times.Once(),"System should have called ExpireTestDataCookie, but did not");
+
+        }
 
         [Fact]
         public void TestHandler_Disabling_The_Page_Swap_Returns_The_Published_Page()
@@ -108,7 +127,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var pageRef = new PageReference() { ID = 2, WorkID = 2 };
             var variantPage = new PageData(pageRef);
-            
+
             IMarketingTest test = new ABTest()
             {
                 Id = _activeTestGuid,
@@ -229,7 +248,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference();
-            
+
             IMarketingTest test = new ABTest()
             {
                 Id = _activeTestGuid,
@@ -246,7 +265,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = Guid.Empty
             };
-            
+
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
 
