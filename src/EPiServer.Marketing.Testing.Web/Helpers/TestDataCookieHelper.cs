@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Web;
-using System.Web.WebSockets;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestDataCookieHelper : ITestDataCookieHelper
     {
         private ITestManager _testManager;
+        private const string COOKIE_PREFIX = "EPI-MAR-";
 
         public TestDataCookieHelper()
         {
@@ -24,21 +23,33 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             _testManager = mockTestManager;
         }
 
-
+        /// <summary>
+        /// Evaluates the supplied testdata cookie to determine if it is populated with valid test information
+        /// </summary>
+        /// <param name="testDataCookie"></param>
+        /// <returns></returns>
         public bool HasTestData(TestDataCookie testDataCookie)
         {
             return testDataCookie.TestContentId != Guid.Empty;
         }
 
+        /// <summary>
+        /// Evaluates the supplied testdata cookie to determine if the user has been set as a participant.
+        /// </summary>
+        /// <param name="testDataCookie"></param>
+        /// <returns></returns>
         public bool IsTestParticipant(TestDataCookie testDataCookie)
         {
             return testDataCookie.TestVariantId != Guid.Empty;
         }
 
+        /// <summary>
+        /// Saves the supplied test data as a cookie
+        /// </summary>
+        /// <param name="testData"></param>
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-
-            var cookieData = new HttpCookie("EPI-MAR-"+testData.TestContentId.ToString())
+            var cookieData = new HttpCookie(COOKIE_PREFIX+testData.TestContentId.ToString())
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
@@ -51,16 +62,25 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             HttpContext.Current.Response.Cookies.Add(cookieData);
         }
 
+        /// <summary>
+        /// Updates the current cookie
+        /// </summary>
+        /// <param name="testData"></param>
         public void UpdateTestDataCookie(TestDataCookie testData)
         {
-            HttpContext.Current.Response.Cookies.Remove("EPI-MAR-"+testData.TestContentId.ToString());
+            HttpContext.Current.Response.Cookies.Remove(COOKIE_PREFIX + testData.TestContentId.ToString());
             SaveTestDataToCookie(testData);
         }
 
+        /// <summary>
+        /// Gets the requested cookie data
+        /// </summary>
+        /// <param name="testContentId"></param>
+        /// <returns></returns>
         public TestDataCookie GetTestDataFromCookie(string testContentId)
         {
             var retCookie = new TestDataCookie();
-            var testDataCookie = HttpContext.Current.Request.Cookies.Get("EPI-MAR-" + testContentId);
+            var testDataCookie = HttpContext.Current.Request.Cookies.Get(COOKIE_PREFIX + testContentId);
 
             if (testDataCookie != null)
             {
@@ -73,6 +93,18 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
 
             return retCookie;
+        }
+
+        /// <summary>
+        /// Sets the cookie associated with the supplied testData to expire
+        /// </summary>
+        /// <param name="testData"></param>
+        public void ExpireTestDataCookie(TestDataCookie testData)
+        {
+            HttpContext.Current.Response.Cookies.Remove(COOKIE_PREFIX + testData.TestContentId.ToString());
+            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId);
+            expiredCookie.Expires = DateTime.Now.AddDays(-1d);
+            HttpContext.Current.Response.Cookies.Add(expiredCookie);
         }
     }
 }
