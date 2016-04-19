@@ -8,6 +8,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -66,28 +67,30 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void EvaluateKpis(ContentEventArgs e)
         {
-            // Get all the cookies with the prefix "EPI-MAR-" ( name of cookie is prefix + testid )
-            // for each cookie
-            //      if not conversion flag in cookie
-            //          get the test id and the test instance from test manager
-            //          for each Kpi in test // to skip evaulating kpis that have already evaluated to true
-            //              if this Kpi cookie flag doesnt exist
-            //                  add kpi object to KpiList
-            //          call testmanager.EvaluateKPI( KpiList, e.ContentGuid )
-            //          for each guid in returned list
-            //              add kpi guid to cookie
-            //          
-            //          if all KPI evaluated true (in kpis associated with this test)
-            //              update conversion count for test
-            //              update conversion bool in cookie
-            //
             var cdl = _testDataCookieHelper.getTestDataFromCookies();
             foreach( var testdata in cdl )
             {
+                // for every test cookie we have, check for the converted and the viewed flag
                 if( !testdata.Converted && testdata.Viewed )
                 {
                     var test = _testManager.Get(testdata.TestId);
-                    var evaluated = _testManager.EvaluateKPIs(test.KpiInstances, e.Content);
+
+                    // optimization : create the list of kpis that have not evaluated 
+                    // to true and evaluate them
+                    var kpis = new List<IKpi>();
+                    foreach( var kpi in test.KpiInstances )
+                    {
+                        foreach(var kvp in testdata.KpiConversionDictionary)
+                        {
+                            if( kpi.Id == kvp.Key && !kvp.Value )
+                            {
+                                kpis.Add(kpi);
+                                break;
+                            }
+                        }
+                    }
+
+                    var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
                     if( evaluated.Count > 0 )
                     {
                         // add each kpi to testdata cookie data
