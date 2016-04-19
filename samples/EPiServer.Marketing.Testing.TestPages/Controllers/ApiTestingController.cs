@@ -368,7 +368,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 PageData pageData = contentRepository.Get<PageData>(v.ContentLink);
 
 
-                versions.Add(new VersionData() { Name = pageData.PageName, Version = pageData.WorkPageID.ToString(), Reference = pageData.ContentLink.ToString() });
+                versions.Add(new VersionData() { Name = pageData.PageName, Version = pageData.WorkPageID.ToString(), Reference = pageData.ContentLink.ToString(), Status = pageData.Status });
             }
 
             return Json(versions);
@@ -379,6 +379,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             public string Name { get; set; }
             public string Version { get; set; }
             public string Reference { get; set; }
+            public VersionStatus Status { get; set; }
         }
 
         public class IntegrationTestModel
