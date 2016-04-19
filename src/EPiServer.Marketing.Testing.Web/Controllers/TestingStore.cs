@@ -74,8 +74,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
             };
 
-
-            TestManager tm = new TestManager();
+            var tm = _locator.GetInstance<ITestManager>();
             tm.Save(test);
             return new RestStatusCodeResult((int)HttpStatusCode.Created);
         }
