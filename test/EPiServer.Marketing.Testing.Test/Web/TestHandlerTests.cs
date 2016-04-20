@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EPiServer.Marketing.Testing.Web;
 using Moq;
 using Xunit;
@@ -9,14 +8,11 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.ServiceLocation;
-
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class TestHandlerTests : IDisposable
     {
-
         public TestHandlerTests()
         {
             _contentReferenceList = new List<ContentReference>();
@@ -28,23 +24,23 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         private Mock<ITestDataCookieHelper> _tdc;
-        private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestManager> _testManager;
+        private Mock<ITestingContextHelper> _contextHelper;
 
-        private List<ContentReference> _contentReferenceList;
+        private readonly List<ContentReference> _contentReferenceList;
 
-        private Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
-        private Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
-        private Guid _activeTestGuid = Guid.Parse("d9866579-ea05-4c74-a508-ab1c95766660");
-        private Guid _matchingVariantId = Guid.Parse("c6c08d71-2e61-4768-8549-7bdcc43af083");
-        private Guid _variantContentGuid = Guid.Parse("00000000-0000-0000-0000-7bdcc43af083");
+        private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
+        private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
+        private readonly Guid _activeTestGuid = Guid.Parse("d9866579-ea05-4c74-a508-ab1c95766660");
+        private readonly Guid _matchingVariantId = Guid.Parse("c6c08d71-2e61-4768-8549-7bdcc43af083");
 
         private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
         {
             _tdc = new Mock<ITestDataCookieHelper>();
             _testManager = new Mock<ITestManager>();
+            _contextHelper = new Mock<ITestingContextHelper>();
 
-            return new TestHandler(_testManager.Object, _tdc.Object, contentList);
+            return new TestHandler(_testManager.Object, _tdc.Object, contentList,_contextHelper.Object);
         }
 
         [Fact]
@@ -59,6 +55,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.SwapDisabled = true;
 
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
+            _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+                .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -82,11 +81,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
-            
+            _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+                .Returns(true);
+
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
             _tdc.Verify(call=>call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()),Times.Once(),"System should have called ExpireTestDataCookie, but did not");
-
         }
 
         [Fact]
@@ -106,6 +107,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.SwapDisabled = true;
 
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
+            _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+                .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -120,7 +124,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_Returns_A_Variant_To_User_Who_Gets_Included_In_A_Test_And_Is_Flagged_As_Seeing_The_Variant()
         {
-
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference() { ID = 1, WorkID = 1 };
@@ -153,6 +156,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
+            _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+                .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -199,6 +205,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
+            _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+                .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -229,6 +238,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
             _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
+            _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+                .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -240,7 +252,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content, args.Content);
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
-
 
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
