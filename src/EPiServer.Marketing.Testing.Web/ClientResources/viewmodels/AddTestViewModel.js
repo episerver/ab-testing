@@ -78,15 +78,6 @@
                 testTitle: this.testTitle,
                 startDate: this.startDate
             }).then(function () {
-                this.testDescription = null,
-                this.contentData.contentGuid = null,
-                this.publishedVersion = null,
-                this.currentVersion = null,
-                this.testDuration = null,
-                this.participationPercent = null,
-                this.conversionPage = null,
-                this.testTitle = null,
-                this.startDate = null,
                 me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");
