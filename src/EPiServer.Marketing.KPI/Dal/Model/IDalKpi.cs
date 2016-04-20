@@ -5,25 +5,27 @@ namespace EPiServer.Marketing.KPI.Dal.Model
     /// <summary>
     /// Interface for KPI objects.
     /// </summary>
-    public interface IKpi
+    public interface IDalKpi
     {
         /// <summary>
-        /// Id of Kpi.
+        /// Id of DalKpi.
         /// </summary>
         Guid Id { get; set; }
 
+        string ClassName { get; set; }
+
         /// <summary>
-        /// The condition to be met for the kpi to be met by a user.
+        /// The condition to be met for the DalKpi to be met by a user.
         /// </summary>
         string Properties { get; set; }
 
         /// <summary>
-        /// Date the kpi was created.
+        /// Date the DalKpi was created.
         /// </summary>
         DateTime CreatedDate { get; set; }
 
         /// <summary>
-        /// The last time the kpi was modified.
+        /// The last time the DalKpi was modified.
         /// </summary>
         DateTime ModifiedDate { get; set; }
 

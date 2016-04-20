@@ -63,15 +63,15 @@
     <Compile Include="..\..\src\EPiServer.Marketing.KPI\Dal\KpiMap.cs">
       <Link>Dal\KpiMap.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.KPI\Dal\Model\IKpi.cs">
-      <Link>Dal\Model\IKpi.cs</Link>
+    <Compile Include="..\..\src\EPiServer.Marketing.KPI\Dal\Model\DalKpi.cs">
+      <Link>Dal\Model\DalKpi.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.KPI\Dal\Model\Kpi.cs">
-      <Link>Dal\Model\Kpi.cs</Link>
+    <Compile Include="..\..\src\EPiServer.Marketing.KPI\Dal\Model\IDalKpi.cs">
+      <Link>Dal\Model\IDalKpi.cs</Link>
     </Compile>
-    <Compile Include="Migrations\201603241331322_Initial.cs" />
-    <Compile Include="Migrations\201603241331322_Initial.Designer.cs">
-      <DependentUpon>201603241331322_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201604051658334_Initial.cs" />
+    <Compile Include="Migrations\201604051658334_Initial.Designer.cs">
+      <DependentUpon>201604051658334_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,8 +81,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603241331322_Initial.resx">
-      <DependentUpon>201603241331322_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201604051658334_Initial.resx">
+      <DependentUpon>201604051658334_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

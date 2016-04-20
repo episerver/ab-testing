@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using System.Linq;
+using System.Runtime.Caching;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
@@ -8,10 +13,12 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
+using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
 
 namespace EPiServer.Marketing.Testing
 {
-    [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
+    [ServiceConfiguration(ServiceType = typeof (ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
         private ITestingDataAccess _dataAccess;
@@ -24,6 +31,7 @@ namespace EPiServer.Marketing.Testing
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
         }
+
         internal TestManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
@@ -63,9 +71,16 @@ namespace EPiServer.Marketing.Testing
 
         public Guid Save(IMarketingTest multivariateTest)
         {
-            // Todo : We should probably check to see if item quid is empty or null and
+            // Todo : We should probably check to see if item Guid is empty or null and
             // create a new unique guid here?
             // 
+
+            // Save the kpi objects first
+            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
+            foreach (var kpi in multivariateTest.KpiInstances)
+            {
+                kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
+            }
 
             return _dataAccess.Save(ConvertToDalTest(multivariateTest));
         }
@@ -98,26 +113,105 @@ namespace EPiServer.Marketing.Testing
 
 
 
-        public Guid ReturnLandingPage(Guid testId)
+        public Data.Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
-            var activePage = Guid.Empty;
-
+            var activePage = new Data.Variant();
             if (currentTest != null)
             {
                 switch (GetRandomNumber())
                 {
                     case 1:
                     default:
-                        activePage = currentTest.Variants[0].Id;
+                        activePage = ConvertToManagerVariant(currentTest.Variants[0]);
                         break;
                     case 2:
-                        activePage = currentTest.Variants[1].Id;
+                        activePage = ConvertToManagerVariant(currentTest.Variants[1]);
                         break;
                 }
             }
 
             return activePage;
+        }
+
+        public PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList)
+        {
+
+            var marketingTestCache = MemoryCache.Default;
+            var retData = marketingTestCache.Get("epi" + contentGuid) as PageData;
+            if (retData == null)
+            {
+                if (processedList.Count == 1)
+                {
+                    var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+                    if (test != null)
+                    {
+                        var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
+                        var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
+
+                        if (testContent != null)
+                        {
+                            var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
+                            foreach (var variant in test.Variants)
+                            {
+                                if (variant.ItemVersion != contentVersion)
+                                {
+                                    retData = CreateVariantPageData(contentLoader, testContent, variant);
+                                    retData.Status = VersionStatus.Published;
+                                    retData.StartPublish = DateTime.Now.AddDays(-1);
+                                    retData.MakeReadOnly();
+
+                                    var cacheItemPolicy = new CacheItemPolicy
+                                    {
+                                        AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
+                                    };
+                                    marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return retData;
+        }
+
+        public List<IMarketingTest> CreateActiveTestCache()
+        {
+            var _marketingTestCache = MemoryCache.Default;
+            var retTestList = _marketingTestCache.Get("TestContentList") as List<IMarketingTest>;
+
+            if (retTestList == null)
+            {
+                var activeTestCriteria = new Data.TestCriteria();
+                var activeTestStateFilter = new Data.ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = Data.FilterOperator.And,
+                    Value = TestState.Active
+                };
+
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+                retTestList = GetTestList(activeTestCriteria);
+
+                var cacheItemPolicy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTimeOffset.Parse(DateTime.Now.AddMinutes(1).ToString())
+                };
+                _marketingTestCache.Add("TestContentList", retTestList, cacheItemPolicy);
+            }
+
+            return retTestList;
+        }
+
+        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Data.Variant variant)
+        {
+            var contentToSave = d.ContentLink.CreateWritableClone();
+            contentToSave.WorkID = variant.ItemVersion;
+            var newContent = contentLoader.Get<IContent>(contentToSave) as ContentData;
+
+            var contentToCache = newContent?.CreateWritableClone() as PageData;
+            return contentToCache;
         }
 
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
@@ -134,6 +228,19 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
             else if (resultType == CountType.View)
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
+        }
+
+        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
+        {
+            List<Guid> guids = new List<Guid>();
+            foreach (var kpi in kpis)
+            {
+                if (kpi.Evaluate(content))
+                {
+                    guids.Add(kpi.Id);
+                }
+            }
+            return guids;
         }
 
         private IMarketingTest ConvertToManagerTest(IABTest theDalTest)
@@ -154,7 +261,7 @@ namespace EPiServer.Marketing.Testing
                 ModifiedDate = theDalTest.ModifiedDate,
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
                 TestResults = AdaptToManagerResults(theDalTest.TestResults),
-                KeyPerformanceIndicators = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
+                KpiInstances = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
             };
             return aTest;
         }
@@ -174,7 +281,7 @@ namespace EPiServer.Marketing.Testing
                 ParticipationPercentage = theManagerTest.ParticipationPercentage,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
-                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.KeyPerformanceIndicators),
+                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
                 TestResults = AdaptToDalResults(theManagerTest.TestResults)
             };
             return aTest;
@@ -337,9 +444,9 @@ namespace EPiServer.Marketing.Testing
         #endregion ResultsConversion
 
         #region KPIConversion
-        private List<KeyPerformanceIndicator> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
+        private List<IKpi> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
         {
-            var retList = new List<KeyPerformanceIndicator>();
+            var retList = new List<IKpi>();
 
             foreach(var dalKPI in theDalKPIs)
             {
@@ -349,36 +456,33 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        private KeyPerformanceIndicator ConvertToManagerKPI(DalKeyPerformanceIndicator dalKPI)
-        {
-            var retKPI = new KeyPerformanceIndicator
+        private IKpi ConvertToManagerKPI(DalKeyPerformanceIndicator dalKpi)
             {
-                Id = dalKPI.Id,
-                KeyPerformanceIndicatorId = dalKPI.KeyPerformanceIndicatorId
-            };
-            return retKPI;
+            var kpiManager = new KpiManager();
+
+            return kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
         }
 
 
-        private IList<DalKeyPerformanceIndicator> AdaptToDalKPI(IList<KeyPerformanceIndicator> keyPerformanceIndicators)
+        private IList<DalKeyPerformanceIndicator> AdaptToDalKPI(Guid testId, IList<IKpi> keyPerformanceIndicators)
         {
             var retList = new List<DalKeyPerformanceIndicator>();
 
-            foreach (var managerKPI in keyPerformanceIndicators)
+            foreach (var managerKpi in keyPerformanceIndicators)
             {
-                retList.Add(ConvertToDalKPI(managerKPI));
+                retList.Add(ConvertToDalKPI(testId, managerKpi));
             }
 
             return retList;
         }
 
-        private DalKeyPerformanceIndicator ConvertToDalKPI(KeyPerformanceIndicator managerKPI)
+        private DalKeyPerformanceIndicator ConvertToDalKPI(Guid testId, IKpi managerKpi)
         {
             var retKPI = new DalKeyPerformanceIndicator
             {
-                Id = managerKPI.Id,
-                KeyPerformanceIndicatorId = managerKPI.KeyPerformanceIndicatorId,
-                TestId = managerKPI.TestId
+                Id = Guid.NewGuid(),
+                KeyPerformanceIndicatorId = managerKpi.Id,
+                TestId = testId
             };
             return retKPI;
         }
@@ -400,17 +504,50 @@ namespace EPiServer.Marketing.Testing
 
         private DalABTestFilter AdaptToDalFilter(ABTestFilter managerFilter)
         {
-            var dalFilter = new DalABTestFilter
+            var dalFilter = new DalABTestFilter();
+            dalFilter.Property = AdaptToDalTestProperty(managerFilter.Property);
+            dalFilter.Operator = AdaptToDalOperator(managerFilter.Operator);
+
+            if (managerFilter.Property == ABTestProperty.State)
             {
-                Property = AdaptToDalTestProperty(managerFilter.Property),
-                Operator = AdaptToDalOperator(managerFilter.Operator),
-                Value = managerFilter.Value
-            };
+                dalFilter.Value = ConvertToDalValue(managerFilter.Value);
+            }
+            else
+            {
+                dalFilter.Value = managerFilter.Value;
+            }
+            
+
+            
 
             return dalFilter;
         }
 
-        private DalFilterOperator AdaptToDalOperator(FilterOperator theOperator)
+        private DalTestState ConvertToDalValue(object value)
+        {
+            var aValue = DalTestState.Inactive;
+           
+                switch ((TestState)value)
+                {
+                    case TestState.Active:
+                        aValue = DalTestState.Active;
+                        break;
+                    case TestState.Archived:
+                        aValue = DalTestState.Archived;
+                        break;
+                    case TestState.Done:
+                        aValue = DalTestState.Done;
+                        break;
+                    case TestState.Inactive:
+                        aValue = DalTestState.Inactive;
+                        break;
+                }
+            
+
+            return aValue;
+        }
+
+        private DalFilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
         {
             var aOperator = DalFilterOperator.And;
 

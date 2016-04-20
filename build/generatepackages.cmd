@@ -19,6 +19,8 @@ xcopy "%ProjectPath%\ClientResources"\* "%PackagePath%\content\modules\_protecte
 
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 
+xcopy "%ProjectPath%\web.config.install.xdt" "%PackagePath%\content"  /I /F /R /Y
+
 xcopy "..\src\Database"\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles"

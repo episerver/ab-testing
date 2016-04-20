@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
@@ -14,7 +15,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
     {
 
         private TestManager _mtm;
-        private List<KeyPerformanceIndicator> Kpis;
+        private List<IKpi> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
 
@@ -74,9 +75,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             TestManager _mtm = new TestManager();
             dataToSave.Id = Guid.NewGuid();
 
-            dataToSave.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
+            dataToSave.KpiInstances = new List<IKpi>()
                 {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
+                    new Kpi() { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
                 };
 
             dataToSave.TestResults = new List<TestResult>()
@@ -134,12 +135,12 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             for (int x = 0; x < 50; x++)
             {
-                Guid result = _mtm.ReturnLandingPage(testId);
+                Variant result = _mtm.ReturnLandingPage(testId);
 
-                var version = test.Variants.First(v => v.Id == result);
-                _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.View);
+                var version = test.Variants.First(v => v.Id == result.Id);
+                _mtm.IncrementCount(testId, result.Id, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, result.Id, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -154,11 +155,11 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             var test = _mtm.Get(testId);
             for (int x = 0; x < 5; x++)
             {
-                Guid result = _mtm.ReturnLandingPage(testId);
-                var version = test.Variants.First(v => v.Id == result);
-                _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.View);
+                var result = _mtm.ReturnLandingPage(testId);
+                var version = test.Variants.First(v => v.Id == result.Id);
+                _mtm.IncrementCount(testId, result.Id, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, result.Id, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
 
             return _mtm.Get(testId);

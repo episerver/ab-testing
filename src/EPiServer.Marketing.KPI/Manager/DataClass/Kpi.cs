@@ -1,6 +1,6 @@
-﻿using System;
+﻿using EPiServer.Core;
+using System;
 using System.Runtime.Serialization;
-using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -23,25 +23,22 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         public Guid Id { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public string Properties { get; set; }
-
-        /// <summary>
         /// Date the kpi was created.
         /// </summary>
+        [DataMember]
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// The last time the kpi was modified.
         /// </summary>
+        [DataMember]
         public DateTime ModifiedDate { get; set; }
 
         /// <summary>
         /// Determines if a conversion has happened.
         /// </summary>
-        /// <param name="theValues"></param>
-        public void Success(object theValues)
+        /// <param name="content"></param>
+        public virtual bool Evaluate(IContent content)
         {
             throw new NotImplementedException();
         }

@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace KPI.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
+    [ExcludeFromCodeCoverage]
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -12,6 +15,7 @@ namespace KPI.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
+                        ClassName = c.String(nullable: false),
                         Properties = c.String(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),

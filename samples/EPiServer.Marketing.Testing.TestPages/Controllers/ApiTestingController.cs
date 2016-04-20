@@ -9,6 +9,9 @@ using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
 using System.Threading;
 using System.Diagnostics;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using System.Linq;
+using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
@@ -83,7 +86,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     Id = testId,
                     CreatedDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(5),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                    KpiInstances = new List<IKpi>(),
                     LastModifiedBy = "Automation",
                     ModifiedDate = DateTime.Now,
                     OriginalItemId = startpage.ContentGuid,
@@ -391,6 +394,32 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             public TimeSpan ElapsedTimeToProcessAllMessages { get; set; }
 
             public int QueueCount { get; set; }
+        }
+
+        public ActionResult ViewMarketingTestCacheData()
+        {
+            TestManager tm = new TestManager();
+            CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
+            cacheTestingViewModel.ActiveTestCache = new List<IMarketingTest>();
+            cacheTestingViewModel.ActiveTestCache = tm.CreateActiveTestCache();
+            cacheTestingViewModel.CachedVersionPageData = new List<PageData>();
+            MemoryCache memCache = MemoryCache.Default;
+            List<string> cachedKeys =
+                memCache.Select(x => x.Key).Where(x => x.Contains("epi") && !x.ToLower().Contains("episerver")).ToList();
+            foreach (string item in cachedKeys)
+            {
+                cacheTestingViewModel.CachedVersionPageData.Add(memCache.Get(item) as PageData);
+            }
+
+            return View(cacheTestingViewModel);
+
+        }
+
+
+        public ActionResult DeleteCacheEntry(Guid id)
+        {
+            MemoryCache.Default.Remove("epi" + id.ToString());
+            return RedirectToAction("ViewMarketingTestCacheData");
         }
     }
 }

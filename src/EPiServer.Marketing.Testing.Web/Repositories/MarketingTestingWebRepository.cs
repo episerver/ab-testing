@@ -4,6 +4,8 @@ using System.Linq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
@@ -42,9 +44,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             IMarketingTest test = ConvertToMarketingTest(testData);
 
-            tm.Save(test);
+            
 
-            return new Guid();
+            return tm.Save(test);
         }
 
         /// <summary>
@@ -91,6 +93,15 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
         {
             IMarketingTest test = new ABTest();
+
+            var kpi = new ContentComparatorKPI(testData.TestContentId)
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+
+
             test = new ABTest
             {
                 Id = Guid.NewGuid(),
@@ -106,10 +117,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion},
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion}
                 },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>
-                {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid() }
-                }
+                KpiInstances = new List<IKpi> { kpi },
+
             };
 
             test.TestResults = GenerateTestResultList(test.Variants);
