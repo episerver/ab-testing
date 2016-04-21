@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -94,13 +95,15 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             IMarketingTest test = new ABTest();
 
-            var kpi = new ContentComparatorKPI(testData.TestContentId)
+            var content = _serviceLocator.GetInstance<IContentRepository>()
+                .Get<IContent>( new ContentReference(testData.ConversionPage) );
+
+            var kpi = new ContentComparatorKPI(content.ContentGuid)
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow
             };
-
 
             test = new ABTest
             {

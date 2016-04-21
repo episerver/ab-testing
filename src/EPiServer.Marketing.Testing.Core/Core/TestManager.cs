@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
 using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
+using System.Data.Entity.Core;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -40,8 +41,15 @@ namespace EPiServer.Marketing.Testing
 
         public IMarketingTest Get(Guid testObjectId)
         {
-
-            return ConvertToManagerTest(_dataAccess.Get(testObjectId));
+            var t = _dataAccess.Get(testObjectId);
+            if (t != null)
+            {
+                return ConvertToManagerTest(t);
+            }
+            else
+            {
+                throw new ObjectNotFoundException();
+            }
         }
 
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
