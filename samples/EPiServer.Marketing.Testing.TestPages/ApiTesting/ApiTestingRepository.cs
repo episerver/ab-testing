@@ -7,7 +7,6 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
-using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
@@ -19,13 +18,11 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         private List<IKpi> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
-        private List<TestResult> testResults = new List<TestResult>();
 
         public List<IMarketingTest> GetTests(ViewModel viewModel = null)
         {
             TestManager mtm = new TestManager();
             List<IMarketingTest> discoveredTests = new List<IMarketingTest>();
-            ITestRepository testRepo = new TestRepository();
 
             if (viewModel == null)
             {

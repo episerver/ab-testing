@@ -44,6 +44,7 @@
         "System.Data.DataSetExtensions": "4.0.0.0",
         "System.Drawing": "4.0.0.0",
         "System.EnterpriseServices": "4.0.0.0",
+        "System.Runtime.Caching": "4.0.0.0",
         "System.Web": "4.0.0.0",
         "System.Web.Abstractions": "4.0.0.0",
         "System.Web.ApplicationServices": "4.0.0.0",

@@ -1,6 +1,6 @@
 param ([string]$configuration = "Release",
     [string]$runTests = "false",
-	[string]$runtestmode = "",
+	[string]$jsreporter = "",
     [string]$pack = "false",
 	[string]$packageVersion = "")
 
@@ -14,12 +14,17 @@ $ENV:Path = "$cwd;" + $ENV:Path
 
 # Install runtime dependencies
 dnvm update-self
-dnvm install "1.0.0-rc1-update1" -runtime CLR -arch x86 -alias default
+dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
 dnvm use default
 
 # Install node dependencies
-
-"Building $configuration"
+pushd ..
+&"$cwd\npm.cmd" install --silent
+if ($lastexitcode -eq 1) {
+    Write-Host "Node dependencies install failed" -foreground "red"
+    exit $lastexitcode
+}
+pushd $cwd
 
 # Restore packages
 dnu restore ..\ --quiet
@@ -30,6 +35,7 @@ if ($lastexitcode -eq 1) {
 
 &"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
 
+"Building $configuration"
 # Build all xprojs
 dnu build ..\** --quiet --configuration $configuration --out ..\artifacts
 if ($lastexitcode -eq 1) {
@@ -51,7 +57,7 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 
 # Run tests
 if([System.Convert]::ToBoolean($runTests) -eq $true) {
-    &"$cwd\test.ps1" $configuration $runtestmode
+    &"$cwd\test.ps1" $configuration $jsreporter
 }
 
 # Create packages

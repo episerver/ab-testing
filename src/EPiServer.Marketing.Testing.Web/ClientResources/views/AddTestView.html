@@ -2,25 +2,21 @@
     <!-- Button Bar -->
     <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
         <div class="epi-toolbarGroupContainer">
-            <div class="epi-toolbarLeading epi-toolbarGroup">
-                <div class="epi-toolbarGroupContainer">
-                    <!-- Breadcrumb? -->
-                    <div class="epi-toolbarGroup epi-toolbarLeading">
-                        <ul data-dojo-type="epi-cms/widget/Breadcrumb"></ul>
-                    </div>
-                    <div class="epi-toolbarGroup epi-toolbarCenter"></div>
-                    <!-- Start and Cancel Buttons -->
-                    <div class="epi-toolbarGroup epi-toolbarTrailing">
-                        <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">Start Test</button>
-                        <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">Cancel</button>
-                    </div>
+            <!-- Breadcrumb -->
+            <div class="epi-toolbarGroup epi-toolbarLeading">
+                <div id="breadcrumb"
+                     data-dojo-type="epi-cms/widget/Breadcrumb" data-dojo-attach-point="breadcrumbWidget">
                 </div>
+            </div>
+            <div class="epi-toolbarGroup epi-toolbarCenter"></div>
+            <!-- Start and Cancel Buttons -->
+            <div class="epi-toolbarGroup epi-toolbarTrailing">
+                <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">Start Test</button>
+                <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">Cancel</button>
             </div>
         </div>
     </div>
-
     <hr />
-
     <div class="epi-grid epi-grid--limit-width">
         <!-- Title Text -->
         <div class="epi-grid__row epi-grid__row--no-border">
@@ -30,9 +26,7 @@
                 </div>
             </div>
         </div>
-
         <div class="epi-grid__row epi-grid__row--no-border">
-
             <!-- Published Version Information-->
             <div class="epi-grid__col--6">
                 <div class="epi-test-version epi-test-version--1">
@@ -44,7 +38,6 @@
                     <span class="epi-timestamp" data-dojo-attach-point="datePublished"></span>
                 </span>
             </div>
-
             <!-- Current (variant) Vesion Information-->
             <div class="epi-grid__col--6">
                 <div class="epi-test-version epi-test-version--2">
@@ -84,7 +77,6 @@
                 </ul>
             </div>
         </div>
-
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
                 <div class="epi-grid__header">
@@ -92,12 +84,10 @@
                 </div>
             </div>
         </div>
-
         <!-- Test Data -->
         <div class="epi-grid__row">
             <div class="epi-grid__col--12">
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
-
                     <!-- Convesion Page Picker-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
                         <label for="conversionPage">Visitor navigates to page</label>
@@ -107,7 +97,6 @@
                              data-dojo-attach-event="onChange: _onConversionPageChanged">
                         </div>
                     </li>
-
                     <!-- Participation Percentage Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
                         <span>The participants you have in the test, the shorter amount of time you will need to run it to reach a good statistic to base your choice on</span><br>
@@ -119,7 +108,6 @@
                              data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
                         </div> %
                     </li>
-
                     <!-- Duration Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
                         <span></span><br>
@@ -134,7 +122,6 @@
                 </ul>
             </div>
         </div>
-
         <!-- Start Time-->
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
