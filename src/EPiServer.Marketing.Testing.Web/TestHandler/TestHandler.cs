@@ -13,12 +13,12 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        private readonly TestingContextHelper _contextHelper = new TestingContextHelper();
+        internal IContent CurrentPage ;
+        private readonly ITestingContextHelper _contextHelper = new TestingContextHelper();
         private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
 
         private TestDataCookie _testData;
         private ITestManager _testManager;
-
         private bool? _swapDisabled;
         public bool? SwapDisabled
         {
@@ -38,15 +38,16 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public TestHandler()
         {
-            
+
         }
 
         [ExcludeFromCodeCoverage]
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList)
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, ITestingContextHelper contextHelper)
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
             _testManager = testManager;
+            _contextHelper = contextHelper;
         }
 
         [ExcludeFromCodeCoverage]
@@ -60,6 +61,8 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
+            CurrentPage = _contextHelper.GetCurrentPageFromUrl();
+
             if (!SwapDisabled == true)
             {
                 var activeTest =
@@ -70,14 +73,14 @@ namespace EPiServer.Marketing.Testing.Web
 
                 if (activeTest != null)
                 {
-                    ProcessedContentList.Add(e.ContentLink);
-                    
                     if (hasData && _testDataCookieHelper.IsTestParticipant(_testData) && _testData.ShowVariant)
                     {
+                        ProcessedContentList.Add(e.ContentLink);
                         Swap(e);
                     }
-                    else if (!hasData && ProcessedContentList.Count == 1)
+                    else if (!hasData && CurrentPage !=null && _contextHelper.IsRequestedContent(CurrentPage,e.Content) && ProcessedContentList.Count == 0)
                     {
+                        ProcessedContentList.Add(e.ContentLink);
                         //get a new random variant. 
                         var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
                         _testData.TestId = activeTest.Id;
@@ -105,7 +108,7 @@ namespace EPiServer.Marketing.Testing.Web
                         }
                     }
                 }
-                else if(hasData)
+                else if (hasData)
                 {
                     _testDataCookieHelper.ExpireTestDataCookie(_testData);
                 }
