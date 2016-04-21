@@ -82,16 +82,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public TestDataCookie GetTestDataFromCookie(string testContentId)
         {
             var retCookie = new TestDataCookie();
-            HttpCookie cookie;
-            if (HttpContext.Current.Response.Cookies.AllKeys.Contains(COOKIE_PREFIX + testContentId))
+            var currentContext = HttpContext.Current;
+            HttpCookie cookie = currentContext.Response.Cookies.Get(COOKIE_PREFIX + testContentId);
+            if (cookie == null || string.IsNullOrEmpty(cookie.Value))
             {
-                cookie = HttpContext.Current.Response.Cookies.Get(COOKIE_PREFIX + testContentId);
+                cookie = currentContext.Request.Cookies.Get(COOKIE_PREFIX + testContentId);
             }
-            else
-            {
-                cookie = HttpContext.Current.Request.Cookies.Get(COOKIE_PREFIX + testContentId);
-            }
-
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
@@ -102,7 +98,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.Viewed = bool.Parse(cookie["Viewed"]);
                 retCookie.Converted = bool.Parse(cookie["Converted"]);
             }
-
             return retCookie;
         }
 
