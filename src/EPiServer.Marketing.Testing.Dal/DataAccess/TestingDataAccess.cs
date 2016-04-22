@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
-namespace EPiServer.Marketing.Testing.Dal
+namespace EPiServer.Marketing.Testing.Dal.DataAccess
 {
     internal class TestingDataAccess : ITestingDataAccess
     {

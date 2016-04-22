@@ -6,7 +6,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
-using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;

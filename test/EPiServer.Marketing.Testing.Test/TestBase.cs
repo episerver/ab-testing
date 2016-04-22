@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Test.Dal;
-using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
