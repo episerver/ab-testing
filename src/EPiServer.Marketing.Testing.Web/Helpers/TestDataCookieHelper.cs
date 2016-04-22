@@ -83,12 +83,18 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var retCookie = new TestDataCookie();
             var currentContext = HttpContext.Current;
-            HttpCookie cookie = currentContext.Response.Cookies.Get(COOKIE_PREFIX + testContentId);
-            if (cookie == null || string.IsNullOrEmpty(cookie.Value))
+            HttpCookie cookie;
+
+            if (currentContext.Response.Cookies.AllKeys.Contains(COOKIE_PREFIX + testContentId))
+            {
+                cookie = currentContext.Response.Cookies.Get(COOKIE_PREFIX + testContentId);
+            }
+            else
             {
                 cookie = currentContext.Request.Cookies.Get(COOKIE_PREFIX + testContentId);
             }
-
+            
+           
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
                 retCookie.TestId = Guid.Parse(cookie["TestId"]);
