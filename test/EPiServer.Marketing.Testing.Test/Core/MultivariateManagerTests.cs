@@ -38,11 +38,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 {
                     new DalVariant {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
                 },
-                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
-                TestResults = new List<DalTestResult>
-                {
-                    new DalTestResult { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 }
-                }
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
             };
         }
 

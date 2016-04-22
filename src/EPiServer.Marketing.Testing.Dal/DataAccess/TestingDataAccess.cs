@@ -246,7 +246,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         private void IncrementCountHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
         {
             var test = repo.GetById(testId);
-            var result = test.TestResults.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+            var result = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
             if (resultType == DalCountType.View)
             {
@@ -307,34 +307,6 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                         }
                     }
 
-                    // remove any existing results that are not part of the new test
-                    foreach (var existingResult in test.TestResults.ToList())
-                    {
-                        if (testObject.TestResults.All(k => k.Id != existingResult.Id))
-                        {
-                            repo.Delete(existingResult);
-                        }
-                    }
-
-                    // update existing results that are still around and add any that are new
-                    foreach (var newResult in testObject.TestResults)
-                    {
-                        var existingResult = test.TestResults.SingleOrDefault(k => k.Id == newResult.Id);
-
-                        if (existingResult != null)
-                        {
-                            existingResult.Conversions = newResult.Conversions;
-                            existingResult.Views = newResult.Views;
-                            existingResult.ItemId = newResult.ItemId;
-                            existingResult.ItemVersion = newResult.ItemVersion;
-                            existingResult.ModifiedDate = DateTime.UtcNow;
-                        }
-                        else
-                        {
-                            test.TestResults.Add(newResult);
-                        }
-                    }
-
                     // remove any existing variants that are not part of the new test
                     foreach (var existingVariant in test.Variants.ToList())
                     {
@@ -354,6 +326,8 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                             existingVariant.ItemId = newVariant.ItemId;
                             existingVariant.ItemVersion = newVariant.ItemVersion;
                             existingVariant.ModifiedDate = DateTime.UtcNow;
+                            existingVariant.Views = newVariant.Views;
+                            existingVariant.Conversions = newVariant.Conversions;
                         }
                         else
                         {

@@ -268,7 +268,6 @@ namespace EPiServer.Marketing.Testing
                 CreatedDate = theDalTest.CreatedDate,
                 ModifiedDate = theDalTest.ModifiedDate,
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
-                TestResults = AdaptToManagerResults(theDalTest.TestResults),
                 KpiInstances = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
             };
             return aTest;
@@ -290,7 +289,6 @@ namespace EPiServer.Marketing.Testing
                 LastModifiedBy = theManagerTest.LastModifiedBy,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
-                TestResults = AdaptToDalResults(theManagerTest.TestResults)
             };
             return aTest;
         }
@@ -360,7 +358,10 @@ namespace EPiServer.Marketing.Testing
                 Id = theDalVariant.Id,
                 TestId = theDalVariant.TestId,
                 ItemId = theDalVariant.ItemId,
-                ItemVersion = theDalVariant.ItemVersion
+                ItemVersion = theDalVariant.ItemVersion,
+                Conversions = theDalVariant.Conversions,
+                Views = theDalVariant.Views,
+                IsWinner = theDalVariant.IsWinner
             };
 
             return retVariant;
@@ -386,70 +387,16 @@ namespace EPiServer.Marketing.Testing
                 Id = managerVariant.Id,
                 TestId = managerVariant.TestId,
                 ItemId = managerVariant.ItemId,
-                ItemVersion = managerVariant.ItemVersion
+                ItemVersion = managerVariant.ItemVersion,
+                Conversions = managerVariant.Conversions,
+                Views = managerVariant.Views,
+                IsWinner = managerVariant.IsWinner
             };
 
             return retVariant;
         }
 
         #endregion VariantConversion
-
-        #region ResultsConversion
-        private List<TestResult> AdaptToManagerResults(IList<DalTestResult> theResultList)
-        {
-            var retList = new List<TestResult>();
-
-            foreach(var dalResult in theResultList)
-            {
-                retList.Add(ConvertToManagerResult(dalResult));
-            }
-
-            return retList;
-        }
-
-        private TestResult ConvertToManagerResult(DalTestResult dalResult)
-        {
-            var retResult = new TestResult
-            {
-                Id = dalResult.Id,
-                TestId = dalResult.TestId,
-                ItemId = dalResult.ItemId,
-                ItemVersion = dalResult.ItemVersion,
-                Views = dalResult.Views,
-                Conversions = dalResult.Conversions
-            };
-
-            return retResult;
-        }
-
-
-        private IList<DalTestResult> AdaptToDalResults(IList<TestResult> testResults)
-        {
-            var retList = new List<DalTestResult>();
-
-            foreach (var managerResult in testResults)
-            {
-                retList.Add(ConvertToDalResult(managerResult));
-            }
-
-            return retList;
-        }
-
-        private DalTestResult ConvertToDalResult(TestResult managerResult)
-        {
-            var retResult = new DalTestResult
-            {
-                Id = managerResult.Id,
-                ItemId = managerResult.ItemId,
-                ItemVersion = managerResult.ItemVersion,
-                Views = managerResult.Views,
-                Conversions = managerResult.Conversions,
-                TestId = managerResult.TestId
-            };
-
-            return retResult;
-        }
-        #endregion ResultsConversion
 
         #region KPIConversion
         private List<IKpi> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
