@@ -25,12 +25,15 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _serviceLocator = ServiceLocator.Current;
         }
 
-        public bool IsContentUnderTest(Guid aContentGuid)
+        public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var aTestList = testManager.GetTestByItemId(aContentGuid);
+            var aTest = testManager.GetTestByItemId(aContentGuid).Find(tl => tl.State == Data.Enums.TestState.Active);
 
-            return aTestList.Any();
+            if (aTest == null)
+                aTest = new ABTest();
+
+            return aTest;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using EPiServer.Marketing.Testing.Data;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -9,6 +10,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void StartMarketingTest(Guid testGuid);
         void StopMarketingTest(Guid testGuid);
         void ArchiveMarketingTest(Guid testGuid);
-        bool IsContentUnderTest(Guid contentGuid);
+        IMarketingTest GetActiveTestForContent(Guid contentGuid);
     }
 }

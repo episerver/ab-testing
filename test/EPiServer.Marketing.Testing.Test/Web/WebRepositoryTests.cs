@@ -25,21 +25,21 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void IsContentUnderTest_is_true_when_a_test_exists_for_the_content()
+        public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
-            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() });
-            var aReturnValue = aRepo.IsContentUnderTest(Guid.NewGuid());
-            Assert.True(aReturnValue);
+            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = Data.Enums.TestState.Active } });
+            var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
+            Assert.True(aReturnValue != null);
         }
 
         [Fact]
-        public void IsContentUnderTest_is_false_when_a_test_does_not_exist_for_the_content()
+        public void GetActiveTestForContent_returns_empty_test_when_a_test_does_not_exist_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
             _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
-            var aReturnValue = aRepo.IsContentUnderTest(Guid.NewGuid());
-            Assert.False(aReturnValue);
+            var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
+            Assert.True(aReturnValue.Id == Guid.Empty);
         }
     }
 }
