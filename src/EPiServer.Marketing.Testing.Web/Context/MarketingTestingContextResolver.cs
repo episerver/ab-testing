@@ -8,12 +8,12 @@ using EPiServer.Shell.Rest;
 namespace EPiServer.Marketing.Testing.Web.Context
 {
     [ServiceConfiguration(typeof(IUriContextResolver))]
-    public class TestContextResolver : IUriContextResolver
+    public class MarketingTestingContextResolver : IUriContextResolver
     {
         public static readonly string UriPrefix = "epi.marketing.testing";
         private readonly ITestManager _testManager;
 
-        public TestContextResolver(ITestManager testManager)
+        public MarketingTestingContextResolver(ITestManager testManager)
         {
             _testManager = testManager;
         }
