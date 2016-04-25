@@ -81,8 +81,6 @@ namespace EPiServer.Marketing.Testing
         {
             // Todo : We should probably check to see if item Guid is empty or null and
             // create a new unique guid here?
-            // 
-
             // Save the kpi objects first
             var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             foreach (var kpi in multivariateTest.KpiInstances)
@@ -115,7 +113,6 @@ namespace EPiServer.Marketing.Testing
 
         public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
         {
-            
             _dataAccess.IncrementCount(testId, testItemId, itemVersion, AdaptToDalCount(resultType));
         }
 
@@ -471,9 +468,6 @@ namespace EPiServer.Marketing.Testing
             {
                 dalFilter.Value = managerFilter.Value;
             }
-            
-
-            
 
             return dalFilter;
         }
@@ -497,7 +491,6 @@ namespace EPiServer.Marketing.Testing
                         aValue = DalTestState.Inactive;
                         break;
                 }
-            
 
             return aValue;
         }

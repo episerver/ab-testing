@@ -93,16 +93,19 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     Owner = "Automation",
                     StartDate = DateTime.Now.AddDays(1),
                     State = Data.Enums.TestState.Inactive,
-                    TestResults = new List<TestResult>(),
                     Title = "Automation_" + TestID,
                     Description = "Description_" + TestID++,
                     Variants = new List<Variant>() {
-                                    new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 1},
-                                    new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 2}
+                                    new Variant()
+                                    {
+                                        Id = Guid.NewGuid(), ItemId = startpage.ContentGuid, ItemVersion = 1, Views = 0, Conversions = 0
+                                    },
+                                    new Variant()
+                                    {
+                                        Id = Guid.NewGuid(), ItemId = startpage.ContentGuid, ItemVersion = 2, Views = 0, Conversions = 0
+                                    }
                                 }
                 };
-                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[0].Id, ItemVersion = 1});
-                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[1].Id, ItemVersion = 2});
 
                 testManager.Save(test);
             }
@@ -168,16 +171,16 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 {
                     for (int x = 0; x < _model.Views; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.View);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.View);
                     }
                     for (int x = 0; x < _model.Conversions; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.Conversion);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id,
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.Conversion);
                     }
 

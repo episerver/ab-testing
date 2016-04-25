@@ -6,6 +6,7 @@ using EPiServer.Marketing.Testing.Data;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
+using Microsoft.Dnx.Testing.Abstractions;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Core.Messaging
@@ -24,10 +25,9 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
         {
             Id = testGuid,
             Title = "SomeTest",
-            TestResults = new List<TestResult>() {
-                new TestResult() { ItemId = original, Conversions = 5, Views = 10 },
-                new TestResult() { ItemId = varient, Conversions = 100, Views = 200 },
-                new TestResult() { }
+            Variants = new List<Variant>() {
+                new Variant() { ItemId = original, Conversions = 5, Views = 10 },
+                new Variant() { ItemId = varient, Conversions = 100, Views = 200 }
             }
         };
 

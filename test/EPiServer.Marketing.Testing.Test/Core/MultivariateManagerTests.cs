@@ -48,7 +48,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
             {
                 Variants = new List<Variant>(),
                 KpiInstances = new List<IKpi>(),
-                TestResults = new List<TestResult>()
             };
         }
 
@@ -149,9 +148,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
             {
                 Id = theGuid,
                 ModifiedDate = DateTime.UtcNow,
-                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } },
+                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1, Views = 0, Conversions = 0} },
                 KpiInstances = new List<IKpi> { new Kpi { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow } },
-                TestResults = new List<TestResult> { new TestResult { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1 } }
             };
 
             Mock<IKpiManager> kpiManager = new Mock<IKpiManager>();
