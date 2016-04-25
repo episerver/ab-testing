@@ -9,10 +9,10 @@ namespace EPiServer.Marketing.Testing.TestPages.Models
         public ViewModel()
         {
             var filter1 = new FilterView(ABTestProperty.OriginalItemId, FilterOperator.And, null, false, "and");
-            var filter2 = new FilterView(ABTestProperty.VariantId, FilterOperator.Or, null, false, "or");
+            //var filter2 = new FilterView(ABTestProperty.VariantId, FilterOperator.Or, null, false, "or");
             var filter3 = new FilterView(ABTestProperty.State, FilterOperator.And, null, false, "and");
 
-            Filters = new List<FilterView>() {filter1, filter2, filter3};
+            Filters = new List<FilterView>() {filter1, filter3};
         }
 
         public List<IMarketingTest> Tests { get; set; }
