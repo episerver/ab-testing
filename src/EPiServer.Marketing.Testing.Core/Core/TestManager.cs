@@ -111,9 +111,9 @@ namespace EPiServer.Marketing.Testing
             _dataAccess.Archive(testObjectId);
         }
 
-        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
+        public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
         {
-            _dataAccess.IncrementCount(testId, testItemId, itemVersion, AdaptToDalCount(resultType));
+            _dataAccess.IncrementCount(testId, itemId, itemVersion, AdaptToDalCount(resultType));
         }
 
 
