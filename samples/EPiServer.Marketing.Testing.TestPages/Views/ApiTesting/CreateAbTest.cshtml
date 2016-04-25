@@ -30,26 +30,25 @@
             data: { originalItem: originalItem },
             cache: false,
             type: "POST",
-            success: function (returnedData) {
+            success: function(returnedData) {
+                $("#Variants_0_ItemVersion").empty();
+                $("#Variants_1_ItemVersion").empty();
 
-                if (!returnedData.Success) {
-                    alert(returnedData.responseText);
-                } else {
-                    $("#Variants_0_ItemVersion").empty();
-                    $("#Variants_1_ItemVersion").empty();
+                $.each(returnedData, function (i, val) {
+                    var referenceArray = val.Reference.split('_');
+                    if (val.Status == 4) { // 4 = VersionStatus.Published
+                        $("#Variants_0_ItemVersion").append("<option value='" + referenceArray['0'] + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                    } else {
+                        $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                    }
 
-                    $.each(returnedData.Versions, function (i, val) {
-                        if (val.Status == 4) { // 4 = VersionStatus.Published
-                            $("#Variants_0_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
-                        } else {
-                            $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
-                        }
+                });
+                $('#Variants_0_ItemId').val($('#originalItem').val());
+                $('#Variants_1_ItemId').val($('#originalItem').val());
 
-                    });
-
-                    $('#Variants_0_ItemId').val($('#originalItem').val());
-                    $('#Variants_1_ItemId').val($('#originalItem').val());
-                }
+            },
+            error: function(response) {
+                alert("error: " + response);
             }
         });
     }
