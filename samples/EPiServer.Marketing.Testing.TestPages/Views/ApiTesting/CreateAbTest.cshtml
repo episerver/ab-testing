@@ -34,9 +34,10 @@
                 $("#Variants_0_ItemVersion").empty();
                 $("#Variants_1_ItemVersion").empty();
 
-                $.each(returnedData, function(i, val) {
+                $.each(returnedData, function (i, val) {
+                    var referenceArray = val.Reference.split('_');
                     if (val.Status == 4) { // 4 = VersionStatus.Published
-                        $("#Variants_0_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                        $("#Variants_0_ItemVersion").append("<option value='" + referenceArray['0'] + "'>" + val.Name + "[" + val.Reference + "]</option>");
                     } else {
                         $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
                     }
