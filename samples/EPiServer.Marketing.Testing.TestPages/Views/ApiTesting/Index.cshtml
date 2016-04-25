@@ -45,14 +45,11 @@
             <th>
                 @Html.DisplayNameFor(model => Model.Tests[0].OriginalItemId)
             </th>
-            <th>
+            <th colspan="2">
                 @Html.DisplayNameFor(model => Model.Tests[0].Variants)
             </th>
             <th>
                 @*@Html.DisplayNameFor(model => Model.Tests[0].Conversions)*@
-            </th>
-            <th colspan="2">
-                Test Results
             </th>
             <th></th>
         </tr>
@@ -82,16 +79,6 @@
                     @Html.DisplayFor(modelItem => item.OriginalItemId)
                 </td>
                 <td>
-
-                    @if (item.Variants != null)
-                    {
-                        for (int i = 0; i < item.Variants.Count; i++)
-                        {
-                            <p>@Html.DisplayFor(modelItem => item.Variants[i].Id)</p>
-                        }
-                    }
-                </td>
-                <td>
                     @*@Html.DisplayFor(modelItem => item.Conversions)*@
                 </td>
                 @if (item.Variants.Count > 0)
@@ -99,14 +86,14 @@
                     foreach (var variant in item.Variants)
                     {
                         <td>
+                            Item Version:
+                            @Html.DisplayFor(resultItem => variant.ItemVersion)
+                            <br/>
                             Views:
                             @Html.DisplayFor(resultItem => variant.Views)
                             <br/>
                             Conversions:
                             @Html.DisplayFor(resultItem => variant.Conversions)
-                            <br/>
-                            Item Version:
-                            @Html.DisplayFor(resultItem => variant.ItemVersion)
                         </td>
                     }
                     if (item.Variants.Count == 1)

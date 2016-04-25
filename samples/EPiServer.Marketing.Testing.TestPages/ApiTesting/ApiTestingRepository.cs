@@ -75,10 +75,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             TestManager _mtm = new TestManager();
             dataToSave.Id = Guid.NewGuid();
 
-            dataToSave.KpiInstances = new List<IKpi>()
-                {
-                    new Kpi() { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow }
-                };
+            dataToSave.KpiInstances = new List<IKpi>();
 
             dataToSave.Variants = new List<Variant>()
             {
