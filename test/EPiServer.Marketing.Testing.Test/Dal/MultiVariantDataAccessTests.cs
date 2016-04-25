@@ -366,7 +366,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             //_mtm.Save(test);
 
-            var result = new DalVariant()
+            var variant = new DalVariant()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
@@ -376,17 +376,17 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ItemVersion = itemVersion
             };
 
-            test.Variants.Add(result);
+            test.Variants.Add(variant);
 
             _mtm.Save(test);
 
-            // check that a result exists
+            // check that a variant exists
             Assert.Equal(test.Variants.Count(), 1);
 
             _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.View);
             _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.Conversion);
 
-            // check the result is incremented correctly
+            // check the variant is incremented correctly
             Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views);
             Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Conversions);
         }
@@ -442,8 +442,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variant = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].Variants.Add(variant);
 
-            var result = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
-            tests[0].Variants.Add(result);
+            var variant2 = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
+            tests[0].Variants.Add(variant2);
             _mtm.Save(tests[0]);
 
             variant.ItemVersion = 2;

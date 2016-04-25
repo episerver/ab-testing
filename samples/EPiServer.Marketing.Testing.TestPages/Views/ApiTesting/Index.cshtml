@@ -94,29 +94,29 @@
                 <td>
                     @*@Html.DisplayFor(modelItem => item.Conversions)*@
                 </td>
-                @if (item.TestResults.Count > 0)
+                @if (item.Variants.Count > 0)
                 {
-                    foreach (var result in item.TestResults)
+                    foreach (var variant in item.Variants)
                     {
                         <td>
                             Views:
-                            @Html.DisplayFor(resultItem => result.Views)
+                            @Html.DisplayFor(resultItem => variant.Views)
                             <br/>
                             Conversions:
-                            @Html.DisplayFor(resultItem => result.Conversions)
+                            @Html.DisplayFor(resultItem => variant.Conversions)
                             <br/>
-                            Item Id:
-                            @Html.DisplayFor(resultItem => result.ItemId)
+                            Item Version:
+                            @Html.DisplayFor(resultItem => variant.ItemVersion)
                         </td>
                     }
-                    if (item.TestResults.Count == 1)
+                    if (item.Variants.Count == 1)
                     {
                         <td></td>
                     }
                 }
                 else
                 {
-                    <td>No Page Conversion Test Results Found </td>
+                    <td>No Page Conversion Test Variants Found </td>
                     <td></td>
                 }
 

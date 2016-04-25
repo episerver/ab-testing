@@ -246,15 +246,15 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         private void IncrementCountHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
         {
             var test = repo.GetById(testId);
-            var result = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+            var variant = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
 
             if (resultType == DalCountType.View)
             {
-                result.Views++;
+                variant.Views++;
             }
             else
             {
-                result.Conversions++;
+                variant.Conversions++;
             }
 
             repo.SaveChanges();

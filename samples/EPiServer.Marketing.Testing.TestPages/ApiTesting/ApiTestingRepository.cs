@@ -84,7 +84,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             {
                 new Variant()
                 {
-                    Id=Guid.NewGuid(), ItemId = dataToSave.Variants[0].ItemId, ItemVersion = dataToSave.Variants[0].ItemVersion, Views = 0, Conversions = 0
+                    Id = Guid.NewGuid(), ItemId = dataToSave.Variants[0].ItemId, ItemVersion = dataToSave.Variants[0].ItemVersion, Views = 0, Conversions = 0
                 },
                 new Variant()
                 {
@@ -141,12 +141,12 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             for (int x = 0; x < 50; x++)
             {
-                Variant result = _mtm.ReturnLandingPage(testId);
+                Variant variant = _mtm.ReturnLandingPage(testId);
 
-                var version = test.Variants.First(v => v.Id == result.Id);
-                _mtm.IncrementCount(testId, result.ItemId, version.ItemVersion, Data.Enums.CountType.View);
+                var version = test.Variants.First(v => v.Id == variant.Id);
+                _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result.ItemId, version.ItemVersion, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -161,11 +161,11 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             var test = _mtm.Get(testId);
             for (int x = 0; x < 5; x++)
             {
-                var result = _mtm.ReturnLandingPage(testId);
-                var version = test.Variants.First(v => v.Id == result.Id);
-                _mtm.IncrementCount(testId, result.ItemId, version.ItemVersion, Data.Enums.CountType.View);
+                var variant = _mtm.ReturnLandingPage(testId);
+                var version = test.Variants.First(v => v.Id == variant.Id);
+                _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result.ItemId, version.ItemVersion, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
 
             return _mtm.Get(testId);
