@@ -380,7 +380,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     });
                 }
 
-                return Json(new { Success = true, Versions = versions });
+                return Json(versions);
             }
             else
             {

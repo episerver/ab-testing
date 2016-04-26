@@ -35,12 +35,16 @@
                 $("#Variants_1_ItemVersion").empty();
 
                 $.each(returnedData, function (i, val) {
-                    var referenceArray = val.Reference.split('_');
+                    if (typeof val.Status == 'undefined' && typeof val != 'boolean') {
+                        alert("Error: " + val);
+                    }
                     if (val.Status == 4) { // 4 = VersionStatus.Published
-                        $("#Variants_0_ItemVersion").append("<option value='" + referenceArray['0'] + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                        var version = val.Reference.substring(0, val.Reference.indexOf('_'));
+                        $("#Variants_0_ItemVersion").append("<option value='" + version + "'>" + val.Name + "[" + val.Reference + "]</option>");
                     } else {
                         $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
                     }
+
 
                 });
                 $('#Variants_0_ItemId').val($('#originalItem').val());
