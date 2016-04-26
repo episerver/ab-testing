@@ -5,10 +5,10 @@
         "warningsAsErrors": true
     },
 
-    "dependencies": {
-        "EPiServer.ClientTDDSupport": "9.3.8-beta",
-        "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final"
-    },
+  "dependencies": {
+    "EPiServer.ClientTDDSupport": "9.3.8-update1",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final"
+  },
 
     "commands": {
         "web": "Microsoft.AspNet.Server.Kestrel --server.urls=http://*:5000/",
@@ -16,7 +16,10 @@
     },
 
     "frameworks": {
-        "dnx451": { }
+      "dnx451": {
+        "dependencies": {
+        }
+      }
     },
 
     "exclude": [
