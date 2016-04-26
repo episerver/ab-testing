@@ -22,6 +22,21 @@ namespace EPiServer.Marketing.Testing.Data
         public int ItemVersion { get; set; }
 
         /// <summary>
+        /// True if variant won the test, false otherwise.
+        /// </summary>
+        public bool IsWinner { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Conversions { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Views { get; set; }
+
+        /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual ABTest ABTest { get; set; }

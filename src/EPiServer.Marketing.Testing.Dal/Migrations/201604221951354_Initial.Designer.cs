@@ -22,13 +22,13 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations {
     // with the /str option, or rebuild your VS project.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _201603241337050_Initial {
+    internal class _201604221951354_Initial {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
-        internal _201603241337050_Initial() {
+        internal _201604221951354_Initial() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EPiServer.Marketing.Testing.Dal.Migrations.201603241337050_Initial", typeof(_201603241337050_Initial).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EPiServer.Marketing.Testing.Dal.Migrations.201604221951354_Initial", typeof(_201604221951354_Initial).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to  H4sIAAAAAAAEAO1c3W7jNha+X2DfQdDlIrWdDAq0gd0ik5/C2MkkiDPZxd4MaOnYISpRrkilMRb7ZL3oI+0r7JGtP5KiTElO6nSDuZiEPx95Ds/hOaQ+5r+//T7+8TkMnCeIOY3YxD0ejFwHmBf5lC0nbiIW33zn/vjDX/8yvvTDZ+chb/chbYc9GZ+4j0KsTodD7j1CSPggpF4c8WghBl4UDokfDU9Go++Hx8dDQAgXsRxnfJcwQUPY/IK/nkfMg5VISHAd+RDwrBxrZhtU5zMJga+IBxP38pbOIMYZD65J/DMInOjgHvjm/wsSuM5ZQAlOawbBwnUIY5EgAid9+oXDTMQRW85WWECC+/UKsN2CBBwyYU7L5rZyjU5SuYZlxxzKS7iIwpaAxx8yRQ3V7p3U7RaKRFVeosrFOpV6o86Je/Yx1ZvrqEOdngdx2mynrgdbyMEW6MjJqo4KO0FzSv8dOedJIJIYJgwSEZPgyLlN5gH1/g7r++hnYBOWBEF1 [rest of string was truncated]&quot;;.
+        ///    Looks up a localized string similar to  H4sIAAAAAAAEAO1cW28bNxZ+X2D/w2AeF67GTlCgNaQWjmwHwsaxETneoi8BNXMkE+FwVJLjWCj2l+1Df1L/wp6R5kJyLpqLYthtkIfYvHzkufBc5pzkz//9Mf75MWTOAwhJIz5xT0bHrgPcjwLKVxM3VsvvfnB//umf/xhfBOGjc5ete52sw51cTtx7pdannif9ewiJHIXUF5GMlmrkR6FHgsh7dXz8o3dy4gFCuIjlOOMPMVc0hO0v+Os04j6sVUzYVRQAk+k4zsy3qM57EoJcEx8m7sUNnYPAG4+uiPgMCi86ugW5/fucMNc5Y5TgtebAlq5DOI8UUXjp048S5kpEfDVf4wBht5s14LolYRJSYk6L5W3pOn6V0OUVGzMoP5YqCjsCnrxOGeXZ23ux280Ziay8QJarTUL1lp0TF7l19iZhnevYp51OmUhW7mX3aIe6FdsoBzxy0iVHucqgZiV/jpxpzFQsYMIhVoKwI+cmXjDq/xs2t9Fn4BMeM6bf [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Target {
             get {
