@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.KPI.Dal
 
         }
 
-        public DbSet<Kpi> Kpis { get; set; }
+        public DbSet<DalKpi> Kpis { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

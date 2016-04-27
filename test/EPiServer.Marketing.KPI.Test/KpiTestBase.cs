@@ -13,17 +13,18 @@ namespace EPiServer.Marketing.KPI.Test
             context.Set<T>().AddRange(data);
         }
 
-        public IList<Kpi> AddMultivariateTests(KpiTestContext context, int numberOfTests)
+        public IList<DalKpi> AddKpis(KpiTestContext context, int numberOfTests)
         {
-            var kpis = new List<Kpi>();
+            var kpis = new List<DalKpi>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                kpis.Add(new Kpi()
+                kpis.Add(new DalKpi()
                 {
                     Id = Guid.NewGuid(),
-                    Properties = "test"
-                    
+                    ClassName = "EPiServer.Marketing.KPI.Manager.DataClass.Kpi, EPiServer.Marketing.KPI",
+                    Properties = "{ \"Id\":\"fa76a408-1fb4-44a9-9231-954961f0676b\", \"CreatedDate\":\"2016-04-08T18:24:30.3161712Z\", \"ModifiedDate\":\"2016-04-08T18:24:30.3161712Z\" }"
+
                 });
             };
 
@@ -32,16 +33,17 @@ namespace EPiServer.Marketing.KPI.Test
             return kpis;
         }
 
-        public IList<Kpi> AddMultivariateTests(KpiDataAccess mtmManager, int numberOfTests)
+        public IList<DalKpi> AddKpis(KpiDataAccess mtmManager, int numberOfTests)
         {
-            var kpis = new List<Kpi>();
+            var kpis = new List<DalKpi>();
 
             for (var i = 0; i < numberOfTests; i++)
             {
-                var test = new Kpi()
+                var test = new DalKpi()
                 {
                     Id = Guid.NewGuid(),
-                    Properties = "test"
+                    ClassName = "EPiServer.Marketing.KPI.Manager.DataClass.Kpi, EPiServer.Marketing.KPI",
+                    Properties = "{ \"Id\":\"fa76a408-1fb4-44a9-9231-954961f0676b\", \"CreatedDate\":\"2016-04-08T18:24:30.3161712Z\", \"ModifiedDate\":\"2016-04-08T18:24:30.3161712Z\" }"
                 };
 
                 mtmManager.Save(test);

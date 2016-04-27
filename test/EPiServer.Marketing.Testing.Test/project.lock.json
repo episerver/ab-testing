@@ -3,15 +3,6 @@
   "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
-      "AutoMapper/4.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/AutoMapper.dll": {}
-        },
-        "runtime": {
-          "lib/net45/AutoMapper.dll": {}
-        }
-      },
       "Castle.Core/3.3.3": {
         "type": "package",
         "compile": {
@@ -138,6 +129,7 @@
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
@@ -157,6 +149,7 @@
           "System.Net.Http",
           "System.Runtime.Serialization",
           "System.Transactions",
+          "System.Web",
           "System.Xml",
           "System.Xml.Linq"
         ]
@@ -182,6 +175,7 @@
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
+          "EPiServer.Marketing.KPI": "1.0.0",
           "EPIServer.Marketing.Messaging": "1.0.0",
           "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
@@ -200,6 +194,7 @@
           "System.Core",
           "System.Data",
           "System.Data.DataSetExtensions",
+          "System.Runtime.Caching",
           "System.Transactions",
           "System.Web",
           "System.Xml",
@@ -230,7 +225,6 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
-          "AutoMapper": "4.1.1",
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EntityFramework": "6.1.3",
@@ -260,6 +254,7 @@
           "System.Data",
           "System.Data.DataSetExtensions",
           "System.Net.Http",
+          "System.Runtime.Caching",
           "System.Web",
           "System.Web.ApplicationServices",
           "System.Xml",
@@ -647,15 +642,6 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
-      "AutoMapper/4.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/AutoMapper.dll": {}
-        },
-        "runtime": {
-          "lib/net45/AutoMapper.dll": {}
-        }
-      },
       "Castle.Core/3.3.3": {
         "type": "package",
         "compile": {
@@ -782,6 +768,7 @@
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
@@ -801,6 +788,7 @@
           "System.Net.Http",
           "System.Runtime.Serialization",
           "System.Transactions",
+          "System.Web",
           "System.Xml",
           "System.Xml.Linq"
         ]
@@ -826,6 +814,7 @@
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
+          "EPiServer.Marketing.KPI": "1.0.0",
           "EPIServer.Marketing.Messaging": "1.0.0",
           "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
@@ -844,6 +833,7 @@
           "System.Core",
           "System.Data",
           "System.Data.DataSetExtensions",
+          "System.Runtime.Caching",
           "System.Transactions",
           "System.Web",
           "System.Xml",
@@ -874,7 +864,6 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
-          "AutoMapper": "4.1.1",
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EntityFramework": "6.1.3",
@@ -904,6 +893,7 @@
           "System.Data",
           "System.Data.DataSetExtensions",
           "System.Net.Http",
+          "System.Runtime.Caching",
           "System.Web",
           "System.Web.ApplicationServices",
           "System.Xml",
@@ -1291,15 +1281,6 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
-      "AutoMapper/4.1.1": {
-        "type": "package",
-        "compile": {
-          "lib/net45/AutoMapper.dll": {}
-        },
-        "runtime": {
-          "lib/net45/AutoMapper.dll": {}
-        }
-      },
       "Castle.Core/3.3.3": {
         "type": "package",
         "compile": {
@@ -1426,6 +1407,7 @@
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
@@ -1445,6 +1427,7 @@
           "System.Net.Http",
           "System.Runtime.Serialization",
           "System.Transactions",
+          "System.Web",
           "System.Xml",
           "System.Xml.Linq"
         ]
@@ -1470,6 +1453,7 @@
           "Castle.Windsor": "3.3.0",
           "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
+          "EPiServer.Marketing.KPI": "1.0.0",
           "EPIServer.Marketing.Messaging": "1.0.0",
           "EPiServer.Marketing.Testing.Dal": "1.0.0",
           "Microsoft.AspNet.Mvc": "4.0.20710",
@@ -1488,6 +1472,7 @@
           "System.Core",
           "System.Data",
           "System.Data.DataSetExtensions",
+          "System.Runtime.Caching",
           "System.Transactions",
           "System.Web",
           "System.Xml",
@@ -1518,7 +1503,6 @@
         "type": "project",
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
-          "AutoMapper": "4.1.1",
           "Castle.Core": "3.3.3",
           "Castle.Windsor": "3.3.0",
           "EntityFramework": "6.1.3",
@@ -1548,6 +1532,7 @@
           "System.Data",
           "System.Data.DataSetExtensions",
           "System.Net.Http",
+          "System.Runtime.Caching",
           "System.Web",
           "System.Web.ApplicationServices",
           "System.Xml",
@@ -1955,37 +1940,6 @@
     "EPiServer.Marketing.Testing.Web/1.0.0": {
       "type": "project",
       "path": "../../src/EPiServer.Marketing.Testing.Web/project.json"
-    },
-    "AutoMapper/4.1.1": {
-      "type": "package",
-      "sha512": "wTNIFaF21i0heEEOMOLn4Ki991I+b6Ls+tiwTvmzVhkLo5PmSJcNLuf2eGJEtUnQ3UDBTAAdZEaXAgbTqOe2pg==",
-      "files": [
-        "AutoMapper.4.1.1.nupkg",
-        "AutoMapper.4.1.1.nupkg.sha512",
-        "AutoMapper.nuspec",
-        "lib/dotnet/AutoMapper.dll",
-        "lib/dotnet/AutoMapper.xml",
-        "lib/MonoAndroid/AutoMapper.dll",
-        "lib/MonoAndroid/AutoMapper.XML",
-        "lib/MonoTouch/AutoMapper.dll",
-        "lib/MonoTouch/AutoMapper.XML",
-        "lib/net40/AutoMapper.dll",
-        "lib/net40/AutoMapper.xml",
-        "lib/net45/AutoMapper.dll",
-        "lib/net45/AutoMapper.xml",
-        "lib/portable-net45+win+wpa81+wp80+MonoAndroid10+Xamarin.iOS10+MonoTouch10/AutoMapper.dll",
-        "lib/portable-net45+win+wpa81+wp80+MonoAndroid10+Xamarin.iOS10+MonoTouch10/AutoMapper.xml",
-        "lib/sl50/AutoMapper.dll",
-        "lib/sl50/AutoMapper.XML",
-        "lib/win/AutoMapper.dll",
-        "lib/win/AutoMapper.xml",
-        "lib/wp80/AutoMapper.dll",
-        "lib/wp80/AutoMapper.xml",
-        "lib/wpa81/AutoMapper.dll",
-        "lib/wpa81/AutoMapper.xml",
-        "lib/Xamarin.iOS10/AutoMapper.dll",
-        "lib/Xamarin.iOS10/AutoMapper.XML"
-      ]
     },
     "Castle.Core/3.3.3": {
       "type": "package",

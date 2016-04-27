@@ -3,6 +3,31 @@
   "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
+      "Castle.Core/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Castle.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Core.dll": {}
+        }
+      },
+      "Castle.Windsor/3.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "3.3.0"
+        },
+        "frameworkAssemblies": [
+          "System.Core",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Castle.Windsor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Windsor.dll": {}
+        }
+      },
       "Effort.EF6/1.1.4": {
         "type": "package",
         "dependencies": {
@@ -28,6 +53,32 @@
         "runtime": {
           "lib/net45/EntityFramework.dll": {},
           "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.CMS.Core/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "[3.3.3, 4.0.0)",
+          "Castle.Windsor": "[3.3.0, 4.0.0)",
+          "EPiServer.Framework": "[9.6.1]"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
         }
       },
       "EPiServer.Framework/9.6.1": {
@@ -62,6 +113,7 @@
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
@@ -81,6 +133,7 @@
           "System.Net.Http",
           "System.Runtime.Serialization",
           "System.Transactions",
+          "System.Web",
           "System.Xml",
           "System.Xml.Linq"
         ]
@@ -421,6 +474,31 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
+      "Castle.Core/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Castle.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Core.dll": {}
+        }
+      },
+      "Castle.Windsor/3.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "3.3.0"
+        },
+        "frameworkAssemblies": [
+          "System.Core",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Castle.Windsor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Windsor.dll": {}
+        }
+      },
       "Effort.EF6/1.1.4": {
         "type": "package",
         "dependencies": {
@@ -446,6 +524,32 @@
         "runtime": {
           "lib/net45/EntityFramework.dll": {},
           "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.CMS.Core/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "[3.3.3, 4.0.0)",
+          "Castle.Windsor": "[3.3.0, 4.0.0)",
+          "EPiServer.Framework": "[9.6.1]"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
         }
       },
       "EPiServer.Framework/9.6.1": {
@@ -480,6 +584,7 @@
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
@@ -499,6 +604,7 @@
           "System.Net.Http",
           "System.Runtime.Serialization",
           "System.Transactions",
+          "System.Web",
           "System.Xml",
           "System.Xml.Linq"
         ]
@@ -839,6 +945,31 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
+      "Castle.Core/3.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Castle.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Core.dll": {}
+        }
+      },
+      "Castle.Windsor/3.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "3.3.0"
+        },
+        "frameworkAssemblies": [
+          "System.Core",
+          "System.Xml"
+        ],
+        "compile": {
+          "lib/net45/Castle.Windsor.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Castle.Windsor.dll": {}
+        }
+      },
       "Effort.EF6/1.1.4": {
         "type": "package",
         "dependencies": {
@@ -864,6 +995,32 @@
         "runtime": {
           "lib/net45/EntityFramework.dll": {},
           "lib/net45/EntityFramework.SqlServer.dll": {}
+        }
+      },
+      "EPiServer.CMS.Core/9.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "[3.3.3, 4.0.0)",
+          "Castle.Windsor": "[3.3.0, 4.0.0)",
+          "EPiServer.Framework": "[9.6.1]"
+        },
+        "compile": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
+        },
+        "runtime": {
+          "lib/net45/EPiServer.Configuration.dll": {},
+          "lib/net45/EPiServer.dll": {},
+          "lib/net45/EPiServer.Enterprise.dll": {},
+          "lib/net45/EPiServer.ImageLibrary.dll": {},
+          "lib/net45/EPiServer.LinkAnalyzer.dll": {},
+          "lib/net45/EPiServer.Web.WebControls.dll": {},
+          "lib/net45/EPiServer.XForms.dll": {}
         }
       },
       "EPiServer.Framework/9.6.1": {
@@ -898,6 +1055,7 @@
         "framework": ".NETFramework,Version=v4.5",
         "dependencies": {
           "EntityFramework": "6.1.3",
+          "EPiServer.CMS.Core": "9.6.1",
           "EPiServer.Framework": "9.6.1",
           "Microsoft.AspNet.Mvc": "4.0.20710",
           "Microsoft.AspNet.Razor": "2.0.20710",
@@ -917,6 +1075,7 @@
           "System.Net.Http",
           "System.Runtime.Serialization",
           "System.Transactions",
+          "System.Web",
           "System.Xml",
           "System.Xml.Linq"
         ]
@@ -1262,6 +1421,56 @@
       "type": "project",
       "path": "../../src/EPiServer.Marketing.KPI/project.json"
     },
+    "Castle.Core/3.3.3": {
+      "type": "package",
+      "sha512": "tvVrLbHhtAGubUUDbEkH9JlivdlJOTI25u3hlyHpPxuJdTVi/yVQKWCYvGpafGPm7G1ibdWj4brqhtSQkAmN+g==",
+      "files": [
+        "ASL - Apache Software Foundation License.txt",
+        "BreakingChanges.txt",
+        "Castle.Core.3.3.3.nupkg",
+        "Castle.Core.3.3.3.nupkg.sha512",
+        "Castle.Core.nuspec",
+        "Changes.txt",
+        "lib/net35/Castle.Core.dll",
+        "lib/net35/Castle.Core.xml",
+        "lib/net40-client/Castle.Core.dll",
+        "lib/net40-client/Castle.Core.xml",
+        "lib/net45/Castle.Core.dll",
+        "lib/net45/Castle.Core.xml",
+        "lib/sl4/Castle.Core.dll",
+        "lib/sl4/Castle.Core.xml",
+        "lib/sl5/Castle.Core.dll",
+        "lib/sl5/Castle.Core.xml",
+        "License.txt",
+        "readme.txt"
+      ]
+    },
+    "Castle.Windsor/3.3.0": {
+      "type": "package",
+      "sha512": "5QiDI4DPLkIM7N9mTBaFlmh2GlWFZe+tF0tOzx0QdNE+pGWAm3gFrmKi4LnOIKIhGcocqW0zptMMIxidVMWqEQ==",
+      "files": [
+        "ASL - Apache Software Foundation License.txt",
+        "BreakingChanges.txt",
+        "Castle.Windsor.3.3.0.nupkg",
+        "Castle.Windsor.3.3.0.nupkg.sha512",
+        "Castle.Windsor.nuspec",
+        "Changes.txt",
+        "lib/net35/Castle.Windsor.dll",
+        "lib/net35/Castle.Windsor.xml",
+        "lib/net40/Castle.Windsor.dll",
+        "lib/net40/Castle.Windsor.xml",
+        "lib/net40-client/Castle.Windsor.dll",
+        "lib/net40-client/Castle.Windsor.xml",
+        "lib/net45/Castle.Windsor.dll",
+        "lib/net45/Castle.Windsor.xml",
+        "lib/sl4/Castle.Windsor.dll",
+        "lib/sl4/Castle.Windsor.xml",
+        "lib/sl5/Castle.Windsor.dll",
+        "lib/sl5/Castle.Windsor.xml",
+        "License.txt",
+        "readme.txt"
+      ]
+    },
     "Effort.EF6/1.1.4": {
       "type": "package",
       "sha512": "IahdSh6bAs5WZaWYxfsuS3JDa3iG3oK57LbDDO3XQyxLGrhvGPqm4dq42G98BmNaBZ9afy4gMBlIL1V6v7BIZw==",
@@ -1301,6 +1510,60 @@
         "tools/init.ps1",
         "tools/install.ps1",
         "tools/migrate.exe"
+      ]
+    },
+    "EPiServer.CMS.Core/9.6.1": {
+      "type": "package",
+      "sha512": "8IXpNS/ef9uShsgdxiVJDw2iKwJDaMqNM+G1bQZSlhlqLpcraEyetn9qipYKg/kPUP5m3wG+EQJsp5JDN6PutQ==",
+      "files": [
+        "EPiServer.CMS.Core.9.6.1.nupkg",
+        "EPiServer.CMS.Core.9.6.1.nupkg.sha512",
+        "EPiServer.CMS.Core.nuspec",
+        "lib/net45/EPiServer.Configuration.dll",
+        "lib/net45/EPiServer.Configuration.xml",
+        "lib/net45/EPiServer.dll",
+        "lib/net45/EPiServer.Enterprise.dll",
+        "lib/net45/EPiServer.Enterprise.xml",
+        "lib/net45/EPiServer.ImageLibrary.dll",
+        "lib/net45/EPiServer.LinkAnalyzer.dll",
+        "lib/net45/EPiServer.Web.WebControls.dll",
+        "lib/net45/EPiServer.Web.WebControls.xml",
+        "lib/net45/EPiServer.XForms.dll",
+        "lib/net45/EPiServer.XForms.xml",
+        "lib/net45/EPiServer.xml",
+        "tools/AssemblyRedirects.ps1",
+        "tools/EPiServer.Cms.Core.sql",
+        "tools/epiupdates/config/7.6.0.0.config",
+        "tools/epiupdates/config/8.0.0.0.config",
+        "tools/epiupdates/config/9.0.0.0.config",
+        "tools/epiupdates/config/9.0.3.0.config",
+        "tools/epiupdates/sql/7.10.0.sql",
+        "tools/epiupdates/sql/7.11.0.sql",
+        "tools/epiupdates/sql/7.12.0.sql",
+        "tools/epiupdates/sql/7.13.0.sql",
+        "tools/epiupdates/sql/7.14.0.sql",
+        "tools/epiupdates/sql/7.16.0.sql",
+        "tools/epiupdates/sql/7.19.0.sql",
+        "tools/epiupdates/sql/7.19.1.sql",
+        "tools/epiupdates/sql/7.8.0.sql",
+        "tools/epiupdates/sql/8.0.0.sql",
+        "tools/epiupdates/sql/8.10.0.sql",
+        "tools/epiupdates/sql/8.4.0.sql",
+        "tools/epiupdates/sql/8.6.0.sql",
+        "tools/epiupdates/sql/8.7.0.sql",
+        "tools/epiupdates/sql/8.9.0.sql",
+        "tools/epiupdates/sql/9.0.0.sql",
+        "tools/epiupdates/sql/9.0.1.sql",
+        "tools/epiupdates/sql/9.0.2.sql",
+        "tools/epiupdates/sql/9.1.0.sql",
+        "tools/epiupdates/sql/9.1.1.sql",
+        "tools/epiupdates/sql/9.2.0.sql",
+        "tools/epiupdates/sql/9.3.0.sql",
+        "tools/epiupdates/sql/9.4.0.sql",
+        "tools/epiupdates/sql/9.5.0.sql",
+        "tools/Install.ps1",
+        "tools/MirroringService/EPiServer.MirroringService.dll",
+        "tools/webconfig-baseline.config"
       ]
     },
     "EPiServer.Framework/9.6.1": {

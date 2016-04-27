@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Core;
+using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
-using EPiServer.Marketing.Testing.Test;
 using Xunit;
+using EPiServer.ServiceLocation;
+using Moq;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
@@ -15,11 +17,19 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         private TestContext _context;
         private DbConnection _dbConnection;
         private TestingDataAccess _mtm;
+        private TestManager _tm;
+        private Mock<IServiceLocator> _serviceLocator;
+
         public MultiVariantDataAccessTests()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
             _mtm = new TestingDataAccess(new Core.TestRepository(_context));
+
+            _serviceLocator = new Mock<IServiceLocator>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_mtm);
+
+            _tm = new TestManager(_serviceLocator.Object);
         }
 
         [Fact]
@@ -39,13 +49,113 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 State = DalTestState.Active,
                 Owner = "Bert",
                 KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
-                TestResults = new List<DalTestResult>(),
                 Variants = new List<DalVariant>()
             };
 
             _mtm.Save(test);
 
             Assert.Equal(_mtm.Get(id), test);
+        }
+
+        [Fact]
+        public void TestManager_CreateActiveTestCache()
+        {
+            var id = Guid.NewGuid();
+
+            var test = new DalABTest()
+            {
+                Id = id,
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                State = DalTestState.Active,
+                Owner = "Bert",
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                Variants = new List<DalVariant>()
+            };
+
+            var test2 = new DalABTest()
+            {
+                Id = Guid.NewGuid(),
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                State = DalTestState.Inactive,
+                Owner = "Ernie",
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                Variants = new List<DalVariant>()
+            };
+
+            _mtm.Save(test);
+            _mtm.Save(test2);
+
+            var tests = _tm.CreateActiveTestCache();
+
+            Assert.Equal(1, tests.Count);
+        }
+
+        [Fact]
+        public void TestManager_CreateVariantPageDataCache()
+        {
+            var id = Guid.NewGuid();
+            var itemId = Guid.NewGuid();
+
+            var testVariant = new DalVariant()
+            {
+                Id = Guid.NewGuid(),
+                ItemVersion = 0,
+                ItemId = itemId
+            };
+
+            var testVariant2 = new DalVariant()
+            {
+                Id = Guid.NewGuid(),
+                ItemVersion = 2,
+                ItemId = itemId
+            };
+
+            var test = new DalABTest()
+            {
+                Id = id,
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                State = DalTestState.Active,
+                OriginalItemId = itemId,
+                Owner = "Bert",
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                Variants = new List<DalVariant>() { testVariant, testVariant2 }
+            };
+           
+            _mtm.Save(test);
+
+            var pageRef = new PageReference() { ID = 2, WorkID = 2 };
+            var variantPage = new PageData(pageRef);
+            var references = new List<ContentReference>() {new ContentReference() {ID = 3, WorkID = 3, ProviderName = "TestProvider"} };
+            var contentLoader = new Mock<IContentLoader>();
+
+            _serviceLocator.Setup(call => call.GetInstance<IContentLoader>()).Returns(contentLoader.Object);
+            contentLoader.Setup(call => call.Get<IContent>(itemId)).Returns(variantPage);
+
+            var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
+            var contentData = new PageData(pageRef2) as IContent;
+            
+            contentData.Property.Add(new PropertyNumber() {Name = "PageWorkStatus"});
+            contentData.Property.Add(new PropertyDate() { Name = "PageStartPublish"});
+            contentLoader.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(contentData);
+
+            var pd = _tm.CreateVariantPageDataCache(itemId, references);
+
+            Assert.Equal(VersionStatus.Published, pd.Status);
         }
 
         [Fact]
@@ -248,7 +358,6 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 Owner = "Bert",
-                TestResults = new List<DalTestResult>(),
                 Variants = new List<DalVariant>(),
                 KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
                 ParticipationPercentage = 100,
@@ -257,7 +366,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             //_mtm.Save(test);
 
-            var result = new DalTestResult()
+            var variant = new DalVariant()
             {
                 ItemId = itemId,
                 Id = Guid.NewGuid(),
@@ -267,19 +376,19 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ItemVersion = itemVersion
             };
 
-            test.TestResults.Add(result);
+            test.Variants.Add(variant);
 
             _mtm.Save(test);
 
-            // check that a result exists
-            Assert.Equal(test.TestResults.Count(), 1);
+            // check that a variant exists
+            Assert.Equal(test.Variants.Count(), 1);
 
             _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.View);
             _mtm.IncrementCount(testId, itemId, itemVersion, DalCountType.Conversion);
 
-            // check the result is incremented correctly
-            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views, 1);
-            Assert.Equal(test.TestResults.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Conversions, 1);
+            // check the variant is incremented correctly
+            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views);
+            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Conversions);
         }
 
         [Fact]
@@ -299,14 +408,14 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _mtm._repository.Add(test);
             _mtm._repository.SaveChanges();
 
-            Assert.Equal(_mtm._repository.GetAll().Count(), 1);
+            Assert.Equal(1, _mtm._repository.GetAll().Count());
         }
 
         [Fact]
         public void MultivariteTestManagerMultivariateDataAccess()
         {
             TestingDataAccess mda = new TestingDataAccess();
-            Assert.NotNull(mda._repository);
+            Assert.True(mda._UseEntityFramework);
         }
 
         [Fact]
@@ -333,15 +442,15 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variant = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
             tests[0].Variants.Add(variant);
 
-            var result = new DalTestResult() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
-            tests[0].TestResults.Add(result);
+            var variant2 = new DalVariant() {Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1, TestId = tests[0].Id };
+            tests[0].Variants.Add(variant2);
             _mtm.Save(tests[0]);
 
             variant.ItemVersion = 2;
             _mtm.Save(tests[0]);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).OriginalItemId, originalItemId);
-            Assert.Equal(_mtm.Get(tests[0].Id).Variants.First(v => v.ItemId == originalItemId).ItemVersion, 2);
+            Assert.Equal(originalItemId, _mtm.Get(tests[0].Id).OriginalItemId);
+            Assert.Equal(2, _mtm.Get(tests[0].Id).Variants.First(v => v.ItemId == originalItemId).ItemVersion);
 
         }
 
@@ -354,21 +463,16 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             var variant = new DalVariant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
             tests[0].Variants.Add(variant);
 
-            var result = new DalTestResult() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
-            tests[0].TestResults.Add(result);
             _mtm.Save(tests[0]);
 
             var variantItemId2 = Guid.NewGuid();
             var variant2 = new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
             tests[0].Variants.Add(variant2);
 
-            var result2 = new DalTestResult() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
-            tests[0].TestResults.Add(result2);
-
             _mtm.Save(tests[0]);
 
-            Assert.Equal(_mtm.Get(tests[0].Id).OriginalItemId, originalItemId);
-            Assert.Equal(_mtm.Get(tests[0].Id).Variants.Count, 2);
+            Assert.Equal(originalItemId, _mtm.Get(tests[0].Id).OriginalItemId);
+            Assert.Equal(2, _mtm.Get(tests[0].Id).Variants.Count);
         }
 
     }

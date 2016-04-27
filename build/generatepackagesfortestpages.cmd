@@ -5,10 +5,6 @@ set ProjectPath="..\samples\EpiServer.Marketing.Testing.TestPages"
 
 IF exist "%PackagePath%" ( rd "%PackagePath%" /s /q )
 
-md "%PackagePath%\lib"
-
-xcopy "..\artifacts\%Configuration%\net45\EPiServer.Marketing.Testing.TestPages.dll" "%PackagePath%\lib\"  /I /F /R /Y
-
 md "%PackagePath%\content\Views"
 md "%PackagePath%\content\Controllers"
 md "%PackagePath%\content\ApiTesting"

@@ -2,9 +2,14 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Web.Mvc;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
+using EPiServer.ServiceLocation;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -12,6 +17,7 @@ namespace EPiServer.Marketing.Testing.Web
     public class TestingStore : RestControllerBase
     {
         private readonly IMarketingTestingWebRepository _marketingTestRepository;
+
 
         [ExcludeFromCodeCoverage]
         public TestingStore()
@@ -28,11 +34,12 @@ namespace EPiServer.Marketing.Testing.Web
         [HttpPost]
         public ActionResult Post(TestingStoreModel testData)
         {
-            RestStatusCodeResult createTestRestStatus = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
+            RestStatusCodeResult createTestRestStatus =
+                new RestStatusCodeResult((int) HttpStatusCode.InternalServerError);
 
             if (_marketingTestRepository.CreateMarketingTest(testData) != Guid.Empty)
             {
-                createTestRestStatus = new RestStatusCodeResult((int)HttpStatusCode.Created);
+                createTestRestStatus = new RestStatusCodeResult((int) HttpStatusCode.Created);
             }
             return createTestRestStatus;
         }

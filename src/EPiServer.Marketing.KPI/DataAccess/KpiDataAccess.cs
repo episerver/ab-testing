@@ -35,7 +35,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// </summary>
         /// <param name="kpiId">Id of the KPI to retrieve.</param>
         /// <returns>KPI object.</returns>
-        public IKpi Get(Guid kpiId)
+        public IDalKpi Get(Guid kpiId)
         {
             return _repository.GetById(kpiId);
         }
@@ -44,7 +44,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// Gets the whole list of KPI objects.
         /// </summary>
         /// <returns>List of KPI objects.</returns>
-        public List<IKpi> GetKpiList()
+        public List<IDalKpi> GetKpiList()
         {
             return _repository.GetAll().ToList();
         }
@@ -54,9 +54,9 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// </summary>
         /// <param name="kpiObject">Id of the KPI to add/update.</param>
         /// <returns>The Id of the KPI object that was added/updated.</returns>
-        public Guid Save(IKpi kpiObject)
+        public Guid Save(IDalKpi kpiObject)
         {
-            var kpi = _repository.GetById(kpiObject.Id) as Kpi;
+            var kpi = _repository.GetById(kpiObject.Id) as DalKpi;
             Guid id;
 
             // if a test doesn't exist, add it to the db
@@ -67,6 +67,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
             }
             else
             {
+                kpi.ClassName = kpiObject.ClassName;
                 kpi.Properties = kpiObject.Properties;
                 id = kpi.Id;
             }

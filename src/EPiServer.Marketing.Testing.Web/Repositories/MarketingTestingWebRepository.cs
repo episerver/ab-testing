@@ -4,7 +4,10 @@ using System.Linq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -42,9 +45,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             IMarketingTest test = ConvertToMarketingTest(testData);
 
-            tm.Save(test);
+            
 
-            return new Guid();
+            return tm.Save(test);
         }
 
         /// <summary>
@@ -91,6 +94,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
         {
             IMarketingTest test = new ABTest();
+
+            var content = _serviceLocator.GetInstance<IContentRepository>()
+                .Get<IContent>( new ContentReference(testData.ConversionPage) );
+
+            var kpi = new ContentComparatorKPI(content.ContentGuid)
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+
             test = new ABTest
             {
                 Id = Guid.NewGuid(),
@@ -103,26 +117,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 ParticipationPercentage = testData.ParticipationPercent,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion},
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion}
+                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
+                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
-                KeyPerformanceIndicators = new List<KeyPerformanceIndicator>
-                {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid() }
-                }
+                KpiInstances = new List<IKpi> { kpi },
+
             };
 
-            test.TestResults = GenerateTestResultList(test.Variants);
-
             return test;
-        }
-
-        private List<TestResult> GenerateTestResultList(List<Variant> variants)
-        {
-            return variants.Select(v => new TestResult()
-            {
-                Id = Guid.NewGuid(), ItemId = v.Id, ItemVersion = v.ItemVersion
-            }).ToList();
         }
 
         private string GetCurrentUser()

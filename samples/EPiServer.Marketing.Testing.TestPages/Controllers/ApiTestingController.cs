@@ -9,6 +9,9 @@ using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
 using System.Threading;
 using System.Diagnostics;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using System.Linq;
+using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
@@ -83,23 +86,26 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     Id = testId,
                     CreatedDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(5),
-                    KeyPerformanceIndicators = new List<KeyPerformanceIndicator>(),
+                    KpiInstances = new List<IKpi>(),
                     LastModifiedBy = "Automation",
                     ModifiedDate = DateTime.Now,
                     OriginalItemId = startpage.ContentGuid,
                     Owner = "Automation",
                     StartDate = DateTime.Now.AddDays(1),
                     State = Data.Enums.TestState.Inactive,
-                    TestResults = new List<TestResult>(),
                     Title = "Automation_" + TestID,
                     Description = "Description_" + TestID++,
                     Variants = new List<Variant>() {
-                                    new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 1},
-                                    new Variant() { Id = Guid.NewGuid(), ItemId=Guid.NewGuid(), ItemVersion = 2}
+                                    new Variant()
+                                    {
+                                        Id = Guid.NewGuid(), ItemId = startpage.ContentGuid, ItemVersion = 1, Views = 0, Conversions = 0
+                                    },
+                                    new Variant()
+                                    {
+                                        Id = Guid.NewGuid(), ItemId = startpage.ContentGuid, ItemVersion = 2, Views = 0, Conversions = 0
+                                    }
                                 }
                 };
-                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[0].Id, ItemVersion = 1});
-                test.TestResults.Add(new TestResult { Id = Guid.NewGuid(), ItemId = test.Variants[1].Id, ItemVersion = 2});
 
                 testManager.Save(test);
             }
@@ -165,16 +171,16 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 {
                     for (int x = 0; x < _model.Views; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.View);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id, 
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.View);
                     }
                     for (int x = 0; x < _model.Conversions; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].Id,
+                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.Conversion);
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].Id,
+                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.Conversion);
                     }
 
@@ -391,6 +397,32 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             public TimeSpan ElapsedTimeToProcessAllMessages { get; set; }
 
             public int QueueCount { get; set; }
+        }
+
+        public ActionResult ViewMarketingTestCacheData()
+        {
+            TestManager tm = new TestManager();
+            CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
+            cacheTestingViewModel.ActiveTestCache = new List<IMarketingTest>();
+            cacheTestingViewModel.ActiveTestCache = tm.CreateActiveTestCache();
+            cacheTestingViewModel.CachedVersionPageData = new List<PageData>();
+            MemoryCache memCache = MemoryCache.Default;
+            List<string> cachedKeys =
+                memCache.Select(x => x.Key).Where(x => x.Contains("epi") && !x.ToLower().Contains("episerver")).ToList();
+            foreach (string item in cachedKeys)
+            {
+                cacheTestingViewModel.CachedVersionPageData.Add(memCache.Get(item) as PageData);
+            }
+
+            return View(cacheTestingViewModel);
+
+        }
+
+
+        public ActionResult DeleteCacheEntry(Guid id)
+        {
+            MemoryCache.Default.Remove("epi" + id.ToString());
+            return RedirectToAction("ViewMarketingTestCacheData");
         }
     }
 }

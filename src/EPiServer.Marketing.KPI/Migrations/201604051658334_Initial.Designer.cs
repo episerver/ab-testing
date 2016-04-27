@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EPiServer.Marketing.Testing.Dal.Migrations {
+namespace EPiServer.Marketing.KPI.Migrations {
     using System;
     using System.Reflection;
     
@@ -22,13 +22,13 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations {
     // with the /str option, or rebuild your VS project.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class _201603241337050_Initial {
+    internal class _201604051658334_Initial {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
-        internal _201603241337050_Initial() {
+        internal _201604051658334_Initial() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EPiServer.Marketing.Testing.Dal.Migrations.201603241337050_Initial", typeof(_201603241337050_Initial).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EPiServer.Marketing.KPI.Migrations.201604051658334_Initial", typeof(_201604051658334_Initial).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to  H4sIAAAAAAAEAO1c3W7jNha+X2DfQdDlIrWdDAq0gd0ik5/C2MkkiDPZxd4MaOnYISpRrkilMRb7ZL3oI+0r7JGtP5KiTElO6nSDuZiEPx95Ds/hOaQ+5r+//T7+8TkMnCeIOY3YxD0ejFwHmBf5lC0nbiIW33zn/vjDX/8yvvTDZ+chb/chbYc9GZ+4j0KsTodD7j1CSPggpF4c8WghBl4UDokfDU9Go++Hx8dDQAgXsRxnfJcwQUPY/IK/nkfMg5VISHAd+RDwrBxrZhtU5zMJga+IBxP38pbOIMYZD65J/DMInOjgHvjm/wsSuM5ZQAlOawbBwnUIY5EgAid9+oXDTMQRW85WWECC+/UKsN2CBBwyYU7L5rZyjU5SuYZlxxzKS7iIwpaAxx8yRQ3V7p3U7RaKRFVeosrFOpV6o86Je/Yx1ZvrqEOdngdx2mynrgdbyMEW6MjJqo4KO0FzSv8dOedJIJIYJgwSEZPgyLlN5gH1/g7r++hnYBOWBEF1 [rest of string was truncated]&quot;;.
+        ///    Looks up a localized string similar to  H4sIAAAAAAAEAM1X227bOBB9X2D/QeDTLpCKSfvSDeQWWTkpjNSJUaV9p6WRQ5QXlaQC+9v6sJ+0v7BD62r5UjsNioUBQxrOHJ4ZzoX69/s/0fulFMETGMu1GpGL8JwEoFKdcbUYkdLlr96S9+9+/y26zuQy+NLovfF6aKnsiDw6V1xSatNHkMyGkqdGW527MNWSskzT1+fnf9GLCwoIQRArCKJPpXJcwvoFX2OtUihcycRUZyBsLceVZI0a3DEJtmApjMj1jCdgkHE4ZeYrOCQa3s4m4ZgJElwJzpBSAiInAVNKO+aQ8OVnC4kzWi2SAgVMPKwKQL2cCQu1I5ed+rE+nb/2PtHOsIFKS+u0PBHw4k0dJDo0f1aoSRtEDOM1htutvNfrUI4IRuu24CQYbnUZC+PVDsY5XJ9SWGGcBSg9a1MDM8j/zoK4FK40MFJQOsPEWTAr54Knt7B60F9BjVQpRJ8jssS1DQGKZkYXYNzqE+Q180lGArppR4eGrVnP [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Target {
             get {

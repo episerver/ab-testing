@@ -3,13 +3,16 @@ using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Dal
 {
-    public class KpiMap : EntityTypeConfiguration<Kpi>
+    public class KpiMap : EntityTypeConfiguration<DalKpi>
     {
         public KpiMap()
         {
             this.ToTable("tblKeyPerformaceIndicator");
 
             this.HasKey(hk => hk.Id);
+
+            this.Property(m => m.ClassName)
+                .IsRequired();
 
             this.Property(m => m.Properties)
                 .IsRequired();
