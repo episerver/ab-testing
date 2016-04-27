@@ -357,22 +357,36 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             ApiTestingRepository apiRepo = new ApiTestingRepository();
 
 
-            PageVersionCollection pageVersions = apiRepo.GetContentVersions(Guid.Parse(originalItem));
-
-            List<VersionData> versions = new List<VersionData>();
-            foreach (PageVersion v in pageVersions)
+            Guid id;
+            if (Guid.TryParse(originalItem, out id))
             {
+                PageVersionCollection pageVersions = apiRepo.GetContentVersions(id);
 
-                IServiceLocator serviceLocator = ServiceLocator.Current;
-                IContentRepository contentRepository = serviceLocator.GetInstance<IContentRepository>();
+                List<VersionData> versions = new List<VersionData>();
+                foreach (PageVersion v in pageVersions)
+                {
 
-                PageData pageData = contentRepository.Get<PageData>(v.ContentLink);
+                    IServiceLocator serviceLocator = ServiceLocator.Current;
+                    IContentRepository contentRepository = serviceLocator.GetInstance<IContentRepository>();
+
+                    PageData pageData = contentRepository.Get<PageData>(v.ContentLink);
 
 
-                versions.Add(new VersionData() { Name = pageData.PageName, Version = pageData.WorkPageID.ToString(), Reference = pageData.ContentLink.ToString() });
+                    versions.Add(new VersionData()
+                    {
+                        Name = pageData.PageName,
+                        Version = pageData.WorkPageID.ToString(),
+                        Reference = pageData.ContentLink.ToString(),
+                        Status = pageData.Status
+                    });
+                }
+
+                return Json(versions);
             }
-
-            return Json(versions);
+            else
+            {
+                return Json(new { Success = false, responseText = "Invalid Guid Structure. Check that you have entered a valid Guid." });
+            }
         }
 
         private class VersionData
@@ -380,6 +394,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             public string Name { get; set; }
             public string Version { get; set; }
             public string Reference { get; set; }
+            public VersionStatus Status { get; set; }
         }
 
         public class IntegrationTestModel
