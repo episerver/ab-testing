@@ -28,8 +28,6 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<DalABTest> ABTests { get; set; }
 
-        public DbSet<DalTestResult> ABTestsResults { get; set; }
-
         public DbSet<DalVariant> Variants { get; set; }
 
         public DbSet<DalKeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
@@ -41,7 +39,6 @@ namespace EPiServer.Marketing.Testing.Dal
                 this._modelBuilder = modelBuilder;
 
                 _modelBuilder.Configurations.Add(new Mappings.ABTestMap());
-                _modelBuilder.Configurations.Add(new Mappings.ABTestResultMap());
                 _modelBuilder.Configurations.Add(new Mappings.VariantMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());
             }

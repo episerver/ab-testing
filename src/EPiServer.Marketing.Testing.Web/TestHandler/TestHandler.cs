@@ -194,7 +194,7 @@ namespace EPiServer.Marketing.Testing.Web
             //increment view if not already done
             if (_testData.Viewed == false)
             {
-                _testManager.IncrementCount(_testData.TestId, _testData.TestVariantId, contentVersion,
+                _testManager.IncrementCount(_testData.TestId, _testData.TestContentId, contentVersion,
                     CountType.View);
             }
             //set viewed = true in testdata

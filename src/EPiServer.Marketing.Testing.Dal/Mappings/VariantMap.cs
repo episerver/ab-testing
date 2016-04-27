@@ -21,6 +21,12 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.IsWinner)
                 .IsRequired();
 
+            this.Property(m => m.Views)
+                .IsRequired();
+
+            this.Property(m => m.Conversions)
+                .IsRequired();
+
             this.HasRequired(m => m.DalABTest)
                 .WithMany(m => m.Variants)
                 .HasForeignKey(m => m.TestId)

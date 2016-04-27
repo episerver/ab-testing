@@ -27,6 +27,16 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public bool IsWinner { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public int Conversions { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Views { get; set; }
+        
+        /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual DalABTest DalABTest { get; set; }

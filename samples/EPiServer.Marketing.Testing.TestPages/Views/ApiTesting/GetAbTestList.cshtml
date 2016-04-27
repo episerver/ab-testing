@@ -48,15 +48,18 @@
         </div>
 
         <hr />
-        @if (Model.TestResults != null)
+        @if (Model.Variants != null)
         {
-            foreach (var result in Model.TestResults)
+            foreach (var variant in Model.Variants)
             {
                 <div class="display-label">
-                    @Html.DisplayNameFor(resultItem => result.Views) : @Html.DisplayFor(resultItem => result.Views)
+                    @Html.DisplayNameFor(resultItem => variant.Views) : @Html.DisplayFor(resultItem => variant.Views)
                 </div>
                 <div class="display-label">
-                    @Html.DisplayNameFor(resultItem => result.ItemId) : @Html.DisplayFor(resultItem => result.ItemId)
+                    @Html.DisplayNameFor(resultItem => variant.ItemId) : @Html.DisplayFor(resultItem => variant.ItemId)
+                </div>                
+                <div class="display-label">
+                    @Html.DisplayNameFor(resultItem => variant.ItemVersion) : @Html.DisplayFor(resultItem => variant.ItemVersion)
                 </div>
                 <br />
             }

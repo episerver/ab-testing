@@ -70,11 +70,6 @@ namespace EPiServer.Marketing.Testing.Data
         List<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of test results. There will be a TestResult for the OriginalItem and each Variant item.
-        /// </summary>
-        List<TestResult> TestResults { get; set; }
-
-        /// <summary>
         /// List of key performance indicators.  These can be time on a page, form submission, etc.
         /// </summary>
         List<IKpi> KpiInstances { get; set; }

@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Testing.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
+    [ExcludeFromCodeCoverage]
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -46,23 +49,6 @@ namespace Testing.Migrations
                 .Index(t => t.TestId);
             
             CreateTable(
-                "dbo.tblABTestResult",
-                c => new
-                    {
-                        Id = c.Guid(nullable: false),
-                        TestId = c.Guid(nullable: false),
-                        ItemId = c.Guid(nullable: false),
-                        ItemVersion = c.Int(nullable: false),
-                        Views = c.Int(nullable: false),
-                        Conversions = c.Int(nullable: false),
-                        CreatedDate = c.DateTime(nullable: false),
-                        ModifiedDate = c.DateTime(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.tblABTest", t => t.TestId, cascadeDelete: true)
-                .Index(t => t.TestId);
-            
-            CreateTable(
                 "dbo.tblABVariant",
                 c => new
                     {
@@ -71,6 +57,8 @@ namespace Testing.Migrations
                         ItemId = c.Guid(nullable: false),
                         ItemVersion = c.Int(nullable: false),
                         IsWinner = c.Boolean(nullable: false),
+                        Conversions = c.Int(nullable: false),
+                        Views = c.Int(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })
@@ -83,13 +71,10 @@ namespace Testing.Migrations
         public override void Down()
         {
             DropForeignKey("dbo.tblABVariant", "TestId", "dbo.tblABTest");
-            DropForeignKey("dbo.tblABTestResult", "TestId", "dbo.tblABTest");
             DropForeignKey("dbo.tblABKeyPerformanceIndicator", "TestId", "dbo.tblABTest");
             DropIndex("dbo.tblABVariant", new[] { "TestId" });
-            DropIndex("dbo.tblABTestResult", new[] { "TestId" });
             DropIndex("dbo.tblABKeyPerformanceIndicator", new[] { "TestId" });
             DropTable("dbo.tblABVariant");
-            DropTable("dbo.tblABTestResult");
             DropTable("dbo.tblABKeyPerformanceIndicator");
             DropTable("dbo.tblABTest");
         }
