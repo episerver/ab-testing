@@ -25,6 +25,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _serviceLocator = ServiceLocator.Current;
         }
 
+        public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
+        {
+            var testManager = _serviceLocator.GetInstance<ITestManager>();
+            var aTest = testManager.GetTestByItemId(aContentGuid).Find(tl => tl.State == Data.Enums.TestState.Active);
+
+            if (aTest == null)
+                aTest = new ABTest();
+
+            return aTest;
+        }
+
         /// <summary>
         /// For unit testing
         /// </summary>
@@ -147,18 +158,5 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             DateTime endDate = DateTime.Parse(startDate).ToLocalTime();
             return endDate.AddDays(testDuration);
         }
-
-
-
-
-
-
-
-
-
-
-
-       
-
     }
 }
