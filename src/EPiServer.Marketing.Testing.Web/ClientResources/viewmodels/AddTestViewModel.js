@@ -78,6 +78,8 @@
                 testTitle: this.testTitle,
                 startDate: this.startDate
             }).then(function () {
+                var contentGuid = this.contentData.contentGuid;
+                var contextParameters = {uri: 'epi.cms.contentdata:///'+contentGuid}
                 me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");

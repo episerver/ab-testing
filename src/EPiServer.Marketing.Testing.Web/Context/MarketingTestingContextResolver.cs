@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 VersionAgnosticUri = uri,
                 Name = marketingTest.Title,
                 DataType = typeof(IMarketingTest).FullName.ToLowerInvariant(),
-                CustomViewType = "marketing-testing/views/TestDetailsView"
+                CustomViewType = "marketing-testing/views/MultivariateTestDetailsView"
             };
 
             return true;
