@@ -10,6 +10,7 @@ using Microsoft.AspNet.FileProviders;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNet.Mvc.Internal;
 
 namespace EPiServer.Marketing.Testing.Web.ClientTest
 {
@@ -18,13 +19,18 @@ namespace EPiServer.Marketing.Testing.Web.ClientTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            new MvcBuilder(services).AddControllersAsServices(new[]
+            {
+                typeof(TestRunnerExtensions).Assembly,
+                typeof(Startup).Assembly
+            });
             services.AddTestRunner();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder builder, IHostingEnvironment environment, DojoConfiguration dojoConfiguration, ProviderBasedLocalizationService localizationService)
         {
-            builder.UseTestRunner(environment);
+            builder.UseCmsTestEnvironment();
 
             // Create a physical file provider to serve the javascript source as static files
             var sourcePath = Path.Combine(environment.WebRootPath, @"..\..\..\src\EPiServer.Marketing.Testing.Web\ClientResources");
@@ -32,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientTest
             builder.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(sourcePath),
-                RequestPath = new Microsoft.AspNet.Http.PathString("/marketing-testing")
+                RequestPath = new Microsoft.AspNet.Http.PathString("/shell/marketing-testing")
             });
 
             var epiPath = Path.Combine(environment.WebRootPath, @"..\..\DtkBinaries\dojo-release-1.8.9-src\epi");

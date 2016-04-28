@@ -2,6 +2,8 @@
 using System.Web;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
+using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -10,10 +12,13 @@ namespace EPiServer.Marketing.Testing.Web
     public class TestHandlerInitializer : IInitializableHttpModule
     {
         private readonly TestHandler _testHandler;
+        private UrlResolver _pageRouteHelper;
+
 
         public TestHandlerInitializer()
         {
             _testHandler = new TestHandler();
+
         }
         public void Initialize(InitializationEngine context)
         {
@@ -28,14 +33,25 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void InitializeHttpEvents(HttpApplication application)
         {
+            application.BeginRequest += BeginRequest;
             application.EndRequest += EndRequest;
 
         }
 
+        private void BeginRequest(object sender, EventArgs e)
+        {
+            _pageRouteHelper = ServiceLocator.Current.GetInstance<UrlResolver>();
+            HttpContext.Current.Items["CurrentPage"] = _pageRouteHelper.Route(new UrlBuilder(HttpContext.Current.Request.Url));
+          //  _testHandler.CurrentPage = _pageRouteHelper.Route(new UrlBuilder(HttpContext.Current.Request.Url));
+
+
+        }
+
+
 
         private void EndRequest(object sender, EventArgs e)
         {
-          
+           
             _testHandler.ProcessedContentList.Clear();
         }
 

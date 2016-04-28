@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Test.Dal;
-using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
@@ -34,7 +34,6 @@ namespace EPiServer.Marketing.Testing.Test
                     OriginalItemId = Guid.NewGuid(),
                     State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
-                    TestResults = new List<DalTestResult>(),
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 });
@@ -65,7 +64,6 @@ namespace EPiServer.Marketing.Testing.Test
                     LastModifiedBy = "me",
                     OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,
-                    TestResults = new List<DalTestResult>(),
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 };
@@ -75,21 +73,6 @@ namespace EPiServer.Marketing.Testing.Test
             }
 
             return newABTests;
-        }
-
-        internal void AddMultivariateTestResults(TestingDataAccess mtmManager, DalABTest multivariateTest, Guid itemId)
-        {
-            var result = new DalTestResult()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                Views = 0,
-                Conversions = 0,
-                ItemId = itemId
-            };
-
-            multivariateTest.TestResults.Add(result);
-            mtmManager.Save(multivariateTest);
         }
     }
 }

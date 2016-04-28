@@ -110,23 +110,30 @@
 
 
         <hr />
-        @if (Model.TestResults != null)
+        @if (Model.Variants != null)
         {
             <table style="width:50%">
-                @foreach (var result in Model.TestResults)
+                @foreach (var variant in Model.Variants)
                 {
-                    <tr><td> @Html.DisplayNameFor(resultItem => result.ItemId)</td><td> @Html.DisplayFor(resultItem => result.ItemId) version: @Html.DisplayFor(resultItem => result.ItemVersion) </td></tr>
                     <tr>
-                        <td>@Html.DisplayNameFor(resultItem => result.Views)</td>
-                        <td>@Html.DisplayFor(resultItem => result.Views)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@result.ItemId','@result.ItemVersion');" /></td>
+                        <td> @Html.DisplayNameFor(resultItem => variant.ItemId)</td>
+                        <td> @Html.DisplayFor(resultItem => variant.ItemId)</td>
                     </tr>
                     <tr>
-                        <td>@Html.DisplayNameFor(resultItem => result.Conversions)</td>
-                        <td>@Html.DisplayFor(resultItem => result.Conversions)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@result.ItemId','@result.ItemVersion');" /></td>
+                        <td> @Html.DisplayNameFor(resultItem => variant.ItemVersion)</td>
+                        <td> @Html.DisplayFor(resultItem => variant.ItemVersion) </td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(resultItem => variant.Views)</td>
+                        <td>@Html.DisplayFor(resultItem => variant.Views)</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@variant.ItemId','@variant.ItemVersion');" /></td>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(resultItem => variant.Conversions)</td>
+                        <td>@Html.DisplayFor(resultItem => variant.Conversions)</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@variant.ItemId','@variant.ItemVersion');" /></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@result.ItemId','@result.ItemVersion' );" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@variant.ItemId','@variant.ItemVersion' );" /></td>
                     </tr>
                     <tr><td>&nbsp;</td></tr> }
             </table>

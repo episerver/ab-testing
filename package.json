@@ -5,7 +5,8 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp --tasks-simple",
-    "test": "gulp test"
+    "test": "gulp test",
+    "extract-js-sources": "gulp extract-js-sources"
   },
   "repository": {
     "type": "git",
