@@ -34,9 +34,17 @@
                 $("#Variants_0_ItemVersion").empty();
                 $("#Variants_1_ItemVersion").empty();
 
-                $.each(returnedData, function(i, val) {
-                    $("#Variants_0_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
-                    $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                $.each(returnedData, function (i, val) {
+                    if (typeof val.Status == 'undefined' && typeof val != 'boolean') {
+                        alert("Error: " + val);
+                    }
+                    if (val.Status == 4) { // 4 = VersionStatus.Published
+                        var version = val.Reference.substring(0, val.Reference.indexOf('_'));
+                        $("#Variants_0_ItemVersion").append("<option value='" + version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                    } else {
+                        $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                    }
+
 
                 });
                 $('#Variants_0_ItemId').val($('#originalItem').val());

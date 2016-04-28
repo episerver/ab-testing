@@ -1,0 +1,100 @@
+﻿<script>
+    require(["dojo/dom",
+            "dojo/_base/config",
+            "dojo/ready",
+            "dojo/Stateful",
+            "dojo/topic",
+            "dojo/Deferred",
+            "dojo/store/Memory",
+            "dijit/Form/Button",
+            "dijit/form/TextBox",
+            "dojox/mvc/at",
+            "epi/dependency",
+            "marketing-testing/viewmodels/AddTestViewModel",
+            "marketing-testing/views/AddTestView" ],
+        function (dom, config, ready, Stateful, topic, Deferred, Memory, Button, TextBox, at, dependency, AddTestViewModel, AddTestView) {
+            ready(function() {
+                
+                dependency.register("epi.storeregistry", { get : function() {return new Memory()}});
+                
+                dependency.register("epi.cms.contentRepositoryDescriptors", { pages: { roots: {}}});
+                
+                dependency.register("epi.shell.Profile", {
+                    get: function() {
+                        return "currentUser";
+                    }
+                });
+
+                var lastPublished = new Date();
+                lastPublished.setDate(lastPublished.getDate() - 2);
+                
+                var savedDate = new Date();
+                savedDate.setDate(savedDate.getDate() - 1);
+
+                var currentVersion = {
+                    savedBy: "admin",
+                    lastPublished: lastPublished,
+                    contentGuid: "pageguid-current",
+                    name: "Current version",
+                    contentLink: "123_3",
+                    changedBy: "admin",
+                    saved: savedDate
+                };
+
+                var publishedVersion = {
+                    savedBy: "admin",
+                    lastPublished: lastPublished,
+                    contentGuid: "pageguid-original",
+                    name: "Original page",
+                    contentLink: "123",
+                    changedBy: "admin",
+                    saved: lastPublished
+                };
+                
+                var contentVersionStore  = {
+                    query: function() {
+                        var deferred = new Deferred();
+                        deferred.resolve(                             
+                            publishedVersion
+                        );
+                        return deferred.promise;
+                    }
+                };
+                
+                var model = new AddTestViewModel({ 
+                    contentData: currentVersion,
+                    store: contentVersionStore,
+                    _contentVersionStore: contentVersionStore
+                });
+
+                var addView = new AddTestView({
+                    model: model,
+                    contentData: currentVersion
+                }, "widgetNode");
+
+                addView.startup();
+
+                var succeedButton = new Button({
+                        label: "Succeed",
+                        onClick: function () {
+                        }
+                    }, "successButtonNode");
+
+                succeedButton.startup();
+
+                var failedButton = new Button({
+                        label: "Failed",
+                        onClick: function () {                            
+                        }
+                    }, "failedButtonNode");
+
+                failedButton.startup();
+            });
+        });
+</script>
+
+
+<div id="widgetNode"></div>
+<hr style="clear: both;" />
+<div id="successButtonNode"></div>
+<div id="failedButtonNode"></div>

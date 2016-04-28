@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
-namespace EPiServer.Marketing.Testing.Dal
+namespace EPiServer.Marketing.Testing.Dal.DataAccess
 {
     public interface ITestingDataAccess
     {

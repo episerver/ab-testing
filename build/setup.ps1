@@ -61,6 +61,15 @@ if([System.Convert]::ToBoolean($clean) -eq $true) {
 # Build 
 &"$cwd\build.ps1" $configuration
 
+#Extract client resources
+pushd ..
+&"$cwd\npm.cmd" run extract-js-sources
+if ($lastexitcode -eq 1) {
+    Write-Host "Extracting client resources failed" -foreground "red"
+    exit $lastexitcode
+}
+pushd $cwd
+
 # Setup database
 $databasePath = Join-Path $SitePath "App_Data"
 Detach-Database $DbName $DbServer

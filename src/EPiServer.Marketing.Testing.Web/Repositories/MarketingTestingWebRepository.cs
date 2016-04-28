@@ -128,24 +128,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 ParticipationPercentage = testData.ParticipationPercent,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion},
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion}
+                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
+                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
                 KpiInstances = new List<IKpi> { kpi },
 
             };
 
-            test.TestResults = GenerateTestResultList(test.Variants);
-
             return test;
-        }
-
-        private List<TestResult> GenerateTestResultList(List<Variant> variants)
-        {
-            return variants.Select(v => new TestResult()
-            {
-                Id = Guid.NewGuid(), ItemId = v.Id, ItemVersion = v.ItemVersion
-            }).ToList();
         }
 
         private string GetCurrentUser()
