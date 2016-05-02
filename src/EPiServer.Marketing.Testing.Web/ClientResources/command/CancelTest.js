@@ -17,7 +17,10 @@ function (declare, dependency, _ContentCommandBase, ContentActionSupport) {
         _contentActionSupport: ContentActionSupport,
 
         _execute: function () {
-            var me = this;
+            var me = this,
+                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+
+            store.remove(me.model.contentData.contentGuid);
         },
 
         _onModelChange: function () {
@@ -28,7 +31,7 @@ function (declare, dependency, _ContentCommandBase, ContentActionSupport) {
             //disable the other publish options
             store.get(me.model.contentData.contentGuid).then(function (data) {
                 var isVisible = false, isClickable = false;
-                if (data.title != null) {
+                if (data.title != undefined && data.title != null) {
                     isVisible = true;
                     isClickable = true;
                 }
