@@ -111,10 +111,10 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
-            CurrentPage = _contextHelper.GetCurrentPageFromUrl();
-
             if (!SwapDisabled == true)
             {
+                CurrentPage = _contextHelper.GetCurrentPageFromUrl();
+
                 if (e.TargetLink != null)
                 {
                     EvaluateKpis(e);    // new method to evaluate Kpi
