@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using System.Data.Entity.Core;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -109,7 +110,25 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.TestVariantId = Guid.Parse(cookie["TestVariantId"]);
                 retCookie.Viewed = bool.Parse(cookie["Viewed"]);
                 retCookie.Converted = bool.Parse(cookie["Converted"]);
+
+                try
+                {
+                    var t = _testManager.Get(retCookie.TestId);
+                    foreach (var kpi in t.KpiInstances)
+                    {
+                        bool converted = bool.Parse(cookie[kpi.Id + "-Flag"]);
+                        retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
+                    }
+                }
+                catch (ObjectNotFoundException)
+                {
+                    // test doesnt exist but this user had a cookie for it so delete the cookie
+                    HttpCookie delCookie = new HttpCookie(COOKIE_PREFIX + testContentId);
+                    delCookie.Expires = DateTime.Now.AddDays(-1d);
+                    HttpContext.Current.Response.Cookies.Add(delCookie);
+                }
             }
+
             return retCookie;
         }
 
