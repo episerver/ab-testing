@@ -11,6 +11,7 @@
 
         constructor: function () {
             this.add('commands', new AddTest());
+            this.add('commands', new CancelTest());
         }
     });
 });
