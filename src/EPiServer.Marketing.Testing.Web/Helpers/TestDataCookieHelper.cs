@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using System.Data.Entity.Core;
+using EPiServer.Marketing.Testing.Core.Exceptions;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -120,12 +120,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                         retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
                     }
                 }
-                catch (ObjectNotFoundException)
+                catch (TestNotFoundException)
                 {
                     // test doesnt exist but this user had a cookie for it so delete the cookie
-                    HttpCookie delCookie = new HttpCookie(COOKIE_PREFIX + testContentId);
-                    delCookie.Expires = DateTime.Now.AddDays(-1d);
-                    HttpContext.Current.Response.Cookies.Add(delCookie);
+                    ExpireTestDataCookie(new TestDataCookie() { TestContentId = Guid.Parse(testContentId) } );
                 }
             }
 
