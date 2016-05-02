@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
@@ -28,7 +29,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var aTest = testManager.GetTestByItemId(aContentGuid).Find(tl => tl.State == Data.Enums.TestState.Active);
+            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Done && abTest.State != TestState.Archived);
 
             if (aTest == null)
                 aTest = new ABTest();
