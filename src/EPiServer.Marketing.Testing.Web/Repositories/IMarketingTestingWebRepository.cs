@@ -11,5 +11,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void StopMarketingTest(Guid testGuid);
         void ArchiveMarketingTest(Guid testGuid);
         IMarketingTest GetActiveTestForContent(Guid contentGuid);
+        void DeleteTestForContent(Guid contentGuid);
     }
 }
