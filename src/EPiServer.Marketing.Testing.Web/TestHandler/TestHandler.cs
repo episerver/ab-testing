@@ -102,7 +102,7 @@ namespace EPiServer.Marketing.Testing.Web
                         if (testdata.Converted)
                         {
                             Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
-                            _testManager.EmitUpdateCount(test.Id, varUserSees.Id, varUserSees.ItemVersion, CountType.Conversion);
+                            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
                         }
                     }
                 }
@@ -119,6 +119,10 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     EvaluateKpis(e);    // new method to evaluate Kpi
                 }
+
+                // Causing numerous errors at startup
+                if (e.Content == null)
+                    return;
 
                 var activeTest =
                     _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);

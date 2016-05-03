@@ -15,7 +15,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
 using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
-using System.Data.Entity.Core;
+using EPiServer.Marketing.Testing.Core.Exceptions;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -48,7 +48,7 @@ namespace EPiServer.Marketing.Testing
             }
             else
             {
-                throw new ObjectNotFoundException();
+                throw new TestNotFoundException();
             }
         }
 
