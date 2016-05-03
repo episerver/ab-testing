@@ -1,52 +1,34 @@
 define([
-// dojo
-    "dojo/_base/array",
     "dojo/_base/declare",
     "dojo/_base/event",
     "dojo/dom-construct",
     "dojo/on",
-    "dojo/when",
-// epi
-    "epi",
-    "epi/shell/TypeDescriptorManager",
-    "epi-cms/contentediting/_ContentEditingNotification",
-    "epi-cms/command/BackCommand",
-    "epi-cms/widget/sharedContentDialogHandler",
-    'marketing-testing/command/ViewTestCommand',
-    'marketing-testing/viewmodels/TestModel'
+    "dojo/topic",
+    "dijit/Destroyable",
+    "epi-cms/contentediting/_ContentEditingNotification"
 ],
 
 function (
-// dojo
-    array,
     declare,
     event,
     domConstruct,
     on,
-    when,
-// epi
-    epi,
-    TypeDescriptorManager,
-    _ContentEditingNotification,
-    BackCommand,
-    sharedContentDialogHandler,
-    ViewTestCommand,
-    TestModel
+    topic,
+    Destroyable,
+    _ContentEditingNotification
 ) {
 
-    return declare([_ContentEditingNotification], {
+    return declare([_ContentEditingNotification, Destroyable], {
+        // summary:
+        //      Shows the notification when active or finished test exists for the current content.
         // tags:
         //      public
 
-        _viewTestCommand: null,
-
         constructor: function (params) {
-
-            this._viewTestCommand = new ViewTestCommand();
         },
 
         postscript: function () {
-            this._storeName = "marketing.contenttesting";
+            this._storeName = "marketing.contentTesting";
             this.inherited(arguments);
         },
 
@@ -61,36 +43,42 @@ function (
 
         _onExecuteSuccess: function (/*Object*/test) {
             // summary:
-            //      Set notification(s) when executed success
+            //      Set notification(s) when executed success and the test is active or finished
             // tags:
             //      protected
 
             // Show notification for active and finished tests only
-            if (!test || test.State == 0 || test.State == 3 || !test.Id) {
+            if (!test || test.state == 0 || test.state == 3 || !test.id) {
                 this._setNotification(null);
                 return;
             }
             
             var notificationMessage = this._constructNotificationMessage(test);
-            var model = new TestModel(test);            
-
-            this._viewTestCommand.set("model", model);
 
             this._setNotification({
-                content: notificationMessage,
-                commands: [this._viewTestCommand]
+                content: notificationMessage
             });
         },
         
         _constructNotificationMessage: function (test) {
-            // use localized resources
-            var message = "This page is part of a running A/B Test";
+            // TODO: create different content for active and finished tests.
+            // TODO: use localized resources.
+            var message = "This page is part of a running A/B Test. ";
             var testLinkText = "View test";
             var testLinkTooltip = "View test details";
 
             var notificationMesage = domConstruct.create("div", {innerHTML: message});
             
             var testLink =  domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
+            
+            this.own(
+                on(testLink, "click", function (e) {
+                    event.stop(e);
+                    topic.publish("/epi/shell/context/request", {
+                        uri: "epi.marketing.testing:///" + test.id
+                    }, {});
+                })
+            );
             
             return notificationMesage;
         }

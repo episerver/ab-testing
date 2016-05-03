@@ -54,7 +54,7 @@ define([
         postscript: function () {
             this.inherited(arguments);
             if (arguments.test) {
-                this.testId = test.Id;
+                this.testId = test.id;
             }
         }
     });
