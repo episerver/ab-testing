@@ -15,7 +15,7 @@ function (declare, topic, _ContentCommandBase, ContentActionSupport) {
         name: "AddTest",
         label: resources.addtestcommand.label_text,
         tooltip: resources.addtestcommand.tooltip_text,
-        iconClass: "", //Define your own icon css class here.
+        iconClass: "epi-iconClock",
 
         _contentActionSupport: ContentActionSupport,
         _topic: topic,
