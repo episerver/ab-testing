@@ -20,6 +20,10 @@
             start_scheduled: "Test Scheduled",
             cancel_default: "Cancel",
             default_test_title: "Default Test Title"
+        },
+        addtestcommand: {
+            label_text: "Create A/B test for my changes",
+            tooltip_text: "Create A/B test for my changes"
         }
     }
 
