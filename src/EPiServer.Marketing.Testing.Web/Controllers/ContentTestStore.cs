@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Web.Repositories;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
+using System.Net;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -18,10 +18,31 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get(Guid contentGuid)
+        public ActionResult Get(string id)
         {
-            var aTest = _marketingTestRepostiory.GetActiveTestForContent(contentGuid);
+            var aContentGuid = Guid.Empty;
+            Guid.TryParse(id, out aContentGuid);
+
+            var aTest = _marketingTestRepostiory.GetActiveTestForContent(aContentGuid);
             return Rest(aTest);
+        }
+
+        [HttpDelete]
+        public ActionResult Delete(string id)
+        {
+            RestStatusCodeResult aResult;
+            try
+            {
+                var aContentGuid = Guid.Empty;
+                Guid.TryParse(id, out aContentGuid);
+                _marketingTestRepostiory.DeleteTestForContent(aContentGuid);
+                aResult = new RestStatusCodeResult((int)HttpStatusCode.OK);
+            }
+            catch
+            {
+                aResult = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+            return aResult;
         }
     }
 }
