@@ -21,16 +21,15 @@
 
             //define our store
             var commandRegistry = dependency.resolve("epi.globalcommandregistry"),
-                testingStorePath = routes.getRestPath({
-                    moduleArea: "EPiServer.Marketing.Testing",
-                    storeName: "MarketingTestingStore"
-                });
+                testingStorePath = routes.getRestPath({ moduleArea: "EPiServer.Marketing.Testing", storeName: "MarketingTestingStore" }),
+                contentTestingStorePath = routes.getRestPath({ moduleArea: "EPiServer.Marketing.Testing", storeName: "MarketingContentTestingStore" });
 
             //create our store
             var store = new JsonRest({ target: testingStorePath });
-
+            var contentTestStore = new JsonRest({ target: contentTestingStorePath });
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.testing", store);
+            registry.add("marketing.contentTesting", contentTestStore);
 
             commandRegistry.registerProvider('epi.cms.publishmenu', new AddTestCommandProvider());
         }

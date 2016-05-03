@@ -41,5 +41,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
             Assert.True(aReturnValue.Id == Guid.Empty);
         }
+
+        [Fact]
+        public void DeleteTestForContent_calls_delete_for_every_test_associated_with_the_content_guid()
+        {
+            var aRepo = GetUnitUnderTest();
+            var testList = new List<IMarketingTest>();
+
+            testList.Add(new ABTest() { Id = Guid.NewGuid() });
+            testList.Add(new ABTest() { Id = Guid.NewGuid() });
+            testList.Add(new ABTest() { Id = Guid.NewGuid() });
+
+            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            aRepo.DeleteTestForContent(Guid.NewGuid());
+
+            _testManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+        }
+
+        [Fact]
+        public void DeleteTestForContent_handles_guids_with_no_tests_associated_with_it_gracefully()
+        {
+            var aRepo = GetUnitUnderTest();
+            var testList = new List<IMarketingTest>();
+
+            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            aRepo.DeleteTestForContent(Guid.NewGuid());
+
+            _testManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Never, "Delete was called when it should not have been");
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
@@ -25,15 +26,31 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _serviceLocator = ServiceLocator.Current;
         }
 
+        /// <summary>
+        /// Gets the test associated with the content guid specified. If no tests are found an empty test is returned
+        /// </summary>
+        /// <param name="aContentGuid">the content guid to search against</param>
+        /// <returns>the first marketing test found that is not done or archived or an empty test in the case of no results</returns>
         public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var aTest = testManager.GetTestByItemId(aContentGuid).Find(tl => tl.State == Data.Enums.TestState.Active);
+            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Done && abTest.State != TestState.Archived);
 
             if (aTest == null)
                 aTest = new ABTest();
 
             return aTest;
+        }
+
+        public void DeleteTestForContent(Guid aContentGuid)
+        {
+            var testManager = _serviceLocator.GetInstance<ITestManager>();
+            var testList = testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Done && abtest.State != TestState.Archived);
+
+            foreach(var test in testList)
+            {
+                testManager.Delete(test.Id);
+            }
         }
 
         /// <summary>
@@ -148,5 +165,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             DateTime endDate = DateTime.Parse(startDate).ToLocalTime();
             return endDate.AddDays(testDuration);
         }
+
+
     }
 }
