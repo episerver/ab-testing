@@ -6,7 +6,7 @@
     "epi-cms/contentediting/ContentActionSupport",
 ],
 
-function (declare, topic, _ContentCommandBase, ContentActionSupport) {
+function (declare, topic, resources, _ContentCommandBase, ContentActionSupport) {
 
     return declare([_ContentCommandBase], {
 
