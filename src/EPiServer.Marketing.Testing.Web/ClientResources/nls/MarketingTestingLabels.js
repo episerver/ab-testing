@@ -1,6 +1,5 @@
 ﻿define({
     root: {
-
         addtestview: {
             header: "Create Marketing A/B Test",
             published_prefix: "Published by",
@@ -24,7 +23,10 @@
         addtestcommand: {
             label_text: "Create A/B test for my changes",
             tooltip_text: "Create A/B test for my changes"
+        },
+        canceltestcommand: {
+            label_text: "Cancel A/B test and edit page",
+            tooltip_text: "Cancel A/B test to edit"
         }
     }
-
 });
