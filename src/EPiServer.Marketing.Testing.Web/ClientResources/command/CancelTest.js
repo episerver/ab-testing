@@ -21,6 +21,7 @@ function (declare, dependency, _ContentCommandBase, ContentActionSupport) {
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
 
             store.remove(me.model.contentData.contentGuid);
+            window.location.reload();
         },
 
         _onModelChange: function () {
