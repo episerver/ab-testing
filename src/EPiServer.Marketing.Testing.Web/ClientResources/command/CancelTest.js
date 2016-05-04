@@ -1,7 +1,7 @@
 ﻿define([
     "dojo/_base/declare",
     'epi/dependency',
-    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels",
+    "epi/i18n!marketing-testing/nls/MarketingTestingLabels",
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport"
 ],
