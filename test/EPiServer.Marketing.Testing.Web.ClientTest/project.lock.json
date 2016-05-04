@@ -3,6 +3,9 @@
   "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
+      "AsyncUsageAnalyzers/1.0.0-alpha003": {
+        "type": "package"
+      },
       "Castle.Core/3.2.0": {
         "type": "package",
         "compile": {
@@ -28,10 +31,12 @@
           "lib/net45/Castle.Windsor.dll": {}
         }
       },
-      "EPiServer.ClientTDDSupport/9.3.8-beta": {
+      "EPiServer.ClientTDDSupport/9.3.8-update1": {
         "type": "package",
         "dependencies": {
-          "EPiServer.CMS.UI": "[9.3.8]",
+          "AsyncUsageAnalyzers": "1.0.0-alpha003",
+          "EPiServer.CMS.UI.Core": "[9.3.8, 10.0.0)",
+          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
           "Microsoft.AspNet.FileProviders.Embedded": "1.0.0-rc1-final",
           "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
           "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
@@ -40,13 +45,25 @@
           "Microsoft.AspNet.Razor": "4.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final"
+          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+          "StyleCop.Analyzers": "1.0.0",
+          "System.IO.Compression": "4.0.0"
         },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
         "compile": {
-          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {}
+          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {},
+          "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll": {},
+          "lib/dnx451/EPiServer.Shell.UI.Tests.dll": {}
         },
         "runtime": {
-          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {}
+          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {},
+          "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll": {},
+          "lib/dnx451/EPiServer.Shell.UI.Tests.dll": {}
         }
       },
       "EPiServer.CMS.Core/9.5.1": {
@@ -72,12 +89,6 @@
           "lib/net45/EPiServer.LinkAnalyzer.dll": {},
           "lib/net45/EPiServer.Web.WebControls.dll": {},
           "lib/net45/EPiServer.XForms.dll": {}
-        }
-      },
-      "EPiServer.CMS.UI/9.3.8": {
-        "type": "package",
-        "dependencies": {
-          "EPiServer.CMS.UI.Core": "[9.3.8]"
         }
       },
       "EPiServer.CMS.UI.Core/9.3.8": {
@@ -244,6 +255,33 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.DataProtection.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Diagnostics/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Diagnostics.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
+          "Microsoft.Dnx.Compilation.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+          "Microsoft.Extensions.WebEncoders.Core": "1.0.0-rc1-final",
+          "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core",
+          "System.Runtime"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Diagnostics.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Diagnostics.dll": {}
         }
       },
       "Microsoft.AspNet.Diagnostics.Abstractions/1.0.0-rc1-final": {
@@ -1449,6 +1487,9 @@
           "lib/net40/StructureMap.Net4.dll": {}
         }
       },
+      "StyleCop.Analyzers/1.0.0": {
+        "type": "package"
+      },
       "System.Collections/4.0.0": {
         "type": "package",
         "compile": {
@@ -1520,6 +1561,18 @@
       },
       "System.IO/4.0.0": {
         "type": "package",
+        "compile": {
+          "ref/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/_._": {}
+        }
+      },
+      "System.IO.Compression/4.0.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.IO.Compression"
+        ],
         "compile": {
           "ref/net45/_._": {}
         },
@@ -1662,6 +1715,9 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
+      "AsyncUsageAnalyzers/1.0.0-alpha003": {
+        "type": "package"
+      },
       "Castle.Core/3.2.0": {
         "type": "package",
         "compile": {
@@ -1687,10 +1743,12 @@
           "lib/net45/Castle.Windsor.dll": {}
         }
       },
-      "EPiServer.ClientTDDSupport/9.3.8-beta": {
+      "EPiServer.ClientTDDSupport/9.3.8-update1": {
         "type": "package",
         "dependencies": {
-          "EPiServer.CMS.UI": "[9.3.8]",
+          "AsyncUsageAnalyzers": "1.0.0-alpha003",
+          "EPiServer.CMS.UI.Core": "[9.3.8, 10.0.0)",
+          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
           "Microsoft.AspNet.FileProviders.Embedded": "1.0.0-rc1-final",
           "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
           "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
@@ -1699,13 +1757,25 @@
           "Microsoft.AspNet.Razor": "4.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final"
+          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+          "StyleCop.Analyzers": "1.0.0",
+          "System.IO.Compression": "4.0.0"
         },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
         "compile": {
-          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {}
+          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {},
+          "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll": {},
+          "lib/dnx451/EPiServer.Shell.UI.Tests.dll": {}
         },
         "runtime": {
-          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {}
+          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {},
+          "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll": {},
+          "lib/dnx451/EPiServer.Shell.UI.Tests.dll": {}
         }
       },
       "EPiServer.CMS.Core/9.5.1": {
@@ -1731,12 +1801,6 @@
           "lib/net45/EPiServer.LinkAnalyzer.dll": {},
           "lib/net45/EPiServer.Web.WebControls.dll": {},
           "lib/net45/EPiServer.XForms.dll": {}
-        }
-      },
-      "EPiServer.CMS.UI/9.3.8": {
-        "type": "package",
-        "dependencies": {
-          "EPiServer.CMS.UI.Core": "[9.3.8]"
         }
       },
       "EPiServer.CMS.UI.Core/9.3.8": {
@@ -1903,6 +1967,33 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.DataProtection.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Diagnostics/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Diagnostics.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
+          "Microsoft.Dnx.Compilation.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+          "Microsoft.Extensions.WebEncoders.Core": "1.0.0-rc1-final",
+          "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core",
+          "System.Runtime"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Diagnostics.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Diagnostics.dll": {}
         }
       },
       "Microsoft.AspNet.Diagnostics.Abstractions/1.0.0-rc1-final": {
@@ -3111,6 +3202,9 @@
           "lib/net40/StructureMap.Net4.dll": {}
         }
       },
+      "StyleCop.Analyzers/1.0.0": {
+        "type": "package"
+      },
       "System.Collections/4.0.0": {
         "type": "package",
         "compile": {
@@ -3187,6 +3281,24 @@
         },
         "runtime": {
           "lib/net45/_._": {}
+        }
+      },
+      "System.IO.Compression/4.0.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.IO.Compression"
+        ],
+        "compile": {
+          "ref/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/_._": {}
+        }
+      },
+      "System.IO.Compression.clrcompression-x86/4.0.0": {
+        "type": "package",
+        "native": {
+          "runtimes/win7-x86/native/clrcompression.dll": {}
         }
       },
       "System.Linq/4.0.0": {
@@ -3324,6 +3436,9 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
+      "AsyncUsageAnalyzers/1.0.0-alpha003": {
+        "type": "package"
+      },
       "Castle.Core/3.2.0": {
         "type": "package",
         "compile": {
@@ -3349,10 +3464,12 @@
           "lib/net45/Castle.Windsor.dll": {}
         }
       },
-      "EPiServer.ClientTDDSupport/9.3.8-beta": {
+      "EPiServer.ClientTDDSupport/9.3.8-update1": {
         "type": "package",
         "dependencies": {
-          "EPiServer.CMS.UI": "[9.3.8]",
+          "AsyncUsageAnalyzers": "1.0.0-alpha003",
+          "EPiServer.CMS.UI.Core": "[9.3.8, 10.0.0)",
+          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
           "Microsoft.AspNet.FileProviders.Embedded": "1.0.0-rc1-final",
           "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
           "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
@@ -3361,13 +3478,25 @@
           "Microsoft.AspNet.Razor": "4.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final"
+          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+          "StyleCop.Analyzers": "1.0.0",
+          "System.IO.Compression": "4.0.0"
         },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
         "compile": {
-          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {}
+          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {},
+          "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll": {},
+          "lib/dnx451/EPiServer.Shell.UI.Tests.dll": {}
         },
         "runtime": {
-          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {}
+          "lib/dnx451/EPiServer.ClientTDDSupport.dll": {},
+          "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll": {},
+          "lib/dnx451/EPiServer.Shell.UI.Tests.dll": {}
         }
       },
       "EPiServer.CMS.Core/9.5.1": {
@@ -3393,12 +3522,6 @@
           "lib/net45/EPiServer.LinkAnalyzer.dll": {},
           "lib/net45/EPiServer.Web.WebControls.dll": {},
           "lib/net45/EPiServer.XForms.dll": {}
-        }
-      },
-      "EPiServer.CMS.UI/9.3.8": {
-        "type": "package",
-        "dependencies": {
-          "EPiServer.CMS.UI.Core": "[9.3.8]"
         }
       },
       "EPiServer.CMS.UI.Core/9.3.8": {
@@ -3565,6 +3688,33 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.DataProtection.Abstractions.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Diagnostics/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Diagnostics.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
+          "Microsoft.Dnx.Compilation.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+          "Microsoft.Extensions.WebEncoders.Core": "1.0.0-rc1-final",
+          "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core",
+          "System.Runtime"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Diagnostics.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Diagnostics.dll": {}
         }
       },
       "Microsoft.AspNet.Diagnostics.Abstractions/1.0.0-rc1-final": {
@@ -4773,6 +4923,9 @@
           "lib/net40/StructureMap.Net4.dll": {}
         }
       },
+      "StyleCop.Analyzers/1.0.0": {
+        "type": "package"
+      },
       "System.Collections/4.0.0": {
         "type": "package",
         "compile": {
@@ -4849,6 +5002,24 @@
         },
         "runtime": {
           "lib/net45/_._": {}
+        }
+      },
+      "System.IO.Compression/4.0.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.IO.Compression"
+        ],
+        "compile": {
+          "ref/net45/_._": {}
+        },
+        "runtime": {
+          "lib/net45/_._": {}
+        }
+      },
+      "System.IO.Compression.clrcompression-x64/4.0.0": {
+        "type": "package",
+        "native": {
+          "runtimes/win7-x64/native/clrcompression.dll": {}
         }
       },
       "System.Linq/4.0.0": {
@@ -4987,6 +5158,18 @@
     }
   },
   "libraries": {
+    "AsyncUsageAnalyzers/1.0.0-alpha003": {
+      "type": "package",
+      "sha512": "rj0BLCPLI0QF6/fDswekUtavjj2g6uA4vsASOZ0g6N/w77XQTQgzSqhiJ/6Py6R5HhdpQ3HfkjUpR+KSvWq3nQ==",
+      "files": [
+        "analyzers/dotnet/AsyncUsageAnalyzers.dll",
+        "AsyncUsageAnalyzers.1.0.0-alpha003.nupkg",
+        "AsyncUsageAnalyzers.1.0.0-alpha003.nupkg.sha512",
+        "AsyncUsageAnalyzers.nuspec",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
     "Castle.Core/3.2.0": {
       "type": "package",
       "sha512": "Ht9+voegMLDLfGwHIpDjP9deFeVlSGi2USLGGLRl32IgkcKxUZUAdXV2OLPYdXrlYqbfohFUmBIcL1y0oWIhtg==",
@@ -5037,14 +5220,19 @@
         "readme.txt"
       ]
     },
-    "EPiServer.ClientTDDSupport/9.3.8-beta": {
+    "EPiServer.ClientTDDSupport/9.3.8-update1": {
       "type": "package",
-      "sha512": "S9xODUfgCVAL0d3V1Tis239OwgJYaba9SdaSPdJqAryrvqWLgdnQsxBcLK6qeBmceIi5xK3HSJQbli28VTrdSQ==",
+      "sha512": "zTm1UvtmjNLtVNRVHXDAFP1cuVjwpocDRdnC3x+qfHEbQQAn468ZxXVWpSNFeEXQiqggu8gKrhChz8lDzWOftA==",
       "files": [
-        "EPiServer.ClientTDDSupport.9.3.8-beta.nupkg",
-        "EPiServer.ClientTDDSupport.9.3.8-beta.nupkg.sha512",
+        "EPiServer.ClientTDDSupport.9.3.8-update1.nupkg",
+        "EPiServer.ClientTDDSupport.9.3.8-update1.nupkg.sha512",
         "EPiServer.ClientTDDSupport.nuspec",
-        "lib/dnx451/EPiServer.ClientTDDSupport.dll"
+        "lib/dnx451/EPiServer.ClientTDDSupport.dll",
+        "lib/dnx451/EPiServer.ClientTDDSupport.xml",
+        "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.dll",
+        "lib/dnx451/EPiServer.Cms.Shell.UI.Tests.xml",
+        "lib/dnx451/EPiServer.Shell.UI.Tests.dll",
+        "lib/dnx451/EPiServer.Shell.UI.Tests.xml"
       ]
     },
     "EPiServer.CMS.Core/9.5.1": {
@@ -5099,20 +5287,6 @@
         "tools/Install.ps1",
         "tools/MirroringService/EPiServer.MirroringService.dll",
         "tools/webconfig-baseline.config"
-      ]
-    },
-    "EPiServer.CMS.UI/9.3.8": {
-      "type": "package",
-      "sha512": "NQrkRVFKqCB8a3M7NA5lSkyNJJpA7tV6S0GLdo1OwBgeN53zNy6PdPzFei3DsBalOPmMyTNdBpToqQgi9YaR0w==",
-      "files": [
-        "content/modules/_protected/CMS/CMS.zip",
-        "content/modules/_protected/CMS/web.config",
-        "content/modules/_protected/Shell/Shell.zip",
-        "content/modules/_protected/Shell/web.config",
-        "EPiServer.CMS.UI.9.3.8.nupkg",
-        "EPiServer.CMS.UI.9.3.8.nupkg.sha512",
-        "EPiServer.CMS.UI.nuspec",
-        "readme.txt"
       ]
     },
     "EPiServer.CMS.UI.Core/9.3.8": {
@@ -5245,6 +5419,20 @@
         "Microsoft.AspNet.DataProtection.Abstractions.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.DataProtection.Abstractions.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.DataProtection.Abstractions.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.Diagnostics/1.0.0-rc1-final": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "PlLhXpe74DUMEanyFNvo+A96zD465usPOxu2iAqREnfcpagNJY4dn6uQxDE04BY6XcqPaYAYcrZYyKRfn/pTIg==",
+      "files": [
+        "lib/dotnet5.4/Microsoft.AspNet.Diagnostics.dll",
+        "lib/dotnet5.4/Microsoft.AspNet.Diagnostics.xml",
+        "lib/net451/Microsoft.AspNet.Diagnostics.dll",
+        "lib/net451/Microsoft.AspNet.Diagnostics.xml",
+        "Microsoft.AspNet.Diagnostics.1.0.0-rc1-final.nupkg",
+        "Microsoft.AspNet.Diagnostics.1.0.0-rc1-final.nupkg.sha512",
+        "Microsoft.AspNet.Diagnostics.nuspec"
       ]
     },
     "Microsoft.AspNet.Diagnostics.Abstractions/1.0.0-rc1-final": {
@@ -6237,6 +6425,20 @@
         "structuremap-signed.nuspec"
       ]
     },
+    "StyleCop.Analyzers/1.0.0": {
+      "type": "package",
+      "sha512": "NT0qdVF8gfXn6YcajL/s9orWNbO9NAr9AM8MDHIxXHstMvxi7+viLxAlZIoWRAA25Cs4O91qFcMt06cL/61TjQ==",
+      "files": [
+        "analyzers/dotnet/cs/Newtonsoft.Json.dll",
+        "analyzers/dotnet/cs/StyleCop.Analyzers.CodeFixes.dll",
+        "analyzers/dotnet/cs/StyleCop.Analyzers.dll",
+        "StyleCop.Analyzers.1.0.0.nupkg",
+        "StyleCop.Analyzers.1.0.0.nupkg.sha512",
+        "StyleCop.Analyzers.nuspec",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
     "System.Collections/4.0.0": {
       "type": "package",
       "sha512": "i2vsGDIEbWdHcUSNDPKZP/ZWod6o740el7mGTCy0dqbCxQh74W4QoC+klUwPEtGEFuvzJ7bJgvwJqscosVNyZQ==",
@@ -6501,6 +6703,68 @@
         "System.IO.4.0.0.nupkg",
         "System.IO.4.0.0.nupkg.sha512",
         "System.IO.nuspec"
+      ]
+    },
+    "System.IO.Compression/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "S+ljBE3py8pujTrsOOYHtDg2cnAifn6kBu/pfh1hMWIXd8DoVh0ADTA6Puv4q+nYj+Msm6JoFLNwuRSmztbsDQ==",
+      "files": [
+        "lib/dotnet/System.IO.Compression.dll",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net45/_._",
+        "lib/netcore50/System.IO.Compression.dll",
+        "lib/win8/_._",
+        "lib/wpa81/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "ref/dotnet/de/System.IO.Compression.xml",
+        "ref/dotnet/es/System.IO.Compression.xml",
+        "ref/dotnet/fr/System.IO.Compression.xml",
+        "ref/dotnet/it/System.IO.Compression.xml",
+        "ref/dotnet/ja/System.IO.Compression.xml",
+        "ref/dotnet/ko/System.IO.Compression.xml",
+        "ref/dotnet/ru/System.IO.Compression.xml",
+        "ref/dotnet/System.IO.Compression.dll",
+        "ref/dotnet/System.IO.Compression.xml",
+        "ref/dotnet/zh-hans/System.IO.Compression.xml",
+        "ref/dotnet/zh-hant/System.IO.Compression.xml",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/_._",
+        "ref/netcore50/System.IO.Compression.dll",
+        "ref/netcore50/System.IO.Compression.xml",
+        "ref/win8/_._",
+        "ref/wpa81/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "runtime.json",
+        "System.IO.Compression.4.0.0.nupkg",
+        "System.IO.Compression.4.0.0.nupkg.sha512",
+        "System.IO.Compression.nuspec"
+      ]
+    },
+    "System.IO.Compression.clrcompression-x64/4.0.0": {
+      "type": "package",
+      "sha512": "Lqr+URMwKzf+8HJF6YrqEqzKzDzFJTE4OekaxqdIns71r8Ufbd8SbZa0LKl9q+7nu6Em4SkIEXVMB7plSXekOw==",
+      "files": [
+        "runtimes/win10-x64/native/ClrCompression.dll",
+        "runtimes/win7-x64/native/clrcompression.dll",
+        "System.IO.Compression.clrcompression-x64.4.0.0.nupkg",
+        "System.IO.Compression.clrcompression-x64.4.0.0.nupkg.sha512",
+        "System.IO.Compression.clrcompression-x64.nuspec"
+      ]
+    },
+    "System.IO.Compression.clrcompression-x86/4.0.0": {
+      "type": "package",
+      "sha512": "GmevpuaMRzYDXHu+xuV10fxTO8DsP7OKweWxYtkaxwVnDSj9X6RBupSiXdiveq9yj/xjZ1NbG+oRRRb99kj+VQ==",
+      "files": [
+        "runtimes/win10-x86/native/ClrCompression.dll",
+        "runtimes/win7-x86/native/clrcompression.dll",
+        "System.IO.Compression.clrcompression-x86.4.0.0.nupkg",
+        "System.IO.Compression.clrcompression-x86.4.0.0.nupkg.sha512",
+        "System.IO.Compression.clrcompression-x86.nuspec"
       ]
     },
     "System.Linq/4.0.0": {
@@ -7014,7 +7278,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "EPiServer.ClientTDDSupport >= 9.3.8-beta",
+      "EPiServer.ClientTDDSupport >= 9.3.8-update1",
       "Microsoft.AspNet.Server.Kestrel >= 1.0.0-rc1-final"
     ],
     "DNX,Version=v4.5.1": []
