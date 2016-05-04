@@ -18,7 +18,8 @@
             start_default: "Start Test",
             start_scheduled: "Test Scheduled",
             cancel_default: "Cancel",
-            default_test_title: "Default Test Title"
+            default_test_title: "Default Test Title",
+            days_text: "days."
         },
         addtestcommand: {
             label_text: "Create A/B test for my changes",

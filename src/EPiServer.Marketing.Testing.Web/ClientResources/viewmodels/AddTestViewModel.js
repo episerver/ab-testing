@@ -1,15 +1,15 @@
 ﻿define([
-     'dojo/_base/declare',
-    'epi/dependency',
-    'dojo/Stateful',
-    'dojo/topic'
+    "dojo/_base/declare",
+    "epi/dependency",
+    "dojo/Stateful",
+    "dojo/topic"
 ], function (
     declare,
     dependency,
-    Stateful,
+    stateful,
     topic
 ) {
-    return declare([Stateful], {
+    return declare([stateful], {
 
         //First Content version to be used as potential content swap
         //during active A/B test.
@@ -59,7 +59,7 @@
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this))
-                .otherwise(function (result) {
+                .otherwise(function () {
                     console.log("Query did not return valid result");
                 });
         },
@@ -78,11 +78,7 @@
                 testTitle: this.testTitle,
                 startDate: this.startDate
             }).then(function () {
-                var contextParameters = { uri: "epi.marketing.testing:///" + me.testContentId }
-                topic.publish("/epi/shell/context/request", contextParameters);
-                //if (!me.topic.publish("/epi/shell/context/request", contextParameters)) {
-                //    me.topic.publish("/epi/shell/action/changeview/back");
-                //}
+                me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");
             });

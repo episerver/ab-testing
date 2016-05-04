@@ -1,9 +1,9 @@
 ﻿define([
     "dojo/_base/declare",
     "dojo/topic",
-    "epi/i18n!marketing-testing/nls/MarketingTestingLabels",
+    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels",
     "epi-cms/contentediting/command/_ContentCommandBase",
-    "epi-cms/contentediting/ContentActionSupport",
+    "epi-cms/contentediting/ContentActionSupport"
 ],
 
 function (declare, topic, resources, _ContentCommandBase, ContentActionSupport) {
