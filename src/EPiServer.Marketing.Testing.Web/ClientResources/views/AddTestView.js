@@ -72,7 +72,7 @@
                 return;
             }
             this.publishedVersionReference.textContent = viewPublishedVersion.name + "[" + viewPublishedVersion.contentLink + "]";
-            this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.savedBy);
+            this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
             this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
             this.model.testContentId = this.contentData.contentGuid;
         },
