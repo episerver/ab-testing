@@ -14,10 +14,8 @@
     
 
 ) {
-    
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
-
-        
+     
     });
 });

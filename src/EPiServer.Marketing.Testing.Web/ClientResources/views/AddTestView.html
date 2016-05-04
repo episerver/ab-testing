@@ -93,7 +93,7 @@
                         <label for="conversionPage">${resources.addtestview.conversion_selector_description}</label>
                         <div id="conversionPage"
                              data-dojo-type="epi-cms/widget/ContentSelector"
-                             data-dojo-props="repositoryKey:'pages'"
+                             data-dojo-props="repositoryKey:'pages',required: true"
                              data-dojo-attach-event="onChange: _onConversionPageChanged">
                         </div>
                     </li>
@@ -117,7 +117,7 @@
                              data-dojo-props="constraints:{min:7,max:365},value:30"
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
-                        </div>
+                        </div> ${resources.addtestview.days_text}
                     </li>
                 </ul>
             </div>
