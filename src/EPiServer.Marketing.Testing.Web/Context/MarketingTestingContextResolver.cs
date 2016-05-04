@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
            var marketingTest =
                 _testManager
                     .GetTestByItemId(id)
-                    .FirstOrDefault(x => x.State == TestState.Active);
+                    .FirstOrDefault();
 
             if (marketingTest == null)
             {
