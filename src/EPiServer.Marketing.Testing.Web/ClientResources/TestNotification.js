@@ -5,6 +5,7 @@ define([
     "dojo/on",
     "dojo/topic",
     "dijit/Destroyable",
+    "epi/datetime",
     "epi-cms/contentediting/_ContentEditingNotification"
 ],
 
@@ -15,6 +16,7 @@ function (
     on,
     topic,
     Destroyable,
+    datetime,
     _ContentEditingNotification
 ) {
 
@@ -47,8 +49,8 @@ function (
             // tags:
             //      protected
 
-            // Show notification for active and finished tests only
-            if (!test || test.state == 0 || test.state == 3 || !test.id) {
+            // Show notification for not started, active and finished tests
+            if (!test || test.state == 3 || !test.id) {
                 this._setNotification(null);
                 return;
             }
@@ -61,11 +63,23 @@ function (
         },
         
         _constructNotificationMessage: function (test) {
-            // TODO: create different content for active and finished tests.
             // TODO: use localized resources.
             var message = "This page is part of a running A/B Test. ";
             var testLinkText = "View test";
             var testLinkTooltip = "View test details";
+            
+             // Inactive (scheduled)
+            if (test.state == 0) {
+                message = "An A/B Test is scheduled to run on this page " + 
+                    datetime.toUserFriendlyString(test.startDate, null, false, true) +". ";
+            }
+            
+             // Done, finished
+            if (test.state == 2) {
+                message = "An A/B Test has been completed on this page. ";
+                var testLinkText = "Pick winner";
+                var testLinkTooltip = "View test details and pick winner";
+            }
 
             var notificationMesage = domConstruct.create("div", {innerHTML: message});
             
