@@ -84,9 +84,10 @@
             this.currentVersionReference.textContent = this.contentData.name + "[" + this.contentData.contentLink + "]";
             this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
             this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
+            this.pageName.textContent = this.contentData.name + " A/B Test";
             if (this.breadcrumbWidget) {
                 this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);    
-            }            
+            }
         },
 
         //EVENT HANDLERS
