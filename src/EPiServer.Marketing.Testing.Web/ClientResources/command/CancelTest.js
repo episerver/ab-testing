@@ -1,5 +1,6 @@
 ﻿define([
     "dojo/_base/declare",
+    "dojo/topic",
     'epi/dependency',
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport",
@@ -21,7 +22,8 @@ function (declare, dependency, _ContentCommandBase, ContentActionSupport) {
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
 
             store.remove(me.model.contentData.contentGuid);
-            window.location.reload();
+            me.set("isAvailable", false);
+            me.set("canExecute", false);
         },
 
         _onModelChange: function () {
