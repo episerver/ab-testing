@@ -1,6 +1,5 @@
 ﻿define([
     "dojo/_base/declare",
-    "dojo/topic",
     'epi/dependency',
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport",
