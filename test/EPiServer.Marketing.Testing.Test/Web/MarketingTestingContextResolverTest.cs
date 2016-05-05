@@ -27,13 +27,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager = new Mock<ITestManager>();
             _marketingTestingContextResolver = new MarketingTestingContextResolver(_mockTestManager.Object);
             _activeTestDataList = new List<IMarketingTest>() { new ABTest() { Title = _testTitle, State = TestState.Active, OriginalItemId = _activeTestGuid } };
-            _inactiveTestDataList = new List<IMarketingTest>() { new ABTest() { Title = _testTitle, State = TestState.Inactive, OriginalItemId = _inactiveTestGuid } };
+            _inactiveTestDataList = null;
 
             _mockTestManager.Setup(call => call.GetTestByItemId(It.Is<Guid>(g => g == _activeTestGuid)))
                 .Returns(_activeTestDataList);
 
             _mockTestManager.Setup(call => call.GetTestByItemId(It.Is<Guid>(g => g == _inactiveTestGuid)))
-                .Returns(_inactiveTestDataList);
+                .Returns(new List<IMarketingTest>());
 
         }
 

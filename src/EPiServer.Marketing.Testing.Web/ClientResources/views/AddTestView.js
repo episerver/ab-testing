@@ -3,6 +3,7 @@
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!marketing-testing/views/AddTestView.html',
+    'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
     'epi/shell/widget/_ModelBindingMixin',
@@ -26,6 +27,7 @@
     _WidgetBase,
     _TemplatedMixin,
     template,
+    resources,
     AddTestViewModel,
     _WidgetsInTemplateMixin,
     _ModelBindingMixing,
@@ -41,6 +43,8 @@
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
         templateString: template,
+
+        resources: resources,
 
         //set bindings to view model properties
         modelBindingMap: {
@@ -60,7 +64,7 @@
             this.model.testDescription = this.descriptionText.value;
             this.model.participationPercent = this.participationPercentText.value;
             this.model.testDuration = this.durationText.value;
-            this.model.testTitle = "Default Test Title";
+            this.model.testTitle = resources.addtestview.default_test_title;
             var _startDate = Date();
             this.model.startDate = new Date(_startDate).toUTCString();
         },
@@ -126,17 +130,17 @@
         _onDateTimeChange: function (event) {
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
-            var _startDate;
+            var startDate;
 
             if (event !== null) {
-                startButton.innerText = "Test Scheduled";
-                scheduleText.innerText = "is scheduled to begin " + event;
+                startButton.innerText = resources.addtestview.start_scheduled;
+                scheduleText.innerText = resources.addtestview.scheduled_text + event;
                 this.model.startDate = new Date(event).toUTCString();
             } else {
-                startButton.innerText = "Start Test";
-                scheduleText.innerText = "not scheduled, and will start right away";
-                _startDate = Date();
-                this.model.startDate = new Date(_startDate).toUTCString();
+                startButton.innerText = resources.addtestview.start_default;
+                scheduleText.innerText = resources.addtestview.notscheduled_text;
+                startDate = Date();
+                this.model.startDate = new Date(startDate).toUTCString();
             }
         }
     });

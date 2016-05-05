@@ -1,17 +1,19 @@
 ﻿define([
     "dojo/_base/declare",
     'epi/dependency',
+    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels",
     "epi-cms/contentediting/command/_ContentCommandBase",
-    "epi-cms/contentediting/ContentActionSupport",
+    "epi-cms/contentediting/ContentActionSupport"
 ],
 
-function (declare, dependency, _ContentCommandBase, ContentActionSupport) {
+function (declare, dependency, resources, _ContentCommandBase, ContentActionSupport) {
 
     return declare([_ContentCommandBase], {
+        resources: resources,
 
         name: "Cancel Test",
-        label: "Cancel AB Test and edit page",
-        tooltip: "Cancel AB test to edit",
+        label: resources.canceltestcommand.label_text,
+        tooltip:resources.canceltestcommand.tooltip_text,
         iconClass: "", //Define your own icon css class here.
 
         _contentActionSupport: ContentActionSupport,
