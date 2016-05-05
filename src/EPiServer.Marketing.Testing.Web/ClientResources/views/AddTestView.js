@@ -52,6 +52,15 @@
         postMixInProperties: function () {
 
             this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
+            this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
+        },
+
+        _onContextChange: function (context, caller) {
+            // Widget will update itself using the new context.
+            this.model = new AddTestViewModel({ contentData: caller.contentData });
+
+            this.contentData = caller.contentData;
+            _setViewCurrentVersionAttr();
         },
 
         //sets default values once everything is loaded
