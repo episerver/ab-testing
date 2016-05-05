@@ -140,7 +140,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             }
             else if(idType=="malformattedpropertystring")
             {
-                uriString = idType +  guidString;
+                uriString = "testid" +  guidString;
             }
             else
             {

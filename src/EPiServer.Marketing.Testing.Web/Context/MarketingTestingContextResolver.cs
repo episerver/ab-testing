@@ -87,6 +87,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
         }
     }
 
+    [ExcludeFromCodeCoverage]
     internal class MarketingTestContext : ClientContextBase
     {
         public override string DataType { get; set; }
