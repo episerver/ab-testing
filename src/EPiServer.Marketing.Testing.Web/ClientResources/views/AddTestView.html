@@ -13,6 +13,7 @@
             <div class="epi-toolbarGroup epi-toolbarTrailing">
                 <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">Start Test</button>
                 <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">Cancel</button>
+                &nbsp;
             </div>
         </div>
     </div>
@@ -70,9 +71,7 @@
                                   data-dojo-type="dijit/form/SimpleTextarea"
                                   style="width: 75%;"
                                   data-dojo-attach-point="descriptionText"
-                                  data-dojo-attach-event="onChange: _onTestDescriptionChanged">
-                            What are your goals for this test?
-                        </textarea>
+                                  data-dojo-attach-event="onChange: _onTestDescriptionChanged">What are your goals for this test?</textarea>
                     </li>
                 </ul>
             </div>
@@ -99,7 +98,7 @@
                     </li>
                     <!-- Participation Percentage Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
-                        <span>The participants you have in the test, the shorter amount of time you will need to run it to reach a good statistic to base your choice on</span><br>
+                        <span>The more participants you have in the test, the shorter amount of time you will need to run it to reach a good statistic to base your choice on</span><br>
                         <label for="percentageSpinner">What percentage of visitors should participate in this A/B test?</label><br>
                         <div id="percentageSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
@@ -138,3 +137,5 @@
         </div>
     </div>
 </div>
+
+
