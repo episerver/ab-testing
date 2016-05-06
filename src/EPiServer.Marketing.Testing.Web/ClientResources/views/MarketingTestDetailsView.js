@@ -1,21 +1,22 @@
 ﻿define([
-     'dojo/_base/declare',
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dojo/text!marketing-testing/views/MultivariateTestDetailsView.html',
-    'dijit/_WidgetsInTemplateMixin'
+    "dojo/_base/declare",
+    "dijit/_WidgetBase",
+    "dijit/_TemplatedMixin",
+    "dojo/text!marketing-testing/views/MultivariateTestDetailsView.html",
+    "marketing-testing/viewmodels/TestDetailsViewModel",
+    "dijit/_WidgetsInTemplateMixin"
     
 ], function (
     declare,
-    _WidgetBase,
-    _TemplatedMixin,
+    widgetBase,
+    templatedMixin,
     template,
-    _WidgetsInTemplateMixin
-    
+    testDetailsViewModel,
+    widgetsInTemplateMixin
 
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
-        templateString: template,
-     
+    return declare([widgetBase, templatedMixin, widgetsInTemplateMixin], {
+
+        templateString: template
     });
 });
