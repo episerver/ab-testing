@@ -12,8 +12,8 @@ namespace EPiServer.Marketing.Testing.Web
         public MultivariateTestDetailsViewConfiguration()
         {
             Key = "MultivariateTestDetailsView";
-            ControllerType = "marketing-testing/views/MultivariateTestDetailsView";
-            ViewType = "marketing-testing/views/MultivariateTestDetailsView";
+            ControllerType = "marketing-testing/views/MarketingTestDetailsView";
+            ViewType = "marketing-testing/views/MarketingTestDetailsView";
         }
     }
 }
