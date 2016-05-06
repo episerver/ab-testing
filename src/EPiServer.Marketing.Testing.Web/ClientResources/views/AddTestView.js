@@ -15,7 +15,7 @@
     'xstyle/css!marketing-testing/css/GridForm.css',
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
-    'dijit/form/SimpleTextarea',
+    'dijit/form/Textarea',
     'epi-cms/widget/Breadcrumb',    
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
@@ -105,6 +105,8 @@
         //Start and Cancel Events
 
         _onStartButtonClick: function () {
+            var description = dom.byId("testDescription"); //Description is not a dojo widget so setting it on save rather than onchange.
+            this.model.testDescription = description.value;
             this.model.createTest();
         },
 
@@ -117,11 +119,7 @@
         _onTestTitleChanged: function (event) {
             this.model.testTitle = event;
         },
-
-        _onTestDescriptionChanged: function (event) {
-            this.model.testDescription = event;
-        },
-
+      
         _onConversionPageChanged: function (event) {
             this.model.conversionPage = event;
         },
