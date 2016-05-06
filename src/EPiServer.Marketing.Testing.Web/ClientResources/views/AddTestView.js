@@ -13,7 +13,6 @@
     'dojo/dom',
     'xstyle/css!marketing-testing/css/style.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
-    'xstyle/css!marketing-testing/css/dijit.css',
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/SimpleTextarea',
