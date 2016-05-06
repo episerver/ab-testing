@@ -80,7 +80,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 Name = marketingTest.Title,
                 DataType = typeof(IMarketingTest).FullName.ToLowerInvariant(),
                 Data = marketingTest,
-                CustomViewType = "marketing-testing/views/MultivariateTestDetailsView"
+                CustomViewType = "marketing-testing/views/MarketingTestDetailsView"
             };
 
             return true;
