@@ -57,9 +57,6 @@
         },
 
         _onContextChange: function (context, caller) {
-            // Widget will update itself using the new context.
-            this.model = new AddTestViewModel({ contentData: caller.contentData });
-
             this.contentData = caller.contentData;
             _setViewCurrentVersionAttr();
         },
