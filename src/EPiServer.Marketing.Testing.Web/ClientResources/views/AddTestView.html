@@ -59,11 +59,11 @@
                     <li>
                         <label for="textTitle">Title</label>
                         <input id="textTitle"
-                               data-dojo-type="dijit/form/ValidationTextBox"
-                               data-dojo-props="trim:true,value:'Default Test Title'"
-                               data-dojo-attachpoint="titleText"
-                               data-dojo-attach-event="onChange: _onTestTitleChanged"
-                               required="true" />
+                                data-dojo-type="dijit/form/TextBox"
+                                data-dojo-props="trim:true,value:'Default Test Title'"
+                                data-dojo-attach-event="onChange: _onTestTitleChanged"
+                               data-dojo-attach-point="titleText"
+                                required="true" />
                     </li>
                     <!-- Test Description -->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
@@ -90,6 +90,7 @@
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
                         <label for="conversionPage">Visitor navigates to page</label>
                         <div id="conversionPage"
+                             data-dojo-attach-point="conversionPageWidget"
                              data-dojo-type="epi-cms/widget/ContentSelector"
                              data-dojo-props="repositoryKey:'pages'"
                              data-dojo-attach-event="onChange: _onConversionPageChanged">
@@ -131,7 +132,11 @@
         </div>
         <div class="epi-grid__row">
             <div class="epi-grid__col--12">
-                <div id="StartDateTimeSelector" data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown" data-dojo-attach-event="onChange: _onDateTimeChange"></div>
+                <div id="StartDateTimeSelector" 
+                     data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown" 
+                     data-dojo-attach-point="startTimeSelector"
+                     data-dojo-attach-event="onChange: _onDateTimeChange"
+                     ></div>
                 <span class="dijitInline dijitIcon epi-iconClock"></span> A/B test is currently <span id="ScheduleText"> not scheduled, and will start right away</span>
             </div>
         </div>

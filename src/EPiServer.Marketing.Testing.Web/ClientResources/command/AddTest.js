@@ -42,14 +42,11 @@ function (declare, topic, _ContentCommandBase, ContentActionSupport) {
             this.set("isAvailable", isAvailable);
 
             //Executable when available and not published, have published version and have edit access right
-            var canExecute = isAvailable && this._getCanExecute(contentData, versionStatus);
-            if( canExecute )
-            {
+            this.set("canExecute", isAvailable && this._getCanExecute(contentData, versionStatus));
+            if (this.get("canExecute")) {
                 // only update the state for content that can be tested.
                 me._topic.publish("/epi/marketing/updatestate", "AddTestView", { contentData: me.model.contentData, languageContext: me.model.languageContext });
             }
-
-            this.set("canExecute", canExecute);
         },
 
         _getCanExecute: function (contentData, versionStatus) {
