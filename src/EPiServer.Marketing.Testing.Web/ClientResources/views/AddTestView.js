@@ -58,18 +58,49 @@
 
         _onContextChange: function (context, caller) {
             this.contentData = caller.contentData;
-            _setViewCurrentVersionAttr();
+            this.reset();
         },
 
         //sets default values once everything is loaded
         postCreate: function () {
+            this.reset();
+        },
+
+        reset: function () {
             //set view model properties to default form values.
-            this.model.testDescription = this.descriptionText.value;
-            this.model.participationPercent = this.participationPercentText.value;
-            this.model.testDuration = this.durationText.value;
-            this.model.testTitle = "Default Test Title";
-            var _startDate = Date();
-            this.model.startDate = new Date(_startDate).toUTCString();
+            if (this.titleText) {
+                this.titleText.reset();
+                this.model.testTitle = this.titleText.value;
+            }
+
+            if (this.descriptionText) {
+                this.descriptionText.value = this.model.testDescription = "What are your goals for this test?";
+            }
+
+            if (this.participationPercentText) {
+                this.participationPercentText.reset();
+                this.model.participationPercent = this.participationPercentText.value;
+            }
+
+            if (this.durationText) {
+                this.durationText.reset();
+                this.model.testDuration = this.durationText.value;
+            }
+
+            if (this.startTimeSelector) {
+                this.startTimeSelector.reset();
+                this.model.startDate = new Date(Date.now()).toUTCString();
+            }
+
+            if (this.breadcrumbWidget) {
+                this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
+            }
+            if (this.conversionPageWidget) {
+                this.conversionPageWidget.reset();
+            }
+
+            this._setViewPublishedVersionAttr(true);
+            this._setViewCurrentVersionAttr();
         },
 
         //setters for bound properties
@@ -92,9 +123,6 @@
             this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
             this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
             this.pageName.textContent = this.contentData.name + " A/B Test";
-            if (this.breadcrumbWidget) {
-                this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);    
-            }
         },
 
         //EVENT HANDLERS
@@ -132,7 +160,6 @@
         _onDateTimeChange: function (event) {
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
-            var _startDate;
 
             if (event !== null) {
                 startButton.innerText = "Test Scheduled";
@@ -141,8 +168,7 @@
             } else {
                 startButton.innerText = "Start Test";
                 scheduleText.innerText = "not scheduled, and will start right away";
-                _startDate = Date();
-                this.model.startDate = new Date(_startDate).toUTCString();
+                this.model.startDate = new Date(Date.now()).toUTCString();
             }
         }
     });
