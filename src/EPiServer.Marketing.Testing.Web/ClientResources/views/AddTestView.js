@@ -138,8 +138,8 @@
             var _startDate;
 
             if (event !== null) {
-                startButton.innerText = "Test Scheduled";
-                scheduleText.innerText = "is scheduled to begin " + event;
+                startButton.innerText = "Schedule Test";
+                scheduleText.innerText = "scheduled to begin on " + event;
                 this.model.startDate = new Date(event).toUTCString();
             } else {
                 startButton.innerText = "Start Test";
