@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Rest;
 
@@ -34,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
             //check url to resolve for actionable keys
             if (uri.Segments.Length <= 1 || (!uri.Segments[1].Contains("testid") &&
-                !uri.Segments[1].Contains("contentid")))
+                                             !uri.Segments[1].Contains("contentid")))
             {
                 return false;
             }
@@ -85,7 +88,36 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
             return true;
         }
+
+        private void GenerateContextData(IMarketingTest testData)
+        {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentRepository>();
+
+            MarketingTestingContextModel contextModel = new MarketingTestingContextModel();
+
+            contextModel.Test = testData;
+
+            contextModel.PublishedContent = contentLoader.Get<ContentData>(testData.OriginalItemId);
+
+
+            if (testData.State == TestState.Active)
+            {
+                contextModel.DaysElapsed =(int)DateTime.Now.Subtract(testData.StartDate).TotalDays;
+                contextModel.DaysRemaining = (int)testData.StartDate.Subtract(DateTime.Now).TotalDays;
+            }
+            else
+            {
+                contextModel.DaysElapsed = 0;
+                contextModel.DaysRemaining = 0;
+            }
+
+            
+
+        }
+
+
     }
+
 
     [ExcludeFromCodeCoverage]
     internal class MarketingTestContext : ClientContextBase
@@ -93,4 +125,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
         public override string DataType { get; set; }
         public string CustomViewType { get; set; }
     }
+
+
 }
