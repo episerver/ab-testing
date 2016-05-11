@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -81,15 +82,15 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 RequestedUri = uri,
                 VersionAgnosticUri = uri,
                 Name = marketingTest.Title,
-                DataType = typeof(IMarketingTest).FullName.ToLowerInvariant(),
-                Data = marketingTest,
+                DataType = typeof(MarketingTestingContextModel).FullName.ToLowerInvariant(),
+                Data = GenerateContextData(marketingTest),
                 CustomViewType = "marketing-testing/views/MarketingTestDetailsView"
             };
 
             return true;
         }
 
-        private void GenerateContextData(IMarketingTest testData)
+        private MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
         {
             var contentLoader = ServiceLocator.Current.GetInstance<IContentRepository>();
 
@@ -97,9 +98,18 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
             contextModel.Test = testData;
 
-            contextModel.PublishedContent = contentLoader.Get<ContentData>(testData.OriginalItemId);
+            var PublishedContent = contentLoader.Get<IContent>(testData.OriginalItemId) as PageData;
+            contextModel.PublishedVersionContentLink = PublishedContent.ContentLink.ToString();
+            contextModel.PublishedVersionName = PublishedContent.Name;
 
 
+            var tempContent = PublishedContent;
+            
+            var tempContentClone = tempContent.ContentLink.CreateWritableClone();
+            int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(tempContent.ContentLink.ID)).ItemVersion ; 
+            tempContentClone.WorkID = variantVersion;
+            
+            var DraftContent = contentLoader.Get<PageData>(tempContentClone);
             if (testData.State == TestState.Active)
             {
                 contextModel.DaysElapsed =(int)DateTime.Now.Subtract(testData.StartDate).TotalDays;
@@ -111,11 +121,8 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 contextModel.DaysRemaining = 0;
             }
 
-            
-
+            return contextModel;
         }
-
-
     }
 
 
