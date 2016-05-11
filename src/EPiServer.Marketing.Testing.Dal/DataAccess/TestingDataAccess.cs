@@ -141,14 +141,14 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return id;
         }
 
-        public void Start(Guid testObjectId)
+        public IABTest Start(Guid testObjectId )
         {
             if (IsTestActive(testObjectId))
             {
                 throw new Exception("The test page already has an Active test");
             }
 
-            SetTestState(testObjectId, DalTestState.Active);
+            return SetTestState(testObjectId, DalTestState.Active);
         }
 
         public void Stop(Guid testObjectId)
@@ -372,28 +372,32 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return tests.Any();
         }
 
-        private void SetTestState(Guid theTestId, DalTestState theState)
+        private IABTest SetTestState(Guid theTestId, DalTestState theState)
         {
+            IABTest test;
+
             if (_UseEntityFramework)
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
-                    SetTestStateHelper(repository, theTestId, theState);
+                    test = SetTestStateHelper(repository, theTestId, theState);
                 }
             }
             else
             {
-                SetTestStateHelper(_repository, theTestId, theState);
+                test = SetTestStateHelper(_repository, theTestId, theState);
             }
 
+            return test;
         }
 
-        private void SetTestStateHelper(IRepository repo, Guid theTestId, DalTestState theState)
+        private IABTest SetTestStateHelper(IRepository repo, Guid theTestId, DalTestState theState)
         {
             var aTest = repo.GetById(theTestId);
             aTest.State = theState;
             repo.SaveChanges();
+            return aTest;
         }
         #endregion
     }

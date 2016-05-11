@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
         void Delete(Guid testObjectId);
 
-        void Start(Guid testObjectId);
+        IABTest Start(Guid testObjectId);
 
         void Stop(Guid testObjectId);
 

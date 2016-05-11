@@ -28,6 +28,12 @@ namespace EPiServer.Marketing.Testing
         private static Random _r = new Random();
         public MemoryCache _testCache = MemoryCache.Default;
 
+        public enum CacheOperator
+        {
+            Add,
+            Remove
+        };
+
         [ExcludeFromCodeCoverage]
         public TestManager()
         {
@@ -59,10 +65,12 @@ namespace EPiServer.Marketing.Testing
             }
 
             var managerTest = ConvertToManagerTest(dbTest);
-            
-            // the test isn't in the cache for some reason so add it
-            cachedTests.Add(managerTest);
-            UpdateCache(cachedTests);
+
+            // the test isn't in the cache and its State is Active so add it
+            if (managerTest.State == TestState.Active)
+            {
+                UpdateCache(managerTest, CacheOperator.Add);
+            }
 
             return managerTest;
         }
@@ -109,9 +117,7 @@ namespace EPiServer.Marketing.Testing
 
             if (multivariateTest.State == TestState.Active)
             {
-                var cachedTests = CreateOrGetCache();
-                cachedTests.Add(multivariateTest);
-                UpdateCache(cachedTests);
+                UpdateCache(multivariateTest, CacheOperator.Add);
             }
 
             return testId;
@@ -120,14 +126,26 @@ namespace EPiServer.Marketing.Testing
         public void Delete(Guid testObjectId)
         {
             _dataAccess.Delete(testObjectId);
+
+            // if the test is in the cache remove it.  This should only happen if someone deletes an Active test - which really shouldn't happen...
+            var cachedTests = CreateOrGetCache();
+            var test = cachedTests.FirstOrDefault(t => t.Id == testObjectId);
+
+            if (test != null)
+            {
+                UpdateCache(test, CacheOperator.Remove);
+            }
         }
 
         public void Start(Guid testObjectId)
         {
-            _dataAccess.Start(testObjectId);
+            var dalTest = _dataAccess.Start(testObjectId);
 
-            //var cachedTests = CreateOrGetCache();
-            //cachedTests.Add();
+            // update cache to include new test as long as it was changed to Active
+            if (dalTest != null)
+            {
+                UpdateCache(ConvertToManagerTest(dalTest), CacheOperator.Add);
+            }
         }
 
         public void Stop(Guid testObjectId)
@@ -140,8 +158,7 @@ namespace EPiServer.Marketing.Testing
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
             if (test != null)
             {
-                cachedTests.Remove(test);
-                UpdateCache(cachedTests);
+                UpdateCache(test, CacheOperator.Remove);
             }
         }
 
@@ -157,10 +174,10 @@ namespace EPiServer.Marketing.Testing
 
 
 
-        public Data.Variant ReturnLandingPage(Guid testId)
+        public Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
-            var activePage = new Data.Variant();
+            var activePage = new Variant();
             if (currentTest != null)
             {
                 switch (GetRandomNumber())
@@ -234,16 +251,34 @@ namespace EPiServer.Marketing.Testing
 
                 activeTestCriteria.AddFilter(activeTestStateFilter);
 
-                UpdateCache(GetTestList(activeTestCriteria));
+                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.Now.AddMinutes(15));
             }
 
             var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
             return activeTests;
         }
 
-        private void UpdateCache(List<IMarketingTest> tests)
+        private void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {
-            _testCache.Add(TestingCacheName, tests, DateTimeOffset.Now.AddMinutes(15));
+            var cachedTests = CreateOrGetCache();
+
+            switch (cacheOperator)
+            {
+                case CacheOperator.Add:
+                    if (!cachedTests.Contains(test))
+                    {
+                        cachedTests.Add(test);
+                    }
+                    break;
+                case CacheOperator.Remove:
+                    if (cachedTests.Contains(test))
+                    {
+                        cachedTests.Remove(test);
+                    }
+                    break;
+            }
+            
+            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.Now.AddMinutes(15));
         }
 
 
