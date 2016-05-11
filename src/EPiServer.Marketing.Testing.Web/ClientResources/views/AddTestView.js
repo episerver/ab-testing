@@ -74,7 +74,7 @@
             }
 
             if (this.descriptionText) {
-                this.descriptionText.value = this.model.testDescription = "What are your goals for this test?";
+                this.descriptionText.value = this.model.testDescription = "";
             }
 
             if (this.participationPercentText) {
