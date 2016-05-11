@@ -64,6 +64,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return test;
         }
 
+        // TODO : rename to GetTestsByItemId
         public List<IABTest> GetTestByItemId(Guid originalItemId)
         {
             List<IABTest> tests;

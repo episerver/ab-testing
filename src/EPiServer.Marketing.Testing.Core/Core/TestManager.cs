@@ -22,15 +22,18 @@ namespace EPiServer.Marketing.Testing
     [ServiceConfiguration(ServiceType = typeof (ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
+        private const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
+        public MemoryCache _testCache = MemoryCache.Default;
 
         [ExcludeFromCodeCoverage]
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
+            CreateOrGetCache();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
@@ -41,29 +44,42 @@ namespace EPiServer.Marketing.Testing
 
         public IMarketingTest Get(Guid testObjectId)
         {
-            var t = _dataAccess.Get(testObjectId);
-            if (t != null)
+            var cachedTests = CreateOrGetCache();
+
+            var test = cachedTests.FirstOrDefault(t => t.Id == testObjectId);
+            if (test != null)
             {
-                return ConvertToManagerTest(t);
+                return test;
             }
-            else
+
+            var dbTest = _dataAccess.Get(testObjectId);
+            if (dbTest == null)
             {
                 throw new TestNotFoundException();
             }
+
+            var managerTest = ConvertToManagerTest(dbTest);
+            
+            // the test isn't in the cache for some reason so add it
+            cachedTests.Add(managerTest);
+            UpdateCache(cachedTests);
+
+            return managerTest;
         }
 
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
-            var testList = new List<IMarketingTest>();
+            var cachedTests = CreateOrGetCache();
 
-            foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
-            {
-                testList.Add(ConvertToManagerTest(dalTest));
-            }
-
-            return testList;
+            return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
+        /// <summary>
+        /// Don't want to use refernce the cache here.  The criteria could be anything, not just active tests which
+        /// is what the cache is intended to have in it.
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
             var testList = new List<IMarketingTest>();
@@ -88,7 +104,17 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-            return _dataAccess.Save(ConvertToDalTest(multivariateTest));
+            
+            var testId = _dataAccess.Save(ConvertToDalTest(multivariateTest));
+
+            if (multivariateTest.State == TestState.Active)
+            {
+                var cachedTests = CreateOrGetCache();
+                cachedTests.Add(multivariateTest);
+                UpdateCache(cachedTests);
+            }
+
+            return testId;
         }
 
         public void Delete(Guid testObjectId)
@@ -99,11 +125,24 @@ namespace EPiServer.Marketing.Testing
         public void Start(Guid testObjectId)
         {
             _dataAccess.Start(testObjectId);
+
+            //var cachedTests = CreateOrGetCache();
+            //cachedTests.Add();
         }
 
         public void Stop(Guid testObjectId)
         {
             _dataAccess.Stop(testObjectId);
+
+            var cachedTests = CreateOrGetCache();
+
+            // remove test from cache
+            var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
+            if (test != null)
+            {
+                cachedTests.Remove(test);
+                UpdateCache(cachedTests);
+            }
         }
 
         public void Archive(Guid testObjectId)
@@ -180,6 +219,33 @@ namespace EPiServer.Marketing.Testing
             }
             return retData;
         }
+
+        private List<IMarketingTest> CreateOrGetCache()
+        {
+            if (!_testCache.Contains(TestingCacheName))
+            {
+                var activeTestCriteria = new TestCriteria();
+                var activeTestStateFilter = new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                };
+
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+
+                UpdateCache(GetTestList(activeTestCriteria));
+            }
+
+            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+            return activeTests;
+        }
+
+        private void UpdateCache(List<IMarketingTest> tests)
+        {
+            _testCache.Add(TestingCacheName, tests, DateTimeOffset.Now.AddMinutes(15));
+        }
+
 
         public List<IMarketingTest> CreateActiveTestCache()
         {
