@@ -56,7 +56,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
+            var dalList = new List<IABTest>();
             _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             tm.Get(theGuid);
 
             _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
@@ -69,12 +71,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
             var dalList = new List<IABTest>();
-            dalList.Add(GetDalTest());
-            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
-            tm.GetTestByItemId(theGuid);
 
-            _dataAccessLayer.Verify(da => da.GetTestByItemId(It.Is<Guid>(arg => arg.Equals(theGuid))),
-                "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
+            var test = new DalABTest
+            {
+                OriginalItemId = theGuid,
+                Variants = new List<DalVariant>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
+            };
+
+            dalList.Add(test);
+            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+            var returnList = tm.GetTestByItemId(theGuid);
+
+            Assert.True(returnList.All(t => t.OriginalItemId == theGuid), "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
         }
 
         [Fact]

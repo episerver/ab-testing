@@ -32,9 +32,12 @@ namespace EPiServer.Marketing.Testing
         void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
 
         Variant ReturnLandingPage(Guid testId);
-        PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
-        List<IMarketingTest> CreateActiveTestCache();
 
+        PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
+
+        List<IMarketingTest> CreateOrGetCache();
+
+        void UpdateCache(IMarketingTest test, TestManager.CacheOperator cacheOperator);
         /// <summary>
         /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
         /// the list of Kpi Guids that evaluated as true.

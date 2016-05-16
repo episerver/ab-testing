@@ -237,7 +237,7 @@ namespace EPiServer.Marketing.Testing
             return retData;
         }
 
-        private List<IMarketingTest> CreateOrGetCache()
+        public List<IMarketingTest> CreateOrGetCache()
         {
             if (!_testCache.Contains(TestingCacheName))
             {
@@ -258,7 +258,7 @@ namespace EPiServer.Marketing.Testing
             return activeTests;
         }
 
-        private void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
+        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {
             var cachedTests = CreateOrGetCache();
 

@@ -101,64 +101,6 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         }
 
         [Fact]
-        public void TestManager_CreateVariantPageDataCache()
-        {
-            var id = Guid.NewGuid();
-            var itemId = Guid.NewGuid();
-
-            var testVariant = new DalVariant()
-            {
-                Id = Guid.NewGuid(),
-                ItemVersion = 0,
-                ItemId = itemId
-            };
-
-            var testVariant2 = new DalVariant()
-            {
-                Id = Guid.NewGuid(),
-                ItemVersion = 2,
-                ItemId = itemId
-            };
-
-            var test = new DalABTest()
-            {
-                Id = id,
-                Title = "test",
-                Description = "description",
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow,
-                State = DalTestState.Active,
-                OriginalItemId = itemId,
-                Owner = "Bert",
-                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
-                Variants = new List<DalVariant>() { testVariant, testVariant2 }
-            };
-           
-            _mtm.Save(test);
-
-            var pageRef = new PageReference() { ID = 2, WorkID = 2 };
-            var variantPage = new PageData(pageRef);
-            var references = new List<ContentReference>() {new ContentReference() {ID = 3, WorkID = 3, ProviderName = "TestProvider"} };
-            var contentLoader = new Mock<IContentLoader>();
-
-            _serviceLocator.Setup(call => call.GetInstance<IContentLoader>()).Returns(contentLoader.Object);
-            contentLoader.Setup(call => call.Get<IContent>(itemId)).Returns(variantPage);
-
-            var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
-            var contentData = new PageData(pageRef2) as IContent;
-            
-            contentData.Property.Add(new PropertyNumber() {Name = "PageWorkStatus"});
-            contentData.Property.Add(new PropertyDate() { Name = "PageStartPublish"});
-            contentLoader.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(contentData);
-
-            var pd = _tm.CreateVariantPageDataCache(itemId, references);
-
-            Assert.Equal(VersionStatus.Published, pd.Status);
-        }
-
-        [Fact]
         public void TestManagerGetTestListNoFilter()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
