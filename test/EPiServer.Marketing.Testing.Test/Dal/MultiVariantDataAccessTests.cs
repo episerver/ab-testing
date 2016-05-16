@@ -58,49 +58,6 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         }
 
         [Fact]
-        public void TestManager_CreateActiveTestCache()
-        {
-            var id = Guid.NewGuid();
-
-            var test = new DalABTest()
-            {
-                Id = id,
-                Title = "test",
-                Description = "description",
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow,
-                State = DalTestState.Active,
-                Owner = "Bert",
-                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
-                Variants = new List<DalVariant>()
-            };
-
-            var test2 = new DalABTest()
-            {
-                Id = Guid.NewGuid(),
-                Title = "test",
-                Description = "description",
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.UtcNow,
-                State = DalTestState.Inactive,
-                Owner = "Ernie",
-                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
-                Variants = new List<DalVariant>()
-            };
-
-            _mtm.Save(test);
-            _mtm.Save(test2);
-
-            var tests = _tm.CreateActiveTestCache();
-
-            Assert.Equal(1, tests.Count);
-        }
-
-        [Fact]
         public void TestManagerGetTestListNoFilter()
         {
             var originalItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");

@@ -46,6 +46,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             return new ABTest
             {
+                Id = Guid.NewGuid(),
+                OriginalItemId = Guid.NewGuid(),
                 Variants = new List<Variant>(),
                 KpiInstances = new List<IKpi>(),
             };
@@ -308,6 +310,22 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var retList = testManager.EvaluateKPIs(kpis, c);
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
             Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list that did not have one item in it");
+        }
+
+        [Fact]
+        public void TestManager_UpdateCache()
+        {
+            var testManager = GetUnitUnderTest();
+            var dalList = new List<IABTest>();
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+
+            var test = GetManagerTest();
+            testManager.UpdateCache(test, TestManager.CacheOperator.Add);
+
+            Assert.Equal(testManager.CreateOrGetCache().Count(), 1);
+
+            testManager.UpdateCache(test, TestManager.CacheOperator.Remove);
+            Assert.Equal(testManager.CreateOrGetCache().Count(), 0);
         }
     }
 

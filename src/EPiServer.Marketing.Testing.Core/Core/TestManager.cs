@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
-        public MemoryCache _testCache = MemoryCache.Default;
+        private MemoryCache _testCache = MemoryCache.Default;
 
         public enum CacheOperator
         {
@@ -172,8 +172,6 @@ namespace EPiServer.Marketing.Testing
             _dataAccess.IncrementCount(testId, itemId, itemVersion, AdaptToDalCount(resultType));
         }
 
-
-
         public Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
@@ -279,35 +277,6 @@ namespace EPiServer.Marketing.Testing
             }
             
             _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.Now.AddMinutes(15));
-        }
-
-
-        public List<IMarketingTest> CreateActiveTestCache()
-        {
-            var _marketingTestCache = MemoryCache.Default;
-            var retTestList = _marketingTestCache.Get("TestContentList") as List<IMarketingTest>;
-
-            if (retTestList == null)
-            {
-                var activeTestCriteria = new Data.TestCriteria();
-                var activeTestStateFilter = new Data.ABTestFilter()
-                {
-                    Property = ABTestProperty.State,
-                    Operator = Data.FilterOperator.And,
-                    Value = TestState.Active
-                };
-
-                activeTestCriteria.AddFilter(activeTestStateFilter);
-                retTestList = GetTestList(activeTestCriteria);
-
-                var cacheItemPolicy = new CacheItemPolicy
-                {
-                    AbsoluteExpiration = DateTimeOffset.Parse(DateTime.Now.AddMinutes(1).ToString())
-                };
-                _marketingTestCache.Add("TestContentList", retTestList, cacheItemPolicy);
-            }
-
-            return retTestList;
         }
 
         private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Data.Variant variant)
