@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
             instance = null;
 
             //check url to resolve for actionable keys
-            if (uri.Segments.Length <= 1 || (!uri.Segments[1].Contains("testid") &&
+            if (uri.Segments.Length <= 2 || (!uri.Segments[1].Contains("testid") &&
                                              !uri.Segments[1].Contains("contentid")))
             {
                 return false;
@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
             }
 
             //check url for proper guid
-            if (!Guid.TryParse(uri.Segments[1].Split('=')[1], out id))
+            if (!Guid.TryParse(uri.Segments[1].TrimEnd('/').Split('=')[1], out id))
             {
                 return false;
             }
@@ -59,7 +59,8 @@ namespace EPiServer.Marketing.Testing.Web.Context
             //if url is properly formatted with the correct data
             //get back the test based on the guid type given
             var idType = uri.Segments[1].Split('=')[0];
-            id = Guid.Parse(uri.Segments[1].Split('=')[1]);
+            string targetView = uri.Segments[2];
+
 
             switch (idType)
             {
@@ -84,7 +85,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 Name = marketingTest.Title,
                 DataType = typeof(MarketingTestingContextModel).FullName.ToLowerInvariant(),
                 Data = GenerateContextData(marketingTest),
-                CustomViewType = "marketing-testing/views/MarketingTestDetailsView"
+                CustomViewType = $"marketing-testing/views/{targetView}"
             };
 
             return true;

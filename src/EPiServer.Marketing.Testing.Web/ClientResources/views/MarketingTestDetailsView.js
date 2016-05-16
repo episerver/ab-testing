@@ -4,6 +4,7 @@
     "dijit/_TemplatedMixin",
     "dojo/text!marketing-testing/views/MarketingTestDetailsView.html",
     "dijit/_WidgetsInTemplateMixin",
+    'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
     "epi/datetime",
     'xstyle/css!marketing-testing/css/style.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
@@ -16,12 +17,16 @@
     widgetBase,
     templatedMixin,
     template,
+    resources,
     widgetsInTemplateMixin,
     datetime
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin], {
         templateString: template,
+
+        resources: resources,
+
 
         constructor: function() {
             var contextService = epi.dependency.resolve("epi.shell.ContextService"), me=this;

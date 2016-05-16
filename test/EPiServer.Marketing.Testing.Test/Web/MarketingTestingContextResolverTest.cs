@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             ClientContextBase context;
 
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri(null,null), out context);
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri(null,null, "MarketingTestDetailsView"), out context);
 
             Assert.False(resolveUri);
             Assert.Null(context);
@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             ClientContextBase context;
 
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("badIdType", _activeTestGuid), out context);
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("badIdType", _activeTestGuid, "MarketingTestDetailsView"), out context);
 
             Assert.False(resolveUri);
             Assert.Null(context);
@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             ClientContextBase context;
 
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("testid", null), out context);
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("testid", null, "MarketingTestDetailsView"), out context);
 
             Assert.False(resolveUri);
             Assert.Null(context);
@@ -74,7 +74,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             ClientContextBase context;
 
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("malformattedpropertystring", _activeTestGuid), out context);
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("malformattedpropertystring", _activeTestGuid, "MarketingTestDetailsView"), out context);
 
             Assert.False(resolveUri);
             Assert.Null(context);
@@ -84,7 +84,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void TryResolveUri_With_Content_Guid_Part_Of_Inactive_Test_Should_Return_False_And_Null_Context()
         {
             ClientContextBase context;
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("contentid",_inactiveTestGuid), out context);
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("contentid",_inactiveTestGuid,"MarketingTestDetailsView"), out context);
 
             _mockTestManager.Verify(call => call.GetTestByItemId(It.Is<Guid>(g => g == _inactiveTestGuid)), Times.Once, "TryResolveUir Should have called test manager but apparently did not");
             Assert.False(resolveUri);
@@ -95,7 +95,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void TryResolveUri_With_Content_Guid_Part_Of_Active_Test_Should_Return_True_And_Proper_Context()
         {
             ClientContextBase context;
-            var uri = CreateUri("contentid",_activeTestGuid);
+            var uri = CreateUri("contentid",_activeTestGuid,"MarketingTestDetailsView");
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(uri, out context);
 
             _mockTestManager.Verify(call => call.GetTestByItemId(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test manager but apparently did not");
@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void TryResolveUri_With_Test_Guid_Should_Return_True_And_Proper_Context()
         {
             ClientContextBase context;
-            var uri = CreateUri("testid", _activeTestGuid);
+            var uri = CreateUri("testid", _activeTestGuid, "MarketingTestDetailsView");
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(uri, out context);
 
             _mockTestManager.Verify(call => call.Get(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test manager but apparently did not");
@@ -130,7 +130,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
 
-        private Uri CreateUri(string idType, Guid? contentGuid)
+        private Uri CreateUri(string idType, Guid? contentGuid,string targetView)
         {
             var guidString = contentGuid != Guid.Empty ? contentGuid.ToString() : string.Empty;
             string uriString;
@@ -140,11 +140,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             }
             else if(idType=="malformattedpropertystring")
             {
-                uriString = "testid" +  guidString;
+                uriString = "testid" +  guidString +"/"+targetView;
             }
             else
             {
-                uriString = idType + "=" + guidString;
+                uriString = idType + "=" + guidString +"/"+targetView;
             }
             return new Uri(_marketingTestingContextResolver.Name+ ":///" + uriString );
         }
