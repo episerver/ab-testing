@@ -192,3 +192,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /test/DtkBinaries/dojo-release-1.8.9-src
+/test/EPiServer.Marketing.Testing.Web.ClientTest/project.lock.json
