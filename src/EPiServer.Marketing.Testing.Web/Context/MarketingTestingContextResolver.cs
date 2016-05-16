@@ -114,8 +114,8 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 contextModel.DraftVersionChangedBy = draftContent.ChangedBy;
                 contextModel.DraftVersionChangedDate = draftContent.Saved.ToString();
             }
-
-
+            
+            
             if (testData.State == TestState.Active)
             {
                 contextModel.DaysElapsed = DateTime.Now.Subtract(testData.StartDate).TotalDays.ToString();
