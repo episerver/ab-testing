@@ -39,13 +39,7 @@
             conversion_selector_description: "Visitor navigates to page",
             percentage_details: "Percentage of visitors participating:",
             total_participants_details: "Current number of test participants",
-            duration_details:"Remaining duration:",
-
-
-
-
-
-
+            duration_details:"Remaining duration:"
         }
     }
 });
