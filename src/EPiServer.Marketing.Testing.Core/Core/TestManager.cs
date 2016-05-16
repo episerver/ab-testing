@@ -198,41 +198,54 @@ namespace EPiServer.Marketing.Testing
 
             var marketingTestCache = MemoryCache.Default;
             var retData = marketingTestCache.Get("epi" + contentGuid) as PageData;
-            if (retData == null)
+
+            if (retData != null)
             {
-                if (processedList.Count == 1)
+                return retData;
+            }
+
+            if (processedList.Count == 1)
+            {
+                var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+                if (test != null)
                 {
-                    var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+                    var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
+                    var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
 
-                    if (test != null)
+                    if (testContent != null)
                     {
-                        var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
-                        var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
-
-                        if (testContent != null)
+                        var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
+                        foreach (var variant in test.Variants)
                         {
-                            var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
-                            foreach (var variant in test.Variants)
+                            if (variant.ItemVersion != contentVersion)
                             {
-                                if (variant.ItemVersion != contentVersion)
-                                {
-                                    retData = CreateVariantPageData(contentLoader, testContent, variant);
-                                    retData.Status = VersionStatus.Published;
-                                    retData.StartPublish = DateTime.Now.AddDays(-1);
-                                    retData.MakeReadOnly();
+                                retData = CreateVariantPageData(contentLoader, testContent, variant);
+                                retData.Status = VersionStatus.Published;
+                                retData.StartPublish = DateTime.Now.AddDays(-1);
+                                retData.MakeReadOnly();
 
-                                    var cacheItemPolicy = new CacheItemPolicy
-                                    {
-                                        AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
-                                    };
-                                    marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
-                                }
+                                var cacheItemPolicy = new CacheItemPolicy
+                                {
+                                    AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
+                                };
+                                marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
                             }
                         }
                     }
                 }
             }
             return retData;
+        }
+
+        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Variant variant)
+        {
+            var contentToSave = d.ContentLink.CreateWritableClone();
+            contentToSave.WorkID = variant.ItemVersion;
+            var newContent = contentLoader.Get<IContent>(contentToSave) as ContentData;
+
+            var contentToCache = newContent?.CreateWritableClone() as PageData;
+            return contentToCache;
         }
 
         public List<IMarketingTest> CreateOrGetCache()
@@ -277,16 +290,6 @@ namespace EPiServer.Marketing.Testing
             }
             
             _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.Now.AddMinutes(15));
-        }
-
-        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Data.Variant variant)
-        {
-            var contentToSave = d.ContentLink.CreateWritableClone();
-            contentToSave.WorkID = variant.ItemVersion;
-            var newContent = contentLoader.Get<IContent>(contentToSave) as ContentData;
-
-            var contentToCache = newContent?.CreateWritableClone() as PageData;
-            return contentToCache;
         }
 
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
