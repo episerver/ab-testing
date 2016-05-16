@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Core;
 
@@ -6,13 +7,31 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestingContextHelper : ITestingContextHelper
     {
+        public TestingContextHelper()
+        {}
+
+        /// <summary>
+        /// For Unit Testing
+        /// </summary>
+        /// <param name="context"></param>
+        [ExcludeFromCodeCoverage]
+        internal TestingContextHelper(HttpContext context)
+        {
+            HttpContext.Current = context;
+        }
         /// <summary>
         /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
         /// </summary>
         /// <returns></returns>
         public bool IsInSystemFolder()
         {
-            return HttpContext.Current.Request.RawUrl.ToLower()
+            var currentContext = HttpContext.Current;
+            if (currentContext == null)
+            {
+                return true;
+            }
+
+            return currentContext.Request.RawUrl.ToLower()
                 .Contains(EPiServer.Shell.Paths.ProtectedRootPath.ToLower());
         }
 
