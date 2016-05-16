@@ -92,33 +92,50 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
         private MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
         {
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
             MarketingTestingContextModel contextModel = new MarketingTestingContextModel();
 
             contextModel.Test = testData;
+            var publishedContent = contentRepository.Get<IContent>(testData.OriginalItemId) as PageData;
+            if (publishedContent != null)
+            {
+                contextModel.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
+                contextModel.PublishedVersionName = publishedContent.Name;
 
-            var PublishedContent = contentLoader.Get<IContent>(testData.OriginalItemId) as PageData;
-            contextModel.PublishedVersionContentLink = PublishedContent.ContentLink.ToString();
-            contextModel.PublishedVersionName = PublishedContent.Name;
+
+                var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
+                int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
+                tempContentClone.WorkID = variantVersion;
+
+                var draftContent = contentRepository.Get<PageData>(tempContentClone);
+                contextModel.DraftVersionContentLink = draftContent.ContentLink.ToString();
+                contextModel.DraftVersionName = draftContent.PageName;
+                contextModel.DraftVersionChangedBy = draftContent.ChangedBy;
+                contextModel.DraftVersionChangedDate = draftContent.Saved.ToString();
+            }
 
 
-            var tempContent = PublishedContent;
-            
-            var tempContentClone = tempContent.ContentLink.CreateWritableClone();
-            int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(tempContent.ContentLink.ID)).ItemVersion ; 
-            tempContentClone.WorkID = variantVersion;
-            
-            var DraftContent = contentLoader.Get<PageData>(tempContentClone);
             if (testData.State == TestState.Active)
             {
-                contextModel.DaysElapsed =(int)DateTime.Now.Subtract(testData.StartDate).TotalDays;
-                contextModel.DaysRemaining = (int)testData.StartDate.Subtract(DateTime.Now).TotalDays;
+                contextModel.DaysElapsed = DateTime.Now.Subtract(testData.StartDate).TotalDays.ToString();
+                contextModel.DaysRemaining = testData.StartDate.Subtract(DateTime.Now).TotalDays.ToString();
+            }
+            else if (testData.State == TestState.Inactive)
+            {
+                contextModel.DaysElapsed = "Test has not been started";
+                contextModel.DaysRemaining = "Test has not been started";
             }
             else
             {
-                contextModel.DaysElapsed = 0;
-                contextModel.DaysRemaining = 0;
+                contextModel.DaysElapsed = $"Test finished on {testData.EndDate}";
+                contextModel.DaysRemaining = $"Test finished on {testData.EndDate}";
+            }
+
+            contextModel.VisitorPercentage = testData.ParticipationPercentage.ToString();
+            foreach (var variant in testData.Variants)
+            {
+                contextModel.TotalParticipantCount += variant.Views;
             }
 
             return contextModel;
