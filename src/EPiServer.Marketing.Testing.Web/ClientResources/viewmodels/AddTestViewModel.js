@@ -40,6 +40,9 @@
         //start date (currently set to "now" when they hit the start test button
         startDate: null,
 
+        //property to start a test immediately upon creation
+        start: true,
+
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
@@ -85,7 +88,8 @@
                 participationPercent: this.participationPercent,
                 conversionPage: this.conversionPage,
                 testTitle: this.testTitle,
-                startDate: this.startDate
+                startDate: this.startDate,
+                start: this.start
             }).then(function () {
                 me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {

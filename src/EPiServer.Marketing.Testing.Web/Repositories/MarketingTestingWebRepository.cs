@@ -115,6 +115,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
+                State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
                 Variants = new List<Variant>
                 {
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
