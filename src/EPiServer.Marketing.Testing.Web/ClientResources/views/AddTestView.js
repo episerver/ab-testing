@@ -166,10 +166,12 @@
                 startButton.innerText = "Schedule Test";
                 scheduleText.innerText = "scheduled to begin on " + event;
                 this.model.startDate = new Date(event).toUTCString();
+                this.model.start = false;
             } else {
                 startButton.innerText = "Start Test";
                 scheduleText.innerText = "not scheduled, and will start right away";
                 this.model.startDate = new Date(Date.now()).toUTCString();
+                this.model.start = true;
             }
         }
     });

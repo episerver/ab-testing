@@ -18,6 +18,7 @@ namespace EPiServer.Marketing.Testing.Web
         public int ParticipationPercent { get; set; }
         public int ConversionPage { get; set; }
         public string TestTitle { get; set; }
+        public bool Start { get; set; }
 
     }
 }
