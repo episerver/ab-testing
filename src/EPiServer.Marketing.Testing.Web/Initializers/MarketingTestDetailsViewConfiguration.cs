@@ -14,6 +14,8 @@ namespace EPiServer.Marketing.Testing.Web
             Key = "MultivariateTestDetailsView";
             ControllerType = "marketing-testing/views/MarketingTestDetailsView";
             ViewType = "marketing-testing/views/MarketingTestDetailsView";
+            HideFromViewMenu = true;
+
         }
     }
 }
