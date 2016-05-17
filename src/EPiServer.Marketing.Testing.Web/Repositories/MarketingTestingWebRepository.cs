@@ -43,6 +43,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return aTest;
         }
 
+        public IMarketingTest GetTestById(Guid testGuid)
+        {
+            var testManager = _serviceLocator.GetInstance<ITestManager>();
+            return testManager.Get(testGuid);
+        }
+
         public void DeleteTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
@@ -157,6 +163,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 KpiInstances = new List<IKpi> { kpi },
 
             };
+
+            if (DateTime.Now >= DateTime.Parse(testData.StartDate))
+            {
+                test.State = TestState.Active;
+            }
 
             return test;
         }

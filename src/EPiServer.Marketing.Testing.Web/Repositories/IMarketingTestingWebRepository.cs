@@ -5,6 +5,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     public interface IMarketingTestingWebRepository
     {
+        IMarketingTest GetTestById(Guid testGuid);
         Guid CreateMarketingTest(TestingStoreModel testData);
         void DeleteMarketingTest(Guid testGuid);
         void StartMarketingTest(Guid testGuid);

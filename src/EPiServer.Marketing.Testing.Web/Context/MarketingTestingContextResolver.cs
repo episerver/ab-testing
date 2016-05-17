@@ -6,8 +6,10 @@ using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Rest;
+
 
 namespace EPiServer.Marketing.Testing.Web.Context
 {
@@ -16,11 +18,13 @@ namespace EPiServer.Marketing.Testing.Web.Context
     {
         public static readonly string UriPrefix = "epi.marketing.testing";
         private readonly ITestManager _testManager;
+        private readonly IMarketingTestingWebRepository _testRepository;
 
         [ExcludeFromCodeCoverage]
         public MarketingTestingContextResolver(ITestManager testManager)
         {
             _testManager = testManager;
+            _testRepository = new MarketingTestingWebRepository();
         }
 
         [ExcludeFromCodeCoverage]
@@ -65,10 +69,10 @@ namespace EPiServer.Marketing.Testing.Web.Context
             switch (idType)
             {
                 case "testid":
-                    marketingTest = _testManager.Get(id);
+                    marketingTest = _testRepository.GetTestById(id);
                     break;
                 case "contentid":
-                    marketingTest = _testManager.GetTestByItemId(id).FirstOrDefault();
+                    marketingTest = _testRepository.GetActiveTestForContent(id);
                     break;
             }
 
