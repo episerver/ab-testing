@@ -1,5 +1,6 @@
 ﻿define([
     "dojo/_base/declare",
+    'epi/dependency',
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dojo/text!marketing-testing/views/MarketingTestDetailsView.html",
@@ -11,9 +12,10 @@
     "dijit/form/DropDownButton",
     "dijit/TooltipDialog",
     "dijit/form/Button"
-    
+
 ], function (
     declare,
+    dependency,
     widgetBase,
     templatedMixin,
     template,
@@ -28,12 +30,12 @@
         resources: resources,
 
 
-        constructor: function() {
-            var contextService = epi.dependency.resolve("epi.shell.ContextService"), me=this;
+        constructor: function () {
+            var contextService = epi.dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
         },
 
-        postCreate:function() {
+        postCreate: function () {
             this.DetailsHeader.textContent = this.context.data.test.title;
 
             if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
@@ -44,7 +46,7 @@
                 this.Owner.textContent = this.context.data.test.Owner;
                 this.timeRemaining.textContent = this.context.data.daysRemaining + "days";
             }
-            
+
             this.VersionAText.textContent = this.context.data.publishedVersionName;
             this.VersionAContentLink.textContent = this.context.data.publishedVersionContentLink;
 
@@ -64,7 +66,13 @@
         },
 
         _onAbortOptionClicked: function () {
-            alert("ABORT OPTION");
+            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+            store.remove(this.context.data.test.originalItemId);
+            topic.publish("/epi/shell/action/changeview/back");
+        },
+
+        _onCancelClick: function () {
+            topic.publish("/epi/shell/action/changeview/back");
         }
 
 
