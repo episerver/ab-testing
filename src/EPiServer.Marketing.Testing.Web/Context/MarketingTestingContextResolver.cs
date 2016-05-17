@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -36,7 +36,9 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
             instance = null;
 
-            //check url to resolve for actionable keys
+            //check url to resolve for actionable segments
+            //Segment 1 = guid and guid type
+            //Segment 2 = View to render
             if (uri.Segments.Length <= 2 || (!uri.Segments[1].Contains("testid") &&
                                              !uri.Segments[1].Contains("contentid")))
             {
@@ -59,8 +61,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
             //if url is properly formatted with the correct data
             //get back the test based on the guid type given
             var idType = uri.Segments[1].Split('=')[0];
-            string targetView = uri.Segments[2];
-
 
             switch (idType)
             {
@@ -72,11 +72,16 @@ namespace EPiServer.Marketing.Testing.Web.Context
                     break;
             }
 
+            //check that a test was found
             if (marketingTest == null)
             {
                 return false;
             }
 
+            //set required view to render
+            string targetView = uri.Segments[2];
+
+            // Create context instance
             instance = new MarketingTestContext
             {
                 Uri = uri,
@@ -104,7 +109,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 contextModel.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
                 contextModel.PublishedVersionName = publishedContent.Name;
 
-
                 var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
                 int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
                 tempContentClone.WorkID = variantVersion;
@@ -113,14 +117,14 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 contextModel.DraftVersionContentLink = draftContent.ContentLink.ToString();
                 contextModel.DraftVersionName = draftContent.PageName;
                 contextModel.DraftVersionChangedBy = draftContent.ChangedBy;
-                contextModel.DraftVersionChangedDate = draftContent.Saved.ToString();
+                contextModel.DraftVersionChangedDate = draftContent.Saved.ToString(CultureInfo.CurrentCulture);
             }
-            
-            
+
+
             if (testData.State == TestState.Active)
             {
-                contextModel.DaysElapsed = DateTime.Now.Subtract(testData.StartDate).TotalDays.ToString();
-                contextModel.DaysRemaining = testData.StartDate.Subtract(DateTime.Now).TotalDays.ToString();
+                contextModel.DaysElapsed = DateTime.Now.Subtract(testData.StartDate).TotalDays.ToString(CultureInfo.CurrentCulture);
+                contextModel.DaysRemaining = testData.StartDate.Subtract(DateTime.Now).TotalDays.ToString(CultureInfo.CurrentCulture);
             }
             else if (testData.State == TestState.Inactive)
             {

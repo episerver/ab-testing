@@ -150,6 +150,10 @@
             this.model.testTitle = event;
         },
 
+        _onTestDescriptionChanged: function (event) {
+            this.model.testDescription = event;
+        },
+
         _onConversionPageChanged: function (event) {
             this.model.conversionPage = event;
         },
