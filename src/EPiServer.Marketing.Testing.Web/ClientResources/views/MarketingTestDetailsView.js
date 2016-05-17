@@ -55,6 +55,18 @@
             this.visitorPercentage.textContent = this.context.data.visitorPercentage;
             this.totalParticipants.textContent = this.context.data.totalParticipantCount;
             this.TestDescription.textContent = this.context.data.test.Description;
+        },
+
+        _onWinnerOptionClicked: function () {
+            var me = this;
+            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/MarketingTestPickWinnerView" };
+            topic.publish("/epi/shell/context/request", contextParameters);
+        },
+
+        _onAbortOptionClicked: function () {
+            alert("ABORT OPTION");
         }
+
+
     });
 });

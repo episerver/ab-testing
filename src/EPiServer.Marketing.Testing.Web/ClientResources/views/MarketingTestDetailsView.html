@@ -7,12 +7,11 @@
                         <div class="epi-toolbarGroup epi-toolbarLeading"></div>
                         <div class="epi-toolbarGroup epi-toolbarCenter"></div>
                         <div class="epi-toolbarGroup epi-toolbarTrailing">
-                            <div class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton"
-                                 data-dojo-type="dijit/form/DropDownButton">
+                            <div class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton" data-dojo-type="dijit/form/DropDownButton">
                                 <span>Options</span>
-                                <div>
-                                    <a href="#" id="pickWinnerLink" data-dojo-attach-event="onClick: _onPickWinnerLinkClick">${resources.detailsview.pickoptionlinktext}</a><!-- pickoptionlinktext-->
-                                    <a href="#" id="abortLink" data-dojo-attach-event="onClick: _onAbortLinkClick">${resources.detailsview.abortoptionlinktext}</a><!-- abortoptionlinktext -->
+                                <div class="dijitReset epi-tooltipDialogMenu epi-menuInverted" data-dojo-type="dijit/DropDownMenu" role="menu">
+                                    <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onWinnerOptionClicked">Pick a Winner</div>
+                                    <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">Abort</div>
                                 </div>
                             </div>
                             <button data-dojo-type="dijit/form/Button" id="detailsCancel" type="button">Cancel</button>
