@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
