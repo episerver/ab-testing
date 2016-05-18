@@ -87,9 +87,7 @@
                 testTitle: this.testTitle,
                 startDate: this.startDate
             }).then(function () {
-                var contextParameters = { uri: "epi.marketing.testing:///contentid=" + me.testContentId+"/TestDetailsViewModel" };
-                me.topic.publish("/epi/shell/context/request", contextParameters);
-                //me.topic.publish("/epi/shell/action/changeview/back");
+                me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");
             });
