@@ -10,8 +10,8 @@ function (declare, topic, _ContentCommandBase, ContentActionSupport) {
     return declare([_ContentCommandBase], {
 
         name: "AddTest",
-        label: "Create AB Test",
-        tooltip: "Create AB test from my changes",
+        label: "Create A/B Test for my changes",
+        tooltip: "Create A/B Test for my changes",
         iconClass: "", //Define your own icon css class here.
 
         _contentActionSupport: ContentActionSupport,
@@ -43,6 +43,10 @@ function (declare, topic, _ContentCommandBase, ContentActionSupport) {
 
             //Executable when available and not published, have published version and have edit access right
             this.set("canExecute", isAvailable && this._getCanExecute(contentData, versionStatus));
+            if (this.get("canExecute")) {
+                // only update the state for content that can be tested.
+                me._topic.publish("/epi/marketing/updatestate", "AddTestView", { contentData: me.model.contentData, languageContext: me.model.languageContext });
+            }
         },
 
         _getCanExecute: function (contentData, versionStatus) {
