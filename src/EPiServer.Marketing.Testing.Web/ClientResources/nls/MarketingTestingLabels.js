@@ -41,6 +41,8 @@
             total_participants_details: "Current number of test participants",
             duration_details: "Remaining duration:",
             cancel_default: "Cancel",
+            conversions_label: "Conversions:",
+            views_label: "Views:"
 
         }
     }
