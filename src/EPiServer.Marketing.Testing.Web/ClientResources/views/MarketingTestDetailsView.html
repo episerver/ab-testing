@@ -10,11 +10,11 @@
                             <div class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton" data-dojo-type="dijit/form/DropDownButton">
                                 <span>Options</span>
                                 <div class="dijitReset epi-tooltipDialogMenu epi-menuInverted" data-dojo-type="dijit/DropDownMenu" role="menu">
-                                    <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onWinnerOptionClicked">${resources.detailsview.pickoptionlinktext}</div>
-                                    <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">${resources.detailsview.abortoptionlinktext}</div>
+                                    <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onWinnerOptionClicked">Pick a Winner</div>
+                                    <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">Abort</div>
                                 </div>
                             </div>
-                            <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.cancel_default}</button>
+                            <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">Cancel</button>
                             &nbsp;
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                         <div class="epi-grid__header">
                             <hgroup>
                                 <h1 class="dijitInline" data-dojo-attach-point="DetailsHeader"></h1>
-                                <h3 data-dojo-attach-point="StartedText"><span class="epi-username" data-dojo-attach-point="Owner"></span></h3>
+                                <h3><span data-dojo-attach-point="daysElapsed"></span>&nbsp;<span class="epi-username" data-dojo-attach-point="Owner"></span></h3>
                             </hgroup>
                         </div>
                     </div>
@@ -43,28 +43,28 @@
                                 <h2 data-dojo-attach-point="VersionAText"></h2>
                                 <h3 data-dojo-attach-point="VersionAContentLink"></h3>
                             </div>
-                            <span class="epi-test-version__info">${resources.detailsview.published_prefix}<span class="epi-username" data-dojo-attach-point="PublishedUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="PublishedDate"></span></span>
+                            <span class="epi-test-version__info">${resources.detailsview.published_prefix} <span class="epi-username" data-dojo-attach-point="PublishedUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="PublishedDate"></span></span>
                         </div>
                         <div class="flex-container--narrow">
-                            <h2>26%</h2>
-                            <div class="epi-test-meter epi-test-version--1" style="height:100px;"></div>
-                            <span data-dojo-attach-point="firstVariantConversions"></span><br>
-                            <span data-dojo-attach-point="firstVariantViews"></span>
+                            <h2 data-dojo-attach-point="firstVariantPercentage"></h2>
+                            <div class="epi-test-meter epi-test-version--1" data-dojo-attach-point="firstVariantPercentMeter"></div>
+                            ${resources.detailsview.conversions_label}<span data-dojo-attach-point="firstVariantConversions"></span><br>
+                            ${resources.detailsview.views_label}<span data-dojo-attach-point="firstVariantViews"></span>
                         </div>
                     </div>
                     <div class="flex-container">
-                        <div class="flex-container--wide">
+                        <div class="flex-container--wide" style="float: right">
                             <div class="epi-test-version epi-test-version--2">
                                 <h2 data-dojo-attach-point="VersionBText"></h2>
                                 <h3 data-dojo-attach-point="VersionBContentLink"></h3>
                             </div>
-                            <span class="epi-test-version__info">${resources.detailsview.draft_prefix}<span class="epi-username" data-dojo-attach-point="DraftUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="DraftSavedDate"></span></span>
+                            <span class="epi-test-version__info">${resources.detailsview.draft_prefix} <span class="epi-username" data-dojo-attach-point="DraftUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="DraftSavedDate"></span></span>
                         </div>
                         <div class="flex-container--narrow">
-                            <h2>38%</h2>
-                            <div class="epi-test-meter epi-test-version--2" style="height:120px;"></div>
-                            <span data-dojo-attach-point="secondtVariantConversions"></span><br>
-                            <span data-dojo-attach-point="secondVariantViews"></span>
+                            <h2 data-dojo-attach-point="secondVariantPercentage"></h2>
+                            <div class="epi-test-meter epi-test-version--2" data-dojo-attach-point="secondVariantPercentMeter"></div>
+                            ${resources.detailsview.conversions_label}<span data-dojo-attach-point="secondtVariantConversions"></span><br>
+                            ${resources.detailsview.views_label}<span data-dojo-attach-point="secondVariantViews"></span>
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="epi-grid__col--12">
                         <div class="epi-grid__header">
                             <h2>${resources.detailsview.description_heading}</h2>
-                            <p data-dojo-attach-point="TestDescription">To see if the new block will lead to more conversions than the current one</p>
+                            <p data-dojo-attach-point="TestDescription"></p>
                         </div>
                     </div>
                 </div>
@@ -91,9 +91,9 @@
                                 <span class="dijitInline dijitReset dijitIcon epi-iconPage"></span> <a href="/">Start</a>
                             </li>
                             <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
-                                <h3>${resources.detailsview.percentage_details}<span data-dojo-attach-point="visitorPercentage"></span></h3>
-                                <h3>${resources.detailsview.total_participants_details}<span data-dojo-attach-point="totalParticipants"></span></h3>
-                                <h3>${resources.detailsview.duration_details}<span data-dojo-attach-point="timeRemaining"></span></h3>
+                                <h3>${resources.detailsview.percentage_details} <span data-dojo-attach-point="visitorPercentage"></span></h3>
+                                <h3>${resources.detailsview.total_participants_details} <span data-dojo-attach-point="totalParticipants"></span></h3>
+                                <h3>${resources.detailsview.duration_details} <span data-dojo-attach-point="timeRemaining"> </span>&nbsp;${resources.detailsview.remaining_increment}</h3>
                             </li>
                         </ul>
                     </div>
