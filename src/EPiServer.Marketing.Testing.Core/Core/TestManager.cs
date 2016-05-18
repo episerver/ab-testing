@@ -13,12 +13,16 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
-using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 
 namespace EPiServer.Marketing.Testing
 {
+    public enum CacheOperator
+    {
+        Add,
+        Remove
+    }
+
     [ServiceConfiguration(ServiceType = typeof (ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
@@ -27,12 +31,6 @@ namespace EPiServer.Marketing.Testing
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
         private MemoryCache _testCache = MemoryCache.Default;
-
-        public enum CacheOperator
-        {
-            Add,
-            Remove
-        };
 
         [ExcludeFromCodeCoverage]
         public TestManager()

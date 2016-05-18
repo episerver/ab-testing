@@ -322,11 +322,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
 
             var test = GetManagerTest();
-            testManager.UpdateCache(test, TestManager.CacheOperator.Add);
+            testManager.UpdateCache(test, CacheOperator.Add);
 
             Assert.Equal(testManager.CreateOrGetCache().Count(), 1);
 
-            testManager.UpdateCache(test, TestManager.CacheOperator.Remove);
+            testManager.UpdateCache(test, CacheOperator.Remove);
             Assert.Equal(testManager.CreateOrGetCache().Count(), 0);
         }
     }

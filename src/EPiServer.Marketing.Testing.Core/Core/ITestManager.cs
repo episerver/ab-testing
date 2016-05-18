@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.Core;
-using System.Collections;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing
@@ -37,7 +35,7 @@ namespace EPiServer.Marketing.Testing
 
         List<IMarketingTest> CreateOrGetCache();
 
-        void UpdateCache(IMarketingTest test, TestManager.CacheOperator cacheOperator);
+        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
         /// <summary>
         /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
         /// the list of Kpi Guids that evaluated as true.
