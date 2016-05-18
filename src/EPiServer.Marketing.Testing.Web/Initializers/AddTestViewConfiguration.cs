@@ -15,7 +15,7 @@ namespace EPiServer.Marketing.Testing.Web
             ControllerType = "marketing-testing/views/AddTestView";
             ViewType = "marketing-testing/views/AddTestView";
             //IconClass;
-            //HideFromViewMenu;
+            HideFromViewMenu = true;
         }
     }
 }
