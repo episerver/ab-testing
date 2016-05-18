@@ -42,7 +42,9 @@
             duration_details: "Remaining duration:",
             cancel_default: "Cancel",
             conversions_label: "Conversions:",
-            views_label: "Views:"
+            views_label: "Views:",
+            remaining_increment: "Days"
+
 
         }
     }
