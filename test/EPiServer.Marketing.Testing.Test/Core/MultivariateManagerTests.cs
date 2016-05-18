@@ -23,8 +23,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         private TestManager GetUnitUnderTest()
         {
+            var dalList = new List<IABTest>();
             _serviceLocator = new Mock<IServiceLocator>();
             _dataAccessLayer = new Mock<ITestingDataAccess>();
+            _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
 
             return new TestManager(_serviceLocator.Object);
@@ -58,9 +61,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            var dalList = new List<IABTest>();
-            _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
-            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+            
+            
             tm.Get(theGuid);
 
             _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),

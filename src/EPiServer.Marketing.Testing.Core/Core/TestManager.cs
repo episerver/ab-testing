@@ -46,6 +46,7 @@ namespace EPiServer.Marketing.Testing
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
+            CreateOrGetCache();
         }
 
         public IMarketingTest Get(Guid testObjectId)
