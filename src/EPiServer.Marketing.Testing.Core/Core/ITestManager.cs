@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing
     {
         IMarketingTest Get(Guid testObjectId);
 
-        List<IMarketingTest> GetTestByItemId(Guid originalItemId);
+        List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
 
         List<IMarketingTest> GetTestList(TestCriteria criteria);
 

@@ -124,7 +124,7 @@ namespace EPiServer.Marketing.Testing.Web
                 if (e.Content == null)
                     return;
 
-                var activeTest = _testManager.GetTestByItemId(e.Content.ContentGuid).FirstOrDefault();
+                var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
 
                 _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                 var hasData = _testDataCookieHelper.HasTestData(_testData);

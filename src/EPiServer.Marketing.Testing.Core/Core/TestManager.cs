@@ -47,34 +47,29 @@ namespace EPiServer.Marketing.Testing
             CreateOrGetCache();
         }
 
+        /// <summary>
+        /// Gets a test based on the supplied id from the database.
+        /// </summary>
+        /// <param name="testObjectId"></param>
+        /// <returns>IMarketing Test</returns>
         public IMarketingTest Get(Guid testObjectId)
         {
-            var cachedTests = CreateOrGetCache();
-
-            var test = cachedTests.FirstOrDefault(t => t.Id == testObjectId);
-            if (test != null)
-            {
-                return test;
-            }
-
             var dbTest = _dataAccess.Get(testObjectId);
             if (dbTest == null)
             {
                 throw new TestNotFoundException();
             }
-
-            var managerTest = ConvertToManagerTest(dbTest);
-
-            // the test isn't in the cache and its State is Active so add it
-            if (managerTest.State == TestState.Active)
-            {
-                UpdateCache(managerTest, CacheOperator.Add);
-            }
-
-            return managerTest;
+            
+            return ConvertToManagerTest(dbTest);
         }
 
-        public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
+        /// <summary>
+        /// Retrieves all active tests that have the supplied OriginalItemId from the cache.  The associated data for each 
+        /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
+        /// </summary>
+        /// <param name="originalItemId"></param>
+        /// <returns>List of IMarketingTest</returns>
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             var cachedTests = CreateOrGetCache();
 
@@ -205,7 +200,7 @@ namespace EPiServer.Marketing.Testing
 
             if (processedList.Count == 1)
             {
-                var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+                var test = GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
 
                 if (test != null)
                 {
@@ -261,7 +256,7 @@ namespace EPiServer.Marketing.Testing
 
                 activeTestCriteria.AddFilter(activeTestStateFilter);
 
-                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.Now.AddMinutes(15));
+                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.MaxValue);
             }
 
             var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
@@ -288,7 +283,7 @@ namespace EPiServer.Marketing.Testing
                     break;
             }
             
-            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.Now.AddMinutes(15));
+            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula

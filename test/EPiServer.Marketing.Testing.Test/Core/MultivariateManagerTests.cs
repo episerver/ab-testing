@@ -86,7 +86,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             dalList.Add(test);
             _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
-            var returnList = tm.GetTestByItemId(theGuid);
+            var returnList = tm.GetActiveTestsByOriginalItemId(theGuid);
 
             Assert.True(returnList.All(t => t.OriginalItemId == theGuid), "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
         }
