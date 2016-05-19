@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Testing.Web.Context;
+using EPiServer.Marketing.Testing.Web.Controllers;
+using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell.Rest;
 using Moq;
 using Xunit;
@@ -11,37 +15,50 @@ namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class MarketingTestingContextResolverTest
     {
-        private Mock<ITestManager> _mockTestManager;
+        private Mock<IServiceLocator> _serviceLocator;
+        private Mock<IContentRepository> _mockContentRepository;
+        private Mock<IMarketingTestingWebRepository> _mockTestingRespository;
         private MarketingTestingContextResolver _marketingTestingContextResolver;
-        private List<IMarketingTest> _activeTestDataList;
+        private IMarketingTest _activeTestData;
         private IMarketingTest _test;
         private IMarketingTest _testData;
         private readonly Guid _activeTestGuid = Guid.Parse("b6fc7ed9-089b-45b0-9eb1-f6de58591d32");
         private readonly Guid _inactiveTestGuid = Guid.Parse("466ad41d-7994-428f-ba65-09296b387627");
         private string _testTitle = "Unit Test Title";
 
-        public MarketingTestingContextResolverTest()
+
+        private MarketingTestingContextResolver GetUnitUnderTest()
         {
-            _mockTestManager = new Mock<ITestManager>();
-            _marketingTestingContextResolver = new MarketingTestingContextResolver(_mockTestManager.Object);
             _test = new ABTest() { Title = "_returnedTestTitle", State = TestState.Done, OriginalItemId = _activeTestGuid };
-            _activeTestDataList = new List<IMarketingTest>() { new ABTest() { Title = _testTitle, State = TestState.Active, OriginalItemId = _activeTestGuid } };
+            _activeTestData = new ABTest() { Title = _testTitle, State = TestState.Active, OriginalItemId = _activeTestGuid };
 
-            _mockTestManager.Setup(call => call.GetTestByItemId(It.Is<Guid>(g => g == _activeTestGuid)))
-                .Returns(_activeTestDataList);
+            _serviceLocator = new Mock<IServiceLocator>();
+            _mockContentRepository = new Mock<IContentRepository>();
+            _mockTestingRespository = new Mock<IMarketingTestingWebRepository>();
 
-            _mockTestManager.Setup(call => call.GetTestByItemId(It.Is<Guid>(g => g == _inactiveTestGuid)))
-                .Returns(new List<IMarketingTest>());
+            _mockTestingRespository.Setup(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _activeTestGuid)))
+    .Returns(_activeTestData);
 
-            _mockTestManager.Setup(call => call.Get(It.Is<Guid>(g => g == _activeTestGuid))).Returns(_test);
+            _mockTestingRespository.Setup(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _inactiveTestGuid)))
+    .Returns((ABTest)null);
+
+            _mockTestingRespository.Setup(call => call.GetTestById(It.Is<Guid>(g => g == _activeTestGuid))).Returns(_test);
+
+
+            _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_mockContentRepository.Object);
+
+            return new MarketingTestingContextResolver(_serviceLocator.Object);
         }
+
+        
 
         [Fact]
         public void TryResolveUri_without_id_should_return_false()
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
             ClientContextBase context;
 
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri(null,null, "MarketingTestDetailsView"), out context);
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri(null, null, "MarketingTestDetailsView"), out context);
 
             Assert.False(resolveUri);
             Assert.Null(context);
@@ -50,6 +67,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_without_proper_idType_should_return_false()
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
+
             ClientContextBase context;
 
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("badIdType", _activeTestGuid, "MarketingTestDetailsView"), out context);
@@ -61,6 +80,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_without_proper_guid_should_return_false()
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
+
             ClientContextBase context;
 
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("testid", null, "MarketingTestDetailsView"), out context);
@@ -72,6 +93,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_with_malformatted_property_string_should_return_false()
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
+
             ClientContextBase context;
 
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("malformattedpropertystring", _activeTestGuid, "MarketingTestDetailsView"), out context);
@@ -83,10 +106,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_With_Content_Guid_Part_Of_Inactive_Test_Should_Return_False_And_Null_Context()
         {
-            ClientContextBase context;
-            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("contentid",_inactiveTestGuid,"MarketingTestDetailsView"), out context);
+            _marketingTestingContextResolver = GetUnitUnderTest();
 
-            _mockTestManager.Verify(call => call.GetTestByItemId(It.Is<Guid>(g => g == _inactiveTestGuid)), Times.Once, "TryResolveUir Should have called test manager but apparently did not");
+            ClientContextBase context;
+            var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("contentid", _inactiveTestGuid, "MarketingTestDetailsView"), out context);
+
+            _mockTestingRespository.Verify(call => call.GetTestById(It.Is<Guid>(g => g == _inactiveTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
             Assert.False(resolveUri);
             Assert.Null(context);
         }
@@ -94,30 +119,34 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_With_Content_Guid_Part_Of_Active_Test_Should_Return_True_And_Proper_Context()
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
+
             ClientContextBase context;
-            var uri = CreateUri("contentid",_activeTestGuid,"MarketingTestDetailsView");
+            var uri = CreateUri("contentid", _activeTestGuid, "MarketingTestDetailsView");
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(uri, out context);
 
-            _mockTestManager.Verify(call => call.GetTestByItemId(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test manager but apparently did not");
+            _mockTestingRespository.Verify(call => call.GetTestById(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
             Assert.True(resolveUri);
             Assert.NotNull(context);
             Assert.Equal(context.Name, _testTitle);
             Assert.Equal(context.Uri, uri);
             IMarketingTest returnedTestData = context.Data as IMarketingTest;
             Assert.NotNull(returnedTestData);
-            Assert.Equal(returnedTestData.Title,_activeTestDataList[0].Title);
-            Assert.Equal(returnedTestData.State, _activeTestDataList[0].State);
-            Assert.Equal(returnedTestData.OriginalItemId, _activeTestDataList[0].OriginalItemId);
+            Assert.Equal(returnedTestData.Title, _activeTestData.Title);
+            Assert.Equal(returnedTestData.State, _activeTestData.State);
+            Assert.Equal(returnedTestData.OriginalItemId, _activeTestData.OriginalItemId);
         }
 
         [Fact]
         public void TryResolveUri_With_Test_Guid_Should_Return_True_And_Proper_Context()
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
+
             ClientContextBase context;
             var uri = CreateUri("testid", _activeTestGuid, "MarketingTestDetailsView");
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(uri, out context);
 
-            _mockTestManager.Verify(call => call.Get(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test manager but apparently did not");
+            _mockTestingRespository.Verify(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
             Assert.True(resolveUri);
             Assert.NotNull(context);
             Assert.Equal(context.Name, _test.Title);
@@ -130,23 +159,25 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
 
-        private Uri CreateUri(string idType, Guid? contentGuid,string targetView)
+        private Uri CreateUri(string idType, Guid? contentGuid, string targetView)
         {
+            _marketingTestingContextResolver = GetUnitUnderTest();
+
             var guidString = contentGuid != Guid.Empty ? contentGuid.ToString() : string.Empty;
             string uriString;
             if (idType == null)
             {
                 uriString = string.Empty;
             }
-            else if(idType=="malformattedpropertystring")
+            else if (idType == "malformattedpropertystring")
             {
-                uriString = "testid" +  guidString +"/"+targetView;
+                uriString = "testid" + guidString + "/" + targetView;
             }
             else
             {
-                uriString = idType + "=" + guidString +"/"+targetView;
+                uriString = idType + "=" + guidString + "/" + targetView;
             }
-            return new Uri(_marketingTestingContextResolver.Name+ ":///" + uriString );
+            return new Uri(_marketingTestingContextResolver.Name + ":///" + uriString);
         }
     }
 }

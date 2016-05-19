@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Dal.Mappings;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -20,14 +22,23 @@ namespace EPiServer.Marketing.Testing.Web.Context
     public class MarketingTestingContextResolver : IUriContextResolver
     {
         public static readonly string UriPrefix = "epi.marketing.testing";
-        private readonly ITestManager _testManager;
-        private readonly IMarketingTestingWebRepository _testRepository;
+        private readonly IMarketingTestingWebRepository _marketingTestRepository;
+        private readonly IContentRepository _contentRepository;
+
 
         [ExcludeFromCodeCoverage]
         public MarketingTestingContextResolver(ITestManager testManager)
         {
-            _testManager = testManager;
-            _testRepository = new MarketingTestingWebRepository();
+            var serviceLocator = ServiceLocator.Current;
+            _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _contentRepository = serviceLocator.GetInstance<IContentRepository>();
+        }
+
+        internal MarketingTestingContextResolver(IServiceLocator serviceLocator)
+        {
+            _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _contentRepository = serviceLocator.GetInstance<IContentRepository>();
+
         }
 
         [ExcludeFromCodeCoverage]
@@ -72,10 +83,10 @@ namespace EPiServer.Marketing.Testing.Web.Context
             switch (idType)
             {
                 case "testid":
-                    marketingTest = _testRepository.GetTestById(id);
+                    marketingTest = _marketingTestRepository.GetTestById(id);
                     break;
                 case "contentid":
-                    marketingTest = _testRepository.GetActiveTestForContent(id);
+                    marketingTest = _marketingTestRepository.GetActiveTestForContent(id);
                     break;
             }
 
@@ -105,12 +116,11 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
         private MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
         {
-            var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
 
             MarketingTestingContextModel contextModel = new MarketingTestingContextModel();
 
             contextModel.Test = testData;
-            var publishedContent = contentRepository.Get<IContent>(testData.OriginalItemId) as PageData;
+            var publishedContent = _contentRepository.Get<IContent>(testData.OriginalItemId) as PageData;
             if (publishedContent != null)
             {
                 contextModel.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
@@ -122,7 +132,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
                 tempContentClone.WorkID = variantVersion;
 
-                var draftContent = contentRepository.Get<PageData>(tempContentClone);
+                var draftContent = _contentRepository.Get<PageData>(tempContentClone);
                 contextModel.DraftVersionContentLink = draftContent.ContentLink.ToString();
                 contextModel.DraftVersionName = draftContent.PageName;
                 contextModel.DraftVersionChangedBy = draftContent.ChangedBy;
@@ -130,8 +140,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
             }
 
             contextModel.Test.StartDate = contextModel.Test.StartDate.ToLocalTime();
-
-            
 
             if (testData.State == TestState.Active)
             {
