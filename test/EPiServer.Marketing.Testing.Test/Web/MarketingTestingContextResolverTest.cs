@@ -5,6 +5,7 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Testing.Web.Context;
 using EPiServer.Marketing.Testing.Web.Controllers;
+using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Rest;
@@ -30,7 +31,36 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private MarketingTestingContextResolver GetUnitUnderTest()
         {
             _test = new ABTest() { Title = "_returnedTestTitle", State = TestState.Done, OriginalItemId = _activeTestGuid };
-            _activeTestData = new ABTest() { Title = _testTitle, State = TestState.Active, OriginalItemId = _activeTestGuid };
+            _activeTestData = new ABTest()
+            { Id = _activeTestGuid,
+                Title = _testTitle,
+                State = TestState.Active,
+                OriginalItemId = _activeTestGuid,
+                StartDate = DateTime.Now.AddDays(3),
+                EndDate = DateTime.Now.AddDays(15),
+                Owner = "Test Owner",
+                Description = "Test Description",
+                Variants = new List<Variant>()
+            };
+
+            _activeTestData.Variants.Add(new Variant()
+            {
+                Conversions = 6,
+                Views = 10,
+                Id = Guid.NewGuid(),
+                ItemId = Guid.NewGuid(),
+                ItemVersion = 5,
+                TestId = _activeTestGuid
+            });
+            _activeTestData.Variants.Add(new Variant()
+            {
+                Conversions = 4,
+                Views = 12,
+                Id = Guid.NewGuid(),
+                ItemId = Guid.NewGuid(),
+                ItemVersion = 500,
+                TestId = _activeTestGuid
+            });
 
             _serviceLocator = new Mock<IServiceLocator>();
             _mockContentRepository = new Mock<IContentRepository>();
@@ -44,6 +74,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _mockTestingRespository.Setup(call => call.GetTestById(It.Is<Guid>(g => g == _activeTestGuid))).Returns(_test);
 
+            _serviceLocator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_mockTestingRespository.Object);
 
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_mockContentRepository.Object);
 
@@ -106,12 +137,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_With_Content_Guid_Part_Of_Inactive_Test_Should_Return_False_And_Null_Context()
         {
-            _marketingTestingContextResolver = GetUnitUnderTest();
 
+            _marketingTestingContextResolver = GetUnitUnderTest();
+            _mockTestingRespository.Setup(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _inactiveTestGuid)))
+.Returns((ABTest)null);
             ClientContextBase context;
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(CreateUri("contentid", _inactiveTestGuid, "MarketingTestDetailsView"), out context);
 
-            _mockTestingRespository.Verify(call => call.GetTestById(It.Is<Guid>(g => g == _inactiveTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
+            _mockTestingRespository.Verify(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _inactiveTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
             Assert.False(resolveUri);
             Assert.Null(context);
         }
@@ -119,22 +152,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TryResolveUri_With_Content_Guid_Part_Of_Active_Test_Should_Return_True_And_Proper_Context()
         {
-            _marketingTestingContextResolver = GetUnitUnderTest();
 
+            _marketingTestingContextResolver = GetUnitUnderTest();
+            _mockTestingRespository.Setup(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _activeTestGuid)))
+.Returns(_activeTestData);
             ClientContextBase context;
             var uri = CreateUri("contentid", _activeTestGuid, "MarketingTestDetailsView");
             var resolveUri = _marketingTestingContextResolver.TryResolveUri(uri, out context);
 
-            _mockTestingRespository.Verify(call => call.GetTestById(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
+            _mockTestingRespository.Verify(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _activeTestGuid)), Times.Once, "TryResolveUir Should have called test repository but apparently did not");
             Assert.True(resolveUri);
             Assert.NotNull(context);
             Assert.Equal(context.Name, _testTitle);
             Assert.Equal(context.Uri, uri);
-            IMarketingTest returnedTestData = context.Data as IMarketingTest;
+            MarketingTestingContextModel returnedTestData = context.Data as MarketingTestingContextModel;
             Assert.NotNull(returnedTestData);
-            Assert.Equal(returnedTestData.Title, _activeTestData.Title);
-            Assert.Equal(returnedTestData.State, _activeTestData.State);
-            Assert.Equal(returnedTestData.OriginalItemId, _activeTestData.OriginalItemId);
+            Assert.Equal(returnedTestData.Test.Title, _activeTestData.Title);
+            Assert.Equal(returnedTestData.Test.State, _activeTestData.State);
+            Assert.Equal(returnedTestData.Test.OriginalItemId, _activeTestData.OriginalItemId);
         }
 
         [Fact]
