@@ -13,57 +13,75 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using ABTestProperty = EPiServer.Marketing.Testing.Data.ABTestProperty;
-using TestState = EPiServer.Marketing.Testing.Data.Enums.TestState;
-using System.Data.Entity.Core;
+using EPiServer.Marketing.Testing.Core.Exceptions;
 
 namespace EPiServer.Marketing.Testing
 {
+    public enum CacheOperator
+    {
+        Add,
+        Remove
+    }
+
     [ServiceConfiguration(ServiceType = typeof (ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
+        private const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
+        private MemoryCache _testCache = MemoryCache.Default;
 
         [ExcludeFromCodeCoverage]
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
+            CreateOrGetCache();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
+            CreateOrGetCache();
         }
 
+        /// <summary>
+        /// Gets a test based on the supplied id from the database.
+        /// </summary>
+        /// <param name="testObjectId"></param>
+        /// <returns>IMarketing Test</returns>
         public IMarketingTest Get(Guid testObjectId)
         {
-            var t = _dataAccess.Get(testObjectId);
-            if (t != null)
+            var dbTest = _dataAccess.Get(testObjectId);
+            if (dbTest == null)
             {
-                return ConvertToManagerTest(t);
+                throw new TestNotFoundException();
             }
-            else
-            {
-                throw new ObjectNotFoundException();
-            }
+            
+            return ConvertToManagerTest(dbTest);
         }
 
-        public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
+        /// <summary>
+        /// Retrieves all active tests that have the supplied OriginalItemId from the cache.  The associated data for each 
+        /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
+        /// </summary>
+        /// <param name="originalItemId"></param>
+        /// <returns>List of IMarketingTest</returns>
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            var testList = new List<IMarketingTest>();
+            var cachedTests = CreateOrGetCache();
 
-            foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
-            {
-                testList.Add(ConvertToManagerTest(dalTest));
-            }
-
-            return testList;
+            return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
+        /// <summary>
+        /// Don't want to use refernce the cache here.  The criteria could be anything, not just active tests which
+        /// is what the cache is intended to have in it.
+        /// </summary>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
             var testList = new List<IMarketingTest>();
@@ -88,22 +106,54 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-            return _dataAccess.Save(ConvertToDalTest(multivariateTest));
+            
+            var testId = _dataAccess.Save(ConvertToDalTest(multivariateTest));
+
+            if (multivariateTest.State == TestState.Active)
+            {
+                UpdateCache(multivariateTest, CacheOperator.Add);
+            }
+
+            return testId;
         }
 
         public void Delete(Guid testObjectId)
         {
             _dataAccess.Delete(testObjectId);
+
+            // if the test is in the cache remove it.  This should only happen if someone deletes an Active test - which really shouldn't happen...
+            var cachedTests = CreateOrGetCache();
+            var test = cachedTests.FirstOrDefault(t => t.Id == testObjectId);
+
+            if (test != null)
+            {
+                UpdateCache(test, CacheOperator.Remove);
+            }
         }
 
         public void Start(Guid testObjectId)
         {
-            _dataAccess.Start(testObjectId);
+            var dalTest = _dataAccess.Start(testObjectId);
+
+            // update cache to include new test as long as it was changed to Active
+            if (dalTest != null)
+            {
+                UpdateCache(ConvertToManagerTest(dalTest), CacheOperator.Add);
+            }
         }
 
         public void Stop(Guid testObjectId)
         {
             _dataAccess.Stop(testObjectId);
+
+            var cachedTests = CreateOrGetCache();
+
+            // remove test from cache
+            var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
+            if (test != null)
+            {
+                UpdateCache(test, CacheOperator.Remove);
+            }
         }
 
         public void Archive(Guid testObjectId)
@@ -116,12 +166,10 @@ namespace EPiServer.Marketing.Testing
             _dataAccess.IncrementCount(testId, itemId, itemVersion, AdaptToDalCount(resultType));
         }
 
-
-
-        public Data.Variant ReturnLandingPage(Guid testId)
+        public Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
-            var activePage = new Data.Variant();
+            var activePage = new Variant();
             if (currentTest != null)
             {
                 switch (GetRandomNumber())
@@ -144,35 +192,38 @@ namespace EPiServer.Marketing.Testing
 
             var marketingTestCache = MemoryCache.Default;
             var retData = marketingTestCache.Get("epi" + contentGuid) as PageData;
-            if (retData == null)
+
+            if (retData != null)
             {
-                if (processedList.Count == 1)
+                return retData;
+            }
+
+            if (processedList.Count == 1)
+            {
+                var test = GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+                if (test != null)
                 {
-                    var test = GetTestByItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+                    var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
+                    var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
 
-                    if (test != null)
+                    if (testContent != null)
                     {
-                        var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
-                        var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
-
-                        if (testContent != null)
+                        var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
+                        foreach (var variant in test.Variants)
                         {
-                            var contentVersion = testContent.WorkPageID == 0 ? testContent.ContentLink.ID : testContent.WorkPageID;
-                            foreach (var variant in test.Variants)
+                            if (variant.ItemVersion != contentVersion)
                             {
-                                if (variant.ItemVersion != contentVersion)
-                                {
-                                    retData = CreateVariantPageData(contentLoader, testContent, variant);
-                                    retData.Status = VersionStatus.Published;
-                                    retData.StartPublish = DateTime.Now.AddDays(-1);
-                                    retData.MakeReadOnly();
+                                retData = CreateVariantPageData(contentLoader, testContent, variant);
+                                retData.Status = VersionStatus.Published;
+                                retData.StartPublish = DateTime.Now.AddDays(-1);
+                                retData.MakeReadOnly();
 
-                                    var cacheItemPolicy = new CacheItemPolicy
-                                    {
-                                        AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
-                                    };
-                                    marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
-                                }
+                                var cacheItemPolicy = new CacheItemPolicy
+                                {
+                                    AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
+                                };
+                                marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
                             }
                         }
                     }
@@ -181,35 +232,7 @@ namespace EPiServer.Marketing.Testing
             return retData;
         }
 
-        public List<IMarketingTest> CreateActiveTestCache()
-        {
-            var _marketingTestCache = MemoryCache.Default;
-            var retTestList = _marketingTestCache.Get("TestContentList") as List<IMarketingTest>;
-
-            if (retTestList == null)
-            {
-                var activeTestCriteria = new Data.TestCriteria();
-                var activeTestStateFilter = new Data.ABTestFilter()
-                {
-                    Property = ABTestProperty.State,
-                    Operator = Data.FilterOperator.And,
-                    Value = TestState.Active
-                };
-
-                activeTestCriteria.AddFilter(activeTestStateFilter);
-                retTestList = GetTestList(activeTestCriteria);
-
-                var cacheItemPolicy = new CacheItemPolicy
-                {
-                    AbsoluteExpiration = DateTimeOffset.Parse(DateTime.Now.AddMinutes(1).ToString())
-                };
-                _marketingTestCache.Add("TestContentList", retTestList, cacheItemPolicy);
-            }
-
-            return retTestList;
-        }
-
-        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Data.Variant variant)
+        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Variant variant)
         {
             var contentToSave = d.ContentLink.CreateWritableClone();
             contentToSave.WorkID = variant.ItemVersion;
@@ -217,6 +240,50 @@ namespace EPiServer.Marketing.Testing
 
             var contentToCache = newContent?.CreateWritableClone() as PageData;
             return contentToCache;
+        }
+
+        public List<IMarketingTest> CreateOrGetCache()
+        {
+            if (!_testCache.Contains(TestingCacheName))
+            {
+                var activeTestCriteria = new TestCriteria();
+                var activeTestStateFilter = new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                };
+
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+
+                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.MaxValue);
+            }
+
+            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+            return activeTests;
+        }
+
+        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
+        {
+            var cachedTests = CreateOrGetCache();
+
+            switch (cacheOperator)
+            {
+                case CacheOperator.Add:
+                    if (!cachedTests.Contains(test))
+                    {
+                        cachedTests.Add(test);
+                    }
+                    break;
+                case CacheOperator.Remove:
+                    if (cachedTests.Contains(test))
+                    {
+                        cachedTests.Remove(test);
+                    }
+                    break;
+            }
+            
+            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
         // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula

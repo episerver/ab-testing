@@ -39,6 +39,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             _tdc = new Mock<ITestDataCookieHelper>();
             _testManager = new Mock<ITestManager>();
+            _testManager.Setup(call => call.CreateOrGetCache()).Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _contextHelper = new Mock<ITestingContextHelper>();
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
@@ -57,7 +59,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             testHandler.SwapDisabled = true;
 
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
                 .Returns(true);
@@ -82,7 +83,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
 
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(new List<IMarketingTest>());
+            //_testManager.Setup(call => call.CreateOrGetCache()).Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
@@ -109,7 +112,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = true;
 
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
                 .Returns(true);
@@ -154,9 +156,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
 
-            _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
+            _testManager.Setup(call => call.CreateOrGetCache()).Returns(testList);
             _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
@@ -203,9 +205,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
 
-            _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
+            _testManager.Setup(call => call.CreateOrGetCache()).Returns(testList);
             _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
@@ -245,7 +247,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
                 .Returns(true);
@@ -289,9 +292,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             testHandler.SwapDisabled = false;
 
-            _testManager.Setup(call => call.GetTestByItemId(_associatedTestGuid)).Returns(testList);
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.CreateActiveTestCache()).Returns(testList);
+            //_testManager.Setup(call => call.CreateOrGetCache()).Returns(testList);
             _testManager.Setup(call => call.CreateVariantPageDataCache(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);

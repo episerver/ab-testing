@@ -191,3 +191,10 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+/test/EPiServer.Marketing.Testing.Web.ClientTest/project.lock.json
+/test/EPiServer.Marketing.Testing.Web.ClientTest/project.lock.json
+/test/DtkBinaries/dojo-release-1.8.9-src
+/test
+/.vs/config/applicationhost.config
+/samples/EPiServer.Marketing.Testing.TestPages/project.lock.json
+/test/EPiServer.Marketing.Testing.Web.ClientTest/project.lock.json

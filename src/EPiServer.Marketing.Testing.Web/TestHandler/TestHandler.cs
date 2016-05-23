@@ -102,7 +102,7 @@ namespace EPiServer.Marketing.Testing.Web
                         if (testdata.Converted)
                         {
                             Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
-                            _testManager.EmitUpdateCount(test.Id, varUserSees.Id, varUserSees.ItemVersion, CountType.Conversion);
+                            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
                         }
                     }
                 }
@@ -111,17 +111,20 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void LoadedContent(object sender, ContentEventArgs e)
         {
-            CurrentPage = _contextHelper.GetCurrentPageFromUrl();
-
             if (!SwapDisabled == true)
             {
+                CurrentPage = _contextHelper.GetCurrentPageFromUrl();
+
                 if (e.TargetLink != null)
                 {
                     EvaluateKpis(e);    // new method to evaluate Kpi
                 }
 
-                var activeTest =
-                    _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
+                // Causing numerous errors at startup
+                if (e.Content == null)
+                    return;
+
+                var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
 
                 _testData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                 var hasData = _testDataCookieHelper.HasTestData(_testData);
