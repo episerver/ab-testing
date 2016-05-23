@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using EPiServer.Cms.Shell.UI.Rest;
+using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
+using EPiServer.Cms.Shell.UI.Rest.Models;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Dal.Mappings;
 using EPiServer.Marketing.Testing.Data;
@@ -121,6 +126,14 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
             contextModel.Test = testData;
             var publishedContent = _contentRepository.Get<IContent>(testData.OriginalItemId) as PageData;
+            IContent mycontent;
+            var publishedContent3 = _contentRepository.TryGet(publishedContent.ContentLink, out mycontent);
+          //  var publishedContent2 = _contentRepository.Get<IContent>(testData.OriginalItemId);
+            
+           // ContentStoreModelCreator modelCreator = ServiceLocator.Current.GetInstance<ContentStoreModelCreator>();
+         //   var mymodel = modelCreator.CreateContentDataStoreModel<ContentDataStoreModel>(publishedContent2, new DefaultQueryParameters());
+            //var published = mymodel.PublishedBy;
+
             if (publishedContent != null)
             {
                 contextModel.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
@@ -133,6 +146,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 tempContentClone.WorkID = variantVersion;
 
                 var draftContent = _contentRepository.Get<PageData>(tempContentClone);
+                
                 contextModel.DraftVersionContentLink = draftContent.ContentLink.ToString();
                 contextModel.DraftVersionName = draftContent.PageName;
                 contextModel.DraftVersionChangedBy = draftContent.ChangedBy;
@@ -157,6 +171,14 @@ namespace EPiServer.Marketing.Testing.Web.Context
             {
                 contextModel.TotalParticipantCount += variant.Views;
             }
+
+            var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
+            var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
+            
+            
+            var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+            contextModel.ConversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+            contextModel.ConversionContentName = conversionContent.Name;
 
             return contextModel;
         }

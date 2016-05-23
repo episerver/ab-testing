@@ -9,6 +9,8 @@ namespace EPiServer.Marketing.Testing.Web.Models
 {
     public class MarketingTestingContextModel
     {
+        public string ConversionContentName { get; set; }
+        public string ConversionLink { get; set; }
         public IMarketingTest Test { get; set; }
         public string DaysElapsed { get; set; }
         public string DaysRemaining { get; set; }
