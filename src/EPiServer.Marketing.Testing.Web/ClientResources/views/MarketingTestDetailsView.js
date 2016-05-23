@@ -1,5 +1,5 @@
 ﻿define([
-    "dojo/_base/declare",
+  "dojo/_base/declare",
     'epi/dependency',
     'dojo/dom',
     'dojo/dom-style',
@@ -34,14 +34,20 @@
     {
         templateString: template,
         resources: resources,
+        contextHistory: null,
+
 
         constructor: function () {
-            var contextService = epi.dependency.resolve("epi.shell.ContextService"), me = this;
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
+
         },
 
         postCreate: function () {
             var publishedVariant, draftVariant;
+            this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
+
+            //Header and Test Start Information
             this.DetailsHeader.textContent = this.context.data.test.title;
 
             if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
@@ -53,17 +59,19 @@
                 this.timeRemaining.textContent = this.context.data.daysRemaining;
             }
 
+            //Published version data
             this.VersionAText.textContent = this.context.data.publishedVersionName;
             this.VersionAContentLink.textContent = this.context.data.publishedVersionContentLink;
             this.PublishedUser.textContent = this.context.data.publishedVersionPublishedBy;
             this.PublishedDate.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
 
+            //Draft version data
             this.VersionBText.textContent = this.context.data.draftVersionName;
             this.VersionBContentLink.textContent = this.context.data.draftVersionContentLink;
             this.DraftUser.textContent = this.context.data.draftVersionChangedBy;
             this.DraftSavedDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
-
+            //Set the correct corresponding variant data
             if (this.context.data.test.variants[0].itemversion === this.context.data.publishedVersionContentLink) {
                 publishedVariant = this.context.data.test.variants[0];
                 draftVariant = this.context.data.test.variants[1];
@@ -72,26 +80,29 @@
                 draftVariant = this.context.data.test.variants[0];
             }
 
+            //Published version views/conversions and meter
             this.firstVariantConversions.textContent = publishedVariant.conversions;
             this.firstVariantViews.textContent = publishedVariant.views;
             this.firstVariantPercentage.textContent = getPercent(publishedVariant.conversions, publishedVariant.views) + "%";
             this.firstVariantPercentMeter.style.height = getPercent(publishedVariant.conversions, publishedVariant.views) * 1.5 + "px";
 
+            //Draft version views/conversions and meter
             this.secondtVariantConversions.textContent = draftVariant.conversions;
             this.secondVariantViews.textContent = draftVariant.views;
             this.secondVariantPercentage.textContent = getPercent(draftVariant.conversions, draftVariant.views) + "%";
             this.secondVariantPercentMeter.style.height = getPercent(draftVariant.conversions, draftVariant.views) * 1.5 + "px";
 
+            //Test description, visitor percentage and total participants
             this.TestDescription.textContent = this.context.data.test.description;
 
             this.visitorPercentage.textContent = this.context.data.visitorPercentage;
             this.totalParticipants.textContent = this.context.data.totalParticipantCount;
-            //   this.firstVariantPercentMeter.height = "height:" + 300/getPercent(10, 100) + " px";
 
+            this.contentLinkAnchor.href = this.context.data.conversionLink;
+            this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
         },
 
-        _onWinnerOptionClicked: function () {
-            var me = this;
+        _onPickWinnerOptionClicked: function () {
             var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/MarketingTestPickWinnerView" };
             topic.publish("/epi/shell/context/request", contextParameters);
         },
@@ -103,11 +114,8 @@
         },
 
         _onCancelClick: function () {
-            topic.publish("/epi/shell/action/changeview/back");
+            this.contextHistory.closeAndNavigateBack(this);
         }
-
-
-
     });
 
     function getPercent(visitors, conversions) {
