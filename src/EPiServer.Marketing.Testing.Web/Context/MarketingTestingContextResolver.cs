@@ -32,8 +32,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
             _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _contentRepository = serviceLocator.GetInstance<IContentRepository>();
             _contentVersionRepository = serviceLocator.GetInstance<IContentVersionRepository>();
-
-
         }
 
         internal MarketingTestingContextResolver(IServiceLocator serviceLocator)
@@ -41,7 +39,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
             _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _contentRepository = serviceLocator.GetInstance<IContentRepository>();
             _contentVersionRepository = serviceLocator.GetInstance<IContentVersionRepository>();
-
         }
 
         [ExcludeFromCodeCoverage]
@@ -70,7 +67,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
             if (uri.Segments[1].IndexOf('=') == -1)
             {
                 return false;
-
             }
 
             //check url for proper guid
@@ -126,11 +122,11 @@ namespace EPiServer.Marketing.Testing.Web.Context
 
             //convert test data StartDate to local time;
             marketingTestingContextModel.Test.StartDate = marketingTestingContextModel.Test.StartDate.ToLocalTime();
-
-
+            
             //get published version
             var publishedContentPageData = _contentRepository.Get<IContent>(testData.OriginalItemId) as PageData;
             var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink,publishedContentPageData.LanguageBranch);
+            
             //set required contextmodel published version data
             marketingTestingContextModel.PublishedVersionContentLink = publishedContentPageData.ContentLink.ToString();
             marketingTestingContextModel.PublishedVersionName = publishedContentPageData.Name;
@@ -164,39 +160,34 @@ namespace EPiServer.Marketing.Testing.Web.Context
                 marketingTestingContextModel.DaysRemaining = "Test has not been started";
             }
 
-
-            marketingTestingContextModel.VisitorPercentage = testData.ParticipationPercentage.ToString();
-            foreach (var variant in testData.Variants)
-            {
-                marketingTestingContextModel.TotalParticipantCount += variant.Views;
-            }
-
+            //retrieve conversion content from kpis
+            //convert conversion content link to anchor link
             var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
             if (kpi != null)
             {
                 var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
-
-
+                
                 var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
                 marketingTestingContextModel.ConversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
                 marketingTestingContextModel.ConversionContentName = conversionContent.Name;
             }
+            
+            //set test details visitor precentage and total visitors
+            marketingTestingContextModel.VisitorPercentage = testData.ParticipationPercentage.ToString();
 
+            foreach (var variant in testData.Variants)
+            {
+                marketingTestingContextModel.TotalParticipantCount += variant.Views;
+            }
+            
             return marketingTestingContextModel;
         }
-
-
     }
-
-
+    
     [ExcludeFromCodeCoverage]
     internal class MarketingTestContext : ClientContextBase
     {
         public override string DataType { get; set; }
         public string CustomViewType { get; set; }
     }
-
-
-
-
 }
