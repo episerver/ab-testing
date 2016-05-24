@@ -44,7 +44,12 @@
             duration_details: "Remaining duration:",
             conversions_label: "Conversions:",
             views_label: "Views:",
-            remaining_increment: "Days"
+            remaining_increment: "Days",
+            options_button_text: "Options",
+            cancel_button_text: "Cancel",
+            pick_winner_option_text: "Pick a Winner",
+            abort_option_text: "Abort"
+
         }
     }
 });
