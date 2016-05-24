@@ -24,7 +24,6 @@ namespace EPiServer.Marketing.Testing.Web.Context
         private readonly IContentRepository _contentRepository;
         private readonly IContentVersionRepository _contentVersionRepository;
 
-
         [ExcludeFromCodeCoverage]
         public MarketingTestingContextResolver()
         {
@@ -124,7 +123,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
             marketingTestingContextModel.Test.StartDate = marketingTestingContextModel.Test.StartDate.ToLocalTime();
             
             //get published version
-            var publishedContentPageData = _contentRepository.Get<IContent>(testData.OriginalItemId) as PageData;
+            var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
             var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink,publishedContentPageData.LanguageBranch);
             
             //set required contextmodel published version data
