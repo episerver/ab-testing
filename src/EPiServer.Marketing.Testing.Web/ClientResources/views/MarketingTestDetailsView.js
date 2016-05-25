@@ -110,7 +110,7 @@
         _onAbortOptionClicked: function () {
             var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
             store.remove(this.context.data.test.originalItemId);
-            topic.publish("/epi/shell/action/changeview/back");
+            this.contextHistory.closeAndNavigateBack(this);
         },
 
         _onCancelClick: function () {
