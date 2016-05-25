@@ -1,14 +1,33 @@
 ﻿
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.ServiceLocation;
+using EPiServer.Web.Mvc.Html;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestingContextHelper : ITestingContextHelper
     {
+        private readonly IContentRepository _contentRepository;
+        private readonly IContentVersionRepository _contentVersionRepository;
+
+
+
         public TestingContextHelper()
-        {}
+        {
+            var serviceLocator = ServiceLocator.Current;
+            _contentRepository = serviceLocator.GetInstance<IContentRepository>();
+            _contentVersionRepository = serviceLocator.GetInstance<IContentVersionRepository>();
+        }
 
         /// <summary>
         /// For Unit Testing
@@ -19,6 +38,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             HttpContext.Current = context;
         }
+
+
+
         /// <summary>
         /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
         /// </summary>
@@ -53,6 +75,76 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public IContent GetCurrentPageFromUrl()
         {
             return HttpContext.Current.Items["CurrentPage"] as IContent;
+        }
+
+        public MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
+        {
+            var marketingTestingContextModel = new MarketingTestingContextModel();
+
+            //set contextmodel IMarketingTest data
+            marketingTestingContextModel.Test = testData;
+
+            //convert test data StartDate to local time;
+            marketingTestingContextModel.Test.StartDate = marketingTestingContextModel.Test.StartDate.ToLocalTime();
+
+            //get published version
+            var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
+            var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink, publishedContentPageData.LanguageBranch);
+
+            //set required contextmodel published version data
+            marketingTestingContextModel.PublishedVersionContentLink = publishedContentPageData.ContentLink.ToString();
+            marketingTestingContextModel.PublishedVersionName = publishedContentPageData.Name;
+            marketingTestingContextModel.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
+            marketingTestingContextModel.PublishedVersionPublishedDate = publishedContentPageData.StartPublish.ToString(CultureInfo.CurrentCulture);
+
+            //get variant version
+            var tempContentClone = publishedContentPageData.ContentLink.CreateWritableClone();
+            int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContentPageData.ContentLink.ID)).ItemVersion;
+            tempContentClone.WorkID = variantVersion;
+            var draftContent = _contentRepository.Get<PageData>(tempContentClone);
+
+            //set required contextmodel variant version data
+            marketingTestingContextModel.DraftVersionContentLink = draftContent.ContentLink.ToString();
+            marketingTestingContextModel.DraftVersionName = draftContent.PageName;
+            marketingTestingContextModel.DraftVersionChangedBy = draftContent.ChangedBy;
+            marketingTestingContextModel.DraftVersionChangedDate = draftContent.Saved.ToString(CultureInfo.CurrentCulture);
+
+            //Test Details may be viewed before the test has started.   
+            //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
+            //Text message if Inactive, Remaining Days if active.   Days Elapsed will be parsed and displayed using
+            //episervers friendly datetime method on the client side.
+            if (testData.State == TestState.Active)
+            {
+                marketingTestingContextModel.DaysElapsed = "";
+                marketingTestingContextModel.DaysRemaining = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
+            }
+            else if (testData.State == TestState.Inactive)
+            {
+                marketingTestingContextModel.DaysElapsed = "Test has not been started";
+                marketingTestingContextModel.DaysRemaining = "Test has not been started";
+            }
+
+            //retrieve conversion content from kpis
+            //convert conversion content link to anchor link
+            var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
+            if (kpi != null)
+            {
+                var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
+
+                var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+                marketingTestingContextModel.ConversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+                marketingTestingContextModel.ConversionContentName = conversionContent.Name;
+            }
+
+            //set test details visitor precentage and total visitors
+            marketingTestingContextModel.VisitorPercentage = testData.ParticipationPercentage.ToString();
+
+            foreach (var variant in testData.Variants)
+            {
+                marketingTestingContextModel.TotalParticipantCount += variant.Views;
+            }
+
+            return marketingTestingContextModel;
         }
     }
 }
