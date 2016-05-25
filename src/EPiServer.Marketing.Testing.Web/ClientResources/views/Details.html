@@ -1,0 +1,107 @@
+﻿<div class="epi-form-container epi-grid-form dijitContainer">
+    <!-- button bar -->
+    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
+        <div class="epi-toolbarGroupContainer">
+            <div class="epi-toolbarGroup epi-toolbarLeading"></div>
+            <div class="epi-toolbarGroup epi-toolbarCenter"></div>
+            <div class="epi-toolbarGroup epi-toolbarTrailing">
+                <!-- Options Button-->
+                <div class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton" data-dojo-type="dijit/form/DropDownButton">
+                    <span>${resources.detailsview.options_button_text}</span>
+                    <div class="dijitReset epi-tooltipDialogMenu epi-menuInverted" data-dojo-type="dijit/DropDownMenu" role="menu">
+                        <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onPickWinnerOptionClicked">${resources.detailsview.pick_winner_option_text}</div>
+                        <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">${resources.detailsview.abort_option_text}</div>
+                    </div>
+                </div>
+                <!--Cancel Button-->
+                <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.cancel_button_text}</button>
+                &nbsp;
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
+        <div class="epi-grid__row epi-grid__row--no-border">
+            <div class="epi-grid__col--12">
+                <!--Test Details Header Text-->
+                <div class="epi-grid__header">
+                    <hgroup>
+                        <h1 class="dijitInline" data-dojo-attach-point="detailsHeaderText"></h1>
+                        <h3><span data-dojo-attach-point="daysElapsedText"></span>&nbsp;<span class="epi-username" data-dojo-attach-point="ownerText"></span></h3>
+                    </hgroup>
+                </div>
+            </div>
+        </div>
+        <div class="flex-wrapper">
+            <!--Published Version Data-->
+            <div class="flex-container">
+                <div class="flex-container--wide">
+                    <div class="epi-test-version epi-test-version--1">
+                        <h2 data-dojo-attach-point="publishedVersionName"></h2>
+                        <h3 data-dojo-attach-point="publishedVersionContentLink"></h3>
+                    </div>
+                    <span class="epi-test-version__info">${resources.detailsview.published_prefix} <span class="epi-username" data-dojo-attach-point="publishedVersionUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="publishedVersionDate"></span></span>
+                </div>
+                <div class="flex-container--narrow">
+                    <h2 data-dojo-attach-point="publishedVersionPercentage"></h2>
+                    <div class="epi-test-meter epi-test-version--1" data-dojo-attach-point="publishedVersionPercentMeter"></div>
+                    ${resources.detailsview.conversions_label}<span data-dojo-attach-point="publishedVersionConversions"></span><br>
+                    ${resources.detailsview.views_label}<span data-dojo-attach-point="publishedVersionViews"></span>
+                </div>
+            </div>
+            <!-- Variant Version Data -->
+            <div class="flex-container">
+                <div class="flex-container--wide" style="float: right">
+                    <div class="epi-test-version epi-test-version--2">
+                        <h2 data-dojo-attach-point="variantName"></h2>
+                        <h3 data-dojo-attach-point="variantContentLink"></h3>
+                    </div>
+                    <span class="epi-test-version__info">${resources.detailsview.draft_prefix} <span class="epi-username" data-dojo-attach-point="variantUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="variantDate"></span></span>
+                </div>
+                <div class="flex-container--narrow">
+                    <h2 data-dojo-attach-point="variantPercentage"></h2>
+                    <div class="epi-test-meter epi-test-version--2" data-dojo-attach-point="variantPercentMeter"></div>
+                    ${resources.detailsview.conversions_label}<span data-dojo-attach-point="variantConversions"></span><br>
+                    ${resources.detailsview.views_label}<span data-dojo-attach-point="variantViews"></span>
+                </div>
+            </div>
+        </div>
+        <!--Description-->
+        <div class="epi-grid__row epi-grid__row--no-border">
+            <div class="epi-grid__col--12">
+                <div class="epi-grid__header">
+                    <h2>${resources.detailsview.description_heading}</h2>
+                    <p data-dojo-attach-point="testDescription"></p>
+                </div>
+            </div>
+        </div>
+        <!--Conversion-->
+        <div class="epi-grid__row epi-grid__row--no-border">
+            <div class="epi-grid__col--12">
+                <div class="epi-grid__header">
+                    <h2>${resources.detailsview.conversion_header}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="epi-grid__row">
+            <div class="epi-grid__col--12">
+                <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
+                    <li class="epi-form-container__section__row epi-form-container__section__row--field">
+                        <label>${resources.detailsview.conversion_selector_description}</label>
+                        <span class="dijitInline dijitReset dijitIcon epi-iconPage"></span> <a href="" data-dojo-attach-point="contentLinkAnchor"></a>
+                    </li>
+                    <!--Participation and duration-->
+                    <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
+                        <h3>${resources.detailsview.percentage_details} <span data-dojo-attach-point="visitorPercentageText"></span></h3>
+                        <h3>${resources.detailsview.total_participants_details} <span data-dojo-attach-point="totalParticipantsText"></span></h3>
+                        <h3>
+                            ${resources.detailsview.duration_details} <span data-dojo-attach-point="timeRemainingText"> </span>&nbsp;${resources.detailsview.remaining_increment}
+                        </h3>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -45,6 +45,15 @@
             this.setupContentData();
             this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testing");
             this.topic = this.topic || topic;
+
+            this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
+        },
+
+        _onContextChange: function (context, caller) {
+            // Widget will update itself using the new context.
+            this.contentData = caller.contentData;
+            this.contentData.contentLink = caller.contentData.contentLink;
+            this.setupContentData();
         },
 
         setupContentData: function () {

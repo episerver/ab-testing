@@ -28,6 +28,28 @@
         canceltestcommand: {
             label_text: "Cancel A/B test and edit page",
             tooltip_text: "Cancel A/B test to edit"
+        },
+        detailsview: {
+            pickoptionlinktext: "Pick The Winner",
+            abortoptionlinktext: "Abort A/B Test",
+            test_started_label: "Test started",
+            by: "by",
+            published_prefix: "Published by",
+            draft_prefix: "Draft - Edited by",
+            description_heading: "Purpose of the A/B Test",
+            conversion_header: "Conversion goal:",
+            conversion_selector_description: "Visitor navigates to page",
+            percentage_details: "Percentage of visitors participating:",
+            total_participants_details: "Current number of test participants:",
+            duration_details: "Remaining duration:",
+            conversions_label: "Conversions:",
+            views_label: "Views:",
+            remaining_increment: "Days",
+            options_button_text: "Options",
+            cancel_button_text: "Cancel",
+            pick_winner_option_text: "Pick a Winner",
+            abort_option_text: "Abort"
+
         }
     }
 });
