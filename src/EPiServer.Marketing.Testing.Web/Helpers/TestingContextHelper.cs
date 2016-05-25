@@ -17,16 +17,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestingContextHelper : ITestingContextHelper
     {
-        private readonly IContentRepository _contentRepository;
-        private readonly IContentVersionRepository _contentVersionRepository;
-
-
-
+        private IContentRepository _contentRepository;
+        private IContentVersionRepository _contentVersionRepository;
+        private IUIHelper _uiHelper;
+        private IServiceLocator _serviceLocator;
+        
         public TestingContextHelper()
         {
-            var serviceLocator = ServiceLocator.Current;
-            _contentRepository = serviceLocator.GetInstance<IContentRepository>();
-            _contentVersionRepository = serviceLocator.GetInstance<IContentVersionRepository>();
+            _serviceLocator = ServiceLocator.Current;
         }
 
         /// <summary>
@@ -34,9 +32,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <param name="context"></param>
         [ExcludeFromCodeCoverage]
-        internal TestingContextHelper(HttpContext context)
+        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator)
         {
             HttpContext.Current = context;
+            _serviceLocator = mockServiceLocator;
         }
 
 
@@ -79,6 +78,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
         {
+            _contentRepository = _serviceLocator.GetInstance<IContentRepository>();
+            _contentVersionRepository = _serviceLocator.GetInstance<IContentVersionRepository>();
+            _uiHelper = _serviceLocator.GetInstance<IUIHelper>();
+
             var marketingTestingContextModel = new MarketingTestingContextModel();
 
             //set contextmodel IMarketingTest data
@@ -131,8 +134,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
 
-                var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
-                marketingTestingContextModel.ConversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+                marketingTestingContextModel.ConversionLink = _uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
                 marketingTestingContextModel.ConversionContentName = conversionContent.Name;
             }
 
