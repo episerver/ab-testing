@@ -7,7 +7,7 @@
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-    "dojo/text!marketing-testing/views/MarketingTestDetailsView.html",
+    "dojo/text!marketing-testing/views/Details.html",
     'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
     "epi/datetime",
     'xstyle/css!marketing-testing/css/style.css',
@@ -103,7 +103,7 @@
         },
 
         _onPickWinnerOptionClicked: function () {
-            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/MarketingTestPickWinnerView" };
+            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
             topic.publish("/epi/shell/context/request", contextParameters);
         },
 
