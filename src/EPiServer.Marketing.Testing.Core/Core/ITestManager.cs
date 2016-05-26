@@ -13,6 +13,8 @@ namespace EPiServer.Marketing.Testing
 
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
 
+        List<IMarketingTest> GetTestByItemId(Guid originalItemId);
+
         List<IMarketingTest> GetTestList(TestCriteria criteria);
 
         Guid Save(IMarketingTest testObject);
