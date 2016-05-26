@@ -1,4 +1,6 @@
 using EPiServer.Core;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Web.Models;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -7,5 +9,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         bool IsInSystemFolder();
         bool IsRequestedContent(IContent requestedContent, IContent loadedContent);
         IContent GetCurrentPageFromUrl();
+        MarketingTestingContextModel GenerateContextData(IMarketingTest testData);
+
     }
 }

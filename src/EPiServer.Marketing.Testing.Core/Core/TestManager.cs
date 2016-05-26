@@ -76,6 +76,19 @@ namespace EPiServer.Marketing.Testing
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
+
+        public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
+        {
+            var testList = new List<IMarketingTest>();
+
+            foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
+            {
+                testList.Add(ConvertToManagerTest(dalTest));
+            }
+
+            return testList;
+        }
+
         /// <summary>
         /// Don't want to use refernce the cache here.  The criteria could be anything, not just active tests which
         /// is what the cache is intended to have in it.

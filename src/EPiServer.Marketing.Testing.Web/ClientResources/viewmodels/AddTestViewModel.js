@@ -1,15 +1,15 @@
 ﻿define([
-     'dojo/_base/declare',
-    'epi/dependency',
-    'dojo/Stateful',
-    'dojo/topic'
+    "dojo/_base/declare",
+    "epi/dependency",
+    "dojo/Stateful",
+    "dojo/topic"
 ], function (
     declare,
     dependency,
-    Stateful,
+    stateful,
     topic
 ) {
-    return declare([Stateful], {
+    return declare([stateful], {
 
         //First Content version to be used as potential content swap
         //during active A/B test.
@@ -68,7 +68,7 @@
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this))
-                .otherwise(function (result) {
+                .otherwise(function () {
                     console.log("Query did not return valid result");
                 });
         },

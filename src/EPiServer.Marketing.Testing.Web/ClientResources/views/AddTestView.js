@@ -3,6 +3,7 @@
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!marketing-testing/views/AddTestView.html',
+    'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
     'epi/shell/widget/_ModelBindingMixin',
@@ -28,6 +29,7 @@
     _WidgetBase,
     _TemplatedMixin,
     template,
+    resources,
     AddTestViewModel,
     _WidgetsInTemplateMixin,
     _ModelBindingMixing,
@@ -43,6 +45,8 @@
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
         templateString: template,
+
+        resources: resources,
 
         //set bindings to view model properties
         modelBindingMap: {
@@ -80,12 +84,12 @@
 
             if (this.participationPercentText) {
                 this.participationPercentText.reset();
-                this.model.participationPercent = this.participationPercentText.value;
+            this.model.participationPercent = this.participationPercentText.value;
             }
 
             if (this.durationText) {
                 this.durationText.reset();
-                this.model.testDuration = this.durationText.value;
+            this.model.testDuration = this.durationText.value;
             }
 
             if (this.startTimeSelector) {
@@ -145,7 +149,11 @@
         _onTestTitleChanged: function (event) {
             this.model.testTitle = event;
         },
-      
+
+        _onTestDescriptionChanged: function (event) {
+            this.model.testDescription = event;
+        },
+
         _onConversionPageChanged: function (event) {
             this.model.conversionPage = event;
         },
