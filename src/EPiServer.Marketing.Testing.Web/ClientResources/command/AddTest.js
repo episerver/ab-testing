@@ -10,8 +10,8 @@ function (declare, topic, _ContentCommandBase, ContentActionSupport) {
     return declare([_ContentCommandBase], {
 
         name: "AddTest",
-        label: "Create A/B Test for my changes",
-        tooltip: "Create A/B Test for my changes",
+        label: "A/B Test changes",
+        tooltip: "A/B Test changes",
         iconClass: "", //Define your own icon css class here.
 
         _contentActionSupport: ContentActionSupport,
