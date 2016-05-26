@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
 
     [ServiceConfiguration(typeof(IContentQuery))]
-    public class InactiveTestsQuery : IContentQuery
+    public class InactiveTestsQuery : QueryHelper, IContentQuery
     {
         private LocalizationService _localizationService;
         private IContentRepository _contentRepository;
@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
         public QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
-            var contents = QueryHelper.GetTestContentList(_contentRepository, TestState.Inactive);
+            var contents = GetTestContentList(_contentRepository, TestState.Inactive);
 
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }

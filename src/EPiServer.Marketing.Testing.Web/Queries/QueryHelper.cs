@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
     public class QueryHelper
     {
-        public static List<IContent> GetTestContentList(IContentRepository contentRepository, TestState state)
+        public virtual List<IContent> GetTestContentList(IContentRepository contentRepository, TestState state)
         {
             var filter = new ABTestFilter() { Operator = FilterOperator.And, Property = ABTestProperty.State, Value = state };
             var activeCriteria = new TestCriteria();

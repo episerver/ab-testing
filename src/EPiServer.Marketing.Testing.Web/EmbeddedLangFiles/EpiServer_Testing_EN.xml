@@ -49,6 +49,12 @@
          <title>Marketing Content Test</title>
          <legendtitle>Test Information</legendtitle>
        </form>
+       <tasks>
+         <activetests>Active A/B Tests</activetests>
+         <inactivetests>Inactive A/B Tests</inactivetests>
+         <archivedtests>Archived A/B Tests</archivedtests>
+         <completedtests>Completed A/B Tests</completedtests>
+       </tasks>
    </settings>
    </multivariate>
   </language>
