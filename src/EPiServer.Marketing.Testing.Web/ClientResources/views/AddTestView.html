@@ -88,23 +88,14 @@
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <!-- Convesion Page Picker-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
-                        <table>
-                            <tr>
-                                <td>
-                                    <label for="conversionPage">Visitor navigates to page</label>
-                                    <div id="conversionPage"
-                                        data-dojo-attach-point="conversionPageWidget"
-                                        data-dojo-type="epi-cms/widget/ContentSelector"
-                                        data-dojo-props="repositoryKey:'pages', allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
-                                        data-dojo-attach-event="onChange: _onConversionPageChanged">
-                                    </div>
-                                </td>
-                                <td>&nbsp;</td>
-                                <td>
-                                    <span style="color:red;" id="errorText"></span>
-                                </td>
-                            </tr>
-                        </table>
+                        <label for="conversionPage">Visitor navigates to page</label>
+                        <div id="conversionPage"
+                             data-dojo-attach-point="conversionPageWidget"
+                             data-dojo-type="epi-cms/widget/ContentSelector"
+                             data-dojo-props="repositoryKey:'pages', allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
+                             data-dojo-attach-event="onChange: _onConversionPageChanged">
+                         </div>
+                         <span style="color:red;" id="errorText"></span>
                     </li>
                     <!-- Participation Percentage Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
