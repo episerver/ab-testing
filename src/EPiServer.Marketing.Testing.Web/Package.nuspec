@@ -15,6 +15,8 @@
       <dependency id="EPiServer.CMS.Core" version="[9.6.1,10)" />
       <dependency id="EPiServer.CMS.UI" version="[9.3.8,10)" />
       <dependency id="EPiServer.Logging.Log4Net" version="[2,3)" />
+      <dependency id="EPiServer.Marketing.Messaging" version="[1,2)" />
+      <dependency id="EPiServer.Marketing.KPI" version="[1,2)" />
       <dependency id="EntityFramework" version="6.1.3" />
       <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
     </dependencies>

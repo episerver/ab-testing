@@ -23,8 +23,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         private TestManager GetUnitUnderTest()
         {
+            var dalList = new List<IABTest>();
             _serviceLocator = new Mock<IServiceLocator>();
             _dataAccessLayer = new Mock<ITestingDataAccess>();
+            _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
 
             return new TestManager(_serviceLocator.Object);
@@ -46,6 +49,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             return new ABTest
             {
+                Id = Guid.NewGuid(),
+                OriginalItemId = Guid.NewGuid(),
                 Variants = new List<Variant>(),
                 KpiInstances = new List<IKpi>(),
             };
@@ -56,7 +61,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
+            
+            
             tm.Get(theGuid);
 
             _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
@@ -69,12 +75,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
             var dalList = new List<IABTest>();
-            dalList.Add(GetDalTest());
-            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
-            tm.GetTestByItemId(theGuid);
 
-            _dataAccessLayer.Verify(da => da.GetTestByItemId(It.Is<Guid>(arg => arg.Equals(theGuid))),
-                "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
+            var test = new DalABTest
+            {
+                OriginalItemId = theGuid,
+                Variants = new List<DalVariant>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
+            };
+
+            dalList.Add(test);
+            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+            var returnList = tm.GetActiveTestsByOriginalItemId(theGuid);
+
+            Assert.True(returnList.All(t => t.OriginalItemId == theGuid), "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
         }
 
         [Fact]
@@ -298,6 +312,22 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var retList = testManager.EvaluateKPIs(kpis, c);
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
             Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list that did not have one item in it");
+        }
+
+        [Fact]
+        public void TestManager_UpdateCache()
+        {
+            var testManager = GetUnitUnderTest();
+            var dalList = new List<IABTest>();
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+
+            var test = GetManagerTest();
+            testManager.UpdateCache(test, CacheOperator.Add);
+
+            Assert.Equal(testManager.CreateOrGetCache().Count(), 1);
+
+            testManager.UpdateCache(test, CacheOperator.Remove);
+            Assert.Equal(testManager.CreateOrGetCache().Count(), 0);
         }
     }
 
