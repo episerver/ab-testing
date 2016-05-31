@@ -21,7 +21,18 @@ namespace EPiServer.Marketing.Testing.Web.Queries
             // loop over active tests and get the associated original page for that test to display and add to list to return to view
             foreach (var marketingTest in activeTests)
             {
-                contents.Add(contentRepository.Get<IContent>(marketingTest.OriginalItemId) as PageData);
+                //Get the icontent item if it exists, if not found returns a BasicContent instance with name set to ContentNotFound
+                IContent content;
+                try
+                {
+                    content = contentRepository.Get<IContent>(marketingTest.OriginalItemId) as PageData;
+                }
+                catch
+                {
+                    content = new BasicContent() { Name = "ContentNotFound" };
+                }
+
+                contents.Add(content);
             }
 
             return contents;
