@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Framework;
-using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
@@ -15,17 +13,22 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     [ServiceConfiguration(typeof(IContentQuery))]
     public class ActiveTestsQuery : QueryHelper, IContentQuery
     {
-        private LocalizationService _localizationService;
         private IContentRepository _contentRepository;
+        private ITestManager _testManager;
 
         public ActiveTestsQuery(
-            LocalizationService localizationService,
             IContentRepository contentRepository)
         {
-            Validator.ThrowIfNull("localizationService", localizationService);
-
-            _localizationService = localizationService;
             _contentRepository = contentRepository;
+            _testManager = new TestManager();
+        }
+
+        public ActiveTestsQuery(
+            IContentRepository contentRepository,
+            ITestManager testManager)
+        {
+            _contentRepository = contentRepository;
+            _testManager = testManager;
         }
 
         /// <inheritdoc />
@@ -54,7 +57,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
         public QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
-            var contents = GetTestContentList(_contentRepository, TestState.Active);
+            var contents = GetTestContentList(_contentRepository, _testManager, TestState.Active);
  
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using EPiServer.Core;
 using EPiServer.Framework;
 using EPiServer.Framework.Localization;
@@ -17,17 +16,22 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     [ServiceConfiguration(typeof(IContentQuery))]
     public class CompletedTestsQuery : QueryHelper, IContentQuery
     {
-        private LocalizationService _localizationService;
         private IContentRepository _contentRepository;
+        private ITestManager _testManager;
 
         public CompletedTestsQuery(
-            LocalizationService localizationService,
             IContentRepository contentRepository)
         {
-            Validator.ThrowIfNull("localizationService", localizationService);
-
-            _localizationService = localizationService;
             _contentRepository = contentRepository;
+            _testManager = new TestManager();
+        }
+
+        public CompletedTestsQuery(
+            IContentRepository contentRepository,
+            ITestManager testManager)
+        {
+            _contentRepository = contentRepository;
+            _testManager = testManager;
         }
 
         /// <inheritdoc />
@@ -56,12 +60,12 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
         public QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
-            var contents = GetTestContentList(_contentRepository, TestState.Done);
+            var contents = GetTestContentList(_contentRepository, _testManager, TestState.Done);
 
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }
 
-        public override List<IContent> GetTestContentList(IContentRepository contentRepository, TestState state)
+        public override List<IContent> GetTestContentList(IContentRepository contentRepository, ITestManager testManager, TestState state)
         {
 
             var filter = new ABTestFilter() { Operator = FilterOperator.And, Property = ABTestProperty.State, Value = state };
@@ -69,8 +73,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
             activeCriteria.AddFilter(filter);
 
             // get tests using active filter
-            var tm = new TestManager();
-            var activeTests = tm.GetTestList(activeCriteria);
+            var activeTests = testManager.GetTestList(activeCriteria);
             
             // filter out all but latest tests for each originalItem
             for (var i = 0; i < activeTests.Count; i++)

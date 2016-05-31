@@ -15,17 +15,22 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     [ServiceConfiguration(typeof(IContentQuery))]
     public class InactiveTestsQuery : QueryHelper, IContentQuery
     {
-        private LocalizationService _localizationService;
         private IContentRepository _contentRepository;
+        private ITestManager _testManager;
 
         public InactiveTestsQuery(
-            LocalizationService localizationService,
             IContentRepository contentRepository)
         {
-            Validator.ThrowIfNull("localizationService", localizationService);
-
-            _localizationService = localizationService;
             _contentRepository = contentRepository;
+            _testManager = new TestManager();
+        }
+
+        public InactiveTestsQuery(
+            IContentRepository contentRepository,
+            ITestManager testManager)
+        {
+            _contentRepository = contentRepository;
+            _testManager = testManager;
         }
 
         /// <inheritdoc />
@@ -54,7 +59,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
         public QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
-            var contents = GetTestContentList(_contentRepository, TestState.Inactive);
+            var contents = GetTestContentList(_contentRepository, _testManager, TestState.Inactive);
 
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }
