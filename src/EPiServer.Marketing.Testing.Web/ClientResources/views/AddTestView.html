@@ -11,9 +11,8 @@
             <div class="epi-toolbarGroup epi-toolbarCenter"></div>
             <!-- Start and Cancel Buttons -->
             <div class="epi-toolbarGroup epi-toolbarTrailing">
-                <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">Start Test</button>
-                <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">Cancel</button>
-                &nbsp;
+                <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">${resources.addtestview.start_default}</button>
+                <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">${resources.addtestview.cancel_default}</button>
             </div>
         </div>
     </div>
@@ -34,7 +33,7 @@
                     <h2 data-dojo-attach-point="publishedVersionReference" />
                 </div>
                 <span class="epi-test-version__info">
-                    Published by
+                    ${resources.addtestview.published_prefix}
                     <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
                     <span class="epi-timestamp" data-dojo-attach-point="datePublished"></span>
                 </span>
@@ -45,7 +44,7 @@
                     <h2 data-dojo-attach-point="currentVersionReference" />
                 </div>
                 <span class="epi-test-version__info">
-                    Draft - Edited by
+                    ${resources.addtestview.draft_prefix}
                     <span class="epi-username" data-dojo-attach-point="savedBy"></span>,
                     <span class="epi-timestamp" data-dojo-attach-point="dateSaved"></span>
                 </span>
@@ -57,7 +56,7 @@
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <!-- Test Title -->
                     <li>
-                        <label for="textTitle">Title</label>
+                        <label for="textTitle">${resources.addtestview.title_text}</label>
                         <input id="textTitle"
                                data-dojo-type="dijit/form/TextBox"
                                data-dojo-props="trim:true,value:'Default Test Title'"
@@ -70,7 +69,10 @@
                         <textarea id="testDescription"
                                   placeholder="What are your goals for this test?"
                                   style="width: 75%;"
-                                  data-dojo-attach-point="descriptionText"></textarea>
+                                  data-dojo-attach-point="descriptionText"
+                                  data-dojo-attach-event="onChange: _onTestDescriptionChanged">
+                            ${resources.addtestview.goals_default_text}
+                        </textarea>
                     </li>
                 </ul>
             </div>
@@ -78,7 +80,7 @@
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
                 <div class="epi-grid__header">
-                    <h2>Conversion goal:</h2>
+                    <h2>${resources.addtestview.conversion_header}</h2>
                 </div>
             </div>
         </div>
@@ -88,19 +90,18 @@
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <!-- Convesion Page Picker-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
-                        <label for="conversionPage">Visitor navigates to page</label>
+                        <label for="conversionPage">${resources.addtestview.conversion_selector_description}</label>
                         <div id="conversionPage"
                              data-dojo-attach-point="conversionPageWidget"
                              data-dojo-type="epi-cms/widget/ContentSelector"
-                             data-dojo-props="repositoryKey:'pages'"
+                             data-dojo-props="repositoryKey:'pages',required: true"
                              data-dojo-attach-event="onChange: _onConversionPageChanged">
                         </div>
                     </li>
                     <!-- Participation Percentage Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
-                        <span>The more participants you have in the test, the shorter amount of time you will need to run it to reach a good statistic to base your choice on</span><br>
-                        <br />
-                        <label for="percentageSpinner">What percentage of visitors should participate in this A/B test?</label><br>
+                        <span>${resources.addtestview.participant_percentage_tip}</span><br>
+                        <label for="percentageSpinner">${resources.addtestview.participant_percentage_text}</label><br>
                         <div id="percentageSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
                              data-dojo-props="constraints:{min:0,max:100},value:10"
@@ -111,13 +112,13 @@
                     <!-- Duration Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
                         <span></span><br>
-                        <label for="durationSpinner">How long do you wish to run the A/B Test for?</label><br>
+                        <label for="durationSpinner">${resources.addtestview.duration_text}</label><br>
                         <div id="durationSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
                              data-dojo-props="constraints:{min:1,max:365},value:30"
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
-                        </div> days
+                        </div> ${resources.addtestview.days_text}
                     </li>
                 </ul>
             </div>
@@ -126,17 +127,14 @@
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
                 <div class="epi-grid__header">
-                    <h2>Schedule start:</h2>
+                    <h2>${resources.addtestview.schedule_header}</h2>
                 </div>
             </div>
         </div>
         <div class="epi-grid__row">
             <div class="epi-grid__col--12">
-                <div id="StartDateTimeSelector"
-                     data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown"
-                     data-dojo-attach-point="startTimeSelector"
-                     data-dojo-attach-event="onChange: _onDateTimeChange"></div>
-                <span class="dijitInline dijitIcon epi-iconClock"></span> A/B test is currently <span id="ScheduleText"> not scheduled, and will start right away</span>
+                <div id="StartDateTimeSelector" data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown" data-dojo-attach-event="onChange: _onDateTimeChange"></div>
+                <span class="dijitInline dijitIcon epi-iconClock"></span> ${resources.addtestview.schedule_text_prefix} <span id="ScheduleText">${resources.addtestview.notscheduled_text}</span>
             </div>
         </div>
     </div>

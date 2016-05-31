@@ -2,14 +2,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Web.Mvc;
-using EPiServer.Marketing.KPI.Common;
-using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
-using EPiServer.ServiceLocation;
-using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing.Web
 {

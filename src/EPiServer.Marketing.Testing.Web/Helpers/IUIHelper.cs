@@ -17,5 +17,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <returns></returns>
         String getConfigurationURL();
+
+        string getEpiUrlFromLink(ContentReference urltext);
+
     }
 }

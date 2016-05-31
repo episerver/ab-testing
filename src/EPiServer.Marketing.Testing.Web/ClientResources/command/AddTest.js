@@ -1,18 +1,21 @@
 ﻿define([
     "dojo/_base/declare",
     "dojo/topic",
+    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels",
     "epi-cms/contentediting/command/_ContentCommandBase",
-    "epi-cms/contentediting/ContentActionSupport",
+    "epi-cms/contentediting/ContentActionSupport"
 ],
 
-function (declare, topic, _ContentCommandBase, ContentActionSupport) {
+function (declare, topic, resources, _ContentCommandBase, ContentActionSupport) {
 
     return declare([_ContentCommandBase], {
 
+        resources: resources,
+
         name: "AddTest",
-        label: "A/B Test changes",
-        tooltip: "A/B Test changes",
-        iconClass: "", //Define your own icon css class here.
+        label: resources.addtestcommand.label_text,
+        tooltip: resources.addtestcommand.tooltip_text,
+        iconClass: "epi-iconClock",
 
         _contentActionSupport: ContentActionSupport,
         _topic: topic,
