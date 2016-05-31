@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
@@ -40,6 +40,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 aTest = new ABTest();
 
             return aTest;
+        }
+
+        public IMarketingTest GetTestById(Guid testGuid)
+        {
+            var testManager = _serviceLocator.GetInstance<ITestManager>();
+            return testManager.Get(testGuid);
         }
 
         public void DeleteTestForContent(Guid aContentGuid)
@@ -123,6 +129,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             IMarketingTest test = new ABTest();
 
+            if (testData.StartDate == null)
+            {
+                testData.StartDate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+            }
+
             var content = _serviceLocator.GetInstance<IContentRepository>()
                 .Get<IContent>( new ContentReference(testData.ConversionPage) );
 
@@ -151,6 +162,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 KpiInstances = new List<IKpi> { kpi },
 
             };
+
+            if (DateTime.Now >= DateTime.Parse(testData.StartDate))
+            {
+                test.State = TestState.Active;
+            }
 
             return test;
         }

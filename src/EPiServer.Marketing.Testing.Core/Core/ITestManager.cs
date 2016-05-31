@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.Core;
-using System.Collections;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing
@@ -12,6 +10,8 @@ namespace EPiServer.Marketing.Testing
     public interface ITestManager
     {
         IMarketingTest Get(Guid testObjectId);
+
+        List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
 
         List<IMarketingTest> GetTestByItemId(Guid originalItemId);
 
@@ -32,9 +32,12 @@ namespace EPiServer.Marketing.Testing
         void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
 
         Variant ReturnLandingPage(Guid testId);
-        PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
-        List<IMarketingTest> CreateActiveTestCache();
 
+        PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
+
+        List<IMarketingTest> CreateOrGetCache();
+
+        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
         /// <summary>
         /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
         /// the list of Kpi Guids that evaluated as true.

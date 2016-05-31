@@ -17,12 +17,12 @@
         </div>
     </div>
     <hr />
-    <div class="epi-grid epi-grid--limit-width">
+    <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
         <!-- Title Text -->
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
                 <div class="epi-grid__header">
-                    <h1>${resources.addtestview.header}</h1>
+                    <h1 data-dojo-attach-point="pageName"></h1>
                 </div>
             </div>
         </div>
@@ -58,16 +58,16 @@
                     <li>
                         <label for="textTitle">${resources.addtestview.title_text}</label>
                         <input id="textTitle"
-                               data-dojo-type="dijit/form/ValidationTextBox"
+                               data-dojo-type="dijit/form/TextBox"
                                data-dojo-props="trim:true,value:'Default Test Title'"
-                               data-dojo-attachpoint="titleText"
                                data-dojo-attach-event="onChange: _onTestTitleChanged"
+                               data-dojo-attach-point="titleText"
                                required="true" />
                     </li>
                     <!-- Test Description -->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
                         <textarea id="testDescription"
-                                  data-dojo-type="dijit/form/SimpleTextarea"
+                                  placeholder="What are your goals for this test?"
                                   style="width: 75%;"
                                   data-dojo-attach-point="descriptionText"
                                   data-dojo-attach-event="onChange: _onTestDescriptionChanged">
@@ -92,6 +92,7 @@
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
                         <label for="conversionPage">${resources.addtestview.conversion_selector_description}</label>
                         <div id="conversionPage"
+                             data-dojo-attach-point="conversionPageWidget"
                              data-dojo-type="epi-cms/widget/ContentSelector"
                              data-dojo-props="repositoryKey:'pages',required: true"
                              data-dojo-attach-event="onChange: _onConversionPageChanged">
@@ -103,7 +104,7 @@
                         <label for="percentageSpinner">${resources.addtestview.participant_percentage_text}</label><br>
                         <div id="percentageSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:5,max:95},value:50"
+                             data-dojo-props="constraints:{min:0,max:100},value:10"
                              data-dojo-attach-point="participationPercentText"
                              data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
                         </div> %
@@ -114,7 +115,7 @@
                         <label for="durationSpinner">${resources.addtestview.duration_text}</label><br>
                         <div id="durationSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:7,max:365},value:30"
+                             data-dojo-props="constraints:{min:1,max:365},value:30"
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
                         </div> ${resources.addtestview.days_text}
