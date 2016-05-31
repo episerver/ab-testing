@@ -1,5 +1,12 @@
 ﻿define({
     root: {
+        sharedtext: {
+            published_prefix: "Published by",
+            draft_prefix: "Draft - Edited by",
+            visitor_navigates_text: "Visitor navigates to page",
+            conversion_goal_header: "Convesrion goal:",
+            purpose_header: "Purpose of the A/B Test",
+        },
         addtestview: {
             header: "Create Marketing A/B Test",
             published_prefix: "Published by",
@@ -49,7 +56,16 @@
             cancel_button_text: "Cancel",
             pick_winner_option_text: "Pick a Winner",
             abort_option_text: "Abort"
-
+        },
+        pickwinnerview: {
+            close_button_text: "Close",
+            started_by_text: "Started by ",
+            completed_text: "Completed ",
+            pick_a_winner_text: "Pick a winner!",
+            conversion_text: "Conversion",
+            visitors_participated_text: "of visitors participated",
+            total_participants_text: "test participants",
+            duration_text: "days duration"
         }
     }
 });
