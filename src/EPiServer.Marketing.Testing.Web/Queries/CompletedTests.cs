@@ -64,41 +64,6 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }
-
-        public override List<IContent> GetTestContentList(IContentRepository contentRepository, ITestManager testManager, TestState state)
-        {
-
-            var filter = new ABTestFilter() { Operator = FilterOperator.And, Property = ABTestProperty.State, Value = state };
-            var activeCriteria = new TestCriteria();
-            activeCriteria.AddFilter(filter);
-
-            // get tests using active filter
-            var activeTests = testManager.GetTestList(activeCriteria);
-            
-            // filter out all but latest tests for each originalItem
-            for (var i = 0; i < activeTests.Count; i++)
-            {
-                var marketingTest = activeTests[i];
-                for (var index = 0; index < activeTests.Count; index++)
-                {
-                    var activeTest = activeTests[index];
-                    if (marketingTest.Id == activeTest.Id || marketingTest.OriginalItemId != activeTest.OriginalItemId)
-                        continue;
-
-                    activeTests.Remove(marketingTest.EndDate > activeTest.EndDate ? activeTest : marketingTest);
-                }
-            }
-
-            var contents = new List<IContent>();
-
-            // loop over active tests and get the associated original page for that test to display and add to list to return to view
-            foreach (var marketingTest in activeTests)
-            {
-                contents.Add(contentRepository.Get<IContent>(marketingTest.OriginalItemId) as PageData);
-            }
-
-            return contents;
-        }
     }
     
 }

@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
     public class QueryHelper
     {
-        public virtual List<IContent> GetTestContentList(IContentRepository contentRepository, ITestManager testManager, TestState state)
+        public List<IContent> GetTestContentList(IContentRepository contentRepository, ITestManager testManager, TestState state)
         {
             var filter = new ABTestFilter() { Operator = FilterOperator.And, Property = ABTestProperty.State, Value = state };
             var activeCriteria = new TestCriteria();
@@ -15,6 +15,24 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
             // get tests using active filter
             var activeTests = testManager.GetTestList(activeCriteria);
+
+            // filter out all but latest tests for each originalItem if TestState is Done
+            if (state == TestState.Done)
+            {
+                for (var i = 0; i < activeTests.Count; i++)
+                {
+                    var marketingTest = activeTests[i];
+                    for (var index = 0; index < activeTests.Count; index++)
+                    {
+                        var activeTest = activeTests[index];
+                        if (marketingTest.Id == activeTest.Id ||
+                            marketingTest.OriginalItemId != activeTest.OriginalItemId)
+                            continue;
+
+                        activeTests.Remove(marketingTest.EndDate > activeTest.EndDate ? activeTest : marketingTest);
+                    }
+                }
+            }
 
             var contents = new List<IContent>();
 
