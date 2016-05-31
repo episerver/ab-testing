@@ -15,20 +15,25 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     [ServiceConfiguration(typeof(IContentQuery))]
     public class InactiveTestsQuery : QueryHelper, IContentQuery
     {
+        private LocalizationService _localizationService;
         private IContentRepository _contentRepository;
         private ITestManager _testManager;
 
         public InactiveTestsQuery(
+            LocalizationService localizationService,
             IContentRepository contentRepository)
         {
+            _localizationService = localizationService;
             _contentRepository = contentRepository;
             _testManager = new TestManager();
         }
 
         public InactiveTestsQuery(
+            LocalizationService localizationService,
             IContentRepository contentRepository,
             ITestManager testManager)
         {
+            _localizationService = localizationService;
             _contentRepository = contentRepository;
             _testManager = testManager;
         }
@@ -37,10 +42,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "inactivetests";
 
         /// <inheritdoc />
-        public string DisplayName
-        {
-            get { return "Inactive A/B Tests"; } //return _localizationService.GetString("/versionstatus/rejected"); }
-        }
+        public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/inactivetests");
 
         public int Rank { get; }
 

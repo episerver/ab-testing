@@ -16,20 +16,25 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     [ServiceConfiguration(typeof(IContentQuery))]
     public class CompletedTestsQuery : QueryHelper, IContentQuery
     {
+        private LocalizationService _localizationService;
         private IContentRepository _contentRepository;
         private ITestManager _testManager;
 
         public CompletedTestsQuery(
+            LocalizationService localizationService,
             IContentRepository contentRepository)
         {
+            _localizationService = localizationService;
             _contentRepository = contentRepository;
             _testManager = new TestManager();
         }
 
         public CompletedTestsQuery(
+            LocalizationService localizationService,
             IContentRepository contentRepository,
             ITestManager testManager)
         {
+            _localizationService = localizationService;
             _contentRepository = contentRepository;
             _testManager = testManager;
         }
@@ -38,10 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "completedtests";
 
         /// <inheritdoc />
-        public string DisplayName
-        {
-            get { return "Completed A/B Tests"; } //return _localizationService.GetString("/versionstatus/rejected"); }
-        }
+        public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/completedtests");
 
         public int Rank { get; }
 
