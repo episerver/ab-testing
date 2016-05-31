@@ -50,7 +50,7 @@ function (
             //      protected
 
             // Show notification for not started, active and finished tests
-            if (!test || test.state == 3 || !test.id) {
+            if (!test || !test.title || test.state == 3 || !test.id) {
                 this._setNotification(null);
                 return;
             }
