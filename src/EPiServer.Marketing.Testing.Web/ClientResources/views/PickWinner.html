@@ -1,1 +1,56 @@
-﻿<h1> PLACEHOLDER FOR PICK A WINNER VIEW</h1>
+﻿<div class="epi-form-container epi-grid-form dijitContainer">
+    <!-- Button Bar -->
+    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
+        <div class="epi-toolbarGroupContainer">
+            <!-- Breadcrumb -->
+            <div class="epi-toolbarGroup epi-toolbarLeading"></div>
+            <div class="epi-toolbarGroup epi-toolbarCenter"></div>
+            <!-- Close Button -->
+            <div class="epi-toolbarGroup epi-toolbarTrailing">
+                <button data-dojo-type="dijit/form/Button" id="CloseButton" data-dojo-attach-event="onClick: _onCloseButtonClick" type="button">${resources.addtestview.close_button_text}</button>
+            </div>
+        </div>
+    </div>
+    <div class="dijitGutter dijitGutterH dijitAlignTop" role="presentation" id="dijit_layout_ContentPane_6_splitter" widgetid="dijit_layout_ContentPane_6_splitter" style="left: 0px; top: 98px; position: absolute; width: 1308px;"></div>
+    <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
+        <div class="epi-grid__row epi-grid__row--no-border">
+            <div class="epi-grid__col--12">
+                <div class="epi-grid__header">
+                    <hgroup>
+                        <!-- test title -->
+                        <h1 class="dijitInline" data-dojo-attach-point="testTitle"></h1>
+                        <h3>${resources.pickwinnerview.started_by_text}<span class="epi-username" data-dojo-attach-point="testOwner" />. ${resources.pickwinnerview.completed_text} <span data-dojo-attach-point="testStarted" /></h3>
+                    </hgroup>
+                </div>
+            </div>
+        </div>
+        <div class="epi-grid__row epi-grid__row--no-border">
+            <div class="epi-grid__col--12">
+                <div class="epi-grid__header">
+                    <h2 class="dijitInline"><strong>${resources.pickwinnerview.pick_a_winner_text}</strong>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="flex-wrapper">
+            <div class="flex-container">
+                <div class="flex-container--wide">
+                    <div class="epi-test-version epi-test-version--1 dijitInline"><!-- Attach dojo onclick to publish as winner-->
+                        <h2 data-dojo-attach-point="publishedVersionTitle"></h2>
+                        <span class="epi-text--small epi-test-version__info">${resources.sharedtext.published_prefix} <span class="epi-username" data-dojo-attach-point="publishedByUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="publishedDate"></span></span>
+                        <h1><span data-dojo-attach-point="publishedConversionPercent"></span> Conversion</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-container">
+                <div class="flex-container--wide">
+                    <div class="epi-test-version epi-test-version--2"><!-- Attach dojo onclick to publish as winner-->
+                        <h2 data-dojo-attach-point="variantVersionTitle"></h2>
+                        <span class="epi-text--small epi-test-version__info">${resources.sharedtext.draft_prefix} <span class="epi-username"  data-dojo-attach-point="editedByUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="savedDate"></span></span>
+                        <h1><span data-dojo-attach-point="variantConversionPercent"></span> Conversion</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
