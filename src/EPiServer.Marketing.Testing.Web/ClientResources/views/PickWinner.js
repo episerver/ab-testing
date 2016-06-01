@@ -1,5 +1,5 @@
 ﻿define([
- 'dojo/_base/declare',
+  'dojo/_base/declare',
      'epi/dependency',
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
@@ -35,8 +35,9 @@
         postCreate: function () {
             var publishedVariant, draftVariant, publishedConversionPercent, variantConversionPercent;
 
-            var versionDivBaseHeight = this.publishedDiv.offsetHeight;
-            var versionDivBaseWidth = this.publishedDiv.offsetWidth;
+
+            this.testOwner.textContent = this.context.data.test.owner;
+            this.testCompleted.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
 
             //Set the correct corresponding variant data
             if (this.context.data.test.variants[0].itemversion === this.context.data.publishedVersionContentLink) {
@@ -53,14 +54,15 @@
             publishedConversionPercent = getPercent(publishedVariant.conversions, publishedVariant.views);
             variantConversionPercent = getPercent(draftVariant.conversions, draftVariant.views);
 
-            if (publishedConversionPercent > variantConversionPercent) {
+            if (publishedConversionPercent === variantConversionPercent) {
+                //No change to styling
+            }
+            else if (publishedConversionPercent > variantConversionPercent) {
                 this.publishedDiv.style.height = "20em";
                 this.publishedDiv.style.widthidth = "20em";
             } else {
-
                 this.variantDiv.style.height = "20em";
                 this.variantDiv.style.width = "20em";
-
             }
 
 
@@ -79,6 +81,13 @@
             this.savedDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
             this.variantConversionPercent.textContent = variantConversionPercent + "%";
 
+            this.descriptionText.textContent = this.context.data.test.description;
+            this.participationPercent.textContent = this.context.data.visitorPercentage + "%";
+            this.totalParticipants.textContent = this.context.data.totalParticipantCount;
+            this.testDuration.textContent = this.context.data.daysElapsed;
+
+            this.contentLinkAnchor.href = this.context.data.conversionLink;
+            this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
 
         },
 
