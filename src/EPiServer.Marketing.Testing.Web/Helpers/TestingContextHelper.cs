@@ -118,7 +118,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //episervers friendly datetime method on the client side.
             if (testData.State == TestState.Active)
             {
-                marketingTestingContextModel.DaysElapsed = "";
+                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
                 marketingTestingContextModel.DaysRemaining = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
             }
             else if (testData.State == TestState.Inactive)
@@ -133,7 +133,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             if (kpi != null)
             {
                 var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
-
+               
                 marketingTestingContextModel.ConversionLink = _uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
                 marketingTestingContextModel.ConversionContentName = conversionContent.Name;
             }
