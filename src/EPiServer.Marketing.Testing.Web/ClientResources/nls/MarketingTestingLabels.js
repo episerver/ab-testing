@@ -37,8 +37,8 @@
             tooltip_text: "Cancel A/B test to edit"
         },
         detailsview: {
-            pickoptionlinktext: "Pick The Winner",
-            abortoptionlinktext: "Abort A/B Test",
+            pickWinnerOptionText: "Pick The Winner",
+            abortOptionText: "Abort A/B Test",
             test_started_label: "Test started",
             by: "by",
             published_prefix: "Published by",
@@ -54,8 +54,6 @@
             remaining_increment: "Days",
             options_button_text: "Options",
             cancel_button_text: "Cancel",
-            pick_winner_option_text: "Pick a Winner",
-            abort_option_text: "Abort"
         },
         pickwinnerview: {
             close_button_text: "Close",
