@@ -22,7 +22,9 @@
 
 ) {
     return declare([_WidgetBase, _TemplatedMixin, widgetsInTemplateMixin], {
+
         templateString: template,
+
         resources: resources,
 
         contextHistory: null,
@@ -34,8 +36,10 @@
 
         postCreate: function () {
             var publishedVariant, draftVariant, publishedConversionPercent, variantConversionPercent;
-
-
+            this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
+            
+            //Header test owner and end date
+            this.testTitle.textContent = this.context.data.test.title;
             this.testOwner.textContent = this.context.data.test.owner;
             this.testCompleted.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
 
@@ -47,10 +51,8 @@
                 publishedVariant = this.context.data.test.variants[1];
                 draftVariant = this.context.data.test.variants[0];
             }
-
-
-            this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
-
+            
+            //Version percent conversions and styling changes to highlight leader
             publishedConversionPercent = getPercent(publishedVariant.conversions, publishedVariant.views);
             variantConversionPercent = getPercent(draftVariant.conversions, draftVariant.views);
 
@@ -65,9 +67,6 @@
                 this.variantDiv.style.width = "20em";
             }
 
-
-            this.testTitle.textContent = this.context.data.test.title;
-
             //Published version data
             this.publishedVersionName.textContent = this.context.data.publishedVersionName;
             this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
@@ -81,11 +80,13 @@
             this.savedDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
             this.variantConversionPercent.textContent = variantConversionPercent + "%";
 
+            //Description and statistics
             this.descriptionText.textContent = this.context.data.test.description;
             this.participationPercent.textContent = this.context.data.visitorPercentage + "%";
             this.totalParticipants.textContent = this.context.data.totalParticipantCount;
             this.testDuration.textContent = this.context.data.daysElapsed;
 
+            //Content Link 
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
 
@@ -104,9 +105,8 @@
         _onVariantVersionClick: function () {
             alert("VARIANT VERSION CLICKED");
             //WIRE IN WHAT TO DO FOR VARIANT VERSION SELECTION
-            //Publishe variant? Set test to archved?"
+            //Publish variant. Set test to archved?"
         }
-
     });
 
     function getPercent(visitors, conversions) {

@@ -4,8 +4,8 @@
             published_prefix: "Published by",
             draft_prefix: "Draft - Edited by",
             visitor_navigates_text: "Visitor navigates to page",
-            conversion_goal_header: "Convesrion goal:",
-            purpose_header: "Purpose of the A/B Test",
+            conversion_goal_header: "Conversion goal:",
+            purpose_header: "Purpose of the A/B Test"
         },
         addtestview: {
             header: "Create Marketing A/B Test",
