@@ -133,7 +133,15 @@
         _onStartButtonClick: function () {
             var description = dom.byId("testDescription"); //Description is not a dojo widget so setting it on save rather than onchange.
             this.model.testDescription = description.value;
-            this.model.createTest();
+
+            if (!this.model.conversionPage)
+            {
+                var p1 = dom.byId("errorText"); //Description is not a dojo widget so setting it on save rather than onchange.
+                p1.innerText = "Pick a conversion page.";
+            } else
+            {
+                this.model.createTest();
+            }
         },
 
         _onCancelButtonClick: function () {
@@ -148,6 +156,15 @@
       
         _onConversionPageChanged: function (event) {
             this.model.conversionPage = event;
+            var p1 = dom.byId("errorText"); 
+            if (this.model.conversionPage == 0)
+            {
+                p1.innerHTML = "Pick a conversion page.";
+            }
+            else
+            {
+                p1.innerText = "";
+            }
         },
 
         _onPercentageSpinnerChanged: function (event) {
