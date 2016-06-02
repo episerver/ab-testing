@@ -21,7 +21,8 @@
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
-    'epi-cms/widget/Breadcrumb'
+    'epi-cms/widget/Breadcrumb',
+    'epi/dependency',
 
 ], function (
     declare,
@@ -35,7 +36,9 @@
     username,
     topic,
     html,
-    dom
+    dom,
+    dependency
+
 
 ) {
     viewPublishedVersion: null;
@@ -102,6 +105,8 @@
 
             this._setViewPublishedVersionAttr(true);
             this._setViewCurrentVersionAttr();
+
+            this._clearError();
         },
 
         //setters for bound properties
@@ -126,21 +131,60 @@
             this.pageName.textContent = this.contentData.name + " A/B Test";
         },
 
+        _clearError: function () {
+            var errorText = dom.byId("pickerErrorText");
+            if (!errorText) {
+                return;
+            }
+            errorText.innerText = "";
+            errorText.style.visibility = "hidden";
+            var et2 = dom.byId("pickerErrorIcon");
+            et2.style.visibility = "hidden";
+        },
+
+        _setError: function( error ) {
+            var errorText = dom.byId("pickerErrorText");
+            if (!errorText) {
+                return;
+            }
+            errorText.innerText = error;
+            errorText.style.visibility = "visible";
+            var et2 = dom.byId("pickerErrorIcon");
+            et2.style.visibility = "visible";
+        },
+
         //EVENT HANDLERS
 
         //Start and Cancel Events
 
         _onStartButtonClick: function () {
-            var description = dom.byId("testDescription"); //Description is not a dojo widget so setting it on save rather than onchange.
+            var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
 
             if (!this.model.conversionPage)
             {
-                var p1 = dom.byId("errorText"); //Description is not a dojo widget so setting it on save rather than onchange.
-                p1.innerText = "Pick a conversion page.";
+                this._setError("You must select a conversion goal page before you can save the A/B test.");
             } else
             {
-                this.model.createTest();
+                this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+                this._contentVersionStore
+                    .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
+                    .then(function (result) {
+                        var errorText = dom.byId("errorText");
+                        var publishedVersion = result;
+                        if (result) {
+                            if (result.contentLink != this.model.publishedVersion.contentLink) {
+                                this.model.createTest();
+                            } else {
+                                this._setError("You cannot select the page you are testing as the conversion goal page. Select another page.");
+                            }
+                        } else {
+                            this._setError("You cannot select an unpublished page as your conversion goal page. Select a published page.");
+                        }
+                    }.bind(this))
+                    .otherwise(function (result) {
+                        console.log("Query failed, we cannot tell if this page is a valid page or not.");
+                    });
             }
         },
 
@@ -156,15 +200,7 @@
       
         _onConversionPageChanged: function (event) {
             this.model.conversionPage = event;
-            var p1 = dom.byId("errorText"); 
-            if (this.model.conversionPage == 0)
-            {
-                p1.innerHTML = "Pick a conversion page.";
-            }
-            else
-            {
-                p1.innerText = "";
-            }
+            this._clearError();
         },
 
         _onPercentageSpinnerChanged: function (event) {
