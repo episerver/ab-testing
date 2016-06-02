@@ -1,26 +1,28 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/event",
+    "dojo/Stateful",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/topic",
     "dijit/Destroyable",
     "epi/datetime",
-    "epi-cms/contentediting/_ContentEditingNotification"
+    'epi/dependency'
 ],
 
 function (
     declare,
     event,
+    Stateful,
     domConstruct,
     on,
     topic,
     Destroyable,
     datetime,
-    _ContentEditingNotification
+    dependency
 ) {
 
-    return declare([_ContentEditingNotification, Destroyable], {
+    return declare([Stateful, Destroyable], {
         // summary:
         //      Shows the notification when active or finished test exists for the current content.
         // tags:
@@ -34,34 +36,26 @@ function (
             this.inherited(arguments);
         },
 
-        _executeAction: function (/*Object*/value) {
-            // summary:
-            //      Get active test
-            // tags:
-            //      protected, extension
+        _valueSetter: function (value) {
+            var me = this;
+            this.value = value;
+            this._store = this._store || dependency.resolve("epi.storeregistry").get(this._storeName);
 
-            return this._store.get(value.contentData.contentGuid);
-        },
+            this._store.get(value.contentData.contentGuid).then(function (test) {
+                // Hide notification for content without a pending or active test
+                if (!test || !test.title || test.state == 3 || !test.id) {
+                    me.set("notification", null);
+                    return;
+                }
 
-        _onExecuteSuccess: function (/*Object*/test) {
-            // summary:
-            //      Set notification(s) when executed success and the test is active or finished
-            // tags:
-            //      protected
-
-            // Show notification for not started, active and finished tests
-            if (!test || !test.title || test.state == 3 || !test.id) {
-                this._setNotification(null);
-                return;
-            }
-            
-            var notificationMessage = this._constructNotificationMessage(test);
-
-            this._setNotification({
-                content: notificationMessage
+                var notificationMessage = me._constructNotificationMessage(test);
+                me.set("notification", {
+                    content: notificationMessage,
+                    commands: []
+                });
             });
         },
-        
+
         _constructNotificationMessage: function (test) {
             // TODO: use localized resources.
             var message = "This page is part of a running A/B Test. ";
@@ -89,7 +83,7 @@ function (
                 on(testLink, "click", function (e) {
                     event.stop(e);
                     topic.publish("/epi/shell/context/request", {
-                        uri: "epi.marketing.testing:///" + test.id
+                        uri: "epi.marketing.testing:///testid=" + test.id + "/details"
                     }, {});
                 })
             );
