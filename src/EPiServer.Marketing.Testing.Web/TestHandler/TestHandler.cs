@@ -134,28 +134,28 @@ namespace EPiServer.Marketing.Testing.Web
                 var activeTest =
                     _testManager.CreateActiveTestCache().FirstOrDefault(x => x.OriginalItemId == e.Content.ContentGuid);
 
-                var testCookie = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
-                var hasData = _testDataCookieHelper.HasTestData(testCookie);
+                var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+                var hasData = _testDataCookieHelper.HasTestData(testCookieData);
 
                 if (activeTest != null)
                 {
-                    if (hasData && _testDataCookieHelper.IsTestParticipant(testCookie) && testCookie.ShowVariant)
+                    if (hasData && _testDataCookieHelper.IsTestParticipant(testCookieData) && testCookieData.ShowVariant)
                     {
                         ProcessedContentList.Add(e.ContentLink);
-                        Swap(testCookie, e);
+                        Swap(testCookieData, e);
                     }
                     else if (!hasData && CurrentPage !=null && _contextHelper.IsRequestedContent(CurrentPage,e.Content) && ProcessedContentList.Count == 0)
                     {
                         ProcessedContentList.Add(e.ContentLink);
                         //get a new random variant. 
                         var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
-                        testCookie.TestId = activeTest.Id;
-                        testCookie.TestContentId = activeTest.OriginalItemId;
-                        testCookie.TestVariantId = newVariant.Id;
+                        testCookieData.TestId = activeTest.Id;
+                        testCookieData.TestContentId = activeTest.OriginalItemId;
+                        testCookieData.TestVariantId = newVariant.Id;
 
                         foreach (var kpi in activeTest.KpiInstances)
                         {
-                            testCookie.KpiConversionDictionary.Add(kpi.Id, false);
+                            testCookieData.KpiConversionDictionary.Add(kpi.Id, false);
                         }
 
                         if (newVariant.Id != Guid.Empty)
@@ -165,23 +165,23 @@ namespace EPiServer.Marketing.Testing.Web
                             if (newVariant.ItemVersion != contentVersion)
                             {
                                 contentVersion = newVariant.ItemVersion;
-                                testCookie.ShowVariant = true;
-                                _testDataCookieHelper.SaveTestDataToCookie(testCookie);
+                                testCookieData.ShowVariant = true;
+                                _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
 
-                                Swap(testCookie, e);
+                                Swap(testCookieData, e);
                             }
                             else
                             {
-                                testCookie.ShowVariant = false;
+                                testCookieData.ShowVariant = false;
                             }
 
-                            CalculateView(testCookie, contentVersion);
+                            CalculateView(testCookieData, contentVersion);
                         }
                     }
                 }
                 else if (hasData)
                 {
-                    _testDataCookieHelper.ExpireTestDataCookie(testCookie);
+                    _testDataCookieHelper.ExpireTestDataCookie(testCookieData);
                 }
             }
         }
