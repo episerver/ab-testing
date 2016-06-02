@@ -48,6 +48,9 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// </summary>
         int ParticipationPercentage { get; set; }
 
+
+        bool IsSignificant { get; set; }
+
         /// <summary>
         /// The person that last changed the test.
         /// </summary>
