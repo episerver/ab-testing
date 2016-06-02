@@ -194,3 +194,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 /test/DtkBinaries/dojo-release-1.8.9-src
+/.vs/config/applicationhost.config
