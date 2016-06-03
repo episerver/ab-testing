@@ -109,7 +109,6 @@ namespace EPiServer.Marketing.Testing.Web
                     }
                     catch(TestNotFoundException )
                     {
-                        // now save the testdata to the cookie
                         _testDataCookieHelper.ExpireTestDataCookie(testdata);
                     }
                 }
