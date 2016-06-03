@@ -2,6 +2,7 @@
     <!-- Button Bar -->
     <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
         <div class="epi-toolbarGroupContainer">
+            <!-- Breadcrumb -->
             <div class="epi-toolbarGroup epi-toolbarLeading"></div>
             <div class="epi-toolbarGroup epi-toolbarCenter"></div>
             <!-- Close Button -->
@@ -10,21 +11,19 @@
             </div>
         </div>
     </div>
-    <hr/>
-    <!-- Body -->
+    <hr />
     <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
-        <!-- test title -->
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
                 <div class="epi-grid__header">
                     <hgroup>
+                        <!-- test title -->
                         <h1 class="dijitInline" data-dojo-attach-point="testTitle"></h1>
                         <h3>${resources.pickwinnerview.started_by_text}<span class="epi-username" data-dojo-attach-point="testOwner"></span>. ${resources.pickwinnerview.completed_text} <span data-dojo-attach-point="testCompleted"></span></h3>
                     </hgroup>
                 </div>
             </div>
         </div>
-        <!-- Pick Winner Header -->
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
                 <div class="epi-grid__header">
@@ -34,14 +33,13 @@
                 </div>
             </div>
         </div>
-        <!-- Variants Section -->
         <div class="flex-wrapper">
             <div class="flex-container">
                 <div class="flex-container--wide">
-                    <!-- Published Variant -->
                     <div class="epi-test-version epi-test-version--1 dijitInline" data-dojo-attach-point="publishedDiv" style="cursor: pointer" data-dojo-attach-event="onclick: _onPublishedVersionClick">
+                        <!-- Attach dojo onclick to publish as winner-->
                         <h2 data-dojo-attach-point="publishedVersionName"></h2>
-                        <h3 data-dojo-attach-point="publishedVersionContentLink"></h3><br/>
+                        <h3 data-dojo-attach-point="publishedVersionContentLink"></h3><br />
                         <span class="epi-text--small epi-test-version__info">${resources.sharedtext.published_prefix} <span class="epi-username" data-dojo-attach-point="publishedByUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="publishedDate"></span></span>
                         <h1 style="padding-bottom: 5px">
                             <span data-dojo-attach-point="publishedConversionPercent"></span> ${resources.pickwinnerview.conversion_text}
@@ -51,11 +49,10 @@
             </div>
             <div class="flex-container">
                 <div class="flex-container--wide">
-                    <!-- Test Variant -->
                     <div class="epi-test-version epi-test-version--2" data-dojo-attach-point="variantDiv" style="cursor: pointer" data-dojo-attach-event="onclick: _onVariantVersionClick">
                         <!-- Attach dojo onclick to publish as winner-->
                         <h2 data-dojo-attach-point="variantName"></h2>
-                        <h3 data-dojo-attach-point="variantContentLink"></h3><br/>
+                        <h3 data-dojo-attach-point="variantContentLink"></h3><br />
                         <span class="epi-text--small epi-test-version__info">${resources.sharedtext.draft_prefix} <span class="epi-username" data-dojo-attach-point="editedByUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="savedDate"></span></span>
                         <h1 style="padding-bottom: 5px">
                             <span data-dojo-attach-point="variantConversionPercent"></span> ${resources.pickwinnerview.conversion_text}
@@ -84,12 +81,13 @@
                 </ul>
             </div>
         </div>
+
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
-                <h2>${resources.sharedtext.conversion_goal_header}</h2>
+                <h2>Conversion goal:</h2>
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <li class="epi-form-container__section__row epi-form-container__section__row--field  test-summary">
-                        <label>${resources.sharedtext.visitor_navigates_text}</label>
+                        <label for="navigationPage">${resources.sharedtext.visitor_navigates_text}</label>
                         <span class="dijitInline dijitReset dijitIcon epi-iconPage"></span> <a href="" data-dojo-attach-point="contentLinkAnchor"></a>
                     </li>
                 </ul>

@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //get published version
             var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
             var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink, publishedContentPageData.LanguageBranch);
-
+            publishedVersionData.
             //set required contextmodel published version data
             marketingTestingContextModel.PublishedVersionContentLink = publishedContentPageData.ContentLink.ToString();
             marketingTestingContextModel.PublishedVersionName = publishedContentPageData.Name;
