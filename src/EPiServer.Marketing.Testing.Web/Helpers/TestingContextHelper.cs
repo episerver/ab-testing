@@ -93,12 +93,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //get published version
             var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
             var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink, publishedContentPageData.LanguageBranch);
-            publishedVersionData.
             //set required contextmodel published version data
-            marketingTestingContextModel.PublishedVersionContentLink = publishedContentPageData.ContentLink.ToString();
+            marketingTestingContextModel.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
             marketingTestingContextModel.PublishedVersionName = publishedContentPageData.Name;
             marketingTestingContextModel.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
-            marketingTestingContextModel.PublishedVersionPublishedDate = publishedContentPageData.StartPublish.ToString(CultureInfo.CurrentCulture);
+            marketingTestingContextModel.PublishedVersionPublishedDate = publishedContentPageData.Saved.ToString(CultureInfo.CurrentCulture);
 
             //get variant version
             var tempContentClone = publishedContentPageData.ContentLink.CreateWritableClone();

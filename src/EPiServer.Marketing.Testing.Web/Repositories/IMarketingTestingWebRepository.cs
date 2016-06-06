@@ -10,7 +10,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void DeleteMarketingTest(Guid testGuid);
         void StartMarketingTest(Guid testGuid);
         void StopMarketingTest(Guid testGuid);
-        void ArchiveMarketingTest(Guid testGuid);
+        void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, int version);
+        Guid SaveMarketingTest(IMarketingTest testData);
         IMarketingTest GetActiveTestForContent(Guid contentGuid);
         void DeleteTestForContent(Guid contentGuid);
     }
