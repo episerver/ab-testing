@@ -50,6 +50,9 @@
          <legendtitle>Test Information</legendtitle>
        </form>
    </settings>
+     <scheduler_plugin>
+       <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test</description>
+     </scheduler_plugin>
    </multivariate>
   </language>
 </languages>
