@@ -112,7 +112,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
-                StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
+                StartDate = DateTime.Parse(testData.StartDate),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
@@ -135,7 +135,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         private DateTime? CalculateEndDateFromDuration(string startDate, int testDuration)
         {
-            DateTime endDate = DateTime.Parse(startDate).ToUniversalTime();
+            DateTime endDate = DateTime.Parse(startDate);
             return endDate.AddDays(testDuration);
         }
 
