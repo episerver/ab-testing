@@ -146,11 +146,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public void TestManager_CallsArchiveWithGuid()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var theVariantGuid = new Guid("e5187661-71a9-4209-8a5c-1f52f4be245b");
             var tm = GetUnitUnderTest();
-            tm.Archive(theGuid);
-
-            _dataAccessLayer.Verify(da => da.Archive(It.Is<Guid>(arg => arg.Equals(theGuid))),
-                "DataAcessLayer Archive was never called or Guid did not match.");
+            tm.Archive(theGuid,theVariantGuid);
+            _dataAccessLayer.Verify(da => da.Archive(It.Is<Guid>(arg => arg.Equals(theGuid)),It.Is<Guid>(arg=>arg.Equals(theVariantGuid))),"DataAcessLayer Archive was never called or Guid did not match.");
         }
 
         [Fact]
