@@ -49,7 +49,15 @@
             cancel_button_text: "Cancel",
             pick_winner_option_text: "Pick a Winner",
             abort_option_text: "Abort"
-
+        },
+        notificationbar: {
+            ongoing_test: "This page is part of a running A/B Test. ",
+            scheduled_test: "An A/B Test is scheduled to run on this page ",
+            completed_test: "An A/B Test has been completed on this page. ",
+            details_link_text: "View test",
+            details_link_tooltip: "View test details",
+            winner_link_text: "Pick winner",
+            winner_link_tooltip: "View test details and pick winner"
         }
     }
 });
