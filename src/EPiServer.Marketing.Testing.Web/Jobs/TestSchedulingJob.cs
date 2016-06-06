@@ -57,11 +57,6 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         if (DateTime.UtcNow > test.EndDate)
                         {
                             tm.Stop(test.Id);
-
-                            // test is now complete so calculate if the results are significant or not
-                            test.IsSignificant = Significance.CalculateIsSignificant(test);
-                            tm.Save(test);
-
                             stopped++;
                         }
                         break;

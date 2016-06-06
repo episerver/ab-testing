@@ -52,6 +52,11 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         bool IsSignificant { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        double ZScore { get; set; }
+
+        /// <summary>
         /// The person that last changed the test.
         /// </summary>
         string LastModifiedBy { get; set; }
