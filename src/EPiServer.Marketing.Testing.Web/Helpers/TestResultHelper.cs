@@ -14,7 +14,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     {
         private IServiceLocator _serviceLocator;
         private IContentRepository _contentRepository;
-        private IContent retContent;
 
         public TestResultHelper()
         {
@@ -24,22 +23,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public IContent GetClonedContentFromReference(ContentReference reference)
         {
-            retContent = _contentRepository.Get<ContentData>(reference).CreateWritableClone() as IContent;
-            return retContent;
+            return _contentRepository.Get<ContentData>(reference).CreateWritableClone() as IContent;
         }
 
-        public bool PublishContent(IContent contentToPublish)
+        public ContentReference PublishContent(IContent contentToPublish)
         {
-            try
-            {
-                _contentRepository.Save(contentToPublish, DataAccess.SaveAction.Publish);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
+              return _contentRepository.Save(contentToPublish, DataAccess.SaveAction.Publish);
         }
     }
 }

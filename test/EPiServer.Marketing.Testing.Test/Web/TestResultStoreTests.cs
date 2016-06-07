@@ -84,10 +84,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
                .Returns(publishedContent);
 
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == draftContent)))
-                .Returns(true);
+                .Returns(new ContentReference{ID=10,WorkID = 101});
 
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == publishedContent)))
-               .Returns(true);
+               .Returns(new ContentReference{ID=10,WorkID = 0});
 
             _mockUiHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("http://");
             
@@ -138,10 +138,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
                .Returns(publishedContent);
 
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == draftContent)))
-                .Returns(true);
+                .Returns(new ContentReference { ID = 10, WorkID = 101 });
 
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == publishedContent)))
-               .Returns(true);
+               .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
             _mockUiHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("http://");
             
@@ -178,10 +178,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
                .Returns(publishedContent);
 
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == draftContent)))
-                .Returns(true);
+                .Returns(new ContentReference { ID = 10, WorkID = 101 });
 
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == publishedContent)))
-               .Returns(true);
+               .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
             _mockUiHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("http://");
 
