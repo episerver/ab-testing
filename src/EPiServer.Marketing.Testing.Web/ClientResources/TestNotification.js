@@ -7,7 +7,8 @@ define([
     "dojo/topic",
     "dijit/Destroyable",
     "epi/datetime",
-    'epi/dependency'
+    'epi/dependency',
+    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels"
 ],
 
 function (
@@ -19,7 +20,8 @@ function (
     topic,
     Destroyable,
     datetime,
-    dependency
+    dependency,
+    resources
 ) {
 
     return declare([Stateful, Destroyable], {
@@ -58,21 +60,21 @@ function (
 
         _constructNotificationMessage: function (test) {
             // TODO: use localized resources.
-            var message = "This page is part of a running A/B Test. ";
-            var testLinkText = "View test";
-            var testLinkTooltip = "View test details";
+            var message = resources.notificationbar.ongoing_test;
+            var testLinkText = resources.notificationbar.details_link_text;
+            var testLinkTooltip = resources.notificationbar.details_link_tooltip;
             
              // Inactive (scheduled)
             if (test.state == 0) {
-                message = "An A/B Test is scheduled to run on this page " + 
+                message = resources.notificationbar.scheduled_test + 
                     datetime.toUserFriendlyString(test.startDate, null, false, true) +". ";
             }
             
              // Done, finished
             if (test.state == 2) {
-                message = "An A/B Test has been completed on this page. ";
-                var testLinkText = "Pick winner";
-                var testLinkTooltip = "View test details and pick winner";
+                message = resources.notificationbar.completed_test;
+                var testLinkText = resources.notificationbar.winner_link_text;
+                var testLinkTooltip = resources.notificationbar.winner_link_tooltip;
             }
 
             var notificationMesage = domConstruct.create("div", {innerHTML: message});

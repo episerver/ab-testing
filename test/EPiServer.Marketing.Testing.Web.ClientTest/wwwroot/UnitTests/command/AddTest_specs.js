@@ -25,6 +25,18 @@
                 }
             };
 
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
+
             aCommand._onModelChange()
             expect(aCommand.isAvailable).to.be.true;
 
@@ -55,6 +67,18 @@
                 }
             };
 
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
+
             aCommand.isAvailable = true;
             aCommand._onModelChange()
             expect(aCommand.isAvailable).to.be.false;
@@ -76,6 +100,18 @@
                 }
             };
 
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
+
             aCommand._contentActionSupport.hasAccess = function (accessMask, accessLevel) {
                 return aHasAccessFlag;
             }
@@ -94,6 +130,18 @@
                     publishedBy: "Timmy",
                 }
             };
+
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
 
             aCommand._contentActionSupport.hasAccess = function (accessMask, accessLevel) {
                 return aHasAccessFlag;
@@ -114,6 +162,18 @@
                 }
             };
 
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
+
             aCommand._contentActionSupport.hasAccess = function (accessMask, accessLevel) {
                 return aHasAccessFlag;
             }
@@ -132,6 +192,18 @@
                     publishedBy: null
                 }
             };
+
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
 
             aCommand._contentActionSupport.hasAccess = function (accessMask, accessLevel) {
                 return aHasAccessFlag;
@@ -156,11 +228,52 @@
                 },
                 languageContext: {}
             };
+
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: undefined
+                    }
+                    callBack(activeTest);
+                }
+            }
+
             aCommand._execute()
 
             expect(me.retView).to.equal('AddTestView');
             expect(me.retAction).to.equal('/epi/shell/action/changeview');
             expect(me.retData.contentData).to.deep.equal(aCommand.model.contentData);
         });
+
+        it("is not visible or executable when there is an active test against the content", function () {
+            var aCommand = new AddTestCommand()
+            aCommand._contentActionSupport = contentActionSupport;
+            aCommand.model = {
+                contentData: {
+                    status: "CheckedOut",
+                    isCommonDraft: true,
+                    publishedBy: "Timmy",
+                }
+            };
+
+            aCommand.store = {
+                get: function (contentGuid) {
+                    return this;
+                },
+                then: function (callBack) {
+                    var activeTest = {
+                        title: "We Got One!"
+                    }
+                    callBack(activeTest);
+                }
+            }
+
+            aCommand._onModelChange()
+            expect(aCommand.isAvailable).to.be.false;
+            expect(aCommand.canExecute).to.be.false;
+        })
     });
 });
