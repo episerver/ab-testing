@@ -155,15 +155,6 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         {
             _mtm = new TestManager();
             _mtm.Start(testId);
-            var test = _mtm.Get(testId);
-            for (int x = 0; x < 5; x++)
-            {
-                var variant = _mtm.ReturnLandingPage(testId);
-                var version = test.Variants.First(v => v.Id == variant.Id);
-                _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.View);
-                if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.Conversion);
-            }
 
             return _mtm.Get(testId);
         }
@@ -172,7 +163,6 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         {
             _mtm = new TestManager();
             _mtm.Stop(testId);
-
 
             return _mtm.Get(testId);
         }
