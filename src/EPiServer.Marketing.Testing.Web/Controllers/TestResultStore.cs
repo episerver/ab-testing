@@ -19,6 +19,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         private IContentRepository _contentRepository;
         private IMarketingTestingWebRepository _testRepository;
         private IUIHelper _uiHelper;
+        private ITestResultHelper _testResultHelper;
+
 
         [ExcludeFromCodeCoverage]
         public TestResultStore()
@@ -27,6 +29,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             _contentRepository = serviceLocator.GetInstance<IContentRepository>();
             _testRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _uiHelper = serviceLocator.GetInstance<IUIHelper>();
+            _testResultHelper = serviceLocator.GetInstance<ITestResultHelper>();
 
         }
 
@@ -35,6 +38,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             _contentRepository = serviceLocator.GetInstance<IContentRepository>();
             _testRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _uiHelper = serviceLocator.GetInstance<IUIHelper>();
+            _testResultHelper = serviceLocator.GetInstance<ITestResultHelper>();
+
 
         }
 
@@ -53,12 +58,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 //get current test data and content data for published and variant content
                 IMarketingTest currentTest = _testRepository.GetTestById(Guid.Parse(testResult.TestId));
-                var draftContent =
-                    _contentRepository.Get<ContentData>(ContentReference.Parse(testResult.DraftContentLink))
-                        .CreateWritableClone() as IContent;
-                var publishedContent =
-                    _contentRepository.Get<ContentData>(ContentReference.Parse(testResult.PublishedContentLink))
-                        .CreateWritableClone() as IContent;
+                var draftContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.DraftContentLink));
+                var publishedContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.PublishedContentLink));
 
                 //get winning content url
                 var winningContentReference = ContentReference.Parse(testResult.WinningContentLink);
@@ -70,12 +71,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
                     //had been on the site as published.
-                    _contentRepository.Save(draftContent, DataAccess.SaveAction.Publish);
-
+                    _testResultHelper.PublishContent(draftContent);
+                    
                     if (testResult.WinningContentLink == testResult.PublishedContentLink)
                     {
                         //republish original published version as winner.
-                        _contentRepository.Save(publishedContent, DataAccess.SaveAction.Publish);
+                        _testResultHelper.PublishContent(publishedContent);
 
                         //get the appropriate variant and set IsWinner to True. Archive test to show completion.
                         workingVariantId =
