@@ -1,16 +1,16 @@
 ﻿define([
  'dojo/_base/declare',
-     'epi/dependency',
-     'dojo/topic',
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    "dijit/_WidgetsInTemplateMixin",
-    'dojo/text!marketing-testing/views/PickWinner.html',
-    'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
-    "epi/datetime",
-    'xstyle/css!marketing-testing/css/style.css',
-    'xstyle/css!marketing-testing/css/GridForm.css',
-    "dijit/form/Button"
+ 'epi/dependency',
+ 'dojo/topic',
+ 'dijit/_WidgetBase',
+ 'dijit/_TemplatedMixin',
+ 'dijit/_WidgetsInTemplateMixin',
+ 'dojo/text!marketing-testing/views/PickWinner.html',
+ 'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
+ 'epi/datetime',
+ 'xstyle/css!marketing-testing/css/style.css',
+ 'xstyle/css!marketing-testing/css/GridForm.css',
+ 'dijit/form/Button'
 ], function (
     declare,
     dependency,
@@ -27,25 +27,18 @@
     {
         templateString: template,
         resources: resources,
-
         contextHistory: null,
-
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
         },
 
-
-
         postCreate: function () {
-
-
             var publishedVariant, draftVariant, publishedConversionPercent, variantConversionPercent;
 
             this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testingResult");
             this.topic = this.topic || topic;
-
 
             this.testOwner.textContent = this.context.data.test.owner;
             this.testCompleted.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
@@ -58,7 +51,6 @@
                 publishedVariant = this.context.data.test.variants[1];
                 draftVariant = this.context.data.test.variants[0];
             }
-
 
             this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
 
@@ -76,7 +68,6 @@
                 this.variantDiv.style.width = "20em";
             }
 
-
             this.testTitle.textContent = this.context.data.test.title;
 
             //Published version data
@@ -92,11 +83,13 @@
             this.savedDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
             this.variantConversionPercent.textContent = variantConversionPercent + "%";
 
+            //Test information and stats
             this.descriptionText.textContent = this.context.data.test.description;
             this.participationPercent.textContent = this.context.data.visitorPercentage + "%";
             this.totalParticipants.textContent = this.context.data.totalParticipantCount;
             this.testDuration.textContent = this.context.data.daysElapsed;
 
+            //Conversion content
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
 
@@ -107,29 +100,29 @@
         },
 
         _onPublishedVersionClick: function () {
-            alert("PUBLISHED VERSION CLICKED");
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
                 winningContentLink: this.context.data.publishedVersionContentLink,
                 testId: this.context.data.test.id
-            }).then(function () {
-                this.contextHistory.closeAndNavigateBack(this);
+            }).then(function (data) {
+                window.location = data;
             }).otherwise(function () {
+                alert("Error Processing Winner: Unable to process and save selected version");
                 console.log("Error occurred while processing winning content");
             });
         },
 
         _onVariantVersionClick: function () {
-            alert("VARIANT VERSION CLICKED");
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
                 winningContentLink: this.context.data.draftVersionContentLink,
                 testId: this.context.data.test.id
-            }).then(function () {
-                this.contextHistory.closeAndNavigateBack(this);
+            }).then(function (data) {
+                window.location = data;
             }).otherwise(function () {
+                alert("Error Processing Winner: Unable to process and save selected version");
                 console.log("Error occurred while processing winning content");
             });
         }

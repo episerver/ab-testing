@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -17,6 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         private IContentRepository _contentRepository;
         private IMarketingTestingWebRepository _testRepository;
+        private IUIHelper _uiHelper;
 
         [ExcludeFromCodeCoverage]
         public TestResultStore()
@@ -24,12 +26,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var serviceLocator = ServiceLocator.Current;
             _contentRepository = serviceLocator.GetInstance<IContentRepository>();
             _testRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _uiHelper = serviceLocator.GetInstance<IUIHelper>();
+
         }
 
         internal TestResultStore(IServiceLocator serviceLocator)
         {
             _contentRepository = serviceLocator.GetInstance<IContentRepository>();
             _testRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _uiHelper = serviceLocator.GetInstance<IUIHelper>();
+
         }
 
         [HttpPost]
@@ -54,6 +60,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     _contentRepository.Get<ContentData>(ContentReference.Parse(testResult.PublishedContentLink))
                         .CreateWritableClone() as IContent;
 
+                //get winning content url
+                var winningContentReference = ContentReference.Parse(testResult.WinningContentLink);
+                var winningContentUrl = _uiHelper.getEpiUrlFromLink(winningContentReference);
+
                 try
                 {
                     Guid workingVariantId;
@@ -71,28 +81,27 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         workingVariantId =
                             currentTest.Variants.FirstOrDefault(x => x.ItemVersion == workingPublishedVersion).Id;
 
-                        
                         _testRepository.ArchiveMarketingTest(currentTest.Id, workingVariantId, workingPublishedVersion);
-                        aResult = new RestStatusCodeResult((int)HttpStatusCode.Created);
-                        return aResult;
+
+                        //send back url for winning content
+                        return Rest(winningContentUrl);
                     }
 
                     //get the appropriate alternate variant and set IsWinner to True. Archive test to show completion.
                     workingVariantId =
                         currentTest.Variants.FirstOrDefault(x => x.ItemVersion == workingVariantVersion).Id;
                     _testRepository.ArchiveMarketingTest(currentTest.Id, workingVariantId, workingVariantVersion);
-                    aResult = new RestStatusCodeResult((int)HttpStatusCode.Created);
-                    return aResult;
+
+                    //send back url for winning content
+                    return Rest(winningContentUrl);
                 }
                 catch (Exception ex)
                 {
                     return aResult;
                 }
             }
-
             return aResult;
         }
-
     }
 }
 

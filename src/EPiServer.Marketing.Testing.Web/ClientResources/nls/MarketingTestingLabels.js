@@ -1,11 +1,7 @@
 ﻿define({
     root: {
         sharedtext: {
-            published_prefix: "Published by",
-            draft_prefix: "Draft - Edited by",
-            visitor_navigates_text: "Visitor navigates to page",
-            conversion_goal_header: "Conversion goal:",
-            purpose_header: "Purpose of the A/B Test"
+
         },
         addtestview: {
             header: "Create Marketing A/B Test",
@@ -63,7 +59,12 @@
             conversion_text: "Conversion",
             visitors_participated_text: "of visitors participated",
             total_participants_text: "test participants",
-            duration_text: "days duration"
+            duration_text: "days duration",
+            published_prefix: "Published by",
+            draft_prefix: "Draft - Edited by",
+            visitor_navigates_text: "Visitor navigates to page",
+            conversion_goal_header: "Conversion goal:",
+            purpose_header: "Purpose of the A/B Test"
         }
     }
 });
