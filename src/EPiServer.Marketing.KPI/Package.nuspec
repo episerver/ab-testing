@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>EPiServer.Marketing.KPI</id>
-        <version>1.0.0.9000</version>
+        <version>1.0.0</version>
         <title>EPiServer KPI</title>
         <authors>EPiServer</authors>
         <owners>EPiServer</owners>
