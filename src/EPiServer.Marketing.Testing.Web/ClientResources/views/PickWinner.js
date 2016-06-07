@@ -62,7 +62,7 @@
             }
             else if (publishedConversionPercent > variantConversionPercent) {
                 this.publishedDiv.style.height = "20em";
-                this.publishedDiv.style.widthidth = "20em";
+                this.publishedDiv.style.width = "20em";
             } else {
                 this.variantDiv.style.height = "20em";
                 this.variantDiv.style.width = "20em";
