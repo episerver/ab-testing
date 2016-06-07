@@ -279,8 +279,16 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                     test.Description = testObject.Description;
                     test.OriginalItemId = testObject.OriginalItemId;
                     test.LastModifiedBy = testObject.LastModifiedBy;
-                    test.StartDate = testObject.StartDate;
-                    test.EndDate = testObject.EndDate;
+                    test.StartDate = testObject.StartDate.ToUniversalTime();
+                    if(testObject.EndDate.HasValue)
+                    {
+                        test.EndDate = testObject.EndDate.Value.ToUniversalTime();
+                    }
+                    else
+                    {
+                        test.EndDate = testObject.EndDate;
+                    }
+
                     test.ModifiedDate = DateTime.UtcNow;
 
                     // remove any existing kpis that are not part of the new test
