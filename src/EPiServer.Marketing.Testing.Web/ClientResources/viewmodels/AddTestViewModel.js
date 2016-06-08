@@ -1,4 +1,10 @@
-﻿define([
+﻿function showSettings() {
+    $('.advanced-options__content').animate({
+        height: "toggle"
+    }, "fast");
+};
+
+define([
     "dojo/_base/declare",
     "epi/dependency",
     "dojo/Stateful",

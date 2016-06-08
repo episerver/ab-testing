@@ -14,6 +14,9 @@
 .Sleek .panel--trailing {
   background: url('/images/blocks.png') top left no-repeat;
 }
+.Sleek .panel--center .panel--center {
+  padding-bottom: 2em;
+}
 .Sleek .tasks-pane {
   padding: 20px;
 }
@@ -31,11 +34,7 @@
   margin-bottom: .5em;
   padding: 5px 15px 10px;
   text-align: center;
-  width: 180px;
-  position: relative;
-  transition: transform 0.1s ease-out;
 }
-.Sleek .epi-test-version h1,
 .Sleek .epi-test-version h2 {
   margin: 0;
 }
@@ -48,17 +47,6 @@
 }
 .Sleek .epi-test-version--2 {
   background: #84c8e4;
-}
-.Sleek .epi-test-version--winner {
-  background: #cbe25e;
-}
-.Sleek .epi-test-version .screenshot {
-  width: 100%;
-}
-.Sleek .epi-test-version--final:hover {
-  cursor: pointer;
-  transform: scale(1.1);
-  transition: transform 0.09s ease-out;
 }
 .Sleek .epi-test-result {
   text-align: center;
@@ -92,6 +80,32 @@
 }
 .Sleek hgroup h1 {
   margin-bottom: 10px;
+}
+.Sleek .advanced-options {
+  margin-top: 2em;
+  position: relative;
+  text-align: center;
+}
+.Sleek .advanced-options__button-container {
+  background: #fff;
+  display: inline-block;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+.Sleek .advanced-options::after {
+  border-bottom: 1px solid #e9e9e9;
+  content: "";
+  left: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
+.Sleek .epi-radio-list label {
+  display: block;
+}
+.Sleek .advanced-options__content {
+  display: none;
 }
 ul,
 li {
