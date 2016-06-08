@@ -34,7 +34,11 @@
   margin-bottom: .5em;
   padding: 5px 15px 10px;
   text-align: center;
+  width: 180px;
+  position: relative;
+  transition: transform 0.1s ease-out;
 }
+.Sleek .epi-test-version h1,
 .Sleek .epi-test-version h2 {
   margin: 0;
 }
@@ -47,6 +51,17 @@
 }
 .Sleek .epi-test-version--2 {
   background: #84c8e4;
+}
+.Sleek .epi-test-version--winner {
+  background: #cbe25e;
+}
+.Sleek .epi-test-version .screenshot {
+  width: 100%;
+}
+.Sleek .epi-test-version--final:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  transition: transform 0.09s ease-out;
 }
 .Sleek .epi-test-result {
   text-align: center;
