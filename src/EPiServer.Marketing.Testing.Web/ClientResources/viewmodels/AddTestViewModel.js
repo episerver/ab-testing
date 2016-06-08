@@ -49,6 +49,9 @@ define([
         //property to start a test immediately upon creation
         start: true,
 
+        //confidence level
+        confidencelevel: 95,
+
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
@@ -95,7 +98,8 @@ define([
                 conversionPage: this.conversionPage,
                 testTitle: this.testTitle,
                 startDate: this.startDate,
-                start: this.start
+                start: this.start,
+                confidencelevel: this.confidencelevel
             }).then(function () {
                 me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {

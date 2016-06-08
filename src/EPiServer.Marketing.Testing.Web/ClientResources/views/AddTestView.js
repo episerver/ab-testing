@@ -174,6 +174,19 @@
             et2.style.visibility = "visible";
         },
 
+        _getConfidenceLevel: function () {
+            var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
+            for (i = 0; i < rbs.length; i++) {
+                var rb = dom.byId(rbs[i]);
+                if (!rb) {
+                    return;
+                } else if (rb.checked) {
+                    this.model.confidencelevel = rb.value;
+                    return;
+                }
+            }
+        },
+
         //EVENT HANDLERS
 
         //Start and Cancel Events
@@ -183,6 +196,7 @@
             this.model.testDescription = description.value;
 
             this._clearErrors();
+            this._getConfidenceLevel();
 
             var title = dom.byId("textTitle");
             if( !this.titleText.value ) {
