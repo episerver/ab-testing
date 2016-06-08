@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             
             ActionResult aResult = trs.Post(testResultmodel);
             var restResult = aResult as RestResult;
-            Assert.True(restResult.Data.ToString() == "http://");
+            Assert.True(restResult.Data.ToString() == testResultmodel.DraftContentLink.Split('_')[0]);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Never);
         }
@@ -147,7 +147,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             
             ActionResult aResult = trs.Post(testResultmodel);
             var restResult = aResult as RestResult;
-            Assert.True(restResult.Data.ToString() == "http://");
+            Assert.True(restResult.Data.ToString() == testResultmodel.DraftContentLink.Split('_')[0]);
             _mockTestResultHelper.Verify(call=>call.PublishContent(draftContent),Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Once);
         }

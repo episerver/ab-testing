@@ -84,8 +84,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                         _testRepository.ArchiveMarketingTest(currentTest.Id, workingVariantId, workingPublishedVersion);
 
-                        //send back url for winning content
-                        return Rest(winningContentUrl);
                     }
 
                     //get the appropriate alternate variant and set IsWinner to True. Archive test to show completion.
@@ -93,8 +91,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         currentTest.Variants.FirstOrDefault(x => x.ItemVersion == workingVariantVersion).Id;
                     _testRepository.ArchiveMarketingTest(currentTest.Id, workingVariantId, workingVariantVersion);
 
-                    //send back url for winning content
-                    return Rest(winningContentUrl);
+                    //send back contentlink to switch context with winning content
+                    return Rest(workingPublishedVersion);
                 }
                 catch (Exception ex)
                 {
