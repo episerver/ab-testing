@@ -328,14 +328,14 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
-        public ActionResult ArchiveAbTest(string id)
-        {
-            TestManager mtm = new TestManager();
-            mtm.Archive(Guid.Parse(id));
-            var multivariateTest = mtm.Get(Guid.Parse(id));
+        //public ActionResult ArchiveAbTest(string id)
+        //{
+        //    //TestManager mtm = new TestManager();
+        //    //mtm.Archive(Guid.Parse(id));
+        //    //var multivariateTest = mtm.Get(Guid.Parse(id));
 
-            return View("TestDetails", multivariateTest);
-        }
+        //    //return View("TestDetails", multivariateTest);
+        //}
 
         public ActionResult UpdateView(string id, string itemid)
         {

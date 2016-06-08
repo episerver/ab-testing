@@ -169,9 +169,10 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        public void Archive(Guid testObjectId)
+       
+        public void Archive(Guid testObjectId, Guid winningVariantId)
         {
-            _dataAccess.Archive(testObjectId);
+            _dataAccess.Archive(testObjectId, winningVariantId);
         }
 
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)

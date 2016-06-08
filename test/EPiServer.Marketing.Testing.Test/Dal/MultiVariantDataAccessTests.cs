@@ -233,13 +233,49 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         [Fact]
         public void TestManagerArchive()
         {
-            var tests = AddMultivariateTests(_mtm, 1);
-            tests[0].State = DalTestState.Active;
-            _mtm.Save(tests[0]);
+            var testId = Guid.NewGuid();
+            var itemId = Guid.NewGuid();
+            var itemVersion = 1;
 
-            _mtm.Archive(tests[0].Id);
+            var test = new DalABTest()
+            {
+                Id = testId,
+                State = DalTestState.Active,
+                Title = "test",
+                CreatedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                Owner = "Bert",
+                Variants = new List<DalVariant>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                ParticipationPercentage = 100,
+                OriginalItemId = itemId
+            };
 
-            Assert.Equal(_mtm.Get(tests[0].Id).State, DalTestState.Archived);
+            //_mtm.Save(test);
+
+            var variant = new DalVariant()
+            {
+                ItemId = itemId,
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                Views = 0,
+                Conversions = 0,
+                ItemVersion = itemVersion
+            };
+
+            test.Variants.Add(variant);
+            var retTestid = _mtm.Save(test);
+
+            _mtm.Archive(retTestid,variant.Id);
+
+            var retTest = _mtm.Get(retTestid);
+            // check that a variant is set to winner
+            Assert.Equal(retTest.Variants[0].IsWinner,true);
+            
+            // check the test is archived
+            Assert.True(retTest.State == DalTestState.Archived);
+            
         }
 
         [Fact]

@@ -118,12 +118,18 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// 
         /// </summary>
         /// <param name="testGuid"></param>
-        public void ArchiveMarketingTest(Guid testGuid)
+        public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, int version)
         {
             ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.Archive(testGuid);
+            tm.Archive(testObjectId, winningVariantId);
         }
 
+        public Guid SaveMarketingTest(IMarketingTest testData)
+        {
+            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
+
+            return tm.Save(testData);
+        }
        
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
         {
