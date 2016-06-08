@@ -73,5 +73,10 @@ namespace EPiServer.Marketing.Testing.Data
         /// List of key performance indicators.  These can be time on a page, form submission, etc.
         /// </summary>
         List<IKpi> KpiInstances { get; set; }
+
+        /// <summary>
+        /// Percentage of accuracy required.
+        /// </summary>
+        double ConfidenceLevel { get; set; }
     }
 }

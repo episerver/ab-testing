@@ -161,7 +161,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
                 KpiInstances = new List<IKpi> { kpi },
-
+                ConfidenceLevel = testData.ConfidenceLevel
             };
 
             if (DateTime.Now >= DateTime.Parse(testData.StartDate))
