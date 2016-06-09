@@ -155,7 +155,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
-                ConfidenceLevel = 95, //TODO: wire up to advanced options when available in UI
                 IsSignificant = testData.IsSignificant,
                 Variants = new List<Variant>
                 {
