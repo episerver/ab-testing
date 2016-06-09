@@ -37,10 +37,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// For unit testing
         /// </summary>
         /// <param name="locator"></param>
-        internal MarketingTestingWebRepository(IServiceLocator locator)
+        internal MarketingTestingWebRepository(IServiceLocator locator, ILogger logger)
         {
             _serviceLocator = locator;
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
+            _logger = logger;
         }
 
         /// <summary>
@@ -239,7 +240,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 }
                 catch (Exception ex)
                 {
-                    _logger.Debug("PickWinner Failed: Unable to process and/or publish winning test results",ex);
+                    _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results",ex);
                 }
             }
             return publishedVersionReference;

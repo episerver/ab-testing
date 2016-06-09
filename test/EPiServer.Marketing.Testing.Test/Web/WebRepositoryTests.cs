@@ -8,22 +8,26 @@ using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using Xunit;
+using EPiServer.Logging;
+using StructureMap.Diagnostics;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class WebRepositoryTests
     {
-        private Mock<ITestManager> _testManager;
+        private Mock<ITestManager> _mockTestManager;
+        private Mock<ILogger> _mockLogger;
         private Mock<IServiceLocator> _mockServiceLocator;
         private Mock<ITestResultHelper> _mockTestResultHelper;
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
 
         private MarketingTestingWebRepository GetUnitUnderTest()
         {
+            _mockLogger = new Mock<ILogger>();
             _mockServiceLocator = new Mock<IServiceLocator>();
-
-            _testManager = new Mock<ITestManager>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
+            
+            _mockTestManager = new Mock<ITestManager>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
 
             _mockTestResultHelper = new Mock<ITestResultHelper>();
             _mockServiceLocator.Setup(call => call.GetInstance<ITestResultHelper>())
@@ -34,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(_mockMarketingTestingWebRepository.Object);
          
 
-            var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object);
+            var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object,_mockLogger.Object);
             return aRepo;
         }
 
@@ -42,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
-            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = Data.Enums.TestState.Active } });
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = Data.Enums.TestState.Active } });
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
             Assert.True(aReturnValue != null);
         }
@@ -51,7 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void GetActiveTestForContent_returns_empty_test_when_a_test_does_not_exist_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
-            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
             Assert.True(aReturnValue.Id == Guid.Empty);
         }
@@ -66,10 +70,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testList.Add(new ABTest() { Id = Guid.NewGuid() });
             testList.Add(new ABTest() { Id = Guid.NewGuid() });
 
-            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
-            _testManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
         }
 
         [Fact]
@@ -78,10 +82,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aRepo = GetUnitUnderTest();
             var testList = new List<IMarketingTest>();
 
-            _testManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
-            _testManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Never, "Delete was called when it should not have been");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Never, "Delete was called when it should not have been");
         }
 
         [Fact]
@@ -109,10 +113,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent draftContent = new BasicContent();
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            _testManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
-            _testManager.Setup(
+            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
+            _mockTestManager.Setup(
                 call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
-            _testManager.Setup(
+            _mockTestManager.Setup(
                 call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
 
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
@@ -159,10 +163,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent draftContent = new BasicContent();
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            _testManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
-            _testManager.Setup(
+            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
+            _mockTestManager.Setup(
                 call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
-            _testManager.Setup(
+            _mockTestManager.Setup(
                 call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
 
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
@@ -200,7 +204,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent draftContent = new BasicContent();
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            _testManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns((IMarketingTest)null);
+            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns((IMarketingTest)null);
 
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
                             reference => reference == ContentReference.Parse(testResultmodel.DraftContentLink))))
