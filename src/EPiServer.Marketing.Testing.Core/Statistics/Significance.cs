@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Core.Statistics
     public static class Significance
     {
         // Confidence level and corresponding Z-score used to determine significance
-        private static readonly Dictionary<int, double> ZScores = new Dictionary<int, double>() { { 90, 1.645 }, { 95, 1.960 }, { 98, 2.326 }, { 99, 2.576 } };
+        private static readonly Dictionary<double, double> ZScores = new Dictionary<double, double>() { { 90, 1.645 }, { 95, 1.960 }, { 98, 2.326 }, { 99, 2.576 } };
 
         public static SignificanceResults CalculateIsSignificant(IMarketingTest test)
         {
@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Core.Statistics
 
             var calculatedZScore = Math.Abs(variantConversionRate - originalConversionRate) / standardErrorOfDifference;
 
-            return new SignificanceResults() { IsSignificant = calculatedZScore > ZScores[95], ZScore = calculatedZScore };
+            return new SignificanceResults() { IsSignificant = calculatedZScore > ZScores[test.ConfidenceLevel], ZScore = calculatedZScore };
         }
     }
 }

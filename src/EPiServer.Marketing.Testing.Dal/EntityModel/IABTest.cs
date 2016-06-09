@@ -48,6 +48,11 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// </summary>
         int ParticipationPercentage { get; set; }
 
+        /// <summary>
+        /// Percentage of accuracy required.
+        /// Default: 95 %
+        /// </summary>
+        double ConfidenceLevel { get; set; }
 
         bool IsSignificant { get; set; }
 

@@ -154,6 +154,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
+                ConfidenceLevel = 95, //TODO: wire up to advanced options when available in UI
+                IsSignificant = testData.IsSignificant,
                 Variants = new List<Variant>
                 {
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},

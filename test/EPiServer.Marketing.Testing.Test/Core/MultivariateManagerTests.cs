@@ -371,6 +371,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var test = new ABTest()
             {
+                ConfidenceLevel = 95,
                 Variants =
                     new List<Variant>()
                     {
