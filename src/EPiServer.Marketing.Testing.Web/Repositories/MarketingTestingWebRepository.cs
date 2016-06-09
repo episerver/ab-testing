@@ -10,6 +10,7 @@ using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
+using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -20,6 +21,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         private IServiceLocator _serviceLocator;
         private ITestResultHelper _testResultHelper;
+        private ILogger _logger;
 
         /// <summary>
         /// Default constructor
@@ -29,6 +31,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _serviceLocator = ServiceLocator.Current;
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
+            _logger = LogManager.GetLogger();
         }
         /// <summary>
         /// For unit testing
@@ -227,7 +230,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     else
                     {
                         workingVariantId =
-                    currentTest.Variants.FirstOrDefault(x => x.ItemVersion == variantVersion).Id;
+                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == variantVersion).Id;
                         ArchiveMarketingTest(currentTest.Id, workingVariantId);
                     }
 
@@ -236,7 +239,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 }
                 catch (Exception ex)
                 {
-                    publishedVersionReference = -1;
+                    _logger.Debug("PickWinner Failed: Unable to process and/or publish winning test results",ex);
                 }
             }
             return publishedVersionReference;
