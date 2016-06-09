@@ -17,9 +17,9 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
-        private readonly ITestingContextHelper _contextHelper = new TestingContextHelper();
-        private readonly ITestDataCookieHelper _testDataCookieHelper = new TestDataCookieHelper();
-        private static readonly ILogger _logger = LogManager.GetLogger();
+        private ITestingContextHelper _contextHelper;
+        private ITestDataCookieHelper _testDataCookieHelper;
+        private ILogger _logger;
 
         private ITestManager _testManager;
         private bool? _swapDisabled;
@@ -41,16 +41,19 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public TestHandler()
         {
-
+            _testDataCookieHelper = new TestDataCookieHelper();
+            _contextHelper = new TestingContextHelper();
+            _logger = LogManager.GetLogger();
         }
 
         [ExcludeFromCodeCoverage]
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, ITestingContextHelper contextHelper)
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
             _testManager = testManager;
             _contextHelper = contextHelper;
+            _logger = logger;
         }
 
         [ExcludeFromCodeCoverage]
@@ -134,7 +137,7 @@ namespace EPiServer.Marketing.Testing.Web
                     if (e.Content == null)
                         return;
 
-                var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
+                    var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
 
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                     var hasData = _testDataCookieHelper.HasTestData(testCookieData);

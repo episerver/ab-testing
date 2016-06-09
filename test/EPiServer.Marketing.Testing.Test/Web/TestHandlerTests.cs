@@ -9,9 +9,28 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
+
+    public class MyLogger : ILogger
+    {
+        public bool errorCalled = false;
+        public bool IsEnabled(Level level)
+        {
+            return true;
+        }
+
+        public void Log<TState, TException>(Level level, TState state, TException exception, Func<TState, TException, string> messageFormatter, Type boundaryType) where TException : Exception
+        {
+            if (level == Level.Error)
+            {
+                errorCalled = true;
+            }
+        }
+    }
+
     public class TestHandlerTests : IDisposable
     {
         public TestHandlerTests()
@@ -27,6 +46,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestDataCookieHelper> _tdc;
         private Mock<ITestManager> _testManager;
         private Mock<ITestingContextHelper> _contextHelper;
+        private MyLogger _logger;
 
         private readonly List<ContentReference> _contentReferenceList;
 
@@ -37,6 +57,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
         {
+            _logger = new MyLogger();
+
             _tdc = new Mock<ITestDataCookieHelper>();
             _testManager = new Mock<ITestManager>();
             _testManager.Setup(call => call.CreateOrGetCache()).Returns(new List<IMarketingTest>());
@@ -45,7 +67,23 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
 
-            return new TestHandler(_testManager.Object, _tdc.Object, contentList, _contextHelper.Object);
+            return new TestHandler(_testManager.Object, _tdc.Object, contentList, _contextHelper.Object, _logger);
+        }
+
+        [Fact]
+        public void TestHandler_VerifyExceptionHandler()
+        {
+            var th = GetUnitUnderTest(_contentReferenceList);
+
+            var content = new BasicContent();
+            content.ContentGuid = _noAssociatedTestGuid;
+            content.ContentLink = new ContentReference();
+            ContentEventArgs args = new ContentEventArgs(content);
+            th.LoadedContent(new object(), args);
+
+            // For this test we dont actually care what the exception is just that it is catching and
+            // logging one.
+            Assert.True(_logger.errorCalled, "Exception was not logged.");
         }
 
         [Fact]
