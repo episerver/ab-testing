@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
     /// </summary>
     [ScheduledPlugIn(
         DisplayName = "Marketing Test Monitor",
-        Description = "Starts and stops tests based on their start and stop dates.",
+        Description = "Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test",
         SortIndex = 0,              // Brings it to top of job list.
         DefaultEnabled = true,      // By default the task is enabled.
         InitialTime = "00:02:00",   // First time only, start after 2 min

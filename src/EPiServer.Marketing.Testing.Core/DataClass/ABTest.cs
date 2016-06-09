@@ -85,5 +85,6 @@ namespace EPiServer.Marketing.Testing.Data
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public double ConfidenceLevel { get; set; }
     }
 }

@@ -151,9 +151,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
-                StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
+                StartDate = DateTime.Parse(testData.StartDate),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
+                State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
                 ConfidenceLevel = 95, //TODO: wire up to advanced options when available in UI
                 IsSignificant = testData.IsSignificant,
                 Variants = new List<Variant>
@@ -162,7 +163,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
                 KpiInstances = new List<IKpi> { kpi },
-
+                ConfidenceLevel = testData.ConfidenceLevel
             };
 
             if (DateTime.Now >= DateTime.Parse(testData.StartDate))
@@ -180,7 +181,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         private DateTime? CalculateEndDateFromDuration(string startDate, int testDuration)
         {
-            DateTime endDate = DateTime.Parse(startDate).ToUniversalTime();
+            DateTime endDate = DateTime.Parse(startDate);
             return endDate.AddDays(testDuration);
         }
 

@@ -379,6 +379,7 @@ namespace EPiServer.Marketing.Testing
                 LastModifiedBy = theManagerTest.LastModifiedBy,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
+                ConfidenceLevel = theManagerTest.ConfidenceLevel
             };
             return aTest;
         }

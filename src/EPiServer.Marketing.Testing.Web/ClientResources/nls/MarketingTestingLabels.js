@@ -19,7 +19,15 @@
             start_scheduled: "Test Scheduled",
             cancel_default: "Cancel",
             default_test_title: "Default Test Title",
-            days_text: "days."
+            days_text: "days.",
+            advancedsettings: "Advanced Settings",
+            confidencelevel_header: "Confidence level",
+            confidencelevel_description1: "The confidence level dictates the amount of error allowed. A higher percentage directly correlates to the accuracy of the test results.",
+            confidencelevel_description2: "This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).",
+            confidence_99: "99%",
+            confidence_98: "98%",
+            confidence_95: "95%",
+            confidence_90: "90%"
         },
         addtestcommand: {
             label_text: "Create A/B test for my changes",
