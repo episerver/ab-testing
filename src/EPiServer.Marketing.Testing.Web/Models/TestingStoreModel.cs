@@ -19,6 +19,8 @@ namespace EPiServer.Marketing.Testing.Web
         public int ConversionPage { get; set; }
         public string TestTitle { get; set; }
         public bool Start { get; set; }
+        public double ConfidenceLevel { get; set; }
+        public bool IsSignificant { get; set; }
 
     }
 }

@@ -110,7 +110,7 @@
             this._setViewPublishedVersionAttr(true);
             this._setViewCurrentVersionAttr();
 
-            this._clearError();
+            this._clearErrors();
         },
 
         //setters for bound properties
@@ -135,7 +135,7 @@
             this.pageName.textContent = this.contentData.name + " A/B Test";
         },
 
-        _clearError: function () {
+        _clearErrors: function () {
             var errorText = dom.byId("pickerErrorText");
             if (!errorText) {
                 return;
@@ -144,9 +144,15 @@
             errorText.style.visibility = "hidden";
             var et2 = dom.byId("pickerErrorIcon");
             et2.style.visibility = "hidden";
+
+            errorText = dom.byId("titleErrorText");
+            errorText.innerText = "";
+            errorText.style.visibility = "hidden";
+            et2 = dom.byId("titleErrorIcon");
+            et2.style.visibility = "hidden";
         },
 
-        _setError: function( error ) {
+        _setPickerError: function( error ) {
             var errorText = dom.byId("pickerErrorText");
             if (!errorText) {
                 return;
@@ -157,6 +163,30 @@
             et2.style.visibility = "visible";
         },
 
+        _setTitleError: function (error) {
+            var errorText = dom.byId("titleErrorText");
+            if (!errorText) {
+                return;
+            }
+            errorText.innerText = error;
+            errorText.style.visibility = "visible";
+            var et2 = dom.byId("titleErrorIcon");
+            et2.style.visibility = "visible";
+        },
+
+        _getConfidenceLevel: function () {
+            var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
+            for (i = 0; i < rbs.length; i++) {
+                var rb = dom.byId(rbs[i]);
+                if (!rb) {
+                    return;
+                } else if (rb.checked) {
+                    this.model.confidencelevel = rb.value;
+                    return;
+                }
+            }
+        },
+
         //EVENT HANDLERS
 
         //Start and Cancel Events
@@ -165,11 +195,17 @@
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
 
-            if (!this.model.conversionPage)
-            {
-                this._setError("You must select a conversion goal page before you can save the A/B test.");
-            } else
-            {
+            this._clearErrors();
+            this._getConfidenceLevel();
+
+            var title = dom.byId("textTitle");
+            if( !this.titleText.value ) {
+                // TODO: use localized resources.
+                this._setTitleError("You must enter a title before you can save the A/B test.");
+            }
+            else if (!this.model.conversionPage) {
+                this._setPickerError("You must select a conversion goal page before you can save the A/B test.");
+            } else {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -180,10 +216,10 @@
                             if (result.contentLink != this.model.publishedVersion.contentLink) {
                                 this.model.createTest();
                             } else {
-                                this._setError("You cannot select the page you are testing as the conversion goal page. Select another page.");
+                                this._setPickerError("You cannot select the page you are testing as the conversion goal page. Select another page.");
                             }
                         } else {
-                            this._setError("You cannot select an unpublished page as your conversion goal page. Select a published page.");
+                            this._setPickerError("You cannot select an unpublished page as your conversion goal page. Select a published page.");
                         }
                     }.bind(this))
                     .otherwise(function (result) {
@@ -208,7 +244,7 @@
 
         _onConversionPageChanged: function (event) {
             this.model.conversionPage = event;
-            this._clearError();
+            this._clearErrors();
         },
 
         _onPercentageSpinnerChanged: function (event) {

@@ -8,6 +8,7 @@ using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Core.Statistics;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -50,15 +51,19 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             // start / stop any tests that are scheduled to start / stop
             foreach (var test in tm.GetTestList(new TestCriteria()))
             {
-                if (test.State == TestState.Active)
+                switch (test.State)
                 {
-                    if (DateTime.UtcNow > test.EndDate )
-                    { tm.Stop(test.Id); stopped++; }
-                }
-                else if (test.State == TestState.Inactive)
-                {
-                    if( DateTime.UtcNow > test.StartDate )
-                    { tm.Start(test.Id); started++; }
+                    case TestState.Active:
+                        if (DateTime.UtcNow > test.EndDate)
+                        {
+                            tm.Stop(test.Id);
+                            stopped++;
+                        }
+                        break;
+                    case TestState.Inactive:
+                        if( DateTime.UtcNow > test.StartDate )
+                        { tm.Start(test.Id); started++; }
+                        break;
                 }
             }
 

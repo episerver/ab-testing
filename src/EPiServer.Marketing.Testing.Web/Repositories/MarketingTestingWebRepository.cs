@@ -155,13 +155,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
+                IsSignificant = testData.IsSignificant,
                 Variants = new List<Variant>
                 {
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
                 KpiInstances = new List<IKpi> { kpi },
-
+                ConfidenceLevel = testData.ConfidenceLevel
             };
 
             if (DateTime.Now >= DateTime.Parse(testData.StartDate))

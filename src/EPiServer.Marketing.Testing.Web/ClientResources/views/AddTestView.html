@@ -63,6 +63,8 @@
                                data-dojo-attach-event="onChange: _onTestTitleChanged"
                                data-dojo-attach-point="titleText"
                                required="true" />
+                        <span id="titleErrorIcon" style="visibility: hidden" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                        <span id="titleErrorText" style="color:#f7542b; visibility: hidden"></span>
                     </li>
                     <!-- Test Description -->
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
@@ -137,6 +139,35 @@
             <div class="epi-grid__col--12">
                 <div id="StartDateTimeSelector" data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown" data-dojo-attach-event="onChange: _onDateTimeChange"></div>
                 <span class="dijitInline dijitIcon epi-iconClock"></span> ${resources.addtestview.schedule_text_prefix} <span id="ScheduleText">${resources.addtestview.notscheduled_text}</span>
+            </div>
+            <br /><br />
+            <div class="advanced-options">
+                <div class="advanced-options__button-container">
+                    <button data-dojo-type="dijit/form/ToggleButton" onclick="showSettings();" class="js-settings-btn epi-chromeless epi-flat" data-dojo-props="iconClass:'epi-iconSettings', checked: false">
+                        ${resources.addtestview.advancedsettings}
+                    </button>
+                </div>
+            </div>
+            <div class="advanced-options__content epi-grid epi-grid--limit-width">
+                <div class="epi-grid__row epi-grid__row--no-border">
+                    <div class="epi-grid__col--12">
+                        <div class="epi-grid__header">
+                            <h2>${resources.addtestview.confidencelevel_header}</h2>
+                            <p>
+                                ${resources.addtestview.confidencelevel_description1}
+                                ${resources.addtestview.confidencelevel_description2}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="epi-grid__row">
+                    <div class="epi-grid__col--12 epi-radio-list">
+                        <label for="confidence_99"><input type="radio" name="confidence" id="confidence_99" value="99" data-dojo-type="dijit/form/RadioButton" />${resources.addtestview.confidence_99}</label>
+                        <label for="confidence_98"><input type="radio" name="confidence" id="confidence_98" value="98" data-dojo-type="dijit/form/RadioButton" />${resources.addtestview.confidence_98}</label>
+                        <label for="confidence_95"><input type="radio"  checked="checked" name="confidence" id="confidence_95" value="95" data-dojo-type="dijit/form/RadioButton" />${resources.addtestview.confidence_95}</label>
+                        <label for="confidence_90"><input type="radio" name="confidence" id="confidence_90" value="90" data-dojo-type="dijit/form/RadioButton" />${resources.addtestview.confidence_90}</label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
