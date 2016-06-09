@@ -14,6 +14,7 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
+using EPiServer.Marketing.Testing.Core.Statistics;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -165,6 +166,12 @@ namespace EPiServer.Marketing.Testing
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
             if (test != null)
             {
+                // test has been stopped or ended on its own so calculate if the results are significant or not
+                var sigResults = Significance.CalculateIsSignificant(test);
+                test.IsSignificant = sigResults.IsSignificant;
+                test.ZScore = sigResults.ZScore;
+                Save(test);
+
                 UpdateCache(test, CacheOperator.Remove);
             }
         }
@@ -341,6 +348,9 @@ namespace EPiServer.Marketing.Testing
                 StartDate = theDalTest.StartDate,
                 EndDate = theDalTest.EndDate,
                 ParticipationPercentage = theDalTest.ParticipationPercentage,
+                IsSignificant = theDalTest.IsSignificant,
+                ZScore = theDalTest.ZScore,
+                ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
                 CreatedDate = theDalTest.CreatedDate,
                 ModifiedDate = theDalTest.ModifiedDate,
@@ -363,10 +373,12 @@ namespace EPiServer.Marketing.Testing
                 StartDate = theManagerTest.StartDate,
                 EndDate = theManagerTest.EndDate,
                 ParticipationPercentage = theManagerTest.ParticipationPercentage,
+                ConfidenceLevel = theManagerTest.ConfidenceLevel,
+                IsSignificant = theManagerTest.IsSignificant,
+                ZScore = theManagerTest.ZScore,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
-                ConfidenceLevel = theManagerTest.ConfidenceLevel
             };
             return aTest;
         }

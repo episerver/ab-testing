@@ -53,6 +53,22 @@ namespace EPiServer.Marketing.Testing.Data
         public int ParticipationPercentage { get; set; }
 
         /// <summary>
+        /// Percentage of accuracy required.
+        /// Default: 95 %
+        /// </summary>
+        public double ConfidenceLevel { get; set; }
+
+        /// <summary>
+        /// Calculated z-score to determine statistical significance.
+        /// </summary>
+        public double ZScore { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsSignificant { get; set; }
+
+        /// <summary>
         /// Last person that modified the test.
         /// </summary>
         public string LastModifiedBy { get; set; }
@@ -69,6 +85,5 @@ namespace EPiServer.Marketing.Testing.Data
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public double ConfidenceLevel { get; set; }
     }
 }

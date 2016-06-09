@@ -50,6 +50,22 @@ namespace EPiServer.Marketing.Testing.Data
         int ParticipationPercentage { get; set; }
 
         /// <summary>
+        /// Percentage of accuracy required.
+        /// Default: 95 %
+        /// </summary>
+        double ConfidenceLevel { get; set; }
+
+        /// <summary>
+        /// Calculated z-score to determine statistical significance.
+        /// </summary>
+        double ZScore { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        bool IsSignificant { get; set; }
+
+        /// <summary>
         /// The person that last changed the test.
         /// </summary>
         string LastModifiedBy { get; set; }
@@ -73,10 +89,5 @@ namespace EPiServer.Marketing.Testing.Data
         /// List of key performance indicators.  These can be time on a page, form submission, etc.
         /// </summary>
         List<IKpi> KpiInstances { get; set; }
-
-        /// <summary>
-        /// Percentage of accuracy required.
-        /// </summary>
-        double ConfidenceLevel { get; set; }
     }
 }
