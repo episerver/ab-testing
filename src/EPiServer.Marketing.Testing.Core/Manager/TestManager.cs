@@ -24,13 +24,12 @@ namespace EPiServer.Marketing.Testing
         Remove
     }
 
-    [ServiceConfiguration(ServiceType = typeof (ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
+    [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
         private const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
-        private static Random _r = new Random();
         private MemoryCache _testCache = MemoryCache.Default;
 
         [ExcludeFromCodeCoverage]
@@ -60,8 +59,8 @@ namespace EPiServer.Marketing.Testing
             {
                 throw new TestNotFoundException();
             }
-            
-            return ConvertToManagerTest(dbTest);
+
+            return Helpers.ConvertToManagerTest(dbTest);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
             {
-                testList.Add(ConvertToManagerTest(dalTest));
+                testList.Add(Helpers.ConvertToManagerTest(dalTest));
             }
 
             return testList;
@@ -100,9 +99,9 @@ namespace EPiServer.Marketing.Testing
         {
             var testList = new List<IMarketingTest>();
 
-            foreach (var dalTest in _dataAccess.GetTestList(ConvertToDalCriteria(criteria)))
+            foreach (var dalTest in _dataAccess.GetTestList(Helpers.ConvertToDalCriteria(criteria)))
             {
-                testList.Add(ConvertToManagerTest(dalTest));
+                testList.Add(Helpers.ConvertToManagerTest(dalTest));
             }
 
             return testList;
@@ -120,8 +119,8 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-            
-            var testId = _dataAccess.Save(ConvertToDalTest(multivariateTest));
+
+            var testId = _dataAccess.Save(Helpers.ConvertToDalTest(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
             {
@@ -152,7 +151,7 @@ namespace EPiServer.Marketing.Testing
             // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(ConvertToManagerTest(dalTest), CacheOperator.Add);
+                UpdateCache(Helpers.ConvertToManagerTest(dalTest), CacheOperator.Add);
             }
         }
 
@@ -183,7 +182,7 @@ namespace EPiServer.Marketing.Testing
 
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
         {
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, AdaptToDalCount(resultType));
+            _dataAccess.IncrementCount(testId, itemId, itemVersion, Helpers.AdaptToDalCount(resultType));
         }
 
         public Variant ReturnLandingPage(Guid testId)
@@ -192,14 +191,14 @@ namespace EPiServer.Marketing.Testing
             var activePage = new Variant();
             if (currentTest != null)
             {
-                switch (GetRandomNumber())
+                switch (Helpers.GetRandomNumber())
                 {
                     case 1:
                     default:
-                        activePage = ConvertToManagerVariant(currentTest.Variants[0]);
+                        activePage = Helpers.ConvertToManagerVariant(currentTest.Variants[0]);
                         break;
                     case 2:
-                        activePage = ConvertToManagerVariant(currentTest.Variants[1]);
+                        activePage = Helpers.ConvertToManagerVariant(currentTest.Variants[1]);
                         break;
                 }
             }
@@ -234,7 +233,7 @@ namespace EPiServer.Marketing.Testing
                         {
                             if (variant.ItemVersion != contentVersion)
                             {
-                                retData = CreateVariantPageData(contentLoader, testContent, variant);
+                                retData = Helpers.CreateVariantPageData(contentLoader, testContent, variant);
                                 retData.Status = VersionStatus.Published;
                                 retData.StartPublish = DateTime.Now.AddDays(-1);
                                 retData.MakeReadOnly();
@@ -250,16 +249,6 @@ namespace EPiServer.Marketing.Testing
                 }
             }
             return retData;
-        }
-
-        private PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Variant variant)
-        {
-            var contentToSave = d.ContentLink.CreateWritableClone();
-            contentToSave.WorkID = variant.ItemVersion;
-            var newContent = contentLoader.Get<IContent>(contentToSave) as ContentData;
-
-            var contentToCache = newContent?.CreateWritableClone() as PageData;
-            return contentToCache;
         }
 
         public List<IMarketingTest> CreateOrGetCache()
@@ -302,15 +291,8 @@ namespace EPiServer.Marketing.Testing
                     }
                     break;
             }
-            
-            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
-        }
 
-        // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
-        // to determine what page to display to the user.
-        private int GetRandomNumber()
-        {
-            return _r.Next(1, 3);
+            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
         public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
@@ -333,305 +315,6 @@ namespace EPiServer.Marketing.Testing
                 }
             }
             return guids;
-        }
-
-        private IMarketingTest ConvertToManagerTest(IABTest theDalTest)
-        {
-            var aTest = new ABTest
-            {
-                Id = theDalTest.Id,
-                Title = theDalTest.Title,
-                Description = theDalTest.Description,
-                Owner = theDalTest.Owner,
-                OriginalItemId = theDalTest.OriginalItemId,
-                State = AdaptToManagerState(theDalTest.State),
-                StartDate = theDalTest.StartDate,
-                EndDate = theDalTest.EndDate,
-                ParticipationPercentage = theDalTest.ParticipationPercentage,
-                IsSignificant = theDalTest.IsSignificant,
-                ZScore = theDalTest.ZScore,
-                ConfidenceLevel = theDalTest.ConfidenceLevel,
-                LastModifiedBy = theDalTest.LastModifiedBy,
-                CreatedDate = theDalTest.CreatedDate,
-                ModifiedDate = theDalTest.ModifiedDate,
-                Variants = AdaptToManagerVariant(theDalTest.Variants),
-                KpiInstances = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
-            };
-            return aTest;
-        }
-
-        private IABTest ConvertToDalTest(IMarketingTest theManagerTest)
-        {
-            var aTest = new DalABTest
-            {
-                Id = theManagerTest.Id,
-                Title = theManagerTest.Title,
-                Description = theManagerTest.Description,
-                Owner = theManagerTest.Owner,
-                OriginalItemId = theManagerTest.OriginalItemId,
-                State = AdaptToDalState(theManagerTest.State),
-                StartDate = theManagerTest.StartDate,
-                EndDate = theManagerTest.EndDate,
-                ParticipationPercentage = theManagerTest.ParticipationPercentage,
-                ConfidenceLevel = theManagerTest.ConfidenceLevel,
-                IsSignificant = theManagerTest.IsSignificant,
-                ZScore = theManagerTest.ZScore,
-                LastModifiedBy = theManagerTest.LastModifiedBy,
-                Variants = AdaptToDalVariant(theManagerTest.Variants),
-                KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
-            };
-            return aTest;
-        }
-
-
-        private TestState AdaptToManagerState(DalTestState theDalState)
-        {
-            var retState = TestState.Inactive;
-            switch(theDalState)
-            {
-                case DalTestState.Active:
-                    retState = TestState.Active;
-                    break;
-                case DalTestState.Done:
-                    retState = TestState.Done;
-                    break;
-                case DalTestState.Archived:
-                    retState = TestState.Archived;
-                    break;
-                default:
-                    retState = TestState.Inactive;
-                    break;
-            }
-
-            return retState;
-        }
-
-        private DalTestState AdaptToDalState(TestState theManagerState)
-        {
-            var retState = DalTestState.Inactive;
-            switch (theManagerState)
-            {
-                case TestState.Active:
-                    retState = DalTestState.Active;
-                    break;
-                case TestState.Done:
-                    retState = DalTestState.Done;
-                    break;
-                case TestState.Archived:
-                    retState = DalTestState.Archived;
-                    break;
-                default:
-                    retState = DalTestState.Inactive;
-                    break;
-            }
-
-            return retState;
-        }
-
-        #region VariantConversion
-        private List<Variant> AdaptToManagerVariant(IList<DalVariant> theVariantList)
-        {
-            var retList = new List<Variant>();
-
-            foreach(var dalVariant in theVariantList)
-            {
-                retList.Add(ConvertToManagerVariant(dalVariant));
-            }
-
-            return retList;
-        }
-
-        private Variant ConvertToManagerVariant(DalVariant theDalVariant)
-        {
-            var retVariant = new Variant
-            {
-                Id = theDalVariant.Id,
-                TestId = theDalVariant.TestId,
-                ItemId = theDalVariant.ItemId,
-                ItemVersion = theDalVariant.ItemVersion,
-                Conversions = theDalVariant.Conversions,
-                Views = theDalVariant.Views,
-                IsWinner = theDalVariant.IsWinner
-            };
-
-            return retVariant;
-        }
-
-
-        private IList<DalVariant> AdaptToDalVariant(IList<Variant> variants)
-        {
-            var retList = new List<DalVariant>();
-
-            foreach(var managerVariant in variants)
-            {
-                retList.Add(ConvertToDalVariant(managerVariant));
-            }
-
-            return retList;
-        }
-
-        private DalVariant ConvertToDalVariant(Variant managerVariant)
-        {
-            var retVariant = new DalVariant
-            {
-                Id = managerVariant.Id,
-                TestId = managerVariant.TestId,
-                ItemId = managerVariant.ItemId,
-                ItemVersion = managerVariant.ItemVersion,
-                Conversions = managerVariant.Conversions,
-                Views = managerVariant.Views,
-                IsWinner = managerVariant.IsWinner
-            };
-
-            return retVariant;
-        }
-
-        #endregion VariantConversion
-
-        #region KPIConversion
-        private List<IKpi> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
-        {
-            var retList = new List<IKpi>();
-
-            foreach(var dalKPI in theDalKPIs)
-            {
-                retList.Add(ConvertToManagerKPI(dalKPI));
-            }
-
-            return retList;
-        }
-
-        private IKpi ConvertToManagerKPI(DalKeyPerformanceIndicator dalKpi)
-            {
-            var kpiManager = new KpiManager();
-
-            return kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
-        }
-
-
-        private IList<DalKeyPerformanceIndicator> AdaptToDalKPI(Guid testId, IList<IKpi> keyPerformanceIndicators)
-        {
-            var retList = new List<DalKeyPerformanceIndicator>();
-
-            foreach (var managerKpi in keyPerformanceIndicators)
-            {
-                retList.Add(ConvertToDalKPI(testId, managerKpi));
-            }
-
-            return retList;
-        }
-
-        private DalKeyPerformanceIndicator ConvertToDalKPI(Guid testId, IKpi managerKpi)
-        {
-            var retKPI = new DalKeyPerformanceIndicator
-            {
-                Id = Guid.NewGuid(),
-                KeyPerformanceIndicatorId = managerKpi.Id,
-                TestId = testId
-            };
-            return retKPI;
-        }
-        #endregion  KPIConversion
-
-        #region CriteriaConversion
-
-        private DalTestCriteria ConvertToDalCriteria(TestCriteria criteria)
-        {
-            var dalCriteria = new DalTestCriteria();
-
-            foreach(var managerFilters in criteria.GetFilters())
-            {
-                dalCriteria.AddFilter(AdaptToDalFilter(managerFilters));
-            }
-
-            return dalCriteria;
-        }
-
-        private DalABTestFilter AdaptToDalFilter(ABTestFilter managerFilter)
-        {
-            var dalFilter = new DalABTestFilter();
-            dalFilter.Property = AdaptToDalTestProperty(managerFilter.Property);
-            dalFilter.Operator = AdaptToDalOperator(managerFilter.Operator);
-
-            if (managerFilter.Property == ABTestProperty.State)
-            {
-                dalFilter.Value = ConvertToDalValue(managerFilter.Value);
-            }
-            else
-            {
-                dalFilter.Value = managerFilter.Value;
-            }
-
-            return dalFilter;
-        }
-
-        private DalTestState ConvertToDalValue(object value)
-        {
-            var aValue = DalTestState.Inactive;
-           
-                switch ((TestState)value)
-                {
-                    case TestState.Active:
-                        aValue = DalTestState.Active;
-                        break;
-                    case TestState.Archived:
-                        aValue = DalTestState.Archived;
-                        break;
-                    case TestState.Done:
-                        aValue = DalTestState.Done;
-                        break;
-                    case TestState.Inactive:
-                        aValue = DalTestState.Inactive;
-                        break;
-                }
-
-            return aValue;
-        }
-
-        private DalFilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
-        {
-            var aOperator = DalFilterOperator.And;
-
-            switch(theOperator)
-            {
-                case FilterOperator.Or:
-                    aOperator = DalFilterOperator.Or;
-                    break;
-                case FilterOperator.And:
-                    aOperator = DalFilterOperator.And;
-                    break;
-            }
-
-            return aOperator;
-        }
-
-        private DalABTestProperty AdaptToDalTestProperty(ABTestProperty property)
-        {
-            var aProperty = DalABTestProperty.OriginalItemId;
-            switch(property)
-            {
-                case ABTestProperty.State:
-                    aProperty = DalABTestProperty.State;
-                    break;
-                case ABTestProperty.VariantId:
-                    aProperty = DalABTestProperty.VariantId;
-                    break;
-                case ABTestProperty.OriginalItemId:
-                    aProperty = DalABTestProperty.OriginalItemId;
-                    break;
-            }
-            return aProperty;
-        }
-        #endregion
-
-        private DalCountType AdaptToDalCount(CountType resultType)
-        {
-            var dalCountType = DalCountType.View;
-
-            if (resultType == CountType.Conversion)
-                dalCountType = DalCountType.Conversion;
-
-            return dalCountType;
         }
     }
 }
