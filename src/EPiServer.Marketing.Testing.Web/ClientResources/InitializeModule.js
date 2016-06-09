@@ -33,9 +33,8 @@
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.testing", store);
             registry.add("marketing.contentTesting", contentTestStore);
-
-            var testNotification = new TestNotification();
-            editNotifications.add(testNotification);
+            
+            editNotifications.add(TestNotification);
 
             commandRegistry.registerProvider('epi.cms.publishmenu', new AddTestCommandProvider());
         }
