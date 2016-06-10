@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using Xunit;
 using EPiServer.ServiceLocation;
 using Moq;
@@ -47,6 +50,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow,
                 State = DalTestState.Active,
+                ConfidenceLevel = 95,
                 Owner = "Bert",
                 KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
                 Variants = new List<DalVariant>()
@@ -408,6 +412,49 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             Assert.Equal(originalItemId, _mtm.Get(tests[0].Id).OriginalItemId);
             Assert.Equal(2, _mtm.Get(tests[0].Id).Variants.Count);
+        }
+
+        [Fact]
+        public void TestManagerSaveDone()
+        {
+            var id = Guid.NewGuid();
+            var itemId = Guid.NewGuid();
+
+            var test = new ABTest()
+            {
+                Id = id,
+                State = TestState.Done,
+                Variants =
+                    new List<Variant>()
+                    {
+                        new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 130 },
+                        new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100 }
+                    },
+                KpiInstances = new List<IKpi>(),
+                Title = "test",
+                Description = "description",
+                CreatedDate = DateTime.UtcNow,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                ParticipationPercentage = 100,
+                LastModifiedBy = "me",
+                OriginalItemId = Guid.NewGuid(),
+                Owner = "Bert",
+                ZScore = 0,
+                IsSignificant = false
+
+            };
+
+            var testId = _tm.Save(test);
+
+            var testt = _tm.Get(id);
+
+            testt.State = TestState.Archived;
+            testt.ZScore = 2.0;
+            testt.IsSignificant = true;
+
+            Assert.Equal(id, _tm.Save(testt));
         }
 
     }

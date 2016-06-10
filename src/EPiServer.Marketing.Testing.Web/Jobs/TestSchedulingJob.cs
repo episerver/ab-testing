@@ -8,6 +8,7 @@ using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Core.Statistics;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -17,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
     /// </summary>
     [ScheduledPlugIn(
         DisplayName = "Marketing Test Monitor",
-        Description = "Starts and stops tests based on their start and stop dates.",
+        Description = "Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test",
         SortIndex = 0,              // Brings it to top of job list.
         DefaultEnabled = true,      // By default the task is enabled.
         InitialTime = "00:02:00",   // First time only, start after 2 min
@@ -50,15 +51,19 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             // start / stop any tests that are scheduled to start / stop
             foreach (var test in tm.GetTestList(new TestCriteria()))
             {
-                if (test.State == TestState.Active)
+                switch (test.State)
                 {
-                    if (DateTime.UtcNow > test.EndDate )
-                    { tm.Stop(test.Id); stopped++; }
-                }
-                else if (test.State == TestState.Inactive)
-                {
-                    if( DateTime.UtcNow > test.StartDate )
-                    { tm.Start(test.Id); started++; }
+                    case TestState.Active:
+                        if (DateTime.UtcNow > test.EndDate)
+                        {
+                            tm.Stop(test.Id);
+                            stopped++;
+                        }
+                        break;
+                    case TestState.Inactive:
+                        if( DateTime.UtcNow > test.StartDate )
+                        { tm.Start(test.Id); started++; }
+                        break;
                 }
             }
 

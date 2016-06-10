@@ -294,15 +294,25 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             }
             else
             {
-                if (test.State == DalTestState.Inactive)
+                switch (test.State)
                 {
+                    case DalTestState.Inactive:
                     test.Title = testObject.Title;
                     test.Description = testObject.Description;
                     test.OriginalItemId = testObject.OriginalItemId;
                     test.LastModifiedBy = testObject.LastModifiedBy;
-                    test.StartDate = testObject.StartDate;
+                    test.StartDate = testObject.StartDate.ToUniversalTime();
+                    if(testObject.EndDate.HasValue)
+                    {
+                        test.EndDate = testObject.EndDate.Value.ToUniversalTime();
+                    }
+                    else
+                    {
                     test.EndDate = testObject.EndDate;
+                    }
+
                     test.ModifiedDate = DateTime.UtcNow;
+                        test.ParticipationPercentage = testObject.ParticipationPercentage;
 
                     // remove any existing kpis that are not part of the new test
                     foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
@@ -350,15 +360,26 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                             existingVariant.ModifiedDate = DateTime.UtcNow;
                             existingVariant.Views = newVariant.Views;
                             existingVariant.Conversions = newVariant.Conversions;
+                                existingVariant.IsWinner = newVariant.IsWinner;
                         }
                         else
                         {
                             test.Variants.Add(newVariant);
                         }
                     }
+                        break;
+                    case DalTestState.Done:
+                        test.State = testObject.State == DalTestState.Archived ? DalTestState.Archived : DalTestState.Done;
+                        test.IsSignificant = testObject.IsSignificant;
+                        test.ZScore = testObject.ZScore;
+                        test.ModifiedDate = DateTime.UtcNow;
+                        break;
+                    case DalTestState.Active:
+                        test.State = testObject.State;
+                        test.ModifiedDate = DateTime.UtcNow;
+                        break;
                 }
             }
-
             repo.SaveChanges();
 
             return id;
