@@ -1,4 +1,10 @@
-﻿define([
+﻿function showSettings() {
+    $('.advanced-options__content').animate({
+        height: "toggle"
+    }, "fast");
+};
+
+define([
     "dojo/_base/declare",
     "epi/dependency",
     "dojo/Stateful",
@@ -39,6 +45,12 @@
 
         //start date (currently set to "now" when they hit the start test button
         startDate: null,
+
+        //property to start a test immediately upon creation
+        start: true,
+
+        //confidence level
+        confidencelevel: 95,
 
         postscript: function () {
             this.inherited(arguments);
@@ -85,7 +97,9 @@
                 participationPercent: this.participationPercent,
                 conversionPage: this.conversionPage,
                 testTitle: this.testTitle,
-                startDate: this.startDate
+                startDate: this.startDate,
+                start: this.start,
+                confidencelevel: this.confidencelevel
             }).then(function () {
                 me.topic.publish("/epi/shell/action/changeview/back");
             }).otherwise(function () {

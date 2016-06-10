@@ -25,16 +25,26 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 new ABTest() { Id = TestToStart,
                     StartDate = DateTime.Now.ToUniversalTime().AddHours(-1),
-                    State = Data.Enums.TestState.Inactive },
+                    State = Data.Enums.TestState.Inactive,
+                    ZScore = 2.4,
+                    ConfidenceLevel = 95,
+                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                },
                 new ABTest() { Id = TestToStop,
                     EndDate = DateTime.Now.ToUniversalTime().AddHours(-1),
-                    State = Data.Enums.TestState.Active },
+                    State = Data.Enums.TestState.Active,
+                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                },
                 new ABTest() { Id = Guid.NewGuid(),
                     EndDate = DateTime.Now.ToUniversalTime().AddHours(-1),
-                    State = Data.Enums.TestState.Done },
+                    State = Data.Enums.TestState.Done,
+                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                },
                 new ABTest() { Id = Guid.NewGuid(),
                     EndDate = DateTime.Now.ToUniversalTime().AddHours(-1),
-                    State = Data.Enums.TestState.Archived },
+                    State = Data.Enums.TestState.Archived,
+                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                },
             };
 
             _testManager.Setup(m => m.GetTestList(It.IsAny<TestCriteria>())).Returns(list);

@@ -13,6 +13,7 @@ using Moq;
 using Xunit;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Core.Statistics;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -61,8 +62,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            
-            
+
+
             tm.Get(theGuid);
 
             _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
@@ -88,14 +89,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             var returnList = tm.GetActiveTestsByOriginalItemId(theGuid);
 
-            Assert.True(returnList.All(t => t.OriginalItemId == theGuid), "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
+            Assert.True(returnList.All(t => t.OriginalItemId == theGuid),
+                "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
         }
 
         [Fact]
         public void TestManager_CallsGetTestListWithCritera()
         {
             var critera = new TestCriteria();
-            var testFilter = new ABTestFilter { Operator = FilterOperator.And, Property = ABTestProperty.OriginalItemId, Value = "Test" };
+            var testFilter = new ABTestFilter
+            {
+                Operator = FilterOperator.And,
+                Property = ABTestProperty.OriginalItemId,
+                Value = "Test"
+            };
             critera.AddFilter(testFilter);
             var tm = GetUnitUnderTest();
             var dalList = new List<IABTest>();
@@ -103,10 +110,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             tm.GetTestList(critera);
 
-            _dataAccessLayer.Verify(da => da.GetTestList(It.Is<DalTestCriteria>(arg => arg.GetFilters().First().Operator == DalFilterOperator.And &&
-            arg.GetFilters().First().Property == DalABTestProperty.OriginalItemId &&
-            arg.GetFilters().First().Value == testFilter.Value)),
-            "DataAcessLayer GetTestList was never called or criteria did not match.");
+            _dataAccessLayer.Verify(
+                da =>
+                    da.GetTestList(
+                        It.Is<DalTestCriteria>(arg => arg.GetFilters().First().Operator == DalFilterOperator.And &&
+                                                      arg.GetFilters().First().Property ==
+                                                      DalABTestProperty.OriginalItemId &&
+                                                      arg.GetFilters().First().Value == testFilter.Value)),
+                "DataAcessLayer GetTestList was never called or criteria did not match.");
         }
 
         [Fact]
@@ -162,8 +173,23 @@ namespace EPiServer.Marketing.Testing.Test.Core
             {
                 Id = theGuid,
                 ModifiedDate = DateTime.UtcNow,
-                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1, Views = 0, Conversions = 0} },
-                KpiInstances = new List<IKpi> { new Kpi { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow } },
+                Variants =
+                    new List<Variant>
+                    {
+                        new Variant
+                        {
+                            Id = Guid.NewGuid(),
+                            ItemId = Guid.NewGuid(),
+                            ItemVersion = 1,
+                            Views = 0,
+                            Conversions = 0
+                        }
+                    },
+                KpiInstances =
+                    new List<IKpi>
+                    {
+                        new Kpi {Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow}
+                    },
             };
 
             Mock<IKpiManager> kpiManager = new Mock<IKpiManager>();
@@ -187,11 +213,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var tm = GetUnitUnderTest();
             tm.IncrementCount(theGuid, theTestItemGuid, theItemVersion, type);
 
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<DalCountType>()),
+            _dataAccessLayer.Verify(
+                da =>
+                    da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                        It.IsAny<DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(), It.IsAny<DalCountType>()),
+            _dataAccessLayer.Verify(
+                da =>
+                    da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                        It.IsAny<DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
-            _dataAccessLayer.Verify(da => da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
+            _dataAccessLayer.Verify(
+                da =>
+                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                        It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
@@ -202,7 +237,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var originalItemId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var vID = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A5");
-            var variantList = new List<DalVariant> { new DalVariant { Id = vID }, new DalVariant {Id = originalItemId} };
+            var variantList = new List<DalVariant> {new DalVariant {Id = vID}, new DalVariant {Id = originalItemId}};
 
             var tm = GetUnitUnderTest();
             _dataAccessLayer.Setup(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid)))).Returns(
@@ -238,7 +273,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 _dataAccessLayer.Verify(da => da.Get(It.Is<Guid>(arg => arg.Equals(theGuid))),
                     "DataAcessLayer get was never called or Guid did not match.");
                 Assert.True(landingPage.Id.Equals(originalItemId) ||
-                              landingPage.Id.Equals(vID), "landingPage is not the original quid or the variant quid");
+                            landingPage.Id.Equals(vID), "landingPage is not the original quid or the variant quid");
             }
         }
 
@@ -300,7 +335,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var testManager = GetUnitUnderTest();
 
-            IList<IKpi> kpis = new List<IKpi>() {
+            IList<IKpi> kpis = new List<IKpi>()
+            {
                 new TestKpi(Guid.NewGuid()),
                 new TestKpi(Guid.Empty),
                 new TestKpi(Guid.NewGuid())
@@ -329,6 +365,28 @@ namespace EPiServer.Marketing.Testing.Test.Core
             testManager.UpdateCache(test, CacheOperator.Remove);
             Assert.Equal(testManager.CreateOrGetCache().Count(), 0);
         }
+
+        [Fact]
+        public void CalculateSignificance()
+        {
+            var test = new ABTest()
+            {
+                ConfidenceLevel = 95,
+                Variants =
+                    new List<Variant>()
+                    {
+                        new Variant() {Views = 5000, Conversions = 130},
+                        new Variant() {Views = 5000, Conversions = 100}
+                    }
+            };
+
+            var results = Significance.CalculateIsSignificant(test);
+
+            Assert.InRange(results.ZScore, 2.00, 2.01);
+            Assert.True(results.IsSignificant);
+        }
+
+
     }
 
     class TestKpi : Kpi
