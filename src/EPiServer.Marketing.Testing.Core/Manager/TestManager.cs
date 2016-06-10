@@ -7,8 +7,6 @@ using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
-using EPiServer.Marketing.Testing.Dal.EntityModel;
-using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Messaging;
@@ -31,6 +29,7 @@ namespace EPiServer.Marketing.Testing
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private MemoryCache _testCache = MemoryCache.Default;
+        private MemoryCache _variantCache = MemoryCache.Default;
 
         [ExcludeFromCodeCoverage]
         public TestManager()
@@ -206,16 +205,82 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
-        public PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList)
+        public PageData GetVariantPageData(Guid contentGuid, List<ContentReference> processedList)
         {
+            var retData = _variantCache.Get("epi" + contentGuid) as PageData;
 
-            var marketingTestCache = MemoryCache.Default;
-            var retData = marketingTestCache.Get("epi" + contentGuid) as PageData;
+            return retData ?? UpdateVariantPageDataCache(contentGuid, processedList);
+        }  
 
-            if (retData != null)
+        public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
+        {
+            var messaging = _serviceLocator.GetInstance<IMessagingManager>();
+            if (resultType == CountType.Conversion)
+                messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
+            else if (resultType == CountType.View)
+                messaging.EmitUpdateViews(testId, testItemId, itemVersion);
+        }
+
+        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
+        {
+            List<Guid> guids = new List<Guid>();
+            foreach (var kpi in kpis)
             {
-                return retData;
+                if (kpi.Evaluate(content))
+                {
+                    guids.Add(kpi.Id);
+                }
             }
+            return guids;
+        }
+
+        internal List<IMarketingTest> CreateOrGetCache()
+        {
+            if (!_testCache.Contains(TestingCacheName))
+            {
+                var activeTestCriteria = new TestCriteria();
+                var activeTestStateFilter = new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                };
+
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+
+                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.MaxValue);
+            }
+
+            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+            return activeTests;
+        }
+
+        internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
+        {
+            var cachedTests = CreateOrGetCache();
+
+            switch (cacheOperator)
+            {
+                case CacheOperator.Add:
+                    if (!cachedTests.Contains(test))
+                    {
+                        cachedTests.Add(test);
+                    }
+                    break;
+                case CacheOperator.Remove:
+                    if (cachedTests.Contains(test))
+                    {
+                        cachedTests.Remove(test);
+                    }
+                    break;
+            }
+
+            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
+        }
+
+        internal PageData UpdateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList)
+        {
+            PageData retData = null;
 
             if (processedList.Count == 1)
             {
@@ -242,79 +307,14 @@ namespace EPiServer.Marketing.Testing
                                 {
                                     AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
                                 };
-                                marketingTestCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
+
+                                _variantCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
                             }
                         }
                     }
                 }
             }
             return retData;
-        }
-
-        public List<IMarketingTest> CreateOrGetCache()
-        {
-            if (!_testCache.Contains(TestingCacheName))
-            {
-                var activeTestCriteria = new TestCriteria();
-                var activeTestStateFilter = new ABTestFilter()
-                {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                };
-
-                activeTestCriteria.AddFilter(activeTestStateFilter);
-
-                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.MaxValue);
-            }
-
-            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
-            return activeTests;
-        }
-
-        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
-        {
-            var cachedTests = CreateOrGetCache();
-
-            switch (cacheOperator)
-            {
-                case CacheOperator.Add:
-                    if (!cachedTests.Contains(test))
-                    {
-                        cachedTests.Add(test);
-                    }
-                    break;
-                case CacheOperator.Remove:
-                    if (cachedTests.Contains(test))
-                    {
-                        cachedTests.Remove(test);
-                    }
-                    break;
-            }
-
-            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
-        }
-
-        public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
-        {
-            var messaging = _serviceLocator.GetInstance<IMessagingManager>();
-            if (resultType == CountType.Conversion)
-                messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
-            else if (resultType == CountType.View)
-                messaging.EmitUpdateViews(testId, testItemId, itemVersion);
-        }
-
-        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
-        {
-            List<Guid> guids = new List<Guid>();
-            foreach (var kpi in kpis)
-            {
-                if (kpi.Evaluate(content))
-                {
-                    guids.Add(kpi.Id);
-                }
-            }
-            return guids;
         }
     }
 }
