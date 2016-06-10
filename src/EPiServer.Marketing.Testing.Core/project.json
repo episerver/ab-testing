@@ -8,8 +8,8 @@
   "dependencies": {
     "Castle.Core": "3.3.3",
     "Castle.Windsor": "3.3.0",
-    "EPiServer.CMS.Core": "9.8.2",
-    "EPiServer.Framework": "9.8.2",
+    "EPiServer.CMS.Core": "9.10.1",
+    "EPiServer.Framework": "9.10.1",
     "EPiServer.Marketing.KPI": "1.0.0-*",
     "EPIServer.Marketing.Messaging": "1.0.0-*",
     "EPiServer.Marketing.Testing.Dal": "1.0.0-*",

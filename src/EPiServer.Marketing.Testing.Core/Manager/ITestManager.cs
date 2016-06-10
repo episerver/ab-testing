@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Testing
 
         void Stop(Guid testObjectId);
 
-        void Archive(Guid testObjectId);
+        void Archive(Guid testObjectId, Guid winningVariantId);
 
         void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType);
 

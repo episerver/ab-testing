@@ -24,6 +24,8 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public string DraftVersionChangedDate { get; set; }
         public string VisitorPercentage { get; set; }
         public int TotalParticipantCount { get; set; }
+        public string PublishedUrl { get; set; }
+
 
 
 

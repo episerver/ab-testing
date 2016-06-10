@@ -21,7 +21,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
         void Stop(Guid testObjectId);
 
-        void Archive(Guid testObjectId);
+        void Archive(Guid testObjectId, Guid winningVariantId);
 
         void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType);
     }
