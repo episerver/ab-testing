@@ -12,21 +12,14 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
     [InitializableModule]
     public class MarketingTestingInitialization : IConfigurableModule
     {
-        public void ConfigureContainer(ServiceConfigurationContext context)
-        {
-
-        }
+        public void ConfigureContainer(ServiceConfigurationContext context) { }
 
         public void Initialize(InitializationEngine context)
         {
             var metadataHandlerRegistry = context.Locate.Advanced.GetInstance<MetadataHandlerRegistry>();
             metadataHandlerRegistry.RegisterMetadataHandler(typeof(ContentData), context.Locate.Advanced.GetInstance<MarketingTestMetadataExtender>());
-
         }
 
-        public void Uninitialize(InitializationEngine context)
-        {
-
-        }
+        public void Uninitialize(InitializationEngine context) { }
     }
 }
