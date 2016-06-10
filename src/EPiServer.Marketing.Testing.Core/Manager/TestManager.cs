@@ -31,6 +31,7 @@ namespace EPiServer.Marketing.Testing
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private static Random _r = new Random();
+        private Random _randomParticiaption = new Random();
         private MemoryCache _testCache = MemoryCache.Default;
 
         [ExcludeFromCodeCoverage]
@@ -192,15 +193,18 @@ namespace EPiServer.Marketing.Testing
             var activePage = new Variant();
             if (currentTest != null)
             {
-                switch (GetRandomNumber())
+                if (_randomParticiaption.Next(1, 100) <= currentTest.ParticipationPercentage)
                 {
-                    case 1:
-                    default:
-                        activePage = ConvertToManagerVariant(currentTest.Variants[0]);
-                        break;
-                    case 2:
-                        activePage = ConvertToManagerVariant(currentTest.Variants[1]);
-                        break;
+                    switch (GetRandomNumber())
+                    {
+                        case 1:
+                        default:
+                            activePage = ConvertToManagerVariant(currentTest.Variants[0]);
+                            break;
+                        case 2:
+                            activePage = ConvertToManagerVariant(currentTest.Variants[1]);
+                            break;
+                    }
                 }
             }
 
