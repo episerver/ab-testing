@@ -244,7 +244,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 {
                     Id = theGuid,
                     OriginalItemId = originalItemId,
-                    Variants = variantList
+                    Variants = variantList,
+                    ParticipationPercentage = 100
                 });
 
             var count = 0;

@@ -4,10 +4,13 @@
    // Parent class
    'epi/_Module',
    // Other classes
+   "epi-cms/plugin-area/edit-notifications",
+
+   'marketing-testing/TestNotification',
    'marketing-testing/command/AddTestCommandProvider',
    // For Store
    'epi/shell/store/JsonRest'
-], function (declare, dependency, routes, _Module, AddTestCommandProvider, JsonRest) {
+], function (declare, dependency, routes, _Module, editNotifications, TestNotification, AddTestCommandProvider, JsonRest) {
 
     return declare([_Module], {
 
@@ -32,8 +35,8 @@
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.testing", store);
             registry.add("marketing.contentTesting", contentTestStore);
-            registry.add("marketing.testingResult", resultTestStore);
-
+            
+            editNotifications.add(TestNotification);
 
             commandRegistry.registerProvider('epi.cms.publishmenu', new AddTestCommandProvider());
         }
