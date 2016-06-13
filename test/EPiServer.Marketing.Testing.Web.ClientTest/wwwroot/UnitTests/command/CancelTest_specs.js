@@ -86,6 +86,7 @@
                 aCommand.store = store;
                 aCommand.model = {
                     contentData: {
+                        contentLink: "5_202",
                         contentGuid: "a test guid"
                     }
                 };

@@ -1,12 +1,13 @@
 ﻿define([
     "dojo/_base/declare",
+    "dojo/topic",
     'epi/dependency',
     "dojo/i18n!marketing-testing/nls/MarketingTestingLabels",
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport"
 ],
 
-function (declare, dependency, resources, _ContentCommandBase, ContentActionSupport) {
+function (declare, topic, dependency, resources, _ContentCommandBase, ContentActionSupport) {
 
     return declare([_ContentCommandBase], {
         resources: resources,
@@ -22,9 +23,10 @@ function (declare, dependency, resources, _ContentCommandBase, ContentActionSupp
             var me = this,
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
 
-            store.remove(me.model.contentData.contentGuid);
-            me.set("isAvailable", false);
-            me.set("canExecute", false);
+            store.remove(me.model.contentData.contentGuid).then(function () {
+                var contentId = me.model.contentData.contentLink.split("_"), contextParameters = { uri: "epi.cms.contentdata:///" + contentId[0] };
+                topic.publish("/epi/shell/context/request", contextParameters);
+            });
         },
 
         _onModelChange: function () {
