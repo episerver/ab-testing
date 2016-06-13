@@ -32,12 +32,15 @@
         constructor: function () {
             if (arguments.length > 0) {
                 this.contextService = arguments[0];
+                this.context = arguments[1];
+            } else {
+                var contextService = this.contextService || dependency.resolve("epi.shell.ContextService");
+                this.context = this.context || contextService.currentContext;
             };
         },
        
         postCreate: function () {
-            var contextService = this.contextService || dependency.resolve("epi.shell.ContextService");
-            this.context = this.context || contextService.currentContext;
+ 
 
             var publishedVariant, draftVariant, publishedConversionPercent, variantConversionPercent;
 
