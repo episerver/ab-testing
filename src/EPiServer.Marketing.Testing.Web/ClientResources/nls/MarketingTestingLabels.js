@@ -72,7 +72,7 @@
             draft_prefix: "Draft - Edited by",
             visitor_navigates_text: "Visitor navigates to page",
             conversion_goal_header: "Conversion goal:",
-            purpose_header: "Purpose of the A/B Test"
+            purpose_header: "Purpose of the A/B Test",
             pick_winner_option_text: "Pick a winner",
             abort_option_text: "Abort"
         },
