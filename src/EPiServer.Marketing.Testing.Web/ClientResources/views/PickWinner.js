@@ -1,5 +1,5 @@
 ﻿define([
- 'dojo/_base/declare',
+'dojo/_base/declare',
  'epi/dependency',
  'dojo/topic',
  'dijit/_WidgetBase',
@@ -30,18 +30,15 @@
         contextHistory: null,
 
         constructor: function () {
-            if (arguments.length > 0) {
-                this.contextService = arguments[0];
-            };
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
+            me.context = contextService.currentContext;
         },
-       
-        postCreate: function () {
-            var contextService = this.contextService || dependency.resolve("epi.shell.ContextService");
-            this.context = this.context || contextService.currentContext;
 
+        postCreate: function () {
             var publishedVariant, draftVariant, publishedConversionPercent, variantConversionPercent;
 
-            
+            this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testingResult");
+            this.topic = this.topic || topic;
 
             this.testOwner.textContent = this.context.data.test.owner;
             this.testCompleted.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
@@ -55,6 +52,7 @@
                 draftVariant = this.context.data.test.variants[0];
             }
 
+            this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
 
             publishedConversionPercent = getPercent(publishedVariant.conversions, publishedVariant.views);
             variantConversionPercent = getPercent(draftVariant.conversions, draftVariant.views);
@@ -98,13 +96,10 @@
         },
 
         _onCloseButtonClick: function () {
-            var contextHistory = this.contextHistory || dependency.resolve("epi.cms.BackContextHistory");
-            contextHistory.closeAndNavigateBack(this);
+            this.contextHistory.closeAndNavigateBack(this);
         },
 
         _onPublishedVersionClick: function () {
-            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testingResult"),
-            topic = this.topic || topic;
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
@@ -120,8 +115,6 @@
         },
 
         _onVariantVersionClick: function () {
-            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testingResult"),
-            topic = this.topic || topic;
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
