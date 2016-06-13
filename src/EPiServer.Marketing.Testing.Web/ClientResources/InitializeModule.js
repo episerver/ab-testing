@@ -35,6 +35,8 @@
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.testing", store);
             registry.add("marketing.contentTesting", contentTestStore);
+            registry.add("marketing.testingResult", resultTestStore);
+
             
             editNotifications.add(TestNotification);
 
