@@ -40,10 +40,37 @@
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
-
+            me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
 
         postCreate: function () {
+            this._renderData();
+        },
+
+        _contextChanged: function (newContext) {
+            var me = this;
+            if (!newContext || newContext.type != 'epi.marketing.testing') {
+                return;
+            }
+            me.context = newContext;
+            me._renderData();
+        },
+        _onPickWinnerOptionClicked: function () {
+            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
+            topic.publish("/epi/shell/context/request", contextParameters);
+        },
+
+        _onAbortOptionClicked: function () {
+            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+            store.remove(this.context.data.test.originalItemId);
+            this.contextHistory.closeAndNavigateBack(this);
+        },
+
+        _onCancelClick: function () {
+            this.contextHistory.closeAndNavigateBack(this);
+        },
+
+        _renderData: function () {
             var publishedVariant, draftVariant;
             this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
 
@@ -100,21 +127,6 @@
 
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
-        },
-
-        _onPickWinnerOptionClicked: function () {
-            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
-            topic.publish("/epi/shell/context/request", contextParameters);
-        },
-
-        _onAbortOptionClicked: function () {
-            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
-            store.remove(this.context.data.test.originalItemId);
-            this.contextHistory.closeAndNavigateBack(this);
-        },
-
-        _onCancelClick: function () {
-            this.contextHistory.closeAndNavigateBack(this);
         }
     });
 
