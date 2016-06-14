@@ -48,11 +48,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// Gets the test associated with the content guid specified. If no tests are found an empty test is returned
         /// </summary>
         /// <param name="aContentGuid">the content guid to search against</param>
-        /// <returns>the first marketing test found that is not done or archived or an empty test in the case of no results</returns>
+        /// <returns>the first marketing test found that is not archived or an empty test in the case of no results</returns>
         public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Done && abTest.State != TestState.Archived);
+            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
 
             if (aTest == null)
                 aTest = new ABTest();
