@@ -30,11 +30,14 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                 {
                     var repository = new BaseRepository(dbContext);
                     SetWinningVariantHelper(repository, testObjectId, winningVariantId);
+                    UpdateTestEndDateHelper(repository,testObjectId);
                 }
             }
             else
             {
                 SetWinningVariantHelper(_repository, testObjectId, winningVariantId);
+                UpdateTestEndDateHelper(_repository, testObjectId);
+
 
             }
             SetTestState(testObjectId, DalTestState.Archived);
@@ -280,6 +283,14 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             var variant = test.Variants.FirstOrDefault(v => v.Id == variantId);
             variant.IsWinner = true;
             repo.SaveChanges();
+        }
+
+        private void UpdateTestEndDateHelper(IRepository repo, Guid testid)
+        {
+            var test = repo.GetById(testid);
+            test.EndDate = DateTime.Now;
+            repo.SaveChanges();
+
         }
 
         private Guid SaveHelper(IRepository repo, IABTest testObject)
