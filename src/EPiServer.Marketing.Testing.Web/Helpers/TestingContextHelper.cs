@@ -1,17 +1,14 @@
-﻿
-using System;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
-using EPiServer.Web.Mvc.Html;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -31,14 +28,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// For Unit Testing
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="mockServiceLocator"></param>
         [ExcludeFromCodeCoverage]
         internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator)
         {
             HttpContext.Current = context;
             _serviceLocator = mockServiceLocator;
         }
-
-
 
         /// <summary>
         /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
@@ -113,17 +109,22 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //Test Details may be viewed before the test has started.   
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
-            //Text message if Inactive, Remaining Days if active.   Days Elapsed will be parsed and displayed using
-            //episervers friendly datetime method on the client side.
+            //Text message if Inactive, Remaining Days if active, and adjusted days for done and archived.
+            //Days Elapsed will be parsed and displayed using episervers friendly datetime method on the client side.
             if (testData.State == TestState.Active)
             {
-                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
+                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
                 marketingTestingContextModel.DaysRemaining = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
             }
             else if (testData.State == TestState.Inactive)
             {
                 marketingTestingContextModel.DaysElapsed = "Test has not been started";
                 marketingTestingContextModel.DaysRemaining = "Test has not been started";
+            }
+            else
+            {
+                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
+                marketingTestingContextModel.DaysRemaining = "0";
             }
 
             //retrieve conversion content from kpis

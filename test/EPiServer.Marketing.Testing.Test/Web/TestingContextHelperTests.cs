@@ -7,6 +7,7 @@ using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
@@ -127,15 +128,133 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(testResult.ConversionLink == "TestLink");
             Assert.True(testResult.ConversionContentName == "Conversion Content");
             Assert.True(testResult.PublishedVersionPublishedBy == "me");
-
         }
 
+        [Fact]
+        public void Test_Marked_Done_Returns_Correct_Elapsed_and_Remaining_values()
+        {
+            test = new ABTest()
+            {
+                CreatedDate = DateTime.Parse("5/5/2016"),
+                Description = "Unit Test Description",
+                StartDate = DateTime.Parse("6/1/2016"),
+                EndDate = DateTime.Parse("6/6/2016"),
+                Id = testId,
+                LastModifiedBy = "Unit Test User",
+                ModifiedDate = DateTime.Parse("5/4/2016"),
+                OriginalItemId = Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664"),
+                Owner = "Unit Test",
+                ParticipationPercentage = 30,
+                State = TestState.Done
+            };
 
+            Variant publishedVariant = new Variant()
+            {
+                Conversions = 5,
+                Id = Guid.Parse("b7a2a5ea-5925-4fe6-b546-a31876dddafb"),
+                IsWinner = false,
+                ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
+                ItemVersion = 5,
+                Views = 25,
+                TestId = test.Id
+            };
 
+            Variant draftVariant = new Variant()
+            {
+                Conversions = 15,
+                Id = Guid.Parse("68d8cc5e-39dc-44b7-a784-40c14221c0c1"),
+                IsWinner = false,
+                ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
+                ItemVersion = 190,
+                Views = 50,
+                TestId = test.Id
+            };
 
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
 
+            test.Variants = new List<Variant>() { publishedVariant, draftVariant };
+            test.KpiInstances = new List<IKpi>() { kpi };
 
+            _testingContextHelper = GetUnitUnderTest(null);
+            MarketingTestingContextModel testResult = _testingContextHelper.GenerateContextData(test);
 
+            Assert.NotNull(testResult);
+            Assert.True(testResult.Test.Id == testId);
+            Assert.True(testResult.TotalParticipantCount == (draftVariant.Views + publishedVariant.Views));
+            Assert.True(testResult.ConversionLink == "TestLink");
+            Assert.True(testResult.ConversionContentName == "Conversion Content");
+            Assert.True(testResult.PublishedVersionPublishedBy == "me");
+            Assert.True(testResult.DaysRemaining == "0");
+            Assert.True(testResult.DaysElapsed == "5");
+        }
+
+        [Fact]
+        public void Test_Marked_Archived_Returns_Correct_Elapsed_and_Remaining_values()
+        {
+            test = new ABTest()
+            {
+                CreatedDate = DateTime.Parse("5/5/2016"),
+                Description = "Unit Test Description",
+                StartDate = DateTime.Parse("6/1/2016"),
+                EndDate = DateTime.Parse("6/10/2016"),
+                Id = testId,
+                LastModifiedBy = "Unit Test User",
+                ModifiedDate = DateTime.Parse("5/4/2016"),
+                OriginalItemId = Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664"),
+                Owner = "Unit Test",
+                ParticipationPercentage = 30,
+                State = TestState.Archived
+            };
+
+            Variant publishedVariant = new Variant()
+            {
+                Conversions = 5,
+                Id = Guid.Parse("b7a2a5ea-5925-4fe6-b546-a31876dddafb"),
+                IsWinner = false,
+                ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
+                ItemVersion = 5,
+                Views = 25,
+                TestId = test.Id
+            };
+
+            Variant draftVariant = new Variant()
+            {
+                Conversions = 15,
+                Id = Guid.Parse("68d8cc5e-39dc-44b7-a784-40c14221c0c1"),
+                IsWinner = false,
+                ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
+                ItemVersion = 190,
+                Views = 50,
+                TestId = test.Id
+            };
+
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+
+            test.Variants = new List<Variant>() { publishedVariant, draftVariant };
+            test.KpiInstances = new List<IKpi>() { kpi };
+
+            _testingContextHelper = GetUnitUnderTest(null);
+            MarketingTestingContextModel testResult = _testingContextHelper.GenerateContextData(test);
+
+            Assert.NotNull(testResult);
+            Assert.True(testResult.Test.Id == testId);
+            Assert.True(testResult.TotalParticipantCount == (draftVariant.Views + publishedVariant.Views));
+            Assert.True(testResult.ConversionLink == "TestLink");
+            Assert.True(testResult.ConversionContentName == "Conversion Content");
+            Assert.True(testResult.PublishedVersionPublishedBy == "me");
+            Assert.True(testResult.DaysRemaining == "0");
+            Assert.True(testResult.DaysElapsed == "9");
+        }
 
         public void Dispose()
         {
