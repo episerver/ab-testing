@@ -288,9 +288,11 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         private void UpdateTestEndDateHelper(IRepository repo, Guid testid)
         {
             var test = repo.GetById(testid);
-            test.EndDate = DateTime.Now;
-            repo.SaveChanges();
-
+            if (DateTime.UtcNow < test.EndDate)
+            {
+                test.EndDate = DateTime.Now;
+                repo.SaveChanges();
+            }
         }
 
         private Guid SaveHelper(IRepository repo, IABTest testObject)
