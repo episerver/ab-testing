@@ -56,23 +56,26 @@
             me._renderData();
         },
         _onPickWinnerOptionClicked: function () {
-            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
-            topic.publish("/epi/shell/context/request", contextParameters);
+            var me = this;
+            me.contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
         _onAbortOptionClicked: function () {
-            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+            var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
             store.remove(this.context.data.test.originalItemId);
-            this.contextHistory.closeAndNavigateBack(this);
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request",me.contextParameters);
         },
 
         _onCancelClick: function () {
-            this.contextHistory.closeAndNavigateBack(this);
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
         _renderData: function () {
             var publishedVariant, draftVariant;
-            this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
 
             //Header and Test Start Information
             this.detailsHeaderText.textContent = this.context.data.test.title;
@@ -99,7 +102,7 @@
             this.variantDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
             //Set the correct corresponding variant data
-            if (this.context.data.test.variants[0].itemversion === this.context.data.publishedVersionContentLink) {
+            if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0] ) {
                 publishedVariant = this.context.data.test.variants[0];
                 draftVariant = this.context.data.test.variants[1];
             } else {
