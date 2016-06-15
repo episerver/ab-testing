@@ -29,8 +29,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public ActionResult Post(TestResultStoreModel testResult)
         {
-            int publishedVersionContentLink = _testRepository.PublishWinningVariant(testResult);
-            if (publishedVersionContentLink == -1)
+            string publishedVersionContentLink = _testRepository.PublishWinningVariant(testResult);
+            if (string.IsNullOrEmpty(publishedVersionContentLink) )
             {
                 return new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }

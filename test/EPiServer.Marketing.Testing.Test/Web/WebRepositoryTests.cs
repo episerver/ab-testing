@@ -133,8 +133,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == publishedContent)))
                .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
-            int aResult = webRepo.PublishWinningVariant(testResultmodel);
-            Assert.True(aResult.ToString() == testResultmodel.DraftContentLink.Split('_')[0]);
+            string aResult = webRepo.PublishWinningVariant(testResultmodel);
+            Assert.True(aResult == testResultmodel.DraftContentLink.Split('_')[0]);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Once);
         }
@@ -183,8 +183,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestResultHelper.Setup(call => call.PublishContent(It.Is<IContent>(con => con == publishedContent)))
                .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
-            int aResult = webRepo.PublishWinningVariant(testResultmodel);
-            Assert.True(aResult.ToString() == testResultmodel.DraftContentLink.Split('_')[0]);
+            string aResult = webRepo.PublishWinningVariant(testResultmodel);
+            Assert.True(aResult == testResultmodel.DraftContentLink);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Never);
         }
@@ -221,8 +221,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
 
-            int aResult = webRepo.PublishWinningVariant(testResultmodel);
-            Assert.True(aResult.ToString()  == "-1");
+            string aResult = webRepo.PublishWinningVariant(testResultmodel);
+            Assert.Null(aResult);
         }
 
         [Fact]
@@ -237,8 +237,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            int aResult = webRepo.PublishWinningVariant(testResultModel);
-            Assert.True(aResult.ToString() == "-1");
+            string aResult = webRepo.PublishWinningVariant(testResultModel);
+            Assert.True(aResult == null);
         }
     }
 }
