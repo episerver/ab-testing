@@ -115,6 +115,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
             //Text message if Inactive, Remaining Days if active.   Days Elapsed will be parsed and displayed using
             //episervers friendly datetime method on the client side.
+
+            
             if (testData.State == TestState.Active)
             {
                 marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
@@ -125,6 +127,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 marketingTestingContextModel.DaysElapsed = "Test has not been started";
                 marketingTestingContextModel.DaysRemaining = "Test has not been started";
             }
+            else
+            {
+                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
+                marketingTestingContextModel.DaysRemaining = "0";
+
+            }
+
 
             //retrieve conversion content from kpis
             //convert conversion content link to anchor link
