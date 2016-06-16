@@ -83,9 +83,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //set contextmodel IMarketingTest data
             marketingTestingContextModel.Test = testData;
 
-            //convert test data StartDate to local time;
-            marketingTestingContextModel.Test.StartDate = marketingTestingContextModel.Test.StartDate.ToLocalTime();
-
             //get published version
             var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
             var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink, publishedContentPageData.LanguageBranch);
