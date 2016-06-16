@@ -41,8 +41,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "activetests";
 
         /// <inheritdoc />
-        //public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/activetests");
-        public string DisplayName => "Active A/B Tests";
+        public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/activetests");
 
         public int Rank { get; }
 
