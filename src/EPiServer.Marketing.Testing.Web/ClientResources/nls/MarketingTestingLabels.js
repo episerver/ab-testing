@@ -58,6 +58,8 @@
             remaining_increment: "Days",
             options_button_text: "Options",
             cancel_button_text: "Cancel",
+            test_not_started_text: "This test has not yet started.",
+            test_scheduled: "It is scheduled to start "
         },
         pickwinnerview: {
             close_button_text: "Close",
