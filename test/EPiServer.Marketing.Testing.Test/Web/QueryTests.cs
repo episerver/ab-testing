@@ -48,6 +48,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
 
             var query = new ActiveTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
+            
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
             Assert.Equal(1, results.Items.Count);
@@ -55,6 +56,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(query.Name);
             Assert.NotNull(query.SortOrder);
             Assert.Equal(_editor, query.PlugInAreas);
+            Assert.True(query.CanHandleQuery(new ContentQueryParameters()));
         }
 
         [Fact]
@@ -85,6 +87,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(query.Name);
             Assert.NotNull(query.SortOrder);
             Assert.Equal(_editor, query.PlugInAreas);
+            Assert.True(query.CanHandleQuery(new ContentQueryParameters()));
         }
 
         [Fact]
@@ -115,6 +118,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(query.Name);
             Assert.NotNull(query.SortOrder);
             Assert.Equal(_editor, query.PlugInAreas);
+            Assert.True(query.CanHandleQuery(new ContentQueryParameters()));
         }
 
         [Fact]
@@ -157,6 +161,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(query.Name);
             Assert.NotNull(query.SortOrder);
             Assert.Equal(_editor, query.PlugInAreas);
+            Assert.True(query.CanHandleQuery(new ContentQueryParameters()));
         }
     }
 }

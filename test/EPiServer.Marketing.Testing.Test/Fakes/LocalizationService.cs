@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using EPiServer.Framework.Localization;
 
-namespace EPiServer.Marketing.Testing.Test.Fake
+namespace EPiServer.Marketing.Testing.Test.Fakes
 {
     /// <summary>
     /// Can't mock this, so make our own mocked version of it for unit tests
