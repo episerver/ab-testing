@@ -202,7 +202,7 @@ namespace EPiServer.Marketing.Testing
             {
                 if (_randomParticiaption.Next(1, 100) <= currentTest.ParticipationPercentage)
                 {
-                    switch (GetRandomNumber())
+                    switch (Helpers.GetRandomNumber())
                 {
                     case 1:
                     default:
