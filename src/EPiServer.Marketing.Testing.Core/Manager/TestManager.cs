@@ -47,6 +47,14 @@ namespace EPiServer.Marketing.Testing
         }
 
         /// <summary>
+        /// For some reason, some unit tests run into issues with the cache being dirty from  other tests, this ensures it doesn't exist from a previous test.
+        /// </summary>
+        internal void RemoveCacheForUnitTests()
+        {
+            _testCache.Remove("TestingCache");
+        }
+
+        /// <summary>
         /// Gets a test based on the supplied id from the database.
         /// </summary>
         /// <param name="testObjectId"></param>
@@ -236,7 +244,9 @@ namespace EPiServer.Marketing.Testing
 
         internal List<IMarketingTest> CreateOrGetCache()
         {
-            if (!_testCache.Contains(TestingCacheName))
+            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+
+            if (activeTests == null || activeTests.Count == 0)
             {
                 var activeTestCriteria = new TestCriteria();
                 var activeTestStateFilter = new ABTestFilter()
@@ -248,10 +258,11 @@ namespace EPiServer.Marketing.Testing
 
                 activeTestCriteria.AddFilter(activeTestStateFilter);
 
-                _testCache.Add(TestingCacheName, GetTestList(activeTestCriteria), DateTimeOffset.MaxValue);
+                var tests = GetTestList(activeTestCriteria);
+                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+                activeTests = tests;
             }
 
-            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
             return activeTests;
         }
 
@@ -271,6 +282,11 @@ namespace EPiServer.Marketing.Testing
                     if (cachedTests.Contains(test))
                     {
                         cachedTests.Remove(test);
+
+                        if (cachedTests.Count == 0)
+                        {
+                            _testCache.Remove(TestingCacheName);
+                        }
                     }
                     break;
             }
