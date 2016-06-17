@@ -22,10 +22,10 @@
                     }
                 },
                 aContentData = {
-                    contentLink: "updownupdownbabaselectstart"
+                    contentLink: "up_down"
                 },
                 aLanguageContext = {
-                    language: "englishmotherfuckerdoyouspeakit"
+                    language: "mycontentlanguage"
                 },
                 aViewModel = AddTestViewModel({
                     store: {}, 
@@ -63,7 +63,7 @@
                     contentGuid: "theGuid"
                 },
                 aLanguageContext = {
-                    language: "englishmotherfuckerdoyouspeakit"
+                    language: "mycontentlanguage"
                 },
                 aViewModel = AddTestViewModel({
                     store: {
@@ -104,7 +104,7 @@
             });
 
             it("goes back to the previous page on a successful test creation", function () {
-                var me = this,
+                var me = this,retCall, retParams,
                 aGuidString = "updownupdown",
                 aVersionString = "babaselectstart",
                 aContentResult = {
@@ -127,7 +127,7 @@
                     contentGuid: "theGuid"
                 },
                 aLanguageContext = {
-                    language: "englishmotherfuckerdoyouspeakit"
+                    language: "mycontentlanguage"
                 };
                 var aViewModel = AddTestViewModel({
                     store: {
@@ -142,8 +142,9 @@
                         }
                     },
                     topic: {
-                        publish: function (action) {
-                            me.action = action;
+                        publish: function (action,params) {
+                            me.retCall = action;
+                            me.retParams = params;
                             return this;
                         }
                     },
@@ -154,7 +155,8 @@
 
                 aViewModel.currentVersion = aContentData;
                 aViewModel.createTest();
-                expect(me.action).to.equal("/epi/shell/action/changeview/back");
+                expect(me.retCall).to.equal("/epi/shell/context/request");
+                expect(me.retParams.uri).to.equal("epi.cms.contentdata:///"+aGuidString);
             });
         });
     });

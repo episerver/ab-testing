@@ -1,5 +1,8 @@
 ﻿define({
     root: {
+        sharedtext: {
+
+        },
         addtestview: {
             header: "Create Marketing A/B Test",
             published_prefix: "Published by",
@@ -38,8 +41,8 @@
             tooltip_text: "Cancel A/B test to edit"
         },
         detailsview: {
-            pickoptionlinktext: "Pick the winner",
-            abortoptionlinktext: "Abort A/B test",
+            pickWinnerOptionText: "Pick The Winner",
+            abortOptionText: "Abort A/B Test",
             test_started_label: "Test started",
             by: "by",
             published_prefix: "Published by",
@@ -55,6 +58,21 @@
             remaining_increment: "Days",
             options_button_text: "Options",
             cancel_button_text: "Cancel",
+        },
+        pickwinnerview: {
+            close_button_text: "Close",
+            started_by_text: "Started by ",
+            completed_text: "Completed ",
+            pick_a_winner_text: "Pick a winner!",
+            conversion_text: "Conversion",
+            visitors_participated_text: "of visitors participated",
+            total_participants_text: "test participants",
+            duration_text: "days duration",
+            published_prefix: "Published by",
+            draft_prefix: "Draft - Edited by",
+            visitor_navigates_text: "Visitor navigates to page",
+            conversion_goal_header: "Conversion goal:",
+            purpose_header: "Purpose of the A/B Test",
             pick_winner_option_text: "Pick a winner",
             abort_option_text: "Abort"
         },

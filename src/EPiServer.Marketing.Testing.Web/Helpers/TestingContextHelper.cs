@@ -93,12 +93,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //get published version
             var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
             var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink, publishedContentPageData.LanguageBranch);
-
             //set required contextmodel published version data
-            marketingTestingContextModel.PublishedVersionContentLink = publishedContentPageData.ContentLink.ToString();
+            marketingTestingContextModel.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
             marketingTestingContextModel.PublishedVersionName = publishedContentPageData.Name;
             marketingTestingContextModel.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
-            marketingTestingContextModel.PublishedVersionPublishedDate = publishedContentPageData.StartPublish.ToString(CultureInfo.CurrentCulture);
+            marketingTestingContextModel.PublishedVersionPublishedDate = publishedContentPageData.Saved.ToString(CultureInfo.CurrentCulture);
 
             //get variant version
             var tempContentClone = publishedContentPageData.ContentLink.CreateWritableClone();
@@ -118,7 +117,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //episervers friendly datetime method on the client side.
             if (testData.State == TestState.Active)
             {
-                marketingTestingContextModel.DaysElapsed = "";
+                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
                 marketingTestingContextModel.DaysRemaining = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
             }
             else if (testData.State == TestState.Inactive)
@@ -133,7 +132,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             if (kpi != null)
             {
                 var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
-
+               
                 marketingTestingContextModel.ConversionLink = _uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
                 marketingTestingContextModel.ConversionContentName = conversionContent.Name;
             }

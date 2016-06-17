@@ -121,8 +121,8 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
                 case TestState.Inactive:
                     _mtm.Stop(testId);
                     break;
-                case TestState.Archived:
-                    _mtm.Archive(testId);
+                //case TestState.Archived:
+                //    _mtm.Archive(testId);
                     break;
                 default:
                     return null;

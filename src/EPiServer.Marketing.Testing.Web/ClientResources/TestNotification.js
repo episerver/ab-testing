@@ -1,26 +1,30 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/event",
+    "dojo/Stateful",
     "dojo/dom-construct",
     "dojo/on",
     "dojo/topic",
     "dijit/Destroyable",
     "epi/datetime",
-    "epi-cms/contentediting/_ContentEditingNotification"
+    'epi/dependency',
+    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels"
 ],
 
 function (
     declare,
     event,
+    Stateful,
     domConstruct,
     on,
     topic,
     Destroyable,
     datetime,
-    _ContentEditingNotification
+    dependency,
+    resources
 ) {
 
-    return declare([_ContentEditingNotification, Destroyable], {
+    return declare([Stateful, Destroyable], {
         // summary:
         //      Shows the notification when active or finished test exists for the current content.
         // tags:
@@ -34,51 +38,43 @@ function (
             this.inherited(arguments);
         },
 
-        _executeAction: function (/*Object*/value) {
-            // summary:
-            //      Get active test
-            // tags:
-            //      protected, extension
+        _valueSetter: function (value) {
+            var me = this;
+            this.value = value;
+            this._store = this._store || dependency.resolve("epi.storeregistry").get(this._storeName);
 
-            return this._store.get(value.contentData.contentGuid);
-        },
+            this._store.get(value.contentData.contentGuid).then(function (test) {
+                // Hide notification for content without a pending or active test
+                if (!test || !test.title || test.state == 3 || !test.id) {
+                    me.set("notification", null);
+                    return;
+                }
 
-        _onExecuteSuccess: function (/*Object*/test) {
-            // summary:
-            //      Set notification(s) when executed success and the test is active or finished
-            // tags:
-            //      protected
-
-            // Show notification for not started, active and finished tests
-            if (!test || test.state == 3 || !test.id) {
-                this._setNotification(null);
-                return;
-            }
-            
-            var notificationMessage = this._constructNotificationMessage(test);
-
-            this._setNotification({
-                content: notificationMessage
+                var notificationMessage = me._constructNotificationMessage(test);
+                me.set("notification", {
+                    content: notificationMessage,
+                    commands: []
+                });
             });
         },
-        
+
         _constructNotificationMessage: function (test) {
             // TODO: use localized resources.
-            var message = "This page is part of a running A/B Test. ";
-            var testLinkText = "View test";
-            var testLinkTooltip = "View test details";
+            var message = resources.notificationbar.ongoing_test;
+            var testLinkText = resources.notificationbar.details_link_text;
+            var testLinkTooltip = resources.notificationbar.details_link_tooltip;
             
              // Inactive (scheduled)
             if (test.state == 0) {
-                message = "An A/B Test is scheduled to run on this page " + 
+                message = resources.notificationbar.scheduled_test + 
                     datetime.toUserFriendlyString(test.startDate, null, false, true) +". ";
             }
             
              // Done, finished
             if (test.state == 2) {
-                message = "An A/B Test has been completed on this page. ";
-                var testLinkText = "Pick winner";
-                var testLinkTooltip = "View test details and pick winner";
+                message = resources.notificationbar.completed_test;
+                var testLinkText = resources.notificationbar.winner_link_text;
+                var testLinkTooltip = resources.notificationbar.winner_link_tooltip;
             }
 
             var notificationMesage = domConstruct.create("div", {innerHTML: message});
@@ -89,7 +85,7 @@ function (
                 on(testLink, "click", function (e) {
                     event.stop(e);
                     topic.publish("/epi/shell/context/request", {
-                        uri: "epi.marketing.testing:///" + test.id
+                        uri: "epi.marketing.testing:///testid=" + test.id + "/details"
                     }, {});
                 })
             );
