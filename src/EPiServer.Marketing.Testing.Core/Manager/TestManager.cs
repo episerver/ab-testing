@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing
                 throw new TestNotFoundException();
             }
             
-            return Helpers.ConvertToManagerTest(dbTest);
+            return TestManagerHelper.ConvertToManagerTest(dbTest);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
             {
-                testList.Add(Helpers.ConvertToManagerTest(dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
             }
 
             return testList;
@@ -107,9 +107,9 @@ namespace EPiServer.Marketing.Testing
         {
             var testList = new List<IMarketingTest>();
 
-            foreach (var dalTest in _dataAccess.GetTestList(Helpers.ConvertToDalCriteria(criteria)))
+            foreach (var dalTest in _dataAccess.GetTestList(TestManagerHelper.ConvertToDalCriteria(criteria)))
             {
-                testList.Add(Helpers.ConvertToManagerTest(dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
             }
 
             return testList;
@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Testing
             }
 
             
-            var testId = _dataAccess.Save(Helpers.ConvertToDalTest(multivariateTest));
+            var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
             {
@@ -159,7 +159,7 @@ namespace EPiServer.Marketing.Testing
             // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(Helpers.ConvertToManagerTest(dalTest), CacheOperator.Add);
+                UpdateCache(TestManagerHelper.ConvertToManagerTest(dalTest), CacheOperator.Add);
             }
         }
 
@@ -191,7 +191,7 @@ namespace EPiServer.Marketing.Testing
 
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
         {
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, Helpers.AdaptToDalCount(resultType));
+            _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
         }
 
         public Variant ReturnLandingPage(Guid testId)
@@ -202,14 +202,14 @@ namespace EPiServer.Marketing.Testing
             {
                 if (_randomParticiaption.Next(1, 100) <= currentTest.ParticipationPercentage)
                 {
-                    switch (Helpers.GetRandomNumber())
+                    switch (TestManagerHelper.GetRandomNumber())
                 {
                     case 1:
                     default:
-                        activePage = Helpers.ConvertToManagerVariant(currentTest.Variants[0]);
+                        activePage = TestManagerHelper.ConvertToManagerVariant(currentTest.Variants[0]);
                         break;
                     case 2:
-                        activePage = Helpers.ConvertToManagerVariant(currentTest.Variants[1]);
+                        activePage = TestManagerHelper.ConvertToManagerVariant(currentTest.Variants[1]);
                         break;
                 }
             }
@@ -319,7 +319,7 @@ namespace EPiServer.Marketing.Testing
         {
                             if (variant.ItemVersion != contentVersion)
             {
-                                retData = Helpers.CreateVariantPageData(contentLoader, testContent, variant);
+                                retData = TestManagerHelper.CreateVariantPageData(contentLoader, testContent, variant);
                                 retData.Status = VersionStatus.Published;
                                 retData.StartPublish = DateTime.Now.AddDays(-1);
                                 retData.MakeReadOnly();

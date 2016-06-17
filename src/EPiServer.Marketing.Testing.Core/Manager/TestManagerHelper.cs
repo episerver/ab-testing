@@ -10,7 +10,7 @@ using EPiServer.Marketing.Testing.Data.Enums;
 
 namespace EPiServer.Marketing.Testing
 {
-    internal static class Helpers
+    internal static class TestManagerHelper
     {
         private static Random _r = new Random();
 
