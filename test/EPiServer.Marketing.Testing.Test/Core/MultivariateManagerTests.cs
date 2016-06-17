@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Components.DictionaryAdapter;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -21,15 +22,36 @@ namespace EPiServer.Marketing.Testing.Test.Core
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestingDataAccess> _dataAccessLayer;
+        private Mock<IContentLoader> _contentLoader;
+        private Guid testId = Guid.NewGuid();
 
         private TestManager GetUnitUnderTest()
         {
-            var dalList = new List<IABTest>();
+            var dalList = new List<IABTest>()
+            {
+                new DalABTest() {
+                    EndDate = DateTime.Now.AddDays(1),
+                    OriginalItemId = testId,
+                    State = DalTestState.Active,
+                    Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1} },
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()}
+            };
             _serviceLocator = new Mock<IServiceLocator>();
             _dataAccessLayer = new Mock<ITestingDataAccess>();
             _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
+
+            var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
+            var contentData = new PageData(pageRef2) as IContent;
+
+            contentData.Property.Add(new PropertyNumber() { Name = "PageWorkStatus" });
+            contentData.Property.Add(new PropertyDate() { Name = "PageStartPublish" });
+
+            _contentLoader = new Mock<IContentLoader>();
+            _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
+            _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(contentData);
+            _serviceLocator.Setup(sl => sl.GetInstance<IContentLoader>()).Returns(_contentLoader.Object);
 
             return new TestManager(_serviceLocator.Object);
         }
@@ -354,16 +376,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public void TestManager_UpdateCache()
         {
             var testManager = GetUnitUnderTest();
-            var dalList = new List<IABTest>();
-            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
-
             var test = GetManagerTest();
             testManager.UpdateCache(test, CacheOperator.Add);
 
-            Assert.Equal(testManager.CreateOrGetCache().Count(), 1);
+            Assert.Equal(2, testManager.CreateOrGetCache().Count());
 
             testManager.UpdateCache(test, CacheOperator.Remove);
-            Assert.Equal(testManager.CreateOrGetCache().Count(), 0);
+            Assert.Equal(1, testManager.CreateOrGetCache().Count());
         }
 
         [Fact]
@@ -386,7 +405,16 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Assert.True(results.IsSignificant);
         }
 
+        [Fact]
+        public void GetVariantPageData_Test()
+        {
+            var testManager = GetUnitUnderTest();
+            testManager.RemoveCacheForUnitTests();
 
+            var pageData = testManager.GetVariantPageData(testId, new List<ContentReference>() {new ContentReference()});
+
+            Assert.NotNull(pageData);
+        }
     }
 
     class TestKpi : Kpi

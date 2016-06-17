@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Framework;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.ServiceLocation;
@@ -19,6 +19,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         private IContentRepository _contentRepository;
         private ITestManager _testManager;
 
+        [ExcludeFromCodeCoverage]
         public ArchivedTestsQuery(
             LocalizationService localizationService,
             IContentRepository contentRepository)

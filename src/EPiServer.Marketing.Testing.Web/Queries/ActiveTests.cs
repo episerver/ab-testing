@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Framework.Localization;
@@ -18,6 +19,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         private IContentRepository _contentRepository;
         private ITestManager _testManager;
 
+        [ExcludeFromCodeCoverage]
         public ActiveTestsQuery(
             LocalizationService localizationService,
             IContentRepository contentRepository)
