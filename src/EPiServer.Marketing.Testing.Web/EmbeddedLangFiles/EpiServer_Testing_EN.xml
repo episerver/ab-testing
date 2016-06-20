@@ -1,154 +1,100 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
   <language name="English" id="en">
-   <multivariate>
-     <addtestcommand>
+    <multivariate>
+      <addtestcommand>
         <label_text>Create A/B test for my changes</label_text>
         <tooltip_text>Create A/B test for my changes</tooltip_text>
-     </addtestcommand>
-     <canceltestcommand>
-       <label_text>Cancel A/B test and edit page</label_text>
-       <tooltip_text>Cancel A/B test and edit page</tooltip_text>
-     </canceltestcommand>
-     <addtestview>
-         <header>Create Marketing A/B Test</header>
-         <published_prefix>Published by</published_prefix>
-         <draft_prefix>Draft - Edited by</draft_prefix>
-         <title_text>Title</title_text>
-         <goals_default_text>What are the goals for this test?</goals_default_text>
-         <conversion_header>Conversion Goal:</conversion_header>
-         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-         <participant_percentage_tip>More participants in the test means reaching statistical significance sooner</participant_percentage_tip>
-         <participant_percentage_text>What percentage of visitors should participate in this A/B test?</participant_percentage_text>
-         <duration_text>How long should the A/B test run?</duration_text>
-         <schedule_header>Schedule Start:</schedule_header>
-         <schedule_text_prefix>A/B test is currently </schedule_text_prefix>
-         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
-         <scheduled_text>scheduled to begin </scheduled_text>
-         <start_default>Start Test</start_default>
-         <start_scheduled>Test Scheduled</start_scheduled>
-         <cancel_default>Cancel</cancel_default>
-         <default_test_title>Default Test Title</default_test_title>
-         <days_text>days.</days_text>
-         <advancedsettings>Advanced Settings</advancedsettings>
-         <confidencelevel_header>Confidence level</confidencelevel_header>
-         <confidencelevel_description1>The confidence level dictates the amount of error allowed. A higher percentage directly correlates to the accuracy of the test results.</confidencelevel_description1>
-         <confidencelevel_description2>This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidencelevel_description2>
-         <confidence_99>99%</confidence_99>
-         <confidence_98>98%</confidence_98>
-         <confidence_95>95%</confidence_95>
-         <confidence_90>90%</confidence_90>
-         <error_entertitle>You must enter a title before you can save the A/B test.</error_entertitle>
-         <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
-         <error_selected_samepage>You cannot select the page you are testing as the conversion goal page. Select another page.</error_selected_samepage>
-         <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page. Select a published page.</error_selected_notpublished>
-         <schedule_test>Schedule Test</schedule_test>
-         <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
-     </addtestview>
-     <detailsview>
-        <pickwinneroptiontext>Pick The Winner</pickwinneroptiontext>
-        <abortoptiontext>Abort A/B Test</abortoptiontext>
-        <test_started_label>Test started</test_started_label>
-        <by>by</by>
-        <published_prefix>Published by</published_prefix>
+      </addtestcommand>
+      <addtestview>
+        <advancedsettings>Advanced Settings</advancedsettings>
+        <cancel_default>Cancel</cancel_default>
+        <confidencelevel_description1>The confidence level dictates the amount of error allowed. A higher percentage directly correlates to the accuracy of the test results.</confidencelevel_description1>
+        <confidencelevel_description2>This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidencelevel_description2>
+        <confidencelevel_header>Confidence level</confidencelevel_header>
+        <confidence_90>90%</confidence_90>
+        <confidence_95>95%</confidence_95>
+        <confidence_98>98%</confidence_98>
+        <confidence_99>99%</confidence_99>
+        <conversion_header>Conversion Goal:</conversion_header>
+        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <days_text>days.</days_text>
+        <default_test_title>Default Test Title</default_test_title>
         <draft_prefix>Draft - Edited by</draft_prefix>
-        <description_heading>Purpose of the A/B test</description_heading>
+        <duration_text>How long should the A/B test run?</duration_text>
+        <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
+        <error_entertitle>You must enter a title before you can save the A/B test.</error_entertitle>
+        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page. Select a published page.</error_selected_notpublished>
+        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page. Select another page.</error_selected_samepage>
+        <goals_default_text>What are the goals for this test?</goals_default_text>
+        <header>Create Marketing A/B Test</header>
+        <notscheduled_text>not scheduled, and will start now</notscheduled_text>
+        <participant_percentage_text>What percentage of visitors should participate in this A/B test?</participant_percentage_text>
+        <participant_percentage_tip>More participants in the test means reaching statistical significance sooner</participant_percentage_tip>
+        <published_prefix>Published by</published_prefix>
+        <scheduled_text>scheduled to begin </scheduled_text>
+        <schedule_header>Schedule Start:</schedule_header>
+        <schedule_test>Schedule Test</schedule_test>
+        <schedule_text_prefix>A/B test is currently </schedule_text_prefix>
+        <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
+        <start_default>Start Test</start_default>
+        <start_scheduled>Test Scheduled</start_scheduled>
+        <title_text>Title</title_text>
+      </addtestview>
+      <canceltestcommand>
+        <label_text>Cancel A/B test and edit page</label_text>
+        <tooltip_text>Cancel A/B test and edit page</tooltip_text>
+      </canceltestcommand>
+      <detailsview>
+        <abortoptiontext>Abort A/B Test</abortoptiontext>
+        <by>by</by>
+        <cancel_button_text>Cancel</cancel_button_text>
+        <conversions_label>Conversions:</conversions_label>
         <conversion_header>Conversion goal:</conversion_header>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <percentage_details>Percentage of visitors participating:</percentage_details>
-        <total_participants_details>Current number of test participants:</total_participants_details>
-        <duration_details>Remaining duration:</duration_details>
-        <conversions_label>Conversions:</conversions_label>
-        <views_label>Views:</views_label>
-        <remaining_increment>Days</remaining_increment>
-        <options_button_text>Options</options_button_text>
-        <cancel_button_text>Cancel</cancel_button_text>
-     </detailsview>
-     <pickwinnerview>
-        <close_button_text>Close</close_button_text>
-        <started_by_text>Started by </started_by_text>
-        <completed_text>Completed </completed_text>
-        <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
-        <conversion_text>Conversion</conversion_text>
-        <visitors_participated_text>of visitors participated</visitors_participated_text>
-        <total_participants_text>test participants</total_participants_text>
-        <duration_text>days duration</duration_text>
-        <published_prefix>Published by</published_prefix>
+        <description_heading>Purpose of the A/B test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
-        <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
-        <conversion_goal_header>Conversion goal:</conversion_goal_header>
-        <purpose_header>Purpose of the A/B Test</purpose_header>
-        <pick_winner_option_text>Pick a winner</pick_winner_option_text>
+        <duration_details>Remaining duration:</duration_details>
+        <options_button_text>Options</options_button_text>
+        <percentage_details>Percentage of visitors participating:</percentage_details>
+        <pickwinneroptiontext>Pick The Winner</pickwinneroptiontext>
+        <published_prefix>Published by</published_prefix>
+        <remaining_increment>Days</remaining_increment>
+        <test_started_label>Test started</test_started_label>
+        <total_participants_details>Current number of test participants:</total_participants_details>
+        <views_label>Views:</views_label>
+      </detailsview>
+      <notificationbar>
+        <completed_test>An A/B test was completed on this page.</completed_test>
+        <details_link_text>View test</details_link_text>
+        <details_link_tooltip>View test details</details_link_tooltip>
+        <ongoing_test>This page is part of a running A/B test.</ongoing_test>
+        <scheduled_test>An A/B test is scheduled to run on this page.</scheduled_test>
+        <winner_link_text>Pick winner</winner_link_text>
+        <winner_link_tooltip>View test details and pick winner</winner_link_tooltip>
+      </notificationbar>
+      <pickwinnerview>
         <abort_option_text>Abort</abort_option_text>
-     </pickwinnerview>
-     <notificationbar>
-       <ongoing_test>This page is part of a running A/B test.</ongoing_test>
-       <scheduled_test>An A/B test is scheduled to run on this page.</scheduled_test>
-       <completed_test>An A/B test was completed on this page.</completed_test>
-       <details_link_text>View test</details_link_text>
-       <details_link_tooltip>View test details</details_link_tooltip>
-       <winner_link_text>Pick winner</winner_link_text>
-       <winner_link_tooltip>View test details and pick winner</winner_link_tooltip>
-     </notificationbar>
-     <settings>
-       <displayname>Marketing Content Test List</displayname>
-       <description>New Test Details</description>
-       <testtitle>Name</testtitle>
-       <owner>Owner</owner>
-       <state>State</state>
-       <teststart>Start</teststart>
-       <testend>End</testend>
-       <originpage>Original Page</originpage>
-       <variantpage>Variant Page</variantpage>
-       <conversionpage>Conversion Page</conversionpage>
-       <startdate>Click to choose start date...</startdate>
-       <enddate>Click to choose end date...</enddate>
-       <refresh>Refresh</refresh>
-       <back>Back</back>
-       <details>Details</details>
-       <edit>Edit</edit>
-       <create>Create</create>
-       <promote>Promote</promote>
-       <results>Results</results>
-       <views>Total Views</views>
-       <totalconversion>Total Conversions</totalconversion>
-       <resultconversions>Conversions</resultconversions>
-       <winner>Winning Variation</winner>
-       <conversions>Conversion Rate</conversions>
-       <actions>Actions</actions>
-       <delete>Delete</delete>
-       <stop>Stop Test</stop>
-       <configurationview>
-         <testdetails>
-           <title>Title:</title>
-           <owner>Current Owner:</owner>
-           <created>Created:</created>
-           <modified>Last Modified:</modified>
-           <unmodified>Unmodified</unmodified>
-           <teststate>Status:</teststate>
-           <start>Start Date:</start>
-           <end>End Date:</end>
-           <testresults>
-             <tablecaption>Current Testing Results</tablecaption>
-           </testresults>
-         </testdetails>
-       </configurationview>
-       <form>
-         <title>Marketing Content Test</title>
-         <legendtitle>Test Information</legendtitle>
-       </form>
-       <tasks>
-         <activetests>Active A/B Tests</activetests>
-         <inactivetests>Inactive A/B Tests</inactivetests>
-         <archivedtests>Archived A/B Tests</archivedtests>
-         <completedtests>Completed A/B Tests</completedtests>
-       </tasks>
-   </settings>
-     <scheduler_plugin>
-       <displayname>Marketing Test Monitor</displayname>
-       <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
-       <message>Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]</message>
-     </scheduler_plugin>
-   </multivariate>
+        <close_button_text>Close</close_button_text>
+        <completed_text>Completed </completed_text>
+        <conversion_goal_header>Conversion goal:</conversion_goal_header>
+        <conversion_text>Conversion</conversion_text>
+        <draft_prefix>Draft - Edited by</draft_prefix>
+        <duration_text>days duration</duration_text>
+        <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
+        <pick_winner_option_text>Pick a winner</pick_winner_option_text>
+        <published_prefix>Published by</published_prefix>
+        <purpose_header>Purpose of the A/B Test</purpose_header>
+        <started_by_text>Started by </started_by_text>
+        <total_participants_text>test participants</total_participants_text>
+        <visitors_participated_text>of visitors participated</visitors_participated_text>
+        <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
+      </pickwinnerview>
+      <scheduler_plugin>
+        <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
+        <displayname>Marketing Test Monitor</displayname>
+        <message>Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]</message>
+      </scheduler_plugin>
+    </multivariate>
   </language>
 </languages>
