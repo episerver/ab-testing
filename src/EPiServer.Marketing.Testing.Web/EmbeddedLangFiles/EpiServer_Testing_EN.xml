@@ -45,6 +45,51 @@
          <schedule_test>Schedule Test</schedule_test>
          <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
      </addtestview>
+     <detailsview>
+        <pickwinneroptiontext>Pick The Winner</pickwinneroptiontext>
+        <abortoptiontext>Abort A/B Test</abortoptiontext>
+        <test_started_label>Test started</test_started_label>
+        <by>by</by>
+        <published_prefix>Published by</published_prefix>
+        <draft_prefix>Draft - Edited by</draft_prefix>
+        <description_heading>Purpose of the A/B test</description_heading>
+        <conversion_header>Conversion goal:</conversion_header>
+        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <percentage_details>Percentage of visitors participating:</percentage_details>
+        <total_participants_details>Current number of test participants:</total_participants_details>
+        <duration_details>Remaining duration:</duration_details>
+        <conversions_label>Conversions:</conversions_label>
+        <views_label>Views:</views_label>
+        <remaining_increment>Days</remaining_increment>
+        <options_button_text>Options</options_button_text>
+        <cancel_button_text>Cancel</cancel_button_text>
+     </detailsview>
+     <pickwinnerview>
+        <close_button_text>Close</close_button_text>
+        <started_by_text>Started by </started_by_text>
+        <completed_text>Completed </completed_text>
+        <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
+        <conversion_text>Conversion</conversion_text>
+        <visitors_participated_text>of visitors participated</visitors_participated_text>
+        <total_participants_text>test participants</total_participants_text>
+        <duration_text>days duration</duration_text>
+        <published_prefix>Published by</published_prefix>
+        <draft_prefix>Draft - Edited by</draft_prefix>
+        <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
+        <conversion_goal_header>Conversion goal:</conversion_goal_header>
+        <purpose_header>Purpose of the A/B Test</purpose_header>
+        <pick_winner_option_text>Pick a winner</pick_winner_option_text>
+        <abort_option_text>Abort</abort_option_text>
+     </pickwinnerview>
+     <notificationbar>
+       <ongoing_test>This page is part of a running A/B test.</ongoing_test>
+       <scheduled_test>An A/B test is scheduled to run on this page.</scheduled_test>
+       <completed_test>An A/B test was completed on this page.</completed_test>
+       <details_link_text>View test</details_link_text>
+       <details_link_tooltip>View test details</details_link_tooltip>
+       <winner_link_text>Pick winner</winner_link_text>
+       <winner_link_tooltip>View test details and pick winner</winner_link_tooltip>
+     </notificationbar>
      <settings>
        <displayname>Marketing Content Test List</displayname>
        <description>New Test Details</description>

@@ -1,6 +1,6 @@
 ﻿define([
     'marketing-testing/TestNotification',
-    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels"
+    "dojo/i18n!marketing-testing/nls/multivariate"
 ],
     function (TestNotification, labels) {
         describe("TestNotification", function () {

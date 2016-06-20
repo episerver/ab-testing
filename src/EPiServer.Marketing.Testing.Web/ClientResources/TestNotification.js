@@ -8,7 +8,7 @@ define([
     "dijit/Destroyable",
     "epi/datetime",
     'epi/dependency',
-    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels"
+    "dojo/i18n!marketing-testing/nls/multivariate"
 ],
 
 function (
