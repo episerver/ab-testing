@@ -1,7 +1,7 @@
 ﻿define([
     "dojo/_base/declare",
     "dojo/topic",
-    "dojo/i18n!marketing-testing/nls/MarketingTestingLabels",
+    "dojo/i18n!marketing-testing/nls/multivariate",
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport",
     'epi/dependency'

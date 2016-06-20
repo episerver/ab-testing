@@ -3,7 +3,7 @@
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!marketing-testing/views/AddTestView.html',
-    'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
+    'dojo/i18n!marketing-testing/nls/multivariate',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
     'epi/shell/widget/_ModelBindingMixin',
@@ -201,10 +201,10 @@
             var title = dom.byId("textTitle");
             if( !this.titleText.value ) {
                 // TODO: use localized resources.
-                this._setTitleError("You must enter a title before you can save the A/B test.");
+                this._setTitleError(resources.addtestview.error_entertitle);
             }
             else if (!this.model.conversionPage) {
-                this._setPickerError("You must select a conversion goal page before you can save the A/B test.");
+                this._setPickerError(resources.addtestview.error_conversiongoal);
             } else {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
@@ -216,10 +216,10 @@
                             if (result.contentLink != this.model.publishedVersion.contentLink) {
                                 this.model.createTest();
                             } else {
-                                this._setPickerError("You cannot select the page you are testing as the conversion goal page. Select another page.");
+                                this._setPickerError(resources.addtestview.error_selected_samepage);
                             }
                         } else {
-                            this._setPickerError("You cannot select an unpublished page as your conversion goal page. Select a published page.");
+                            this._setPickerError(resources.addtestview.error_selected_notpublished);
                         }
                     }.bind(this))
                     .otherwise(function (result) {
@@ -260,13 +260,13 @@
             var scheduleText = dom.byId("ScheduleText");
 
             if (event !== null) {
-                startButton.innerText = "Schedule Test";
-                scheduleText.innerText = "scheduled to begin on " + event;
+                startButton.innerText = resources.addtestview.schedule_test;
+                scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
                 this.model.startDate = new Date(event).toUTCString();
                 this.model.start = false;
             } else {
-                startButton.innerText = "Start Test";
-                scheduleText.innerText = "not scheduled, and will start right away";
+                startButton.innerText = resources.addtestview.start_default;
+                scheduleText.innerText = resources.addtestview.notscheduled_text;
                 this.model.startDate = new Date(Date.now()).toUTCString();
                 this.model.start = true;
             }
