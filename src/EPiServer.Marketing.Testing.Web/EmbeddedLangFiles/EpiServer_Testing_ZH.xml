@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
   <language name="中文 (Chinese)" id="zh-CN">
-    <multivariate>
+    <abtesting>
       <addtestcommand>
-        <label_text>Create A/B test for my changes</label_text>
-        <tooltip_text>Create A/B test for my changes</tooltip_text>
+        <label_text>A/B Test changes</label_text>
+        <tooltip_text>A/B Test changes</tooltip_text>
       </addtestcommand>
       <addtestview>
         <advancedsettings>Advanced Settings</advancedsettings>
@@ -95,6 +95,12 @@
         <displayname>Marketing Test Monitor</displayname>
         <message>Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]</message>
       </scheduler_plugin>
-    </multivariate>
+      <tasks>
+        <activetests>Active A/B Tests</activetests>
+        <inactivetests>Scheduled A/B Tests</inactivetests>
+        <archivedtests>Archived A/B Tests</archivedtests>
+        <completedtests>Completed A/B Tests</completedtests>
+      </tasks>
+    </abtesting>
   </language>
 </languages>

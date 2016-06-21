@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         InitialTime = "00:02:00",   // First time only, start after 2 min
         IntervalLength = 30,        // Default configured interval is 30 minutes
         IntervalType = ScheduledIntervalType.Minutes,
-        LanguagePath = "/multivariate/scheduler_plugin")
+        LanguagePath = "/abtesting/scheduler_plugin")
     ]
     public class TestSchedulingJob : ScheduledJobBase
     {
@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         {
             int started = 0, stopped = 0, active = 0, inactive = 0, done = 0;
             var ls = _locator.GetInstance<LocalizationService>();
-            var msg = ls.GetString("/multivariate/scheduler_plugin/message");
+            var msg = ls.GetString("/abtesting/scheduler_plugin/message");
 
             var tm = _locator.GetInstance<ITestManager>();
 

@@ -8,7 +8,7 @@
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!marketing-testing/views/Details.html",
-    'dojo/i18n!marketing-testing/nls/multivariate',
+    'dojo/i18n!marketing-testing/nls/abtesting',
     "epi/datetime",
     'xstyle/css!marketing-testing/css/style.css',
     'xstyle/css!marketing-testing/css/GridForm.css',

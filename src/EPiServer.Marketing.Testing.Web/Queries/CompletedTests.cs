@@ -43,7 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "completedtests";
 
         /// <inheritdoc />
-        public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/completedtests");
+        public string DisplayName => _localizationService.GetString("/abtesting/tasks/completedtests");
 
         public int Rank { get; }
 
