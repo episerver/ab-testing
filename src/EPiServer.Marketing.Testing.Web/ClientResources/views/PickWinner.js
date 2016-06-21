@@ -6,7 +6,7 @@
  'dijit/_TemplatedMixin',
  'dijit/_WidgetsInTemplateMixin',
  'dojo/text!marketing-testing/views/PickWinner.html',
- 'dojo/i18n!marketing-testing/nls/abtesting',
+ 'epi/i18n!marketing-testing/nls/abtesting',
  'epi/datetime',
  'xstyle/css!marketing-testing/css/style.css',
  'xstyle/css!marketing-testing/css/GridForm.css',

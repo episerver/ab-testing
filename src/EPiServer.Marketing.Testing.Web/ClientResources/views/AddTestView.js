@@ -3,7 +3,7 @@
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!marketing-testing/views/AddTestView.html',
-    'dojo/i18n!marketing-testing/nls/abtesting',
+    'epi/i18n!marketing-testing/nls/abtesting',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
     'epi/shell/widget/_ModelBindingMixin',

@@ -2,7 +2,7 @@
     "dojo/_base/declare",
     "dojo/topic",
     'epi/dependency',
-    "dojo/i18n!marketing-testing/nls/abtesting",
+    "epi/i18n!marketing-testing/nls/abtesting",
     "epi-cms/contentediting/command/_ContentCommandBase",
     "epi-cms/contentediting/ContentActionSupport"
 ],
