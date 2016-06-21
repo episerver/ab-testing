@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -13,28 +14,26 @@ namespace EPiServer.Marketing.Testing.Web
     {
         private readonly TestHandler _testHandler;
         private UrlResolver _pageRouteHelper;
-
+        [ExcludeFromCodeCoverage]
         public TestHandlerInitializer()
         {
             _testHandler = new TestHandler();
         }
 
+        [ExcludeFromCodeCoverage]
         public void Initialize(InitializationEngine context)
         {
             _testHandler.Initialize();
         }
 
-        public void Uninitialize(InitializationEngine context)
-        {
-            _testHandler.Uninitialize();
-        }
-
+        [ExcludeFromCodeCoverage]
         public void InitializeHttpEvents(HttpApplication application)
         {
             application.BeginRequest += BeginRequest;
             application.EndRequest += EndRequest;
         }
 
+        [ExcludeFromCodeCoverage]
         private void BeginRequest(object sender, EventArgs e)
         {
             _pageRouteHelper = ServiceLocator.Current.GetInstance<UrlResolver>();
@@ -44,13 +43,16 @@ namespace EPiServer.Marketing.Testing.Web
             HttpContext.Current.Items["CurrentPage"] = _pageRouteHelper.Route(new UrlBuilder(HttpContext.Current.Request.Url));
         }
 
+        [ExcludeFromCodeCoverage]
         private void EndRequest(object sender, EventArgs e)
         {
             _testHandler.ProcessedContentList.Clear();
         }
 
+        //Interface Requirement but not used.
+        [ExcludeFromCodeCoverage]
+        public void Uninitialize(InitializationEngine context) { }
 
-      
 
     }
 }

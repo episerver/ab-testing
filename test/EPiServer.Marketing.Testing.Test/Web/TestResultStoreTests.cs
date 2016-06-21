@@ -33,6 +33,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aResult = resultStore.Post(new TestResultStoreModel());
             Assert.IsType<RestStatusCodeResult>(aResult);
             RestStatusCodeResult code = (RestStatusCodeResult) aResult;
+            Assert.True(code.StatusCode == 500 );
            }
 
         [Fact]

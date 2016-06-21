@@ -65,68 +65,13 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
         }
 
-        private void EvaluateKpis(ContentEventArgs e)
-        {
-            var cdl = _testDataCookieHelper.getTestDataFromCookies();
-            foreach (var testdata in cdl)
-            {
-                // for every test cookie we have, check for the converted and the viewed flag
-                if (!testdata.Converted && testdata.Viewed)
-                {
-                    try
-                    {
-                        var test = _testManager.Get(testdata.TestId);
-
-                        // optimization : create the list of kpis that have not evaluated 
-                        // to true and then evaluate them
-                        var kpis = new List<IKpi>();
-                        foreach (var kpi in test.KpiInstances)
-                        {
-                            var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
-                            if (!converted)
-                                kpis.Add(kpi);
-                        }
-
-                        var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
-                        if (evaluated.Count > 0)
-                        {
-                            // add each kpi to testdata cookie data
-                            foreach (var eval in evaluated)
-                            {
-                                testdata.KpiConversionDictionary.Remove(eval);
-                                testdata.KpiConversionDictionary.Add(eval, true);
-                            }
-
-                            // now check to see if all kpi objects have evalated
-                            testdata.Converted = !testdata.KpiConversionDictionary.Where(x => x.Value == false).Any();
-
-                            // now save the testdata to the cookie
-                            _testDataCookieHelper.SaveTestDataToCookie(testdata);
-
-                            // now if we have converted, fire the converted message 
-                            // note : we wouldnt be here if we already converted on a previous loop
-                            if (testdata.Converted)
-                            {
-                                Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
-                                _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
-                            }
-                        }
-                    }
-                    catch(TestNotFoundException )
-                    {
-                        _testDataCookieHelper.ExpireTestDataCookie(testdata);
-                    }
-                }
-            }
-        }
-
         public void LoadedContent(object sender, ContentEventArgs e)
         {
             if (!SwapDisabled == true)
             {
                 try
                 {
-                    IContent CurrentPage = _contextHelper.GetCurrentPageFromUrl();
+                    IContent currentPage = _contextHelper.GetCurrentPageFromUrl();
 
                     if (e.TargetLink != null)
                     {
@@ -149,7 +94,7 @@ namespace EPiServer.Marketing.Testing.Web
                             ProcessedContentList.Add(e.ContentLink);
                             Swap(testCookieData, e);
                         }
-                        else if (!hasData && CurrentPage !=null && _contextHelper.IsRequestedContent(CurrentPage,e.Content) && ProcessedContentList.Count == 0)
+                        else if (!hasData && currentPage !=null && _contextHelper.IsRequestedContent(currentPage,e.Content) && ProcessedContentList.Count == 0)
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             //get a new random variant. 
@@ -223,8 +168,59 @@ namespace EPiServer.Marketing.Testing.Web
             _testDataCookieHelper.UpdateTestDataCookie(cookie);
         }
 
-        public void Uninitialize()
+        private void EvaluateKpis(ContentEventArgs e)
         {
+            var cdl = _testDataCookieHelper.getTestDataFromCookies();
+            foreach (var testdata in cdl)
+            {
+                // for every test cookie we have, check for the converted and the viewed flag
+                if (!testdata.Converted && testdata.Viewed)
+                {
+                    try
+                    {
+                        var test = _testManager.Get(testdata.TestId);
+
+                        // optimization : create the list of kpis that have not evaluated 
+                        // to true and then evaluate them
+                        var kpis = new List<IKpi>();
+                        foreach (var kpi in test.KpiInstances)
+                        {
+                            var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
+                            if (!converted)
+                                kpis.Add(kpi);
+                        }
+
+                        var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
+                        if (evaluated.Count > 0)
+                        {
+                            // add each kpi to testdata cookie data
+                            foreach (var eval in evaluated)
+                            {
+                                testdata.KpiConversionDictionary.Remove(eval);
+                                testdata.KpiConversionDictionary.Add(eval, true);
+                            }
+
+                            // now check to see if all kpi objects have evalated
+                            testdata.Converted = !testdata.KpiConversionDictionary.Where(x => x.Value == false).Any();
+
+                            // now save the testdata to the cookie
+                            _testDataCookieHelper.SaveTestDataToCookie(testdata);
+
+                            // now if we have converted, fire the converted message 
+                            // note : we wouldnt be here if we already converted on a previous loop
+                            if (testdata.Converted)
+                            {
+                                Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
+                                _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
+                            }
+                        }
+                    }
+                    catch (TestNotFoundException)
+                    {
+                        _testDataCookieHelper.ExpireTestDataCookie(testdata);
+                    }
+                }
+            }
         }
     }
 }
