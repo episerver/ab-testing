@@ -97,9 +97,9 @@
       </scheduler_plugin>
       <tasks>
         <activetests>Active A/B Tests</activetests>
-        <inactivetests>Scheduled A/B Tests</inactivetests>
         <archivedtests>Archived A/B Tests</archivedtests>
         <completedtests>Completed A/B Tests</completedtests>
+        <inactivetests>Scheduled A/B Tests</inactivetests>
       </tasks>
     </abtesting>
   </language>
