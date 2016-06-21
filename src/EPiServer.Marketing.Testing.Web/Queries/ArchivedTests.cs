@@ -43,8 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "archivedtests";
 
         /// <inheritdoc />
-        //public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/archivedtests");
-        public string DisplayName => "Archived A/B Tests";
+        public string DisplayName => _localizationService.GetString("/abtesting/tasks/archivedtests");
 
         public int Rank { get; }
 

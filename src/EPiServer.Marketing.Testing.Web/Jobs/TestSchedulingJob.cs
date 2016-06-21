@@ -17,14 +17,14 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
     /// Scheduled job class that automatically starts and stops tests
     /// </summary>
     [ScheduledPlugIn(
-        DisplayName = "Marketing Test Monitor",
-        Description = "Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test",
+        DisplayName = "displayname",
+        Description = "description",
         SortIndex = 0,              // Brings it to top of job list.
         DefaultEnabled = true,      // By default the task is enabled.
         InitialTime = "00:02:00",   // First time only, start after 2 min
         IntervalLength = 30,        // Default configured interval is 30 minutes
         IntervalType = ScheduledIntervalType.Minutes,
-        LanguagePath = "/multivariate/scheduler_plugin")
+        LanguagePath = "/abtesting/scheduler_plugin")
     ]
     public class TestSchedulingJob : ScheduledJobBase
     {
@@ -44,7 +44,8 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         public override string Execute()
         {
             int started = 0, stopped = 0, active = 0, inactive = 0, done = 0;
-            string msg = "Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]";
+            var ls = _locator.GetInstance<LocalizationService>();
+            var msg = ls.GetString("/abtesting/scheduler_plugin/message");
 
             var tm = _locator.GetInstance<ITestManager>();
 

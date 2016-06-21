@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
-  <language name="English" id="en">
+  <language name="Nederlands" id="nl">
     <abtesting>
       <addtestcommand>
         <label_text>A/B Test changes</label_text>
