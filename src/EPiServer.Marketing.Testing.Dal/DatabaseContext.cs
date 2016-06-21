@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing.Dal
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public class DatabaseContext : DbContext
+    internal class DatabaseContext : DbContext
     {
         [ExcludeFromCodeCoverage]
         public DatabaseContext()

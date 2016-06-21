@@ -6,7 +6,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
-    public class TestContext : DatabaseContext
+    internal class TestContext : DatabaseContext
     {
         public TestContext(DbConnection dbConnection) : base(dbConnection)
         {
