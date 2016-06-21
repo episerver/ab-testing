@@ -40,25 +40,60 @@
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
-
+            me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
 
         postCreate: function () {
+            this._renderData();
+        },
+
+        _contextChanged: function (newContext) {
+            var me = this;
+            if (!newContext || newContext.type != 'epi.marketing.testing') {
+                return;
+            }
+            me.context = newContext;
+            me._renderData();
+        },
+        _onPickWinnerOptionClicked: function () {
+            var me = this;
+            me.contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _onAbortOptionClicked: function () {
+            var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+            store.remove(this.context.data.test.originalItemId);
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _onCancelClick: function () {
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _renderData: function () {
             var publishedVariant, draftVariant;
-            this.contextHistory = dependency.resolve("epi.cms.BackContextHistory");
 
             //Header and Test Start Information
             this.detailsHeaderText.textContent = this.context.data.test.title;
 
             if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
-                this.daysElapsedText.textContent = this.context.data.daysElapsed;
-                this.timeRemainingText.textContent = this.context.data.daysRemaining;
+                this.daysElapsedText.textContent = resources.detailsview.test_not_started_text + " " +
+                    resources.detailsview.test_scheduled +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
+                    resources.detailsview.by + " " + this.context.data.test.owner;
+                this.timeRemainingText.textContent = resources.detailsview.test_not_started_text;
             } else {
-                this.daysElapsedText.textContent = resources.detailsview.test_started_label + ' ' + datetime.toUserFriendlyString(this.context.data.test.startDate) + ' ' + resources.detailsview.by;
-                this.ownerText.textContent = this.context.data.test.owner;
-                this.timeRemainingText.textContent = this.context.data.daysRemaining;
+                this.daysElapsedText.textContent = resources.detailsview.test_started_label + " " +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
+                    resources.detailsview.by + " " + this.context.data.test.owner;
+                this.timeRemainingText.textContent = this.context.data.daysRemaining + " " +
+                    resources.detailsview.remaining_increment;
             }
-
+            
             //Published version data
             this.publishedVersionName.textContent = this.context.data.publishedVersionName;
             this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
@@ -72,7 +107,7 @@
             this.variantDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
             //Set the correct corresponding variant data
-            if (this.context.data.test.variants[0].itemversion === this.context.data.publishedVersionContentLink) {
+            if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {
                 publishedVariant = this.context.data.test.variants[0];
                 draftVariant = this.context.data.test.variants[1];
             } else {
@@ -100,21 +135,6 @@
 
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
-        },
-
-        _onPickWinnerOptionClicked: function () {
-            var contextParameters = { uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner" };
-            topic.publish("/epi/shell/context/request", contextParameters);
-        },
-
-        _onAbortOptionClicked: function () {
-            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
-            store.remove(this.context.data.test.originalItemId);
-            this.contextHistory.closeAndNavigateBack(this);
-        },
-
-        _onCancelClick: function () {
-            this.contextHistory.closeAndNavigateBack(this);
         }
     });
 

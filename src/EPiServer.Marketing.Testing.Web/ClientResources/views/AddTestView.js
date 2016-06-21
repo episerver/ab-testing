@@ -95,8 +95,8 @@
             this.model.testDuration = this.durationText.value;
             }
 
-            if (this.startTimeSelector) {
-                this.startTimeSelector.reset();
+            if (this.startDatePicker) {
+                this.startDatePicker.reset();
                 this.model.startDate = new Date(Date.now()).toUTCString();
             }
 

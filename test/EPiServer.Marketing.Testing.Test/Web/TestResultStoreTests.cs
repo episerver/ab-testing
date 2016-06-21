@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var resultStore = GetUnitUnderTest();
             _mockMarketingTestingWebRepository.Setup(
-                call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns(-1);
+                call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns((string)null);
 
             var aResult = resultStore.Post(new TestResultStoreModel());
             Assert.IsType<RestStatusCodeResult>(aResult);
@@ -36,11 +36,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
            }
 
         [Fact]
-        public void publishing_success_returns_rest_result_containing_integer()
+        public void publishing_success_returns_rest_result_containing_stringreference()
         {
             var resultStore = GetUnitUnderTest();
             _mockMarketingTestingWebRepository.Setup(
-                call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns(20);
+                call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns("20");
 
             var aResult = resultStore.Post(new TestResultStoreModel());
             Assert.IsType<RestResult>(aResult);
