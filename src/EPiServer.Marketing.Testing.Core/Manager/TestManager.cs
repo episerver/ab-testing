@@ -173,6 +173,9 @@ namespace EPiServer.Marketing.Testing
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
             if (test != null)
             {
+                // sum up all views and save in test
+                test.ActualVisitorCount = test.Variants.Select(v => v.Views).Sum();
+
                 // test has been stopped or ended on its own so calculate if the results are significant or not
                 var sigResults = Significance.CalculateIsSignificant(test);
                 test.IsSignificant = sigResults.IsSignificant;
