@@ -6,7 +6,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.DataAccess
 {
-    public class KpiDataAccess : IKpiDataAccess
+    internal class KpiDataAccess : IKpiDataAccess
     {
         internal IRepository _repository;
 
