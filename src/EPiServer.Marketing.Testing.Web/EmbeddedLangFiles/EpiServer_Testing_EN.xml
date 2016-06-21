@@ -3,8 +3,8 @@
   <language name="English" id="en">
     <multivariate>
       <addtestcommand>
-        <label_text>Create A/B test for my changes</label_text>
-        <tooltip_text>Create A/B test for my changes</tooltip_text>
+        <label_text>A/B Test changes</label_text>
+        <tooltip_text>A/B Test changes</tooltip_text>
       </addtestcommand>
       <addtestview>
         <advancedsettings>Advanced Settings</advancedsettings>
