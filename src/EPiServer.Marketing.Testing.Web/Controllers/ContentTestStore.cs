@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -12,9 +13,15 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         private IMarketingTestingWebRepository _marketingTestRepostiory;
 
+        [ExcludeFromCodeCoverage]
         public ContentTestStore()
         {
             _marketingTestRepostiory = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
+        }
+
+        internal ContentTestStore(IServiceLocator serviceLocator)
+        {
+            _marketingTestRepostiory = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
         }
 
         [HttpGet]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting;
 using EPiServer.Marketing.Testing.Web;
 using Moq;
 using Xunit;
@@ -10,7 +11,9 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Test.Core;
+using Xunit.Sdk;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -570,6 +573,54 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Once, "Test should have attempted to increment count");
         }
 
+        [Fact]
+        public void TestHandler_EvaluateKpi_Catch_Throws_TestNotFound_Exception()
+        {
+            BasicContent nullContent = null;
+            ContentReference testTargetLink = new ContentReference(2, 101);
+
+            IMarketingTest test = new ABTest()
+            {
+                Id = _activeTestGuid,
+                OriginalItemId = _associatedTestGuid,
+                State = TestState.Active,
+                KpiInstances = new List<IKpi>() { new TestKpi(_firstKpiId) { Id = _firstKpiId } },
+                Variants = new List<Variant>() { new Variant() { Id = _matchingVariantId, ItemVersion = 5, TestId = _associatedTestGuid, ItemId = _activeTestGuid } }
+
+            };
+            TestDataCookie testCookieOne = new TestDataCookie
+            {
+                Viewed = true,
+                Converted = false,
+                TestVariantId = _matchingVariantId
+            };
+            testCookieOne.KpiConversionDictionary.Add(_firstKpiId, true);
+
+
+            List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
+
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            testHandler.SwapDisabled = false;
+
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
+                .Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.Get(It.IsAny<Guid>())).Throws(new TestNotFoundException());
+            _testManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()))
+                .Returns(new List<Guid> { Guid.NewGuid() });
+
+            _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
+
+
+            ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
+            {
+                Content = nullContent,
+                TargetLink = testTargetLink
+            };
+            testHandler.LoadedContent(new object(), args);
+_tdc.Verify(call=>call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()),Times.Once,"Expected expire test data cookie to be called");            
+           
+        }
 
 
 
