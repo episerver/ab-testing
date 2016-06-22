@@ -15,7 +15,7 @@ using Moq;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
-    internal class MultiVariantDataAccessTests : TestBase
+    public class MultiVariantDataAccessTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;

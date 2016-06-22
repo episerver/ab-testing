@@ -7,7 +7,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Test
 {
-    internal class TestBase
+    public class TestBase
     {
         public void AddObjectsToContext<T>(TestContext context, IList<T> data) where T : class
         {

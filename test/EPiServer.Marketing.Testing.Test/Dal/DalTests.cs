@@ -9,7 +9,7 @@ using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
-    internal class DalTests : TestBase
+    public class DalTests : TestBase
     {
         private TestContext _context;
         private DbConnection _dbConnection;
@@ -155,6 +155,5 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             Assert.Equal(1, _context.KeyPerformanceIndicators.Count());
         }
-
     }
 }
