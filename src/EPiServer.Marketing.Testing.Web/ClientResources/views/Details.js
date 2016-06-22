@@ -10,6 +10,7 @@
     "dojo/text!marketing-testing/views/Details.html",
     'epi/i18n!marketing-testing/nls/abtesting',
     "epi/datetime",
+    "epi/username",
     'xstyle/css!marketing-testing/css/style.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
     "dijit/form/DropDownButton",
@@ -27,7 +28,8 @@
     widgetsInTemplateMixin,
     template,
     resources,
-    datetime
+    datetime,
+    username
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -62,13 +64,13 @@
             //Published version data
             this.publishedVersionName.textContent = this.context.data.publishedVersionName;
             this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
-            this.publishedVersionUser.textContent = this.context.data.publishedVersionPublishedBy;
+            this.publishedVersionUser.textContent = username.toUserFriendlyString(this.context.data.publishedVersionPublishedBy);
             this.publishedVersionDate.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
 
             //Draft version data
             this.variantName.textContent = this.context.data.draftVersionName;
             this.variantContentLink.textContent = this.context.data.draftVersionContentLink;
-            this.variantUser.textContent = this.context.data.draftVersionChangedBy;
+            this.variantUser.textContent = username.toUserFriendlyString(this.context.data.draftVersionChangedBy);
             this.variantDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
             //Set the correct corresponding variant data
