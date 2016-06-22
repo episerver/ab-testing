@@ -136,7 +136,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         /// <summary>
-        /// Map IContent data into the model if content is BlockData
+        /// Map IContent version data into the model
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <param name="draftContent"></param>
