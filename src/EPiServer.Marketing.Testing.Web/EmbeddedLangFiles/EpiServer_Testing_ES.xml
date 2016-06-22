@@ -52,6 +52,8 @@
         <conversions_label>Conversions:</conversions_label>
         <conversion_header>Conversion goal:</conversion_header>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <dayselapsed>Test has not been started</dayselapsed>
+        <daysremainging>Test has not been started</daysremainging>
         <description_heading>Purpose of the A/B test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_details>Remaining duration:</duration_details>

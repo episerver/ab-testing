@@ -11,6 +11,7 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using EPiServer.DataAbstraction;
 using EPiServer.Globalization;
+using EPiServer.Framework.Localization;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -109,8 +110,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
             else if (testData.State == TestState.Inactive)
             {
-                model.DaysElapsed = "Test has not been started";
-                model.DaysRemaining = "Test has not been started";
+                var ls = _serviceLocator.GetInstance<LocalizationService>();
+                model.DaysElapsed = ls.GetString("/abtesting/detailsview/dayselapsed");
+                model.DaysRemaining = ls.GetString("/abtesting/detailsview/daysremainging");
             }
 
             //retrieve conversion content from kpis

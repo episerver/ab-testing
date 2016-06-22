@@ -30,15 +30,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var dalList = new List<IABTest>()
             {
                 new DalABTest() {
+                    Id = testId,
                     EndDate = DateTime.Now.AddDays(1),
                     OriginalItemId = testId,
+                    ConfidenceLevel = 95,
                     State = DalTestState.Active,
-                    Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1} },
+                    Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant() {ItemVersion = 4, Views = 5000, Conversions = 130} },
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()}
             };
+
+            var startTest = new DalABTest() {Id = testId, State = DalTestState.Active, Variants = new List<DalVariant>(), KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>() };
             _serviceLocator = new Mock<IServiceLocator>();
             _dataAccessLayer = new Mock<ITestingDataAccess>();
             _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
+            _dataAccessLayer.Setup(dal => dal.Start(It.IsAny<Guid>())).Returns(startTest);
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
 
@@ -145,33 +150,35 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void TestManager_CallsDeleteWithGuid()
         {
-            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            //var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            tm.Delete(theGuid);
+            tm.RemoveCacheForUnitTests();
+            tm.Delete(testId);
 
-            _dataAccessLayer.Verify(da => da.Delete(It.Is<Guid>(arg => arg.Equals(theGuid))),
+            _dataAccessLayer.Verify(da => da.Delete(It.Is<Guid>(arg => arg.Equals(testId))),
                 "DataAcessLayer Delete was never called or Guid did not match.");
         }
 
         [Fact]
         public void TestManager_CallsStartWithGuid()
         {
-            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            //var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            tm.Start(theGuid);
+            tm.Start(testId);
 
-            _dataAccessLayer.Verify(da => da.Start(It.Is<Guid>(arg => arg.Equals(theGuid))),
+            _dataAccessLayer.Verify(da => da.Start(It.Is<Guid>(arg => arg.Equals(testId))),
                 "DataAcessLayer Start was never called or Guid did not match.");
         }
 
         [Fact]
         public void TestManager_CallsStopWithGuid()
         {
-            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            //var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            tm.Stop(theGuid);
+            tm.RemoveCacheForUnitTests();
+            tm.Stop(testId);
 
-            _dataAccessLayer.Verify(da => da.Stop(It.Is<Guid>(arg => arg.Equals(theGuid))),
+            _dataAccessLayer.Verify(da => da.Stop(It.Is<Guid>(arg => arg.Equals(testId))),
                 "DataAcessLayer Stop was never called or Guid did not match.");
         }
 
