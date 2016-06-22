@@ -13,6 +13,8 @@ using Moq;
 using Xunit;
 using System.Globalization;
 using EPiServer.Globalization;
+using EPiServer.Framework.Localization;
+using EPiServer.Marketing.Testing.Test.Fakes;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -23,6 +25,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IContentRepository> _mockContentRepository;
         private Mock<IContentVersionRepository> _mockContentVersionRepository;
         private Mock<IUIHelper> _mockUIHelper;
+        LocalizationService _localizationService = new FakeLocalizationService("test");
 
         private IMarketingTest test;
         private Guid testId = Guid.Parse("98cbde0e-4431-4712-9f04-8094e7be826b");
@@ -54,6 +57,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockUIHelper = new Mock<IUIHelper>();
             _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
 
+            _mockServiceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationService);
             _mockServiceLocator.Setup(call => call.GetInstance<IContentRepository>())
                .Returns(_mockContentRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IContentVersionRepository>())
