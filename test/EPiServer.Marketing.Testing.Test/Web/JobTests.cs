@@ -1,4 +1,5 @@
-﻿using EPiServer.Marketing.Testing.Data;
+﻿using EPiServer.Framework.Localization;
+using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Jobs;
 using EPiServer.ServiceLocation;
 using Moq;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -14,12 +16,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<ITestManager> _testManager = new Mock<ITestManager>();
+        MyLS _ls = new MyLS();
         private Guid TestToStart = Guid.NewGuid();
         private Guid TestToStop = Guid.NewGuid();
 
         private TestSchedulingJob GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
+            _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_ls);
 
             var list = new List<IMarketingTest>()
             {
@@ -74,6 +78,31 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 "Get did not call getTestList");
             _testManager.Verify(tm => tm.Stop(It.Is<Guid>(g => g == TestToStop)), Times.Once, 
                 "Failed to stop test with proper Guid");
+        }
+
+        public class MyLS : LocalizationService
+        {
+            public MyLS() : base( new ResourceKeyHandler())
+            {
+
+            }
+            public override IEnumerable<CultureInfo> AvailableLocalizations
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            protected override IEnumerable<ResourceItem> GetAllStringsByCulture(string originalKey, string[] normalizedKey, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override string LoadString(string[] normalizedKey, string originalKey, CultureInfo culture)
+            {
+                return "Empty STring";
+            }
         }
     }
 }
