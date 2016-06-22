@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+using EPiServer.Data.Dynamic;
 using EPiServer.Marketing.Testing.Web;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -37,8 +34,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aResult = testingStore.Post(new TestingStoreModel());
             Assert.IsType<RestStatusCodeResult>(aResult);
-            RestStatusCodeResult code = (RestStatusCodeResult)aResult;
-            Assert.True(code.StatusCode == 201);
+            var  code = aResult.ToPropertyBag()["StatusCode"].ToString();
+            Assert.True(code == "201");
         }
 
         [Fact]
@@ -50,13 +47,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aResult = testingStore.Post(new TestingStoreModel());
             Assert.IsType<RestStatusCodeResult>(aResult);
-            RestStatusCodeResult code = (RestStatusCodeResult)aResult;
-            Assert.True(code.StatusCode == 500);
+            var code = aResult.ToPropertyBag()["StatusCode"].ToString();
+            Assert.True(code == "500");
         }
-
-
-
-
-
     }
 }

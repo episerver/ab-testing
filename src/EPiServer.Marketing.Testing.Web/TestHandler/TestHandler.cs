@@ -17,12 +17,15 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
+
         private ITestingContextHelper _contextHelper;
         private ITestDataCookieHelper _testDataCookieHelper;
         private ILogger _logger;
-
         private ITestManager _testManager;
         private bool? _swapDisabled;
+
+        //allows SwapDisabled to be explicitly set (e.g unit tests)
+        //Otherwise set via context helper.
         public bool? SwapDisabled
         {
             set { _swapDisabled = value; }
@@ -46,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Web
             _logger = LogManager.GetLogger();
         }
 
-        [ExcludeFromCodeCoverage]
+        //To support unit testing
         internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
@@ -65,6 +68,8 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
         }
 
+        /// Main worker method.  Processes each content which triggers a
+        /// content loaded event to determine the state of a test and what content to display.
         public void LoadedContent(object sender, ContentEventArgs e)
         {
             if (!SwapDisabled == true)
@@ -83,7 +88,6 @@ namespace EPiServer.Marketing.Testing.Web
                         return;
 
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
-
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                     var hasData = _testDataCookieHelper.HasTestData(testCookieData);
 
@@ -141,6 +145,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
+        //Handles the swapping of content data
         private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
         {
             if (cookie.ShowVariant)
@@ -155,6 +160,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
+        //Handles the incrementing of view counts on a version
         private void CalculateView(TestDataCookie cookie, int contentVersion)
         {
             //increment view if not already done
@@ -168,6 +174,7 @@ namespace EPiServer.Marketing.Testing.Web
             _testDataCookieHelper.UpdateTestDataCookie(cookie);
         }
 
+        //Processes the Kpis, determining conversions and handling incrementing conversion counts.
         private void EvaluateKpis(ContentEventArgs e)
         {
             var cdl = _testDataCookieHelper.getTestDataFromCookies();

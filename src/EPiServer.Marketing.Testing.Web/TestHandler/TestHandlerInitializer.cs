@@ -14,6 +14,7 @@ namespace EPiServer.Marketing.Testing.Web
     {
         private readonly TestHandler _testHandler;
         private UrlResolver _pageRouteHelper;
+
         [ExcludeFromCodeCoverage]
         public TestHandlerInitializer()
         {
@@ -38,7 +39,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             _pageRouteHelper = ServiceLocator.Current.GetInstance<UrlResolver>();
 
-            //Convert URL to content and store it in the current requests items collection
+            //Convert URL to content and stores it in the current requests items collection
             //This collection is volatile and will be cleared at the end of the session, preventing threading issues.
             HttpContext.Current.Items["CurrentPage"] = _pageRouteHelper.Route(new UrlBuilder(HttpContext.Current.Request.Url));
         }
@@ -52,7 +53,5 @@ namespace EPiServer.Marketing.Testing.Web
         //Interface Requirement but not used.
         [ExcludeFromCodeCoverage]
         public void Uninitialize(InitializationEngine context) { }
-
-
     }
 }

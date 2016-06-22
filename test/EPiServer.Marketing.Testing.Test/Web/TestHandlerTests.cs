@@ -17,7 +17,6 @@ using Xunit.Sdk;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
-
     public class MyLogger : ILogger
     {
         public bool errorCalled = false;
@@ -61,7 +60,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private readonly Guid _firstKpiId = Guid.Parse("ebb50f9d-8a4c-4f7f-8734-a8c31967a39a");
         private readonly Guid _secondKpiId = Guid.Parse("64d9e743-0c74-4098-b23f-a7046b7d7be8");
 
-
         private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
         {
             _logger = new MyLogger();
@@ -91,7 +89,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             // logging one.
             Assert.True(_logger.errorCalled, "Exception was not logged.");
         }
-
 
         [Fact]
         public void TestHandler_Null_Content_Argument_Does_Not_Attempt_To_Process_ContentSwitching()
@@ -260,7 +257,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>() { new Kpi() { Id=Guid.NewGuid()} }
+                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } }
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -287,7 +284,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
-
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -329,7 +325,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
-
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -395,7 +390,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(variantPage.ContentLink, args.ContentLink);
         }
 
-
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
@@ -443,7 +437,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
-
         [Fact]
         public void TestHandler_EvaluateKPIs_Should_Not_Be_Called_When_Cookies_Are_Marked_Converted_and_Viewed()
         {
@@ -473,7 +466,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             testHandler.LoadedContent(new object(), args);
             _testManager.Verify(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()), Times.Never, "Test should not have called Evaluate KPIs");
-
         }
 
         [Fact]
@@ -496,7 +488,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             testCookieOne.KpiConversionDictionary.Add(_firstKpiId, false);
 
-
             List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
@@ -510,7 +501,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<Guid> { Guid.NewGuid() });
 
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-
 
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
@@ -535,8 +525,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
                 KpiInstances = new List<IKpi>() { new TestKpi(_firstKpiId) { Id = _firstKpiId } },
-                Variants = new List<Variant>() {  new Variant() { Id = _matchingVariantId, ItemVersion = 5, TestId = _associatedTestGuid, ItemId = _activeTestGuid} }
-                
+                Variants = new List<Variant>() { new Variant() { Id = _matchingVariantId, ItemVersion = 5, TestId = _associatedTestGuid, ItemId = _activeTestGuid } }
+
             };
             TestDataCookie testCookieOne = new TestDataCookie
             {
@@ -545,7 +535,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestVariantId = _matchingVariantId
             };
             testCookieOne.KpiConversionDictionary.Add(_firstKpiId, true);
-
 
             List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
 
@@ -560,7 +549,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<Guid> { Guid.NewGuid() });
 
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-
 
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
@@ -596,7 +584,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             testCookieOne.KpiConversionDictionary.Add(_firstKpiId, true);
 
-
             List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
@@ -611,18 +598,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
 
-
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
                 Content = nullContent,
                 TargetLink = testTargetLink
             };
             testHandler.LoadedContent(new object(), args);
-_tdc.Verify(call=>call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()),Times.Once,"Expected expire test data cookie to be called");            
-           
+            _tdc.Verify(call => call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once, "Expected expire test data cookie to be called");
         }
-
-
-
     }
 }

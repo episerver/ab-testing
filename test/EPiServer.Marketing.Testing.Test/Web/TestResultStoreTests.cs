@@ -1,4 +1,5 @@
-﻿using EPiServer.Marketing.Testing.Web.Controllers;
+﻿using EPiServer.Data.Dynamic;
+using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -32,8 +33,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aResult = resultStore.Post(new TestResultStoreModel());
             Assert.IsType<RestStatusCodeResult>(aResult);
-            RestStatusCodeResult code = (RestStatusCodeResult) aResult;
-            Assert.True(code.StatusCode == 500 );
+            var code = aResult.ToPropertyBag()["StatusCode"].ToString();
+            Assert.True(code == "500" );
            }
 
         [Fact]

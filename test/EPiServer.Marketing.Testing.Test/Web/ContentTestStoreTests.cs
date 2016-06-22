@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
+using EPiServer.Data.Dynamic;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Repositories;
@@ -43,6 +44,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testResult = contentTestStore.Get(Guid.NewGuid().ToString());
             Assert.IsType<RestResult>(testResult);
+
             var resultData = (RestResult) testResult;
             var abTestData = (ABTest)resultData.Data;
             Assert.True(abTestData.Id == testData.Id);
@@ -56,9 +58,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var contentTestStore = GetUnitUnderTest();
             var testResult = contentTestStore.Delete(Guid.NewGuid().ToString());
             _mockMarketingTestingWebRepository.Setup(call => call.DeleteTestForContent(It.IsAny<Guid>()));
+
             Assert.IsType<RestStatusCodeResult>(testResult);
-            RestStatusCodeResult code = (RestStatusCodeResult)testResult;
-            Assert.True(code.StatusCode == 200);
+            var code = testResult.ToPropertyBag()["StatusCode"].ToString();
+            Assert.True(code == "200");
         }
 
         [Fact]
@@ -66,10 +69,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var contentTestStore = GetUnitUnderTest();
             _mockMarketingTestingWebRepository.Setup(call => call.DeleteTestForContent(It.IsAny<Guid>())).Throws(new ServerException());
+
             var testResult = contentTestStore.Delete("abc");
+
             Assert.IsType<RestStatusCodeResult>(testResult);
-            RestStatusCodeResult code = (RestStatusCodeResult)testResult;
-            Assert.True(code.StatusCode == 500);
+            var code = testResult.ToPropertyBag()["StatusCode"].ToString();
+            Assert.True(code == "500");
         }
     }
 }
