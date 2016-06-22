@@ -53,16 +53,6 @@ namespace EPiServer.Marketing.Testing.Data
         public int ParticipationPercentage { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        public int? ExpectedVisitorCount { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int ActualVisitorCount { get; set; }
-
-        /// <summary>
         /// Percentage of accuracy required.
         /// Default: 95 %
         /// </summary>

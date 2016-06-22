@@ -49,16 +49,6 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         int ParticipationPercentage { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        int? ExpectedVisitorCount { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        int ActualVisitorCount { get; set; }
-
-        /// <summary>
         /// Percentage of accuracy required.
         /// Default: 95 %
         /// </summary>
