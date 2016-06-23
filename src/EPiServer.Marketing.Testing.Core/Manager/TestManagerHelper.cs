@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Core;
+using EPiServer.Data.Dynamic;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -14,13 +15,12 @@ namespace EPiServer.Marketing.Testing
     {
         private static Random _r = new Random();
 
-        internal static PageData CreateVariantPageData(IContentLoader contentLoader, PageData d, Variant variant)
+        internal static IContent CreateVariantContent(IContentLoader contentLoader, IContent d, Variant variant)
         {
             var contentToSave = d.ContentLink.CreateWritableClone();
             contentToSave.WorkID = variant.ItemVersion;
-            var newContent = contentLoader.Get<IContent>(contentToSave) as ContentData;
-
-            var contentToCache = newContent?.CreateWritableClone() as PageData;
+            var newContent = contentLoader.Get<ContentData>(contentToSave);
+            var contentToCache = newContent?.CreateWritableClone() as IContent;
             return contentToCache;
         }
 
@@ -330,5 +330,7 @@ namespace EPiServer.Marketing.Testing
 
             return dalCountType;
         }
+
+       
     }
 }
