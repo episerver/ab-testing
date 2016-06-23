@@ -6,7 +6,6 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
-using EPiServer.Data.Dynamic;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -14,7 +13,6 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
-using EPiServer.Web.WebControls;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -69,7 +67,6 @@ namespace EPiServer.Marketing.Testing
             {
                 throw new TestNotFoundException();
             }
-
             return TestManagerHelper.ConvertToManagerTest(dbTest);
         }
 
@@ -86,7 +83,6 @@ namespace EPiServer.Marketing.Testing
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
-
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
             var testList = new List<IMarketingTest>();
@@ -95,7 +91,6 @@ namespace EPiServer.Marketing.Testing
             {
                 testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
             }
-
             return testList;
         }
 
@@ -113,10 +108,8 @@ namespace EPiServer.Marketing.Testing
             {
                 testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
             }
-
             return testList;
         }
-
 
         public Guid Save(IMarketingTest multivariateTest)
         {
@@ -129,14 +122,12 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
             {
                 UpdateCache(multivariateTest, CacheOperator.Add);
             }
-
             return testId;
         }
 
@@ -185,7 +176,6 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
@@ -216,7 +206,6 @@ namespace EPiServer.Marketing.Testing
                     }
                 }
             }
-
             return activePage;
         }
 
@@ -269,7 +258,6 @@ namespace EPiServer.Marketing.Testing
                 _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
                 activeTests = tests;
             }
-
             return activeTests;
         }
 
@@ -297,7 +285,6 @@ namespace EPiServer.Marketing.Testing
                     }
                     break;
             }
-
             _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
