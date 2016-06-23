@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Components.DictionaryAdapter;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -48,14 +47,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
-            var contentData = new PageData(pageRef2) as IContent;
+            var contentData = new PageData(pageRef2);
 
             contentData.Property.Add(new PropertyNumber() { Name = "PageWorkStatus" });
             contentData.Property.Add(new PropertyDate() { Name = "PageStartPublish" });
 
             _contentLoader = new Mock<IContentLoader>();
             _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
-            _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(contentData);
+            _contentLoader.Setup(call => call.Get<ContentData>(It.IsAny<ContentReference>())).Returns(contentData);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentLoader>()).Returns(_contentLoader.Object);
 
             return new TestManager(_serviceLocator.Object);
@@ -418,7 +417,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var testManager = GetUnitUnderTest();
             testManager.RemoveCacheForUnitTests();
 
-            var pageData = testManager.GetVariantPageData(testId, new List<ContentReference>() {new ContentReference()});
+            var pageData = testManager.GetVariantContent(testId, new List<ContentReference>() {new ContentReference()});
 
             Assert.NotNull(pageData);
         }
