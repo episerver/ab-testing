@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Core;
+using EPiServer.Data.Dynamic;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -79,6 +80,7 @@ namespace EPiServer.Marketing.Testing
             return aTest;
         }
 
+
         internal static TestState AdaptToManagerState(DalTestState theDalState)
         {
             var retState = TestState.Inactive;
@@ -97,6 +99,7 @@ namespace EPiServer.Marketing.Testing
                     retState = TestState.Inactive;
                     break;
             }
+
             return retState;
         }
 
@@ -118,6 +121,7 @@ namespace EPiServer.Marketing.Testing
                     retState = DalTestState.Inactive;
                     break;
             }
+
             return retState;
         }
 
@@ -326,5 +330,7 @@ namespace EPiServer.Marketing.Testing
 
             return dalCountType;
         }
+
+       
     }
 }
