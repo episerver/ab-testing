@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
+using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -70,28 +71,28 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             return discoveredTests;
         }
 
-        public Guid CreateAbTest(ABTest dataToSave)
+        public Guid CreateAbTest(TestPagesCreateTestViewModel dataToSave)
         {
             TestManager _mtm = new TestManager();
-            dataToSave.Id = Guid.NewGuid();
+            dataToSave.Test.Id = Guid.NewGuid();
 
-            dataToSave.KpiInstances = new List<IKpi>();
+            dataToSave.Test.KpiInstances = new List<IKpi>() {new ContentComparatorKPI() {ContentGuid = dataToSave.ContentGuid} };
 
-            dataToSave.Variants = new List<Variant>()
+            dataToSave.Test.Variants = new List<Variant>()
             {
                 new Variant()
                 {
-                    Id = Guid.NewGuid(), ItemId = dataToSave.Variants[0].ItemId, ItemVersion = dataToSave.Variants[0].ItemVersion, Views = 0, Conversions = 0
+                    Id = Guid.NewGuid(), ItemId = dataToSave.Test.Variants[0].ItemId, ItemVersion = dataToSave.Test.Variants[0].ItemVersion, Views = 0, Conversions = 0
                 },
                 new Variant()
                 {
-                    Id = Guid.NewGuid(), ItemId = dataToSave.Variants[1].ItemId, ItemVersion = dataToSave.Variants[1].ItemVersion, Views = 0, Conversions = 0
+                    Id = Guid.NewGuid(), ItemId = dataToSave.Test.Variants[1].ItemId, ItemVersion = dataToSave.Test.Variants[1].ItemVersion, Views = 0, Conversions = 0
                 }
             };
 
-            _mtm.Save(dataToSave);
+            _mtm.Save(dataToSave.Test);
 
-            return dataToSave.Id;
+            return dataToSave.Test.Id;
         }
 
         /// <summary>
