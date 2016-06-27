@@ -49,7 +49,7 @@
             draft_prefix: "Draft - Edited by",
             description_heading: "Purpose of the A/B test:",
             conversion_header: "Conversion goal:",
-            conversion_selector_description: "Visitor navigates to page",
+            conversion_selector_description: "Visitor navigates to page:",
             percentage_details: "Percentage of visitors participating:",
             total_participants_details: "Current number of test participants:",
             duration_details: "Remaining duration:",
