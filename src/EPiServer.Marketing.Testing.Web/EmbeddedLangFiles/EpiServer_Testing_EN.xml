@@ -48,7 +48,7 @@
       <detailsview>
         <abortoptiontext>Abort A/B Test</abortoptiontext>
         <by>by</by>
-        <cancel_button_text>Cancel</cancel_button_text>
+        <close_button_text>Close</close_button_text>
         <conversions_label>Conversions:</conversions_label>
         <conversion_header>Conversion goal:</conversion_header>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
