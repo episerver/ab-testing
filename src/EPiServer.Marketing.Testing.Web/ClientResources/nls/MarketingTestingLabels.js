@@ -57,7 +57,7 @@
             views_label: "Views:",
             remaining_increment: "Days",
             options_button_text: "Options",
-            cancel_button_text: "Cancel",
+            close_button_text: "Close",
             test_not_started_text: "This test has not yet started.",
             test_scheduled: "It is scheduled to start "
         },
