@@ -112,6 +112,17 @@ namespace EPiServer.Marketing.Testing
 
         public Guid Save(IMarketingTest multivariateTest)
         {
+            // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
+            if (multivariateTest.KpiInstances == null)
+            {
+                throw new SaveTestException("Unable to save test due to null list of KPI's.  One or more KPI's are required.");
+            }
+
+            if (multivariateTest.KpiInstances.Count == 0)
+            {
+                throw new SaveTestException("Unable to save test due to empty list of KPI's.  One or more KPI's are required.");
+            }
+
             // Todo : We should probably check to see if item Guid is empty or null and
             // create a new unique guid here?
             // Save the kpi objects first
@@ -121,7 +132,7 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-            
+
             var testId = _dataAccess.Save(ConvertToDalTest(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)

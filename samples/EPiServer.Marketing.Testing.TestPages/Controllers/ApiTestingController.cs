@@ -215,11 +215,13 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 new Variant() {Id=Guid.NewGuid(),ItemId = Guid.NewGuid()}
             };
 
-            return View(multiVariateTest);
+            var test = new TestPagesCreateTestViewModel() { Test = multiVariateTest };
+
+            return View(test);
         }
 
         [HttpPost]
-        public ActionResult CreateABTest(ABTest multivariateTestData)
+        public ActionResult CreateABTest(TestPagesCreateTestViewModel multivariateTestData)
         {
             ApiTestingRepository testLib = new ApiTestingRepository();
             TestManager mtm = new TestManager();
@@ -249,7 +251,8 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             TestManager mtm = new TestManager();
             if (ModelState.IsValid)
             {
-                testLib.CreateAbTest(dataToSave);
+                var test = new TestPagesCreateTestViewModel() { Test = dataToSave };
+                testLib.CreateAbTest(test);
                 ABTest returnedTestData = mtm.Get(dataToSave.Id) as ABTest;
 
                 return View("TestDetails", returnedTestData);
