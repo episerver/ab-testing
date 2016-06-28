@@ -13,8 +13,8 @@
                         <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">${resources.detailsview.abortOptionText}</div>
                     </div>
                 </div>
-                <!--Cancel Button-->
-                <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.close_button_text}</button>
+                <!--Close Button-->
+                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.close_button_text}</button>
                 &nbsp;
             </div>
         </div>
@@ -28,7 +28,7 @@
                 <div class="epi-grid__header">
                     <hgroup>
                         <h1 class="dijitInline" data-dojo-attach-point="detailsHeaderText"></h1>
-                        <h3><span data-dojo-attach-point="daysElapsedText"></span></h3>
+                        <h3><span data-dojo-attach-point="daysElapsedText"></span><span class="epi-username" data-dojo-attach-point="testOwner"></span></h3>
                     </hgroup>
                 </div>
             </div>
