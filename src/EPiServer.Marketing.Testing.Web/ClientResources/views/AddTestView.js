@@ -97,7 +97,6 @@
 
             if (this.startDatePicker) {
                 this.startDatePicker.reset();
-                this.model.startDate = new Date(Date.now()).toUTCString();
             }
 
             if (this.breadcrumbWidget) {
@@ -195,6 +194,11 @@
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
 
+            var startDateSelector = dom.byId("StartDateTimeSelector");
+            if (startDateSelector.value === "") {
+                this.model.startDate = new Date(Date.now()).toUTCString();
+            }
+
             this._clearErrors();
             this._getConfidenceLevel();
 
@@ -267,7 +271,6 @@
             } else {
                 startButton.innerText = "Start Test";
                 scheduleText.innerText = "not scheduled, and will start right away";
-                this.model.startDate = new Date(Date.now()).toUTCString();
                 this.model.start = true;
             }
         }
