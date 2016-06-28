@@ -84,16 +84,18 @@
                 this.daysElapsedText.textContent = resources.detailsview.test_not_started_text + " " +
                     resources.detailsview.test_scheduled +
                     datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " " + this.context.data.test.owner;
+                    resources.detailsview.by + " ";
                 this.timeRemainingText.textContent = resources.detailsview.test_not_started_text;
             } else {
                 this.daysElapsedText.textContent = resources.detailsview.test_started_label + " " +
                     datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " " + this.context.data.test.owner;
+                    resources.detailsview.by + " ";
                 this.timeRemainingText.textContent = this.context.data.daysRemaining + " " +
                     resources.detailsview.remaining_increment;
             }
-            
+
+            this.testOwner.textContent = this.context.data.test.owner;
+
             //Published version data
             this.publishedVersionName.textContent = this.context.data.publishedVersionName;
             this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
