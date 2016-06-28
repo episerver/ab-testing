@@ -100,7 +100,7 @@
 
             if (this.startDatePicker) {
                 this.startDatePicker.reset();
-                this.model.startDate = new Date(Date.now()).toUTCString();
+                this._setDatePickerError();
             }
 
             if (this.breadcrumbWidget) {
@@ -179,7 +179,7 @@
                 et2.style.visibility = "visible";
                 this.invalidStartDate = true;
             } else {
-                invalidStartDate = false;
+                this.invalidStartDate = false;
                 errorText.style.visibility = "hidden";
                 et2.style.visibility = "hidden";
             }
@@ -210,12 +210,8 @@
         },
 
         _isDateValidRange: function (dateValue) {
-            var parsedDate = Date.parse(dateValue);
-            var now = Date.parse(new Date());
-            if (parsedDate < now) {
-                return false;
-            }
-            return true;
+            var now = new Date();
+            return(dateValue >= now);
         },
 
         _isDateValidFormat: function (dateValue) {
@@ -223,7 +219,6 @@
         },
 
         //EVENT HANDLERS
-
         //Start and Cancel Events
 
         _onStartButtonClick: function () {
@@ -320,7 +315,6 @@
             } else {
                 startButton.innerText = "Start Test";
                 scheduleText.innerText = "not scheduled, and will start right away";
-                this.model.startDate = new Date(Date.now()).toUTCString();
                 this.model.start = true;
             }
         }
