@@ -46,10 +46,13 @@
     viewPublishedVersion: null;
     viewCurrentVersion: null;
 
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
+    {
         templateString: template,
 
         resources: resources,
+
+        invalidStartDate: false, //flag for preventing submission if start date is in the past or invalid. Set on date change.
 
         //set bindings to view model properties
         modelBindingMap: {
@@ -87,12 +90,12 @@
 
             if (this.participationPercentText) {
                 this.participationPercentText.reset();
-            this.model.participationPercent = this.participationPercentText.value;
+                this.model.participationPercent = this.participationPercentText.value;
             }
 
             if (this.durationText) {
                 this.durationText.reset();
-            this.model.testDuration = this.durationText.value;
+                this.model.testDuration = this.durationText.value;
             }
 
             if (this.startDatePicker) {
@@ -152,7 +155,7 @@
             et2.style.visibility = "hidden";
         },
 
-        _setPickerError: function( error ) {
+        _setPickerError: function (error) {
             var errorText = dom.byId("pickerErrorText");
             if (!errorText) {
                 return;
@@ -161,6 +164,25 @@
             errorText.style.visibility = "visible";
             var et2 = dom.byId("pickerErrorIcon");
             et2.style.visibility = "visible";
+        },
+
+        _setDatePickerError: function (error) {
+            var errorText = dom.byId("datePickerErrorText");
+            var et2 = dom.byId("datePickerErrorIcon");
+
+            if (!errorText) {
+                return;
+            }
+            if (error !== undefined) {
+                errorText.innerText = error;
+                errorText.style.visibility = "visible";
+                et2.style.visibility = "visible";
+                this.invalidStartDate = true;
+            } else {
+                invalidStartDate = false;
+                errorText.style.visibility = "hidden";
+                et2.style.visibility = "hidden";
+            }
         },
 
         _setTitleError: function (error) {
@@ -187,6 +209,19 @@
             }
         },
 
+        _isDateValidRange: function (dateValue) {
+            var parsedDate = Date.parse(dateValue);
+            var now = Date.parse(new Date());
+            if (parsedDate < now) {
+                return false;
+            }
+            return true;
+        },
+
+        _isDateValidFormat: function (dateValue) {
+            return (!isNaN(new Date(dateValue)));
+        },
+
         //EVENT HANDLERS
 
         //Start and Cancel Events
@@ -195,17 +230,26 @@
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
 
+            var startDateSelector = dom.byId("StartDateTimeSelector");
+            var utcNow = new Date(Date.now()).toUTCString();
+            if (startDateSelector.value === "") {
+                this.model.startDate = utcNow;
+            }
+
             this._clearErrors();
             this._getConfidenceLevel();
 
             var title = dom.byId("textTitle");
-            if( !this.titleText.value ) {
+            if (!this.titleText.value) {
                 // TODO: use localized resources.
                 this._setTitleError("You must enter a title before you can save the A/B test.");
             }
             else if (!this.model.conversionPage) {
                 this._setPickerError("You must select a conversion goal page before you can save the A/B test.");
-            } else {
+            } else if (this.invalidStartDate) {
+                //prevent submission.  Error text already set on date change
+            }
+            else {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -229,7 +273,9 @@
         },
 
         _onCancelButtonClick: function () {
-            topic.publish("/epi/shell/action/changeview/back");
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
         // Form Field Events
@@ -258,8 +304,15 @@
         _onDateTimeChange: function (event) {
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
-
-            if (event !== null) {
+            this._setDatePickerError();
+            if (!this._isDateValidRange(event)) {
+                this._setDatePickerError("The starting date/time of the test cannot be in the past.");
+                scheduleText.innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+            } else if (!this._isDateValidFormat(event)) {
+                this._setDatePickerError("The information entered is not a valid date/time value");
+                scheduleText.innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+            }
+            else if (event !== null) {
                 startButton.innerText = "Schedule Test";
                 scheduleText.innerText = "scheduled to begin on " + event;
                 this.model.startDate = new Date(event).toUTCString();
