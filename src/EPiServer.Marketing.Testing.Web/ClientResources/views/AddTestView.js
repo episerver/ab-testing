@@ -18,7 +18,7 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-    'epi-cms/widget/Breadcrumb',    
+    'epi-cms/widget/Breadcrumb',
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
@@ -40,8 +40,6 @@
     html,
     dom,
     dependency
-
-
 ) {
     viewPublishedVersion: null;
     viewCurrentVersion: null;
@@ -51,8 +49,6 @@
         templateString: template,
 
         resources: resources,
-
-        invalidStartDate: false, //flag for preventing submission if start date is in the past or invalid. Set on date change.
 
         //set bindings to view model properties
         modelBindingMap: {
@@ -177,9 +173,7 @@
                 errorText.innerText = error;
                 errorText.style.visibility = "visible";
                 et2.style.visibility = "visible";
-                this.invalidStartDate = true;
             } else {
-                this.invalidStartDate = false;
                 errorText.style.visibility = "hidden";
                 et2.style.visibility = "hidden";
             }
@@ -209,13 +203,23 @@
             }
         },
 
-        _isDateValidRange: function (dateValue) {
+        _isValidStartDate(dateValue) {
+            var scheduleText = dom.byId("ScheduleText");
             var now = new Date();
-            return(dateValue >= now);
-        },
-
-        _isDateValidFormat: function (dateValue) {
-            return (!isNaN(new Date(dateValue)));
+            if (dateValue !== "") {
+                if (isNaN(new Date(dateValue))) {
+                    this._setDatePickerError("The information entered is not a valid date/time value");
+                    scheduleText
+                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    return false;
+                } else if (new Date(dateValue) < now) {
+                    this._setDatePickerError("The starting date/time of the test cannot be in the past.");
+                    scheduleText
+                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    return false;
+                }
+            }
+            return true;
         },
 
         //EVENT HANDLERS
@@ -241,10 +245,8 @@
             }
             else if (!this.model.conversionPage) {
                 this._setPickerError("You must select a conversion goal page before you can save the A/B test.");
-            } else if (this.invalidStartDate) {
-                //prevent submission.  Error text already set on date change
             }
-            else {
+            else if (this._isValidStartDate(startDateSelector.value)) {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -268,6 +270,7 @@
         },
 
         _onCancelButtonClick: function () {
+            this._setDatePickerError();
             var me = this;
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
             topic.publish("/epi/shell/context/request", me.contextParameters);
@@ -300,22 +303,18 @@
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
             this._setDatePickerError();
-            if (!this._isDateValidRange(event)) {
-                this._setDatePickerError("The starting date/time of the test cannot be in the past.");
-                scheduleText.innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
-            } else if (!this._isDateValidFormat(event)) {
-                this._setDatePickerError("The information entered is not a valid date/time value");
-                scheduleText.innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
-            }
-            else if (event !== null) {
-                startButton.innerText = "Schedule Test";
-                scheduleText.innerText = "scheduled to begin on " + event;
-                this.model.startDate = new Date(event).toUTCString();
-                this.model.start = false;
-            } else {
-                startButton.innerText = "Start Test";
-                scheduleText.innerText = "not scheduled, and will start right away";
-                this.model.start = true;
+
+           if (this._isValidStartDate(event)) {
+                if (event !== null) {
+                    startButton.innerText = "Schedule Test";
+                    scheduleText.innerText = "scheduled to begin on " + event;
+                    this.model.startDate = new Date(event).toUTCString();
+                    this.model.start = false;
+                } else {
+                    startButton.innerText = "Start Test";
+                    scheduleText.innerText = "not scheduled, and will start right away";
+                    this.model.start = true;
+                }
             }
         }
     });
