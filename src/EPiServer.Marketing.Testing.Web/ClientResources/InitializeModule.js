@@ -41,6 +41,13 @@
             editNotifications.add(TestNotification);
 
             commandRegistry.registerProvider('epi.cms.publishmenu', new AddTestCommandProvider());
+
+            // Re-direct to a/b test context
+            var hashWrapper = dependency.resolve("epi.shell.HashWrapper");
+            var contextService = this.resolveDependency("epi.shell.ContextService");
+            contextService.registerRoute("epi.marketing.testing", function (context, callerData) {
+                hashWrapper.onContextChange(context, callerData);
+            }.bind(this));
         }
     });
 });

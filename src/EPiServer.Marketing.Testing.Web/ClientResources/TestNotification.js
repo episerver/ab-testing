@@ -86,7 +86,7 @@ function (
                     event.stop(e);
                     topic.publish("/epi/shell/context/request", {
                         uri: "epi.marketing.testing:///testid=" + test.id + "/details"
-                    }, {});
+                    }, {sender: this});
                 })
             );
             
