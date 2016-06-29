@@ -24,8 +24,11 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             _serviceLocator = locator;
         }
 
+        [ExcludeFromCodeCoverage]
         public JobRescheduler()
-        {}
+        {
+            // requried default constructor else cms complains when instantiating this class.
+        }
 
         [ExcludeFromCodeCoverage]
         public void Initialize(InitializationEngine context)
