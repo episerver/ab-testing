@@ -47,23 +47,54 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             string msg = "Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]";
 
             var tm = _locator.GetInstance<ITestManager>();
+            var repo = _locator.GetInstance<IScheduledJobRepository>();
+            ScheduledJob job = repo.Get(this.ScheduledJobId);
+            DateTime NextExecutionUTC = job.NextExecutionUTC;
 
-            // start / stop any tests that are scheduled to start / stop
+            // Start / stop any tests that need to be.
+            // If any tests are scheduled to start or stop prior to the next scheduled
+            // exection date of this job, change the next execution date approprately. 
             foreach (var test in tm.GetTestList(new TestCriteria()))
             {
                 switch (test.State)
                 {
                     case TestState.Active:
-                        if (DateTime.UtcNow > test.EndDate)
+                        var utcEndDate = ((DateTime)test.EndDate).ToUniversalTime();
+                        if (DateTime.UtcNow > utcEndDate) // stop it now
                         {
                             tm.Stop(test.Id);
                             stopped++;
                         }
+                        else if(NextExecutionUTC > utcEndDate)
+                        {
+                            // set a newer date to run the job again
+                            NextExecutionUTC = utcEndDate;
+                        }
                         break;
                     case TestState.Inactive:
-                        if( DateTime.UtcNow > test.StartDate )
-                        { tm.Start(test.Id); started++; }
+                        var utcStartDate = test.StartDate.ToUniversalTime();
+                        if ( DateTime.UtcNow > utcStartDate) // start it now
+                        {
+                            tm.Start(test.Id);
+                            started++;
+                        }
+                        else if (NextExecutionUTC > utcStartDate)
+                        {
+                            // set a newer date to run the job again
+                            NextExecutionUTC = utcStartDate;
+                        }
                         break;
+                }
+            }
+
+            // update the next run time if we need to
+            if( job.NextExecutionUTC != NextExecutionUTC )
+            {
+                if (job.IsEnabled)
+                {
+                    // NextExecution requires local time
+                    job.NextExecution = NextExecutionUTC.ToLocalTime();
+                    repo.Save(job);
                 }
             }
 
