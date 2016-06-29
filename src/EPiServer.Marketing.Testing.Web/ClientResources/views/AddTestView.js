@@ -302,10 +302,15 @@
         _onDateTimeChange: function (event) {
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
+            var startDateSelector = dom.byId("StartDateTimeSelector");
+
             this._setDatePickerError();
+            if (event === null) {
+                event = startDateSelector.value;
+            }
 
            if (this._isValidStartDate(event)) {
-                if (event !== null) {
+                if (event !== "") {
                     startButton.innerText = "Schedule Test";
                     scheduleText.innerText = "scheduled to begin on " + event;
                     this.model.startDate = new Date(event).toUTCString();
