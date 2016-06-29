@@ -18,7 +18,7 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-    'epi-cms/widget/Breadcrumb',    
+    'epi-cms/widget/Breadcrumb',
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
@@ -40,13 +40,12 @@
     html,
     dom,
     dependency
-
-
 ) {
     viewPublishedVersion: null;
     viewCurrentVersion: null;
 
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
+    {
         templateString: template,
 
         resources: resources,
@@ -87,16 +86,17 @@
 
             if (this.participationPercentText) {
                 this.participationPercentText.reset();
-            this.model.participationPercent = this.participationPercentText.value;
+                this.model.participationPercent = this.participationPercentText.value;
             }
 
             if (this.durationText) {
                 this.durationText.reset();
-            this.model.testDuration = this.durationText.value;
+                this.model.testDuration = this.durationText.value;
             }
 
             if (this.startDatePicker) {
                 this.startDatePicker.reset();
+                this._setDatePickerError();
             }
 
             if (this.breadcrumbWidget) {
@@ -151,7 +151,7 @@
             et2.style.visibility = "hidden";
         },
 
-        _setPickerError: function( error ) {
+        _setPickerError: function (error) {
             var errorText = dom.byId("pickerErrorText");
             if (!errorText) {
                 return;
@@ -160,6 +160,23 @@
             errorText.style.visibility = "visible";
             var et2 = dom.byId("pickerErrorIcon");
             et2.style.visibility = "visible";
+        },
+
+        _setDatePickerError: function (error) {
+            var errorText = dom.byId("datePickerErrorText");
+            var et2 = dom.byId("datePickerErrorIcon");
+
+            if (!errorText) {
+                return;
+            }
+            if (error !== undefined) {
+                errorText.innerText = error;
+                errorText.style.visibility = "visible";
+                et2.style.visibility = "visible";
+            } else {
+                errorText.style.visibility = "hidden";
+                et2.style.visibility = "hidden";
+            }
         },
 
         _setTitleError: function (error) {
@@ -186,8 +203,26 @@
             }
         },
 
-        //EVENT HANDLERS
+        _isValidStartDate(dateValue) {
+            var scheduleText = dom.byId("ScheduleText");
+            var now = new Date();
+            if (dateValue !== "") {
+                if (isNaN(new Date(dateValue))) {
+                    this._setDatePickerError("The information entered is not a valid date/time value");
+                    scheduleText
+                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    return false;
+                } else if (new Date(dateValue) < now) {
+                    this._setDatePickerError("The starting date/time of the test cannot be in the past.");
+                    scheduleText
+                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    return false;
+                }
+            }
+            return true;
+        },
 
+        //EVENT HANDLERS
         //Start and Cancel Events
 
         _onStartButtonClick: function () {
@@ -195,21 +230,23 @@
             this.model.testDescription = description.value;
 
             var startDateSelector = dom.byId("StartDateTimeSelector");
+            var utcNow = new Date(Date.now()).toUTCString();
             if (startDateSelector.value === "") {
-                this.model.startDate = new Date(Date.now()).toUTCString();
+                this.model.startDate = utcNow;
             }
 
             this._clearErrors();
             this._getConfidenceLevel();
 
             var title = dom.byId("textTitle");
-            if( !this.titleText.value ) {
+            if (!this.titleText.value) {
                 // TODO: use localized resources.
                 this._setTitleError("You must enter a title before you can save the A/B test.");
             }
             else if (!this.model.conversionPage) {
                 this._setPickerError("You must select a conversion goal page before you can save the A/B test.");
-            } else {
+            }
+            else if (this._isValidStartDate(startDateSelector.value)) {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -233,7 +270,10 @@
         },
 
         _onCancelButtonClick: function () {
-            topic.publish("/epi/shell/action/changeview/back");
+            this._setDatePickerError();
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
         // Form Field Events
@@ -262,16 +302,24 @@
         _onDateTimeChange: function (event) {
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
+            var startDateSelector = dom.byId("StartDateTimeSelector");
 
-            if (event !== null) {
-                startButton.innerText = "Schedule Test";
-                scheduleText.innerText = "scheduled to begin on " + event;
-                this.model.startDate = new Date(event).toUTCString();
-                this.model.start = false;
-            } else {
-                startButton.innerText = "Start Test";
-                scheduleText.innerText = "not scheduled, and will start right away";
-                this.model.start = true;
+            this._setDatePickerError();
+            if (event === null) {
+                event = startDateSelector.value;
+            }
+
+           if (this._isValidStartDate(event)) {
+                if (event !== "") {
+                    startButton.innerText = "Schedule Test";
+                    scheduleText.innerText = "scheduled to begin on " + event;
+                    this.model.startDate = new Date(event).toUTCString();
+                    this.model.start = false;
+                } else {
+                    startButton.innerText = "Start Test";
+                    scheduleText.innerText = "not scheduled, and will start right away";
+                    this.model.start = true;
+                }
             }
         }
     });
