@@ -63,7 +63,8 @@ function (
             var message = resources.notificationbar.ongoing_test;
             var testLinkText = resources.notificationbar.details_link_text;
             var testLinkTooltip = resources.notificationbar.details_link_tooltip;
-            
+            var page = "details";
+
              // Inactive (scheduled)
             if (test.state == 0) {
                 message = resources.notificationbar.scheduled_test + 
@@ -75,6 +76,7 @@ function (
                 message = resources.notificationbar.completed_test;
                 var testLinkText = resources.notificationbar.winner_link_text;
                 var testLinkTooltip = resources.notificationbar.winner_link_tooltip;
+                page = "pickwinner";
             }
 
             var notificationMesage = domConstruct.create("div", {innerHTML: message});
@@ -85,7 +87,7 @@ function (
                 on(testLink, "click", function (e) {
                     event.stop(e);
                     topic.publish("/epi/shell/context/request", {
-                        uri: "epi.marketing.testing:///testid=" + test.id + "/details"
+                        uri: "epi.marketing.testing:///testid=" + test.id + "/" + page
                     }, {});
                 })
             );

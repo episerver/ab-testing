@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.PlugIn;
 
 namespace EPiServer.Marketing.Testing.TestPages.Models
 {
@@ -45,4 +47,10 @@ namespace EPiServer.Marketing.Testing.TestPages.Models
     }
 
 
+    public class TestPagesCreateTestViewModel
+    {
+        public ABTest Test { get; set; }
+
+        public Guid ContentGuid { get; set; }
+    }
 }

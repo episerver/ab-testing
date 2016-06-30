@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     public class TestingContextHelper : ITestingContextHelper
     {
         private IServiceLocator _serviceLocator;
-
+        
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
@@ -28,6 +28,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// For Unit Testing
         /// </summary>
         /// <param name="context"></param>
+        /// <param name="mockServiceLocator"></param>
         [ExcludeFromCodeCoverage]
         internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator)
         {
@@ -77,6 +78,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
 
+
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
 
@@ -101,8 +103,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //Test Details may be viewed before the test has started.   
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
-            //Text message if Inactive, Remaining Days if active.   Days Elapsed will be parsed and displayed using
-            //episervers friendly datetime method on the client side.
+            //Text message if Inactive, Remaining Days if active, and adjusted days for done and archived.
+            //Days Elapsed will be parsed and displayed using episervers friendly datetime method on the client side.
             if (testData.State == TestState.Active)
             {
                 model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
@@ -114,6 +116,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysElapsed = ls.GetString("/abtesting/detailsview/dayselapsed");
                 model.DaysRemaining = ls.GetString("/abtesting/detailsview/daysremainging");
             }
+            else
+            {
+                model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysRemaining = "0";
+            }
 
             //retrieve conversion content from kpis
             //convert conversion content link to anchor link
@@ -121,7 +128,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             if (kpi != null)
             {
                 var conversionContent = repo.Get<IContent>(kpi.ContentGuid);
-
+               
                 model.ConversionLink = uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
                 model.ConversionContentName = conversionContent.Name;
             }
@@ -133,7 +140,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
 
             return model;
-        }
+            }
 
         /// <summary>
         /// Map IContent version data into the model
