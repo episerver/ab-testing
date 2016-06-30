@@ -74,7 +74,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
         {
-            var contentVersionRepo = _serviceLocator.GetInstance<IContentVersionRepository>();
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
 
@@ -91,7 +90,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
             model.Test = testData;
-            model.Test.StartDate = model.Test.StartDate.ToLocalTime();
             model.PublishedVersionName = publishedContent.Name;
             model.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
@@ -112,9 +110,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
             else if (testData.State == TestState.Inactive)
             {
-                var ls = _serviceLocator.GetInstance<LocalizationService>();
-                model.DaysElapsed = ls.GetString("/abtesting/detailsview/dayselapsed");
-                model.DaysRemaining = ls.GetString("/abtesting/detailsview/daysremainging");
+                model.DaysElapsed = "Test has not been started";
+                model.DaysRemaining = "Test has not been started";
             }
             else
             {
