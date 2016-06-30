@@ -34,6 +34,8 @@ namespace EPiServer.Marketing.Testing
         private Random _randomParticiaption = new Random();
         private MemoryCache _testCache = MemoryCache.Default;
 
+        public event EventHandler<TestEventArgs> SavingTestEvent;
+
         [ExcludeFromCodeCoverage]
         public TestManager()
         {
@@ -138,6 +140,12 @@ namespace EPiServer.Marketing.Testing
             if (multivariateTest.State == TestState.Active)
             {
                 UpdateCache(multivariateTest, CacheOperator.Add);
+            }
+
+            if( SavingTestEvent != null )
+            {
+                var eventarg = new TestEventArgs(multivariateTest);
+                SavingTestEvent(this, eventarg);
             }
 
             return testId;

@@ -38,6 +38,7 @@ namespace EPiServer.Marketing.Testing
         List<IMarketingTest> CreateOrGetCache();
 
         void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
+
         /// <summary>
         /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
         /// the list of Kpi Guids that evaluated as true.
@@ -46,5 +47,10 @@ namespace EPiServer.Marketing.Testing
         /// <param name="content"></param>
         /// <returns>list - can be empty, never null</returns>
         IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content);
+
+        /// <summary>
+        /// Event handler for callers to get notified when a test is saved.
+        /// </summary>
+        event EventHandler<TestEventArgs> SavingTestEvent;
     }
 }
