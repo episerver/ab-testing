@@ -63,6 +63,8 @@
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
         <test_started_label>Test started</test_started_label>
+        <test_not_started_text></test_not_started_text>
+        <test_scheduled></test_scheduled>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views_label>Views:</views_label>
       </detailsview>

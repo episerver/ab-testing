@@ -310,7 +310,7 @@
             }
 
             if (this._isValidStartDate(event)) {
-            if (event !== null) {
+            if (event !== "") {
                 startButton.innerText = resources.addtestview.schedule_test;
                 scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
                 this.model.startDate = new Date(event).toUTCString();
@@ -318,7 +318,6 @@
             } else {
                 startButton.innerText = resources.addtestview.start_default;
                 scheduleText.innerText = resources.addtestview.notscheduled_text;
-                this.model.startDate = new Date(Date.now()).toUTCString();
                 this.model.start = true;
             }
         }
