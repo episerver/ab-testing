@@ -31,6 +31,7 @@ namespace EPiServer.Marketing.Testing
         private Random _randomParticiaption = new Random();
         private MemoryCache _testCache = MemoryCache.Default;
         private MemoryCache _variantCache = MemoryCache.Default;
+        private IKpiManager _kpiManager;
 
         public event EventHandler<TestEventArgs> SavingTestEvent;
 
@@ -39,6 +40,7 @@ namespace EPiServer.Marketing.Testing
         {
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
+            _kpiManager = new KpiManager();
             CreateOrGetCache();
         }
 
@@ -46,6 +48,7 @@ namespace EPiServer.Marketing.Testing
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
+            _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             CreateOrGetCache();
         }
 
@@ -70,7 +73,7 @@ namespace EPiServer.Marketing.Testing
                 throw new TestNotFoundException();
             }
             
-            return TestManagerHelper.ConvertToManagerTest(_serviceLocator, dbTest);
+            return TestManagerHelper.ConvertToManagerTest(_kpiManager, dbTest);
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
             {
-                testList.Add(TestManagerHelper.ConvertToManagerTest(_serviceLocator, dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
 
             return testList;
@@ -111,7 +114,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestList(TestManagerHelper.ConvertToDalCriteria(criteria)))
             {
-                testList.Add(TestManagerHelper.ConvertToManagerTest(_serviceLocator, dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
 
             return testList;
@@ -178,7 +181,7 @@ namespace EPiServer.Marketing.Testing
             // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(TestManagerHelper.ConvertToManagerTest(_serviceLocator, dalTest), CacheOperator.Add);
+                UpdateCache(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest), CacheOperator.Add);
             }
         }
 

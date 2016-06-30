@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Testing
             return _r.Next(1, 3);
         }
 
-        internal static IMarketingTest ConvertToManagerTest(IServiceLocator serviceLocator, IABTest theDalTest)
+        internal static IMarketingTest ConvertToManagerTest(IKpiManager _kpiManager, IABTest theDalTest)
         {
             var aTest = new ABTest
             {
@@ -53,7 +53,7 @@ namespace EPiServer.Marketing.Testing
                 CreatedDate = theDalTest.CreatedDate,
                 ModifiedDate = theDalTest.ModifiedDate,
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
-                KpiInstances = AdaptToManagerKPI(serviceLocator, theDalTest.KeyPerformanceIndicators)
+                KpiInstances = AdaptToManagerKPI(_kpiManager, theDalTest.KeyPerformanceIndicators)
             };
             return aTest;
         }
@@ -187,23 +187,21 @@ namespace EPiServer.Marketing.Testing
         #endregion VariantConversion
 
         #region KPIConversion
-        internal static List<IKpi> AdaptToManagerKPI(IServiceLocator serviceLocator, IList<DalKeyPerformanceIndicator> theDalKPIs)
+        internal static List<IKpi> AdaptToManagerKPI(IKpiManager _kpiManager, IList<DalKeyPerformanceIndicator> theDalKPIs)
         {
             var retList = new List<IKpi>();
 
             foreach (var dalKPI in theDalKPIs)
             {
-                retList.Add(ConvertToManagerKPI(serviceLocator, dalKPI));
+                retList.Add(ConvertToManagerKPI(_kpiManager, dalKPI));
             }
 
             return retList;
         }
 
-        internal static IKpi ConvertToManagerKPI(IServiceLocator serviceLocator, DalKeyPerformanceIndicator dalKpi)
+        internal static IKpi ConvertToManagerKPI(IKpiManager _kpiManager, DalKeyPerformanceIndicator dalKpi)
         {
-            var kpiManager = serviceLocator.GetInstance<IKpiManager>();
-
-            return kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
+            return _kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
         }
 
 
