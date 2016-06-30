@@ -95,9 +95,8 @@
             this.model.testDuration = this.durationText.value;
             }
 
-            if (this.startTimeSelector) {
-                this.startTimeSelector.reset();
-                this.model.startDate = new Date(Date.now()).toUTCString();
+            if (this.startDatePicker) {
+                this.startDatePicker.reset();
             }
 
             if (this.breadcrumbWidget) {
@@ -194,6 +193,11 @@
         _onStartButtonClick: function () {
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
+
+            var startDateSelector = dom.byId("StartDateTimeSelector");
+            if (startDateSelector.value === "") {
+                this.model.startDate = new Date(Date.now()).toUTCString();
+            }
 
             this._clearErrors();
             this._getConfidenceLevel();

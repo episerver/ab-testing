@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         Guid SaveMarketingTest(IMarketingTest testData);
         IMarketingTest GetActiveTestForContent(Guid contentGuid);
         void DeleteTestForContent(Guid contentGuid);
-        int PublishWinningVariant(TestResultStoreModel testResult);
+        string PublishWinningVariant(TestResultStoreModel testResult);
 
     }
 }

@@ -14,6 +14,7 @@ using Moq;
 using Xunit;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
 
 namespace EPiServer.Marketing.Testing.Test.Core
@@ -412,6 +413,61 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Assert.True(results.IsSignificant);
         }
 
+        [Fact]
+        public void TestManager_Save_Throws_Null_KPIs()
+        {
+            var testManager = GetUnitUnderTest();
+            var dalList = new List<IABTest>();
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+
+            var test = new ABTest
+            {
+                Id = Guid.NewGuid(),
+                Variants = new List<Variant>()
+            };
+
+            try
+            {
+                testManager.Save(test);
+            }
+            catch (Exception e)
+            {
+                Assert.IsType<SaveTestException>(e);
+            }
+        }
+
+        [Fact]
+        public void TestManager_Save_Throws_Empty_KPIs()
+        {
+            var testManager = GetUnitUnderTest();
+            var dalList = new List<IABTest>();
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+
+            var test = new ABTest
+            {
+                Id = Guid.NewGuid(),
+                Variants = new List<Variant>(),
+                KpiInstances = new List<IKpi>()
+            };
+
+            try
+            {
+                testManager.Save(test);
+            }
+            catch (Exception e)
+            {
+                Assert.IsType<SaveTestException>(e);
+            }
+        }
+
+        [Fact]
+        public void SaveTestExceptions()
+        {
+            var e = new SaveTestException("test", new Exception());
+
+            Assert.IsType<SaveTestException>(new SaveTestException());
+            Assert.Equal("test", e.Message);
+        }
         [Fact]
         public void GetVariantPageData_Test()
         {

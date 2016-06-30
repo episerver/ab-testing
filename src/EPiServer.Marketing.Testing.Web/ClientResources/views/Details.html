@@ -9,12 +9,12 @@
                 <div class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton" data-dojo-type="dijit/form/DropDownButton">
                     <span>${resources.detailsview.options_button_text}</span>
                     <div class="dijitReset epi-tooltipDialogMenu epi-menuInverted" data-dojo-type="dijit/DropDownMenu" role="menu">
-                        <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onPickWinnerOptionClicked">${resources.detailsview.pickwinneroptiontext}</div>
-                        <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">${resources.detailsview.abortoptiontext}</div>
+                        <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onPickWinnerOptionClicked">${resources.detailsview.pickWinnerOptionText}</div>
+                        <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">${resources.detailsview.abortOptionText}</div>
                     </div>
                 </div>
-                <!--Cancel Button-->
-                <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.close_button_text}</button>
+                <!--Close Button-->
+                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.close_button_text}</button>
                 &nbsp;
             </div>
         </div>
@@ -28,7 +28,7 @@
                 <div class="epi-grid__header">
                     <hgroup>
                         <h1 class="dijitInline" data-dojo-attach-point="detailsHeaderText"></h1>
-                        <h3><span data-dojo-attach-point="daysElapsedText"></span>&nbsp;<span class="epi-username" data-dojo-attach-point="ownerText"></span></h3>
+                        <h3><span data-dojo-attach-point="daysElapsedText"></span><span class="epi-username" data-dojo-attach-point="testOwner"></span></h3>
                     </hgroup>
                 </div>
             </div>
@@ -70,7 +70,7 @@
         <!--Description-->
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
-                <div class="epi-grid__header">
+                <div class="epi-grid__header" style="width: 75%" >
                     <h2>${resources.detailsview.description_heading}</h2>
                     <p data-dojo-attach-point="testDescription"></p>
                 </div>
@@ -88,15 +88,15 @@
             <div class="epi-grid__col--12">
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <li class="epi-form-container__section__row epi-form-container__section__row--field">
-                        <label>${resources.detailsview.conversion_selector_description}</label>
+                        <label style="width:200px">${resources.detailsview.conversion_selector_description}</label>
                         <span class="dijitInline dijitReset dijitIcon epi-iconPage"></span> <a href="" data-dojo-attach-point="contentLinkAnchor"></a>
                     </li>
                     <!--Participation and duration-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
-                        <h3>${resources.detailsview.percentage_details} <span data-dojo-attach-point="visitorPercentageText"></span></h3>
+                        <h3>${resources.detailsview.percentage_details} <span data-dojo-attach-point="visitorPercentageText"></span> %</h3>
                         <h3>${resources.detailsview.total_participants_details} <span data-dojo-attach-point="totalParticipantsText"></span></h3>
                         <h3>
-                            ${resources.detailsview.duration_details} <span data-dojo-attach-point="timeRemainingText"> </span>&nbsp;${resources.detailsview.remaining_increment}
+                            ${resources.detailsview.duration_details} <span data-dojo-attach-point="timeRemainingText"> </span>
                         </h3>
                     </li>
                 </ul>

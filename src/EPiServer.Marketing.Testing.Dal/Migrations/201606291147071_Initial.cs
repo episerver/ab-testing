@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Testing.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
+
+    [ExcludeFromCodeCoverage]
     public partial class Initial : DbMigration
     {
         public override void Up()
@@ -12,11 +15,11 @@ namespace Testing.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Title = c.String(nullable: false, maxLength: 255),
-                        Description = c.String(maxLength: 255),
-                        Owner = c.String(nullable: false, maxLength: 100),
+                        Title = c.String(nullable: false),
+                        Description = c.String(),
+                        Owner = c.String(nullable: false),
                         OriginalItemId = c.Guid(nullable: false),
-                        State = c.Int(),
+                        State = c.Int(nullable: false),
                         StartDate = c.DateTime(nullable: false),
                         EndDate = c.DateTime(nullable: false),
                         ParticipationPercentage = c.Int(nullable: false),

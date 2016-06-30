@@ -17,12 +17,15 @@ namespace EPiServer.Marketing.Testing.Web
     internal class TestHandler : ITestHandler
     {
         internal List<ContentReference> ProcessedContentList;
+
         private ITestingContextHelper _contextHelper;
         private ITestDataCookieHelper _testDataCookieHelper;
         private ILogger _logger;
-
         private ITestManager _testManager;
         private bool? _swapDisabled;
+
+        //allows SwapDisabled to be explicitly set (e.g unit tests)
+        //Otherwise set via context helper.
         public bool? SwapDisabled
         {
             set { _swapDisabled = value; }
@@ -46,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Web
             _logger = LogManager.GetLogger();
         }
 
-        [ExcludeFromCodeCoverage]
+        //To support unit testing
         internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
@@ -65,6 +68,113 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
         }
 
+        /// Main worker method.  Processes each content which triggers a
+        /// content loaded event to determine the state of a test and what content to display.
+        public void LoadedContent(object sender, ContentEventArgs e)
+        {
+            if (!SwapDisabled == true)
+            {
+                try
+                {
+                    IContent currentPage = _contextHelper.GetCurrentPageFromUrl();
+
+                    if (e.TargetLink != null)
+                    {
+                        EvaluateKpis(e);    // new method to evaluate Kpi
+                    }
+
+                    // Causing numerous errors at startup
+                    if (e.Content == null)
+                        return;
+
+                    var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
+                    var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+                    var hasData = _testDataCookieHelper.HasTestData(testCookieData);
+
+                    if (activeTest != null)
+                    {
+                        if (hasData && _testDataCookieHelper.IsTestParticipant(testCookieData) && testCookieData.ShowVariant)
+                        {
+                            ProcessedContentList.Add(e.ContentLink);
+                            Swap(testCookieData, e);
+                        }
+                        else if (!hasData && currentPage !=null && _contextHelper.IsRequestedContent(currentPage,e.Content) && ProcessedContentList.Count == 0)
+                        {
+                            ProcessedContentList.Add(e.ContentLink);
+                            //get a new random variant. 
+                            var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
+                            testCookieData.TestId = activeTest.Id;
+                            testCookieData.TestContentId = activeTest.OriginalItemId;
+                            testCookieData.TestVariantId = newVariant.Id;
+
+                            foreach (var kpi in activeTest.KpiInstances)
+                            {
+                                testCookieData.KpiConversionDictionary.Add(kpi.Id, false);
+                            }
+
+                            if (newVariant.Id != Guid.Empty)
+                            {
+                                var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+
+                                if (newVariant.ItemVersion != contentVersion)
+                                {
+                                    contentVersion = newVariant.ItemVersion;
+                                    testCookieData.ShowVariant = true;
+                                    _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
+
+                                    Swap(testCookieData, e);
+                                }
+                                else
+                                {
+                                    testCookieData.ShowVariant = false;
+                                }
+
+                                CalculateView(testCookieData, contentVersion);
+                            }
+                        }
+                    }
+                    else if (hasData)
+                    {
+                        _testDataCookieHelper.ExpireTestDataCookie(testCookieData);
+                    }
+                }
+                catch (Exception err)
+                {
+                    _logger.Error("TestHandler", err);
+                }
+            }
+        }
+
+        //Handles the swapping of content data
+        private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
+        {
+            if (cookie.ShowVariant)
+            {
+                var variant = _testManager.GetVariantPageData(activeContent.Content.ContentGuid, ProcessedContentList);
+                //swap it with the cached version
+                if (variant != null)
+                {
+                    activeContent.ContentLink = variant.ContentLink;
+                    activeContent.Content = variant;
+                }
+            }
+        }
+
+        //Handles the incrementing of view counts on a version
+        private void CalculateView(TestDataCookie cookie, int contentVersion)
+        {
+            //increment view if not already done
+            if (cookie.Viewed == false)
+            {
+                _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                    CountType.View);
+            }
+            //set viewed = true in testdata
+            cookie.Viewed = true;
+            _testDataCookieHelper.UpdateTestDataCookie(cookie);
+        }
+
+        //Processes the Kpis, determining conversions and handling incrementing conversion counts.
         private void EvaluateKpis(ContentEventArgs e)
         {
             var cdl = _testDataCookieHelper.getTestDataFromCookies();
@@ -112,119 +222,12 @@ namespace EPiServer.Marketing.Testing.Web
                             }
                         }
                     }
-                    catch(TestNotFoundException )
+                    catch (TestNotFoundException)
                     {
                         _testDataCookieHelper.ExpireTestDataCookie(testdata);
                     }
                 }
             }
-        }
-
-        public void LoadedContent(object sender, ContentEventArgs e)
-        {
-            if (!SwapDisabled == true)
-            {
-                try
-                {
-                    IContent CurrentPage = _contextHelper.GetCurrentPageFromUrl();
-
-                    if (e.TargetLink != null)
-                    {
-                        EvaluateKpis(e);    // new method to evaluate Kpi
-                    }
-
-                    // Causing numerous errors at startup
-                    if (e.Content == null)
-                        return;
-
-                    var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
-
-                    var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
-                    var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-
-                    if (activeTest != null)
-                    {
-                        if (hasData && _testDataCookieHelper.IsTestParticipant(testCookieData) && testCookieData.ShowVariant)
-                        {
-                            ProcessedContentList.Add(e.ContentLink);
-                            Swap(testCookieData, e);
-                        }
-                        else if (!hasData && CurrentPage !=null && _contextHelper.IsRequestedContent(CurrentPage,e.Content) && ProcessedContentList.Count == 0)
-                        {
-                            ProcessedContentList.Add(e.ContentLink);
-                            //get a new random variant. 
-                            var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
-                            testCookieData.TestId = activeTest.Id;
-                            testCookieData.TestContentId = activeTest.OriginalItemId;
-                            testCookieData.TestVariantId = newVariant.Id;
-
-                            foreach (var kpi in activeTest.KpiInstances)
-                            {
-                                testCookieData.KpiConversionDictionary.Add(kpi.Id, false);
-                            }
-
-                            if (newVariant.Id != Guid.Empty)
-                            {
-                                var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-
-                                if (newVariant.ItemVersion != contentVersion)
-                                {
-                                    contentVersion = newVariant.ItemVersion;
-                                    testCookieData.ShowVariant = true;
-                                    _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
-
-                                    Swap(testCookieData, e);
-                                }
-                                else
-                                {
-                                    testCookieData.ShowVariant = false;
-                                }
-
-                                CalculateView(testCookieData, contentVersion);
-                            }
-                        }
-                    }
-                    else if (hasData)
-                    {
-                        _testDataCookieHelper.ExpireTestDataCookie(testCookieData);
-                    }
-                }
-                catch (Exception err)
-                {
-                    _logger.Error("TestHandler", err);
-                }
-            }
-        }
-
-        private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
-        {
-            if (cookie.ShowVariant)
-            {
-                var variant = _testManager.GetVariantPageData(activeContent.Content.ContentGuid, ProcessedContentList);
-                //swap it with the cached version
-                if (variant != null)
-                {
-                    activeContent.ContentLink = variant.ContentLink;
-                    activeContent.Content = variant;
-                }
-            }
-        }
-
-        private void CalculateView(TestDataCookie cookie, int contentVersion)
-        {
-            //increment view if not already done
-            if (cookie.Viewed == false)
-            {
-                _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
-                    CountType.View);
-            }
-            //set viewed = true in testdata
-            cookie.Viewed = true;
-            _testDataCookieHelper.UpdateTestDataCookie(cookie);
-        }
-
-        public void Uninitialize()
-        {
         }
     }
 }

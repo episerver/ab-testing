@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -12,11 +13,23 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         private IMarketingTestingWebRepository _marketingTestRepostiory;
 
+        [ExcludeFromCodeCoverage]
         public ContentTestStore()
         {
             _marketingTestRepostiory = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
         }
 
+        // For unit test support.
+        internal ContentTestStore(IServiceLocator serviceLocator)
+        {
+            _marketingTestRepostiory = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+        }
+
+        /// <summary>
+        /// Gets an IMarketingTest and returns it as a rest result
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Get(string id)
         {
@@ -27,6 +40,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             return Rest(aTest);
         }
 
+        /// <summary>
+        /// Deletes the specified IMarketingTest
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public ActionResult Delete(string id)
         {
