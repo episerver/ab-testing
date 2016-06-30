@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Components.DictionaryAdapter;
+using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -13,6 +14,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
@@ -25,6 +27,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private Mock<ITestingDataAccess> _dataAccessLayer;
         private Mock<IContentLoader> _contentLoader;
         private Guid testId = Guid.NewGuid();
+        private Mock<IKpiManager> _kpiManager;
+        private Mock<IKpiDataAccess> _kpiDataAccess;
 
         private TestManager GetUnitUnderTest()
         {
@@ -37,8 +41,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     ConfidenceLevel = 95,
                     State = DalTestState.Active,
                     Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant() {ItemVersion = 4, Views = 5000, Conversions = 130} },
-                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()}
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>() {new DalKeyPerformanceIndicator()} }
             };
+
+            _kpiDataAccess = new Mock<IKpiDataAccess>();
+            _kpiDataAccess.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new DalKpi());
+            var kpi = new Kpi();
+            _kpiManager = new Mock<IKpiManager>();
+            _kpiManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(kpi);
 
             var startTest = new DalABTest() {Id = testId, State = DalTestState.Active, Variants = new List<DalVariant>(), KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>() };
             _serviceLocator = new Mock<IServiceLocator>();
@@ -47,6 +57,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Setup(dal => dal.Start(It.IsAny<Guid>())).Returns(startTest);
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
             var contentData = new PageData(pageRef2) as IContent;

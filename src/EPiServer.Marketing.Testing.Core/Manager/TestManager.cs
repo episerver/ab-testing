@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing
                 throw new TestNotFoundException();
             }
             
-            return TestManagerHelper.ConvertToManagerTest(dbTest);
+            return TestManagerHelper.ConvertToManagerTest(_serviceLocator, dbTest);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
             {
-                testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(_serviceLocator, dalTest));
             }
 
             return testList;
@@ -109,7 +109,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestList(TestManagerHelper.ConvertToDalCriteria(criteria)))
             {
-                testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(_serviceLocator, dalTest));
             }
 
             return testList;
@@ -170,7 +170,7 @@ namespace EPiServer.Marketing.Testing
             // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(TestManagerHelper.ConvertToManagerTest(dalTest), CacheOperator.Add);
+                UpdateCache(TestManagerHelper.ConvertToManagerTest(_serviceLocator, dalTest), CacheOperator.Add);
             }
         }
 

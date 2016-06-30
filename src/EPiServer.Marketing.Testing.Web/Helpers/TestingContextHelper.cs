@@ -78,10 +78,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
 
-            var marketingTestingContextModel = new MarketingTestingContextModel();
-
-            //set contextmodel IMarketingTest data
-            marketingTestingContextModel.Test = testData;
 
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
@@ -122,8 +118,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
             else
             {
-                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
-                marketingTestingContextModel.DaysRemaining = "0";
+                model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysRemaining = "0";
             }
 
             //retrieve conversion content from kpis

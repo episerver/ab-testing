@@ -7,6 +7,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -32,7 +33,7 @@ namespace EPiServer.Marketing.Testing
             return _r.Next(1, 3);
         }
 
-        internal static IMarketingTest ConvertToManagerTest(IABTest theDalTest)
+        internal static IMarketingTest ConvertToManagerTest(IServiceLocator serviceLocator, IABTest theDalTest)
         {
             var aTest = new ABTest
             {
@@ -52,7 +53,7 @@ namespace EPiServer.Marketing.Testing
                 CreatedDate = theDalTest.CreatedDate,
                 ModifiedDate = theDalTest.ModifiedDate,
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
-                KpiInstances = AdaptToManagerKPI(theDalTest.KeyPerformanceIndicators)
+                KpiInstances = AdaptToManagerKPI(serviceLocator, theDalTest.KeyPerformanceIndicators)
             };
             return aTest;
         }
@@ -186,21 +187,21 @@ namespace EPiServer.Marketing.Testing
         #endregion VariantConversion
 
         #region KPIConversion
-        internal static List<IKpi> AdaptToManagerKPI(IList<DalKeyPerformanceIndicator> theDalKPIs)
+        internal static List<IKpi> AdaptToManagerKPI(IServiceLocator serviceLocator, IList<DalKeyPerformanceIndicator> theDalKPIs)
         {
             var retList = new List<IKpi>();
 
             foreach (var dalKPI in theDalKPIs)
             {
-                retList.Add(ConvertToManagerKPI(dalKPI));
+                retList.Add(ConvertToManagerKPI(serviceLocator, dalKPI));
             }
 
             return retList;
         }
 
-        internal static IKpi ConvertToManagerKPI(DalKeyPerformanceIndicator dalKpi)
+        internal static IKpi ConvertToManagerKPI(IServiceLocator serviceLocator, DalKeyPerformanceIndicator dalKpi)
         {
-            var kpiManager = new KpiManager();
+            var kpiManager = serviceLocator.GetInstance<IKpiManager>();
 
             return kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
         }
