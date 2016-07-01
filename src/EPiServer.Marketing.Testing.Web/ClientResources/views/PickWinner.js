@@ -129,7 +129,14 @@
             this.descriptionText.textContent = this.context.data.test.description;
             this.participationPercent.textContent = this.context.data.visitorPercentage + "%";
             this.totalParticipants.textContent = this.context.data.totalParticipantCount;
-            this.testDuration.textContent = this.context.data.daysElapsed;
+
+            if (this.context.data.test.state === 0) {
+                this.testDuration.textContent = this.context.data.daysElapsed;
+                this.durationText.textContent = "";
+            } else {
+                this.testDuration.textContent = this.context.data.daysElapsed;
+                this.durationText.textContent = resources.pickwinnerview.duration_text;
+            }
 
             //Conversion content
             this.contentLinkAnchor.href = this.context.data.conversionLink;
