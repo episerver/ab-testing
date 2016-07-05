@@ -110,8 +110,6 @@
                 this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
             }
 
-
-
             //Set the correct corresponding variant data
             if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {
                 publishedVariant = this.context.data.test.variants[0];
