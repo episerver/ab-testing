@@ -1,8 +1,5 @@
 ﻿define({
     root: {
-        sharedtext: {
-
-        },
         addtestview: {
             header: "Create Marketing A/B Test",
             published_prefix: "Published by",
@@ -33,12 +30,12 @@
             confidence_90: "90%"
         },
         addtestcommand: {
-            label_text: "Create A/B test for my changes",
-            tooltip_text: "Create A/B test for my changes"
+            label_text: "A/B Test changes",
+            tooltip_text: "A/B Test changes"
         },
         canceltestcommand: {
             label_text: "Cancel A/B test and edit page",
-            tooltip_text: "Cancel A/B test to edit"
+            tooltip_text: "Cancel A/B test and edit page"
         },
         detailsview: {
             pickWinnerOptionText: "Pick The Winner",
@@ -64,6 +61,8 @@
         pickwinnerview: {
             close_button_text: "Close",
             started_by_text: "Started by ",
+            test_not_started: "This test has not yet started. ",
+            test_scheduled_start: "It is scheduled to start ",
             completed_text: "Completed ",
             pick_a_winner_text: "Pick a winner!",
             conversion_text: "Conversion",
