@@ -15,7 +15,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 namespace EPiServer.Marketing.Testing.Dal
 {
     [ExcludeFromCodeCoverage]
-    public class BaseRepository : IRepository
+    internal class BaseRepository : IRepository
     {
         #region Constants and Tables
         #endregion

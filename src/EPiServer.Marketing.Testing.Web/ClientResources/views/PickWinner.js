@@ -6,7 +6,7 @@
  'dijit/_TemplatedMixin',
  'dijit/_WidgetsInTemplateMixin',
  'dojo/text!marketing-testing/views/PickWinner.html',
- 'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
+ 'epi/i18n!marketing-testing/nls/abtesting',
  'epi/datetime',
  'xstyle/css!marketing-testing/css/style.css',
  'xstyle/css!marketing-testing/css/GridForm.css',
@@ -93,8 +93,22 @@
             this.store = dependency.resolve("epi.storeregistry").get("marketing.testingResult");
             this.topic = this.topic || topic;
 
-            this.testOwner.textContent = this.context.data.test.owner;
-            this.testCompleted.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
+            if (this.context.data.test.state === 0) {
+                this.testStartedText.textContent = resources.pickwinnerview.test_not_started;
+                this.testCompletedText.textContent = resources.pickwinnerview.test_scheduled_start;
+                this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.startDate);
+                this.testOwner.textContent = "";
+            } else if (this.context.data.test.state === 1) {
+                this.testStartedText.textContent = resources.pickwinnerview.started_by_text;
+                this.testOwner.textContent = this.context.data.test.owner;
+                this.testCompletedText.textContent = "It is scheduled to finish ";
+                this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
+            } else {
+                this.testStartedText.textContent = resources.pickwinnerview.started_by_text;
+                this.testOwner.textContent = this.context.data.test.owner+",";
+                this.testCompletedText.textContent = "Completed ";
+                this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
+            }
 
             //Set the correct corresponding variant data
             if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {

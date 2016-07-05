@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Framework.Localization;
@@ -18,6 +19,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         private IContentRepository _contentRepository;
         private ITestManager _testManager;
 
+        [ExcludeFromCodeCoverage]
         public ActiveTestsQuery(
             LocalizationService localizationService,
             IContentRepository contentRepository)
@@ -41,8 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "activetests";
 
         /// <inheritdoc />
-        //public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/activetests");
-        public string DisplayName => "Active A/B Tests";
+        public string DisplayName => _localizationService.GetString("/abtesting/tasks/activetests");
 
         public int Rank { get; }
 

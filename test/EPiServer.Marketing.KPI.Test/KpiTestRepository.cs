@@ -9,7 +9,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Test
 {
-    public class KpiTestRepository : IRepository
+    internal class KpiTestRepository : IRepository
     {
         public KpiTestContext TestContext { get; set; }
 

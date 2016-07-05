@@ -1,4 +1,5 @@
 ﻿using EPiServer.DataAbstraction;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Jobs;
 using EPiServer.ServiceLocation;
@@ -6,6 +7,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -13,6 +15,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<ITestManager> _testManager = new Mock<ITestManager>();
+        MyLS _ls = new MyLS();
         Mock<IScheduledJobRepository> _jobRepo = new Mock<IScheduledJobRepository>();
         private Guid TestToStart = Guid.NewGuid();
         private Guid TestToStop = Guid.NewGuid();
@@ -29,6 +32,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     false, "TestSchedulingJob", "EPiServer.Marketing.Testing.Web.Jobs",
                     null
                 ) );
+            _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_ls);
 
             _locator.Setup(sl => sl.GetInstance<IScheduledJobRepository>()).Returns(_jobRepo.Object);
 
@@ -106,6 +110,31 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 "Get did not call getTestList");
             _testManager.Verify(tm => tm.Stop(It.Is<Guid>(g => g == TestToStop)), Times.Once, 
                 "Failed to stop test with proper Guid");
+        }
+
+        public class MyLS : LocalizationService
+        {
+            public MyLS() : base( new ResourceKeyHandler())
+            {
+
+            }
+            public override IEnumerable<CultureInfo> AvailableLocalizations
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            protected override IEnumerable<ResourceItem> GetAllStringsByCulture(string originalKey, string[] normalizedKey, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override string LoadString(string[] normalizedKey, string originalKey, CultureInfo culture)
+            {
+                return "Empty STring";
+            }
         }
     }
 }
