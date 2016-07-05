@@ -19,7 +19,12 @@
                     <hgroup>
                         <!-- test title -->
                         <h1 class="dijitInline" data-dojo-attach-point="testTitle"></h1>
-                        <h3>${resources.pickwinnerview.started_by_text}<span class="epi-username" data-dojo-attach-point="testOwner"></span>. ${resources.pickwinnerview.completed_text} <span data-dojo-attach-point="testCompleted"></span></h3>
+                        <h3>
+                            <span data-dojo-attach-point="testStartedText"></span>
+                            <span class="epi-username" data-dojo-attach-point="testOwner"></span>
+                            <span data-dojo-attach-point="testCompletedText"></span>
+                            <span data-dojo-attach-point="testCompletedDate"></span>
+                        </h3>
                     </hgroup>
                 </div>
             </div>
