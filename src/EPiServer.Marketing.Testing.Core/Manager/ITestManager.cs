@@ -33,11 +33,7 @@ namespace EPiServer.Marketing.Testing
 
         Variant ReturnLandingPage(Guid testId);
 
-        PageData CreateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList);
-
-        List<IMarketingTest> CreateOrGetCache();
-
-        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
+        PageData GetVariantPageData(Guid contentGuid, List<ContentReference> processedList);
 
         /// <summary>
         /// Given a specific test id and the content, iterates over all the Kpi objects and returns 

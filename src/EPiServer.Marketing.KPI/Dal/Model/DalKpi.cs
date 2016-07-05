@@ -5,7 +5,7 @@ namespace EPiServer.Marketing.KPI.Dal.Model
     /// <summary>
     /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
     /// </summary>
-    public class DalKpi : IDalKpi
+    internal class DalKpi : IDalKpi
     {
         public DalKpi()
         {

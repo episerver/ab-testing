@@ -155,6 +155,5 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             Assert.Equal(1, _context.KeyPerformanceIndicators.Count());
         }
-
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
-using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Common;
@@ -13,52 +12,61 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
+using System.Globalization;
+using EPiServer.Globalization;
+using EPiServer.Framework.Localization;
+using EPiServer.Marketing.Testing.Test.Fakes;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class TestingContextHelperTests : IDisposable
     {
-        private TestingContextHelper _testingContextHelper ;
+        private TestingContextHelper _testingContextHelper;
         private Mock<IServiceLocator> _mockServiceLocator;
         private Mock<IContentRepository> _mockContentRepository;
         private Mock<IContentVersionRepository> _mockContentVersionRepository;
         private Mock<IUIHelper> _mockUIHelper;
+        LocalizationService _localizationService = new FakeLocalizationService("test");
 
         private IMarketingTest test;
         private Guid testId = Guid.Parse("98cbde0e-4431-4712-9f04-8094e7be826b");
 
         private TestingContextHelper GetUnitUnderTest(HttpContext context)
         {
-            Mock<PageData> testPublishedData = new Mock<PageData>();
+            Mock<IContent> testPublishedData = new Mock<IContent>();
             testPublishedData.Setup(call => call.ContentLink).Returns(new ContentReference(1, 5));
-            Mock<PageData> testVariantData = new Mock<PageData>();
-            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5,197));
+            Mock<IContent> testVariantData = new Mock<IContent>();
+            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
             Mock<IContent> testConversionContent = new Mock<IContent>();
             testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
             testConversionContent.Setup(call => call.Name).Returns("Conversion Content");
 
             _mockServiceLocator = new Mock<IServiceLocator>();
             _mockContentRepository = new Mock<IContentRepository>();
-            _mockContentRepository.Setup(call => call.Get<PageData>(It.Is<Guid>(g=>g == Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664")))).Returns(testPublishedData.Object);
-            _mockContentRepository.Setup(call => call.Get<PageData>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.Is<Guid>(g => g == Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664")))).Returns(testPublishedData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
-
 
             _mockContentVersionRepository = new Mock<IContentVersionRepository>();
             _mockContentVersionRepository.Setup(
                call => call.LoadPublished(It.IsAny<ContentReference>(), It.IsAny<string>()))
                .Returns(new ContentVersion(new ContentReference(), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+            _mockContentVersionRepository.Setup(
+               call => call.Load(It.IsAny<ContentReference>()))
+               .Returns(new ContentVersion(new ContentReference(), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
 
             _mockUIHelper = new Mock<IUIHelper>();
             _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
 
+            _mockServiceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationService);
             _mockServiceLocator.Setup(call => call.GetInstance<IContentRepository>())
                .Returns(_mockContentRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IContentVersionRepository>())
                 .Returns(_mockContentVersionRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IUIHelper>()).Returns(_mockUIHelper.Object);
 
-
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en");
+            ContentLanguage.PreferredCulture = new CultureInfo("en");
             return new TestingContextHelper(context, _mockServiceLocator.Object);
         }
 
@@ -116,8 +124,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ModifiedDate = DateTime.UtcNow
             };
 
-            test.Variants = new List<Variant>() {publishedVariant,draftVariant};
-            test.KpiInstances = new List<IKpi>() {kpi};
+            test.Variants = new List<Variant>() { publishedVariant, draftVariant };
+            test.KpiInstances = new List<IKpi>() { kpi };
 
             _testingContextHelper = GetUnitUnderTest(null);
             MarketingTestingContextModel testResult = _testingContextHelper.GenerateContextData(test);

@@ -11,7 +11,7 @@ using EPiServer.Marketing.Testing.Test.Dal;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
-    public class TestRepository : IRepository
+    internal class TestRepository : IRepository
     {
         public TestContext TestContext { get; set; }
 

@@ -3,7 +3,7 @@
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dojo/text!marketing-testing/views/AddTestView.html',
-    'dojo/i18n!marketing-testing/nls/MarketingTestingLabels',
+    'epi/i18n!marketing-testing/nls/abtesting',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
     'epi/shell/widget/_ModelBindingMixin',
@@ -18,7 +18,7 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-    'epi-cms/widget/Breadcrumb',
+    'epi-cms/widget/Breadcrumb',    
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
@@ -86,12 +86,12 @@
 
             if (this.participationPercentText) {
                 this.participationPercentText.reset();
-                this.model.participationPercent = this.participationPercentText.value;
+            this.model.participationPercent = this.participationPercentText.value;
             }
 
             if (this.durationText) {
                 this.durationText.reset();
-                this.model.testDuration = this.durationText.value;
+            this.model.testDuration = this.durationText.value;
             }
 
             if (this.startDatePicker) {
@@ -241,10 +241,10 @@
             var title = dom.byId("textTitle");
             if (!this.titleText.value) {
                 // TODO: use localized resources.
-                this._setTitleError("You must enter a title before you can save the A/B test.");
+                this._setTitleError(resources.addtestview.error_entertitle);
             }
             else if (!this.model.conversionPage) {
-                this._setPickerError("You must select a conversion goal page before you can save the A/B test.");
+                this._setPickerError(resources.addtestview.error_conversiongoal);
             }
             else if (this._isValidStartDate(startDateSelector.value)) {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
@@ -257,10 +257,10 @@
                             if (result.contentLink != this.model.publishedVersion.contentLink) {
                                 this.model.createTest();
                             } else {
-                                this._setPickerError("You cannot select the page you are testing as the conversion goal page. Select another page.");
+                                this._setPickerError(resources.addtestview.error_selected_samepage);
                             }
                         } else {
-                            this._setPickerError("You cannot select an unpublished page as your conversion goal page. Select a published page.");
+                            this._setPickerError(resources.addtestview.error_selected_notpublished);
                         }
                     }.bind(this))
                     .otherwise(function (result) {
@@ -309,18 +309,18 @@
                 event = startDateSelector.value;
             }
 
-           if (this._isValidStartDate(event)) {
-                if (event !== "") {
-                    startButton.innerText = "Schedule Test";
-                    scheduleText.innerText = "scheduled to begin on " + event;
-                    this.model.startDate = new Date(event).toUTCString();
-                    this.model.start = false;
-                } else {
-                    startButton.innerText = "Start Test";
-                    scheduleText.innerText = "not scheduled, and will start right away";
-                    this.model.start = true;
-                }
+            if (this._isValidStartDate(event)) {
+            if (event !== "") {
+                startButton.innerText = resources.addtestview.schedule_test;
+                scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
+                this.model.startDate = new Date(event).toUTCString();
+                this.model.start = false;
+            } else {
+                startButton.innerText = resources.addtestview.start_default;
+                scheduleText.innerText = resources.addtestview.notscheduled_text;
+                this.model.start = true;
             }
+        }
         }
     });
 });

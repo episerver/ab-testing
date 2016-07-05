@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Framework;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
@@ -20,6 +19,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         private IContentRepository _contentRepository;
         private ITestManager _testManager;
 
+        [ExcludeFromCodeCoverage]
         public CompletedTestsQuery(
             LocalizationService localizationService,
             IContentRepository contentRepository)
@@ -43,8 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public string Name => "completedtests";
 
         /// <inheritdoc />
-        //public string DisplayName => _localizationService.GetString("/multivariate/settings/tasks/completedtests");
-        public string DisplayName => "Completed A/B Tests";
+        public string DisplayName => _localizationService.GetString("/abtesting/tasks/completedtests");
 
         public int Rank { get; }
 

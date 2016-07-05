@@ -9,14 +9,14 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
+using EPiServer.DataAbstraction;
+using EPiServer.Globalization;
+using EPiServer.Framework.Localization;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestingContextHelper : ITestingContextHelper
     {
-        private IContentRepository _contentRepository;
-        private IContentVersionRepository _contentVersionRepository;
-        private IUIHelper _uiHelper;
         private IServiceLocator _serviceLocator;
         
         public TestingContextHelper()
@@ -74,35 +74,30 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public MarketingTestingContextModel GenerateContextData(IMarketingTest testData)
         {
-            _contentRepository = _serviceLocator.GetInstance<IContentRepository>();
-            _contentVersionRepository = _serviceLocator.GetInstance<IContentVersionRepository>();
-            _uiHelper = _serviceLocator.GetInstance<IUIHelper>();
+            var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
+            var repo = _serviceLocator.GetInstance<IContentRepository>();
 
-            var marketingTestingContextModel = new MarketingTestingContextModel();
-
-            //set contextmodel IMarketingTest data
-            marketingTestingContextModel.Test = testData;
 
             //get published version
-            var publishedContentPageData = _contentRepository.Get<PageData>(testData.OriginalItemId);
-            var publishedVersionData = _contentVersionRepository.LoadPublished(publishedContentPageData.ContentLink, publishedContentPageData.LanguageBranch);
-            //set required contextmodel published version data
-            marketingTestingContextModel.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
-            marketingTestingContextModel.PublishedVersionName = publishedContentPageData.Name;
-            marketingTestingContextModel.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
-            marketingTestingContextModel.PublishedVersionPublishedDate = publishedContentPageData.Saved.ToString(CultureInfo.CurrentCulture);
+            var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
 
-            //get variant version
-            var tempContentClone = publishedContentPageData.ContentLink.CreateWritableClone();
-            int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContentPageData.ContentLink.ID)).ItemVersion;
+            //get variant (draft) version
+            var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
+            int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
             tempContentClone.WorkID = variantVersion;
-            var draftContent = _contentRepository.Get<PageData>(tempContentClone);
+            var draftContent = repo.Get<IContent>(tempContentClone);
 
-            //set required contextmodel variant version data
-            marketingTestingContextModel.DraftVersionContentLink = draftContent.ContentLink.ToString();
-            marketingTestingContextModel.DraftVersionName = draftContent.PageName;
-            marketingTestingContextModel.DraftVersionChangedBy = draftContent.ChangedBy;
-            marketingTestingContextModel.DraftVersionChangedDate = draftContent.Saved.ToString(CultureInfo.CurrentCulture);
+            // map the test data into the model using epi icontent and test object 
+            var model = new MarketingTestingContextModel();
+            model.Test = testData;
+            model.PublishedVersionName = publishedContent.Name;
+            model.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
+            model.DraftVersionContentLink = draftContent.ContentLink.ToString();
+            model.DraftVersionName = draftContent.Name;
+            model.VisitorPercentage = testData.ParticipationPercentage.ToString();
+
+            // Map the version data
+            MapVersionData(publishedContent, draftContent, model);
 
             //Test Details may be viewed before the test has started.   
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
@@ -110,18 +105,18 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //Days Elapsed will be parsed and displayed using episervers friendly datetime method on the client side.
             if (testData.State == TestState.Active)
             {
-                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
-                marketingTestingContextModel.DaysRemaining = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
+                model.DaysRemaining = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
             }
             else if (testData.State == TestState.Inactive)
             {
-                marketingTestingContextModel.DaysElapsed = "Test has not been started";
-                marketingTestingContextModel.DaysRemaining = "Test has not been started";
+                model.DaysElapsed = "Test has not been started";
+                model.DaysRemaining = "Test has not been started";
             }
             else
             {
-                marketingTestingContextModel.DaysElapsed = Math.Round(DateTime.Parse(marketingTestingContextModel.Test.EndDate.ToString()).Subtract(DateTime.Parse(marketingTestingContextModel.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
-                marketingTestingContextModel.DaysRemaining = "0";
+                model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysRemaining = "0";
             }
 
             //retrieve conversion content from kpis
@@ -129,21 +124,40 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
             if (kpi != null)
             {
-                var conversionContent = _contentRepository.Get<IContent>(kpi.ContentGuid);
+                var conversionContent = repo.Get<IContent>(kpi.ContentGuid);
                
-                marketingTestingContextModel.ConversionLink = _uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
-                marketingTestingContextModel.ConversionContentName = conversionContent.Name;
+                model.ConversionLink = uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
+                model.ConversionContentName = conversionContent.Name;
             }
 
-            //set test details visitor precentage and total visitors
-            marketingTestingContextModel.VisitorPercentage = testData.ParticipationPercentage.ToString();
-
+            // Calculate total participation count
             foreach (var variant in testData.Variants)
             {
-                marketingTestingContextModel.TotalParticipantCount += variant.Views;
+                model.TotalParticipantCount += variant.Views;
             }
 
-            return marketingTestingContextModel;
+            return model;
+            }
+
+        /// <summary>
+        /// Map IContent version data into the model
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <param name="draftContent"></param>
+        /// <param name="model"></param>
+        private void MapVersionData(IContent publishedContent, IContent draftContent, MarketingTestingContextModel model)
+        {
+            var versionRepo = _serviceLocator.GetInstance<IContentVersionRepository>();
+            ContentVersion publishedVersionData = versionRepo.LoadPublished(publishedContent.ContentLink,
+                ContentLanguage.PreferredCulture.Name);
+            ContentVersion draftVersionData = versionRepo.Load(draftContent.ContentLink);
+
+            //set published and draft version info
+            model.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
+            model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+
+            model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
+            model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);
         }
     }
 }

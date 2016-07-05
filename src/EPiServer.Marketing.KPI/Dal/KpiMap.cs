@@ -3,7 +3,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Dal
 {
-    public class KpiMap : EntityTypeConfiguration<DalKpi>
+    internal class KpiMap : EntityTypeConfiguration<DalKpi>
     {
         public KpiMap()
         {
