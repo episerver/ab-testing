@@ -96,7 +96,8 @@
         <purpose_header>Purpose of the A/B Test:</purpose_header>
         <started_by_text>Started by </started_by_text>
         <test_not_started>This test has not yet started.</test_not_started>
-        <test_scheduled>It is scheduled to start </test_scheduled>
+        <test_scheduled> It is scheduled to start </test_scheduled>
+        <test_scheduled_finish>It is scheduled to finish </test_scheduled_finish>
         <total_participants_text>test participants</total_participants_text>
         <visitors_participated_text>of visitors participated</visitors_participated_text>
         <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
