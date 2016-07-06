@@ -58,7 +58,6 @@
 
         //sets views starting data from view model
         postMixInProperties: function () {
-
             this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
             this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
         },
@@ -107,7 +106,6 @@
 
             this._setViewPublishedVersionAttr(true);
             this._setViewCurrentVersionAttr();
-
             this._clearConversionErrors();
         },
 
@@ -162,12 +160,8 @@
         // Master validations for all form fields. Used when hitting the start button and will pickup
         // errors not triggered by onChangeEvents.
         _isValidFormData: function () {
-
-            return this._isValidConversionPage() &
-               this._isValidTitle() &
-                this._isValidPercentParticipation() &
-                this._isValidDuration() &
-                this._isValidStartDate();
+            return this._isValidConversionPage() & this._isValidTitle() & this._isValidPercentParticipation() &
+                this._isValidDuration() & this._isValidStartDate();
         },
 
         //Validates a value has been selected for the conversion page.
@@ -237,6 +231,7 @@
             var scheduleText = dom.byId("ScheduleText");
             var dateValue = dom.byId("StartDateTimeSelector").value;
             var now = new Date();
+
             if (dateValue !== "") {
                 if (isNaN(new Date(dateValue))) {
                     this._setError(resources.addtestview.error_invalid_date_time_value, errorTextNode, errorIconNode);
@@ -272,9 +267,9 @@
         _onStartButtonClick: function () {
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
-
             var startDateSelector = dom.byId("StartDateTimeSelector");
             var utcNow = new Date(Date.now()).toUTCString();
+
             if (startDateSelector.value === "") {
                 this.model.startDate = utcNow;
             }
@@ -282,15 +277,14 @@
             this._getConfidenceLevel();
 
             if (this._isValidFormData()) {
-                this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+                this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
                     .then(function (result) {
                         var errorTextNode = dom.byId("pickerErrorText");
                         var errorIconNode = dom.byId("pickerErrorIcon");
-                        var publishedVersion = result;
                         if (result) {
-                            if (result.contentLink != this.model.publishedVersion.contentLink) {
+                            if (result.contentLink !== this.model.publishedVersion.contentLink) {
                                 this.model.createTest();
                             } else {
                                 this._setError(resources.addtestview.error_selected_samepage, errorTextNode, errorIconNode);
