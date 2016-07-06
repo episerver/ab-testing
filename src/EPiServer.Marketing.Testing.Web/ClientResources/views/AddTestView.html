@@ -110,10 +110,12 @@
                         <label for="percentageSpinner">${resources.addtestview.participant_percentage_text}</label><br>
                         <div id="percentageSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:0,max:100},value:10"
+                             data-dojo-props="constraints:{min:1,max:100},value:10"
                              data-dojo-attach-point="participationPercentText"
                              data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
-                        </div> %
+                        </div> %&nbsp;
+                        <span id="participationErrorIcon" style="visibility: hidden" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                        <span id="participationErrorText" style="color:#f7542b; visibility: hidden"></span>
                     </li>
                     <!-- Duration Spinner-->
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width">
@@ -124,7 +126,9 @@
                              data-dojo-props="constraints:{min:1,max:365},value:30"
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
-                        </div> ${resources.addtestview.days_text}
+                        </div> ${resources.addtestview.days_text}&nbsp;
+                        <span id="durationErrorIcon" style="visibility: hidden" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                        <span id="durationErrorText" style="color:#f7542b; visibility: hidden"></span>
                     </li>
                 </ul>
             </div>

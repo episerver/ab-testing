@@ -18,12 +18,12 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-    'epi-cms/widget/Breadcrumb',    
+    'epi-cms/widget/Breadcrumb',
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
     'epi-cms/widget/Breadcrumb',
-    'epi/dependency',
+    'epi/dependency'
 
 ], function (
     declare,
@@ -58,7 +58,6 @@
 
         //sets views starting data from view model
         postMixInProperties: function () {
-
             this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
             this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
         },
@@ -86,17 +85,16 @@
 
             if (this.participationPercentText) {
                 this.participationPercentText.reset();
-            this.model.participationPercent = this.participationPercentText.value;
+                this.model.participationPercent = this.participationPercentText.value;
             }
 
             if (this.durationText) {
                 this.durationText.reset();
-            this.model.testDuration = this.durationText.value;
+                this.model.testDuration = this.durationText.value;
             }
 
             if (this.startDatePicker) {
                 this.startDatePicker.reset();
-                this._setDatePickerError();
             }
 
             if (this.breadcrumbWidget) {
@@ -108,8 +106,7 @@
 
             this._setViewPublishedVersionAttr(true);
             this._setViewCurrentVersionAttr();
-
-            this._clearErrors();
+            this._clearConversionErrors();
         },
 
         //setters for bound properties
@@ -134,60 +131,17 @@
             this.pageName.textContent = this.contentData.name + " A/B Test";
         },
 
-        _clearErrors: function () {
+        _clearConversionErrors: function () {
             var errorText = dom.byId("pickerErrorText");
+
             if (!errorText) {
                 return;
             }
+
             errorText.innerText = "";
             errorText.style.visibility = "hidden";
             var et2 = dom.byId("pickerErrorIcon");
             et2.style.visibility = "hidden";
-
-            errorText = dom.byId("titleErrorText");
-            errorText.innerText = "";
-            errorText.style.visibility = "hidden";
-            et2 = dom.byId("titleErrorIcon");
-            et2.style.visibility = "hidden";
-        },
-
-        _setPickerError: function (error) {
-            var errorText = dom.byId("pickerErrorText");
-            if (!errorText) {
-                return;
-            }
-            errorText.innerText = error;
-            errorText.style.visibility = "visible";
-            var et2 = dom.byId("pickerErrorIcon");
-            et2.style.visibility = "visible";
-        },
-
-        _setDatePickerError: function (error) {
-            var errorText = dom.byId("datePickerErrorText");
-            var et2 = dom.byId("datePickerErrorIcon");
-
-            if (!errorText) {
-                return;
-            }
-            if (error !== undefined) {
-                errorText.innerText = error;
-                errorText.style.visibility = "visible";
-                et2.style.visibility = "visible";
-            } else {
-                errorText.style.visibility = "hidden";
-                et2.style.visibility = "hidden";
-            }
-        },
-
-        _setTitleError: function (error) {
-            var errorText = dom.byId("titleErrorText");
-            if (!errorText) {
-                return;
-            }
-            errorText.innerText = error;
-            errorText.style.visibility = "visible";
-            var et2 = dom.byId("titleErrorIcon");
-            et2.style.visibility = "visible";
         },
 
         _getConfidenceLevel: function () {
@@ -203,23 +157,108 @@
             }
         },
 
-        _isValidStartDate(dateValue) {
+        // Master validations for all form fields. Used when hitting the start button and will pickup
+        // errors not triggered by onChangeEvents.
+        _isValidFormData: function () {
+            return this._isValidConversionPage() & this._isValidTitle() & this._isValidPercentParticipation() &
+                this._isValidDuration() & this._isValidStartDate();
+        },
+
+        //Validates a value has been selected for the conversion page.
+        _isValidConversionPage: function () {
+            var errorTextNode = dom.byId("pickerErrorText");
+            var errorIconNode = dom.byId("pickerErrorIcon");
+            var conversionPage = this.conversionPageWidget.value;
+
+            if (!conversionPage) {
+                this._setError(resources.addtestview.error_conversiongoal, errorTextNode, errorIconNode);
+                return false;
+            }
+
+            this._setError("", errorTextNode, errorIconNode);
+            return true;
+        },
+
+        //Validates a value has been entered for the test title
+        _isValidTitle: function () {
+            var errorTextNode = dom.byId("titleErrorText");
+            var errorIconNode = dom.byId("titleErrorIcon");
+            var title = dom.byId("textTitle").value;
+
+            if (title === "") {
+                this._setError(resources.addtestview.error_entertitle, errorTextNode, errorIconNode);
+                return false;
+            }
+
+            this._setError("", errorTextNode, errorIconNode);
+            return true;
+        },
+
+        //Validates the participation percent entered is between 1 and 100
+        _isValidPercentParticipation: function () {
+            var errorTextNode = dom.byId("participationErrorText");
+            var errorIconNode = dom.byId("participationErrorIcon");
+            var participationPercentage = dom.byId("percentageSpinner").value;
+
+            if (isNaN(participationPercentage) || participationPercentage <= 0 || participationPercentage > 100) {
+                this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
+                return false;
+            }
+
+            this._setError("", errorTextNode, errorIconNode);
+            return true;
+        },
+
+        //Validates the duration entered is not less than 1 day
+        _isValidDuration: function () {
+            var errorTextNode = dom.byId("durationErrorText");
+            var errorIconNode = dom.byId("durationErrorIcon");
+            var duration = dom.byId("durationSpinner").value;
+
+            if (isNaN(duration) || duration < 0) {
+                this._setError(resources.addtestview.error_duration, errorTextNode, errorIconNode);
+                return false;
+            }
+
+            this._setError("", errorTextNode, errorIconNode);
+            return true;
+        },
+
+        //Validates the date information is A) a valid date format and B) not in the past
+        _isValidStartDate: function () {
+            var errorTextNode = dom.byId("datePickerErrorText");
+            var errorIconNode = dom.byId("datePickerErrorIcon");
             var scheduleText = dom.byId("ScheduleText");
+            var dateValue = dom.byId("StartDateTimeSelector").value;
             var now = new Date();
+
             if (dateValue !== "") {
                 if (isNaN(new Date(dateValue))) {
-                    this._setDatePickerError("The information entered is not a valid date/time value");
-                    scheduleText
-                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    this._setError(resources.addtestview.error_invalid_date_time_value, errorTextNode, errorIconNode);
+                    scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                     return false;
                 } else if (new Date(dateValue) < now) {
-                    this._setDatePickerError("The starting date/time of the test cannot be in the past.");
-                    scheduleText
-                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
+                    scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                     return false;
                 }
             }
+
+            this._setError("", errorTextNode, errorIconNode);
             return true;
+        },
+
+        //Toggles an errors text content and icon visibitlity based on the error and nodes supplied
+        _setError: function (errorText, errorNode, iconNode) {
+            if (errorText) {
+                errorNode.innerText = errorText;
+                errorNode.style.visibility = "visible";
+                iconNode.style.visibility = "visible";
+            } else {
+                errorNode.innerText = "";
+                errorNode.style.visibility = "hidden";
+                iconNode.style.visibility = "hidden";
+            }
         },
 
         //EVENT HANDLERS
@@ -228,39 +267,30 @@
         _onStartButtonClick: function () {
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
-
             var startDateSelector = dom.byId("StartDateTimeSelector");
             var utcNow = new Date(Date.now()).toUTCString();
+
             if (startDateSelector.value === "") {
                 this.model.startDate = utcNow;
             }
 
-            this._clearErrors();
             this._getConfidenceLevel();
 
-            var title = dom.byId("textTitle");
-            if (!this.titleText.value) {
-                // TODO: use localized resources.
-                this._setTitleError(resources.addtestview.error_entertitle);
-            }
-            else if (!this.model.conversionPage) {
-                this._setPickerError(resources.addtestview.error_conversiongoal);
-            }
-            else if (this._isValidStartDate(startDateSelector.value)) {
-                this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+            if (this._isValidFormData()) {
+                this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
                     .then(function (result) {
-                        var errorText = dom.byId("errorText");
-                        var publishedVersion = result;
+                        var errorTextNode = dom.byId("pickerErrorText");
+                        var errorIconNode = dom.byId("pickerErrorIcon");
                         if (result) {
-                            if (result.contentLink != this.model.publishedVersion.contentLink) {
+                            if (result.contentLink !== this.model.publishedVersion.contentLink) {
                                 this.model.createTest();
                             } else {
-                                this._setPickerError(resources.addtestview.error_selected_samepage);
+                                this._setError(resources.addtestview.error_selected_samepage, errorTextNode, errorIconNode);
                             }
                         } else {
-                            this._setPickerError(resources.addtestview.error_selected_notpublished);
+                            this._setError(resources.addtestview.error_selected_notpublished, errorTextNode, errorIconNode);
                         }
                     }.bind(this))
                     .otherwise(function (result) {
@@ -270,7 +300,6 @@
         },
 
         _onCancelButtonClick: function () {
-            this._setDatePickerError();
             var me = this;
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
             topic.publish("/epi/shell/context/request", me.contextParameters);
@@ -279,7 +308,9 @@
         // Form Field Events
 
         _onTestTitleChanged: function (event) {
-            this.model.testTitle = event;
+            if (this._isValidTitle()) {
+                this.model.testTitle = event;
+            }
         },
 
         _onTestDescriptionChanged: function (event) {
@@ -287,16 +318,21 @@
         },
 
         _onConversionPageChanged: function (event) {
-            this.model.conversionPage = event;
-            this._clearErrors();
+            if (this._isValidConversionPage()) {
+                this.model.conversionPage = event;
+            }
         },
 
         _onPercentageSpinnerChanged: function (event) {
-            this.model.participationPercent = event;
+            if (this._isValidPercentParticipation()) {
+                this.model.participationPercent = event;
+            }
         },
 
         _onDurationSpinnerChanged: function (event) {
-            this.model.testDuration = event;
+            if (this._isValidDuration()) {
+                this.model.testDuration = event;
+            }
         },
 
         _onDateTimeChange: function (event) {
@@ -304,23 +340,22 @@
             var scheduleText = dom.byId("ScheduleText");
             var startDateSelector = dom.byId("StartDateTimeSelector");
 
-            this._setDatePickerError();
             if (event === null) {
                 event = startDateSelector.value;
             }
 
             if (this._isValidStartDate(event)) {
-            if (event !== "") {
-                startButton.innerText = resources.addtestview.schedule_test;
-                scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
-                this.model.startDate = new Date(event).toUTCString();
-                this.model.start = false;
-            } else {
-                startButton.innerText = resources.addtestview.start_default;
-                scheduleText.innerText = resources.addtestview.notscheduled_text;
-                this.model.start = true;
+                if (event !== "") {
+                    startButton.innerText = resources.addtestview.schedule_test;
+                    scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
+                    this.model.startDate = new Date(event).toUTCString();
+                    this.model.start = false;
+                } else {
+                    startButton.innerText = resources.addtestview.start_default;
+                    scheduleText.innerText = resources.addtestview.notscheduled_text;
+                    this.model.start = true;
+                }
             }
-        }
         }
     });
 });
