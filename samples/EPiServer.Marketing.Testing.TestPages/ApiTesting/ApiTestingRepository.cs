@@ -9,6 +9,7 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
+using System.Runtime.Caching;
 
 namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
@@ -19,6 +20,8 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         private List<IKpi> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
+        private const string TestingCacheName = "TestingCache";
+        private MemoryCache _testCache = MemoryCache.Default;
 
         public List<IMarketingTest> GetTests(ViewModel viewModel = null)
         {
@@ -179,5 +182,30 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             return df.ListVersions(originalContent.PageLink);
         }
+
+        public List<IMarketingTest> CreateOrGetCache()
+        {
+            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+
+            if (activeTests == null || activeTests.Count == 0)
+            {
+                var activeTestCriteria = new TestCriteria();
+                var activeTestStateFilter = new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                };
+
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+
+                var tests = _mtm.GetTestList(activeTestCriteria);
+                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+                activeTests = tests;
+            }
+
+            return activeTests;
+        }
+
     }
 }
