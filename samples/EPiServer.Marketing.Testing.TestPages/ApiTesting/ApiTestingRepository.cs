@@ -9,7 +9,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
-using System.Runtime.Caching;
 
 namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 {
@@ -20,7 +19,6 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         private List<IKpi> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
-       
 
         public List<IMarketingTest> GetTests(ViewModel viewModel = null)
         {
@@ -181,8 +179,5 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             return df.ListVersions(originalContent.PageLink);
         }
-
-       
-
     }
 }

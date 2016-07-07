@@ -26,7 +26,6 @@ namespace EPiServer.Marketing.Testing
     public class TestManager : ITestManager
     {
         public List<IMarketingTest> ActiveCachedTests => CreateOrGetCache();
-
         private const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;

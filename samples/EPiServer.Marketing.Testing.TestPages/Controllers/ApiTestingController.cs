@@ -16,7 +16,6 @@ using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
 {
-
     public class ApiTestingController : Controller
     {
         public static IntegrationTestModel AutoCreateModel = new IntegrationTestModel()
@@ -143,7 +142,6 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                         messageQueueWatch.Start();
                         done = true;
                     }
-
                 } while (!done);
             }
         }
@@ -231,8 +229,8 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
                 return View("TestDetails", mtm.Get(savedTestId));
             }
-            return View(multivariateTestData);
 
+            return View(multivariateTestData);
         }
 
         [HttpGet]
@@ -266,8 +264,6 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             ABTest returnedTest = mtm.Get(Guid.Parse(id)) as ABTest;
 
             return View("TestDetails", returnedTest);
-
-
         }
 
         /// <summary>
@@ -287,10 +283,6 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View(returnedTestList);
         }
 
-
-
-
-
         public ActionResult TestDetails(ABTest testDetails)
         {
             return View(testDetails);
@@ -302,7 +294,6 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             mtm.Delete(id);
 
             return RedirectToAction("Index");
-
         }
 
         public ActionResult RunAbTests(string id)
@@ -368,7 +359,6 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         {
             ApiTestingRepository apiRepo = new ApiTestingRepository();
 
-
             Guid id;
             if (Guid.TryParse(originalItem, out id))
             {
@@ -377,12 +367,10 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 List<VersionData> versions = new List<VersionData>();
                 foreach (PageVersion v in pageVersions)
                 {
-
                     IServiceLocator serviceLocator = ServiceLocator.Current;
                     IContentRepository contentRepository = serviceLocator.GetInstance<IContentRepository>();
 
                     PageData pageData = contentRepository.Get<PageData>(v.ContentLink);
-
 
                     versions.Add(new VersionData()
                     {
@@ -425,10 +413,10 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
         public ActionResult ViewMarketingTestCacheData()
         {
-            TestManager _mtm = new TestManager();
+            TestManager tm = new TestManager();
             CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
             cacheTestingViewModel.ActiveTestCache = new List<IMarketingTest>();
-            cacheTestingViewModel.ActiveTestCache = _mtm.ActiveCachedTests;
+            cacheTestingViewModel.ActiveTestCache = tm.ActiveCachedTests;
             cacheTestingViewModel.CachedVersionPageData = new List<PageData>();
             MemoryCache memCache = MemoryCache.Default;
             List<string> cachedKeys =
@@ -439,9 +427,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             }
 
             return View(cacheTestingViewModel);
-
         }
-
 
         public ActionResult DeleteCacheEntry(Guid id)
         {
