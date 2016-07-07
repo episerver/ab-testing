@@ -77,7 +77,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
 
-
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
 
@@ -91,7 +90,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var model = new MarketingTestingContextModel();
             model.Test = testData;
             model.PublishedVersionName = publishedContent.Name;
-            model.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
@@ -148,13 +146,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private void MapVersionData(IContent publishedContent, IContent draftContent, MarketingTestingContextModel model)
         {
             var versionRepo = _serviceLocator.GetInstance<IContentVersionRepository>();
-            ContentVersion publishedVersionData = versionRepo.LoadPublished(publishedContent.ContentLink,
+            var publishedVersionData = versionRepo.LoadPublished(publishedContent.ContentLink,
                 ContentLanguage.PreferredCulture.Name);
-            ContentVersion draftVersionData = versionRepo.Load(draftContent.ContentLink);
+            var draftVersionData = versionRepo.Load(draftContent.ContentLink);
 
             //set published and draft version info
             model.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
             model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+            model.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
 
             model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
             model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);

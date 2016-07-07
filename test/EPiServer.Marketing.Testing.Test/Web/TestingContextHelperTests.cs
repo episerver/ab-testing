@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContentVersionRepository = new Mock<IContentVersionRepository>();
             _mockContentVersionRepository.Setup(
                call => call.LoadPublished(It.IsAny<ContentReference>(), It.IsAny<string>()))
-               .Returns(new ContentVersion(new ContentReference(), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+               .Returns(new ContentVersion(new ContentReference(10,100), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
             _mockContentVersionRepository.Setup(
                call => call.Load(It.IsAny<ContentReference>()))
                .Returns(new ContentVersion(new ContentReference(), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
@@ -133,6 +133,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(testResult);
             Assert.True(testResult.Test.Id == testId);
             Assert.True(testResult.TotalParticipantCount == (draftVariant.Views + publishedVariant.Views));
+            Assert.True(testResult.PublishedVersionContentLink == "10_100");
+            Assert.True(testResult.DraftVersionContentLink == "5_197");
             Assert.True(testResult.ConversionLink == "TestLink");
             Assert.True(testResult.ConversionContentName == "Conversion Content");
             Assert.True(testResult.PublishedVersionPublishedBy == "me");
