@@ -425,10 +425,10 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
         public ActionResult ViewMarketingTestCacheData()
         {
-            ApiTestingRepository testRepo = new ApiTestingRepository();
+            TestManager _mtm = new TestManager();
             CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
             cacheTestingViewModel.ActiveTestCache = new List<IMarketingTest>();
-            cacheTestingViewModel.ActiveTestCache = testRepo.CreateOrGetCache();
+            cacheTestingViewModel.ActiveTestCache = _mtm.ActiveCachedTests;
             cacheTestingViewModel.CachedVersionPageData = new List<PageData>();
             MemoryCache memCache = MemoryCache.Default;
             List<string> cachedKeys =

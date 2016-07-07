@@ -22,9 +22,11 @@ namespace EPiServer.Marketing.Testing
         Remove
     }
 
-    [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
+   [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
+        public List<IMarketingTest> ActiveCachedTests => CreateOrGetCache();
+
         private const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
