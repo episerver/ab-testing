@@ -131,6 +131,10 @@ namespace EPiServer.Marketing.Testing.Web
 
                                 CalculateView(testCookieData, contentVersion);
                             }
+                            else
+                            {
+                                _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
+                            }
                         }
                     }
                     else if (hasData)
