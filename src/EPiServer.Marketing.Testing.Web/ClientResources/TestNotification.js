@@ -59,33 +59,34 @@ function (
         },
 
         _constructNotificationMessage: function (test) {
-            // TODO: use localized resources.
             var message = resources.notificationbar.ongoing_test;
             var testLinkText = resources.notificationbar.details_link_text;
             var testLinkTooltip = resources.notificationbar.details_link_tooltip;
-            
-             // Inactive (scheduled)
+            var page = "details";
+
+            // Inactive (scheduled)
             if (test.state == 0) {
-                message = resources.notificationbar.scheduled_test + 
-                    datetime.toUserFriendlyString(test.startDate, null, false, true) +". ";
+                message = resources.notificationbar.scheduled_test +
+                    datetime.toUserFriendlyString(test.startDate, null, false, true) + ". ";
             }
-            
-             // Done, finished
+
+            // Done, finished
             if (test.state == 2) {
                 message = resources.notificationbar.completed_test;
                 var testLinkText = resources.notificationbar.winner_link_text;
                 var testLinkTooltip = resources.notificationbar.winner_link_tooltip;
+                page = "pickwinner";
             }
 
-            var notificationMesage = domConstruct.create("div", {innerHTML: message});
-            
-            var testLink =  domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
-            
+            var notificationMesage = domConstruct.create("div", { innerHTML: message });
+
+            var testLink = domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
+
             this.own(
                 on(testLink, "click", function (e) {
                     event.stop(e);
                     topic.publish("/epi/shell/context/request", {
-                        uri: "epi.marketing.testing:///testid=" + test.id + "/details"
+                        uri: "epi.marketing.testing:///testid=" + test.id + "/" + page
                     }, {sender: this});
                 })
             );
