@@ -213,6 +213,7 @@ namespace EPiServer.Marketing.Testing
 
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
+            Stop(testObjectId);  //stop the test prior to archiving in order to get significance and proper cache update
             _dataAccess.Archive(testObjectId, winningVariantId);
         }
 
