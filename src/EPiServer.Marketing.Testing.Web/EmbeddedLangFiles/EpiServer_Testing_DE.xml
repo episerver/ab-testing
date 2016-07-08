@@ -23,9 +23,15 @@
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_text>How long should the A/B test run?</duration_text>
         <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
+        <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
+        <error_duration>Duration cannot be less than 0</error_duration>
         <error_entertitle>You must enter a title before you can save the A/B test.</error_entertitle>
+        <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
+        <error_participation_pecentage>Participation percentage must be between 0 and 100</error_participation_pecentage>
+        <error_participation_percentage>Participation percentage must be between 0 and 100</error_participation_percentage>
         <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page. Select a published page.</error_selected_notpublished>
         <error_selected_samepage>You cannot select the page you are testing as the conversion goal page. Select another page.</error_selected_samepage>
+        <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
         <goals_default_text>What are the goals for this test?</goals_default_text>
         <header>Create Marketing A/B Test</header>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
@@ -92,6 +98,7 @@
         <started_by_text>Started by </started_by_text>
         <test_not_started>This test has not yet started.</test_not_started>
         <test_scheduled>It is scheduled to start </test_scheduled>
+        <test_scheduled_finish>It is scheduled to finish </test_scheduled_finish>
         <total_participants_text>test participants</total_participants_text>
         <visitors_participated_text>of visitors participated</visitors_participated_text>
         <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>

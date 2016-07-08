@@ -95,18 +95,18 @@
 
             if (this.context.data.test.state === 0) {
                 this.testStartedText.textContent = resources.pickwinnerview.test_not_started;
-                this.testCompletedText.textContent = resources.pickwinnerview.test_scheduled_start;
+                this.testCompletedText.textContent = resources.pickwinnerview.test_scheduled;
                 this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.startDate);
                 this.testOwner.textContent = "";
             } else if (this.context.data.test.state === 1) {
                 this.testStartedText.textContent = resources.pickwinnerview.started_by_text;
                 this.testOwner.textContent = this.context.data.test.owner;
-                this.testCompletedText.textContent = "It is scheduled to finish ";
+                this.testCompletedText.textContent = resources.pickwinnerview.test_scheduled_finish;
                 this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
             } else {
                 this.testStartedText.textContent = resources.pickwinnerview.started_by_text;
                 this.testOwner.textContent = this.context.data.test.owner+",";
-                this.testCompletedText.textContent = "Completed ";
+                this.testCompletedText.textContent = resources.pickwinnerview.completed_text;
                 this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
             }
 
