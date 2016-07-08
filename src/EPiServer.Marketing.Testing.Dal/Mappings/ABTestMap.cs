@@ -12,22 +12,19 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.HasKey(hk => hk.Id);
 
             this.Property(m => m.Title)
-                .HasMaxLength(255)
                 .IsRequired();
 
             this.Property(m => m.Description)
-                .HasMaxLength(255)
                 .IsOptional();
 
             this.Property(m => m.Owner)
-                .HasMaxLength(100)
                 .IsRequired();
 
             this.Property(m => m.OriginalItemId)
                 .IsRequired();
 
             this.Property(m => m.State)
-                .IsOptional();
+                .IsRequired();
 
             this.Property(m => m.StartDate)
                 .IsRequired();

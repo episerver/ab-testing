@@ -40,13 +40,12 @@
     html,
     dom,
     dependency
-
-
 ) {
     viewPublishedVersion: null;
     viewCurrentVersion: null;
 
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
+    {
         templateString: template,
 
         resources: resources,
@@ -95,9 +94,9 @@
             this.model.testDuration = this.durationText.value;
             }
 
-            if (this.startTimeSelector) {
-                this.startTimeSelector.reset();
-                this.model.startDate = new Date(Date.now()).toUTCString();
+            if (this.startDatePicker) {
+                this.startDatePicker.reset();
+                this._setDatePickerError();
             }
 
             if (this.breadcrumbWidget) {
@@ -152,7 +151,7 @@
             et2.style.visibility = "hidden";
         },
 
-        _setPickerError: function( error ) {
+        _setPickerError: function (error) {
             var errorText = dom.byId("pickerErrorText");
             if (!errorText) {
                 return;
@@ -161,6 +160,23 @@
             errorText.style.visibility = "visible";
             var et2 = dom.byId("pickerErrorIcon");
             et2.style.visibility = "visible";
+        },
+
+        _setDatePickerError: function (error) {
+            var errorText = dom.byId("datePickerErrorText");
+            var et2 = dom.byId("datePickerErrorIcon");
+
+            if (!errorText) {
+                return;
+            }
+            if (error !== undefined) {
+                errorText.innerText = error;
+                errorText.style.visibility = "visible";
+                et2.style.visibility = "visible";
+            } else {
+                errorText.style.visibility = "hidden";
+                et2.style.visibility = "hidden";
+            }
         },
 
         _setTitleError: function (error) {
@@ -187,25 +203,50 @@
             }
         },
 
-        //EVENT HANDLERS
+        _isValidStartDate(dateValue) {
+            var scheduleText = dom.byId("ScheduleText");
+            var now = new Date();
+            if (dateValue !== "") {
+                if (isNaN(new Date(dateValue))) {
+                    this._setDatePickerError("The information entered is not a valid date/time value");
+                    scheduleText
+                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    return false;
+                } else if (new Date(dateValue) < now) {
+                    this._setDatePickerError("The starting date/time of the test cannot be in the past.");
+                    scheduleText
+                        .innerText = "not scheduled, resolve starting date/time errors in order to schedule a test";
+                    return false;
+                }
+            }
+            return true;
+        },
 
+        //EVENT HANDLERS
         //Start and Cancel Events
 
         _onStartButtonClick: function () {
             var description = dom.byId("testDescription");
             this.model.testDescription = description.value;
 
+            var startDateSelector = dom.byId("StartDateTimeSelector");
+            var utcNow = new Date(Date.now()).toUTCString();
+            if (startDateSelector.value === "") {
+                this.model.startDate = utcNow;
+            }
+
             this._clearErrors();
             this._getConfidenceLevel();
 
             var title = dom.byId("textTitle");
-            if( !this.titleText.value ) {
+            if (!this.titleText.value) {
                 // TODO: use localized resources.
                 this._setTitleError(resources.addtestview.error_entertitle);
             }
             else if (!this.model.conversionPage) {
                 this._setPickerError(resources.addtestview.error_conversiongoal);
-            } else {
+            }
+            else if (this._isValidStartDate(startDateSelector.value)) {
                 this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                 this._contentVersionStore
                     .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -229,7 +270,10 @@
         },
 
         _onCancelButtonClick: function () {
-            topic.publish("/epi/shell/action/changeview/back");
+            this._setDatePickerError();
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
         // Form Field Events
@@ -258,8 +302,15 @@
         _onDateTimeChange: function (event) {
             var startButton = dom.byId("StartButton");
             var scheduleText = dom.byId("ScheduleText");
+            var startDateSelector = dom.byId("StartDateTimeSelector");
 
-            if (event !== null) {
+            this._setDatePickerError();
+            if (event === null) {
+                event = startDateSelector.value;
+            }
+
+            if (this._isValidStartDate(event)) {
+            if (event !== "") {
                 startButton.innerText = resources.addtestview.schedule_test;
                 scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
                 this.model.startDate = new Date(event).toUTCString();
@@ -267,9 +318,9 @@
             } else {
                 startButton.innerText = resources.addtestview.start_default;
                 scheduleText.innerText = resources.addtestview.notscheduled_text;
-                this.model.startDate = new Date(Date.now()).toUTCString();
                 this.model.start = true;
             }
+        }
         }
     });
 });

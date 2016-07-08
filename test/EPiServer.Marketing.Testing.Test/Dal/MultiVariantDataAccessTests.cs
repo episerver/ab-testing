@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -22,6 +24,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         private TestingDataAccess _mtm;
         private TestManager _tm;
         private Mock<IServiceLocator> _serviceLocator;
+        private Mock<IKpiManager> _kpiManager;
 
         public MultiVariantDataAccessTests()
         {
@@ -29,8 +32,13 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _context = new TestContext(_dbConnection);
             _mtm = new TestingDataAccess(new Core.TestRepository(_context));
 
+            _kpiManager = new Mock<IKpiManager>();
+            _kpiManager.Setup(call => call.Save(It.IsAny<IKpi>())).Returns(It.IsAny<Guid>());
+
             _serviceLocator = new Mock<IServiceLocator>();
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_mtm);
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
+
 
             _tm = new TestManager(_serviceLocator.Object);
         }
@@ -417,6 +425,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         [Fact]
         public void TestManagerSaveDone()
         {
+            //var tm = GetUnitUnderTest();
+
             var id = Guid.NewGuid();
             var itemId = Guid.NewGuid();
 
@@ -430,7 +440,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 130 },
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100 }
                     },
-                KpiInstances = new List<IKpi>(),
+                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
                 Title = "test",
                 Description = "description",
                 CreatedDate = DateTime.UtcNow,
@@ -446,15 +456,16 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             };
 
-            var testId = _tm.Save(test);
 
-            var testt = _tm.Get(id);
+            _tm.Save(test);
 
-            testt.State = TestState.Archived;
-            testt.ZScore = 2.0;
-            testt.IsSignificant = true;
+            //var testt = tm.Get(id);
 
-            Assert.Equal(id, _tm.Save(testt));
+            test.State = TestState.Archived;
+            test.ZScore = 2.0;
+            test.IsSignificant = true;
+
+            Assert.Equal(id, _tm.Save(test));
         }
 
     }
