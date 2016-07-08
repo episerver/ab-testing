@@ -203,7 +203,7 @@
             }
         },
 
-        _isValidStartDate(dateValue) {
+        _isValidStartDate: function(dateValue) {
             var scheduleText = dom.byId("ScheduleText");
             var now = new Date();
             if (dateValue !== "") {

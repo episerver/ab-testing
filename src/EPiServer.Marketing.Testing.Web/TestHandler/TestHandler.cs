@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
+using Castle.Core.Internal;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
@@ -66,6 +67,25 @@ namespace EPiServer.Marketing.Testing.Web
             ProcessedContentList = new List<ContentReference>();
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
+            contentEvents.DeletedContentVersion += TestingContentEventsOnDeletedContentVersion;
+        }
+
+        private void TestingContentEventsOnDeletedContentVersion(object sender, ContentEventArgs contentEventArgs)
+        {
+            var tests = _testManager.GetActiveTestsByOriginalItemId(contentEventArgs.Content.ContentGuid);
+
+            if (!tests.IsNullOrEmpty())
+            {
+                var contentVersion = contentEventArgs.ContentLink.WorkID == 0 ? contentEventArgs.ContentLink.ID : contentEventArgs.ContentLink.WorkID;
+
+                foreach (var test in tests)
+                {
+                    if (test.Variants.Any(v => v.ItemVersion == contentVersion))
+                    {
+                        _testManager.Stop(test.Id);
+                    }
+                }
+            }
         }
 
         /// Main worker method.  Processes each content which triggers a
