@@ -214,6 +214,13 @@ namespace EPiServer.Marketing.Testing
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
+
+            var cachedTests = CreateOrGetCache();
+            var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
+            if (test != null)
+            {
+                UpdateCache(test,CacheOperator.Remove);
+            }
         }
 
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
