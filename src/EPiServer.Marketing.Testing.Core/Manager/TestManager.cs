@@ -22,10 +22,9 @@ namespace EPiServer.Marketing.Testing
         Remove
     }
 
-   [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
+    [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
-        public List<IMarketingTest> ActiveCachedTests => CreateOrGetCache();
         private const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
@@ -35,6 +34,15 @@ namespace EPiServer.Marketing.Testing
         private IKpiManager _kpiManager;
 
         public event EventHandler<TestEventArgs> SavingTestEvent;
+
+        public List<IMarketingTest> ActiveCachedTests
+        {
+            get
+            {
+                var x = MemoryCache.Default.Get(TestingCacheName) as List<IMarketingTest>;
+                return x ?? new List<IMarketingTest>();
+            }
+        }
 
         [ExcludeFromCodeCoverage]
         public TestManager()
@@ -73,7 +81,7 @@ namespace EPiServer.Marketing.Testing
             {
                 throw new TestNotFoundException();
             }
-            
+
             return TestManagerHelper.ConvertToManagerTest(_kpiManager, dbTest);
         }
 
@@ -89,7 +97,6 @@ namespace EPiServer.Marketing.Testing
 
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
-
 
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
@@ -121,7 +128,6 @@ namespace EPiServer.Marketing.Testing
             return testList;
         }
 
-
         public Guid Save(IMarketingTest multivariateTest)
         {
             // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
@@ -144,7 +150,6 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-            
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
@@ -152,7 +157,7 @@ namespace EPiServer.Marketing.Testing
                 UpdateCache(multivariateTest, CacheOperator.Add);
             }
 
-            if( SavingTestEvent != null )
+            if (SavingTestEvent != null)
             {
                 var eventarg = new TestEventArgs(multivariateTest);
                 SavingTestEvent(this, eventarg);
@@ -206,7 +211,6 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-       
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
@@ -249,33 +253,33 @@ namespace EPiServer.Marketing.Testing
         }
 
         public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
-            {
+        {
             var messaging = _serviceLocator.GetInstance<IMessagingManager>();
             if (resultType == CountType.Conversion)
                 messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
             else if (resultType == CountType.View)
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
-            }
+        }
 
         public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
-            {
+        {
             List<Guid> guids = new List<Guid>();
             foreach (var kpi in kpis)
-                {
+            {
                 if (kpi.Evaluate(content))
-                    {
+                {
                     guids.Add(kpi.Id);
-                            }
-                        }
+                }
+            }
             return guids;
-                    }
+        }
 
         internal List<IMarketingTest> CreateOrGetCache()
         {
             var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
 
             if (activeTests == null || activeTests.Count == 0)
-        {
+            {
                 var activeTestCriteria = new TestCriteria();
                 var activeTestStateFilter = new ABTestFilter()
                 {
@@ -310,12 +314,12 @@ namespace EPiServer.Marketing.Testing
                     if (cachedTests.Contains(test))
                     {
                         cachedTests.Remove(test);
-            
+
                         if (cachedTests.Count == 0)
-        {
+                        {
                             _testCache.Remove(TestingCacheName);
-        }
-        }
+                        }
+                    }
                     break;
             }
 
@@ -327,40 +331,40 @@ namespace EPiServer.Marketing.Testing
             PageData retData = null;
 
             if (processedList.Count == 1)
-        {
+            {
                 var test =
                     GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
 
                 if (test != null)
-            {
+                {
                     var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
                     var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
 
                     if (testContent != null)
-            {
+                    {
                         var contentVersion = testContent.WorkPageID == 0
                             ? testContent.ContentLink.ID
                             : testContent.WorkPageID;
                         foreach (var variant in test.Variants)
-        {
+                        {
                             if (variant.ItemVersion != contentVersion)
-            {
+                            {
                                 retData = TestManagerHelper.CreateVariantPageData(contentLoader, testContent, variant);
                                 retData.Status = VersionStatus.Published;
                                 retData.StartPublish = DateTime.Now.AddDays(-1);
                                 retData.MakeReadOnly();
 
                                 var cacheItemPolicy = new CacheItemPolicy
-            {
+                                {
                                     AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
-            };
+                                };
 
                                 _variantCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
-        }
+                            }
+                        }
+                    }
+                }
             }
-        }
-            }
-        }
             return retData;
         }
     }
