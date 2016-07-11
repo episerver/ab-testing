@@ -46,8 +46,6 @@
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
     {
-
-
         templateString: template,
 
         resources: resources,
