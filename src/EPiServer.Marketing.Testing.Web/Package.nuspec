@@ -13,7 +13,7 @@
     <tags>EPiServerModulePackage EPiServerAddon EPiServer Marketing Testing</tags>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[9.10.1,10)" />
-      <dependency id="EPiServer.CMS.UI" version="[9.7.0,10)" />
+      <dependency id="EPiServer.CMS.UI" version="[9.8.0,10)" />
       <dependency id="EPiServer.Logging.Log4Net" version="[2,3)" />
       <dependency id="EPiServer.Marketing.Messaging" version="[,2)" />
       <dependency id="EPiServer.Marketing.KPI" version="[,2)" />
