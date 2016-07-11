@@ -112,9 +112,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.Viewed = bool.Parse(cookie["Viewed"]);
                 retCookie.Converted = bool.Parse(cookie["Converted"]);
 
-                TestCriteria criteria = new TestCriteria();
-                criteria.AddFilter(new ABTestFilter() {Operator = FilterOperator.And,Property = ABTestProperty.State,Value = TestState.Active});
-
                 try
                 {
                     //Throws test not found exception and expires the cookie if test does not exist
