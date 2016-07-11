@@ -18,10 +18,20 @@
                     };
                 aCommand.model = {
                     contentData: {
-                        contentGuid: ""
+                        contentGuid: "",
+                        accessMask: ""
                     }
                 }
                 aCommand.store = store;
+
+                aCommand._contentActionSupport = {
+                    hasAccess: function (accessMask, targetAccess) {
+                        return true;
+                    },
+                    accessLevel: {
+                        Publish: "publish"
+                    }
+                };
                 aCommand._onModelChange();
 
                 expect(aCommand.isAvailable).to.be.true;
@@ -45,10 +55,19 @@
                     };
                 aCommand.model = {
                     contentData: {
-                        contentGuid: ""
+                        contentGuid: "",
+                        accessMask: ""
                     }
                 }
                 aCommand.store = store;
+                aCommand._contentActionSupport = {
+                    hasAccess: function (accessMask, targetAccess) {
+                        return true;
+                    },
+                    accessLevel: {
+                        Publish: "publish"
+                    }
+                };
                 aCommand._onModelChange();
 
                 expect(aCommand.isAvailable).to.be.false;
@@ -58,6 +77,43 @@
                 aCommand._onModelChange();
 
                 expect(aCommand.isAvailable).to.be.false;
+                expect(aCommand.canExecute).to.be.false;
+            });
+
+            it("Is not executable when the user does not have publish permission on the content", function () {
+                var me = this,
+                    aCommand = new CancelTestCommand(),
+                    mockResult = {
+                        title: "Good Test",
+
+                    },
+                    store = {
+                        get: function (id) {
+                            return this;
+                        },
+                        then: function (successFunc) {
+                            successFunc(mockResult);
+                            return this;
+                        }
+                    };
+                aCommand.model = {
+                    contentData: {
+                        contentGuid: "",
+                        accessMask: ""
+                    }
+                }
+                aCommand.store = store;
+                aCommand._contentActionSupport = {
+                    hasAccess: function (accessMask, targetAccess) {
+                        return false;
+                    },
+                    accessLevel: {
+                        Publish: "publish"
+                    }
+                };
+                aCommand._onModelChange();
+
+                expect(aCommand.isAvailable).to.be.true;
                 expect(aCommand.canExecute).to.be.false;
             });
 
@@ -87,7 +143,8 @@
                 aCommand.model = {
                     contentData: {
                         contentLink: "5_202",
-                        contentGuid: "a test guid"
+                        contentGuid: "a test guid",
+                        accessMask: ""
                     }
                 };
                 aCommand._execute();
