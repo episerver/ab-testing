@@ -46,6 +46,8 @@
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
     {
+
+
         templateString: template,
 
         resources: resources,
@@ -200,7 +202,7 @@
             var errorIconNode = dom.byId("participationErrorIcon");
             var participationPercentage = dom.byId("percentageSpinner").value;
 
-            if (isNaN(participationPercentage) || participationPercentage <= 0 || participationPercentage > 100) {
+            if (!this._isUnsignedNumeric(participationPercentage) || participationPercentage <= 0 || participationPercentage > 100) {
                 this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                 return false;
             }
@@ -215,7 +217,7 @@
             var errorIconNode = dom.byId("durationErrorIcon");
             var duration = dom.byId("durationSpinner").value;
 
-            if (isNaN(duration) || duration < 0) {
+            if (!this._isUnsignedNumeric(duration) || duration < 0) {
                 this._setError(resources.addtestview.error_duration, errorTextNode, errorIconNode);
                 return false;
             }
@@ -245,6 +247,13 @@
             }
 
             this._setError("", errorTextNode, errorIconNode);
+            return true;
+        },
+
+        _isUnsignedNumeric: function (string) {
+            if (string.match(/^[0-9]+$/) == null) {
+                return false;
+            }
             return true;
         },
 
