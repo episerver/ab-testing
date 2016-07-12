@@ -52,10 +52,7 @@
         },
 
         startup: function () {
-            this._DisplayOptionsButton(true); //reset visibility
-            if (!this.context.data.userHasPublishRights) {
-                this._DisplayOptionsButton(false);
-            }
+            this._DisplayOptionsButton(this.context.data.userHasPublishRights); 
         },
 
         _contextChanged: function (newContext) {
@@ -149,13 +146,12 @@
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
         },
-        
-        _DisplayOptionsButton: function (hide) {
-            var x = dom.byId("publishOptionsMenu");
-            if (hide) {
-                domStyle.set(registry.byId("oWidget").domNode, "visibility", "hidden");
-            } else {
+
+        _DisplayOptionsButton: function (show) {
+            if (show) {
                 domStyle.set(registry.byId("oWidget").domNode, "visibility", "visible");
+            } else {
+                domStyle.set(registry.byId("oWidget").domNode, "visibility", "hidden");
             }
         }
     });
