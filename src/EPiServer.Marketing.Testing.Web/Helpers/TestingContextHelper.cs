@@ -9,9 +9,7 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
-using EPiServer.DataAbstraction;
 using EPiServer.Globalization;
-using EPiServer.Framework.Localization;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
@@ -100,8 +98,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             // Map users publishing rights
             model.UserHasPublishRights = publishedContent.QueryDistinctAccess(AccessLevel.Publish);
-
-
+            
             //Test Details may be viewed before the test has started.   
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
             //Text message if Inactive, Remaining Days if active, and adjusted days for done and archived.
