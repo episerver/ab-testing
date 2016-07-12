@@ -74,10 +74,12 @@ namespace EPiServer.Marketing.Testing.Web
         /// <summary>
         /// need this for deleted drafts as they are permanently deleted and do not go to the trash
         /// the OnDeletedContentVersion event is too late to get the guid to see if it is part of a test or not.
+        /// Excluding from coverage as CheckForActiveTest is tested separately and the rest of this would be mocked.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="contentEventArgs"></param>
-        private void ContentEventsOnDeletingContentVersion(object sender, ContentEventArgs contentEventArgs)
+        [ExcludeFromCodeCoverage]
+        internal void ContentEventsOnDeletingContentVersion(object sender, ContentEventArgs contentEventArgs)
         {
             var serviceLocator = ServiceLocator.Current;
             var repo = serviceLocator.GetInstance<IContentRepository>();
@@ -87,16 +89,18 @@ namespace EPiServer.Marketing.Testing.Web
             // get the actual content item so we can get its Guid to check against our tests
             if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
             {
-                CheckForActiveTest(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
+                CheckForActiveTests(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
             }
         }
 
         /// <summary>
         /// need this for deleted published pages, this is called when the trash is emptied
+        /// Excluding from coverage as CheckForActiveTest is tested separately and the rest of this would be mocked.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="deleteContentEventArgs"></param>
-        private void ContentEventsOnDeletedContent(object sender, DeleteContentEventArgs deleteContentEventArgs)
+        [ExcludeFromCodeCoverage]
+        internal void ContentEventsOnDeletedContent(object sender, DeleteContentEventArgs deleteContentEventArgs)
         {
             // this is the list of pages that are being deleted from the trash.  All we have is the guid, at this point in time
             // the items already seem to be gone.  Luckily all we need is the guid as this only fires for published pages.
@@ -104,7 +108,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             foreach (var guid in guids)
             {
-                CheckForActiveTest(guid, 0);
+                CheckForActiveTests(guid, 0);
             }
         }
 
@@ -114,14 +118,16 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         /// <param name="contentGuid">Guid of item being deleted.</param>
         /// <param name="contentVersion">0 if published page, workID if draft</param>
-        private void CheckForActiveTest(Guid contentGuid, int contentVersion)
+        /// <returns>Number of active tests that were deleted from the system.</returns>
+        internal int CheckForActiveTests(Guid contentGuid, int contentVersion)
         {
+            var testsDeleted = 0;
             var tests = _testManager.GetActiveTestsByOriginalItemId(contentGuid);
 
             // no tests found for the deleted content
             if (tests.IsNullOrEmpty())
             {
-                return;
+                return testsDeleted;
             }
 
             foreach (var test in tests)
@@ -131,6 +137,7 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     _testManager.Stop(test.Id);
                     _testManager.Delete(test.Id);
+                    testsDeleted++;
                     continue;
                 }
                     
@@ -140,7 +147,10 @@ namespace EPiServer.Marketing.Testing.Web
 
                 _testManager.Stop(test.Id);
                 _testManager.Delete(test.Id);
+                testsDeleted++;
             }
+
+            return testsDeleted;
         }
 
         /// Main worker method.  Processes each content which triggers a
