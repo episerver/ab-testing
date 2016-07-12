@@ -127,7 +127,7 @@ namespace EPiServer.Marketing.Testing.Web
                     if (contentVersion == 0)
                     {
                         _testManager.Stop(test.Id);
-                        //_testManager.Delete(test.Id);
+                        _testManager.Delete(test.Id);
                         continue;
                     }
                     
@@ -136,7 +136,7 @@ namespace EPiServer.Marketing.Testing.Web
                         continue;
 
                     _testManager.Stop(test.Id);
-                    //_testManager.Delete(test.Id);
+                    _testManager.Delete(test.Id);
                 }
             }
         }
