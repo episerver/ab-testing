@@ -8,6 +8,7 @@ define([
     "dijit/Destroyable",
     "epi/datetime",
     'epi/dependency',
+    "epi-cms/contentediting/ContentActionSupport",
     "epi/i18n!marketing-testing/nls/abtesting"
 ],
 
@@ -21,6 +22,7 @@ function (
     Destroyable,
     datetime,
     dependency,
+    ContentActionSupport,
     resources
 ) {
 
@@ -32,6 +34,8 @@ function (
 
         constructor: function (params) {
         },
+
+        _contentActionSupport: ContentActionSupport,
 
         postscript: function () {
             this._storeName = "marketing.contentTesting";
@@ -81,17 +85,20 @@ function (
 
             var notificationMesage = domConstruct.create("div", {innerHTML: message});
             
-            var testLink =  domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
+            if(test.state !== 2 || this._contentActionSupport.hasAccess(this.value.contentData.accessMask, this._contentActionSupport.accessLevel.Publish))
+            {
+                var testLink =  domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
             
-            this.own(
-                on(testLink, "click", function (e) {
-                    event.stop(e);
-                    topic.publish("/epi/shell/context/request", {
-                        uri: "epi.marketing.testing:///testid=" + test.id + "/" + page
-                    }, {});
-                })
-            );
-            
+                this.own(
+                    on(testLink, "click", function (e) {
+                        event.stop(e);
+                        topic.publish("/epi/shell/context/request", {
+                            uri: "epi.marketing.testing:///testid=" + test.id + "/" + page
+                        }, {});
+                    })
+                );
+            }
+
             return notificationMesage;
         }
     });
