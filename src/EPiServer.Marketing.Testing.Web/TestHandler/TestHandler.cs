@@ -79,15 +79,15 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="contentEventArgs"></param>
         private void ContentEventsOnDeletingContentVersion(object sender, ContentEventArgs contentEventArgs)
         {
-            // this is the list of drafts being deleted, since they are permanently deleted immediately, there can be only 1
             var serviceLocator = ServiceLocator.Current;
             var repo = serviceLocator.GetInstance<IContentRepository>();
 
             IContent draftContent;
             
+            // get the actual content item so we can get its Guid to check against our tests
             if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
             {
-                Check(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
+                CheckForActiveTest(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
             }
         }
 
@@ -104,40 +104,42 @@ namespace EPiServer.Marketing.Testing.Web
 
             foreach (var guid in guids)
             {
-                Check(guid, 0);
+                CheckForActiveTest(guid, 0);
             }
-           
         }
 
         /// <summary>
         /// Check the guid passed in to see if the page/draft is part of a test.  For published pages, the version passed in will be 0, as all we need/get is the guid
         /// for drafts, we the guid and version will be passed in to compare against known variants being tested.
         /// </summary>
-        /// <param name="guid"></param>
-        /// <param name="contentVersion"></param>
-        private void Check(Guid guid, int contentVersion)
+        /// <param name="contentGuid">Guid of item being deleted.</param>
+        /// <param name="contentVersion">0 if published page, workID if draft</param>
+        private void CheckForActiveTest(Guid contentGuid, int contentVersion)
         {
-            var tests = _testManager.GetActiveTestsByOriginalItemId(guid);
+            var tests = _testManager.GetActiveTestsByOriginalItemId(contentGuid);
 
-            if (!tests.IsNullOrEmpty())
+            // no tests found for the deleted content
+            if (tests.IsNullOrEmpty())
             {
-                foreach (var test in tests)
-                {
-                    // deleting published page
-                    if (contentVersion == 0)
-                    {
-                        _testManager.Stop(test.Id);
-                        _testManager.Delete(test.Id);
-                        continue;
-                    }
-                    
-                    // deleting a draft version of a page
-                    if (test.Variants.All(v => v.ItemVersion != contentVersion))
-                        continue;
+                return;
+            }
 
+            foreach (var test in tests)
+            {
+                // the published page is being deleted
+                if (contentVersion == 0)
+                {
                     _testManager.Stop(test.Id);
                     _testManager.Delete(test.Id);
+                    continue;
                 }
+                    
+                // a draft version of a page is being deleted
+                if (test.Variants.All(v => v.ItemVersion != contentVersion))
+                    continue;
+
+                _testManager.Stop(test.Id);
+                _testManager.Delete(test.Id);
             }
         }
 
