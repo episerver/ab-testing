@@ -624,13 +624,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
             // find test for published page
-            Assert.Equal(1, testHandler.CheckForActiveTest(_OriginalItemId, 0));
+            Assert.Equal(1, testHandler.CheckForActiveTests(_OriginalItemId, 0));
 
             // no match for a variant
-            Assert.Equal(0, testHandler.CheckForActiveTest(_OriginalItemId, 1));
+            Assert.Equal(0, testHandler.CheckForActiveTests(_OriginalItemId, 1));
 
             // find test for variant match
-            Assert.Equal(1, testHandler.CheckForActiveTest(_OriginalItemId, 2));
+            Assert.Equal(1, testHandler.CheckForActiveTests(_OriginalItemId, 2));
         }
     }
 }
