@@ -67,23 +67,76 @@ namespace EPiServer.Marketing.Testing.Web
             ProcessedContentList = new List<ContentReference>();
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
-            contentEvents.DeletedContentVersion += TestingContentEventsOnDeletedContentVersion;
+            contentEvents.DeletedContent += ContentEventsOnDeletedContent;
+            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
         }
 
-        private void TestingContentEventsOnDeletedContentVersion(object sender, ContentEventArgs contentEventArgs)
+        /// <summary>
+        /// need this for deleted drafts as they are permanently deleted and do not go to the trash
+        /// the OnDeletedContentVersion event is too late to get the guid to see if it is part of a test or not.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="contentEventArgs"></param>
+        private void ContentEventsOnDeletingContentVersion(object sender, ContentEventArgs contentEventArgs)
         {
-            var tests = _testManager.GetActiveTestsByOriginalItemId(contentEventArgs.Content.ContentGuid);
+            // this is the list of drafts being deleted, since they are permanently deleted immediately, there can be only 1
+            var serviceLocator = ServiceLocator.Current;
+            var repo = serviceLocator.GetInstance<IContentRepository>();
+
+            IContent draftContent;
+            
+            if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
+            {
+                Check(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
+            }
+        }
+
+        /// <summary>
+        /// need this for deleted published pages, this is called when the trash is emptied
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="deleteContentEventArgs"></param>
+        private void ContentEventsOnDeletedContent(object sender, DeleteContentEventArgs deleteContentEventArgs)
+        {
+            // this is the list of pages that are being deleted from the trash.  All we have is the guid, at this point in time
+            // the items already seem to be gone.  Luckily all we need is the guid as this only fires for published pages.
+            var guids = (List<Guid>)deleteContentEventArgs.Items["DeletedItemGuids"];
+
+            foreach (var guid in guids)
+            {
+                Check(guid, 0);
+            }
+           
+        }
+
+        /// <summary>
+        /// Check the guid passed in to see if the page/draft is part of a test.  For published pages, the version passed in will be 0, as all we need/get is the guid
+        /// for drafts, we the guid and version will be passed in to compare against known variants being tested.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="contentVersion"></param>
+        private void Check(Guid guid, int contentVersion)
+        {
+            var tests = _testManager.GetActiveTestsByOriginalItemId(guid);
 
             if (!tests.IsNullOrEmpty())
             {
-                var contentVersion = contentEventArgs.ContentLink.WorkID == 0 ? contentEventArgs.ContentLink.ID : contentEventArgs.ContentLink.WorkID;
-
                 foreach (var test in tests)
                 {
-                    if (test.Variants.Any(v => v.ItemVersion == contentVersion))
+                    // deleting published page
+                    if (contentVersion == 0)
                     {
                         _testManager.Stop(test.Id);
+                        //_testManager.Delete(test.Id);
+                        continue;
                     }
+                    
+                    // deleting a draft version of a page
+                    if (test.Variants.All(v => v.ItemVersion != contentVersion))
+                        continue;
+
+                    _testManager.Stop(test.Id);
+                    //_testManager.Delete(test.Id);
                 }
             }
         }
@@ -150,10 +203,6 @@ namespace EPiServer.Marketing.Testing.Web
                                 }
 
                                 CalculateView(testCookieData, contentVersion);
-                            }
-                            else
-                            {
-                                _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
                             }
                         }
                     }
