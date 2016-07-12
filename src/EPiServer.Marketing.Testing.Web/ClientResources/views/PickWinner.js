@@ -94,20 +94,22 @@
             this.topic = this.topic || topic;
 
             if (this.context.data.test.state === 0) {
-                this.testStartedText.textContent = resources.pickwinnerview.test_not_started;
-                this.testCompletedText.textContent = resources.pickwinnerview.test_scheduled;
-                this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.startDate);
-                this.testOwner.textContent = "";
+                this.scheduleStatusText.innerHTML =
+                    resources.pickwinnerview.test_not_started + "&nbsp" +
+                    resources.pickwinnerview.test_scheduled +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) + ".";
             } else if (this.context.data.test.state === 1) {
-                this.testStartedText.textContent = resources.pickwinnerview.started_by_text;
-                this.testOwner.textContent = this.context.data.test.owner;
-                this.testCompletedText.textContent = resources.pickwinnerview.test_scheduled_finish;
-                this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
+                this.scheduleStatusText.innerHTML =
+                    resources.pickwinnerview.started_by_text +
+                    "<span class='epi-username'>" + this.context.data.test.owner + "</span>" + ".&nbsp" +
+                    resources.pickwinnerview.test_scheduled_finish +
+                    datetime.toUserFriendlyString(this.context.data.test.endDate) + ".";
             } else {
-                this.testStartedText.textContent = resources.pickwinnerview.started_by_text;
-                this.testOwner.textContent = this.context.data.test.owner+",";
-                this.testCompletedText.textContent = resources.pickwinnerview.completed_text;
-                this.testCompletedDate.textContent = datetime.toUserFriendlyString(this.context.data.test.endDate);
+                this.scheduleStatusText.innerHTML =
+                    resources.pickwinnerview.started_by_text +
+                    "<span class='epi-username'>" + this.context.data.test.owner + "</span>" + ".&nbsp" +
+                    resources.pickwinnerview.completed_text +
+                    datetime.toUserFriendlyString(this.context.data.test.endDate) + ".";
             }
 
             //Set the correct corresponding variant data
