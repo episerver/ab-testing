@@ -12,6 +12,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.DataAbstraction;
 using EPiServer.Globalization;
 using EPiServer.Framework.Localization;
+using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -96,6 +97,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
+
+            // Map users publishing rights
+            model.UserHasPublishRights = publishedContent.QueryDistinctAccess(AccessLevel.Publish);
+
 
             //Test Details may be viewed before the test has started.   
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
