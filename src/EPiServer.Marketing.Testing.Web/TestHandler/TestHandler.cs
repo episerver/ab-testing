@@ -98,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Web
                             ProcessedContentList.Add(e.ContentLink);
                             Swap(testCookieData, e);
                         }
-                        else if (!hasData && currentPage !=null && _contextHelper.IsRequestedContent(currentPage,e.Content) && ProcessedContentList.Count == 0)
+                        else if (!hasData && CurrentPage !=null && ProcessedContentList.Count == 0)
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             //get a new random variant. 
@@ -150,7 +150,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (cookie.ShowVariant)
             {
-                var variant = _testManager.GetVariantPageData(activeContent.Content.ContentGuid, ProcessedContentList);
+                var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
                 if (variant != null)
                 {

@@ -89,7 +89,6 @@ namespace EPiServer.Marketing.Testing
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
-
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
             var testList = new List<IMarketingTest>();
@@ -98,7 +97,6 @@ namespace EPiServer.Marketing.Testing
             {
                 testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
-
             return testList;
         }
 
@@ -116,10 +114,8 @@ namespace EPiServer.Marketing.Testing
             {
                 testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
-
             return testList;
         }
-
 
         public Guid Save(IMarketingTest multivariateTest)
         {
@@ -143,7 +139,6 @@ namespace EPiServer.Marketing.Testing
                 kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
             }
 
-            
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
@@ -205,7 +200,6 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-       
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
@@ -236,15 +230,14 @@ namespace EPiServer.Marketing.Testing
                     }
                 }
             }
-
             return activePage;
         }
 
-        public PageData GetVariantPageData(Guid contentGuid, List<ContentReference> processedList)
+        public IContent GetVariantContent(Guid contentGuid, List<ContentReference> processedList)
         {
-            var retData = _variantCache.Get("epi" + contentGuid) as PageData;
+            var retData = (IContent)_variantCache.Get("epi" + contentGuid);
 
-            return retData ?? UpdateVariantPageDataCache(contentGuid, processedList);
+            return retData ?? UpdateVariantContentCache(contentGuid, processedList);
         }
 
         public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
@@ -289,7 +282,6 @@ namespace EPiServer.Marketing.Testing
                 _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
                 activeTests = tests;
             }
-
             return activeTests;
         }
 
@@ -317,13 +309,12 @@ namespace EPiServer.Marketing.Testing
         }
                     break;
             }
-
             _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
-        internal PageData UpdateVariantPageDataCache(Guid contentGuid, List<ContentReference> processedList)
+        internal IContent UpdateVariantContentCache(Guid contentGuid, List<ContentReference> processedList)
         {
-            PageData retData = null;
+            IVersionable versionableContent = null;
 
             if (processedList.Count == 1)
         {
@@ -333,34 +324,33 @@ namespace EPiServer.Marketing.Testing
                 if (test != null)
             {
                     var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
-                    var testContent = contentLoader.Get<IContent>(contentGuid) as PageData;
+                    var testContent = contentLoader.Get<IContent>(contentGuid);
+                    var contentVersion = testContent.ContentLink.WorkID == 0
+                        ? testContent.ContentLink.ID
+                        : testContent.ContentLink.WorkID;
 
                     if (testContent != null)
-            {
-                        var contentVersion = testContent.WorkPageID == 0
-                            ? testContent.ContentLink.ID
-                            : testContent.WorkPageID;
+                    {
                         foreach (var variant in test.Variants)
         {
                             if (variant.ItemVersion != contentVersion)
-            {
-                                retData = TestManagerHelper.CreateVariantPageData(contentLoader, testContent, variant);
-                                retData.Status = VersionStatus.Published;
-                                retData.StartPublish = DateTime.Now.AddDays(-1);
-                                retData.MakeReadOnly();
+                            {
+                                versionableContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
+                                versionableContent.Status = VersionStatus.Published;
+                                versionableContent.StartPublish = DateTime.Now.AddDays(-1);
 
                                 var cacheItemPolicy = new CacheItemPolicy
             {
                                     AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
             };
 
-                                _variantCache.Add("epi" + contentGuid, retData, cacheItemPolicy);
-        }
+                                _variantCache.Add("epi" + contentGuid, (IContent)versionableContent, cacheItemPolicy);
+                            }
+                        }
+                    }
+                }
             }
-        }
-            }
-        }
-            return retData;
+            return (IContent)versionableContent;
         }
     }
 }
