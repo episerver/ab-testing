@@ -9,9 +9,8 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
-using EPiServer.DataAbstraction;
 using EPiServer.Globalization;
-using EPiServer.Framework.Localization;
+using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -77,7 +76,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
 
-
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
 
@@ -91,7 +89,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var model = new MarketingTestingContextModel();
             model.Test = testData;
             model.PublishedVersionName = publishedContent.Name;
-            model.PublishedVersionContentLink = publishedContent.ContentLink.ToString();
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
@@ -99,6 +96,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
 
+            // Map users publishing rights
+            model.UserHasPublishRights = publishedContent.QueryDistinctAccess(AccessLevel.Publish);
+            
             //Test Details may be viewed before the test has started.   
             //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
             //Text message if Inactive, Remaining Days if active, and adjusted days for done and archived.
@@ -148,13 +148,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private void MapVersionData(IContent publishedContent, IContent draftContent, MarketingTestingContextModel model)
         {
             var versionRepo = _serviceLocator.GetInstance<IContentVersionRepository>();
-            ContentVersion publishedVersionData = versionRepo.LoadPublished(publishedContent.ContentLink,
+            var publishedVersionData = versionRepo.LoadPublished(publishedContent.ContentLink,
                 ContentLanguage.PreferredCulture.Name);
-            ContentVersion draftVersionData = versionRepo.Load(draftContent.ContentLink);
+            var draftVersionData = versionRepo.Load(draftContent.ContentLink);
 
             //set published and draft version info
             model.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
             model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+            model.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
 
             model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
             model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);
