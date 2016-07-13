@@ -148,10 +148,12 @@
         },
 
         _DisplayOptionsButton: function (show) {
+            var dropDownButton = registry.byId("optionsDropdown");
             if (show) {
-                domStyle.set(registry.byId("oWidget").domNode, "visibility", "visible");
+                domStyle.set(dropDownButton.domNode, "visibility", "visible");
+                dropDownButton.startup();
             } else {
-                domStyle.set(registry.byId("oWidget").domNode, "visibility", "hidden");
+                domStyle.set(dropDownButton.domNode, "visibility", "hidden");
             }
         }
     });
