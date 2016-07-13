@@ -151,7 +151,7 @@
             var dropDownButton = registry.byId("optionsDropdown");
             if (show) {
                 domStyle.set(dropDownButton.domNode, "visibility", "visible");
-                dropDownButton.startup();
+                dropDownButton.startup(); //Avoids conditions where the widget is rendered but not active.
             } else {
                 domStyle.set(dropDownButton.domNode, "visibility", "hidden");
             }
