@@ -222,7 +222,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantPageData(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = false });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
@@ -272,7 +272,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantPageData(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
                 .Returns(true);
@@ -366,7 +366,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantPageData(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = true });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
@@ -415,7 +415,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantPageData(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);

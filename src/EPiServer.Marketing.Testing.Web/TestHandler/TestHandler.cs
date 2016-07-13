@@ -98,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Web
                             ProcessedContentList.Add(e.ContentLink);
                             Swap(testCookieData, e);
                         }
-                        else if (!hasData && CurrentPage !=null && ProcessedContentList.Count == 0)
+                        else if (!hasData && currentPage != null && ProcessedContentList.Count == 0)
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             //get a new random variant. 
