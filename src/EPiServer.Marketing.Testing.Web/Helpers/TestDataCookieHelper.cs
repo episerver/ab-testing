@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.Exceptions;
+using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Data.Enums;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -100,7 +102,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 cookie = currentContext.Request.Cookies.Get(COOKIE_PREFIX + testContentId);
             }
-            
            
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
@@ -113,7 +114,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
                 try
                 {
-                    var t = _testManager.Get(retCookie.TestId);
+                    //Throws test not found exception and expires the cookie if test does not exist
+                    var t = _testManager.Get(retCookie.TestId); 
+
+                    //Checks if cookie is part of an active test and resets the cookie if not.
+                    //Used in cases where a users cookie may be for a completed test with the same test content Id.
+                    if (t.State != TestState.Active)
+                    {
+                        retCookie =  ResetTestDataCookie(retCookie);
+                    }
+                    
+                    //If cookie checks out, process KPIs
                     foreach (var kpi in t.KpiInstances)
                     {
                         bool converted = bool.Parse(cookie[kpi.Id + "-Flag"]);
@@ -141,6 +152,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             expiredCookie.HttpOnly = true;
             expiredCookie.Expires = DateTime.Now.AddDays(-1d);
             HttpContext.Current.Response.Cookies.Add(expiredCookie);
+        }
+
+        /// <summary>
+        /// Resets the cookie associated with the supplied testData to an empty Test Data cookie.
+        /// </summary>
+        /// <param name="testData"></param>
+        /// <returns></returns>
+        public TestDataCookie ResetTestDataCookie(TestDataCookie testData)
+        {
+            HttpContext.Current.Response.Cookies.Remove(COOKIE_PREFIX + testData.TestContentId.ToString());
+            HttpCookie resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId) {HttpOnly = true};
+            HttpContext.Current.Response.Cookies.Add(resetCookie);
+            return new TestDataCookie();
         }
 
         public IList<TestDataCookie> getTestDataFromCookies()
