@@ -1,22 +1,35 @@
 ﻿<div class="epi-form-container epi-grid-form dijitContainer">
-    <!-- Button Bar -->
-    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
+    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="uniqName_110_0" widgetid="uniqName_110_0">
         <div class="epi-toolbarGroupContainer">
-            <!-- Breadcrumb -->
-            <div class="epi-toolbarGroup epi-toolbarLeading">
-                <div id="breadcrumb"
-                     data-dojo-type="epi-cms/widget/Breadcrumb" data-dojo-attach-point="breadcrumbWidget">
+            <div class="epi-toolbarLeading epi-toolbarGroup">
+                <div id="breadcrumb" style="overflow-x: hidden;"
+                        data-dojo-type="epi-cms/widget/Breadcrumb"
+                        data-dojo-attach-point="breadcrumbWidget"
+                        data-dojo-props="showCurrentNode: false">
+                </div>
+                <div class="epi-breadCrumbs-title-wrapper">
+                    <div data-dojo-attach-point="iconNode" class="dijitInline dijitIcon epi-breadCrumbsCurrentItem-icon epi-iconObjectPage"></div>
+                    <h1 data-dojo-attach-point="contentNameNode" class="epi-breadCrumbsCurrentItem dojoxEllipsis"></h1>
                 </div>
             </div>
-            <div class="epi-toolbarGroup epi-toolbarCenter"></div>
-            <!-- Start and Cancel Buttons -->
-            <div class="epi-toolbarGroup epi-toolbarTrailing">
-                <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button">${resources.addtestview.start_default}</button>
-                <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button">${resources.addtestview.cancel_default}</button>
+            <div class="epi-toolbarCenter epi-toolbarGroup">&nbsp;</div>
+            <div class="epi-toolbarTrailing  epi-toolbarGroup">
+                <button class="epi-primary" data-dojo-type="dijit/form/Button"
+                        id="StartButton"
+                        data-dojo-attach-event="onClick: _onStartButtonClick"
+                        type="button">
+                    ${resources.addtestview.start_default}
+                </button>
+                <button data-dojo-type="dijit/form/Button"
+                        id="CancelButton"
+                        data-dojo-attach-event="onClick: _onCancelButtonClick"
+                        type="button">
+                    ${resources.addtestview.cancel_default}
+                </button>
             </div>
         </div>
+        <hr />
     </div>
-    <hr />
     <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
         <!-- Title Text -->
         <div class="epi-grid__row epi-grid__row--no-border">
