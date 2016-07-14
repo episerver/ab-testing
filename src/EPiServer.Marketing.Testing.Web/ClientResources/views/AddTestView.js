@@ -6,7 +6,6 @@
     'epi/i18n!marketing-testing/nls/abtesting',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
-
     'epi/shell/widget/_ModelBindingMixin',
     'epi/datetime',
     'epi/username',
@@ -19,7 +18,6 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-
     'epi-cms/widget/Breadcrumb',    
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
@@ -31,7 +29,6 @@
     declare,
     _WidgetBase,
     _TemplatedMixin,
-
     template,
     resources,
     AddTestViewModel,
