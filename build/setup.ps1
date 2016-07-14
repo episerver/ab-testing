@@ -81,15 +81,21 @@ Copy-Item "$cwd\resources\AlloyEPiServerDB.mdf" $databaseFilePath -force
 Attach-Database $databaseFilePath $DbName $DbServer
 
 # Create database structure
-$sqlScriptsPath = Resolve-Path "$cwd\..\src\Database"
 $sqlScript = "$cwd\SqlScript.sql"
 if (Test-Path $sqlScript) {
 	Remove-Item $sqlScript
 }
 
+$sqlScriptsPath = Resolve-Path "$cwd\..\src\Database\Testing"
 foreach ($script in Get-ChildItem $sqlScriptsPath -Filter '*.sql') {
 	Add-Content -Path $sqlScript -Value (Get-Content $script.FullName)			
 }
+
+$sqlScriptsPath = Resolve-Path "$cwd\..\src\Database\KPI"
+foreach ($script in Get-ChildItem $sqlScriptsPath -Filter '*.sql') {
+	Add-Content -Path $sqlScript -Value (Get-Content $script.FullName)			
+}
+
 if (Test-Path  $sqlScript) {
 	"Executing package SQL scripts..."
 	Execute-Sql $sqlScript $DbName $DbServer
