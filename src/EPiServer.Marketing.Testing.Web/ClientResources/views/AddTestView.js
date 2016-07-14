@@ -18,7 +18,6 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-    'epi-cms/widget/Breadcrumb',
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
