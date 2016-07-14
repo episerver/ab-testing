@@ -7,7 +7,8 @@
             <div class="epi-toolbarGroup epi-toolbarCenter"></div>
             <!-- Close Button -->
             <div class="epi-toolbarGroup epi-toolbarTrailing epi-button--bold">
-                <button data-dojo-type="dijit/form/Button" id="CloseButton" data-dojo-attach-event="onClick: _onCloseButtonClick" type="button">${resources.pickwinnerview.close_button_text}</button>
+                <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCloseButtonClick" type="button">${resources.pickwinnerview.close_button_text}</button>
+                &nbsp;
             </div>
         </div>
     </div>
@@ -19,14 +20,16 @@
                     <hgroup>
                         <!-- test title -->
                         <h1 class="dijitInline" data-dojo-attach-point="testTitle"></h1>
-                        <h3>${resources.pickwinnerview.started_by_text}<span class="epi-username" data-dojo-attach-point="testOwner"></span>. ${resources.pickwinnerview.completed_text} <span data-dojo-attach-point="testCompleted"></span></h3>
+                        <h3>
+                            <span data-dojo-attach-point="scheduleStatusText"></span>
+                        </h3>
                     </hgroup>
                 </div>
             </div>
         </div>
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
-                <div class="epi-grid__header">
+                <div class="epi-grid__header epi-pick-winner-text">
                     <h2 class="dijitInline">
                         <strong>${resources.pickwinnerview.pick_a_winner_text}</strong>
                     </h2>
@@ -82,7 +85,7 @@
                     <li class="epi-form-container__section__row epi-form-container__section__row--full-width test-summary">
                         <h2 class="dijitInline valign--top" data-dojo-attach-point="participationPercent"></h2> <h3 class="dijitInline">${resources.pickwinnerview.visitors_participated_text}</h3><br>
                         <h2 class="dijitInline valign--top" data-dojo-attach-point="totalParticipants"></h2> <h3 class="dijitInline">${resources.pickwinnerview.total_participants_text}</h3><br>
-                        <h2 class="dijitInline valign--top" data-dojo-attach-point="testDuration"></h2> <h3 class="dijitInline">${resources.pickwinnerview.duration_text}</h3><br>
+                        <h2 class="dijitInline valign--top" data-dojo-attach-point="testDuration"></h2> <h3 class="dijitInline"><span data-dojo-attach-point="durationText"></span></h3><br>
                     </li>
                 </ul>
             </div>
@@ -93,7 +96,7 @@
                 <h2>Conversion goal:</h2>
                 <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
                     <li class="epi-form-container__section__row epi-form-container__section__row--field  test-summary">
-                        <label for="navigationPage">${resources.pickwinnerview.visitor_navigates_text}</label>
+                        <label style="width:200px" for="navigationPage">${resources.pickwinnerview.visitor_navigates_text}</label>
                         <span class="dijitInline dijitReset dijitIcon epi-iconPage"></span> <a href="" data-dojo-attach-point="contentLinkAnchor"></a>
                     </li>
                 </ul>

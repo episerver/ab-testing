@@ -8,6 +8,7 @@ define([
     "dijit/Destroyable",
     "epi/datetime",
     'epi/dependency',
+    "epi-cms/contentediting/ContentActionSupport",
     "epi/i18n!marketing-testing/nls/abtesting"
 ],
 
@@ -21,6 +22,7 @@ function (
     Destroyable,
     datetime,
     dependency,
+    ContentActionSupport,
     resources
 ) {
 
@@ -32,6 +34,8 @@ function (
 
         constructor: function (params) {
         },
+
+        _contentActionSupport: ContentActionSupport,
 
         postscript: function () {
             this._storeName = "marketing.contentTesting";
@@ -64,13 +68,13 @@ function (
             var testLinkTooltip = resources.notificationbar.details_link_tooltip;
             var page = "details";
 
-            // Inactive (scheduled)
+             // Inactive (scheduled)
             if (test.state == 0) {
-                message = resources.notificationbar.scheduled_test +
+                message = resources.notificationbar.scheduled_test + 
                     datetime.toUserFriendlyString(test.startDate, null, false, true) + ". ";
             }
-
-            // Done, finished
+            
+             // Done, finished
             if (test.state == 2) {
                 message = resources.notificationbar.completed_test;
                 var testLinkText = resources.notificationbar.winner_link_text;
@@ -79,9 +83,11 @@ function (
             }
 
             var notificationMesage = domConstruct.create("div", { innerHTML: message });
-
-            var testLink = domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
-
+            
+            if(test.state !== 2 || this._contentActionSupport.hasAccess(this.value.contentData.accessMask, this._contentActionSupport.accessLevel.Publish))
+            {
+                var testLink =  domConstruct.create("a", { href: "#", innerHTML: testLinkText, title: testLinkTooltip }, notificationMesage);
+            
             this.own(
                 on(testLink, "click", function (e) {
                     event.stop(e);
@@ -90,6 +96,7 @@ function (
                     }, {sender: this});
                 })
             );
+            }
             
             return notificationMesage;
         }

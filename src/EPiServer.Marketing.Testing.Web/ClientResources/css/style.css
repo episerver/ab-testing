@@ -122,6 +122,10 @@
 .Sleek .advanced-options__content {
   display: none;
 }
+.Sleek .epi-pick-winner-text {
+  text-align: center;
+}
+
 ul,
 li {
   margin: 0;

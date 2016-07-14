@@ -2,6 +2,7 @@
   "dojo/_base/declare",
     'epi/dependency',
     'dojo/dom',
+    'dijit/registry',
     'dojo/dom-style',
     "dojo/topic",
     "dijit/_WidgetBase",
@@ -21,6 +22,7 @@
     declare,
     dependency,
     dom,
+    registry,
     domStyle,
     topic,
     widgetBase,
@@ -47,6 +49,10 @@
 
         postCreate: function () {
             this._renderData();
+        },
+
+        startup: function () {
+            this._DisplayOptionsButton(this.context.data.userHasPublishRights); 
         },
 
         _contextChanged: function (newContext) {
@@ -139,6 +145,16 @@
 
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
+        },
+
+        _DisplayOptionsButton: function (show) {
+            var dropDownButton = registry.byId("optionsDropdown");
+            if (show) {
+                domStyle.set(dropDownButton.domNode, "visibility", "visible");
+                dropDownButton.startup(); //Avoids conditions where the widget is rendered but not active.
+            } else {
+                domStyle.set(dropDownButton.domNode, "visibility", "hidden");
+            }
         }
     });
 
