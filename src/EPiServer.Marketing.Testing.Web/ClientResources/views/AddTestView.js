@@ -70,16 +70,6 @@
         //sets default values once everything is loaded
         postCreate: function () {
             this.reset();
-            this.inherited(arguments);
-        },
-
-        startup: function () {
-            if (this.breadcrumbWidget) {
-                this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
-                this.contentNameNode.innerText = this.contentData.name;
-                this.breadcrumbWidget._addResizeListener();
-                this.breadcrumbWidget.layout();
-            }
         },
 
         reset: function () {
@@ -109,10 +99,7 @@
 
             if (this.breadcrumbWidget) {
                 this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
-                this.contentNameNode.innerText = this.contentData.name;
-                this.breadcrumbWidget.layout();
             }
-
             if (this.conversionPageWidget) {
                 this.conversionPageWidget.reset();
             }
