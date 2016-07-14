@@ -6,6 +6,7 @@
     'epi/i18n!marketing-testing/nls/abtesting',
     'marketing-testing/viewmodels/AddTestViewModel',
     'dijit/_WidgetsInTemplateMixin',
+
     'epi/shell/widget/_ModelBindingMixin',
     'epi/datetime',
     'epi/username',
@@ -18,7 +19,8 @@
     'dijit/form/Button',
     'dijit/form/NumberSpinner',
     'dijit/form/Textarea',
-    'epi-cms/widget/Breadcrumb',    
+
+    'epi-cms/widget/Breadcrumb',
     'epi-cms/widget/ContentSelector',
     'epi/shell/widget/DateTimeSelectorDropDown',
     'dijit/form/TextBox',
@@ -29,6 +31,7 @@
     declare,
     _WidgetBase,
     _TemplatedMixin,
+
     template,
     resources,
     AddTestViewModel,
@@ -70,6 +73,16 @@
         //sets default values once everything is loaded
         postCreate: function () {
             this.reset();
+            this.inherited(arguments);
+        },
+
+        startup: function () {
+            if (this.breadcrumbWidget) {
+                this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
+                this.contentNameNode.innerText = this.contentData.name;
+                this.breadcrumbWidget._addResizeListener();
+                this.breadcrumbWidget.layout();
+            }
         },
 
         reset: function () {
@@ -85,12 +98,12 @@
 
             if (this.participationPercentText) {
                 this.participationPercentText.reset();
-            this.model.participationPercent = this.participationPercentText.value;
+                this.model.participationPercent = this.participationPercentText.value;
             }
 
             if (this.durationText) {
                 this.durationText.reset();
-            this.model.testDuration = this.durationText.value;
+                this.model.testDuration = this.durationText.value;
             }
 
             if (this.startDatePicker) {
@@ -99,7 +112,10 @@
 
             if (this.breadcrumbWidget) {
                 this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
+                this.contentNameNode.innerText = this.contentData.name;
+                this.breadcrumbWidget.layout();
             }
+
             if (this.conversionPageWidget) {
                 this.conversionPageWidget.reset();
             }
@@ -149,11 +165,11 @@
             for (i = 0; i < rbs.length; i++) {
                 var rb = dom.byId(rbs[i]);
                 if (!rb) {
-                return;
+                    return;
                 } else if (rb.checked) {
                     this.model.confidencelevel = rb.value;
                     return;
-            }
+                }
             }
         },
 
@@ -316,7 +332,7 @@
 
         _onTestTitleChanged: function (event) {
             if (this._isValidTitle()) {
-            this.model.testTitle = event;
+                this.model.testTitle = event;
             }
         },
 
@@ -326,19 +342,19 @@
 
         _onConversionPageChanged: function (event) {
             if (this._isValidConversionPage()) {
-            this.model.conversionPage = event;
+                this.model.conversionPage = event;
             }
         },
 
         _onPercentageSpinnerChanged: function (event) {
             if (this._isValidPercentParticipation()) {
-            this.model.participationPercent = event;
+                this.model.participationPercent = event;
             }
         },
 
         _onDurationSpinnerChanged: function (event) {
             if (this._isValidDuration()) {
-            this.model.testDuration = event;
+                this.model.testDuration = event;
             }
         },
 
@@ -352,17 +368,17 @@
             }
 
             if (this._isValidStartDate(event)) {
-            if (event !== "") {
-                startButton.innerText = resources.addtestview.schedule_test;
-                scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
-                this.model.startDate = new Date(event).toUTCString();
-                this.model.start = false;
-            } else {
-                startButton.innerText = resources.addtestview.start_default;
-                scheduleText.innerText = resources.addtestview.notscheduled_text;
-                this.model.start = true;
+                if (event !== "") {
+                    startButton.innerText = resources.addtestview.schedule_test;
+                    scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
+                    this.model.startDate = new Date(event).toUTCString();
+                    this.model.start = false;
+                } else {
+                    startButton.innerText = resources.addtestview.start_default;
+                    scheduleText.innerText = resources.addtestview.notscheduled_text;
+                    this.model.start = true;
+                }
             }
-        }
         }
     });
 });
