@@ -7,7 +7,7 @@
             <div class="epi-toolbarGroup epi-toolbarCenter"></div>
             <!-- Close Button -->
             <div class="epi-toolbarGroup epi-toolbarTrailing epi-button--bold">
-                <button data-dojo-type="dijit/form/Button" id="CloseButton" data-dojo-attach-event="onClick: _onCloseButtonClick" type="button">${resources.pickwinnerview.close_button_text}</button>
+                <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCloseButtonClick" type="button">${resources.pickwinnerview.close_button_text}</button>
                 &nbsp;
             </div>
         </div>
@@ -21,10 +21,7 @@
                         <!-- test title -->
                         <h1 class="dijitInline" data-dojo-attach-point="testTitle"></h1>
                         <h3>
-                            <span data-dojo-attach-point="testStartedText"></span>
-                            <span class="epi-username" data-dojo-attach-point="testOwner"></span>
-                            <span data-dojo-attach-point="testCompletedText"></span>
-                            <span data-dojo-attach-point="testCompletedDate"></span>
+                            <span data-dojo-attach-point="scheduleStatusText"></span>
                         </h3>
                     </hgroup>
                 </div>

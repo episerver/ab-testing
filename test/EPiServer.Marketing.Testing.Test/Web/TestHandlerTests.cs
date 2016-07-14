@@ -12,6 +12,8 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Core.Exceptions;
+using EPiServer.Marketing.Testing.Dal.DataAccess;
+using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Test.Core;
 using Xunit.Sdk;
 
@@ -48,6 +50,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private Mock<ITestDataCookieHelper> _tdc;
         private Mock<ITestManager> _testManager;
+        private Mock<ITestingDataAccess> _testingDataAccess;
         private Mock<ITestingContextHelper> _contextHelper;
         private MyLogger _logger;
 
@@ -60,6 +63,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private readonly Guid _firstKpiId = Guid.Parse("ebb50f9d-8a4c-4f7f-8734-a8c31967a39a");
         private readonly Guid _secondKpiId = Guid.Parse("64d9e743-0c74-4098-b23f-a7046b7d7be8");
 
+        private Guid _OriginalItemId = Guid.NewGuid();
+
         private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
         {
             _logger = new MyLogger();
@@ -67,6 +72,18 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc = new Mock<ITestDataCookieHelper>();
             _testManager = new Mock<ITestManager>();
             _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
+            _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
+                .Returns(new List<IMarketingTest>()
+                {
+                    new ABTest()
+                    {
+                        OriginalItemId = _OriginalItemId,
+                        State = TestState.Active,
+                        Variants = new List<Variant>() {new Variant() { ItemId = _OriginalItemId, ItemVersion = 2 } }
+                    }
+                });
+            _testManager.Setup(call => call.Stop(It.IsAny<Guid>()));
+            _testManager.Setup(call => call.Delete(It.IsAny<Guid>()));
             _contextHelper = new Mock<ITestingContextHelper>();
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
 
@@ -599,6 +616,21 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             testHandler.LoadedContent(new object(), args);
             _tdc.Verify(call => call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once, "Expected expire test data cookie to be called");
+        }
+
+        [Fact]
+        public void TestHandler_CheckForActiveTest()
+        {
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+
+            // find test for published page
+            Assert.Equal(1, testHandler.CheckForActiveTests(_OriginalItemId, 0));
+
+            // no match for a variant
+            Assert.Equal(0, testHandler.CheckForActiveTests(_OriginalItemId, 1));
+
+            // find test for variant match
+            Assert.Equal(1, testHandler.CheckForActiveTests(_OriginalItemId, 2));
         }
     }
 }

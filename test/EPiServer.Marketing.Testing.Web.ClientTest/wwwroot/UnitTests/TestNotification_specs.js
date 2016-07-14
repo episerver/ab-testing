@@ -88,6 +88,44 @@
                 expect(aRetNotification.content.innerText).to.have.string(labels.notificationbar.completed_test);
             });
 
+            it("don't set a pick winner link when the user does not have access to publish the content under test", function () {
+                var aTestNotification = new TestNotification(), aRetNotification;
+
+                aTestNotification._contentActionSupport = {
+                    hasAccess: function (accessMask, accessLevel) {
+                        return false;
+                    },
+                    accessLevel: {
+                        Publish: "publish"
+                    }
+                }
+
+                aTestNotification._store = {
+                    get: function (contentId) {
+                        return this;
+                    },
+                    then: function (callBack) {
+                        var aTest = {
+                            id: "a guid",
+                            title: "Test Title",
+                            state: 2
+                        }
+                        callBack(aTest);
+                    }
+                };
+
+                aTestNotification._valueSetter(
+                    {
+                        contentData: {
+                            contentGuid: "guid",
+                            accessMask: "denied"
+                        }
+                    });
+
+                aRetNotification = aTestNotification.get("notification");
+                expect(aRetNotification.content.childNodes.length).to.equal(1);
+            });
+
             it("does not set a notification when there is no test on the content", function () {
                 var aTestNotification = new TestNotification(), aRetNotification;
 
