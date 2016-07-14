@@ -1,6 +1,8 @@
 ﻿<div class="epi-form-container epi-grid-form dijitContainer">
-    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="uniqName_110_0" widgetid="uniqName_110_0">
+    <!-- Button Bar -->
+    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="testtb_id" widgetid="testtb_widget-id">
         <div class="epi-toolbarGroupContainer">
+            <!-- Breadcrumb Group, excludes current node and shows on second line like cms edit pane -->
             <div class="epi-toolbarLeading epi-toolbarGroup">
                 <div id="breadcrumb" style="overflow-x: hidden;"
                         data-dojo-type="epi-cms/widget/Breadcrumb"
@@ -13,19 +15,10 @@
                 </div>
             </div>
             <div class="epi-toolbarCenter epi-toolbarGroup">&nbsp;</div>
+            <!-- Start and Cancel Buttons -->
             <div class="epi-toolbarTrailing  epi-toolbarGroup">
-                <button class="epi-primary" data-dojo-type="dijit/form/Button"
-                        id="StartButton"
-                        data-dojo-attach-event="onClick: _onStartButtonClick"
-                        type="button">
-                    ${resources.addtestview.start_default}
-                </button>
-                <button data-dojo-type="dijit/form/Button"
-                        id="CancelButton"
-                        data-dojo-attach-event="onClick: _onCancelButtonClick"
-                        type="button">
-                    ${resources.addtestview.cancel_default}
-                </button>
+                <button class="epi-primary" data-dojo-type="dijit/form/Button" id="StartButton" data-dojo-attach-event="onClick: _onStartButtonClick" type="button"> ${resources.addtestview.start_default} </button>
+                <button data-dojo-type="dijit/form/Button" id="CancelButton" data-dojo-attach-event="onClick: _onCancelButtonClick" type="button"> ${resources.addtestview.cancel_default} </button>
             </div>
         </div>
         <hr />
