@@ -161,9 +161,10 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    IContent currentPage = _contextHelper.GetCurrentPageFromUrl();
+                    var originalContent = e.Content as PageData;
+                    var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
 
-                    if (e.TargetLink != null)
+                   if (e.TargetLink != null)
                     {
                         EvaluateKpis(e);    // new method to evaluate Kpi
                     }
@@ -182,8 +183,9 @@ namespace EPiServer.Marketing.Testing.Web
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             Swap(testCookieData, e);
+
                         }
-                        else if (!hasData && currentPage != null && ProcessedContentList.Count == 0)
+                        else if (!hasData && ProcessedContentList.Count == 0)
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             //get a new random variant. 
@@ -199,7 +201,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                             if (newVariant.Id != Guid.Empty)
                             {
-                                var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
 
                                 if (newVariant.ItemVersion != contentVersion)
                                 {
@@ -214,12 +215,13 @@ namespace EPiServer.Marketing.Testing.Web
                                     testCookieData.ShowVariant = false;
                                 }
 
-                                CalculateView(testCookieData, contentVersion);
                             }
                             else
                             {
                                 _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
                             }
+                            CalculateView(testCookieData, contentVersion, originalContent);
+
                         }
                     }
                     else if (hasData)
@@ -237,6 +239,8 @@ namespace EPiServer.Marketing.Testing.Web
         //Handles the swapping of content data
         private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
         {
+
+
             if (cookie.ShowVariant)
             {
                 var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid, ProcessedContentList);
@@ -250,17 +254,35 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //Handles the incrementing of view counts on a version
-        private void CalculateView(TestDataCookie cookie, int contentVersion)
+        private void CalculateView(TestDataCookie cookie, int contentVersion, PageData originalContent)
         {
-            //increment view if not already done
-            if (cookie.Viewed == false)
+            var incrementCount = true;
+
+            if (originalContent is PageData)
             {
-                _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
-                    CountType.View);
+                var pageRouteHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+                var currentPageUrl = pageRouteHelper.Page.LinkURL;
+
+                if (currentPageUrl != originalContent.LinkURL)
+                {
+                    incrementCount = false;
+                }
             }
-            //set viewed = true in testdata
-            cookie.Viewed = true;
+
+            if (incrementCount)
+            {
+                //increment view if not already done
+                if (cookie.Viewed == false)
+                {
+                    _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                        CountType.View);
+                }
+                //set viewed = true in testdata
+                cookie.Viewed = true;
+            }
+
             _testDataCookieHelper.UpdateTestDataCookie(cookie);
+
         }
 
         //Processes the Kpis, determining conversions and handling incrementing conversion counts.
