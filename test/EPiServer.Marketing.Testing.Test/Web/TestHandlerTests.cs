@@ -116,7 +116,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.SwapDisabled = false;
 
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -139,7 +139,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.SwapDisabled = true;
 
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -169,7 +169,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -194,7 +194,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.SwapDisabled = true;
 
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -245,7 +245,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -291,7 +291,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = false, Viewed = false });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
@@ -332,8 +332,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(testList);
             _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
-                .Returns(true);
+           _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
+               .Returns(true);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = false, Viewed = true });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
@@ -389,8 +389,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>(), It.IsAny<IContent>()))
-                .Returns(true);
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
+            .Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);

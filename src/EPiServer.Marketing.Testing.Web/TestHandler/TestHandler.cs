@@ -161,9 +161,6 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    var originalContent = e.Content as PageData;
-                    var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-
                    if (e.TargetLink != null)
                     {
                         EvaluateKpis(e);    // new method to evaluate Kpi
@@ -179,6 +176,9 @@ namespace EPiServer.Marketing.Testing.Web
 
                     if (activeTest != null)
                     {
+                        var originalContent = e.Content;
+                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+
                         if (hasData && _testDataCookieHelper.IsTestParticipant(testCookieData) && testCookieData.ShowVariant)
                         {
                             ProcessedContentList.Add(e.ContentLink);
@@ -220,9 +220,11 @@ namespace EPiServer.Marketing.Testing.Web
                             {
                                 _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
                             }
-                            CalculateView(testCookieData, contentVersion, originalContent);
 
                         }
+
+                        CalculateView(testCookieData, contentVersion, originalContent);
+
                     }
                     else if (hasData)
                     {
@@ -254,22 +256,9 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //Handles the incrementing of view counts on a version
-        private void CalculateView(TestDataCookie cookie, int contentVersion, PageData originalContent)
+        private void CalculateView(TestDataCookie cookie, int contentVersion, IContent originalContent)
         {
-            var incrementCount = true;
-
-            if (originalContent is PageData)
-            {
-                var pageRouteHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
-                var currentPageUrl = pageRouteHelper.Page.LinkURL;
-
-                if (currentPageUrl != originalContent.LinkURL)
-                {
-                    incrementCount = false;
-                }
-            }
-
-            if (incrementCount)
+            if (_contextHelper.IsRequestedContent(originalContent))
             {
                 //increment view if not already done
                 if (cookie.Viewed == false)
