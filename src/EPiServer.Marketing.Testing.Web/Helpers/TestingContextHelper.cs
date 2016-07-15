@@ -61,7 +61,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         ///  matches requested page</returns>
         public bool IsRequestedContent(IContent loadedContent)
         {
-
             if (loadedContent is PageData)
             {
                 if (!(GetCurrentPageFromUrl().ContentLink == loadedContent.ContentLink))

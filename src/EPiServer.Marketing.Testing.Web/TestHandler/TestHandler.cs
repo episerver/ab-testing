@@ -149,7 +149,6 @@ namespace EPiServer.Marketing.Testing.Web
                 _testManager.Delete(test.Id);
                 testsDeleted++;
             }
-
             return testsDeleted;
         }
 
@@ -241,8 +240,6 @@ namespace EPiServer.Marketing.Testing.Web
         //Handles the swapping of content data
         private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
         {
-
-
             if (cookie.ShowVariant)
             {
                 var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid, ProcessedContentList);
@@ -269,9 +266,7 @@ namespace EPiServer.Marketing.Testing.Web
                 //set viewed = true in testdata
                 cookie.Viewed = true;
             }
-
             _testDataCookieHelper.UpdateTestDataCookie(cookie);
-
         }
 
         //Processes the Kpis, determining conversions and handling incrementing conversion counts.
