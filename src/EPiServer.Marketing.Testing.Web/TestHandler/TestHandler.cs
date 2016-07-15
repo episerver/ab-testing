@@ -258,7 +258,7 @@ namespace EPiServer.Marketing.Testing.Web
             if (_contextHelper.IsRequestedContent(originalContent))
             {
                 //increment view if not already done
-                if (cookie.Viewed == false)
+                if (!cookie.Viewed)
                 {
                     _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
                         CountType.View);
