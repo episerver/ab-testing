@@ -19,28 +19,10 @@ namespace EPiServer.Marketing.Testing.Web
     {
         internal List<ContentReference> ProcessedContentList;
 
-        private ITestingContextHelper _contextHelper;
-        private ITestDataCookieHelper _testDataCookieHelper;
-        private ILogger _logger;
+        private readonly ITestingContextHelper _contextHelper;
+        private readonly ITestDataCookieHelper _testDataCookieHelper;
+        private readonly ILogger _logger;
         private ITestManager _testManager;
-        private bool? _swapDisabled;
-
-        //allows SwapDisabled to be explicitly set (e.g unit tests)
-        //Otherwise set via context helper.
-        public bool? SwapDisabled
-        {
-            set { _swapDisabled = value; }
-
-            get
-            {
-                if (_swapDisabled == null)
-                {
-                    return _contextHelper.IsInSystemFolder();
-
-                }
-                return _swapDisabled;
-            }
-        }
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -85,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web
             var repo = serviceLocator.GetInstance<IContentRepository>();
 
             IContent draftContent;
-            
+
             // get the actual content item so we can get its Guid to check against our tests
             if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
             {
@@ -140,7 +122,7 @@ namespace EPiServer.Marketing.Testing.Web
                     testsDeleted++;
                     continue;
                 }
-                    
+
                 // a draft version of a page is being deleted
                 if (test.Variants.All(v => v.ItemVersion != contentVersion))
                     continue;
@@ -156,11 +138,11 @@ namespace EPiServer.Marketing.Testing.Web
         /// content loaded event to determine the state of a test and what content to display.
         public void LoadedContent(object sender, ContentEventArgs e)
         {
-            if (!SwapDisabled == true)
+            if (!_contextHelper.SwapDisabled())
             {
                 try
                 {
-                   if (e.TargetLink != null)
+                    if (e.TargetLink != null)
                     {
                         EvaluateKpis(e);    // new method to evaluate Kpi
                     }
@@ -200,7 +182,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                             if (newVariant.Id != Guid.Empty)
                             {
-
                                 if (newVariant.ItemVersion != contentVersion)
                                 {
                                     contentVersion = newVariant.ItemVersion;
@@ -209,11 +190,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                                     Swap(testCookieData, e);
                                 }
-                                else
-                                {
-                                    testCookieData.ShowVariant = false;
-                                }
-
                             }
                             else
                             {

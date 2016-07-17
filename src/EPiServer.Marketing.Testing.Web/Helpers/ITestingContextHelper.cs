@@ -6,9 +6,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public interface ITestingContextHelper
     {
-        bool IsInSystemFolder();
         bool IsRequestedContent(IContent loadedContent);
         IContent GetCurrentPageFromUrl();
+        bool SwapDisabled();
         MarketingTestingContextModel GenerateContextData(IMarketingTest testData);
 
     }
