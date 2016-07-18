@@ -249,7 +249,7 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
-        public IContent GetVariantContent(Guid contentGuid, List<ContentReference> processedList)
+        public IContent GetVariantContent(Guid contentGuid, Dictionary<Guid,int> processedList)
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid);
 
@@ -328,11 +328,11 @@ namespace EPiServer.Marketing.Testing
             _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
-        internal IContent UpdateVariantContentCache(Guid contentGuid, List<ContentReference> processedList)
+        internal IContent UpdateVariantContentCache(Guid contentGuid, Dictionary<Guid,int> processedList)
         {
             IVersionable versionableContent = null;
 
-            if (processedList.Count == 1)
+            if (processedList[contentGuid] == 1)
             {
                 var test =
                     GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));

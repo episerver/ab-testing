@@ -40,12 +40,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// Evaluates a set of conditions which would preclue a test from swapping content
         /// </summary>
         /// <returns></returns>
-        public bool SwapDisabled()
+        public bool SwapDisabled(ContentEventArgs e)
         {
             //currently, our only restriction is user being logged into a system folder (e.g edit).
             //Other conditions have been brought up such as permissions, ip restrictions etc
             //which can be evaluated together here or individually.
-            return IsInSystemFolder();
+            return IsInSystemFolder() && e.Content != null;
         }
 
 

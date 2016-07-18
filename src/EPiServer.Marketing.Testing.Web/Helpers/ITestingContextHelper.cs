@@ -8,7 +8,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     {
         bool IsRequestedContent(IContent loadedContent);
         IContent GetCurrentPageFromUrl();
-        bool SwapDisabled();
+        bool SwapDisabled(ContentEventArgs e);
         MarketingTestingContextModel GenerateContextData(IMarketingTest testData);
 
     }

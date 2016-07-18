@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting;
 using EPiServer.Marketing.Testing.Web;
 using Moq;
 using Xunit;
@@ -13,9 +12,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
-using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Test.Core;
-using Xunit.Sdk;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -40,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         public TestHandlerTests()
         {
-            _contentReferenceList = new List<ContentReference>();
+            _contentReferenceList = new Dictionary<Guid,int>();
         }
 
         public void Dispose()
@@ -54,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestingContextHelper> _contextHelper;
         private MyLogger _logger;
 
-        private readonly List<ContentReference> _contentReferenceList;
+        private readonly Dictionary<Guid,int> _contentReferenceList;
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -65,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private Guid _OriginalItemId = Guid.NewGuid();
 
-        private TestHandler GetUnitUnderTest(List<ContentReference> contentList)
+        private TestHandler GetUnitUnderTest(Dictionary<Guid,int> contentList)
         {
             _logger = new MyLogger();
 
@@ -111,7 +108,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -133,7 +130,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -163,7 +160,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -179,7 +176,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference();
-            _contentReferenceList.Add(content.ContentLink);
+
+            _contentReferenceList.Add(content.ContentGuid,0);
 
             List<IMarketingTest> testList = new List<IMarketingTest>()
             {
@@ -188,7 +186,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(true);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(true);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -234,12 +232,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid,int>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = false });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -247,8 +245,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
+            _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should have triggered call to save cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
             Assert.Equal(variantPage, args.Content);
@@ -284,8 +282,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid,int>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -299,7 +297,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
 
             Assert.Equal(content, args.Content);
             Assert.Equal(content.ContentLink, args.ContentLink);
@@ -308,12 +306,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_ContentUnderTest_Returning_User_Included_In_A_Test_Marked_As_Seeing_Published_Gets_The_Published_Page_But_Does_Not_Count_As_A_View()
         {
-            _contentReferenceList.Add(new ContentReference());
 
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference();
-            _contentReferenceList.Add(content.ContentLink);
+            _contentReferenceList.Add(content.ContentGuid,0);
 
             List<IMarketingTest> testList = new List<IMarketingTest>()
             {
@@ -326,7 +323,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(testList);
             _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
@@ -340,7 +337,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
             _tdc.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
+            _tdc.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once, "Content should have triggered call to update cookie data");
 
             Assert.Equal(content, args.Content);
             Assert.Equal(content.ContentLink, args.ContentLink);
@@ -378,12 +375,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(variantPage);
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid,int>>())).Returns(variantPage);
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = true });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
             .Returns(true);
@@ -427,11 +424,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _testManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<List<ContentReference>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _testManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid,int>>())).Returns(new PageData(content.ContentLink as PageReference));
             _tdc.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _tdc.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -447,7 +444,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_EvaluateKPIs_Should_Not_Be_Called_When_Cookies_Are_Marked_Converted_and_Viewed()
         {
-            BasicContent nullContent = null;
+            IContent content = new BasicContent();
+            content.ContentGuid = _associatedTestGuid;
+            content.ContentLink = new ContentReference();
+
             ContentReference testTargetLink = new ContentReference(2, 101);
 
             List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie>()
@@ -462,11 +462,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
             _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
-                Content = nullContent,
+                Content = content,
                 TargetLink = testTargetLink
             };
 
@@ -477,8 +477,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_Cookies_Marked_Not_Converted_And_Viewed_Should_Be_Processed_By_EvaluateKPI_save_the_cookie_and_not_emit_conversion_increment()
         {
-            BasicContent nullContent = null;
-            ContentReference testTargetLink = new ContentReference(2, 101);
+            IContent content = new BasicContent();
+            content.ContentGuid = _associatedTestGuid;
+            content.ContentLink = new ContentReference(); ContentReference testTargetLink = new ContentReference(2, 101);
 
             IMarketingTest test = new ABTest()
             {
@@ -499,30 +500,31 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
             _testManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
-                .Returns(new List<IMarketingTest>());
+                .Returns(new List<IMarketingTest> {test});
             _testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _testManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _testManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()))
                 .Returns(new List<Guid> { Guid.NewGuid() });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
-                Content = nullContent,
+                Content = content,
                 TargetLink = testTargetLink
             };
             testHandler.LoadedContent(new object(), args);
 
-            _tdc.Verify(call => call.SaveTestDataToCookie(testCookieOne), Times.Once, "Test should have called save test data to cookie");
+            _tdc.Verify(call => call.UpdateTestDataCookie(testCookieOne), Times.Once, "Test should have called save test data to cookie");
             _testManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Never, "Test should not have attempted to increment count");
         }
 
         [Fact]
         public void TestHandler_Cookies_Marked_Not_Converted_And_Viewed_With_ConvertedKPI_Should_Be_Processed_and_emit_conversion_increment()
         {
-            BasicContent nullContent = null;
-            ContentReference testTargetLink = new ContentReference(2, 101);
+            IContent content = new BasicContent();
+            content.ContentGuid = _associatedTestGuid;
+            content.ContentLink = new ContentReference(); ContentReference testTargetLink = new ContentReference(2, 101);
 
             IMarketingTest test = new ABTest()
             {
@@ -552,24 +554,25 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()))
                 .Returns(new List<Guid> { Guid.NewGuid() });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
-                Content = nullContent,
+                Content = content,
                 TargetLink = testTargetLink
             };
             testHandler.LoadedContent(new object(), args);
 
-            _tdc.Verify(call => call.SaveTestDataToCookie(testCookieOne), Times.Once, "Test should have called save test data to cookie");
+            _tdc.Verify(call => call.UpdateTestDataCookie(testCookieOne), Times.Once, "Test should have called save test data to cookie");
             _testManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Once, "Test should have attempted to increment count");
         }
 
         [Fact]
         public void TestHandler_EvaluateKpi_Catch_Throws_TestNotFound_Exception()
         {
-            BasicContent nullContent = null;
-            ContentReference testTargetLink = new ContentReference(2, 101);
+            IContent content = new BasicContent();
+            content.ContentGuid = Guid.NewGuid();
+            content.ContentLink = new ContentReference(); ContentReference testTargetLink = new ContentReference(2, 101);
 
             IMarketingTest test = new ABTest()
             {
@@ -599,11 +602,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()))
                 .Returns(new List<Guid> { Guid.NewGuid() });
             _tdc.Setup(call => call.getTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-            _contextHelper.Setup(call => call.SwapDisabled()).Returns(false);
+            _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
-                Content = nullContent,
+                Content = content,
                 TargetLink = testTargetLink
             };
             testHandler.LoadedContent(new object(), args);
