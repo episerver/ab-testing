@@ -42,12 +42,10 @@ namespace EPiServer.Marketing.Testing.Web.Queries
                 //Get the icontent item if it exists, if not found returns a BasicContent instance with 
                 // name set to ContentNotFound
                 IContent content;
-                if( !contentRepository.TryGet<IContent>(marketingTest.OriginalItemId, out content) ) 
+                if( contentRepository.TryGet<IContent>(marketingTest.OriginalItemId, out content) ) 
                 {
-                    content = new BasicContent() { Name = "ContentNotFound" };
+                    contents.Add(content);
                 }
-
-                contents.Add(content);
             }
 
             return contents;
