@@ -171,7 +171,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             List<TestDataCookie> tdcList = new List<TestDataCookie>();
 
-            foreach (var name in HttpContext.Current.Request.Cookies.AllKeys)
+            foreach (var name in HttpContext.Current.Response.Cookies.AllKeys)
             {
                 if (name.Contains(COOKIE_PREFIX))
                 {

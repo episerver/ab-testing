@@ -142,12 +142,10 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    EvaluateKpis(e);
-
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                     var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-
+                    EvaluateKpis(e);
 
                     if (activeTest != null)
                     {
