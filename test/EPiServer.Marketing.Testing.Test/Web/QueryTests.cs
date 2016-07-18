@@ -19,12 +19,23 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IContentRepository> _contentRepository;
         private Mock<ITestManager> _testManager;
         private string[] _editor = new string[] {KnownContentQueryPlugInArea.EditorTasks};
+        static private Guid originalItem = Guid.NewGuid();
+        static ABTest test = new ABTest
+        {
+            Id = Guid.NewGuid(),
+            State = TestState.Active,
+            OriginalItemId = originalItem,
+            Variants = new List<Variant>(),
+            KpiInstances = new List<IKpi>(),
+        };
+        static private List<IMarketingTest> testList = new List<IMarketingTest>() { test };
+        IContent someContent = new BasicContent() { Name = "thisone" };
 
         private void GetUnitUnderTest()
         {
             _localizationService = new FakeLocalizationService("test");
             _contentRepository = new Mock<IContentRepository>();
-            _contentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
+            _contentRepository.Setup(call => call.TryGet<IContent>(It.IsAny<Guid>(), out someContent)).Returns(true);
         }
 
         [Fact]
@@ -32,20 +43,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
 
-            var tests = new List<IMarketingTest>()
-            {
-                new ABTest
-                {
-                    Id = Guid.NewGuid(),
-                    State = TestState.Active,
-                    OriginalItemId = Guid.NewGuid(),
-                    Variants = new List<Variant>(),
-                    KpiInstances = new List<IKpi>(),
-                }
-            };
-
             var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
 
             var query = new ActiveTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
             
@@ -64,20 +63,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
 
-            var tests = new List<IMarketingTest>()
-            {
-                new ABTest
-                {
-                    Id = Guid.NewGuid(),
-                    State = TestState.Inactive,
-                    OriginalItemId = Guid.NewGuid(),
-                    Variants = new List<Variant>(),
-                    KpiInstances = new List<IKpi>(),
-                }
-            };
-
+            test.State = TestState.Inactive;
             var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
 
             var query = new InactiveTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
             var results = query.ExecuteQuery(new ContentQueryParameters());
@@ -95,20 +83,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
 
-            var tests = new List<IMarketingTest>()
-            {
-                new ABTest
-                {
-                    Id = Guid.NewGuid(),
-                    State = TestState.Archived,
-                    OriginalItemId = Guid.NewGuid(),
-                    Variants = new List<Variant>(),
-                    KpiInstances = new List<IKpi>(),
-                }
-            };
-
+            test.State = TestState.Archived;
             var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
 
             var query = new ArchivedTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
             var results = query.ExecuteQuery(new ContentQueryParameters());
@@ -128,30 +105,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var originalItemId = Guid.NewGuid();
 
-            var tests = new List<IMarketingTest>()
-            {
-                new ABTest
-                {
-                    Id = Guid.NewGuid(),
-                    State = TestState.Done,
-                    OriginalItemId = originalItemId,
-                    EndDate = DateTime.Now.AddDays(-1),
-                    Variants = new List<Variant>(),
-                    KpiInstances = new List<IKpi>(),
-                },
-                new ABTest
-                {
-                    Id = Guid.NewGuid(),
-                    State = TestState.Done,
-                    OriginalItemId = originalItemId,
-                    EndDate = DateTime.Now,
-                    Variants = new List<Variant>(),
-                    KpiInstances = new List<IKpi>(),
-                }
-            };
-
+            test.State = TestState.Done;
             var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
 
             var query = new CompletedTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
             var results = query.ExecuteQuery(new ContentQueryParameters());
