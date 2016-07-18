@@ -52,14 +52,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         /// <summary>
-        /// Compares the current content with the requested content
+        /// Checks the current loaded content with the requested page.
+        /// Page Data content is loaded even if not the requested page, wheras Block Data is only
+        /// loaded when included in the page.
         /// </summary>
-        /// <param name="requestedContent"></param>
         /// <param name="loadedContent"></param>
-        /// <returns></returns>
-        public bool IsRequestedContent(IContent requestedContent, IContent loadedContent)
+        /// <returns> True if not pagedata or if content is pagedata and
+        ///  matches requested page</returns>
+        public bool IsRequestedContent(IContent loadedContent)
         {
-            return requestedContent.ContentLink == loadedContent.ContentLink;
+            return !(loadedContent is PageData) ||
+               (GetCurrentPageFromUrl().ContentLink == loadedContent.ContentLink);
         }
 
         /// <summary>

@@ -149,7 +149,6 @@ namespace EPiServer.Marketing.Testing.Web
                 _testManager.Delete(test.Id);
                 testsDeleted++;
             }
-
             return testsDeleted;
         }
 
@@ -161,9 +160,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    IContent currentPage = _contextHelper.GetCurrentPageFromUrl();
-
-                    if (e.TargetLink != null)
+                   if (e.TargetLink != null)
                     {
                         EvaluateKpis(e);    // new method to evaluate Kpi
                     }
@@ -178,12 +175,16 @@ namespace EPiServer.Marketing.Testing.Web
 
                     if (activeTest != null)
                     {
+                        var originalContent = e.Content;
+                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+
                         if (hasData && _testDataCookieHelper.IsTestParticipant(testCookieData) && testCookieData.ShowVariant)
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             Swap(testCookieData, e);
+
                         }
-                        else if (!hasData && currentPage !=null && _contextHelper.IsRequestedContent(currentPage,e.Content) && ProcessedContentList.Count == 0)
+                        else if (!hasData && ProcessedContentList.Count == 0)
                         {
                             ProcessedContentList.Add(e.ContentLink);
                             //get a new random variant. 
@@ -199,7 +200,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                             if (newVariant.Id != Guid.Empty)
                             {
-                                var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
 
                                 if (newVariant.ItemVersion != contentVersion)
                                 {
@@ -214,13 +214,16 @@ namespace EPiServer.Marketing.Testing.Web
                                     testCookieData.ShowVariant = false;
                                 }
 
-                                CalculateView(testCookieData, contentVersion);
                             }
                             else
                             {
                                 _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
                             }
+
                         }
+
+                        CalculateView(testCookieData, contentVersion, originalContent);
+
                     }
                     else if (hasData)
                     {
@@ -239,7 +242,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (cookie.ShowVariant)
             {
-                var variant = _testManager.GetVariantPageData(activeContent.Content.ContentGuid, ProcessedContentList);
+                var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
                 if (variant != null)
                 {
@@ -250,16 +253,19 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //Handles the incrementing of view counts on a version
-        private void CalculateView(TestDataCookie cookie, int contentVersion)
+        private void CalculateView(TestDataCookie cookie, int contentVersion, IContent originalContent)
         {
-            //increment view if not already done
-            if (cookie.Viewed == false)
+            if (_contextHelper.IsRequestedContent(originalContent))
             {
-                _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
-                    CountType.View);
+                //increment view if not already done
+                if (!cookie.Viewed)
+                {
+                    _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                        CountType.View);
+                }
+                //set viewed = true in testdata
+                cookie.Viewed = true;
             }
-            //set viewed = true in testdata
-            cookie.Viewed = true;
             _testDataCookieHelper.UpdateTestDataCookie(cookie);
         }
 
