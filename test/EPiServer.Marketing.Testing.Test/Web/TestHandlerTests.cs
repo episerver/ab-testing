@@ -239,8 +239,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _tdc.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _contextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _contextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-                .Returns(true);
+            _contextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>())).Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
