@@ -168,8 +168,6 @@ namespace EPiServer.Marketing.Testing.Web
                     {
                         _testDataCookieHelper.ExpireTestDataCookie(testCookieData);
                     }
-
-
                 }
                 catch (Exception err)
                 {

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.Exceptions;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
