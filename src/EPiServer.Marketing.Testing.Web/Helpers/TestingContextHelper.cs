@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestingContextHelper : ITestingContextHelper
     {
-        private IServiceLocator _serviceLocator;
+        private readonly IServiceLocator _serviceLocator;
         
         public TestingContextHelper()
         {
@@ -35,7 +35,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             _serviceLocator = mockServiceLocator;
         }
 
-
         /// <summary>
         /// Evaluates a set of conditions which would preclue a test from swapping content
         /// </summary>
@@ -47,9 +46,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             return IsInSystemFolder() && e.Content != null;
         }
-
-
-
        
         /// <summary>
         /// Checks the current loaded content with the requested page.
@@ -162,7 +158,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             return inSystemFolder;
         }
-
 
         /// <summary>
         /// Map IContent version data into the model
