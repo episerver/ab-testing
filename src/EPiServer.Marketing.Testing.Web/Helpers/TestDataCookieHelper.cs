@@ -167,17 +167,25 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             return new TestDataCookie();
         }
 
+        /// <summary>
+        /// Gets test cookie data from both Response and Request.
+        /// Fetching response cookies gets current cookie data for cookies actively being processed
+        /// while fetching request cookies gets cookie data for cookies which have not been touched.
+        /// This ensure a complete set of current cookie data and prevents missed views or duplicated conversions.
+        /// </summary>
+        /// <returns></returns>
         public IList<TestDataCookie> getTestDataFromCookies()
         {
-            List<TestDataCookie> tdcList = new List<TestDataCookie>();
+            //Get up to date cookies data for cookies which are actively being processed
+            List<TestDataCookie> tdcList = (from name in HttpContext.Current.Response.Cookies.AllKeys
+                                            where name.Contains(COOKIE_PREFIX)
+                                            select GetTestDataFromCookie(name.Substring(COOKIE_PREFIX.Length))).ToList();
 
-            foreach (var name in HttpContext.Current.Response.Cookies.AllKeys)
-            {
-                if (name.Contains(COOKIE_PREFIX))
-                {
-                    tdcList.Add(GetTestDataFromCookie(name.Substring(COOKIE_PREFIX.Length)));
-                }
-            }
+            //Get cookie data from cookies not recently updated.
+            tdcList.AddRange(from name in HttpContext.Current.Request.Cookies.AllKeys
+                             where name.Contains(COOKIE_PREFIX) &&
+                             !HttpContext.Current.Response.Cookies.AllKeys.Contains(name)
+                             select GetTestDataFromCookie(name.Substring(COOKIE_PREFIX.Length)));
 
             return tdcList;
         }

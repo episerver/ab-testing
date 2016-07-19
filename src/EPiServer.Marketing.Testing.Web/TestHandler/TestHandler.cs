@@ -142,10 +142,11 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
+                    EvaluateKpis(e);
+
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                     var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-                    EvaluateKpis(e);
 
                     if (activeTest != null)
                     {
@@ -167,6 +168,8 @@ namespace EPiServer.Marketing.Testing.Web
                     {
                         _testDataCookieHelper.ExpireTestDataCookie(testCookieData);
                     }
+
+
                 }
                 catch (Exception err)
                 {
@@ -278,8 +281,7 @@ namespace EPiServer.Marketing.Testing.Web
                                 }
 
                                 // now check to see if all kpi objects have evalated
-                                testdata.Converted =
-                                    !testdata.KpiConversionDictionary.Where(x => x.Value == false).Any();
+                                testdata.Converted = testdata.KpiConversionDictionary.All(x => x.Value);
 
                                 // now save the testdata to the cookie
                                 _testDataCookieHelper.UpdateTestDataCookie(testdata);
