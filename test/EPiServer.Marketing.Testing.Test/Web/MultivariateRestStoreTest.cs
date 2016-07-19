@@ -5,21 +5,22 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
+using EPiServer.Marketing.Testing.Web.Repositories;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
         public class TestingRestStoreTest
     {
         private static Mock<IServiceLocator> _serviceLocator;
-        private static Mock<ITestManager> _testManager;
+        private static Mock<IMarketingTestingWebRepository> _webRepo;
         private static Mock<IMessagingManager> _messageManager;
 
         private TestingRestStore GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
-            _testManager = new Mock<ITestManager>();
+            _webRepo = new Mock<IMarketingTestingWebRepository>();
             _messageManager = new Mock<IMessagingManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(_messageManager.Object);
 
             return new TestingRestStore(_serviceLocator.Object);
@@ -31,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var unit = GetUnitUnderTest();
             unit.Get(null);
 
-            _testManager.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), "Get did not call getTestList when id is null");
+            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), "Get did not call getTestList when id is null");
         }
 
         [Fact]
@@ -41,7 +42,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var unit = GetUnitUnderTest();
             unit.Get(testGuid.ToString());
 
-            _testManager.Verify(tm => tm.Get(It.Is<Guid>( gg => gg.ToString().Equals(testGuid.ToString()))), 
+            _webRepo.Verify(tm => tm.GetTestById(It.Is<Guid>( gg => gg.ToString().Equals(testGuid.ToString()))), 
                 "Get did not call TestManager.Get with proper Guid");
         }
 

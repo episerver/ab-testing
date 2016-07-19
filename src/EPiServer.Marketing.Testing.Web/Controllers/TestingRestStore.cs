@@ -6,6 +6,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Newtonsoft.Json;
+using EPiServer.Marketing.Testing.Web.Repositories;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -28,12 +29,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public RestResult Get(string id)
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
             if (id != null)
             { // return just one
                 var testId = Guid.Parse(id);
-                var test = tm.Get(testId);
+                var test = tm.GetTestById(testId);
                 return Rest(JsonConvert.SerializeObject(test, Formatting.Indented,
                 new JsonSerializerSettings
                 {
