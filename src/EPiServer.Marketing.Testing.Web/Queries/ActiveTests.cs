@@ -4,6 +4,7 @@ using System.Linq;
 using EPiServer.Core;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
 using EPiServer.Shell.Rest;
@@ -16,27 +17,20 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     public class ActiveTestsQuery : QueryHelper, IContentQuery
     {
         private LocalizationService _localizationService;
-        private IContentRepository _contentRepository;
-        private ITestManager _testManager;
+        private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
-        public ActiveTestsQuery(
-            LocalizationService localizationService,
-            IContentRepository contentRepository)
+        public ActiveTestsQuery()
         {
-            _localizationService = localizationService;
-            _contentRepository = contentRepository;
-            _testManager = new TestManager();
+            _serviceLocator = ServiceLocator.Current;
+            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
         public ActiveTestsQuery(
-            LocalizationService localizationService,
-            IContentRepository contentRepository,
-            ITestManager testManager)
+            IServiceLocator mockServiceLocatorserviceLocator)
         {
-            _localizationService = localizationService;
-            _contentRepository = contentRepository;
-            _testManager = testManager;
+            _serviceLocator = mockServiceLocatorserviceLocator;
+            _localizationService = mockServiceLocatorserviceLocator.GetInstance<LocalizationService>();
         }
 
         /// <inheritdoc />
@@ -62,7 +56,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
         public QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
-            var contents = GetTestContentList(_contentRepository, _testManager, TestState.Active);
+            var contents = GetTestContentList(_serviceLocator, TestState.Active);
  
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }
