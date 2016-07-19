@@ -2,19 +2,23 @@
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Queries
 {
     public class QueryHelper
     {
-        public List<IContent> GetTestContentList(IContentRepository contentRepository, ITestManager testManager, TestState state)
+        public List<IContent> GetTestContentList(IServiceLocator serviceLocator, TestState state)
         {
+            var contentRepository = serviceLocator.GetInstance<IContentRepository>();
+            var webRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             var filter = new ABTestFilter() { Operator = FilterOperator.And, Property = ABTestProperty.State, Value = state };
             var activeCriteria = new TestCriteria();
             activeCriteria.AddFilter(filter);
 
             // get tests using active filter
-            var activeTests = testManager.GetTestList(activeCriteria);
+            var activeTests = webRepository.GetTestList(activeCriteria);
 
             // filter out all but latest tests for each originalItem if TestState is Done
             if (state == TestState.Done)

@@ -16,27 +16,20 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     public class CompletedTestsQuery : QueryHelper, IContentQuery
     {
         private LocalizationService _localizationService;
-        private IContentRepository _contentRepository;
-        private ITestManager _testManager;
+        private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
-        public CompletedTestsQuery(
-            LocalizationService localizationService,
-            IContentRepository contentRepository)
+        public CompletedTestsQuery()
         {
-            _localizationService = localizationService;
-            _contentRepository = contentRepository;
-            _testManager = new TestManager();
+            _serviceLocator = ServiceLocator.Current;
+            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
         public CompletedTestsQuery(
-            LocalizationService localizationService,
-            IContentRepository contentRepository,
-            ITestManager testManager)
+            IServiceLocator mockServiceLocatorserviceLocator)
         {
-            _localizationService = localizationService;
-            _contentRepository = contentRepository;
-            _testManager = testManager;
+            _serviceLocator = mockServiceLocatorserviceLocator;
+            _localizationService = mockServiceLocatorserviceLocator.GetInstance<LocalizationService>();
         }
 
         /// <inheritdoc />
@@ -62,7 +55,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 
         public QueryRange<IContent> ExecuteQuery(IQueryParameters parameters)
         {
-            var contents = GetTestContentList(_contentRepository, _testManager, TestState.Done);
+            var contents = GetTestContentList(_serviceLocator, TestState.Done);
 
             return new QueryRange<IContent>(contents.AsEnumerable(), new ItemRange());
         }
