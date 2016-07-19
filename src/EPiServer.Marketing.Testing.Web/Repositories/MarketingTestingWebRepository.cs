@@ -48,11 +48,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// Gets the test associated with the content guid specified. If no tests are found an empty test is returned
         /// </summary>
         /// <param name="aContentGuid">the content guid to search against</param>
-        /// <returns>the first marketing test found that is not done or archived or an empty test in the case of no results</returns>
+        /// <returns>the first marketing test found that is not archived or an empty test in the case of no results</returns>
         public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Done && abTest.State != TestState.Archived);
+            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
 
             if (aTest == null)
                 aTest = new ABTest();
@@ -192,16 +192,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// </summary>
         /// <param name="testResult"></param>
         /// <returns></returns>
-        public int PublishWinningVariant(TestResultStoreModel testResult)
+        public string PublishWinningVariant(TestResultStoreModel testResult)
         {
-            int publishedVersionReference = -1;
+            string publishedVersionReference = null;
 
             if (!string.IsNullOrEmpty(testResult.WinningContentLink))
             {
+                ContentReference publishedReference = new ContentReference();
                 //setup versions as ints for repository
-                int publishedReference, variantVersion;
+                int publishedVersion,variantVersion;
 
-                int.TryParse(testResult.WinningContentLink.Split('_')[0], out publishedReference);
+                int.TryParse(testResult.WinningContentLink.Split('_')[0], out publishedVersion);
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out variantVersion);
 
                 //get current test data and content data for published and variant content
@@ -217,16 +218,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
                     //had been on the site as published.
-                    _testResultHelper.PublishContent(draftContent);
+                    publishedReference = _testResultHelper.PublishContent(draftContent);
 
                     if (testResult.WinningContentLink == testResult.PublishedContentLink)
                     {
                         //republish original published version as winner.
-                        _testResultHelper.PublishContent(publishedContent);
+                        publishedReference = _testResultHelper.PublishContent(publishedContent);
 
                         //get the appropriate variant and set IsWinner to True. Archive test to show completion.
                         workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == publishedReference).Id;
+                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == publishedVersion).Id;
 
                         ArchiveMarketingTest(currentTest.Id, workingVariantId);
                     }
@@ -237,8 +238,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         ArchiveMarketingTest(currentTest.Id, workingVariantId);
                     }
 
-                    //get the appropriate alternate variant and set IsWinner to True. Archive test to show completion.
-                    publishedVersionReference = publishedReference;
+                    publishedVersionReference = publishedReference.ToString();
                 }
                 catch (Exception ex)
                 {

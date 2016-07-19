@@ -30,16 +30,20 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
         },
 
         _onModelChange: function () {
-            var me = this
-            var store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+            var me = this,
+                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting"),
+                contentData = me.model.contentData;
             //call the rest store to see if there is a test associated with the content being looked at
-            //set isAvailable and canExecute to true when there is a test set up
+            //set isAvailable and canExecute to true when there is a test set up and the test is not completed(2) or archived(3)
             //disable the other publish options
-            store.get(me.model.contentData.contentGuid).then(function (data) {
+            store.get(contentData.contentGuid).then(function (data) {
                 var isVisible = false, isClickable = false;
-                if (data.title != undefined && data.title != null) {
+                if (data.title != undefined && data.title != null && data.state != 2 && data.state != 3) {
                     isVisible = true;
-                    isClickable = true;
+
+                    if (me._contentActionSupport.hasAccess(contentData.accessMask, me._contentActionSupport.accessLevel.Publish)) {
+                        isClickable = true;
+                    }
                 }
                 me.set("isAvailable", isVisible);
                 me.set("canExecute", isClickable);

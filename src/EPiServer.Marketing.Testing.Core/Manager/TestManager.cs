@@ -31,12 +31,25 @@ namespace EPiServer.Marketing.Testing
         private Random _randomParticiaption = new Random();
         private MemoryCache _testCache = MemoryCache.Default;
         private MemoryCache _variantCache = MemoryCache.Default;
+        private IKpiManager _kpiManager;
+
+        public event EventHandler<TestEventArgs> SavingTestEvent;
+
+        public List<IMarketingTest> ActiveCachedTests
+        {
+            get
+            {
+                var x = MemoryCache.Default.Get(TestingCacheName) as List<IMarketingTest>;
+                return x ?? new List<IMarketingTest>();
+            }
+        }
 
         [ExcludeFromCodeCoverage]
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
+            _kpiManager = new KpiManager();
             CreateOrGetCache();
         }
 
@@ -44,6 +57,7 @@ namespace EPiServer.Marketing.Testing
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
+            _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             CreateOrGetCache();
         }
 
@@ -67,7 +81,8 @@ namespace EPiServer.Marketing.Testing
             {
                 throw new TestNotFoundException();
             }
-            return TestManagerHelper.ConvertToManagerTest(dbTest);
+
+            return TestManagerHelper.ConvertToManagerTest(_kpiManager, dbTest);
         }
 
         /// <summary>
@@ -89,7 +104,7 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestByItemId(originalItemId))
             {
-                testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
             return testList;
         }
@@ -106,13 +121,24 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalTest in _dataAccess.GetTestList(TestManagerHelper.ConvertToDalCriteria(criteria)))
             {
-                testList.Add(TestManagerHelper.ConvertToManagerTest(dalTest));
+                testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
             return testList;
         }
 
         public Guid Save(IMarketingTest multivariateTest)
         {
+            // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
+            if (multivariateTest.KpiInstances == null)
+            {
+                throw new SaveTestException("Unable to save test due to null list of KPI's.  One or more KPI's are required.");
+            }
+
+            if (multivariateTest.KpiInstances.Count == 0)
+            {
+                throw new SaveTestException("Unable to save test due to empty list of KPI's.  One or more KPI's are required.");
+            }
+
             // Todo : We should probably check to see if item Guid is empty or null and
             // create a new unique guid here?
             // Save the kpi objects first
@@ -128,6 +154,13 @@ namespace EPiServer.Marketing.Testing
             {
                 UpdateCache(multivariateTest, CacheOperator.Add);
             }
+
+            if (SavingTestEvent != null)
+            {
+                var eventarg = new TestEventArgs(multivariateTest);
+                SavingTestEvent(this, eventarg);
+            }
+
             return testId;
         }
 
@@ -152,7 +185,7 @@ namespace EPiServer.Marketing.Testing
             // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(TestManagerHelper.ConvertToManagerTest(dalTest), CacheOperator.Add);
+                UpdateCache(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest), CacheOperator.Add);
             }
         }
 
@@ -179,6 +212,13 @@ namespace EPiServer.Marketing.Testing
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
+
+            var cachedTests = CreateOrGetCache();
+            var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
+            if (test != null)
+            {
+                UpdateCache(test,CacheOperator.Remove);
+            }
         }
 
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)

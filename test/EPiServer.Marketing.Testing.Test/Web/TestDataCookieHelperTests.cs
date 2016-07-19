@@ -7,6 +7,7 @@ using Moq;
 using Xunit;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Data.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -14,12 +15,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         private Mock<ITestManager> _testManager;
 
-        private Guid _testId = Guid.Parse("a194bde9-af3c-40fa-9635-338d02f5dea4");
+        private Guid _activeTestId = Guid.Parse("a194bde9-af3c-40fa-9635-338d02f5dea4");
+        private Guid _inactiveTestId = Guid.Parse("5e2f21e3-30f7-4dcf-89cd-b9d7ff8c7cd6");
         private Guid _testContentGuid = Guid.Parse("6d532659-006d-453b-b7f4-62a94b2f3a3c");
         private Guid _testVariantGuid = Guid.Parse("9226a971-605c-4fd7-8a5c-aa7873e1e818");
         private DateTime _testEndDateTime = DateTime.Parse("5/5/2050");
 
-        private IMarketingTest test;
+        private IMarketingTest _activeTest;
+        private IMarketingTest _inactiveTest;
 
         public TestDataCookieHelperTest()
         {
@@ -32,14 +35,25 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             _testManager = new Mock<ITestManager>();
 
-            test = new ABTest()
+            _activeTest = new ABTest()
             {
-                Id = _testId,
+                Id = _activeTestId,
                 EndDate = _testEndDateTime,
+                State = TestState.Active,
                 KpiInstances = new List<IKpi>()
              };
 
-            _testManager.Setup(call => call.Get(_testId)).Returns(test);
+            _inactiveTest = new ABTest()
+            {
+                Id = _inactiveTestId,
+                EndDate = _testEndDateTime,
+                State = TestState.Archived,
+                KpiInstances = new List<IKpi>()
+            };
+
+            _testManager.Setup(call => call.Get(_activeTestId)).Returns(_activeTest);
+            _testManager.Setup(call => call.Get(_inactiveTestId)).Returns(_inactiveTest);
+
 
             return new TestDataCookieHelper(_testManager.Object);
         }
@@ -85,7 +99,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void GetTestDataFromCookie_Returns_Correct_Values_From_Populated_Cookie()
+        public void GetTestDataFromCookie_Returns_Correct_Values_For_Active_Test_From_Populated_Cookie()
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var TestContentId = Guid.NewGuid();
@@ -98,7 +112,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             
             HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
             {
-                ["TestId"] = _testId.ToString(),
+                ["TestId"] = _activeTestId.ToString(),
                 ["ShowVariant"] = ShowVariant.ToString(),
                 ["TestContentId"] = TestContentId.ToString(),
                 ["TestVariantId"] = TestVariantId.ToString(),
@@ -111,12 +125,47 @@ namespace EPiServer.Marketing.Testing.Test.Web
             HttpContext.Current.Request.Cookies.Add(testCookie);
 
             TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(TestContentId.ToString());
-            Assert.True(returnCookieData.TestId == _testId);
+            Assert.True(returnCookieData.TestId == _activeTestId);
             Assert.True(returnCookieData.TestContentId == TestContentId);
             Assert.True(returnCookieData.ShowVariant == ShowVariant);
             Assert.True(returnCookieData.TestVariantId == TestVariantId);
             Assert.True(returnCookieData.Viewed == Viewed);
             Assert.True(returnCookieData.Converted == Converted);
+        }
+
+        [Fact]
+        public void GetTestDataFromCookie_Resets_Values_For_Inactive_Test()
+        {
+            var mockTesteDataCookiehelper = GetUnitUnderTest();
+            var TestContentId = Guid.NewGuid();
+            DateTime ExpireDate = DateTime.Now.AddDays(2);
+
+            var ShowVariant = true;
+            var TestVariantId = Guid.NewGuid();
+            var Viewed = false;
+            var Converted = false;
+
+            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
+            {
+                ["TestId"] = _inactiveTestId.ToString(),
+                ["ShowVariant"] = ShowVariant.ToString(),
+                ["TestContentId"] = TestContentId.ToString(),
+                ["TestVariantId"] = TestVariantId.ToString(),
+                ["Viewed"] = Viewed.ToString(),
+                ["Converted"] = Converted.ToString(),
+                Expires = ExpireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+            };
+
+            HttpContext.Current.Request.Cookies.Add(testCookie);
+
+            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(TestContentId.ToString());
+            Assert.True(returnCookieData.TestId == Guid.Empty);
+            Assert.True(returnCookieData.TestContentId == Guid.Empty);
+            Assert.True(returnCookieData.ShowVariant == false);
+            Assert.True(returnCookieData.TestVariantId == Guid.Empty);
+            Assert.True(returnCookieData.Viewed == false);
+            Assert.True(returnCookieData.Converted == false);
         }
 
         [Fact]
@@ -141,7 +190,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             TestDataCookie tdCookie = new TestDataCookie()
             {
-                TestId = test.Id,
+                TestId = _activeTest.Id,
                 TestContentId = _testContentGuid,
                 TestVariantId = _testVariantGuid,
                 ShowVariant = true,
@@ -174,7 +223,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             TestDataCookie originalCookie = new TestDataCookie()
             {
-                TestId = test.Id,
+                TestId = _activeTest.Id,
                 TestContentId = _testContentGuid,
                 TestVariantId = _testVariantGuid,
                 ShowVariant = true,
@@ -184,7 +233,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             TestDataCookie updatedCookie = new TestDataCookie()
             {
-                TestId = test.Id,
+                TestId = _activeTest.Id,
                 TestContentId = _testContentGuid,
                 TestVariantId = _testVariantGuid,
                 ShowVariant = false,
@@ -219,7 +268,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             TestDataCookie tdCookie = new TestDataCookie()
             {
-                TestId = test.Id,
+                TestId = _activeTest.Id,
             };
 
             testDataCookieHelper.SaveTestDataToCookie(tdCookie);

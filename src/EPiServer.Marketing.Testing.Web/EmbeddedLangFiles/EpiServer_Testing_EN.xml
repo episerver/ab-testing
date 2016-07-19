@@ -23,9 +23,14 @@
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_text>How long should the A/B test run?</duration_text>
         <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
+        <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
+        <error_duration>Duration must be a valid integer and cannot be less than 1</error_duration>
         <error_entertitle>You must enter a title before you can save the A/B test.</error_entertitle>
-        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page. Select a published page.</error_selected_notpublished>
-        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page. Select another page.</error_selected_samepage>
+        <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
+        <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
+        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
+        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
+        <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
         <goals_default_text>What are the goals for this test?</goals_default_text>
         <header>Create Marketing A/B Test</header>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
@@ -48,7 +53,7 @@
       <detailsview>
         <abortoptiontext>Abort A/B Test</abortoptiontext>
         <by>by</by>
-        <cancel_button_text>Cancel</cancel_button_text>
+        <close_button_text>Close</close_button_text>
         <conversions_label>Conversions:</conversions_label>
         <conversion_header>Conversion goal:</conversion_header>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
@@ -62,6 +67,8 @@
         <pickwinneroptiontext>Pick The Winner</pickwinneroptiontext>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
+        <test_not_started_text>This test has not yet started.</test_not_started_text>
+        <test_scheduled>It is scheduled to start </test_scheduled>
         <test_started_label>Test started</test_started_label>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views_label>Views:</views_label>
@@ -86,8 +93,11 @@
         <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>
-        <purpose_header>Purpose of the A/B Test</purpose_header>
+        <purpose_header>Purpose of the A/B Test:</purpose_header>
         <started_by_text>Started by </started_by_text>
+        <test_not_started>This test has not yet started.</test_not_started>
+        <test_scheduled> It is scheduled to start </test_scheduled>
+        <test_scheduled_finish>It is scheduled to finish </test_scheduled_finish>
         <total_participants_text>test participants</total_participants_text>
         <visitors_participated_text>of visitors participated</visitors_participated_text>
         <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
