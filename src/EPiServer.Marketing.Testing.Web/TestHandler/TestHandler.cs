@@ -17,30 +17,12 @@ namespace EPiServer.Marketing.Testing.Web
 {
     internal class TestHandler : ITestHandler
     {
-        internal List<ContentReference> ProcessedContentList;
+        internal Dictionary<Guid, int> ProcessedContentList;
 
-        private ITestingContextHelper _contextHelper;
-        private ITestDataCookieHelper _testDataCookieHelper;
-        private ILogger _logger;
+        private readonly ITestingContextHelper _contextHelper;
+        private readonly ITestDataCookieHelper _testDataCookieHelper;
+        private readonly ILogger _logger;
         private ITestManager _testManager;
-        private bool? _swapDisabled;
-
-        //allows SwapDisabled to be explicitly set (e.g unit tests)
-        //Otherwise set via context helper.
-        public bool? SwapDisabled
-        {
-            set { _swapDisabled = value; }
-
-            get
-            {
-                if (_swapDisabled == null)
-                {
-                    return _contextHelper.IsInSystemFolder();
-
-                }
-                return _swapDisabled;
-            }
-        }
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -51,7 +33,7 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //To support unit testing
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, List<ContentReference> processedList, ITestingContextHelper contextHelper, ILogger logger)
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, Dictionary<Guid, int> processedList, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
@@ -64,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web
         public void Initialize()
         {
             _testManager = new TestManager();
-            ProcessedContentList = new List<ContentReference>();
+            ProcessedContentList = new Dictionary<Guid, int>();
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
@@ -85,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web
             var repo = serviceLocator.GetInstance<IContentRepository>();
 
             IContent draftContent;
-            
+
             // get the actual content item so we can get its Guid to check against our tests
             if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
             {
@@ -140,7 +122,7 @@ namespace EPiServer.Marketing.Testing.Web
                     testsDeleted++;
                     continue;
                 }
-                    
+
                 // a draft version of a page is being deleted
                 if (test.Variants.All(v => v.ItemVersion != contentVersion))
                     continue;
@@ -149,7 +131,6 @@ namespace EPiServer.Marketing.Testing.Web
                 _testManager.Delete(test.Id);
                 testsDeleted++;
             }
-
             return testsDeleted;
         }
 
@@ -157,20 +138,11 @@ namespace EPiServer.Marketing.Testing.Web
         /// content loaded event to determine the state of a test and what content to display.
         public void LoadedContent(object sender, ContentEventArgs e)
         {
-            if (!SwapDisabled == true)
+            if (!_contextHelper.SwapDisabled(e))
             {
                 try
                 {
-                    IContent currentPage = _contextHelper.GetCurrentPageFromUrl();
-
-                    if (e.TargetLink != null)
-                    {
-                        EvaluateKpis(e);    // new method to evaluate Kpi
-                    }
-
-                    // Causing numerous errors at startup
-                    if (e.Content == null)
-                        return;
+                    EvaluateKpis(e);
 
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
@@ -178,49 +150,19 @@ namespace EPiServer.Marketing.Testing.Web
 
                     if (activeTest != null)
                     {
-                        if (hasData && _testDataCookieHelper.IsTestParticipant(testCookieData) && testCookieData.ShowVariant)
+                        var originalContent = e.Content;
+                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+
+                        ProcessedContentList = AddProcessedContent(e.Content.ContentGuid, ProcessedContentList);
+
+                        if (!hasData && ProcessedContentList[e.Content.ContentGuid] == 1)
                         {
-                            ProcessedContentList.Add(e.ContentLink);
-                            Swap(testCookieData, e);
+                            SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                         }
-                        else if (!hasData && ProcessedContentList.Count == 0)
-                        {
-                            ProcessedContentList.Add(e.ContentLink);
-                            //get a new random variant. 
-                            var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
-                            testCookieData.TestId = activeTest.Id;
-                            testCookieData.TestContentId = activeTest.OriginalItemId;
-                            testCookieData.TestVariantId = newVariant.Id;
 
-                            foreach (var kpi in activeTest.KpiInstances)
-                            {
-                                testCookieData.KpiConversionDictionary.Add(kpi.Id, false);
-                            }
-
-                            if (newVariant.Id != Guid.Empty)
-                            {
-                                var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-
-                                if (newVariant.ItemVersion != contentVersion)
-                                {
-                                    contentVersion = newVariant.ItemVersion;
-                                    testCookieData.ShowVariant = true;
-                                    _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
-
-                                    Swap(testCookieData, e);
-                                }
-                                else
-                                {
-                                    testCookieData.ShowVariant = false;
-                                }
-
-                                CalculateView(testCookieData, contentVersion);
-                            }
-                            else
-                            {
-                                _testDataCookieHelper.SaveTestDataToCookie(testCookieData);
-                            }
-                        }
+                        Swap(testCookieData, e);
+                        testCookieData = EvaluateViews(testCookieData, contentVersion, originalContent);
+                        _testDataCookieHelper.UpdateTestDataCookie(testCookieData);
                     }
                     else if (hasData)
                     {
@@ -234,10 +176,45 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
+        private Dictionary<Guid, int> AddProcessedContent(Guid contentGuid, Dictionary<Guid, int> processedContent)
+        {
+            if (!processedContent.ContainsKey(contentGuid))
+            {
+                processedContent.Add(contentGuid, 0);
+            }
+            processedContent[contentGuid]++;
+            return ProcessedContentList;
+        }
+
+        private void SetTestData(IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion )
+        {
+            var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
+            testCookieData.TestId = activeTest.Id;
+            testCookieData.TestContentId = activeTest.OriginalItemId;
+            testCookieData.TestVariantId = newVariant.Id;
+
+            foreach (var kpi in activeTest.KpiInstances)
+            {
+                testCookieData.KpiConversionDictionary.Add(kpi.Id, false);
+            }
+
+            if (newVariant.Id != Guid.Empty)
+            {
+                if (newVariant.ItemVersion != contentVersion)
+                {
+                    contentVersion = newVariant.ItemVersion;
+                    testCookieData.ShowVariant = true;
+                }
+            }
+            _testDataCookieHelper.UpdateTestDataCookie(testCookieData);
+            retCookieData = testCookieData;
+            retContentVersion = contentVersion;
+        }
+
         //Handles the swapping of content data
         private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
         {
-            if (cookie.ShowVariant)
+            if (cookie.ShowVariant && _testDataCookieHelper.IsTestParticipant(cookie))
             {
                 var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid, ProcessedContentList);
                 //swap it with the cached version
@@ -250,70 +227,77 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //Handles the incrementing of view counts on a version
-        private void CalculateView(TestDataCookie cookie, int contentVersion)
+        private TestDataCookie EvaluateViews(TestDataCookie cookie, int contentVersion, IContent originalContent)
         {
-            //increment view if not already done
-            if (cookie.Viewed == false)
+            if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
-                _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
-                    CountType.View);
+                //increment view if not already done
+                if (cookie.Viewed == false)
+                {
+                    _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                        CountType.View);
+                    cookie.Viewed = true;
+                }
             }
-            //set viewed = true in testdata
-            cookie.Viewed = true;
-            _testDataCookieHelper.UpdateTestDataCookie(cookie);
+
+            return cookie;
         }
 
         //Processes the Kpis, determining conversions and handling incrementing conversion counts.
         private void EvaluateKpis(ContentEventArgs e)
         {
-            var cdl = _testDataCookieHelper.getTestDataFromCookies();
-            foreach (var testdata in cdl)
+            if (e.TargetLink != null)
             {
-                // for every test cookie we have, check for the converted and the viewed flag
-                if (!testdata.Converted && testdata.Viewed)
+                var cdl = _testDataCookieHelper.getTestDataFromCookies();
+                foreach (var testdata in cdl)
                 {
-                    try
+                    // for every test cookie we have, check for the converted and the viewed flag
+                    if (!testdata.Converted && testdata.Viewed)
                     {
-                        var test = _testManager.Get(testdata.TestId);
-
-                        // optimization : create the list of kpis that have not evaluated 
-                        // to true and then evaluate them
-                        var kpis = new List<IKpi>();
-                        foreach (var kpi in test.KpiInstances)
+                        try
                         {
-                            var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
-                            if (!converted)
-                                kpis.Add(kpi);
-                        }
+                            var test = _testManager.Get(testdata.TestId);
 
-                        var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
-                        if (evaluated.Count > 0)
-                        {
-                            // add each kpi to testdata cookie data
-                            foreach (var eval in evaluated)
+                            // optimization : create the list of kpis that have not evaluated 
+                            // to true and then evaluate them
+                            var kpis = new List<IKpi>();
+                            foreach (var kpi in test.KpiInstances)
                             {
-                                testdata.KpiConversionDictionary.Remove(eval);
-                                testdata.KpiConversionDictionary.Add(eval, true);
+                                var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
+                                if (!converted)
+                                    kpis.Add(kpi);
                             }
 
-                            // now check to see if all kpi objects have evalated
-                            testdata.Converted = !testdata.KpiConversionDictionary.Where(x => x.Value == false).Any();
-
-                            // now save the testdata to the cookie
-                            _testDataCookieHelper.SaveTestDataToCookie(testdata);
-
-                            // now if we have converted, fire the converted message 
-                            // note : we wouldnt be here if we already converted on a previous loop
-                            if (testdata.Converted)
+                            var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
+                            if (evaluated.Count > 0)
                             {
-                                Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
-                                _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
+                                // add each kpi to testdata cookie data
+                                foreach (var eval in evaluated)
+                                {
+                                    testdata.KpiConversionDictionary.Remove(eval);
+                                    testdata.KpiConversionDictionary.Add(eval, true);
+                                }
+
+                                // now check to see if all kpi objects have evalated
+                                testdata.Converted = testdata.KpiConversionDictionary.All(x => x.Value);
+
+                                // now save the testdata to the cookie
+                                _testDataCookieHelper.UpdateTestDataCookie(testdata);
+
+                                // now if we have converted, fire the converted message 
+                                // note : we wouldnt be here if we already converted on a previous loop
+                                if (testdata.Converted)
+                                {
+                                    Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
+                                    _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion,
+                                        CountType.Conversion);
+                                }
                             }
                         }
-                    }
-                    catch (TestNotFoundException)
-                    {
-                        _testDataCookieHelper.ExpireTestDataCookie(testdata);
+                        catch (TestNotFoundException)
+                        {
+                            _testDataCookieHelper.ExpireTestDataCookie(testdata);
+                        }
                     }
                 }
             }
