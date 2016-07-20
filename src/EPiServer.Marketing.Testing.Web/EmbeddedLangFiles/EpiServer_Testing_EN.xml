@@ -101,6 +101,8 @@
         <total_participants_text>test participants</total_participants_text>
         <visitors_participated_text>of visitors participated</visitors_participated_text>
         <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
+        <result_is_significant>The results of this test are significant.</result_is_significant>
+        <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
       </pickwinnerview>
       <scheduler_plugin>
         <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
