@@ -9,6 +9,7 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Core.Statistics;
+using EPiServer.Marketing.Testing.Web.Repositories;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -47,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             var ls = _locator.GetInstance<LocalizationService>();
             var msg = ls.GetString("/abtesting/scheduler_plugin/message");
 
-            var tm = _locator.GetInstance<ITestManager>();
+            var tm = _locator.GetInstance<IMarketingTestingWebRepository>();
             var repo = _locator.GetInstance<IScheduledJobRepository>();
             ScheduledJob job = repo.Get(this.ScheduledJobId);
             DateTime NextExecutionUTC = job.NextExecutionUTC;
@@ -63,7 +64,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         var utcEndDate = ((DateTime)test.EndDate).ToUniversalTime();
                         if (DateTime.UtcNow > utcEndDate) // stop it now
                         {
-                            tm.Stop(test.Id);
+                            tm.StopMarketingTest(test.Id);
                             stopped++;
                         }
                         else if(NextExecutionUTC > utcEndDate)
@@ -76,7 +77,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         var utcStartDate = test.StartDate.ToUniversalTime();
                         if ( DateTime.UtcNow > utcStartDate) // start it now
                         {
-                            tm.Start(test.Id);
+                            tm.StartMarketingTest(test.Id);
                             started++;
                         }
                         else if (NextExecutionUTC > utcStartDate)
