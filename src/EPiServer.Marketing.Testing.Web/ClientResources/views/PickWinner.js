@@ -56,31 +56,33 @@
 
         _onPublishedVersionClick: function () {
             this.store.put({
-                publishedContentLink: this.context.data.publishedVersionContentLink,
-                draftContentLink: this.context.data.draftVersionContentLink,
-                winningContentLink: this.context.data.publishedVersionContentLink,
-                testId: this.context.data.test.id
-            }).then(function (data) {
-                var contextParameters = { uri: "epi.cms.contentdata:///" + data };
-                topic.publish("/epi/shell/context/request", contextParameters);
-            }).otherwise(function () {
-                alert("Error Processing Winner: Unable to process and save selected version");
-                console.log("Error occurred while processing winning content");
+                    publishedContentLink: this.context.data.publishedVersionContentLink,
+                    draftContentLink: this.context.data.draftVersionContentLink,
+                    winningContentLink: this.context.data.publishedVersionContentLink,
+                    testId: this.context.data.test.id
+            }, { id: this.context.data.test.id }, { "options.incremental": false })  // Force a put
+                    .then(function (data) {
+                        var contextParameters = { uri: "epi.cms.contentdata:///" + data };
+                        topic.publish("/epi/shell/context/request", contextParameters);
+                }).otherwise(function () {
+                    alert("Error Processing Winner: Unable to process and save selected version");
+                    console.log("Error occurred while processing winning content");
             });
         },
-
+        
         _onVariantVersionClick: function () {
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
                 winningContentLink: this.context.data.draftVersionContentLink,
                 testId: this.context.data.test.id
-            }).then(function (data) {
-                var contextParameters = { uri: "epi.cms.contentdata:///" + data };
-                topic.publish("/epi/shell/context/request", contextParameters);
-            }).otherwise(function () {
-                alert("Error Processing Winner: Unable to process and save selected version");
-                console.log("Error occurred while processing winning content");
+            }, { id: this.context.data.test.id }, { "options.incremental": false }) // Force a put
+                .then(function (data) {
+                    var contextParameters = { uri: "epi.cms.contentdata:///" + data };
+                    topic.publish("/epi/shell/context/request", contextParameters);
+                }).otherwise(function () {
+                    alert("Error Processing Winner: Unable to process and save selected version");
+                    console.log("Error occurred while processing winning content");
             });
         },
 
@@ -90,7 +92,7 @@
             //reset the div sizes for the versions to prevent errors viewing multiple tests
             this._resetVersionDivs();
 
-            this.store = dependency.resolve("epi.storeregistry").get("marketing.testingResult");
+            this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
 
             if (this.context.data.test.state === 0) {
