@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using EPiServer.Cms.Shell.UI.Rest.ContentQuery;
 using EPiServer.Core;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Queries;
+using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
 using Moq;
 using Xunit;
@@ -15,22 +18,36 @@ namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class QueryTests
     {
+        private Mock<IServiceLocator> _serviceLocator;
         private FakeLocalizationService _localizationService;
         private Mock<IContentRepository> _contentRepository;
+        private Mock<IMarketingTestingWebRepository> _webRepository;
         private Mock<ITestManager> _testManager;
         private string[] _editor = new string[] {KnownContentQueryPlugInArea.EditorTasks};
 
-        private void GetUnitUnderTest()
+        private IServiceLocator GetUnitUnderTest()
         {
+            _serviceLocator = new Mock<IServiceLocator>();
+            
             _localizationService = new FakeLocalizationService("test");
             _contentRepository = new Mock<IContentRepository>();
             _contentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
+
+            _webRepository = new Mock<IMarketingTestingWebRepository>();
+
+
+            _serviceLocator.Setup(call => call.GetInstance<LocalizationService>()).Returns(_localizationService);
+            _serviceLocator.Setup(call => call.GetInstance<IContentRepository>()).Returns(_contentRepository.Object);
+            _serviceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepository.Object);
+
+
+            return _serviceLocator.Object;
         }
 
         [Fact]
         public void ActiveTestsQuery_Test()
         {
-            GetUnitUnderTest();
+            var serviceLocator = GetUnitUnderTest();
 
             var tests = new List<IMarketingTest>()
             {
@@ -44,10 +61,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 }
             };
 
-            var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
 
-            var query = new ActiveTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
+            var query = new ActiveTestsQuery(serviceLocator);
             
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
@@ -62,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void InactiveTestsQuery_Test()
         {
-            GetUnitUnderTest();
+            var serviceLocator = GetUnitUnderTest();
 
             var tests = new List<IMarketingTest>()
             {
@@ -76,10 +92,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 }
             };
 
-            var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
 
-            var query = new InactiveTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
+            var query = new InactiveTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
             Assert.Equal(1, results.Items.Count);
@@ -93,7 +108,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void ArchivedTestsQuery_Test()
         {
-            GetUnitUnderTest();
+            var serviceLocator = GetUnitUnderTest();
 
             var tests = new List<IMarketingTest>()
             {
@@ -107,10 +122,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 }
             };
 
-            var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
 
-            var query = new ArchivedTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
+            var query = new ArchivedTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
             Assert.Equal(1, results.Items.Count);
@@ -124,7 +138,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void CompletedTestsQuery_Test()
         {
-            GetUnitUnderTest();
+            var serviceLocator = GetUnitUnderTest();
 
             var originalItemId = Guid.NewGuid();
 
@@ -150,10 +164,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 }
             };
 
-            var testManager = new Mock<ITestManager>();
-            testManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
 
-            var query = new CompletedTestsQuery(_localizationService, _contentRepository.Object, testManager.Object);
+            var query = new CompletedTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
             Assert.Equal(1, results.Items.Count);
