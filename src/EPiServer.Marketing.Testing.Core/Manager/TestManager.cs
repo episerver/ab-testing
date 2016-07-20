@@ -166,6 +166,8 @@ namespace EPiServer.Marketing.Testing
 
         public void Delete(Guid testObjectId)
         {
+            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
+
             _dataAccess.Delete(testObjectId);
 
             // if the test is in the cache remove it.  This should only happen if someone deletes an Active test - which really shouldn't happen...
@@ -193,6 +195,8 @@ namespace EPiServer.Marketing.Testing
         {
             _dataAccess.Stop(testObjectId);
 
+            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
+
             var cachedTests = CreateOrGetCache();
 
             // remove test from cache
@@ -212,7 +216,7 @@ namespace EPiServer.Marketing.Testing
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
-
+            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
             var cachedTests = CreateOrGetCache();
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
             if (test != null)
@@ -326,6 +330,14 @@ namespace EPiServer.Marketing.Testing
                     break;
             }
             _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
+        }
+
+        internal void RemoveCachedVariant(Guid contentGuid)
+        {
+            if (_variantCache.Contains("epi" + contentGuid))
+            {
+                _variantCache.Remove("epi" + contentGuid);
+            }
         }
 
         internal IContent UpdateVariantContentCache(Guid contentGuid, Dictionary<Guid,int> processedList)
