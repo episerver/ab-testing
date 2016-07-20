@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     public class TestingContextHelper : ITestingContextHelper
     {
-        private IServiceLocator _serviceLocator;
+        private readonly IServiceLocator _serviceLocator;
         
         public TestingContextHelper()
         {
@@ -36,21 +36,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         /// <summary>
-        /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
+        /// Evaluates a set of conditions which would preclue a test from swapping content
         /// </summary>
         /// <returns></returns>
-        public bool IsInSystemFolder()
+        public bool SwapDisabled(ContentEventArgs e)
         {
-            var currentContext = HttpContext.Current;
-            if (currentContext == null)
-            {
-                return true;
-            }
-
-            return currentContext.Request.RawUrl.ToLower()
-                .Contains(EPiServer.Shell.Paths.ProtectedRootPath.ToLower());
+            //currently, our only restriction is user being logged into a system folder (e.g edit).
+            //Other conditions have been brought up such as permissions, ip restrictions etc
+            //which can be evaluated together here or individually.
+            return IsInSystemFolder() && e.Content != null;
         }
-
+       
         /// <summary>
         /// Checks the current loaded content with the requested page.
         /// Page Data content is loaded even if not the requested page, wheras Block Data is only
@@ -141,6 +137,23 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             return model;
             }
+
+        /// <summary>
+        /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
+        /// </summary>
+        /// <returns></returns>
+        internal bool IsInSystemFolder()
+        {
+            var inSystemFolder = true;
+
+            if (HttpContext.Current != null)
+            {
+                inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
+                    .Contains(Shell.Paths.ProtectedRootPath.ToLower());
+            }
+
+            return inSystemFolder;
+        }
 
         /// <summary>
         /// Map IContent version data into the model

@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
    new HttpRequest(null, "http://tempuri.org", null),
    new HttpResponse(null));
         }
-        
+
         private TestDataCookieHelper GetUnitUnderTest()
         {
             _testManager = new Mock<ITestManager>();
@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 EndDate = _testEndDateTime,
                 State = TestState.Active,
                 KpiInstances = new List<IKpi>()
-             };
+            };
 
             _inactiveTest = new ABTest()
             {
@@ -54,7 +54,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManager.Setup(call => call.Get(_activeTestId)).Returns(_activeTest);
             _testManager.Setup(call => call.Get(_inactiveTestId)).Returns(_inactiveTest);
 
-
             return new TestDataCookieHelper(_testManager.Object);
         }
 
@@ -62,9 +61,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void HasTestData_Returns_False_If_TestContentId_Is_Empty()
         {
             var testDataCookieHelper = GetUnitUnderTest();
-            TestDataCookie testData = new TestDataCookie();
-            testData.TestContentId = Guid.Empty;
-            bool hasTestData = testDataCookieHelper.HasTestData(testData);
+            var testData = new TestDataCookie {TestContentId = Guid.Empty};
+            var hasTestData = testDataCookieHelper.HasTestData(testData);
             Assert.False(hasTestData);
         }
 
@@ -72,9 +70,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void HasTestData_Returns_True_If_TestContentId_Is_Not_Empty()
         {
             var testDataCookieHelper = GetUnitUnderTest();
-            TestDataCookie testData = new TestDataCookie();
-            testData.TestContentId = Guid.NewGuid();
-            bool hasTestData = testDataCookieHelper.HasTestData(testData);
+            var testData = new TestDataCookie {TestContentId = Guid.NewGuid()};
+            var hasTestData = testDataCookieHelper.HasTestData(testData);
             Assert.True(hasTestData);
         }
 
@@ -82,9 +79,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void HasTestData_Returns_False_If_TestVariantId_Is_Empty()
         {
             var testDataCookieHelper = GetUnitUnderTest();
-            TestDataCookie testData = new TestDataCookie();
-            testData.TestVariantId = Guid.Empty;
-            bool isTestParticipant = testDataCookieHelper.IsTestParticipant(testData);
+            var testData = new TestDataCookie {TestVariantId = Guid.Empty};
+            var isTestParticipant = testDataCookieHelper.IsTestParticipant(testData);
             Assert.False(isTestParticipant);
         }
 
@@ -92,80 +88,162 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void HasTestData_Returns_True_If_TestVariantId_Is_Not_Empty()
         {
             var testDataCookieHelper = GetUnitUnderTest();
-            TestDataCookie testData = new TestDataCookie();
-            testData.TestVariantId = Guid.NewGuid();
-            bool isTestParticipant = testDataCookieHelper.IsTestParticipant(testData);
+            var testData = new TestDataCookie {TestVariantId = Guid.NewGuid()};
+            var isTestParticipant = testDataCookieHelper.IsTestParticipant(testData);
             Assert.True(isTestParticipant);
         }
 
         [Fact]
-        public void GetTestDataFromCookie_Returns_Correct_Values_For_Active_Test_From_Populated_Cookie()
+        public void GetTestDataFromCookie_Returns_Correct_Values_For_Active_Test_From_Populated_Response_Cookie()
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
-            var TestContentId = Guid.NewGuid();
-            DateTime ExpireDate = DateTime.Now.AddDays(2);
+            var testContentId = Guid.NewGuid();
+            var expireDate = DateTime.Now.AddDays(2);
 
-            var ShowVariant = true;
-            var TestVariantId = Guid.NewGuid();
-            var Viewed = false;
-            var Converted = false;
-            
-            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
+            var testVariantId = Guid.NewGuid();
+
+            var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
                 ["TestId"] = _activeTestId.ToString(),
-                ["ShowVariant"] = ShowVariant.ToString(),
-                ["TestContentId"] = TestContentId.ToString(),
-                ["TestVariantId"] = TestVariantId.ToString(),
-                ["Viewed"] = Viewed.ToString(),
-                ["Converted"] = Converted.ToString(),
-                Expires = ExpireDate,
+                ["ShowVariant"] = "true",
+                ["TestContentId"] = testContentId.ToString(),
+                ["TestVariantId"] = testVariantId.ToString(),
+                ["Viewed"] = "false",
+                ["Converted"] = "false",
+                Expires = expireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+            };
+
+            HttpContext.Current.Response.Cookies.Add(testCookie);
+
+            var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
+            Assert.True(returnCookieData.TestId == _activeTestId);
+            Assert.True(returnCookieData.TestContentId == testContentId);
+            Assert.True(returnCookieData.ShowVariant);
+            Assert.True(returnCookieData.TestVariantId == testVariantId);
+            Assert.False(returnCookieData.Viewed);
+            Assert.False(returnCookieData.Converted);
+        }
+
+        [Fact]
+        public void GetTestDataFromCookie_Returns_Correct_Values_For_Active_Test_From_Populated_Request_Cookies()
+        {
+            var mockTesteDataCookiehelper = GetUnitUnderTest();
+            var testContentId = Guid.NewGuid();
+            var expireDate = DateTime.Now.AddDays(2);
+
+            var testVariantId = Guid.NewGuid();
+
+            var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
+            {
+                ["TestId"] = _activeTestId.ToString(),
+                ["ShowVariant"] = "true",
+                ["TestContentId"] = testContentId.ToString(),
+                ["TestVariantId"] = testVariantId.ToString(),
+                ["Viewed"] = "false",
+                ["Converted"] = "false",
+                Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
 
             HttpContext.Current.Request.Cookies.Add(testCookie);
 
-            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(TestContentId.ToString());
+            var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
             Assert.True(returnCookieData.TestId == _activeTestId);
-            Assert.True(returnCookieData.TestContentId == TestContentId);
-            Assert.True(returnCookieData.ShowVariant == ShowVariant);
-            Assert.True(returnCookieData.TestVariantId == TestVariantId);
-            Assert.True(returnCookieData.Viewed == Viewed);
-            Assert.True(returnCookieData.Converted == Converted);
+            Assert.True(returnCookieData.TestContentId == testContentId);
+            Assert.True(returnCookieData.ShowVariant);
+            Assert.True(returnCookieData.TestVariantId == testVariantId);
+            Assert.False(returnCookieData.Viewed);
+            Assert.False(returnCookieData.Converted);
+        }
+
+        [Fact]
+        public void GetTestDataFromCookies_Returns_Correct_Values_For_Active_Test_From_Populated_Response_and_Request_Cookies()
+        {
+            var mockTesteDataCookiehelper = GetUnitUnderTest();
+            var responseContentCookie1 = Guid.Parse("997636c1-fec2-43ff-8dd8-fa7f6b3ffa91");
+            var requestContentCookie1 = Guid.Parse("997636c1-fec2-43ff-8dd8-fa7f6b3ffa91");
+            var requestContentCookie2 = Guid.Parse("f222c926-999b-43f9-80dc-667f05e08260");
+
+            var expireDate = DateTime.Now.AddDays(2);
+
+            var responseCookie1 = new HttpCookie("EPI-MAR-" + responseContentCookie1.ToString())
+            {
+                ["TestId"] = _activeTestId.ToString(),
+                ["ShowVariant"] = "True",
+                ["TestContentId"] = responseContentCookie1.ToString(),
+                ["TestVariantId"] = Guid.NewGuid().ToString(),
+                ["Viewed"] = "True",
+                ["Converted"] = "True",
+                Expires = expireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+            };
+
+            var requestCookie1 = new HttpCookie("EPI-MAR-" + requestContentCookie1.ToString())
+            {
+                ["TestId"] = _activeTestId.ToString(),
+                ["ShowVariant"] = "True",
+                ["TestContentId"] = requestContentCookie1.ToString(),
+                ["TestVariantId"] = Guid.NewGuid().ToString(),
+                ["Viewed"] = "True",
+                ["Converted"] = "False",
+                Expires = expireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+            };
+
+            var requestCookie2 = new HttpCookie("EPI-MAR-" + requestContentCookie2.ToString())
+            {
+                ["TestId"] = _activeTestId.ToString(),
+                ["ShowVariant"] = "True",
+                ["TestContentId"] = requestContentCookie2.ToString(),
+                ["TestVariantId"] = Guid.NewGuid().ToString(),
+                ["Viewed"] = "True",
+                ["Converted"] = "False",
+                Expires = expireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+            };
+
+            HttpContext.Current.Response.Cookies.Add(responseCookie1);
+            HttpContext.Current.Request.Cookies.Add(requestCookie1);
+            HttpContext.Current.Request.Cookies.Add(requestCookie2);
+
+            var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookies();
+            Assert.True(returnCookieData.Count == 2);
+            Assert.True(returnCookieData[0].TestContentId == Guid.Parse("997636c1-fec2-43ff-8dd8-fa7f6b3ffa91"));
+            Assert.True(returnCookieData[0].Converted);
+            Assert.True(returnCookieData[1].TestContentId == Guid.Parse("f222c926-999b-43f9-80dc-667f05e08260"));
+            Assert.False(returnCookieData[1].Converted);
         }
 
         [Fact]
         public void GetTestDataFromCookie_Resets_Values_For_Inactive_Test()
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
-            var TestContentId = Guid.NewGuid();
-            DateTime ExpireDate = DateTime.Now.AddDays(2);
+            var testContentId = Guid.NewGuid();
+            var expireDate = DateTime.Now.AddDays(2);
+            var testVariantId = Guid.NewGuid();
 
-            var ShowVariant = true;
-            var TestVariantId = Guid.NewGuid();
-            var Viewed = false;
-            var Converted = false;
-
-            HttpCookie testCookie = new HttpCookie("EPI-MAR-" + TestContentId.ToString())
+            var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
                 ["TestId"] = _inactiveTestId.ToString(),
-                ["ShowVariant"] = ShowVariant.ToString(),
-                ["TestContentId"] = TestContentId.ToString(),
-                ["TestVariantId"] = TestVariantId.ToString(),
-                ["Viewed"] = Viewed.ToString(),
-                ["Converted"] = Converted.ToString(),
-                Expires = ExpireDate,
+                ["ShowVariant"] = "false",
+                ["TestContentId"] = testContentId.ToString(),
+                ["TestVariantId"] = testVariantId.ToString(),
+                ["Viewed"] = "false",
+                ["Converted"] = "false",
+                Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
 
             HttpContext.Current.Request.Cookies.Add(testCookie);
 
-            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(TestContentId.ToString());
+            var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
             Assert.True(returnCookieData.TestId == Guid.Empty);
             Assert.True(returnCookieData.TestContentId == Guid.Empty);
-            Assert.True(returnCookieData.ShowVariant == false);
+            Assert.False(returnCookieData.ShowVariant);
             Assert.True(returnCookieData.TestVariantId == Guid.Empty);
-            Assert.True(returnCookieData.Viewed == false);
-            Assert.True(returnCookieData.Converted == false);
+            Assert.False(returnCookieData.Viewed);
+            Assert.False(returnCookieData.Converted);
         }
 
         [Fact]
@@ -174,7 +252,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var invalidTesetContentId = Guid.NewGuid();
 
-            TestDataCookie returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie("EPI-MAR-" + invalidTesetContentId.ToString());
+            var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie("EPI-MAR-" + invalidTesetContentId.ToString());
             Assert.True(returnCookieData.TestId == Guid.Empty);
             Assert.True(returnCookieData.TestContentId == Guid.Empty);
             Assert.True(returnCookieData.ShowVariant == false);
@@ -188,7 +266,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
 
-            TestDataCookie tdCookie = new TestDataCookie()
+            var tdCookie = new TestDataCookie()
             {
                 TestId = _activeTest.Id,
                 TestContentId = _testContentGuid,
@@ -198,8 +276,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Converted = false
             };
 
-           
-            
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
             var cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + tdCookie.TestContentId.ToString());
 
@@ -210,18 +286,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(bool.Parse(cookieValue["ShowVariant"]) == tdCookie.ShowVariant);
             Assert.True(bool.Parse(cookieValue["Viewed"]) == tdCookie.Viewed);
             Assert.True(bool.Parse(cookieValue["Converted"]) == tdCookie.Converted);
-
         }
-
 
         [Fact]
         public void UpdateTestDataCookie_ProperlyUpdatesCookie()
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
-            
 
-
-            TestDataCookie originalCookie = new TestDataCookie()
+            var originalCookie = new TestDataCookie()
             {
                 TestId = _activeTest.Id,
                 TestContentId = _testContentGuid,
@@ -231,7 +303,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Converted = false
             };
 
-            TestDataCookie updatedCookie = new TestDataCookie()
+            var updatedCookie = new TestDataCookie()
             {
                 TestId = _activeTest.Id,
                 TestContentId = _testContentGuid,
@@ -241,13 +313,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Converted = true
 
             };
-            
+
             mockTesteDataCookiehelper.SaveTestDataToCookie(originalCookie);
             mockTesteDataCookiehelper.UpdateTestDataCookie(updatedCookie);
 
-
-
-            HttpCookie cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + updatedCookie.TestContentId.ToString());
+            var cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + updatedCookie.TestContentId.ToString());
 
             Assert.True(cookieValue != null);
             Assert.True(Guid.Parse(cookieValue["TestId"]) == updatedCookie.TestId);
@@ -256,9 +326,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(bool.Parse(cookieValue["ShowVariant"]) == updatedCookie.ShowVariant);
             Assert.True(bool.Parse(cookieValue["Viewed"]) == updatedCookie.Viewed);
             Assert.True(bool.Parse(cookieValue["Converted"]) == updatedCookie.Converted);
-
-
-
         }
 
         [Fact]
@@ -266,7 +333,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testDataCookieHelper = GetUnitUnderTest();
 
-            TestDataCookie tdCookie = new TestDataCookie()
+            var tdCookie = new TestDataCookie()
             {
                 TestId = _activeTest.Id,
             };
@@ -277,9 +344,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testDataCookieHelper.ExpireTestDataCookie(tdCookie);
             cookieValue = HttpContext.Current.Response.Cookies.Get("EPI-MAR-" + tdCookie.TestContentId.ToString());
             Assert.True(cookieValue != null && cookieValue.Expires <= DateTime.Now.AddDays(-1d));
-
         }
-
 
         public void Dispose()
         {
