@@ -248,7 +248,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (e.TargetLink != null)
             {
-                var cdl = _testDataCookieHelper.getTestDataFromCookies();
+                var cdl = _testDataCookieHelper.GetTestDataFromCookies();
                 foreach (var testdata in cdl)
                 {
                     // for every test cookie we have, check for the converted and the viewed flag
