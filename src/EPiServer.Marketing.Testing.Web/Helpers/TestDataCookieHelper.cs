@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.Exceptions;
@@ -13,6 +14,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private ITestManager _testManager;
         private const string COOKIE_PREFIX = "EPI-MAR-";
 
+        [ExcludeFromCodeCoverage]
         public TestDataCookieHelper()
         {
             _testManager = new TestManager();
@@ -173,7 +175,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// This ensure a complete set of current cookie data and prevents missed views or duplicated conversions.
         /// </summary>
         /// <returns></returns>
-        public IList<TestDataCookie> getTestDataFromCookies()
+        public IList<TestDataCookie> GetTestDataFromCookies()
         {
             //Get up to date cookies data for cookies which are actively being processed
             List<TestDataCookie> tdcList = (from name in HttpContext.Current.Response.Cookies.AllKeys
