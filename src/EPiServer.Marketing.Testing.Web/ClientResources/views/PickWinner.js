@@ -112,6 +112,15 @@
                     datetime.toUserFriendlyString(this.context.data.test.endDate) + ".";
             }
 
+            //display result significance
+            if (this.context.data.test.state === 2) {
+                if (this.context.data.test.isSignificant) {
+                    this.isSignificant.innerHTML = resources.pickwinnerview.result_is_significant;
+                } else {
+                    this.isSignificant.innerHTML = resources.pickwinnerview.result_is_not_significant;
+                }
+            }
+
             //Set the correct corresponding variant data
             if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {
                 publishedVariant = this.context.data.test.variants[0];
