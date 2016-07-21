@@ -115,7 +115,6 @@
             //display result significance
             if (this.context.data.test.state === 2) {
                 if (this.context.data.test.isSignificant) {
-               // if (this.context.data.teststate === 2) {
                     this.isSignificant.innerHTML = resources.pickwinnerview.result_is_significant;
                 } else {
                     this.isSignificant.innerHTML = resources.pickwinnerview.result_is_not_significant;
