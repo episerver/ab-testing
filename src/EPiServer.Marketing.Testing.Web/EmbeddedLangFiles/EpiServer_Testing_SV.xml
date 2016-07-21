@@ -75,13 +75,13 @@
         <views_label>Views:</views_label>
       </detailsview>
       <notificationbar>
-        <completed_test>An A/B test was completed on this page.</completed_test>
+        <completed_test>An A/B test was completed on this page. </completed_test>
         <details_link_text>View test</details_link_text>
         <details_link_tooltip>View test details</details_link_tooltip>
-        <ongoing_test>This page is part of a running A/B test.</ongoing_test>
-        <scheduled_test>An A/B test is scheduled to run on this page.</scheduled_test>
+        <ongoing_test>This page is part of a running A/B test. </ongoing_test>
+        <scheduled_test>An A/B test is scheduled to run on this page </scheduled_test>
         <winner_link_text>Pick winner</winner_link_text>
-        <winner_link_tooltip>View test details and pick winner</winner_link_tooltip>
+        <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
       </notificationbar>
       <pickwinnerview>
         <abort_option_text>Abort</abort_option_text>
@@ -95,6 +95,8 @@
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>
         <purpose_header>Purpose of the A/B Test:</purpose_header>
+        <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
+        <result_is_significant>The results of this test are significant.</result_is_significant>
         <started_by_text>Started by </started_by_text>
         <test_not_started>This test has not yet started.</test_not_started>
         <test_scheduled>It is scheduled to start </test_scheduled>

@@ -61,14 +61,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 0 };
-            var contentData = new PageData(pageRef2) as IContent;
+            var contentData = new PageData(pageRef2);
 
             contentData.Property.Add(new PropertyNumber() { Name = "PageWorkStatus" });
             contentData.Property.Add(new PropertyDate() { Name = "PageStartPublish" });
 
             _contentLoader = new Mock<IContentLoader>();
             _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
-            _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(contentData);
+            _contentLoader.Setup(call => call.Get<ContentData>(It.IsAny<ContentReference>())).Returns(contentData);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentLoader>()).Returns(_contentLoader.Object);
 
             return new TestManager(_serviceLocator.Object);
@@ -483,10 +483,12 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void GetVariantPageData_Test()
         {
+            var testProcessedList = new Dictionary<Guid,int>();
+            testProcessedList.Add(testId,1);
             var testManager = GetUnitUnderTest();
             testManager.RemoveCacheForUnitTests();
 
-            var pageData = testManager.GetVariantPageData(testId, new List<ContentReference>() {new ContentReference()});
+            var pageData = testManager.GetVariantContent(testId, testProcessedList);
 
             Assert.NotNull(pageData);
         }
