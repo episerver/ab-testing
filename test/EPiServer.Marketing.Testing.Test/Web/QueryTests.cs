@@ -25,13 +25,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestManager> _testManager;
         private string[] _editor = new string[] {KnownContentQueryPlugInArea.EditorTasks};
 
+        IContent someContent = new BasicContent() { Name = "thisone" };
+
         private IServiceLocator GetUnitUnderTest()
         {
             _serviceLocator = new Mock<IServiceLocator>();
             
             _localizationService = new FakeLocalizationService("test");
             _contentRepository = new Mock<IContentRepository>();
-            _contentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
+            _contentRepository.Setup(call => call.TryGet<IContent>(It.IsAny<Guid>(), out someContent)).Returns(true);
 
             _webRepository = new Mock<IMarketingTestingWebRepository>();
 
