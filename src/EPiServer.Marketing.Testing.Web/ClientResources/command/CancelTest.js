@@ -21,7 +21,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
 
         _execute: function () {
             var me = this,
-                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
 
             store.remove(me.model.contentData.contentGuid).then(function () {
                 var contentId = me.model.contentData.contentLink.split("_"), contextParameters = { uri: "epi.cms.contentdata:///" + contentId[0] };
@@ -31,7 +31,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
 
         _onModelChange: function () {
             var me = this,
-                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting"),
+                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting"),
                 contentData = me.model.contentData;
             //call the rest store to see if there is a test associated with the content being looked at
             //set isAvailable and canExecute to true when there is a test set up and the test is not completed(2) or archived(3)

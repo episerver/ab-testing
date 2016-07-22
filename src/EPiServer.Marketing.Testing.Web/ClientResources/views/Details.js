@@ -57,7 +57,7 @@
 
         _contextChanged: function (newContext) {
             var me = this;
-            if (!newContext || newContext.type != 'epi.marketing.testing') {
+            if (!newContext || newContext.type != 'epi.marketing.abtesting') {
                 return;
             }
             me.context = newContext;
@@ -70,7 +70,7 @@
         },
 
         _onAbortOptionClicked: function () {
-            var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+            var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             store.remove(this.context.data.test.originalItemId);
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
             topic.publish("/epi/shell/context/request", me.contextParameters);
