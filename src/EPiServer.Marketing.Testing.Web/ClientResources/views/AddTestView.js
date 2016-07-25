@@ -12,7 +12,7 @@
         'dojo/topic',
         'dojo/html',
         'dojo/dom',
-        'dijit/registry',
+        'epi/dependency',
         'xstyle/css!marketing-testing/css/ABTesting.css',
         //'xstyle/css!marketing-testing/css/style.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
@@ -25,7 +25,6 @@
         'epi/shell/widget/DateTimeSelectorDropDown',
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
-        'epi/dependency'
 ],
     function (
     declare,
@@ -41,7 +40,6 @@
     topic,
     html,
     dom,
-    registry,
     dependency
 ) {
         viewPublishedVersion: null;
@@ -90,7 +88,7 @@
                 //set view model properties to default form values.
                 if (this.titleText) {
                     this.titleText.reset();
-                    this.model.testTitle = this.titleText.value;
+                    this.model.testTitle = "";
                 }
 
                 if (this.descriptionText) {
@@ -132,7 +130,6 @@
                 if (!viewPublishedVersion) {
                     return;
                 }
-                this.publishedVersionReference.textContent = viewPublishedVersion.name + "[" + viewPublishedVersion.contentLink + "]";
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
@@ -142,7 +139,6 @@
                 if (!this.contentData) {
                     return;
                 }
-                this.currentVersionReference.textContent = this.contentData.name + "[" + this.contentData.contentLink + "]";
                 this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
                 this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
                 this.pageName.textContent = this.contentData.name + " A/B Test";
@@ -278,12 +274,14 @@
                 this.model.testDescription = description.value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
-
                 if (startDateSelector.value === "") {
                     this.model.startDate = utcNow;
                 }
 
                 this._getConfidenceLevel();
+                this.model.testTitle = this.pageName.textContent;
+
+
 
                 if (this._isValidFormData()) {
                     this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");

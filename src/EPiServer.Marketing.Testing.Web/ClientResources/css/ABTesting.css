@@ -172,8 +172,27 @@ hr {
     background-repeat: no-repeat;
     padding-left: 36px;
 }
+
 .draftIcon {
     background-image: url('../../Images/draftIcon.png');
     background-repeat: no-repeat;
     padding-left: 36px;
+}
+
+.controlVersionHeader {
+    background-color: #1ba4fa;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: arial;
+    padding: 14px 8px 12px 20px;
+}
+
+.challengeVersionHeader {
+    background-color: #f7542b;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: arial;
+    padding: 14px 8px 12px 20px;
 }
