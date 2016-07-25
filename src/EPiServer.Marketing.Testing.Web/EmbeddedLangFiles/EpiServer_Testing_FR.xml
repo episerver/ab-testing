@@ -105,6 +105,9 @@
         <visitors_participated_text>of visitors participated</visitors_participated_text>
         <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
       </pickwinnerview>
+      <publishing>
+        <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
+      </publishing>
       <scheduler_plugin>
         <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
         <displayname>Marketing Test Monitor</displayname>
