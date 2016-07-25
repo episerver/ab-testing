@@ -13,6 +13,7 @@ using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Marketing.Testing.Web.Initializers;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -223,11 +224,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
                     //had been on the site as published.
+                    PublishContentEventListener.addPublishingContent(draftContent);
                     publishedReference = _testResultHelper.PublishContent(draftContent);
 
                     if (testResult.WinningContentLink == testResult.PublishedContentLink)
                     {
                         //republish original published version as winner.
+                        PublishContentEventListener.addPublishingContent(publishedContent);
                         publishedReference = _testResultHelper.PublishContent(publishedContent);
 
                         //get the appropriate variant and set IsWinner to True. Archive test to show completion.

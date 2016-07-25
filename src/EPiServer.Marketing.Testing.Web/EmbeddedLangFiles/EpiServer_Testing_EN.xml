@@ -2,6 +2,9 @@
 <languages>
   <language name="English" id="en">
     <abtesting>
+      <publishing>
+        <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
+      </publishing>
       <addtestcommand>
         <label_text>A/B Test changes</label_text>
         <tooltip_text>A/B Test changes</tooltip_text>
