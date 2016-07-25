@@ -1,13 +1,12 @@
 ﻿using EPiServer.Core;
-using EPiServer.Framework.Initialization;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Initializers;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Moq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Xunit;
 
@@ -22,6 +21,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private PublishContentEventListener GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
+            _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(new FakeLocalizationService("whatever"));
 
             return new PublishContentEventListener(_locator.Object, _list.Object);
         }
