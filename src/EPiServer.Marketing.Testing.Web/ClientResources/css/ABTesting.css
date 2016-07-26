@@ -48,7 +48,7 @@ hr {
 
 .versiona {
     height: 200px;
-    background-image: url('../../Images/screenshot1.jpg');
+    background-image: url('../../Images/pageIcon.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -56,7 +56,7 @@ hr {
 
 .versionb {
     height: 200px;
-    background-image: url('../../Images/screenshot2.jpg');
+    background-image: url('../../Images/pageIcon.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
