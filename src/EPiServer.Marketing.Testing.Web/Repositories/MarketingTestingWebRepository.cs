@@ -66,6 +66,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return testManager.Get(testGuid);
         }
 
+        public List<IMarketingTest> GetTestList(TestCriteria criteria)
+        {
+            var testManager = _serviceLocator.GetInstance<ITestManager>();
+            return testManager.GetTestList(criteria);
+        }
+
         public void DeleteTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();

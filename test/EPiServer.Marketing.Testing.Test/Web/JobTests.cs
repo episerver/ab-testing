@@ -8,13 +8,14 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Web.Repositories;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class JobTests
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
-        Mock<ITestManager> _testManager = new Mock<ITestManager>();
+        Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
         MyLS _ls = new MyLS();
         Mock<IScheduledJobRepository> _jobRepo = new Mock<IScheduledJobRepository>();
         private Guid TestToStart = Guid.NewGuid();
@@ -24,7 +25,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestSchedulingJob GetUnitUnderTest()
         {
-            _locator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_testManager.Object);
+            _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
             _jobRepo.Setup(g => g.Get(It.IsAny<Guid>())).Returns( new ScheduledJob(
                 Guid.Empty, "TestSchedulingJob", true, 
                     DateTime.MinValue, DateTime.MaxValue, DateTime.MaxValue.ToUniversalTime(),
@@ -77,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 },
             };
 
-            _testManager.Setup(m => m.GetTestList(It.IsAny<TestCriteria>())).Returns(list);
+            _webRepo.Setup(m => m.GetTestList(It.IsAny<TestCriteria>())).Returns(list);
 
             return new TestSchedulingJob(_locator.Object);
         }
@@ -88,9 +89,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var unit = GetUnitUnderTest();
             unit.Execute();
 
-            _testManager.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), 
+            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), 
                 "Get did not call getTestList");
-            _testManager.Verify(tm => tm.Start(It.Is<Guid>(g => g == TestToStart)), Times.Once,
+            _webRepo.Verify(tm => tm.StartMarketingTest(It.Is<Guid>(g => g == TestToStart)), Times.Once,
                 "Failed to start test with proper Guid");
 
             // note that there are two jobs in the list that will trigger changing 
@@ -106,9 +107,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var unit = GetUnitUnderTest();
             unit.Execute();
 
-            _testManager.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), 
+            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), 
                 "Get did not call getTestList");
-            _testManager.Verify(tm => tm.Stop(It.Is<Guid>(g => g == TestToStop)), Times.Once, 
+            _webRepo.Verify(tm => tm.StopMarketingTest(It.Is<Guid>(g => g == TestToStop)), Times.Once, 
                 "Failed to stop test with proper Guid");
         }
 

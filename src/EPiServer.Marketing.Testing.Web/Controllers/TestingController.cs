@@ -2,6 +2,7 @@
 using EPiServer.Framework.Initialization;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using System;
@@ -55,7 +56,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetAllTests()
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(tm.GetTestList(new TestCriteria()), Formatting.Indented,
                 new JsonSerializerSettings
                 {
@@ -70,10 +72,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetTest(string id)
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
             var testId = Guid.Parse(id);
-            var test = tm.Get(testId);
+            var test = tm.GetTestById(testId);
             if (test != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(test, Formatting.Indented,

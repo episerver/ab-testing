@@ -36,7 +36,7 @@ function (declare, topic, resources, _ContentCommandBase, ContentActionSupport, 
 
         _onModelChange: function () {
             var me = this,
-                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.contentTesting");
+                store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
 
             store.get(me.model.contentData.contentGuid).then(function (test) {
                 me._setVisibility(test, me);

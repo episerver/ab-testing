@@ -38,7 +38,7 @@ function (
         _contentActionSupport: ContentActionSupport,
 
         postscript: function () {
-            this._storeName = "marketing.contentTesting";
+            this._storeName = "marketing.abtesting";
             this.inherited(arguments);
         },
 

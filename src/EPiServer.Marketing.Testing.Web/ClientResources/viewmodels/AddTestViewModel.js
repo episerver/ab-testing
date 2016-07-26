@@ -55,7 +55,7 @@ define([
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
-            this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.testing");
+            this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
 
             this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
