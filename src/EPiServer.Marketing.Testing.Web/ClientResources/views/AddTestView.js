@@ -42,6 +42,8 @@
 ) {
     viewPublishedVersion: null;
     viewCurrentVersion: null;
+    viewParticipationPercent: null;
+    viewTestDuration: null
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
     {
@@ -53,6 +55,8 @@
         modelBindingMap: {
             publishedVersion: ["viewPublishedVersion"],
             currentVersion: ["viewCurrentVersion"],
+            participationPercent: ["viewParticipationPercent"],
+            testDuration: ["viewTestDuration"]
         },
 
         //sets views starting data from view model
@@ -141,6 +145,14 @@
             this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
             this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
             this.pageName.textContent = this.contentData.name + " A/B Test";
+        },
+
+        _setViewParticipationPercentAttr: function (viewParticipationPercent) {
+            this.participationPercentText.set("Value", viewParticipationPercent);
+        },
+
+        _setViewTestDurationAttr: function (viewTestDuration) {
+            this.durationText.set("Value", viewTestDuration);
         },
 
         _clearConversionErrors: function () {

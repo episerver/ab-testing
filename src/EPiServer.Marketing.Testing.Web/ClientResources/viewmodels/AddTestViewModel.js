@@ -77,6 +77,8 @@ define([
                     var publishedVersion = result;
                     this.set("publishedVersion", publishedVersion);
                     this.set("currentVersion", this.contentData);
+                    this.set("participationPercent", 19);
+                    this.set("testDuration", 31);
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this))

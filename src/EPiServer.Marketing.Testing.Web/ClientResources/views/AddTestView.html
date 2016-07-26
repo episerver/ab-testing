@@ -123,7 +123,7 @@
                         <label for="percentageSpinner">${resources.addtestview.participant_percentage_text}</label><br>
                         <div id="percentageSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:1,max:100},value:10"
+                             data-dojo-props="constraints:{min:1,max:100}"
                              data-dojo-attach-point="participationPercentText"
                              data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
                         </div> %&nbsp;
@@ -136,7 +136,7 @@
                         <label for="durationSpinner">${resources.addtestview.duration_text}</label><br>
                         <div id="durationSpinner"
                              data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:1,max:365},value:30"
+                             data-dojo-props="constraints:{min:1,max:365}"
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
                         </div> ${resources.addtestview.days_text}&nbsp;
