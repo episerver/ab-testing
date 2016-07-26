@@ -25,6 +25,8 @@
         'epi/shell/widget/DateTimeSelectorDropDown',
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
+        "dijit/layout/AccordionContainer",
+        "dijit/layout/ContentPane"
 ],
     function (
     declare,
@@ -86,11 +88,6 @@
 
             reset: function () {
                 //set view model properties to default form values.
-                if (this.titleText) {
-                    this.titleText.reset();
-                    this.model.testTitle = "";
-                }
-
                 if (this.descriptionText) {
                     this.descriptionText.value = this.model.testDescription = "";
                 }
@@ -107,6 +104,7 @@
 
                 if (this.startDatePicker) {
                     this.startDatePicker.reset();
+                    this.model.startDate = new Date(Date.now()).toUTCString();
                 }
 
                 if (this.breadcrumbWidget) {
@@ -119,6 +117,17 @@
                     this.conversionPageWidget.reset();
                 }
 
+                if (this.start) {
+                    this.start.set("checked", true);
+                }
+
+                if (this.delay) {
+                    this.delay.set("checked", false);
+                }
+
+                if (this.scheduleDiv) {
+                    this.scheduleDiv.style.visibility = "hidden";
+                }
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
@@ -281,8 +290,6 @@
                 this._getConfidenceLevel();
                 this.model.testTitle = this.pageName.textContent;
 
-
-
                 if (this._isValidFormData()) {
                     this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                     this._contentVersionStore
@@ -368,7 +375,5 @@
                     dateSelector.style.visibility = "hidden";
                 }
             }
-
-
         });
-});
+    });

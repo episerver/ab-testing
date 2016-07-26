@@ -24,100 +24,6 @@ input, textarea {
     font-size: 14px;
 }
 
-.ABh1 {
-    margin: 0;
-}
-
-.ABh2 {
-    text-align: center;
-}
-
-.ABh3 {
-    color: #000;
-    margin: 8px 0;
-    padding: 14px 8px 12px 20px;
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    font-weight: bold;
-}
-
-.ABh4 {
-    font-size: 18px;
-    margin: 8px 0;
-}
-
-ol, ul {
-    list-style: none;
-}
-
-ol, ul, li {
-    margin: 0;
-    padding: 0;
-}
-
-ul {
-}
-
-li {
-    background-image: url(../../Images/remove.png);
-    background-position: 0 center;
-    background-repeat: no-repeat;
-    padding: 12px 0 12px 22px;
-    border-bottom: 1px solid #eee;
-}
-
-    li:hover {
-        background-image: url(../../Images/remove-hover.png);
-    }
-
-.user {
-    background-image: url(../../Images/user.png);
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
-
-.group {
-    background-image: url(../../Images/group.png);
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
-
-.language {
-    display: inline-block;
-    color: #777;
-    margin-left: 12px;
-    background-image: url(../../Images/language.png);
-    background-repeat: no-repeat;
-    padding-left: 28px;
-    font-size: 14px;
-}
-
-.pill {
-    display: inline-block;
-    background: #9fa3ae;
-    border-radius: 2px;
-    padding: 0 3px;
-    margin-right: 4px;
-    color: #fff;
-    text-shadow: 0 1px rgba(255,255,255,0);
-}
-
-.secondaryText {
-    display: inline-block;
-    background: #1ba4fa;
-    border-radius: 15px;
-    padding: 0 6px;
-    margin-right: 4px;
-    color: #fff;
-    text-shadow: 0 1px rgba(255,255,255,0);
-    font-size: 14px;
-    min-width: 14px;
-    text-align: center;
-}
-
-.addObject {
-    padding: 8px 0 8px 22px;
-}
 
 em {
     box-shadow: inset 0 -4px 0 #cbe25e;
@@ -170,13 +76,13 @@ hr {
 .publishedIcon {
     background-image: url('../../Images/publishedIcon.png');
     background-repeat: no-repeat;
-    padding-left: 36px;
+    padding-left: 18px;
 }
 
 .draftIcon {
     background-image: url('../../Images/draftIcon.png');
     background-repeat: no-repeat;
-    padding-left: 36px;
+    padding-left: 20px;
 }
 
 .controlVersionHeader {
@@ -196,3 +102,5 @@ hr {
     font-family: arial;
     padding: 14px 8px 12px 20px;
 }
+
+
