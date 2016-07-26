@@ -57,7 +57,7 @@
 
         _contextChanged: function (newContext) {
             var me = this;
-            if (!newContext || newContext.type != 'epi.marketing.abtesting') {
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
             me.context = newContext;

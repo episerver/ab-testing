@@ -7,45 +7,44 @@
         <tooltip_text>A/B Test changes</tooltip_text>
       </addtestcommand>
       <addtestview>
-        <advancedsettings>Advanced Settings</advancedsettings>
+        <advanced_options>Advanced Options</advanced_options>
         <cancel_default>Cancel</cancel_default>
-        <confidencelevel_description1>The confidence level dictates the amount of error allowed. A higher percentage directly correlates to the accuracy of the test results.</confidencelevel_description1>
-        <confidencelevel_description2>This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidencelevel_description2>
-        <confidencelevel_header>Confidence level</confidencelevel_header>
+        <challenger>B / Challenger</challenger>
         <confidence_90>90%</confidence_90>
         <confidence_95>95%</confidence_95>
         <confidence_98>98%</confidence_98>
         <confidence_99>99%</confidence_99>
-        <conversion_header>Conversion Goal:</conversion_header>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <confidence_level_description>The confidence level dictates the amount of errors allowed. A higher percentage directly correlates to the accuracy of the test results. This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidence_level_description>
+        <confidence_level_header>Confidence level</confidence_level_header>
+        <control>A / Control</control>
+        <conversion_header>What's the conversion goal?</conversion_header>
+        <conversion_label>Visitor navigates to page</conversion_label>
         <days_text>days.</days_text>
-        <default_test_title>Default Test Title</default_test_title>
+        <default> (default)</default>
         <draft_prefix>Draft - Edited by</draft_prefix>
-        <duration_text>How long should the A/B test run?</duration_text>
+        <duration_header>For how long do you wish to run the A/B test?</duration_header>
         <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
-        <error_duration>Duration cannot be less than 0</error_duration>
-        <error_entertitle>You must enter a title before you can save the A/B test.</error_entertitle>
+        <error_duration>Duration must be a valid integer and cannot be less than 1</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
-        <error_participation_pecentage>Participation percentage must be between 0 and 100</error_participation_pecentage>
-        <error_participation_percentage>Participation percentage must be between 0 and 100</error_participation_percentage>
-        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page. Select a published page.</error_selected_notpublished>
-        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page. Select another page.</error_selected_samepage>
+        <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
+        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
+        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
-        <goals_default_text>What are the goals for this test?</goals_default_text>
-        <header>Create Marketing A/B Test</header>
+        <goals_default_text>Ex. By tweaking the copy in the first bullet point to directly address the ‘time issue’, I can motivate more visitors to download the ebook.</goals_default_text>
+        <goals_header>What is the overall goal for this test?</goals_header>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
-        <participant_percentage_text>What percentage of visitors should participate in this A/B test?</participant_percentage_text>
-        <participant_percentage_tip>More participants in the test means reaching statistical significance sooner</participant_percentage_tip>
+        <participant_percentage_tip>A higher participation percentage reduces the time required to gather enough statistics to be able to pick a winner.</participant_percentage_tip>
+        <participation_header>What percentage of visitors should participate in this A/B test?</participation_header>
         <published_prefix>Published by</published_prefix>
-        <scheduled_text>scheduled to begin </scheduled_text>
-        <schedule_header>Schedule Start:</schedule_header>
+        <schedule_header>When should the A/B test be started?</schedule_header>
+        <schedule_selector_delay>Schedule for Later</schedule_selector_delay>
+        <schedule_selector_start>Start Immediately</schedule_selector_start>
         <schedule_test>Schedule Test</schedule_test>
         <schedule_text_prefix>A/B test is currently </schedule_text_prefix>
         <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
         <start_default>Start Test</start_default>
-        <start_scheduled>Test Scheduled</start_scheduled>
-        <title_text>Title</title_text>
+        <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
       </addtestview>
       <canceltestcommand>
         <label_text>Cancel A/B test and edit page</label_text>
