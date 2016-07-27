@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using EPiServer.Framework.Localization;
-using EPiServer.DataAccess;
 
 namespace EPiServer.Marketing.Testing.Web.Initializers
 {
