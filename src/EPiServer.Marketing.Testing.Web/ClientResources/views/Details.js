@@ -12,6 +12,7 @@
     'epi/i18n!marketing-testing/nls/abtesting',
     "epi/datetime",
     "epi/username",
+    "dojo/dom-class",
     'xstyle/css!marketing-testing/css/ABTesting.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
     'xstyle/css!marketing-testing/css/dijit.css',
@@ -32,7 +33,8 @@
     template,
     resources,
     datetime,
-    username
+    username,
+    domClass
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -40,7 +42,6 @@
         templateString: template,
         resources: resources,
         contextHistory: null,
-
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -53,7 +54,7 @@
         },
 
         startup: function () {
-            this._DisplayOptionsButton(this.context.data.userHasPublishRights); 
+            this._DisplayOptionsButton(this.context.data.userHasPublishRights);
         },
 
         _contextChanged: function (newContext) {
@@ -89,37 +90,29 @@
             //Header and Test Start Information
             this.pageName.textContent = this.context.data.test.title;
 
-            if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
-                this.testStateAndStatusHeader.textContent = resources.detailsview.test_status_not_started + " " +
-                    resources.detailsview.test_scheduled +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by +" "+ this.context.data.test.owner;
-            } else {
-                this.testStateAndStatusHeader.textContent = resources.detailsview.test_started_label + " " +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " ";
-                this.timeRemainingText.textContent = this.context.data.daysRemaining + " " +
-                    resources.detailsview.remaining_increment;
+            if (this.context.data.test.state === 0) {
+                this.headerStateAndElapsedText.textContent = resources.detailsview.test_status_not_started;
+                this.headerStartedText.textContent = resources.detailsview.test_scheduled +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate);
+
+            } else if (this.context.data.test.state === 1) {
+                this.headerStateAndElapsedText
+                    .textContent = resources.detailsview.test_status_running + this.context.data.daysRemaining + " " + resources.detailsview.days_remaining;
+                this.headerStartedText.textContent = resources.detailsview.started +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) +
+                    " " +
+                    resources.detailsview.by +
+                    " " +
+                    username.toUserFriendlyString(this.context.data.test.owner);
+
+            } else if (this.contexxt.data.test.state === 3) {
+                this.headerStateAndElapsedText.textContent = resources.detailsview.test_status_completed;
+                this.headerStartedText.textContent = "";
             }
 
-            
-            if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
-                this.daysElapsedText.textContent = resources.detailsview.test_not_started_text + " " +
-                    resources.detailsview.test_scheduled +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " ";
-                this.timeRemainingText.textContent = resources.detailsview.test_not_started_text;
-            } else {
-                this.daysElapsedText.textContent = resources.detailsview.test_started_label + " " +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " ";
-                this.timeRemainingText.textContent = this.context.data.daysRemaining + " " +
-                    resources.detailsview.remaining_increment;
-            }
-
-            this.testOwner.textContent = this.context.data.test.owner;
-
-            this.leaderImage.src = "marketing-testing/images/hot.png";
+            this.testDuration.textContent = this.context.data.daysElapsed;
+            this.timeRemaining.textContent = this.context.data.daysRemaining;
+            this.selectedConfidenceLevel.textContent = this.context.data.test.confidenceLevel + "%";
 
             //Published version data
             this.publishedBy.textContent = username.toUserFriendlyString(this.context.data.publishedVersionPublishedBy);
@@ -130,7 +123,7 @@
             this.dateSaved.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
             //Set the correct corresponding variant data
-            if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {
+            if (this.context.data.test.variants[0].itemVersion === this.context.data.publishedVersionContentLink.split('_')[0]) {
                 publishedVariant = this.context.data.test.variants[0];
                 draftVariant = this.context.data.test.variants[1];
             } else {
@@ -141,23 +134,83 @@
             //Published version views/conversions and meter
             this.publishedVersionConversions.textContent = publishedVariant.conversions;
             this.publishedVersionViews.textContent = publishedVariant.views;
-            this.publishedVersionPercentage.textContent = getPercent(publishedVariant.conversions, publishedVariant.views) + "%";
-            this.publishedVersionPercentMeter.style.height = getPercent(publishedVariant.conversions, publishedVariant.views) * 1.5 + "px";
+            this.publishedVersionPercentage.textContent = getPercent(publishedVariant.conversions, publishedVariant.views);
 
             //Draft version views/conversions and meter
             this.variantConversions.textContent = draftVariant.conversions;
             this.variantViews.textContent = draftVariant.views;
-            this.variantPercentage.textContent = getPercent(draftVariant.conversions, draftVariant.views) + "%";
-            this.variantPercentMeter.style.height = getPercent(draftVariant.conversions, draftVariant.views) * 1.5 + "px";
+            this.variantPercentage.textContent = getPercent(draftVariant.conversions, draftVariant.views);
 
             //Test description, visitor percentage and total participants
-            this.testDescription.textContent = this.context.data.test.description;
+            this.testDescription.textContent = "\"" +
+                this.context.data.test.description +
+                "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
 
             this.visitorPercentageText.textContent = this.context.data.visitorPercentage;
             this.totalParticipantsText.textContent = this.context.data.totalParticipantCount;
 
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
+
+            //Set Test Result Status Icons
+
+            var statusIndicatorClass = "noIndicator";
+
+            if (this.context.data.test.state === 1) {
+                statusIndicatorClass = "leadingContent";
+            }
+            else if (this.context.data.test.state > 2) {
+                statusIndicatorClass = "winningContent";
+            }
+
+            if (Number(this.publishedVersionPercentage.textContent) > Number(this.variantPercentage.textContent)) {
+                domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
+                domClass.replace(this.variantStatusIcon, "noIndicator");
+                domStyle.set(this.publishedVersionPercentage, "font-size", "42px");
+                domStyle.set(this.variantPercentage, "font-size", "32px");
+                domStyle.set(this.controlHeader, "background-color", "#95c532");
+                domStyle.set(this.controlWrapper, "border", "3px solid #95c532");
+                domStyle.set(this.controlWrapper, "width", "48.6%");
+                domStyle.set(this.challengerHeader, "background-color", "#f7542b");
+                domStyle.set(this.challengerWrapper, "border", "0px");
+                domStyle.set(this.challengerWrapper, "width", "48.8%");
+            }
+            else if (Number(this.publishedVersionPercentage.textContent) < Number(this.variantPercentage.textContent)) {
+                domClass.replace(this.publishedStatusIcon, "noIndicator");
+                domClass.replace(this.variantStatusIcon, statusIndicatorClass);
+                domStyle.set(this.publishedVersionPercentage, "font-size", "32px");
+                domStyle.set(this.variantPercentage, "font-size", "42px");
+                domStyle.set(this.controlHeader, "background-color", "#1ba4fa");
+                domStyle.set(this.controlWrapper, "border", "0px");
+                domStyle.set(this.controlWrapper, "width", "48.6%");
+                domStyle.set(this.challengerHeader, "background-color", "#95c532");
+                domStyle.set(this.challengerWrapper, "border", "3px solid #95c532");
+                domStyle.set(this.challengerWrapper, "width", "48.8%");
+            }
+            else if (Number(this.publishedVersionPercentage.textContent) === 0 && Number(this.variantPercentage.textContent) === 0) {
+                domClass.replace(this.publishedStatusIcon, "noIndicator");
+                domClass.replace(this.variantStatusIcon, "noIndicator");
+                domStyle.set(this.publishedVersionPercentage, "font-size", "32px");
+                domStyle.set(this.variantPercentage, "font-size", "32px");
+                domStyle.set(this.controlHeader, "background-color", "#1ba4fa");
+                domStyle.set(this.controlWrapper, "border", "0px");
+                domStyle.set(this.controlWrapper, "width", "49%");
+                domStyle.set(this.challengerHeader, "background-color", "#f7542b");
+                domStyle.set(this.challengerWrapper, "border", "0px");
+                domStyle.set(this.challengerWrapper, "width", "49%");
+            }
+            else {
+                domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
+                domClass.replace(this.variantStatusIcon, statusIndicatorClass);
+                domStyle.set(this.publishedVersionPercentage, "font-size", "42px");
+                domStyle.set(this.variantPercentage, "font-size", "42px");
+                domStyle.set(this.controlHeader, "background-color", "#95c532");
+                domStyle.set(this.controlWrapper, "border", "3px solid #95c532");
+                domStyle.set(this.controlWrapper, "width", "48.3%");
+                domStyle.set(this.challengerHeader, "background-color", "#95c532");
+                domStyle.set(this.challengerWrapper, "border", "3px solid #95c532");
+                domStyle.set(this.challengerWrapper, "width", "48.5%");
+            }
         },
 
         _DisplayOptionsButton: function (show) {
@@ -177,7 +230,5 @@
         }
         var percent = (visitors / conversions) * 100;
         return Math.round(percent);
-
-
     }
 });
