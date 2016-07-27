@@ -71,6 +71,8 @@
         <test_not_started_text>This test has not yet started.</test_not_started_text>
         <test_scheduled>It is scheduled to start </test_scheduled>
         <test_started_label>Test started</test_started_label>
+        <test_status_not_started>Test has not yet started,</test_status_not_started>
+        <test_status_running>Test is running,</test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views_label>Views:</views_label>
       </detailsview>

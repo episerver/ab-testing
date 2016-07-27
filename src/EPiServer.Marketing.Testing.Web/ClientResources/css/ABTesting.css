@@ -48,7 +48,7 @@ hr {
 
 .versiona {
     height: 200px;
-    background-image: url('../../Images/pageIcon.png');
+    background-image: url('../images/pageIcon.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -56,7 +56,7 @@ hr {
 
 .versionb {
     height: 200px;
-    background-image: url('../../Images/pageIcon.png');
+    background-image: url('../images/pageIcon.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -67,20 +67,20 @@ hr {
 }
 
 .objectIcon {
-    background-image: url('../../Images/pageIcon.png');
+    background-image: url('../images/pageIcon.png');
     background-repeat: no-repeat;
     padding-left: 36px;
     background-size: 28px,28px;
 }
 
 .publishedIcon {
-    background-image: url('../../Images/publishedIcon.png');
+    background-image: url('../images/publishedIcon.png');
     background-repeat: no-repeat;
     padding-left: 18px;
 }
 
 .draftIcon {
-    background-image: url('../../Images/draftIcon.png');
+    background-image: url('../images/drafticon.png');
     background-repeat: no-repeat;
     padding-left: 20px;
 }

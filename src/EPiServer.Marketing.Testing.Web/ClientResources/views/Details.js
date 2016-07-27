@@ -12,8 +12,9 @@
     'epi/i18n!marketing-testing/nls/abtesting',
     "epi/datetime",
     "epi/username",
-    'xstyle/css!marketing-testing/css/style.css',
+    'xstyle/css!marketing-testing/css/ABTesting.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
+    'xstyle/css!marketing-testing/css/dijit.css',
     "dijit/form/DropDownButton",
     "dijit/TooltipDialog",
     "dijit/form/Button"
@@ -86,8 +87,22 @@
             var publishedVariant, draftVariant;
 
             //Header and Test Start Information
-            this.detailsHeaderText.textContent = this.context.data.test.title;
+            this.pageName.textContent = this.context.data.test.title;
 
+            if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
+                this.testStateAndStatusHeader.textContent = resources.detailsview.test_status_not_started + " " +
+                    resources.detailsview.test_scheduled +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
+                    resources.detailsview.by +" "+ this.context.data.test.owner;
+            } else {
+                this.testStateAndStatusHeader.textContent = resources.detailsview.test_started_label + " " +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
+                    resources.detailsview.by + " ";
+                this.timeRemainingText.textContent = this.context.data.daysRemaining + " " +
+                    resources.detailsview.remaining_increment;
+            }
+
+            
             if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
                 this.daysElapsedText.textContent = resources.detailsview.test_not_started_text + " " +
                     resources.detailsview.test_scheduled +
@@ -104,17 +119,15 @@
 
             this.testOwner.textContent = this.context.data.test.owner;
 
+            this.leaderImage.src = "marketing-testing/images/hot.png";
+
             //Published version data
-            this.publishedVersionName.textContent = this.context.data.publishedVersionName;
-            this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
-            this.publishedVersionUser.textContent = username.toUserFriendlyString(this.context.data.publishedVersionPublishedBy);
-            this.publishedVersionDate.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
+            this.publishedBy.textContent = username.toUserFriendlyString(this.context.data.publishedVersionPublishedBy);
+            this.datePublished.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
 
             //Draft version data
-            this.variantName.textContent = this.context.data.draftVersionName;
-            this.variantContentLink.textContent = this.context.data.draftVersionContentLink;
-            this.variantUser.textContent = username.toUserFriendlyString(this.context.data.draftVersionChangedBy);
-            this.variantDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
+            this.savedBy.textContent = username.toUserFriendlyString(this.context.data.draftVersionChangedBy);
+            this.dateSaved.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
             //Set the correct corresponding variant data
             if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {

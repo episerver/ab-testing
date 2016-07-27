@@ -2,8 +2,11 @@
     <!-- button bar -->
     <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
         <div class="epi-toolbarGroupContainer">
+            <!-- Empty Leading Toolbar Group -->
             <div class="epi-toolbarGroup epi-toolbarLeading"></div>
+            <!-- Empty Center Toolbar Group -->
             <div class="epi-toolbarGroup epi-toolbarCenter"></div>
+            <!-- Options and Cancel Buttons -->
             <div class="epi-toolbarGroup epi-toolbarTrailing">
                 <!-- Options Button-->
                 <div id="optionsDropdown" class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton" data-dojo-type="dijit/form/DropDownButton">
@@ -20,7 +23,64 @@
         </div>
     </div>
     <hr />
+    <div class="abBody">
+        <!-- Header Test Title and Running Time / Status -->
+        <div class="cardWrapper">
+            <div class="cardBody">
+                <h1 class="objectIcon" style="font-size: 2em; font-weight: bold; font-family: arial" data-dojo-attach-point="pageName"></h1>
+                <h2 style="text-align:left;margin-bottom:0;" data-dojo-attach-point="testStateAndStatusHeader"></h2>
+            </div>
+        </div>
+        <!-- Control/Published Version -->
+        <div class="cardWrapper 2column" style="width: 48%; display: inline-block; float: left; margin-right: 2%;">
+            <h3 style="background-color: #1ba4fa;color: #fff;font-size: 20px;font-weight: bold;font-family: arial;padding: 14px 8px 12px 20px; ">
+                ${resources.addtestview.control}
+            </h3>
+            <div class="cardBody" style="padding-bottom: 0;">
+                <div class="versiona"></div>
+                <p style="text-align: center; padding: 16px 32px; font-family: arial;">
+                    <span class="publishedIcon" style="padding-top: 2px">
+                        ${resources.addtestview.published_prefix}
+                    </span>
+                    <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
+                    <span data-dojo-attach-point="datePublished"></span>
+                </p>
+            </div>
+        </div>
+        <!-- Challenger/Draft Version-->
+        <div class="cardWrapper 2column" style="width: 49%; display: inline-block;">
+            <div style="position:absolute;right:-20px;top:-10px;"><img src="" data-dojo-attach-point="leaderImage"></div>
 
+            <h3 style="background-color: #95c532; color: #fff; font-size: 20px; font-weight: bold; font-family: arial; padding: 14px 8px 12px 20px;">
+                ${resources.addtestview.challenger}
+            </h3>
+            <div class="cardBody" style="padding-bottom: 0;">
+                <div class="versionb"></div>
+                <p style="text-align: center; padding: 16px 32px; font-family: arial;">
+                    <span class="draftIcon" style="padding-top: 2px">${resources.addtestview.draft_prefix}</span>
+                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="savedBy"></span>,
+                    <span style="vertical-align: middle" data-dojo-attach-point="dateSaved"></span>
+                </p>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
     <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
@@ -70,7 +130,7 @@
         <!--Description-->
         <div class="epi-grid__row epi-grid__row--no-border">
             <div class="epi-grid__col--12">
-                <div class="epi-grid__header" style="width: 75%" >
+                <div class="epi-grid__header" style="width: 75%">
                     <h2>${resources.detailsview.description_heading}</h2>
                     <p data-dojo-attach-point="testDescription"></p>
                 </div>
