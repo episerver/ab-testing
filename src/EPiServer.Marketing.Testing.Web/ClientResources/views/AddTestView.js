@@ -43,7 +43,7 @@
     viewPublishedVersion: null;
     viewCurrentVersion: null;
     viewParticipationPercent: null;
-    viewTestDuration: null
+    viewTestDuration: null;
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
     {

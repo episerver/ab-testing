@@ -31,6 +31,13 @@
 
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.abtesting", abTestStore);
+
+            // config store for default values
+            abTestingConfigStorePath = routes.getRestPath({ moduleArea: "EPiServer.Marketing.Testing", storeName: "ABTestConfigStore" });
+            //create our store
+            var abTestConfigStore = new JsonRest({ target: abTestingConfigStorePath });
+            //add our store to the registry to be consumed by the UI
+            registry.add("marketing.abtestingconfig", abTestConfigStore);
             
             editNotifications.add(TestNotification);
 
