@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using EPiServer.Framework.Localization;
+using EPiServer.DataAccess;
 
 namespace EPiServer.Marketing.Testing.Web.Initializers
 {
@@ -44,6 +45,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
             _locator = ServiceLocator.Current;
             var contentEvents = _locator.GetInstance<IContentEvents>();
             contentEvents.PublishingContent += _publishingContentEventHandler;
+            contentEvents.CheckingInContent += _checkingInContentEventHandler; // checkin content is how content is scheduled for publish.
         }
 
         [ExcludeFromCodeCoverage]
@@ -51,6 +53,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         {            //Add uninitialization logic           
             var contentEvents = _locator.GetInstance<IContentEvents>();
             contentEvents.PublishingContent -= _publishingContentEventHandler;
+            contentEvents.CheckingInContent -= _checkingInContentEventHandler;
         }
 
         /// <summary>
@@ -63,6 +66,22 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
             lock (_listLock)
             {
                 _contentList.Add(content);
+            }
+        }
+
+        public void _checkingInContentEventHandler(object sender, ContentEventArgs e)
+        {
+            var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
+            var test = repo.GetActiveTestForContent(e.Content.ContentGuid);
+            if (test.Id != Guid.Empty)
+            {
+                var c = e.Content as IVersionable;
+                if (c.StartPublish > DateTime.Now) // scheduled in the future to be published.
+                {
+                    e.CancelAction = true;
+                    var ls = _locator.GetInstance<LocalizationService>();
+                    e.CancelReason = ls.GetString("/abtesting/publishing/error_cannot_schedule_publish");
+                }
             }
         }
 
