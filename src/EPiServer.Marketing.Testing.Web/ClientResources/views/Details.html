@@ -27,22 +27,22 @@
         <!-- Header Test Title and Running Time / Status -->
         <div class="cardWrapper">
             <div class="cardBody">
-                <h1 class="objectIcon" style="font-size: 2em; font-weight: bold; font-family: arial" data-dojo-attach-point="pageName"></h1>
-                <h2 style="text-align: left; margin-bottom: 0;font-weight: bold; font-family: arial">
+                <h1 class="objectIcon" data-dojo-attach-point="pageName"></h1>
+                <h2>
                     <span data-dojo-attach-point="headerStateAndElapsedText"></span>
                     <span style="color: #777; font-weight: normal;" data-dojo-attach-point="headerStartedText"></span>
                 </h2>
             </div>
         </div>
         <!-- Control/Published Version -->
-        <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column" style="width: 48.6%; display: inline-block; float: left; margin-right: 2%;">
+        <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column">
             <div class="leadingContent" data-dojo-attach-point="publishedStatusIcon"></div>
-            <h3 data-dojo-attach-point="controlHeader" style="background-color: #1ba4fa;color: #fff;font-size: 20px;font-weight: bold;font-family: arial;padding: 14px 8px 12px 20px; ">
+            <h3>
                 ${resources.detailsview.content_control_header}
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versiona"></div>
-                <p style="text-align: center; padding: 16px 32px; font-family: arial;">
+                <p class="contentInfo">
                     <span class="publishedIcon" style="padding-top: 2px">
                         ${resources.detailsview.published_prefix}
                     </span>
@@ -53,17 +53,17 @@
                 <table width="100%">
                     <tr>
                         <td style="text-align:center;">
-                            <span style="font-size:32px;" data-dojo-attach-point="publishedVersionPercentage"></span><br>${resources.detailsview.conversion_rate}
+                            <span id="controlPercent" data-dojo-attach-point="publishedVersionPercentage"></span><br>${resources.detailsview.conversion_rate}
                         </td>
                         <td>
                             <img src="pie1.png">
                         </td>
                         <td style="text-align:center;">
                             <p>
-                                <span style="font-size:24px;" data-dojo-attach-point="publishedVersionConversions"></span><br>${resources.detailsview.conversions}
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedVersionConversions"></span><br>${resources.detailsview.conversions}
                             </p>
                             <p>
-                                <span style="font-size:24px;" data-dojo-attach-point="publishedVersionViews"></span><br>${resources.detailsview.views}
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedVersionViews"></span><br>${resources.detailsview.views}
                             </p>
                         </td>
                     </tr>
@@ -71,14 +71,14 @@
             </div>
         </div>
         <!-- Challenger/Draft Version-->
-        <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column" style="width: 48.8%; display: inline-block;">
+        <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column">
             <div class="winningContent" data-dojo-attach-point="variantStatusIcon"></div>
-            <h3 data-dojo-attach-point="challengerHeader" style="background-color: #f7542b; color: #fff; font-size: 20px; font-weight: bold; font-family: arial; padding: 14px 8px 12px 20px;">
+            <h3>
                 ${resources.detailsview.content_challenger_header}
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versionb"></div>
-                <p style="text-align: center; padding: 16px 32px; font-family: arial;">
+                <p class="contentInfo">
                     <span class="draftIcon" style="padding-top: 2px">${resources.detailsview.draft_prefix}</span>
                     <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="savedBy"></span>,
                     <span style="vertical-align: middle" data-dojo-attach-point="dateSaved"></span>
@@ -86,17 +86,17 @@
                 <table width="100%">
                     <tr>
                         <td style="text-align: center;">
-                            <span style="font-size: 42px;" data-dojo-attach-point="variantPercentage"> %</span><br>${resources.detailsview.conversion_rate}
+                            <span id="challengerPercent" data-dojo-attach-point="variantPercentage"> %</span><br>${resources.detailsview.conversion_rate}
                         </td>
                         <td>
                             <img src="pie2.png">
                         </td>
                         <td style="text-align: center;">
                             <p>
-                                <span style="font-size: 24px;" data-dojo-attach-point="variantConversions"></span><br>${resources.detailsview.conversions}
+                                <span class="viewsAndConversions" data-dojo-attach-point="variantConversions"></span><br>${resources.detailsview.conversions}
                             </p>
                             <p>
-                                <span style="font-size: 24px;" data-dojo-attach-point="variantViews"></span><br>${resources.detailsview.views}
+                                <span class="viewsAndConversions" data-dojo-attach-point="variantViews"></span><br>${resources.detailsview.views}
                             </p>
                         </td>
                         <td></td>
@@ -108,25 +108,25 @@
         <div class="cardWrapper" style="clear: both">
             <div class="cardBody">
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.detailsview.description_heading}</h4>
+                    <h4>${resources.detailsview.description_heading}</h4>
                     <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
                 </div>
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.detailsview.conversion_header}</h4>
+                    <h4>${resources.detailsview.conversion_header}</h4>
                     <p>
                         <label>${resources.detailsview.conversion_selector_description}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span><a href="" data-dojo-attach-point="contentLinkAnchor"></a>
                     </p>
                 </div>
                 <hr>
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.detailsview.percent_participation_header}</h4>
+                    <h4>${resources.detailsview.percent_participation_header}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="visitorPercentageText"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipantsText"></span></strong>
                     </p>
                 </div>
                 <hr>
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.detailsview.test_duration_header}</h4>
+                    <h4>${resources.detailsview.test_duration_header}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="timeRemaining"> </span></strong> ${resources.detailsview.days_remaining}
                     </p>
@@ -134,9 +134,9 @@
             </div>
         </div>
         <div class="cardWrapper">
-            <h3 style="font-size: 16px;font-weight: bold;font-family: arial;padding: 14px 8px 12px 20px; ">${resources.detailsview.advanced_options_header}</h3>
+            <h3>${resources.detailsview.advanced_options_header}</h3>
             <div class="cardBody" style="padding-top: 4px;">
-                <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.detailsview.advanced_options_confidence_level}</h4>
+                <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
                 <p>
                     <strong><span data-dojo-attach-point="selectedConfidenceLevel"></span></strong>
                 </p>

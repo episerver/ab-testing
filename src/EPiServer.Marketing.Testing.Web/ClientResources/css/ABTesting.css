@@ -16,9 +16,41 @@
     overflow: visible;
 }
 
+    .cardWrapper h3 {
+        font-size: 16px;
+        font-weight: bold;
+        font-family: arial;
+        padding: 14px 8px 12px 20px;
+    }
+
 .cardBody {
     padding: 18px;
+    padding-top: 4px;
 }
+
+    .cardBody h1 {
+        font-size: 2em;
+        font-weight: bold;
+        font-family: arial;
+    }
+
+    .cardBody h2 {
+    text-align: left;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-family: arial;
+}
+
+.formsRow {
+    margin-bottom: 24px;
+}
+    .cardBody h4,
+    .formsRow h4 {
+        font-size: 18px;
+        margin: 8px 0;
+        font-family: arial;
+        font-weight: bold;
+    }
 
 input, textarea {
     font-size: 14px;
@@ -41,8 +73,101 @@ hr {
     margin-bottom: 24px;
 }
 
-.cardWrapper h3 {
-    margin: 0 0 8px 0;
+.contentInfo {
+    text-align: center;
+    padding: 16px 32px;
+    font-family: arial;
+}
+
+.controlDefaultBody {
+    width: 49%;
+    display: inline-block;
+    float: left;
+    margin-right: 2%;
+}
+
+.challengerDefaultBody {
+    width: 49%;
+    display: inline-block;
+}
+
+.controlLeaderBody,
+.controlTrailingBody {
+    width: 48.5%;
+    display: inline-block;
+    float: left;
+    margin-right: 2%;
+}
+
+.challengerLeaderBody {
+    width: 49%;
+    display: inline-block;
+}
+
+.challengerTiedBody {
+    width: 48.55%;
+    display: inline-block;
+}
+
+.controlTiedBody {
+    width: 48.55%;
+    display: inline-block;
+    float: left;
+    margin-right: 2%;
+}
+
+.controlTiedBody,
+.challengerTiedBody,
+.controlLeaderBody,
+.challengerLeaderBody {
+    border: 3px solid #95c532;
+}
+
+.challengerDefaultBody h3 {
+    background-color: #f7542b;
+}
+
+.controlDefaultBody h3,
+.controlTrailingBody h3 {
+    background-color: #1ba4fa;
+}
+
+.controlTiedBody h3,
+.challengerTiedBody h3,
+.controlLeaderBody h3,
+.challengerLeaderBody h3 {
+    background-color: #95c532;
+}
+
+.controlDefaultBody h3,
+.controlTiedBody h3,
+.controlLeaderBody h3,
+.controlTrailingBody h3,
+.challengerTiedBody h3,
+.challengerLeaderBody h3,
+.challengerDefaultBody h3 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: arial;
+    padding: 14px 8px 12px 20px;
+    margin-top: 0;
+}
+
+.controlDefaultBody #controlPercent,
+.controlTrailingBody #controlPercent,
+.challengerDefaultBody #challengerPercent {
+    font-family: arial;
+    font-size: 32px;
+}
+
+.controlLeaderBody #controlPercent,
+.challengerLeaderBody #challengerPercent,
+.controlTiedBody #controlPercent,
+.challengerTiedBody #challengerPercent {
+    font-weight: bold;
+    font-family: arial;
+    font-size: 48px;
 }
 
 .versiona {
@@ -59,10 +184,6 @@ hr {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-}
-
-.formsRow {
-    margin-bottom: 24px;
 }
 
 .objectIcon {
@@ -112,4 +233,6 @@ hr {
     width: 64px;
 }
 
-
+.viewsAndConversions {
+    font-size:24px;
+}

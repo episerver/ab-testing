@@ -174,50 +174,26 @@
             if (publishedPercent > variantPercent) {
                 domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
                 domClass.replace(this.variantStatusIcon, "noIndicator");
-                domStyle.set(this.publishedVersionPercentage, "font-size", "42px");
-                domStyle.set(this.variantPercentage, "font-size", "32px");
-                domStyle.set(this.controlHeader, "background-color", "#95c532");
-                domStyle.set(this.controlWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.controlWrapper, "width", "48.6%");
-                domStyle.set(this.challengerHeader, "background-color", "#f7542b");
-                domStyle.set(this.challengerWrapper, "border", "0px");
-                domStyle.set(this.challengerWrapper, "width", "49%");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlLeaderBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
             }
             else if (publishedPercent < variantPercent) {
                 domClass.replace(this.publishedStatusIcon, "noIndicator");
                 domClass.replace(this.variantStatusIcon, statusIndicatorClass);
-                domStyle.set(this.publishedVersionPercentage, "font-size", "32px");
-                domStyle.set(this.variantPercentage, "font-size", "42px");
-                domStyle.set(this.controlHeader, "background-color", "#1ba4fa");
-                domStyle.set(this.controlWrapper, "border", "0px");
-                domStyle.set(this.controlWrapper, "width", "48.6%");
-                domStyle.set(this.challengerHeader, "background-color", "#95c532");
-                domStyle.set(this.challengerWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.challengerWrapper, "width", "49%");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerLeaderBody");
             }
             else if (publishedPercent === 0 && variantPercent === 0) {
                 domClass.replace(this.publishedStatusIcon, "noIndicator");
                 domClass.replace(this.variantStatusIcon, "noIndicator");
-                domStyle.set(this.publishedVersionPercentage, "font-size", "32px");
-                domStyle.set(this.variantPercentage, "font-size", "32px");
-                domStyle.set(this.controlHeader, "background-color", "#1ba4fa");
-                domStyle.set(this.controlWrapper, "border", "0px");
-                domStyle.set(this.controlWrapper, "width", "49%");
-                domStyle.set(this.challengerHeader, "background-color", "#f7542b");
-                domStyle.set(this.challengerWrapper, "border", "0px");
-                domStyle.set(this.challengerWrapper, "width", "49%");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlDefaultBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
             }
             else {
                 domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
                 domClass.replace(this.variantStatusIcon, statusIndicatorClass);
-                domStyle.set(this.publishedVersionPercentage, "font-size", "42px");
-                domStyle.set(this.variantPercentage, "font-size", "42px");
-                domStyle.set(this.controlHeader, "background-color", "#95c532");
-                domStyle.set(this.controlWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.controlWrapper, "width", "48.65%");
-                domStyle.set(this.challengerHeader, "background-color", "#95c532");
-                domStyle.set(this.challengerWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.challengerWrapper, "width", "48.65%");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlTiedBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerTiedBody");
             }
         },
 
