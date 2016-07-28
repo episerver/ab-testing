@@ -16,14 +16,46 @@
     overflow: visible;
 }
 
+    .cardWrapper h3 {
+        font-size: 16px;
+        font-weight: bold;
+        font-family: arial;
+        padding: 14px 8px 12px 20px;
+    }
+
 .cardBody {
     padding: 18px;
+    padding-top: 4px;
 }
+
+    .cardBody h1 {
+        font-size: 2em;
+        font-weight: bold;
+        font-family: arial;
+    }
+
+    .cardBody h2 {
+        text-align: left;
+        margin-bottom: 0;
+        font-weight: bold;
+        font-family: arial;
+    }
+
+.formsRow {
+    margin-bottom: 24px;
+}
+
+    .cardBody h4,
+    .formsRow h4 {
+        font-size: 18px;
+        margin: 8px 0;
+        font-family: arial;
+        font-weight: bold;
+    }
 
 input, textarea {
     font-size: 14px;
 }
-
 
 em {
     box-shadow: inset 0 -4px 0 #cbe25e;
@@ -42,8 +74,81 @@ hr {
     margin-bottom: 24px;
 }
 
-.cardWrapper h3 {
-    margin: 0 0 8px 0;
+.contentInfo {
+    text-align: center;
+    padding: 16px 32px;
+    font-family: arial;
+}
+
+.controlDefaultBody {
+    width: 49%;
+    display: inline-block;
+    float: left;
+    margin-right: 2%;
+}
+
+.challengerDefaultBody {
+    width: 49%;
+    display: inline-block;
+}
+
+.controlLeaderBody,
+.controlTrailingBody {
+    width: 48.5%;
+    display: inline-block;
+    float: left;
+    margin-right: 2%;
+}
+
+.challengerLeaderBody {
+    width: 49%;
+    display: inline-block;
+}
+
+.controlLeaderBody,
+.challengerLeaderBody {
+    border: 3px solid #95c532;
+}
+
+.challengerDefaultBody h3 {
+    background-color: #f7542b;
+}
+
+.controlDefaultBody h3,
+.controlTrailingBody h3 {
+    background-color: #1ba4fa;
+}
+
+.controlLeaderBody h3,
+.challengerLeaderBody h3 {
+    background-color: #95c532;
+}
+
+.controlDefaultBody h3,
+.controlLeaderBody h3,
+.controlTrailingBody h3,
+.challengerLeaderBody h3,
+.challengerDefaultBody h3 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: arial;
+    padding: 14px 8px 12px 20px;
+    margin-top: 0;
+}
+
+.controlDefaultBody #controlPercent,
+.controlTrailingBody #controlPercent,
+.challengerDefaultBody #challengerPercent {
+    font-family: arial;
+    font-size: 32px;
+}
+
+.controlLeaderBody #controlPercent,
+.challengerLeaderBody #challengerPercent {
+    font-weight: bold;
+    font-family: arial;
+    font-size: 48px;
 }
 
 .versiona {
@@ -62,45 +167,53 @@ hr {
     background-position: center;
 }
 
-.formsRow {
-    margin-bottom: 24px;
-}
-
 .objectIcon {
-    background-image: url('../../Images/pageIcon.png');
+    background-image: url('../../images/pageIcon.png');
     background-repeat: no-repeat;
     padding-left: 36px;
     background-size: 28px,28px;
 }
 
 .publishedIcon {
-    background-image: url('../../Images/publishedIcon.png');
+    background-image: url('../../images/publishedIcon.png');
     background-repeat: no-repeat;
     padding-left: 18px;
 }
 
 .draftIcon {
-    background-image: url('../../Images/draftIcon.png');
+    background-image: url('../../images/drafticon.png');
     background-repeat: no-repeat;
     padding-left: 20px;
 }
 
-.controlVersionHeader {
-    background-color: #1ba4fa;
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: arial;
-    padding: 14px 8px 12px 20px;
+.leadingContent {
+    background-image: url('../../Images/hot.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    right: -20px;
+    top: -5px;
+    height: 64px;
+    width: 64px;
 }
 
-.challengeVersionHeader {
-    background-color: #f7542b;
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: arial;
-    padding: 14px 8px 12px 20px;
+.winningContent {
+    background-image: url('../../Images/winner.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    right: -20px;
+    top: -5px;
+    height: 64px;
+    width: 64px;
 }
 
+.noStatusIndicator {
+    position: absolute;
+    right: -20px;
+    top: -5px;
+    height: 64px;
+    width: 64px;
+}
 
+.viewsAndConversions {
+    font-size: 24px;
+}

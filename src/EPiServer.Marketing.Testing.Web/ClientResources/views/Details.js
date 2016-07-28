@@ -12,8 +12,10 @@
     'epi/i18n!marketing-testing/nls/abtesting',
     "epi/datetime",
     "epi/username",
-    'xstyle/css!marketing-testing/css/style.css',
+    "dojo/dom-class",
+    'xstyle/css!marketing-testing/css/ABTesting.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
+    'xstyle/css!marketing-testing/css/dijit.css',
     "dijit/form/DropDownButton",
     "dijit/TooltipDialog",
     "dijit/form/Button"
@@ -31,7 +33,8 @@
     template,
     resources,
     datetime,
-    username
+    username,
+    domClass
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -39,7 +42,6 @@
         templateString: template,
         resources: resources,
         contextHistory: null,
-
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -52,7 +54,7 @@
         },
 
         startup: function () {
-            this._DisplayOptionsButton(this.context.data.userHasPublishRights); 
+            this._DisplayOptionsButton(this.context.data.userHasPublishRights);
         },
 
         _contextChanged: function (newContext) {
@@ -86,38 +88,42 @@
             var publishedVariant, draftVariant;
 
             //Header and Test Start Information
-            this.detailsHeaderText.textContent = this.context.data.test.title;
+            this.pageName.textContent = this.context.data.test.title;
 
-            if (this.context.data.daysElapsed.indexOf("Test") !== -1) {
-                this.daysElapsedText.textContent = resources.detailsview.test_not_started_text + " " +
-                    resources.detailsview.test_scheduled +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " ";
-                this.timeRemainingText.textContent = resources.detailsview.test_not_started_text;
-            } else {
-                this.daysElapsedText.textContent = resources.detailsview.test_started_label + " " +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + " " +
-                    resources.detailsview.by + " ";
-                this.timeRemainingText.textContent = this.context.data.daysRemaining + " " +
-                    resources.detailsview.remaining_increment;
+            if (this.context.data.test.state === 0) {
+                this.headerStateAndElapsedText.textContent = resources.detailsview.test_status_not_started;
+                this.headerStartedText.textContent = resources.detailsview.test_scheduled +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate);
+
+            } else if (this.context.data.test.state === 1) {
+                this.headerStateAndElapsedText
+                    .textContent = resources.detailsview.test_status_running + this.context.data.daysRemaining + " " + resources.detailsview.days_remaining;
+                this.headerStartedText.textContent = resources.detailsview.started +
+                    datetime.toUserFriendlyString(this.context.data.test.startDate) +
+                    " " +
+                    resources.detailsview.by +
+                    " " +
+                    username.toUserFriendlyString(this.context.data.test.owner);
+
+            } else if (this.contexxt.data.test.state === 3) {
+                this.headerStateAndElapsedText.textContent = resources.detailsview.test_status_completed;
+                this.headerStartedText.textContent = "";
             }
 
-            this.testOwner.textContent = this.context.data.test.owner;
+            this.testDuration.textContent = this.context.data.daysElapsed;
+            this.timeRemaining.textContent = this.context.data.daysRemaining;
+            this.selectedConfidenceLevel.textContent = this.context.data.test.confidenceLevel + "%";
 
             //Published version data
-            this.publishedVersionName.textContent = this.context.data.publishedVersionName;
-            this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
-            this.publishedVersionUser.textContent = username.toUserFriendlyString(this.context.data.publishedVersionPublishedBy);
-            this.publishedVersionDate.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
+            this.publishedBy.textContent = username.toUserFriendlyString(this.context.data.publishedVersionPublishedBy);
+            this.datePublished.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
 
             //Draft version data
-            this.variantName.textContent = this.context.data.draftVersionName;
-            this.variantContentLink.textContent = this.context.data.draftVersionContentLink;
-            this.variantUser.textContent = username.toUserFriendlyString(this.context.data.draftVersionChangedBy);
-            this.variantDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
+            this.savedBy.textContent = username.toUserFriendlyString(this.context.data.draftVersionChangedBy);
+            this.dateSaved.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
 
             //Set the correct corresponding variant data
-            if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {
+            if (this.context.data.test.variants[0].itemVersion === this.context.data.publishedVersionContentLink.split('_')[0]) {
                 publishedVariant = this.context.data.test.variants[0];
                 draftVariant = this.context.data.test.variants[1];
             } else {
@@ -125,26 +131,65 @@
                 draftVariant = this.context.data.test.variants[0];
             }
 
+            var publishedPercent = getPercent(publishedVariant.conversions, publishedVariant.views);
+            var variantPercent = getPercent(draftVariant.conversions, draftVariant.views);
+
             //Published version views/conversions and meter
             this.publishedVersionConversions.textContent = publishedVariant.conversions;
             this.publishedVersionViews.textContent = publishedVariant.views;
-            this.publishedVersionPercentage.textContent = getPercent(publishedVariant.conversions, publishedVariant.views) + "%";
-            this.publishedVersionPercentMeter.style.height = getPercent(publishedVariant.conversions, publishedVariant.views) * 1.5 + "px";
+            this.publishedVersionPercentage.textContent = publishedPercent + "%";
+
 
             //Draft version views/conversions and meter
             this.variantConversions.textContent = draftVariant.conversions;
             this.variantViews.textContent = draftVariant.views;
-            this.variantPercentage.textContent = getPercent(draftVariant.conversions, draftVariant.views) + "%";
-            this.variantPercentMeter.style.height = getPercent(draftVariant.conversions, draftVariant.views) * 1.5 + "px";
+            this.variantPercentage.textContent = variantPercent + "%";
 
             //Test description, visitor percentage and total participants
-            this.testDescription.textContent = this.context.data.test.description;
+            this.testDescription.textContent = "\"" +
+                this.context.data.test.description +
+                "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
 
             this.visitorPercentageText.textContent = this.context.data.visitorPercentage;
             this.totalParticipantsText.textContent = this.context.data.totalParticipantCount;
 
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
+
+            //Set Test Result Status Icons and styles
+            //Icons are to show on content which is ahead in conversoins
+            //Styles change size and color of container to accomodate for border
+            //keeping things aligned properly.
+            //Styles and icons adjust based on A > B, A < B, A = B, and 0 and 
+            //whether test is active or complete.
+            var statusIndicatorClass = "noIndicator";
+
+            if (this.context.data.test.state === 1) {
+                statusIndicatorClass = "leadingContent";
+            }
+            else if (this.context.data.test.state > 2) {
+                statusIndicatorClass = "winningContent";
+            }
+
+            if (publishedPercent > variantPercent) {
+                domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
+                domClass.replace(this.variantStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlLeaderBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
+            }
+            else if (publishedPercent < variantPercent) {
+                domClass.replace(this.publishedStatusIcon, "noIndicator");
+                domClass.replace(this.variantStatusIcon, statusIndicatorClass);
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerLeaderBody");
+            }
+           else {
+                domClass.replace(this.publishedStatusIcon, "noIndicator");
+                domClass.replace(this.variantStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column controlDefaultBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
+            
+            }
         },
 
         _DisplayOptionsButton: function (show) {
@@ -164,7 +209,5 @@
         }
         var percent = (visitors / conversions) * 100;
         return Math.round(percent);
-
-
     }
 });
