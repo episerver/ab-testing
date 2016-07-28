@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Web.Mvc;
 using EPiServer.Logging;
-using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 
@@ -35,19 +33,21 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             ActionResult result;
             try
             {
-                //var cGuid = Guid.Parse(id);
-                //var aTest = _webRepo.GetActiveTestForContent(cGuid);
-                result = Rest(new ConfigViewModel() { TestDuration = 11, ParticipationPercent = 33 });
+                result = Rest(new ConfigViewModel()
+                {
+                    TestDuration = 30,
+                    ParticipationPercent = 10,
+                    ConfidenceLevel = 95
+                });
             }
             catch (Exception e)
             {
-                _logger.Error("Internal error getting test using content Guid : "+  e);
+                _logger.Error("Internal error getting test using content Guid : " +  e);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
 
             return result;
         }
-
     }
 
     public class ConfigViewModel
@@ -55,5 +55,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public int TestDuration { get; set; }
 
         public int ParticipationPercent { get; set; }
+
+        public int ConfidenceLevel { get; set; }
     }
 }

@@ -44,6 +44,7 @@
     viewCurrentVersion: null;
     viewParticipationPercent: null;
     viewTestDuration: null;
+    confidenceLevel: null;
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
     {
@@ -56,7 +57,8 @@
             publishedVersion: ["viewPublishedVersion"],
             currentVersion: ["viewCurrentVersion"],
             participationPercent: ["viewParticipationPercent"],
-            testDuration: ["viewTestDuration"]
+            testDuration: ["viewTestDuration"],
+            confidenceLevel: ["viewConfidenceLevel"]
         },
 
         //sets views starting data from view model
@@ -153,6 +155,34 @@
 
         _setViewTestDurationAttr: function (viewTestDuration) {
             this.durationText.set("Value", viewTestDuration);
+        },
+
+        _setViewConfidenceLevelAttr: function(viewConfidenceLevel) {
+            var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
+            for (var i = 0; i < rbs.length; i++) {
+                var rb = dom.byId(rbs[i]);
+                if (!rb) {
+                    return;
+                } else if (rb.value === viewConfidenceLevel.toString()) {
+                    switch (viewConfidenceLevel) {
+                    case 99:
+                        this.confidence_99.set("Checked", "Checked");
+                        break;
+                    case 98:
+                        this.confidence_98.set("Checked", "Checked");
+                        break;
+                    case 90:
+                        this.confidence_90.set("Checked", "Checked");
+                        break;
+                    case 95:
+                    default:
+                        this.confidence_95.set("Checked", "Checked");
+                        break;
+                    }
+                } else {
+                    rb.checked = false;
+                }
+            }
         },
 
         _clearConversionErrors: function () {

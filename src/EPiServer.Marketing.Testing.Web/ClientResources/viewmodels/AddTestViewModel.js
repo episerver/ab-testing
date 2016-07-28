@@ -50,7 +50,7 @@ define([
         start: true,
 
         //confidence level
-        confidencelevel: 95,
+        confidenceLevel: 95,
 
         postscript: function () {
             this.inherited(arguments);
@@ -84,6 +84,7 @@ define([
                             console.log(config);
                             this.set("testDuration", config.testDuration);
                             this.set("participationPercent", config.participationPercent);
+                            this.set("confidenceLevel", config.confidenceLevel);
                         }.bind(this));
                     
                     console.log(result);
