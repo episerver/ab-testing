@@ -131,15 +131,19 @@
                 draftVariant = this.context.data.test.variants[0];
             }
 
+            var publishedPercent = getPercent(publishedVariant.conversions, publishedVariant.views);
+            var variantPercent = getPercent(draftVariant.conversions, draftVariant.views);
+
             //Published version views/conversions and meter
             this.publishedVersionConversions.textContent = publishedVariant.conversions;
             this.publishedVersionViews.textContent = publishedVariant.views;
-            this.publishedVersionPercentage.textContent = getPercent(publishedVariant.conversions, publishedVariant.views);
+            this.publishedVersionPercentage.textContent = publishedPercent + "%";
+
 
             //Draft version views/conversions and meter
             this.variantConversions.textContent = draftVariant.conversions;
             this.variantViews.textContent = draftVariant.views;
-            this.variantPercentage.textContent = getPercent(draftVariant.conversions, draftVariant.views);
+            this.variantPercentage.textContent = variantPercent + "%";
 
             //Test description, visitor percentage and total participants
             this.testDescription.textContent = "\"" +
@@ -152,8 +156,12 @@
             this.contentLinkAnchor.href = this.context.data.conversionLink;
             this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
 
-            //Set Test Result Status Icons
-
+            //Set Test Result Status Icons and styles
+            //Icons are to show on content which is ahead in conversoins
+            //Styles change size and color of container to accomodate for border
+            //keeping things aligned properly.
+            //Styles and icons adjust based on A > B, A < B, A = B, and 0 and 
+            //whether test is active or complete.
             var statusIndicatorClass = "noIndicator";
 
             if (this.context.data.test.state === 1) {
@@ -163,7 +171,7 @@
                 statusIndicatorClass = "winningContent";
             }
 
-            if (Number(this.publishedVersionPercentage.textContent) > Number(this.variantPercentage.textContent)) {
+            if (publishedPercent > variantPercent) {
                 domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
                 domClass.replace(this.variantStatusIcon, "noIndicator");
                 domStyle.set(this.publishedVersionPercentage, "font-size", "42px");
@@ -173,9 +181,9 @@
                 domStyle.set(this.controlWrapper, "width", "48.6%");
                 domStyle.set(this.challengerHeader, "background-color", "#f7542b");
                 domStyle.set(this.challengerWrapper, "border", "0px");
-                domStyle.set(this.challengerWrapper, "width", "48.8%");
+                domStyle.set(this.challengerWrapper, "width", "49%");
             }
-            else if (Number(this.publishedVersionPercentage.textContent) < Number(this.variantPercentage.textContent)) {
+            else if (publishedPercent < variantPercent) {
                 domClass.replace(this.publishedStatusIcon, "noIndicator");
                 domClass.replace(this.variantStatusIcon, statusIndicatorClass);
                 domStyle.set(this.publishedVersionPercentage, "font-size", "32px");
@@ -185,9 +193,9 @@
                 domStyle.set(this.controlWrapper, "width", "48.6%");
                 domStyle.set(this.challengerHeader, "background-color", "#95c532");
                 domStyle.set(this.challengerWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.challengerWrapper, "width", "48.8%");
+                domStyle.set(this.challengerWrapper, "width", "49%");
             }
-            else if (Number(this.publishedVersionPercentage.textContent) === 0 && Number(this.variantPercentage.textContent) === 0) {
+            else if (publishedPercent === 0 && variantPercent === 0) {
                 domClass.replace(this.publishedStatusIcon, "noIndicator");
                 domClass.replace(this.variantStatusIcon, "noIndicator");
                 domStyle.set(this.publishedVersionPercentage, "font-size", "32px");
@@ -206,10 +214,10 @@
                 domStyle.set(this.variantPercentage, "font-size", "42px");
                 domStyle.set(this.controlHeader, "background-color", "#95c532");
                 domStyle.set(this.controlWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.controlWrapper, "width", "48.3%");
+                domStyle.set(this.controlWrapper, "width", "48.65%");
                 domStyle.set(this.challengerHeader, "background-color", "#95c532");
                 domStyle.set(this.challengerWrapper, "border", "3px solid #95c532");
-                domStyle.set(this.challengerWrapper, "width", "48.5%");
+                domStyle.set(this.challengerWrapper, "width", "48.65%");
             }
         },
 
