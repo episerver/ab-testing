@@ -45,6 +45,18 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                         isClickable = true;
                     }
                 }
+
+                if (isClickable) {
+                    var newProviders = [];
+                    var globalReg = dependency.resolve('epi.globalcommandregistry');
+                    var menu = globalReg.get('epi.cms.publishmenu');
+                    for (i = 0; i < menu.providers.length; i++) {
+                        for (j = 0; j < menu.providers[i].commands.length; j++) {
+                            menu.providers[i].commands[j].set("canExecute", false);
+                        }
+                    }
+                }
+
                 me.set("isAvailable", isVisible);
                 me.set("canExecute", isClickable);
             });
