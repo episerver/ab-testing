@@ -183,17 +183,12 @@
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerLeaderBody");
             }
-            else if (publishedPercent === 0 && variantPercent === 0) {
+           else {
                 domClass.replace(this.publishedStatusIcon, "noIndicator");
                 domClass.replace(this.variantStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlDefaultBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
-            }
-            else {
-                domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
-                domClass.replace(this.variantStatusIcon, statusIndicatorClass);
-                domClass.replace(this.controlWrapper, "cardWrapper 2column controlTiedBody");
-                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerTiedBody");
+            
             }
         },
 

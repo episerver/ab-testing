@@ -35,15 +35,16 @@
     }
 
     .cardBody h2 {
-    text-align: left;
-    margin-bottom: 0;
-    font-weight: bold;
-    font-family: arial;
-}
+        text-align: left;
+        margin-bottom: 0;
+        font-weight: bold;
+        font-family: arial;
+    }
 
 .formsRow {
     margin-bottom: 24px;
 }
+
     .cardBody h4,
     .formsRow h4 {
         font-size: 18px;
@@ -104,20 +105,6 @@ hr {
     display: inline-block;
 }
 
-.challengerTiedBody {
-    width: 48.55%;
-    display: inline-block;
-}
-
-.controlTiedBody {
-    width: 48.55%;
-    display: inline-block;
-    float: left;
-    margin-right: 2%;
-}
-
-.controlTiedBody,
-.challengerTiedBody,
 .controlLeaderBody,
 .challengerLeaderBody {
     border: 3px solid #95c532;
@@ -132,18 +119,14 @@ hr {
     background-color: #1ba4fa;
 }
 
-.controlTiedBody h3,
-.challengerTiedBody h3,
 .controlLeaderBody h3,
 .challengerLeaderBody h3 {
     background-color: #95c532;
 }
 
 .controlDefaultBody h3,
-.controlTiedBody h3,
 .controlLeaderBody h3,
 .controlTrailingBody h3,
-.challengerTiedBody h3,
 .challengerLeaderBody h3,
 .challengerDefaultBody h3 {
     color: #fff;
@@ -162,9 +145,7 @@ hr {
 }
 
 .controlLeaderBody #controlPercent,
-.challengerLeaderBody #challengerPercent,
-.controlTiedBody #controlPercent,
-.challengerTiedBody #challengerPercent {
+.challengerLeaderBody #challengerPercent {
     font-weight: bold;
     font-family: arial;
     font-size: 48px;
@@ -234,5 +215,5 @@ hr {
 }
 
 .viewsAndConversions {
-    font-size:24px;
+    font-size: 24px;
 }
