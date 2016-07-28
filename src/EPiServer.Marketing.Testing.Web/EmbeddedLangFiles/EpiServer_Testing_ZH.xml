@@ -107,6 +107,7 @@
       </pickwinnerview>
       <publishing>
         <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
+        <error_cannot_schedule_publish>You cannot schedule content to be published while it is being tested. To schedule your content to be published, choose a winner or cancel the current test.</error_cannot_schedule_publish>
       </publishing>
       <scheduler_plugin>
         <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
