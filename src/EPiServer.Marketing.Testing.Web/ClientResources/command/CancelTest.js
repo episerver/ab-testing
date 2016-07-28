@@ -47,7 +47,6 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                 }
 
                 if (isClickable) {
-                    var newProviders = [];
                     var globalReg = dependency.resolve('epi.globalcommandregistry');
                     var menu = globalReg.get('epi.cms.publishmenu');
                     for (i = 0; i < menu.providers.length; i++) {
