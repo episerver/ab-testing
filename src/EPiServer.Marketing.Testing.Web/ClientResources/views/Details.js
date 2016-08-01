@@ -1,5 +1,5 @@
 ﻿define([
-  "dojo/_base/declare",
+ "dojo/_base/declare",
     'epi/dependency',
     'dojo/dom',
     'dijit/registry',
@@ -13,6 +13,8 @@
     "epi/datetime",
     "epi/username",
     "dojo/dom-class",
+    "dojox/charting/Chart",
+    "dojox/charting/plot2d/Pie",
     'xstyle/css!marketing-testing/css/ABTesting.css',
     'xstyle/css!marketing-testing/css/GridForm.css',
     'xstyle/css!marketing-testing/css/dijit.css',
@@ -34,7 +36,9 @@
     resources,
     datetime,
     username,
-    domClass
+    domClass,
+    chart,
+    pie
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -55,6 +59,7 @@
 
         startup: function () {
             this._DisplayOptionsButton(this.context.data.userHasPublishRights);
+            this._renderChartData();
         },
 
         _contextChanged: function (newContext) {
@@ -64,6 +69,7 @@
             }
             me.context = newContext;
             me._renderData();
+            me._renderChartData();
         },
         _onPickWinnerOptionClicked: function () {
             var me = this;
@@ -200,6 +206,40 @@
             } else {
                 domStyle.set(dropDownButton.domNode, "visibility", "hidden");
             }
+        },
+
+        _renderChartData() {
+            dom.byId("controlPieChart").innerHTML = "";
+            dom.byId("challengerPieChart").innerHTML = "";
+            var controlPercentage = this.publishedVersionPercentage.textContent
+                .substr(0, this.publishedVersionPercentage.textContent.length - 1);
+            var challengerPercentage = this.variantPercentage.textContent
+                .substr(0, this.variantPercentage.textContent.length - 1);
+            this._displayPieChart("controlPieChart", Number(controlPercentage));
+            this._displayPieChart("challengerPieChart", Number(challengerPercentage));
+        },
+
+        _displayPieChart(node, data) {
+            var chartNode = dom.byId(node);
+            var pieChart = new chart(chartNode);
+
+            var chartData = [{
+                x: 1,
+                y: 100 - data,
+                fill: "#edebe9"
+            }, {
+                x: 1,
+                y: data,
+                fill: "#86c740"
+            }];
+            
+            pieChart.addPlot("default", {
+                type: "Pie",
+                labels: false,
+                radius: 50
+            });
+            pieChart.addSeries("", chartData, { stroke: { width: 0 } });
+            pieChart.render();
         }
     });
 
