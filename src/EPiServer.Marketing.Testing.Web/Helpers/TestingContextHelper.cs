@@ -99,10 +99,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.UserHasPublishRights = publishedContent.QueryDistinctAccess(AccessLevel.Publish);
 
             // Map elapsed and remaining days.
-
-            model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
-            model.DaysRemaining = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
-
+            if (testData.State == TestState.Active)
+            {
+                model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
+                model.DaysRemaining = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
+            }
+            else
+            {
+                model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysRemaining = "0";
+            }
 
             //retrieve conversion content from kpis
             //convert conversion content link to anchor link
