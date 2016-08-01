@@ -1,26 +1,26 @@
 ﻿define([
  "dojo/_base/declare",
-    'epi/dependency',
-    'dojo/dom',
-    'dijit/registry',
-    'dojo/dom-style',
-    "dojo/topic",
-    "dijit/_WidgetBase",
-    "dijit/_TemplatedMixin",
-    "dijit/_WidgetsInTemplateMixin",
-    "dojo/text!marketing-testing/views/Details.html",
-    'epi/i18n!marketing-testing/nls/abtesting',
-    "epi/datetime",
-    "epi/username",
-    "dojo/dom-class",
-    "dojox/charting/Chart",
-    "dojox/charting/plot2d/Pie",
-    'xstyle/css!marketing-testing/css/ABTesting.css',
-    'xstyle/css!marketing-testing/css/GridForm.css',
-    'xstyle/css!marketing-testing/css/dijit.css',
-    "dijit/form/DropDownButton",
-    "dijit/TooltipDialog",
-    "dijit/form/Button"
+ "epi/dependency",
+ "dojo/dom",
+ "dijit/registry",
+ "dojo/dom-style",
+ "dojo/topic",
+ "dijit/_WidgetBase",
+ "dijit/_TemplatedMixin",
+ "dijit/_WidgetsInTemplateMixin",
+ "dojo/text!marketing-testing/views/Details.html",
+ "epi/i18n!marketing-testing/nls/abtesting",
+ "epi/datetime",
+ "epi/username",
+ "dojo/dom-class",
+ "dojox/charting/Chart",
+ "dojox/charting/plot2d/Pie",
+ "xstyle/css!marketing-testing/css/ABTesting.css",
+ "xstyle/css!marketing-testing/css/GridForm.css",
+ "xstyle/css!marketing-testing/css/dijit.css",
+ "dijit/form/DropDownButton",
+ "dijit/TooltipDialog",
+ "dijit/form/Button"
 
 ], function (
     declare,
@@ -189,12 +189,12 @@
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerLeaderBody");
             }
-           else {
+            else {
                 domClass.replace(this.publishedStatusIcon, "noIndicator");
                 domClass.replace(this.variantStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlDefaultBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
-            
+
             }
         },
 
@@ -232,7 +232,7 @@
                 y: data,
                 fill: "#86c740"
             }];
-            
+
             pieChart.addPlot("default", {
                 type: "Pie",
                 labels: false,
