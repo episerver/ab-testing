@@ -1,109 +1,137 @@
 ﻿<div class="epi-form-container epi-grid-form dijitContainer">
-    <!-- Button Bar -->
+    <!-- button bar -->
     <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
         <div class="epi-toolbarGroupContainer">
-            <!-- Breadcrumb -->
+            <!-- Empty Leading Toolbar Group -->
             <div class="epi-toolbarGroup epi-toolbarLeading"></div>
+            <!-- Empty Center Toolbar Group -->
             <div class="epi-toolbarGroup epi-toolbarCenter"></div>
-            <!-- Close Button -->
-            <div class="epi-toolbarGroup epi-toolbarTrailing epi-button--bold">
-                <button data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCloseButtonClick" type="button">${resources.pickwinnerview.close_button_text}</button>
+            <!-- Options and Cancel Buttons -->
+            <div class="epi-toolbarGroup epi-toolbarTrailing">
+                <!--Close Button-->
+                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.button_close}</button>
                 &nbsp;
             </div>
         </div>
     </div>
     <hr />
-    <div class="epi-grid epi-grid--limit-width" style="padding-bottom: 5em">
-        <div class="epi-grid__row epi-grid__row--no-border">
-            <div class="epi-grid__col--12">
-                <div class="epi-grid__header">
-                    <hgroup>
-                        <!-- test title -->
-                        <h1 class="dijitInline" data-dojo-attach-point="testTitle"></h1>
-                        <h3>
-                            <span data-dojo-attach-point="scheduleStatusText"></span>
-                        </h3>
-                        <h3>
-                            <span data-dojo-attach-point="isSignificant"></span>
-                        </h3>
-                    </hgroup>
+    <div class="abBody">
+        <!-- Header Test Title and Running Time / Status -->
+        <div class="cardWrapper">
+            <div class="cardBody">
+                <h1 class="objectIcon" data-dojo-attach-point="pageName"></h1>
+                <h2>
+                    <span data-dojo-attach-point="headerStateAndElapsedText"></span>
+                    <span style="color: #777; font-weight: normal;" data-dojo-attach-point="headerStartedText"></span>
+                </h2>
+            </div>
+        </div>
+        <!-- Control/Published Version -->
+        <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column" style="cursor: pointer" data-dojo-attach-event="onclick: _onPublishedVersionClick">
+            <div class="leadingContent" data-dojo-attach-point="publishedStatusIcon"></div>
+            <h3>
+                ${resources.detailsview.content_control_header}
+            </h3>
+            <div class="cardBody" style="padding-bottom: 0;">
+                <div class="versiona"></div>
+                <p class="contentInfo">
+                    <span class="publishedIcon" style="padding-top: 2px">
+                        ${resources.detailsview.published_prefix}
+                    </span>
+                    <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
+                    <span data-dojo-attach-point="datePublished"></span>
+                </p>
+                <!-- Control Statistics -->
+                <table width="100%">
+                    <tr>
+                        <td style="text-align:center;">
+                            <span id="controlPercent" data-dojo-attach-point="publishedVersionPercentage"></span><br>${resources.detailsview.conversion_rate}
+                        </td>
+                        <td style="text-align:center;">
+                            <div id="controlPieChart"></div>
+                        </td>
+                        <td style="text-align:center;">
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedVersionConversions"></span><br>${resources.detailsview.conversions}
+                            </p>
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedVersionViews"></span><br>${resources.detailsview.views}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Challenger/Draft Version-->
+        <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column" style="cursor: pointer" data-dojo-attach-event="onclick: _onVariantVersionClick">
+            <div class="winningContent" data-dojo-attach-point="variantStatusIcon"></div>
+            <h3>
+                ${resources.detailsview.content_challenger_header}
+            </h3>
+            <div class="cardBody" style="padding-bottom: 0;">
+                <div class="versionb"></div>
+                <p class="contentInfo">
+                    <span class="draftIcon" style="padding-top: 2px">${resources.detailsview.draft_prefix}</span>
+                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="savedBy"></span>,
+                    <span style="vertical-align: middle" data-dojo-attach-point="dateSaved"></span>
+                </p>
+                <table width="100%">
+                    <tr>
+                        <td style="text-align: center;">
+                            <span id="challengerPercent" data-dojo-attach-point="variantPercentage"> %</span><br>${resources.detailsview.conversion_rate}
+                        </td>
+                        <td style="text-align:center;">
+                            <div id="challengerPieChart"></div>
+                        </td>
+                        <td style="text-align: center;">
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="variantConversions"></span><br>${resources.detailsview.conversions}
+                            </p>
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="variantViews"></span><br>${resources.detailsview.views}
+                            </p>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Test Information -->
+        <div class="cardWrapper" style="clear: both">
+            <div class="cardBody">
+                <div class="formsRow">
+                    <h4>${resources.detailsview.description_heading}</h4>
+                    <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
+                </div>
+                <div class="formsRow">
+                    <h4>${resources.detailsview.conversion_header}</h4>
+                    <p>
+                        <label>${resources.detailsview.conversion_selector_description}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span><a href="" data-dojo-attach-point="contentLinkAnchor"></a>
+                    </p>
+                </div>
+                <hr>
+                <div class="formsRow">
+                    <h4>${resources.detailsview.percent_participation_header}</h4>
+                    <p>
+                        <strong><span data-dojo-attach-point="visitorPercentageText"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipantsText"></span></strong>
+                    </p>
+                </div>
+                <hr>
+                <div class="formsRow">
+                    <h4>${resources.detailsview.test_duration_header}</h4>
+                    <p>
+                        <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="timeRemaining"> </span></strong> ${resources.detailsview.days_remaining}
+                    </p>
                 </div>
             </div>
         </div>
-
-        <div class="epi-grid__row epi-grid__row--no-border">
-            <div class="epi-grid__col--12">
-                <div class="epi-grid__header epi-pick-winner-text">
-                    <h2 class="dijitInline">
-                        <strong>${resources.pickwinnerview.pick_a_winner_text}</strong>
-                    </h2>
-                </div>
-            </div>
-        </div>
-        <div class="flex-wrapper">
-            <div class="flex-container">
-                <div class="flex-container--wide">
-                    <div class="epi-test-version epi-test-version--1 dijitInline" data-dojo-attach-point="publishedDiv" style="cursor: pointer" data-dojo-attach-event="onclick: _onPublishedVersionClick">
-                        <!-- Attach dojo onclick to publish as winner-->
-                        <h2 data-dojo-attach-point="publishedVersionName"></h2>
-                        <h3 data-dojo-attach-point="publishedVersionContentLink"></h3><br />
-                        <span class="epi-text--small epi-test-version__info">${resources.pickwinnerview.published_prefix} <span class="epi-username" data-dojo-attach-point="publishedByUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="publishedDate"></span></span>
-                        <br />
-                        <div style="position: absolute; bottom: 0; left: 0; padding-bottom: 10px; text-align: center;width:100%">
-                            <h1 style="text-align: center">
-                                <span data-dojo-attach-point="publishedConversionPercent"></span> ${resources.pickwinnerview.conversion_text}
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex-container">
-                <div class="flex-container--wide">
-                    <div class="epi-test-version epi-test-version--2" data-dojo-attach-point="variantDiv" style="cursor: pointer" data-dojo-attach-event="onclick: _onVariantVersionClick">
-                        <!-- Attach dojo onclick to publish as winner-->
-                        <h2 data-dojo-attach-point="variantName"></h2>
-                        <h3 data-dojo-attach-point="variantContentLink"></h3><br />
-                        <span class="epi-text--small epi-test-version__info">${resources.pickwinnerview.draft_prefix} <span class="epi-username" data-dojo-attach-point="editedByUser"></span>, <span class="epi-timestamp" data-dojo-attach-point="savedDate"></span></span>
-                        <br />
-                        <div style="position: absolute; bottom: 0; left: 0; padding-bottom: 10px; text-align: center;width:100%">
-                            <h1 style="text-align: center">
-                                <span data-dojo-attach-point="variantConversionPercent"></span> ${resources.pickwinnerview.conversion_text}
-                            </h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Test Statistics and Information -->
-        <div class="epi-grid__row epi-grid__row--no-border">
-            <div class="epi-grid__col--12">
-                <div class="epi-grid__header">
-                    <h2>${resources.pickwinnerview.purpose_header}</h2>
-                    <p data-dojo-attach-point="descriptionText"></p>
-                </div>
-            </div>
-        </div>
-        <div class="epi-grid__row  epi-grid__row--no-border">
-            <div class="epi-grid__col--12">
-                <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
-                    <li class="epi-form-container__section__row epi-form-container__section__row--full-width test-summary">
-                        <h2 class="dijitInline valign--top" data-dojo-attach-point="participationPercent"></h2> <h3 class="dijitInline">${resources.pickwinnerview.visitors_participated_text}</h3><br>
-                        <h2 class="dijitInline valign--top" data-dojo-attach-point="totalParticipants"></h2> <h3 class="dijitInline">${resources.pickwinnerview.total_participants_text}</h3><br>
-                        <h2 class="dijitInline valign--top" data-dojo-attach-point="testDuration"></h2> <h3 class="dijitInline"><span data-dojo-attach-point="durationText"></span></h3><br>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="epi-grid__row epi-grid__row--no-border">
-            <div class="epi-grid__col--12">
-                <h2>Conversion goal:</h2>
-                <ul class="epi-form-container__section dijitLayoutContainer dijitContainer">
-                    <li class="epi-form-container__section__row epi-form-container__section__row--field  test-summary">
-                        <label style="width:200px" for="navigationPage">${resources.pickwinnerview.visitor_navigates_text}</label>
-                        <span class="dijitInline dijitReset dijitIcon epi-iconPage"></span> <a href="" data-dojo-attach-point="contentLinkAnchor"></a>
-                    </li>
-                </ul>
+        <div class="cardWrapper">
+            <h3>${resources.detailsview.advanced_options_header}</h3>
+            <div class="cardBody" style="padding-top: 4px;">
+                <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
+                <p>
+                    <strong><span data-dojo-attach-point="selectedConfidenceLevel"></span></strong>
+                </p>
             </div>
         </div>
     </div>
