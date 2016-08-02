@@ -217,3 +217,10 @@ hr {
 .viewsAndConversions {
     font-size: 24px;
 }
+
+#controlPieChart,
+#challengerPieChart {
+    margin-right: auto;
+    height: 100px;
+    width: 100px;
+}
