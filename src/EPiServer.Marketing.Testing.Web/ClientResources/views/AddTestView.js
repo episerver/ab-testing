@@ -283,8 +283,7 @@
             //Start and Cancel Events
 
             _onStartButtonClick: function () {
-                var description = dom.byId("testDescription");
-                this.model.testDescription = description.textContent;
+                this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
                 if (startDateSelector.value === "") {
@@ -357,8 +356,10 @@
 
                 if (this._isValidStartDate(event)) {
                     if (event !== "") {
+                        var localDate = new Date(event).toLocaleDateString();
+                        var localTime = new Date(event).toLocaleTimeString();
                         startButton.innerText = resources.addtestview.schedule_test;
-                        scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
+                        scheduleText.innerText = resources.addtestview.schedule_tobegin_on + localDate + "," + localTime;
                         this.model.startDate = new Date(event).toUTCString();
                         this.model.start = false;
                     } else {
