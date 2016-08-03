@@ -60,6 +60,7 @@
         },
 
         startup: function () {
+            this._renderChartData();
         },
 
         _contextChanged: function (newContext) {
@@ -219,14 +220,16 @@
         },
 
         _renderChartData() {
-            dom.byId("controlPieChart").innerHTML = "";
-            dom.byId("challengerPieChart").innerHTML = "";
-            var controlPercentage = this.publishedVersionPercentage.textContent
-                .substr(0, this.publishedVersionPercentage.textContent.length - 1);
-            var challengerPercentage = this.variantPercentage.textContent
-                .substr(0, this.variantPercentage.textContent.length - 1);
-            this._displayPieChart("controlPieChart", Number(controlPercentage));
-            this._displayPieChart("challengerPieChart", Number(challengerPercentage));
+            if (dom.byId("controlPickWinnerPie")) {
+                dom.byId("controlPickWinnerPie").innerHTML = "";
+                dom.byId("challengerPickWinnerPie").innerHTML = "";
+                var controlPercentage = this.publishedVersionPercentage.textContent
+                    .substr(0, this.publishedVersionPercentage.textContent.length - 1);
+                var challengerPercentage = this.variantPercentage.textContent
+                    .substr(0, this.variantPercentage.textContent.length - 1);
+                this._displayPieChart("controlPickWinnerPie", Number(controlPercentage));
+                this._displayPieChart("challengerPickWinnerPie", Number(challengerPercentage));
+            }
         },
 
         _displayPieChart(node, data) {

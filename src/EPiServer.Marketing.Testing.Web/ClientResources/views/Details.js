@@ -208,18 +208,20 @@
             }
         },
 
-        _renderChartData() {
-            dom.byId("controlPieChart").innerHTML = "";
-            dom.byId("challengerPieChart").innerHTML = "";
-            var controlPercentage = this.publishedVersionPercentage.textContent
-                .substr(0, this.publishedVersionPercentage.textContent.length - 1);
-            var challengerPercentage = this.variantPercentage.textContent
-                .substr(0, this.variantPercentage.textContent.length - 1);
-            this._displayPieChart("controlPieChart", Number(controlPercentage));
-            this._displayPieChart("challengerPieChart", Number(challengerPercentage));
+        _renderChartData: function () {
+            if (dom.byId("controlPieChart")) {
+                dom.byId("controlPieChart").innerHTML = "";
+                dom.byId("challengerPieChart").innerHTML = "";
+                var controlPercentage = this.publishedVersionPercentage.textContent
+                    .substr(0, this.publishedVersionPercentage.textContent.length - 1);
+                var challengerPercentage = this.variantPercentage.textContent
+                    .substr(0, this.variantPercentage.textContent.length - 1);
+                this._displayPieChart("controlPieChart", Number(controlPercentage));
+                this._displayPieChart("challengerPieChart", Number(challengerPercentage));
+            }
         },
 
-        _displayPieChart(node, data) {
+        _displayPieChart: function (node, data) {
             var chartNode = dom.byId(node);
             var pieChart = new chart(chartNode);
 
