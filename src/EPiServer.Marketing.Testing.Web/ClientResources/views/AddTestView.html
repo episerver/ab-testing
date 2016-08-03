@@ -192,15 +192,15 @@
                 </button>
             </div>
             <!-- Confidence Level -->
-            <div class="advanced-options__content cardBody" style="display: none">
+            <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none">
                 <div class="cardBody" style="padding-top: 4px;">
                     <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.addtestview.confidence_level_header}</h4>
                     <p>${resources.addtestview.confidence_level_description}</p>
-                    <select name="confidence">
-                        <option>${resources.addtestview.confidence_99}%</option>
-                        <option>${resources.addtestview.confidence_98}</option>
-                        <option selected>${resources.addtestview.confidence_95} ${resources.addtestview.default}</option>
-                        <option>${resources.addtestview.confidence_90}</option>
+                    <select id="confidence">
+                        <option value="99">${resources.addtestview.confidence_99}</option>
+                        <option value="98">${resources.addtestview.confidence_98}</option>
+                        <option value="95" selected>${resources.addtestview.confidence_95} ${resources.addtestview.default}</option>
+                        <option value="90">${resources.addtestview.confidence_90}</option>
                     </select>
                 </div>
             </div>

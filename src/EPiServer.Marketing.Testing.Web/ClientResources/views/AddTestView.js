@@ -127,6 +127,11 @@
                 if (this.scheduleDiv) {
                     this.scheduleDiv.style.visibility = "hidden";
                 }
+
+                if (dom.byId("confidence")) {
+                    dom.byId("confidence").value = "95";
+                }
+
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
@@ -278,15 +283,14 @@
             //Start and Cancel Events
 
             _onStartButtonClick: function () {
-                var description = dom.byId("testDescription");
-                this.model.testDescription = description.value;
+                this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
                 if (startDateSelector.value === "") {
                     this.model.startDate = utcNow;
                 }
 
-                this._getConfidenceLevel();
+                this.model.confidencelevel = dom.byId("confidence").value;
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {
@@ -352,8 +356,10 @@
 
                 if (this._isValidStartDate(event)) {
                     if (event !== "") {
+                        var localDate = new Date(event).toLocaleDateString();
+                        var localTime = new Date(event).toLocaleTimeString();
                         startButton.innerText = resources.addtestview.schedule_test;
-                        scheduleText.innerText = resources.addtestview.schedule_tobegin_on + event;
+                        scheduleText.innerText = resources.addtestview.schedule_tobegin_on + localDate + "," + localTime;
                         this.model.startDate = new Date(event).toUTCString();
                         this.model.start = false;
                     } else {
