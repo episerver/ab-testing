@@ -127,6 +127,11 @@
                 if (this.scheduleDiv) {
                     this.scheduleDiv.style.visibility = "hidden";
                 }
+
+                if (dom.byId("confidence")) {
+                    dom.byId("confidence").value = "95";
+                }
+
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
@@ -279,14 +284,14 @@
 
             _onStartButtonClick: function () {
                 var description = dom.byId("testDescription");
-                this.model.testDescription = description.value;
+                this.model.testDescription = description.textContent;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
                 if (startDateSelector.value === "") {
                     this.model.startDate = utcNow;
                 }
 
-                this._getConfidenceLevel();
+                this.model.confidencelevel = dom.byId("confidence").value;
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {
