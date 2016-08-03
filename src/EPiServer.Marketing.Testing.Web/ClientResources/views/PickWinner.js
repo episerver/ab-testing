@@ -81,7 +81,8 @@
 
         _renderData: function () {
             var publishedVariant, draftVariant;
-
+            this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.topic = this.topic || topic;
             //Header and Test Start Information
             this.pageName.textContent = this.context.data.test.title;
 
