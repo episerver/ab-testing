@@ -152,10 +152,12 @@
             this.variantPercentage.textContent = variantPercent + "%";
 
             //Test description, visitor percentage and total participants
-            this.testDescription.textContent = "\"" +
-                this.context.data.test.description +
-                "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
-
+            if (this.context.data.test.description) {
+                this.testDescription.textContent = "\"" +
+                    this.context.data.test.description +
+                    "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
+            } else this.testDescription.textContent = "";
+            
             this.visitorPercentageText.textContent = this.context.data.visitorPercentage;
             this.totalParticipantsText.textContent = this.context.data.totalParticipantCount;
 
