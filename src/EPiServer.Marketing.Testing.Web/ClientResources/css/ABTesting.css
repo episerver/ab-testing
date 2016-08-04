@@ -219,7 +219,9 @@ hr {
 }
 
 #controlPieChart,
-#challengerPieChart {
+#challengerPieChart,
+#controlPickWinnerPie,
+#challengerPickWinnerPie {
     margin-right: auto;
     height: 100px;
     width: 100px;

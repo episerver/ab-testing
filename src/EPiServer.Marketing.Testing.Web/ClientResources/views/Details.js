@@ -152,9 +152,11 @@
             this.variantPercentage.textContent = variantPercent + "%";
 
             //Test description, visitor percentage and total participants
-            this.testDescription.textContent = "\"" +
-                this.context.data.test.description +
-                "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
+            if (this.context.data.test.description) {
+                this.testDescription.textContent = "\"" +
+                    this.context.data.test.description +
+                    "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
+            } else this.testDescription.textContent = "";
 
             this.visitorPercentageText.textContent = this.context.data.visitorPercentage;
             this.totalParticipantsText.textContent = this.context.data.totalParticipantCount;
@@ -170,12 +172,10 @@
             //whether test is active or complete.
             var statusIndicatorClass = "noIndicator";
 
-            if (this.context.data.test.state === 1) {
+            if (this.context.data.test.state < 2) {
                 statusIndicatorClass = "leadingContent";
             }
-            else if (this.context.data.test.state > 2) {
-                statusIndicatorClass = "winningContent";
-            }
+            else { statusIndicatorClass = "winningContent"; }
 
             if (publishedPercent > variantPercent) {
                 domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
@@ -208,18 +208,20 @@
             }
         },
 
-        _renderChartData() {
-            dom.byId("controlPieChart").innerHTML = "";
-            dom.byId("challengerPieChart").innerHTML = "";
-            var controlPercentage = this.publishedVersionPercentage.textContent
-                .substr(0, this.publishedVersionPercentage.textContent.length - 1);
-            var challengerPercentage = this.variantPercentage.textContent
-                .substr(0, this.variantPercentage.textContent.length - 1);
-            this._displayPieChart("controlPieChart", Number(controlPercentage));
-            this._displayPieChart("challengerPieChart", Number(challengerPercentage));
+        _renderChartData: function () {
+            if (dom.byId("controlPieChart")) {
+                dom.byId("controlPieChart").innerHTML = "";
+                dom.byId("challengerPieChart").innerHTML = "";
+                var controlPercentage = this.publishedVersionPercentage.textContent
+                    .substr(0, this.publishedVersionPercentage.textContent.length - 1);
+                var challengerPercentage = this.variantPercentage.textContent
+                    .substr(0, this.variantPercentage.textContent.length - 1);
+                this._displayPieChart("controlPieChart", Number(controlPercentage));
+                this._displayPieChart("challengerPieChart", Number(challengerPercentage));
+            }
         },
 
-        _displayPieChart(node, data) {
+        _displayPieChart: function (node, data) {
             var chartNode = dom.byId(node);
             var pieChart = new chart(chartNode);
 
