@@ -55,8 +55,6 @@
 
         postCreate: function () {
             this._renderData();
-            this._renderChartData();
-
         },
 
         startup: function () {
@@ -101,7 +99,7 @@
                     " " +
                     username.toUserFriendlyString(this.context.data.test.owner);
 
-            } else if (this.contexxt.data.test.state === 3) {
+            } else if (this.context.data.test.state === 3) {
                 this.headerStateAndElapsedText.textContent = resources.detailsview.test_status_completed;
                 this.headerStartedText.textContent = "";
             }
@@ -162,12 +160,10 @@
             //whether test is active or complete.
             var statusIndicatorClass = "noIndicator";
 
-            if (this.context.data.test.state === 1) {
+            if (this.context.data.test.state < 2) {
                 statusIndicatorClass = "leadingContent";
             }
-            else if (this.context.data.test.state > 2) {
-                statusIndicatorClass = "winningContent";
-            }
+            else { statusIndicatorClass = "winningContent"; }
 
             if (publishedPercent > variantPercent) {
                 domClass.replace(this.publishedStatusIcon, statusIndicatorClass);

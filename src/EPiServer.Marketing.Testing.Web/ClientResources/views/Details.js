@@ -157,7 +157,7 @@
                     this.context.data.test.description +
                     "\" - " + username.toUserFriendlyString(this.context.data.test.owner);
             } else this.testDescription.textContent = "";
-            
+
             this.visitorPercentageText.textContent = this.context.data.visitorPercentage;
             this.totalParticipantsText.textContent = this.context.data.totalParticipantCount;
 
@@ -172,12 +172,10 @@
             //whether test is active or complete.
             var statusIndicatorClass = "noIndicator";
 
-            if (this.context.data.test.state === 1) {
+            if (this.context.data.test.state < 2) {
                 statusIndicatorClass = "leadingContent";
             }
-            else if (this.context.data.test.state > 2) {
-                statusIndicatorClass = "winningContent";
-            }
+            else { statusIndicatorClass = "winningContent"; }
 
             if (publishedPercent > variantPercent) {
                 domClass.replace(this.publishedStatusIcon, statusIndicatorClass);
