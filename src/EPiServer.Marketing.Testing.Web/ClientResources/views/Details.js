@@ -57,6 +57,8 @@
 
         startup: function () {
             this._displayOptionsButton(this.context.data.userHasPublishRights);
+            //make the charts at start up as the dom is not ready for it prior to this on 
+            //the first load.
             uiHelper.displayPieChart("controlPieChart", uiHelper.publishedPercent);
             uiHelper.displayPieChart("challengerPieChart", uiHelper.draftPercent);
         },
@@ -69,6 +71,7 @@
             me.context = newContext;
             uiHelper.initializeHelper(me.context);
             me._renderData();
+            //redraw the charts when the context changes to update the stored dom.
             uiHelper.displayPieChart("controlPieChart", uiHelper.publishedPercent);
             uiHelper.displayPieChart("challengerPieChart", uiHelper.draftPercent);
         },

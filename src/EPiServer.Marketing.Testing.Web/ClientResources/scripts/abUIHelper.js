@@ -5,8 +5,7 @@
 "epi/i18n!marketing-testing/nls/abtesting",
 "epi/datetime",
 "epi/username",
-"dojo/dom-class",
-
+"dojo/dom-class"
 
 ], function (dom, chart, pie, resources, datetime, username, domClass) {
     //"privates"
@@ -44,7 +43,6 @@
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
-
         },
 
         //sets text content of provided node to the context test title
