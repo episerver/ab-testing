@@ -125,30 +125,34 @@
         },
 
         //sets the styling of the control and challnger sections based on their conversion percentages
-        renderStatusIndicatorStyles: function (controlStatusIconNode, challengerStatusIcondNode, controlWrapperNode, challengerWrapperNode) {
+        renderStatusIndicatorStyles: function (controlStatusIconNode, challengerStatusIcondNode, controlWrapperNode, challengerWrapperNode, isPickWinner) {
             var me = this;
+            me.baseWrapper = "cardWrapper";
             if (context.data.test.state < 2) {
                 me.statusIndicatorClass = "leadingContent";
             }
             else { me.statusIndicatorClass = "winningContent"; }
 
+            if (isPickWinner) {
+                me.baseWrapper = "cardWrapperShadowed";
+            }
             if (this.publishedPercent > this.draftPercent) {
                 domClass.replace(controlStatusIconNode, me.statusIndicatorClass);
                 domClass.replace(challengerStatusIcondNode, "noIndicator");
-                domClass.replace(controlWrapperNode, "cardWrapper 2column controlLeaderBody");
-                domClass.replace(challengerWrapperNode, "cardWrapper 2column challengerDefaultBody");
+                domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlLeaderBody");
+                domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerDefaultBody");
             }
             else if (this.publishedPercent < this.draftPercent) {
                 domClass.replace(controlStatusIconNode, "noIndicator");
                 domClass.replace(challengerStatusIcondNode, me.statusIndicatorClass);
-                domClass.replace(controlWrapperNode, "cardWrapper 2column controlTrailingBody");
-                domClass.replace(challengerWrapperNode, "cardWrapper 2column challengerLeaderBody");
+                domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlTrailingBody");
+                domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerLeaderBody");
             }
             else {
                 domClass.replace(controlStatusIconNode, "noIndicator");
                 domClass.replace(challengerStatusIcondNode, "noIndicator");
-                domClass.replace(controlWrapperNode, "cardWrapper 2column controlDefaultBody");
-                domClass.replace(challengerWrapperNode, "cardWrapper 2column challengerDefaultBody");
+                domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlDefaultBody");
+                domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerDefaultBody");
             }
         },
 
@@ -162,6 +166,18 @@
         renderConversion: function (contentLinkAnchorNode) {
             contentLinkAnchorNode.href = context.data.conversionLink;
             contentLinkAnchorNode.textContent = context.data.conversionContentName;
+        },
+
+        renderSignificance: function (significanceNode) {
+            if (context.data.test.state < 2) {
+                significanceNode.innerHTML = "This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.";
+            } else if (context.data.test.state === 2) {
+                if (context.data.test.isSignificant) {
+                    significanceNode.innerHTML = resources.pickwinnerview.result_is_significant;
+                } else {
+                    significanceNode.innerHTML = resources.pickwinnerview.result_is_not_significant;
+                }
+            }
         },
 
         //Checks for an available node and attaches a pie chart widget
