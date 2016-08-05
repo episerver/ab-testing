@@ -19,10 +19,10 @@
         <!-- Header Test Title and Running Time / Status -->
         <div class="cardWrapper">
             <div class="cardBody">
-                <h1 class="objectIcon" data-dojo-attach-point="pageName"></h1>
+                <h1 class="objectIcon" data-dojo-attach-point="titleNode"></h1>
                 <h2>
-                    <span data-dojo-attach-point="headerStateAndElapsedText"></span>
-                    <span style="color: #777; font-weight: normal;" data-dojo-attach-point="headerStartedText"></span>
+                    <span data-dojo-attach-point="testStatusNode"></span>
+                    <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStartedNode"></span>
                 </h2>
             </div>
         </div>
@@ -45,17 +45,17 @@
                 <table width="100%">
                     <tr>
                         <td style="text-align:center;">
-                            <span id="controlPercent" data-dojo-attach-point="publishedVersionPercentage"></span><br>${resources.detailsview.conversion_rate}
+                            <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
                         </td>
                         <td style="text-align:center;">
-                            <div id="controlPickWinnerPie"></div>
+                            <div id="controlPickWinnerPieChart"></div>
                         </td>
                         <td style="text-align:center;">
                             <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="publishedVersionConversions"></span><br>${resources.detailsview.conversions}
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.detailsview.conversions}
                             </p>
                             <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="publishedVersionViews"></span><br>${resources.detailsview.views}
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.detailsview.views}
                             </p>
                         </td>
                     </tr>
@@ -72,23 +72,23 @@
                 <div class="versionb"></div>
                 <p class="contentInfo">
                     <span class="draftIcon" style="padding-top: 2px">${resources.detailsview.draft_prefix}</span>
-                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="savedBy"></span>,
-                    <span style="vertical-align: middle" data-dojo-attach-point="dateSaved"></span>
+                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
+                    <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
                 </p>
                 <table width="100%">
                     <tr>
                         <td style="text-align: center;">
-                            <span id="challengerPercent" data-dojo-attach-point="variantPercentage"> %</span><br>${resources.detailsview.conversion_rate}
+                            <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
                         </td>
                         <td style="text-align:center;">
-                            <div id="challengerPickWinnerPie"></div>
+                            <div id="challengerPickWinnerPieChart"></div>
                         </td>
                         <td style="text-align: center;">
                             <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="variantConversions"></span><br>${resources.detailsview.conversions}
+                                <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.detailsview.conversions}
                             </p>
                             <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="variantViews"></span><br>${resources.detailsview.views}
+                                <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.detailsview.views}
                             </p>
                         </td>
                         <td></td>
@@ -113,14 +113,14 @@
                 <div class="formsRow">
                     <h4>${resources.detailsview.percent_participation_header}</h4>
                     <p>
-                        <strong><span data-dojo-attach-point="visitorPercentageText"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipantsText"></span></strong>
+                        <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
                     </p>
                 </div>
                 <hr>
                 <div class="formsRow">
                     <h4>${resources.detailsview.test_duration_header}</h4>
                     <p>
-                        <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="timeRemaining"> </span></strong> ${resources.detailsview.days_remaining}
+                        <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong> ${resources.detailsview.days_remaining}
                     </p>
                 </div>
             </div>
@@ -130,7 +130,7 @@
             <div class="cardBody" style="padding-top: 4px;">
                 <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
                 <p>
-                    <strong><span data-dojo-attach-point="selectedConfidenceLevel"></span></strong>
+                    <strong><span data-dojo-attach-point="confidence"></span></strong>
                 </p>
             </div>
         </div>
