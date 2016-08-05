@@ -74,10 +74,38 @@ hr {
     margin-bottom: 24px;
 }
 
+.pickWinnerMessage {
+    font-style: italic;
+    font-family: arial;
+    font-size: 16px;
+}
+
 .contentInfo {
     text-align: center;
     padding: 16px 32px;
     font-family: arial;
+}
+
+.cardWrapperShadowed {
+    background-color: white;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    padding: 0;
+    margin-bottom: 12px;
+    box-shadow: 0px 6px 8px 3px #999999;
+    position: relative;
+    overflow: visible;
+}
+
+.cardWrapperShadowed:hover {
+    background-color: white;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    padding: 0;
+    margin-bottom: 12px;
+    box-shadow: 0px 6px 8px 3px #FFFF66;
+    position: relative;
+    overflow: visible;
 }
 
 .controlDefaultBody {

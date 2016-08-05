@@ -99,6 +99,9 @@
         <conversion_text>Conversion</conversion_text>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_text>days duration</duration_text>
+        <early_pick_winner_message>
+          This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.
+        </early_pick_winner_message>
         <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>
