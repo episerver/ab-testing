@@ -168,14 +168,14 @@
             contentLinkAnchorNode.textContent = context.data.conversionContentName;
         },
 
-        renderSignificance: function (significanceNode) {
+        renderSignificance: function (pickAWinnerMessageNode) {
             if (context.data.test.state < 2) {
-                significanceNode.innerHTML = "This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.";
+                pickAWinnerMessageNode.innerHTML = resources.pickwinnerview.early_pick_winner_message;
             } else if (context.data.test.state === 2) {
                 if (context.data.test.isSignificant) {
-                    significanceNode.innerHTML = resources.pickwinnerview.result_is_significant;
+                    pickAWinnerMessageNode.innerHTML = resources.pickwinnerview.result_is_significant;
                 } else {
-                    significanceNode.innerHTML = resources.pickwinnerview.result_is_not_significant;
+                    pickAWinnerMessageNode.innerHTML = resources.pickwinnerview.result_is_not_significant;
                 }
             }
         },
