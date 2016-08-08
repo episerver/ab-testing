@@ -11,7 +11,7 @@
 
 function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
     //"privates"
-    var context, username, domClass;
+    var context, username = userModule, domClass = dojoDomClass;
 
     //used to cacluate the percentages for the control and challenger content.
     function getPercent(visitors, conversions) {
