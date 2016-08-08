@@ -9,7 +9,7 @@
 
 ], function (dom, chart, pie, resources, datetime, userModule, domClass) {
     //"privates"
-    var context, epiUsername;
+    var context, username;
 
     //used to cacluate the percentages for the control and challenger content.
     function getPercent(visitors, conversions) {
@@ -44,7 +44,7 @@
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
 
-            username = mUserModule || userModule;
+           username = mUserModule || userModule;
 
         },
 
@@ -62,7 +62,7 @@
                     datetime.toUserFriendlyString(context.data.test.startDate);
             } else if (context.data.test.state === 1) {
                 testStatusNode
-                    .textContent = resources.detailsview.test_status_running + context.data.daysRemaining + " " + resources.detailsview.days_remaining;
+                    .textContent = resources.detailsview.test_status_running + context.data.daysRemaining + resources.detailsview.days_remaining;
                 testStartedNode.textContent = resources.detailsview.started +
                     datetime.toUserFriendlyString(context.data.test.startDate) +
                     " " +

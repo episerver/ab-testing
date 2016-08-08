@@ -1,19 +1,33 @@
 ﻿define(['marketing-testing/scripts/abUIHelper',
         'epi/_Module'],
+
     function (uiHelper, Module) {
         describe("abUIHelper", function () {
             var context = {
                 data: {
+                    daysElapsed: 4,
+                    daysRemaining: 26,
+                    publishedVersionPublishedBy: "MockPublishedUser",
+                    publishedVersionPublishedDate: "2016-05-01 20:00:00.000",
                     publishedVersionContentLink: "3",
                     test: {
                         title: "Unit Test Title",
                         startDate: "2016-08-03 15:27:50.000",
                         endDate: "2016-09-02 15:27:50.000",
                         state: 0,
-                        variants: []
+                        variants: [],
+                        confidenceLevel: 98,
+                        owner: "MockTestOwner"
                     }
                 }
             };
+
+            var mUserModule = {
+                toUserFriendlyString: function(name) {
+                    return name;
+                }
+            };
+
             context.data.test.variants.push({ itemVersion: "3", conversions: 10, views: 100 });
             context.data.test.variants.push({ itemVersion: "150", conversions: 150, views: 200 });
 
@@ -48,37 +62,70 @@
 
             });
 
-            it("Renders correct status and messaging for a test which is active (state = 1)", function(){
+            it("Renders correct status and messaging for a test which is active (state = 1)", function () {
                 var testContext = context;
-                var mUserModule = {
-                    toUserFriendlyString: function(){ return "MockUser"}
-                };
-                
+
                 var mockStatusElement = { textContent: "MOCK STATUS" };
                 var mockStartedElement = { textContent: "MOCK STARTED" };
                 testContext.data.test.state = 1;
 
-                var now = new Date();
-                var end = new Date(testContext.data.test.endDate);
-                var daysRemaining = Math.ceil(((end - now) / 1000)/(24*60*60));
-
-                uiHelper.initializeHelper(testContext,mUserModule);
+                uiHelper.initializeHelper(testContext, mUserModule);
                 uiHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
-                expect(mockStatusElement.textContent).to.equal("Test is running, "+daysRemaining+" day(s) remaining ");
-                expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
+                expect(mockStatusElement.textContent).to.equal("Test is running, 26 day(s) remaining.");
+                expect(mockStartedElement.textContent).to.equal("started Aug 3, 3:27 PM by MockTestOwner");
 
             });
 
-            it("Renders correct status and messaging for a test which is done (state = 2)");
+            it("Renders correct status and messaging for a test which is done (state = 2)", function () {
+                var testContext = context;
 
-            it("Renders correct daysElapsed based on the context provided");
+                var mockStatusElement = { textContent: "MOCK STATUS" };
+                var mockStartedElement = { textContent: "MOCK STARTED" };
+                testContext.data.test.state = 2;
 
-            it("Renders correct timeRemaining based on the context provided");
+                uiHelper.initializeHelper(testContext, mUserModule);
+                uiHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
-            it("Renders correct confidence based on the context provided");
+                expect(mockStatusElement.textContent).to.equal("Test completed, no go on and pick a winner...");
+                expect(mockStartedElement.textContent).to.equal("");
 
-            it("Renders correct published(control) content information based on the context provided");
+            });
+
+            it("Renders correct daysElapsed based on the context provided", function () {
+                var mockDaysElapsedElement = { textContent: "100" };
+
+                uiHelper.initializeHelper(context);
+                uiHelper.renderTestDuration(mockDaysElapsedElement);
+
+                expect(mockDaysElapsedElement.textContent).to.equal(4);
+            });
+
+            it("Renders correct timeRemaining based on the context provided", function () {
+                var mockDaysRemainingElement = { textContent: "100" };
+
+                uiHelper.initializeHelper(context);
+                uiHelper.renderTestRemaining(mockDaysRemainingElement);
+
+                expect(mockDaysRemainingElement.textContent).to.equal(26);
+            });
+
+            it("Renders correct confidence based on the context provided", function () {
+                var mockConfidenceLevelElement = { textContent: "0" };
+
+                uiHelper.initializeHelper(context);
+                uiHelper.renderConfidence(mockConfidenceLevelElement);
+
+                expect(mockConfidenceLevelElement.textContent).to.equal("98%");
+            });
+
+            it("Renders correct published(control) content information based on the context provided", function () {
+                var mockPublishedElement = { textContent: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
+                    mockDatePublishedElement = { textContent: "ABCDEFGHIJKLMNOPQRSTUVWXYZ" };
+
+                uiHelper.initializeHelper(context, mUserModule);
+                uiHelper.renderPublishedInfo(mockPublishedElement, mockDatePublishedElement);
+            });
 
             it("Renders correct draft(challenger) content information based on the context provided");
 

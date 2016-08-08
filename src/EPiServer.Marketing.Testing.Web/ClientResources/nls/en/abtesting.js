@@ -20,9 +20,11 @@
     detailsview: {
         test_status_running: "Test is running, ",
         days_remaining: " day(s) remaining." ,
-        started: " started ",
+        started: "started ",
         test_status_completed: "Test completed, no go on and pick a winner...",
         test_status_not_started: "Test has not yet started, ",
-        test_scheduled: "It is scheduled to begin "
+        test_scheduled: "It is scheduled to begin ",
+        by: "by"
+
     }
 });
