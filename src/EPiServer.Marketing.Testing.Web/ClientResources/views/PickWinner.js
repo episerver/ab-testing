@@ -52,6 +52,7 @@
         },
 
         postCreate: function () {
+            uiHelper.initializeHelper(this.context);
             this._renderData();
         },
 
@@ -78,8 +79,8 @@
         },
 
         _renderData: function () {
-            uiHelper.renderTitle(this.titleNode);
-            uiHelper.renderTestStatus(this.testStatusNode, this.testStartedNode);
+            uiHelper.renderTitle(this.title);
+            uiHelper.renderTestStatus(this.testStatus, this.testStarted);
             uiHelper.renderTestDuration(this.testDuration);
             uiHelper.renderTestRemaining(this.testRemaining);
             uiHelper.renderConfidence(this.confidence);
@@ -95,9 +96,11 @@
             uiHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
                 this.variantStatusIcon,
                 this.controlWrapper,
-                this.challengerWrapper);
+                this.challengerWrapper,
+                "true");
             uiHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             uiHelper.renderConversion(this.contentLinkAnchor);
+            uiHelper.renderSignificance(this.pickAWinnerMessage);
         },
 
         _onPublishedVersionClick: function () {

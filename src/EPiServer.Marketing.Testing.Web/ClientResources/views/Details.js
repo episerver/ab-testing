@@ -102,8 +102,8 @@
         },
 
         _renderData: function () {
-            uiHelper.renderTitle(this.titleNode);
-            uiHelper.renderTestStatus(this.testStatusNode, this.testStartedNode);
+            uiHelper.renderTitle(this.title);
+            uiHelper.renderTestStatus(this.testStatus, this.testStarted);
             uiHelper.renderTestDuration(this.testDuration);
             uiHelper.renderTestRemaining(this.testRemaining);
             uiHelper.renderConfidence(this.confidence);

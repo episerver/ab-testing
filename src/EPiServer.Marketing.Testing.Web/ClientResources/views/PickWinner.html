@@ -19,12 +19,14 @@
         <!-- Header Test Title and Running Time / Status -->
         <div class="cardWrapper">
             <div class="cardBody">
-                <h1 class="objectIcon" data-dojo-attach-point="titleNode"></h1>
+                <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
                 <h2>
-                    <span data-dojo-attach-point="testStatusNode"></span>
-                    <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStartedNode"></span>
-                </h2>
+                    <span data-dojo-attach-point="testStatus"></span>
+                    <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStarted"></span>
+                </h2><br />
+                <span class="pickWinnerMessage" data-dojo-attach-point="pickAWinnerMessage"></span>
             </div>
+
         </div>
         <!-- Control/Published Version -->
         <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column" style="cursor: pointer" data-dojo-attach-event="onclick: _onPublishedVersionClick">
