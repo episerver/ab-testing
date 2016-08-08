@@ -7,6 +7,13 @@
                     mockResult = {
                         title: "something clever"
                     },
+                    menu = {
+                        providers: {
+                            length: function() {
+                                return 0;
+                            },
+                        },
+                    },
                     store = {
                         get: function (id) {
                             return this;
@@ -23,6 +30,7 @@
                     }
                 }
                 aCommand.store = store;
+                aCommand.menu = menu;
 
                 aCommand._contentActionSupport = {
                     hasAccess: function (accessMask, targetAccess) {
@@ -44,6 +52,13 @@
                     mockResult = {
                         title: null
                     },
+                    menu = {
+                        providers: {
+                            length: function () {
+                                return 0;
+                            },
+                        },
+                    },
                     store = {
                         get: function (id) {
                             return this;
@@ -60,6 +75,7 @@
                     }
                 }
                 aCommand.store = store;
+                aCommand.menu = menu;
                 aCommand._contentActionSupport = {
                     hasAccess: function (accessMask, targetAccess) {
                         return true;
@@ -87,6 +103,13 @@
                         title: "Good Test",
 
                     },
+                    menu = {
+                           providers: {
+                               length: function () {
+                                   return 0;
+                               },
+                           },
+                    },
                     store = {
                         get: function (id) {
                             return this;
@@ -103,6 +126,7 @@
                     }
                 }
                 aCommand.store = store;
+                aCommand.menu = menu;
                 aCommand._contentActionSupport = {
                     hasAccess: function (accessMask, targetAccess) {
                         return false;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EPiServer.Core;
 using EPiServer.DataAccess;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Web.Initializers;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -28,7 +29,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public ContentReference PublishContent(IContent contentToPublish)
         {
-              return _contentRepository.Save(contentToPublish, DataAccess.SaveAction.Publish);
+            PublishContentEventListener.addPublishingContent(contentToPublish);
+            return _contentRepository.Save(contentToPublish, DataAccess.SaveAction.Publish);
         }
     }
 }

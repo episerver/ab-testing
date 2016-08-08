@@ -88,6 +88,7 @@
         <details_link_tooltip>View test details</details_link_tooltip>
         <ongoing_test>This page is part of a running A/B test. </ongoing_test>
         <scheduled_test>An A/B test is scheduled to run on this page </scheduled_test>
+        <version_in_test>A version of this content is part of an ongoing A/B test. </version_in_test>
         <winner_link_text>Pick winner</winner_link_text>
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
       </notificationbar>
@@ -113,6 +114,10 @@
         <visitors_participated_text>of visitors participated</visitors_participated_text>
         <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
       </pickwinnerview>
+      <publishing>
+        <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
+        <error_cannot_schedule_publish>You cannot schedule content to be published while it is being tested. To schedule your content to be published, choose a winner or cancel the current test.</error_cannot_schedule_publish>
+      </publishing>
       <scheduler_plugin>
         <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
         <displayname>Marketing Test Monitor</displayname>
