@@ -7,9 +7,11 @@
 "epi/username",
 "dojo/dom-class"
 
-], function (dom, chart, pie, resources, datetime, userModule, domClass) {
+], 
+
+function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
     //"privates"
-    var context, username;
+    var context, username, domClass;
 
     //used to cacluate the percentages for the control and challenger content.
     function getPercent(visitors, conversions) {
@@ -29,7 +31,7 @@
         draftPercent: null,
 
         //sets the helpers context value as well as initializes calculated variables
-        initializeHelper: function (testContext,mUserModule) {
+        initializeHelper: function (testContext,mModules) {
             context = testContext;
 
             if (context.data.test.variants[0].itemVersion ===
@@ -43,8 +45,10 @@
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
-
-           username = mUserModule || userModule;
+            if (mModules) {
+                username = mModules.username || userModule;
+                domClass = mModules.domClass || dojoDomClass;
+            };
 
         },
 
@@ -128,7 +132,7 @@
         },
 
         //sets the styling of the control and challnger sections based on their conversion percentages
-        renderStatusIndicatorStyles: function (controlStatusIconNode, challengerStatusIcondNode, controlWrapperNode, challengerWrapperNode, isPickWinner) {
+        renderStatusIndicatorStyles: function (controlStatusIconNode, challengerStatusIconNode, controlWrapperNode, challengerWrapperNode, isPickWinner) {
             var me = this;
             me.baseWrapper = "cardWrapper";
             if (context.data.test.state < 2) {
@@ -141,19 +145,19 @@
             }
             if (this.publishedPercent > this.draftPercent) {
                 domClass.replace(controlStatusIconNode, me.statusIndicatorClass);
-                domClass.replace(challengerStatusIcondNode, "noIndicator");
+                domClass.replace(challengerStatusIconNode, "noIndicator");
                 domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlLeaderBody");
                 domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerDefaultBody");
             }
             else if (this.publishedPercent < this.draftPercent) {
                 domClass.replace(controlStatusIconNode, "noIndicator");
-                domClass.replace(challengerStatusIcondNode, me.statusIndicatorClass);
+                domClass.replace(challengerStatusIconNode, me.statusIndicatorClass);
                 domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlTrailingBody");
                 domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerLeaderBody");
             }
             else {
                 domClass.replace(controlStatusIconNode, "noIndicator");
-                domClass.replace(challengerStatusIcondNode, "noIndicator");
+                domClass.replace(challengerStatusIconNode, "noIndicator");
                 domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlDefaultBody");
                 domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerDefaultBody");
             }

@@ -25,6 +25,10 @@
         test_status_not_started: "Test has not yet started, ",
         test_scheduled: "It is scheduled to begin ",
         by: "by"
-
+    },
+    pickwinnerview: {
+        result_is_not_significant:"The results of this test are NOT significant.",
+        result_is_significant: "The results of this test are significant.",
+        early_pick_winner_message:"This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen."
     }
 });
