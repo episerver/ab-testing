@@ -10,6 +10,7 @@
     },
     notificationbar: {
         ongoing_test: 'ongoing',
+        version_in_test: "intest",
         scheduled_test: 'scheduled',
         completed_test: 'complete',
         details_link_text: 'detail link',

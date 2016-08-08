@@ -15,18 +15,20 @@
                         var aTest = {
                             id: "a guid",
                             title: "Test Title",
-                            state: 0
+                            state: 0,
+                            variants : length = 0
                         }
                         callBack(aTest);
                     }
                 };
 
                 aTestNotification._valueSetter(
-                    {
+                {
                         contentData: {
-                            contentGuid: "guid"                             
+                            contentGuid: "guid",
+                            contentLink: "6_168"
                         }
-                    });
+                });
 
                 aRetNotification = aTestNotification.get("notification");
                 expect(aRetNotification.content.innerText).to.have.string(labels.notificationbar.scheduled_test);
@@ -43,7 +45,8 @@
                         var aTest = {
                             id: "a guid",
                             title: "Test Title",
-                            state: 1
+                            state: 1,
+                            variants : length = 0
                         }
                         callBack(aTest);
                     }
@@ -52,12 +55,13 @@
                 aTestNotification._valueSetter(
                     {
                         contentData: {
-                            contentGuid: "guid"
+                            contentGuid: "guid",
+                            contentLink: "6_168"
                         }
                     });
 
                 aRetNotification = aTestNotification.get("notification");
-                expect(aRetNotification.content.innerText).to.have.string(labels.notificationbar.ongoing_test);
+                expect(aRetNotification.content.innerText).to.have.string(labels.notificationbar.version_in_test);
             });
 
             it("sets a notification when a test is done, but a winner is not picked on the content", function () {
@@ -71,7 +75,8 @@
                         var aTest = {
                             id: "a guid",
                             title: "Test Title",
-                            state: 2
+                            state: 2,
+                            variants: length = 0
                         }
                         callBack(aTest);
                     }
@@ -80,7 +85,8 @@
                 aTestNotification._valueSetter(
                     {
                         contentData: {
-                            contentGuid: "guid"
+                            contentGuid: "guid",
+                            contentLink: "6_168"
                         }
                     });
 
@@ -108,7 +114,8 @@
                         var aTest = {
                             id: "a guid",
                             title: "Test Title",
-                            state: 2
+                            state: 2,
+                            variants: length = 0
                         }
                         callBack(aTest);
                     }
@@ -118,7 +125,8 @@
                     {
                         contentData: {
                             contentGuid: "guid",
-                            accessMask: "denied"
+                            accessMask: "denied",
+                            contentLink: "6_168"
                         }
                     });
 
