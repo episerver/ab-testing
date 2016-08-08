@@ -48,24 +48,27 @@
 
             });
 
-            it("Renders correct status and messaging for a test which is active (state = 1)");
-            //    var testContext = context;
+            it("Renders correct status and messaging for a test which is active (state = 1)", function(){
+                var testContext = context;
+                var mUserModule = {
+                    toUserFriendlyString: function(){ return "MockUser"}
+                };
                 
-            //    var mockStatusElement = { textContent: "MOCK STATUS" };
-            //    var mockStartedElement = { textContent: "MOCK STARTED" };
-            //    testContext.data.test.state = 1;
+                var mockStatusElement = { textContent: "MOCK STATUS" };
+                var mockStartedElement = { textContent: "MOCK STARTED" };
+                testContext.data.test.state = 1;
 
-            //    var now = new Date();
-            //    var end = new Date(testContext.data.test.endDate);
-            //    var daysRemaining = Math.ceil(((end - now) / 1000)/(24*60*60));
+                var now = new Date();
+                var end = new Date(testContext.data.test.endDate);
+                var daysRemaining = Math.ceil(((end - now) / 1000)/(24*60*60));
 
-            //    uiHelper.initializeHelper(testContext);
-            //    uiHelper.renderTestStatus(mockStatusElement, mockStartedElement);
+                uiHelper.initializeHelper(testContext,mUserModule);
+                uiHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
-            //    expect(mockStatusElement.textContent).to.equal("Test is running, "+daysRemaining+" day(s) remaining ");
-            //    expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
+                expect(mockStatusElement.textContent).to.equal("Test is running, "+daysRemaining+" day(s) remaining ");
+                expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
 
-            //});
+            });
 
             it("Renders correct status and messaging for a test which is done (state = 2)");
 

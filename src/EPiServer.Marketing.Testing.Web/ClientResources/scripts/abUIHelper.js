@@ -7,9 +7,9 @@
 "epi/username",
 "dojo/dom-class"
 
-], function (dom, chart, pie, resources, datetime, username, domClass) {
+], function (dom, chart, pie, resources, datetime, userModule, domClass) {
     //"privates"
-    var context;
+    var context, epiUsername;
 
     //used to cacluate the percentages for the control and challenger content.
     function getPercent(visitors, conversions) {
@@ -29,7 +29,7 @@
         draftPercent: null,
 
         //sets the helpers context value as well as initializes calculated variables
-        initializeHelper: function (testContext) {
+        initializeHelper: function (testContext,mUserModule) {
             context = testContext;
 
             if (context.data.test.variants[0].itemVersion ===
@@ -43,6 +43,9 @@
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
+
+            username = mUserModule || userModule;
+
         },
 
         //sets text content of provided node to the context test title
