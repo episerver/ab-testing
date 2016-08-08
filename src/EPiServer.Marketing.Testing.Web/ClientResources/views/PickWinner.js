@@ -79,6 +79,9 @@
         },
 
         _renderData: function () {
+            this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.topic = this.topic || topic;
+
             uiHelper.renderTitle(this.title);
             uiHelper.renderTestStatus(this.testStatus, this.testStarted);
             uiHelper.renderTestDuration(this.testDuration);
