@@ -12,7 +12,7 @@
  "epi/i18n!marketing-testing/nls/abtesting",
  "epi/datetime",
  "epi/username",
- "../scripts/abUIHelper",
+ "../scripts/abTestTextHelper",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
@@ -34,7 +34,7 @@
     resources,
     datetime,
     username,
-    uiHelper
+    textHelper
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -51,7 +51,7 @@
         },
 
         postCreate: function () {
-            uiHelper.initializeHelper(this.context);
+            textHelper.initializeHelper(this.context, resources.detailsview);
             this._renderData();
         },
 
@@ -59,8 +59,8 @@
             this._displayOptionsButton(this.context.data.userHasPublishRights);
             //make the charts at start up as the dom is not ready for it prior to this on 
             //the first load.
-            uiHelper.displayPieChart("controlPieChart", uiHelper.publishedPercent);
-            uiHelper.displayPieChart("challengerPieChart", uiHelper.draftPercent);
+            textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
         },
 
         _contextChanged: function (newContext) {
@@ -69,11 +69,11 @@
                 return;
             }
             me.context = newContext;
-            uiHelper.initializeHelper(me.context);
+            textHelper.initializeHelper(me.context, resources.detailsview);
             me._renderData();
             //redraw the charts when the context changes to update the stored dom.
-            uiHelper.displayPieChart("controlPieChart", uiHelper.publishedPercent);
-            uiHelper.displayPieChart("challengerPieChart", uiHelper.draftPercent);
+            textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
         },
 
         _onPickWinnerOptionClicked: function () {
@@ -102,26 +102,26 @@
         },
 
         _renderData: function () {
-            uiHelper.renderTitle(this.title);
-            uiHelper.renderTestStatus(this.testStatus, this.testStarted);
-            uiHelper.renderTestDuration(this.testDuration);
-            uiHelper.renderTestRemaining(this.testRemaining);
-            uiHelper.renderConfidence(this.confidence);
-            uiHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
-            uiHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            uiHelper.renderPublishedViewsAndConversions(this.publishedConversions,
+            textHelper.renderTitle(this.title);
+            textHelper.renderTestStatus(this.testStatus, this.testStarted);
+            textHelper.renderTestDuration(this.testDuration);
+            textHelper.renderTestRemaining(this.testRemaining);
+            textHelper.renderConfidence(this.confidence);
+            textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
+            textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
+            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
                 this.publishedViews,
                 this.publishedConversionPercent);
-            uiHelper.renderDraftViewsAndConversions(this.challengerConversions,
+            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
                 this.challengerViews,
                 this.challengerConversionPercent);
-            uiHelper.renderDescription(this.testDescription);
-            uiHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
+            textHelper.renderDescription(this.testDescription);
+            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
                 this.variantStatusIcon,
                 this.controlWrapper,
                 this.challengerWrapper);
-            uiHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            uiHelper.renderConversion(this.contentLinkAnchor);
+            textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
+            textHelper.renderConversion(this.contentLinkAnchor);
         },
 
         _displayOptionsButton: function (show) {

@@ -13,7 +13,7 @@
  "epi/datetime",
  "epi/username",
  "dojo/dom-class",
- "../scripts/abUIHelper",
+ "../scripts/abTestTextHelper",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
@@ -36,7 +36,7 @@
     datetime,
     username,
     domClass,
-    uiHelper
+    textHelper
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -52,13 +52,13 @@
         },
 
         postCreate: function () {
-            uiHelper.initializeHelper(this.context);
+            textHelper.initializeHelper(this.context, resources.pickwinnerview);
             this._renderData();
         },
 
         startup: function () {
-            uiHelper.displayPieChart("controlPickWinnerPieChart", uiHelper.publishedPercent);
-            uiHelper.displayPieChart("challengerPickWinnerPieChart", uiHelper.draftPercent);
+            textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
         },
 
         _contextChanged: function (newContext) {
@@ -68,8 +68,8 @@
             }
             me.context = newContext;
             me._renderData();
-            uiHelper.displayPieChart("controlPickWinnerPie", uiHelper.publishedPercent);
-            uiHelper.displayPieChart("challengerPickWinnerPie", uiHelper.draftPercent);
+            textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
         },
 
         _onCancelClick: function () {
@@ -82,28 +82,28 @@
             this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
 
-            uiHelper.renderTitle(this.title);
-            uiHelper.renderTestStatus(this.testStatus, this.testStarted);
-            uiHelper.renderTestDuration(this.testDuration);
-            uiHelper.renderTestRemaining(this.testRemaining);
-            uiHelper.renderConfidence(this.confidence);
-            uiHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
-            uiHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            uiHelper.renderPublishedViewsAndConversions(this.publishedConversions,
+            textHelper.renderTitle(this.title);
+            textHelper.renderTestStatus(this.testStatus, this.testStarted);
+            textHelper.renderTestDuration(this.testDuration);
+            textHelper.renderTestRemaining(this.testRemaining);
+            textHelper.renderConfidence(this.confidence);
+            textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
+            textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
+            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
                 this.publishedViews,
                 this.publishedConversionPercent);
-            uiHelper.renderDraftViewsAndConversions(this.challengerConversions,
+            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
                 this.challengerViews,
                 this.challengerConversionPercent);
-            uiHelper.renderDescription(this.testDescription);
-            uiHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
+            textHelper.renderDescription(this.testDescription);
+            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
                 this.variantStatusIcon,
                 this.controlWrapper,
                 this.challengerWrapper,
                 "true");
-            uiHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            uiHelper.renderConversion(this.contentLinkAnchor);
-            uiHelper.renderSignificance(this.pickAWinnerMessage);
+            textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
+            textHelper.renderConversion(this.contentLinkAnchor);
+            textHelper.renderSignificance(this.pickAWinnerMessage);
         },
 
         _onPublishedVersionClick: function () {
