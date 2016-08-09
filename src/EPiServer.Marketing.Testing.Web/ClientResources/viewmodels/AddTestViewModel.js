@@ -92,7 +92,7 @@ define([
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
-                publishedVersion: published[1],
+                publishedVersion: published[0],
                 variantVersion: draft[1],
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,
