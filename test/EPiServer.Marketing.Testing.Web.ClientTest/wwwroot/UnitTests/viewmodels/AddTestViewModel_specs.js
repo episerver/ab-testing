@@ -110,7 +110,7 @@
 
                 expect(me.retTest.testDescription).to.equal(aViewModel.testDescription);
                 expect(me.retTest.testContentId).to.equal(aContentData.contentGuid);
-                expect(me.retTest.publishedVersion).to.equal(aVersionString);
+                expect(me.retTest.publishedVersion).to.equal(aPrefixString);
                 expect(me.retTest.variantVersion).to.equal(aDraftVersionString);
                 expect(me.retTest.testDuration).to.equal(aViewModel.testDuration);
                 expect(me.retTest.participationPercent).to.equal(aViewModel.participationPercent);
