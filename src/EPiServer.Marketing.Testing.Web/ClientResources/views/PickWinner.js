@@ -67,6 +67,8 @@
                 return;
             }
             me.context = newContext;
+            textHelper.initializeHelper(this.context, resources.pickwinnerview);
+
             me._renderData();
             textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
             textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
