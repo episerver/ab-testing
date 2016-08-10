@@ -222,7 +222,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult CreateABTest(TestPagesCreateTestViewModel multivariateTestData)
         {
             ApiTestingRepository testLib = new ApiTestingRepository();
-            TestManager mtm = new TestManager();
+            ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             if (ModelState.IsValid)
             {
                 Guid savedTestId = testLib.CreateAbTest(multivariateTestData);
@@ -236,8 +236,8 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         [HttpGet]
         public ActionResult UpdateAbTest(string id)
         {
-            TestManager mtm = new TestManager();
-            ABTest multivariateTest = mtm.Get(Guid.Parse(id)) as ABTest;
+            ITestManager testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+            ABTest multivariateTest = testManager.Get(Guid.Parse(id)) as ABTest;
 
             return View("CreateAbTest", multivariateTest);
         }
@@ -246,7 +246,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateAbTest(ABTest dataToSave)
         {
             ApiTestingRepository testLib = new ApiTestingRepository();
-            TestManager mtm = new TestManager();
+            ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             if (ModelState.IsValid)
             {
                 var test = new TestPagesCreateTestViewModel() { Test = dataToSave };
@@ -260,7 +260,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
         public ActionResult GetAbTestById(string id)
         {
-            TestManager mtm = new TestManager();
+            ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             ABTest returnedTest = mtm.Get(Guid.Parse(id)) as ABTest;
 
             return View("TestDetails", returnedTest);
@@ -290,7 +290,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
         public ActionResult DeleteAbTest(Guid id)
         {
-            TestManager mtm = new TestManager();
+            ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             mtm.Delete(id);
 
             return RedirectToAction("Index");
@@ -328,18 +328,9 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
-        //public ActionResult ArchiveAbTest(string id)
-        //{
-        //    //TestManager mtm = new TestManager();
-        //    //mtm.Archive(Guid.Parse(id));
-        //    //var multivariateTest = mtm.Get(Guid.Parse(id));
-
-        //    //return View("TestDetails", multivariateTest);
-        //}
-
         public ActionResult UpdateView(string id, string itemid)
         {
-            TestManager mtm = new TestManager();
+            ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
@@ -348,7 +339,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
         public ActionResult UpdateConversion(string id, string itemid)
         {
-            TestManager mtm = new TestManager();
+            ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
@@ -413,10 +404,9 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
 
         public ActionResult ViewMarketingTestCacheData()
         {
-            TestManager tm = new TestManager();
+            ITestManager tm = ServiceLocator.Current.GetInstance<ITestManager>();
             CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
-            cacheTestingViewModel.ActiveTestCache = new List<IMarketingTest>();
-            cacheTestingViewModel.ActiveTestCache = tm.ActiveCachedTests;
+            cacheTestingViewModel.ActiveTestCache = (tm as TestManager).ActiveCachedTests;
             cacheTestingViewModel.CachedVersionPageData = new List<PageData>();
             MemoryCache memCache = MemoryCache.Default;
             List<string> cachedKeys =
