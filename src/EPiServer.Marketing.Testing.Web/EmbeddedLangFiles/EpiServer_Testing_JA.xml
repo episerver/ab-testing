@@ -65,18 +65,18 @@
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <days_divider> days / </days_divider>
-        <days_remaining> day(s) remaining.</days_remaining>
+        <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
-        <started> started </started>
+        <started> Started </started>
         <test_duration_header>Duration of the A/B test</test_duration_header>
         <test_not_started_text>This test has not yet started.</test_not_started_text>
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test completed, no go on and pick a winner...</test_status_completed>
+        <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
         <test_status_not_started>Test has not yet started, </test_status_not_started>
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
@@ -93,29 +93,40 @@
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
       </notificationbar>
       <pickwinnerview>
-        <abort_option_text>Abort</abort_option_text>
-        <close_button_text>Close</close_button_text>
-        <completed_text>Completed </completed_text>
-        <conversion_goal_header>Conversion goal:</conversion_goal_header>
-        <conversion_text>Conversion</conversion_text>
+        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
+        <advanced_options_header>Advanced Options</advanced_options_header>
+        <button_close>Close</button_close>
+        <by> by </by>
+        <content_challenger_header>B / Challenger</content_challenger_header>
+        <content_control_header>A / Control</content_control_header>
+        <conversions>conversions</conversions>
+        <conversion_header>Conversion goal</conversion_header>
+        <conversion_rate>conversion rate</conversion_rate>
+        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <days_divider> days / </days_divider>
+        <days_remaining>day(s) remaining.</days_remaining>
+        <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
-        <duration_text>days duration</duration_text>
         <early_pick_winner_message>
           This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.
         </early_pick_winner_message>
+        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>
-        <purpose_header>Purpose of the A/B Test:</purpose_header>
+        <remaining_increment>Days</remaining_increment>
         <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
         <result_is_significant>The results of this test are significant.</result_is_significant>
-        <started_by_text>Started by </started_by_text>
-        <test_not_started>This test has not yet started.</test_not_started>
-        <test_scheduled>It is scheduled to start </test_scheduled>
-        <test_scheduled_finish>It is scheduled to finish </test_scheduled_finish>
-        <total_participants_text>test participants</total_participants_text>
-        <visitors_participated_text>of visitors participated</visitors_participated_text>
-        <visitor_navigates_text>Visitor navigates to page</visitor_navigates_text>
+        <started> Started </started>
+        <test_duration_header>Duration of the A/B test</test_duration_header>
+        <test_not_started_text>This test has not yet started.</test_not_started_text>
+        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
+        <test_scheduled>It is scheduled to begin </test_scheduled>
+        <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
+        <test_status_not_started>Test has not yet started, </test_status_not_started>
+        <test_status_running>Test is running, </test_status_running>
+        <total_participants_details>Current number of test participants:</total_participants_details>
+        <views>views</views>
       </pickwinnerview>
       <publishing>
         <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
