@@ -30,6 +30,16 @@ namespace EPiServer.Marketing.Testing.Web
             _testDataCookieHelper = new TestDataCookieHelper();
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
+            _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+
+            // init our processed contentlist
+            ProcessedContentList = new Dictionary<Guid, int>();
+
+            // Setup our content events
+            var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
+            contentEvents.LoadedContent += LoadedContent;
+            contentEvents.DeletedContent += ContentEventsOnDeletedContent;
+            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
         }
 
         //To support unit testing
@@ -40,17 +50,6 @@ namespace EPiServer.Marketing.Testing.Web
             _testManager = testManager;
             _contextHelper = contextHelper;
             _logger = logger;
-        }
-
-        [ExcludeFromCodeCoverage]
-        public void Initialize()
-        {
-            _testManager = new TestManager();
-            ProcessedContentList = new Dictionary<Guid, int>();
-            var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
-            contentEvents.LoadedContent += LoadedContent;
-            contentEvents.DeletedContent += ContentEventsOnDeletedContent;
-            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
         }
 
         /// <summary>
