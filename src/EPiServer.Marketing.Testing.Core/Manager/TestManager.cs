@@ -29,15 +29,15 @@ namespace EPiServer.Marketing.Testing
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private Random _randomParticiaption = new Random();
-        private MemoryCache _testCache = MemoryCache.Default;
-        private MemoryCache _variantCache = MemoryCache.Default;
+        private ObjectCache _testCache = MemoryCache.Default;
+        private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
 
         public event EventHandler<TestEventArgs> SavingTestEvent;
 
         public List<IMarketingTest> ActiveCachedTests
         {
-            get { return MemoryCache.Default.Get(TestingCacheName) as List<IMarketingTest>; }
+            get { return _testCache.Get(TestingCacheName) as List<IMarketingTest>; }
         }
 
         [ExcludeFromCodeCoverage]
@@ -61,18 +61,21 @@ namespace EPiServer.Marketing.Testing
 
         private void initCache()
         {
-            var activeTestCriteria = new TestCriteria();
-            var activeTestStateFilter = new ABTestFilter()
+            if (!_testCache.Contains(TestingCacheName))
             {
-                Property = ABTestProperty.State,
-                Operator = FilterOperator.And,
-                Value = TestState.Active
-            };
+                var activeTestCriteria = new TestCriteria();
+                var activeTestStateFilter = new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                };
 
-            activeTestCriteria.AddFilter(activeTestStateFilter);
+                activeTestCriteria.AddFilter(activeTestStateFilter);
 
-            var tests = GetTestList(activeTestCriteria);
-            _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+                var tests = GetTestList(activeTestCriteria);
+                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+            }
         }
 
         /// <summary>
