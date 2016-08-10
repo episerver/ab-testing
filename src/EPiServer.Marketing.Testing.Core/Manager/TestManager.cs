@@ -306,15 +306,9 @@ namespace EPiServer.Marketing.Testing
                     if (cachedTests.Contains(test))
                     {
                         cachedTests.Remove(test);
-
-                        if (cachedTests.Count == 0)
-                        {
-                            _testCache.Remove(TestingCacheName);
-                        }
                     }
                     break;
             }
-            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
         internal void RemoveCachedVariant(Guid contentGuid)
