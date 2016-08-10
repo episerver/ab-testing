@@ -12,7 +12,7 @@
  "epi/i18n!marketing-testing/nls/abtesting",
  "epi/datetime",
  "epi/username",
- "../scripts/abTestTextHelper",
+ "marketing-testing/scripts/abTestTextHelper",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",

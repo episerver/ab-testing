@@ -13,7 +13,7 @@
  "epi/datetime",
  "epi/username",
  "dojo/dom-class",
- "../scripts/abTestTextHelper",
+ "marketing-testing/scripts/abTestTextHelper",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
