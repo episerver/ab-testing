@@ -2,16 +2,15 @@
 "dojo/dom",
 "dojox/charting/Chart",
 "dojox/charting/plot2d/Pie",
-"epi/i18n!marketing-testing/nls/abtesting",
 "epi/datetime",
 "epi/username",
 "dojo/dom-class"
 
 ], 
 
-function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
+function (dom, chart, pie, datetime, userModule, dojoDomClass) {
     //"privates"
-    var context, username = userModule, domClass = dojoDomClass;
+    var context, resources, username = userModule, domClass = dojoDomClass;
 
     //used to cacluate the percentages for the control and challenger content.
     function getPercent(visitors, conversions) {
@@ -23,7 +22,6 @@ function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
     };
 
     return {
-        resources: resources,
 
         publishedVariant: null,
         draftVariant: null,
@@ -31,7 +29,7 @@ function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
         draftPercent: null,
 
         //sets the helpers context value as well as initializes calculated variables
-        initializeHelper: function (testContext,mModules) {
+        initializeHelper: function (testContext,stringResources,mModules) {
             context = testContext;
 
             if (context.data.test.variants[0].itemVersion ===
@@ -45,9 +43,13 @@ function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
+            if (stringResources) {
+                resources = stringResources;
+            }
+
             if (mModules) {
-                username = mModules.username || userModule;
-                domClass = mModules.domClass || dojoDomClass;
+                username = mModules.username;
+                domClass = mModules.domClass;
             };
 
         },
@@ -61,21 +63,21 @@ function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
         //state of the context test
         renderTestStatus: function (testStatusNode, testStartedNode) {
             if (context.data.test.state === 0) {
-                testStatusNode.textContent = resources.detailsview.test_status_not_started;
-                testStartedNode.textContent = resources.detailsview.test_scheduled +
+                testStatusNode.textContent = resources.test_status_not_started;
+                testStartedNode.textContent = resources.test_scheduled +
                     datetime.toUserFriendlyString(context.data.test.startDate);
             } else if (context.data.test.state === 1) {
                 testStatusNode
-                    .textContent = resources.detailsview.test_status_running + context.data.daysRemaining + resources.detailsview.days_remaining;
-                testStartedNode.textContent = resources.detailsview.started +
+                    .textContent = resources.test_status_running + context.data.daysRemaining +" "+resources.days_remaining;
+                testStartedNode.textContent = resources.started +
                     datetime.toUserFriendlyString(context.data.test.startDate) +
                     " " +
-                    resources.detailsview.by +
+                    resources.by +
                     " " +
                     username.toUserFriendlyString(context.data.test.owner);
 
             } else {
-                testStatusNode.textContent = resources.detailsview.test_status_completed;
+                testStatusNode.textContent = resources.test_status_completed;
                 testStartedNode.textContent = "";
             }
         },
@@ -177,12 +179,12 @@ function (dom, chart, pie, resources, datetime, userModule, dojoDomClass) {
 
         renderSignificance: function (pickAWinnerMessageNode) {
             if (context.data.test.state < 2) {
-                pickAWinnerMessageNode.innerHTML = resources.pickwinnerview.early_pick_winner_message;
+                pickAWinnerMessageNode.innerHTML = resources.early_pick_winner_message;
             } else if (context.data.test.state === 2) {
                 if (context.data.test.isSignificant) {
-                    pickAWinnerMessageNode.innerHTML = resources.pickwinnerview.result_is_significant;
+                    pickAWinnerMessageNode.innerHTML = resources.result_is_significant;
                 } else {
-                    pickAWinnerMessageNode.innerHTML = resources.pickwinnerview.result_is_not_significant;
+                    pickAWinnerMessageNode.innerHTML = resources.result_is_not_significant;
                 }
             }
         },
