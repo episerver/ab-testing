@@ -8,7 +8,7 @@
  "dijit/_WidgetBase",
  "dijit/_TemplatedMixin",
  "dijit/_WidgetsInTemplateMixin",
- "dojo/text!marketing-testing/views/PickWinner.html",
+ "dojo/text!marketing-testing/views/Archive.html",
  "epi/i18n!marketing-testing/nls/abtesting",
  "epi/datetime",
  "epi/username",
@@ -57,8 +57,8 @@
         },
 
         startup: function () {
-            textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
         },
 
         _contextChanged: function (newContext) {
@@ -70,8 +70,8 @@
             textHelper.initializeHelper(this.context, resources.pickwinnerview);
 
             me._renderData();
-            textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
+            textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
         },
 
         _onCancelClick: function () {
@@ -101,45 +101,10 @@
             textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
                 this.variantStatusIcon,
                 this.controlWrapper,
-                this.challengerWrapper,
-                "true");
+                this.challengerWrapper);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
             textHelper.renderSignificance(this.pickAWinnerMessage);
-        },
-
-        _onPublishedVersionClick: function () {
-            this.store.put({
-                publishedContentLink: this.context.data.publishedVersionContentLink,
-                draftContentLink: this.context.data.draftVersionContentLink,
-                winningContentLink: this.context.data.publishedVersionContentLink,
-                testId: this.context.data.test.id
-            }, { id: this.context.data.test.id }, { "options.incremental": false })  // Force a put
-                    .then(function (data) {
-                        var contextParameters = {
-                            uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/Archive"
-                        };
-                        topic.publish("/epi/shell/context/request", contextParameters);                        
-                    }).otherwise(function () {
-                        alert("Error Processing Winner: Unable to process and save selected version");
-                        console.log("Error occurred while processing winning content");
-                    });
-        },
-
-        _onVariantVersionClick: function () {
-            this.store.put({
-                publishedContentLink: this.context.data.publishedVersionContentLink,
-                draftContentLink: this.context.data.draftVersionContentLink,
-                winningContentLink: this.context.data.draftVersionContentLink,
-                testId: this.context.data.test.id
-            }, { id: this.context.data.test.id }, { "options.incremental": false }) // Force a put
-                .then(function (data) {
-                    var contextParameters = { uri: "epi.cms.contentdata:///" + data };
-                    topic.publish("/epi/shell/context/request", contextParameters);
-                }).otherwise(function () {
-                    alert("Error Processing Winner: Unable to process and save selected version");
-                    console.log("Error occurred while processing winning content");
-                });
         }
     });
 });
