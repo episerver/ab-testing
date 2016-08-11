@@ -115,11 +115,9 @@
                 winningContentLink: this.context.data.publishedVersionContentLink,
                 testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false })  // Force a put
-                    .then(function (data) {
-                        var contextParameters = {
-                            uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/Archive"
-                        };
-                        topic.publish("/epi/shell/context/request", contextParameters);                        
+                    .then(function (testId) {
+                        var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
+                        topic.publish("/epi/shell/context/request", contextParameters);
                     }).otherwise(function () {
                         alert("Error Processing Winner: Unable to process and save selected version");
                         console.log("Error occurred while processing winning content");
