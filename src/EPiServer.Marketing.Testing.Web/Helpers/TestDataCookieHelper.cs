@@ -7,6 +7,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -18,7 +19,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         [ExcludeFromCodeCoverage]
         public TestDataCookieHelper()
         {
-            _testManager = new TestManager();
+            _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
         }
 
         /// <summary>
