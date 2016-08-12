@@ -407,13 +407,13 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             ITestManager tm = ServiceLocator.Current.GetInstance<ITestManager>();
             CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
             cacheTestingViewModel.ActiveTestCache = (tm as TestManager).ActiveCachedTests;
-            cacheTestingViewModel.CachedVersionPageData = new List<PageData>();
+            cacheTestingViewModel.CachedVersionPageData = new List<IContent>();
             MemoryCache memCache = MemoryCache.Default;
             List<string> cachedKeys =
                 memCache.Select(x => x.Key).Where(x => x.Contains("epi") && !x.ToLower().Contains("episerver")).ToList();
             foreach (string item in cachedKeys)
             {
-                cacheTestingViewModel.CachedVersionPageData.Add(memCache.Get(item) as PageData);
+                cacheTestingViewModel.CachedVersionPageData.Add(memCache.Get(item) as IContent);
             }
 
             return View(cacheTestingViewModel);

@@ -143,7 +143,20 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     EvaluateKpis(e);
 
+                    // get the test from the cache
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
+                    if( activeTest != null )
+                    {
+                        // When TargetLink is null and the content is of type PageData we can skip the processing.
+                        // For an abtest that is blockdata (and probably other formes of content data on a page)
+                        // we need to process each time the loadcontent method is called because TargetLink is always null 
+                        // example. for blocks, TargetLink is always null
+                        if (e.TargetLink == null && (e.Content is PageData) )
+                        {
+                            return;
+                        }
+                    }
+
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                     var hasData = _testDataCookieHelper.HasTestData(testCookieData);
 
