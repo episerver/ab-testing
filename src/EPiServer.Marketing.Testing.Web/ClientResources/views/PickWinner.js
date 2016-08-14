@@ -98,14 +98,10 @@
                 this.challengerViews,
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
-            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
-                this.variantStatusIcon,
-                this.controlWrapper,
-                this.challengerWrapper,
-                "true");
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
             textHelper.renderSignificance(this.pickAWinnerMessage);
+            this.renderStatusIndicatorStyles();
         },
 
         _onPublishedVersionClick: function () {
@@ -131,13 +127,41 @@
                 winningContentLink: this.context.data.draftVersionContentLink,
                 testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false }) // Force a put
-                .then(function (data) {
-                    var contextParameters = { uri: "epi.cms.contentdata:///" + data };
+                .then(function (testId) {
+                    var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
                     topic.publish("/epi/shell/context/request", contextParameters);
                 }).otherwise(function () {
                     alert("Error Processing Winner: Unable to process and save selected version");
                     console.log("Error occurred while processing winning content");
                 });
+        },
+
+        renderStatusIndicatorStyles: function () {
+            var me = this;
+            me.baseWrapper = "cardWrapperShadowed";
+            if (this.context.data.test.state < 2) {
+                me.statusIndicatorClass = "leadingContent";
+            }
+            else { me.statusIndicatorClass = "winningContent"; }
+
+            if (this.publishedPercent > this.draftPercent) {
+                domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+            }
+            else if (this.publishedPercent < this.draftPercent) {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
+            }
+            else {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+            }
         }
     });
 });
