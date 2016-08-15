@@ -72,9 +72,9 @@
             textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
         },
 
-        _onCancelClick: function () {
+        _onCloseClick: function () {
             var me = this;
-            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
@@ -98,7 +98,6 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
-            textHelper.renderSignificance(this.pickAWinnerMessage);
             this.renderStatusIndicatorStyles();
 
         },
@@ -112,12 +111,12 @@
                 me.controlBody = "controlTrailingBody";
                 me.challengerBody = "challengerPublishedBody";
                 this.controlHeader.innerText = resources.archiveview.content_control_header;
-                this.controlHeader.innerText = resources.archiveview.content_challenger_header_picked;
+                this.challengerHeader.innerText = resources.archiveview.content_challenger_header_picked;
             } else {
                 me.controlBody = "controlPublishedBody";
                 me.challengerBody = "challengerDefaultBody";
                 this.controlHeader.innerText = resources.archiveview.content_control_header_picked;
-                this.controlHeader.innerText = resources.archiveview.content_challenger_header;
+                this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
             }
 
             if (this.context.data.test.state < 2) {
