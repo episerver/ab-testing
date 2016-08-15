@@ -1,192 +1,113 @@
-﻿define([
-"dojo/dom",
-"dojox/charting/Chart",
-"dojox/charting/plot2d/Pie",
-"epi/datetime",
-"epi/username",
-"dojo/dom-class"
+﻿function showSettings() {
+    $('.advanced-options__content').animate({
+        height: "toggle"
+    }, "fast");
+};
 
-],
+define([
+    "dojo/_base/declare",
+    "epi/dependency",
+    "dojo/Stateful",
+    "dojo/topic"
+], function (
+    declare,
+    dependency,
+    stateful,
+    topic
+) {
+    return declare([stateful], {
 
-function (dom, chart, pie, datetime, userModule, dojoDomClass) {
-    //"privates"
-    var context, resources, username = userModule, domClass = dojoDomClass;
+        //First Content version to be used as potential content swap
+        //during active A/B test.
+        publishedVersion: null,
 
-    //used to cacluate the percentages for the control and challenger content.
-    function getPercent(visitors, conversions) {
-        if (conversions === 0) {
-            return 0;
-        }
-        var percent = (visitors / conversions) * 100;
-        return Math.round(percent);
-    };
+        //Second content version to be used as potential content swap
+        //during active A/B test.
+        currentVersion: null,
 
-    return {
+        //Content ID of the content under test
+        testContentId: null,
 
-        publishedVariant: null,
-        draftVariant: null,
-        publishedPercent: null,
-        draftPercent: null,
+        //title of the current test
+        testTitle: null,
 
-        //sets the helpers context value as well as initializes calculated variables
-        initializeHelper: function (testContext, stringResources, mModules) {
-            context = testContext;
+        //description provided by the user.
+        testDescription: null,
 
-            if (context.data.test.variants[0].itemVersion ===
-                context.data.publishedVersionContentLink.split('_')[0]) {
-                this.publishedVariant = context.data.test.variants[0];
-                this.draftVariant = context.data.test.variants[1];
-            } else {
-                this.publishedVariant = context.data.test.variants[1];
-                this.draftVariant = context.data.test.variants[0];
-            }
+        //page, which when loaded, triggers a conversion from a page under test.
+        conversionPage: null,
 
-            this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
-            this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
-            if (stringResources) {
-                resources = stringResources;
-            }
+        //percentage of visitors to include in the test.
+        participationPercent: null,
 
-            if (mModules) {
-                username = mModules.username;
-                domClass = mModules.domClass;
-            };
+        //duration, in days, the test should run.
+        testDuration: null,
 
+        //start date (currently set to "now" when they hit the start test button
+        startDate: null,
+
+        //property to start a test immediately upon creation
+        start: true,
+
+        //confidence level
+        confidencelevel: 95,
+
+        postscript: function () {
+            this.inherited(arguments);
+            this.setupContentData();
+            this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.topic = this.topic || topic;
+
+            this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
         },
 
-        //sets text content of provided node to the context test title
-        renderTitle: function (titleNode) {
-            titleNode.textContent = context.data.test.title;
+        _onContextChange: function (context, caller) {
+            // Widget will update itself using the new context.
+            this.contentData = caller.contentData;
+            this.contentData.contentLink = caller.contentData.contentLink;
+            this.setupContentData();
         },
 
-        //sets text content of status and started notes to a string formatted based on the
-        //state of the context test
-        renderTestStatus: function (testStatusNode, testStartedNode) {
-            if (context.data.test.state === 0) {
-                testStatusNode.textContent = resources.test_status_not_started;
-                testStartedNode.textContent = resources.test_scheduled +
-                    datetime.toUserFriendlyString(context.data.test.startDate);
-            } else if (context.data.test.state === 1) {
-                testStatusNode
-                    .textContent = resources.test_status_running + context.data.daysRemaining + " " + resources.days_remaining;
-                testStartedNode.textContent = resources.started +
-                    datetime.toUserFriendlyString(context.data.test.startDate) +
-                    " " +
-                    resources.by +
-                    " " +
-                    username.toUserFriendlyString(context.data.test.owner);
-
-            } else {
-                testStatusNode.textContent = resources.test_status_completed;
-                testStartedNode.textContent = "";
-            }
-        },
-
-        //sets text content of provided node to the context test duration
-        renderTestDuration: function (testDurationNode) {
-            testDurationNode.textContent = context.data.daysElapsed;
-        },
-
-        //sets text content of provided node to the context test time remaining
-        renderTestRemaining: function (testRemainingNode) {
-            testRemainingNode.textContent = context.data.daysRemaining;
-        },
-
-        //sets text content of provided node to the context confidence level
-        renderConfidence: function (confidenceNode) {
-            confidenceNode.textContent = context.data.test.confidenceLevel + "%";
-        },
-
-        //sets text content of provided nodes to the published content publishedy by and date published values
-        renderPublishedInfo: function (publishedByNode, datePublishedNode) {
-            publishedByNode.textContent = username.toUserFriendlyString(context.data.publishedVersionPublishedBy);
-            datePublishedNode.textContent = datetime.toUserFriendlyString(context.data.publishedVersionPublishedDate);
-        },
-
-        //sets text content of provided nodes to the draft content changed by and date changed values
-        renderDraftInfo: function (changedByNode, dateChangedNode) {
-            changedByNode.textContent = username.toUserFriendlyString(context.data.draftVersionChangedBy);
-            dateChangedNode.textContent = datetime.toUserFriendlyString(context.data.draftVersionChangedDate);
-        },
-
-        //sets text content of provided nodes to the published variant conversions, views and conversion percent
-        renderPublishedViewsAndConversions: function (publishedConversionsNode, publishedViewsNode, publishedConversionPercentNode) {
-            publishedConversionsNode.textContent = this.publishedVariant.conversions;
-            publishedViewsNode.textContent = this.publishedVariant.views;
-            publishedConversionPercentNode.textContent = this.publishedPercent + "%";
-        },
-
-        //sets text content of provided nodes to the draft variant conversions, views and conversion percent
-        renderDraftViewsAndConversions: function (challengerConversionsNode, challengerViewsNode, challengerConversionPercentNode) {
-            challengerConversionsNode.textContent = this.draftVariant.conversions;
-            challengerViewsNode.textContent = this.draftVariant.views;
-            challengerConversionPercentNode.textContent = this.draftPercent + "%";
-        },
-
-        //sets text content of provided node to a formatted version of the context test description
-        renderDescription: function (testDescriptionNode) {
-            //Test description, visitor percentage and total participants
-            if (context.data.test.description) {
-                testDescriptionNode.textContent = "\"" +
-                    context.data.test.description +
-                    "\" - " + username.toUserFriendlyString(context.data.test.owner);
-            } else testDescriptionNode.textContent = "";
-        },
-
-        //sets text content of provided nodes to the context participation percentage and total participation values
-        renderVisitorStats: function (participationPercentageNode, totalParticipantsNode) {
-            participationPercentageNode.textContent = context.data.visitorPercentage;
-            totalParticipantsNode.textContent = context.data.totalParticipantCount;
-        },
-
-        //sets text content of provided link node to the context conversion link values
-        renderConversion: function (contentLinkAnchorNode) {
-            contentLinkAnchorNode.href = context.data.conversionLink;
-            contentLinkAnchorNode.textContent = context.data.conversionContentName;
-        },
-
-        renderSignificance: function (pickAWinnerMessageNode) {
-            if (context.data.test.state < 2) {
-                pickAWinnerMessageNode.innerHTML = resources.early_pick_winner_message;
-            } else if (context.data.test.state === 2) {
-                if (context.data.test.isSignificant) {
-                    pickAWinnerMessageNode.innerHTML = resources.result_is_significant;
-                } else {
-                    pickAWinnerMessageNode.innerHTML = resources.result_is_not_significant;
-                }
-            }
-        },
-
-        //Checks for an available node and attaches a pie chart widget
-        //show based on a single value of a 100%
-        displayPieChart: function (node, data) {
-            if (dom.byId(node)) {
-                dom.byId(node).innerHTML = "";
-
-                var chartNode = dom.byId(node);
-                var pieChart = new chart(chartNode);
-
-                var chartData = [
-                    {
-                        x: 1,
-                        y: 100 - data,
-                        fill: "#edebe9"
-                    }, {
-                        x: 1,
-                        y: data,
-                        fill: "#86c740"
-                    }
-                ];
-
-                pieChart.addPlot("default",
-                {
-                    type: "Pie",
-                    labels: false,
-                    radius: 50
+        setupContentData: function () {
+            //get published version
+            this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+            this._contentVersionStore
+                .query({ contentLink: this.contentData.contentLink, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
+                .then(function (result) {
+                    var publishedVersion = result;
+                    this.set("publishedVersion", publishedVersion);
+                    this.set("currentVersion", this.contentData);
+                    console.log(result);
+                    console.log(this.contentData);
+                }.bind(this))
+                .otherwise(function () {
+                    console.log("Query did not return valid result");
                 });
-                pieChart.addSeries("", chartData, { stroke: { width: 0 } });
-                pieChart.render();
-            }
+        },
+
+        createTest: function () {
+            var published = this.publishedVersion.contentLink.split('_');
+            var draft = this.currentVersion.contentLink.split('_');
+            var me = this;
+            this.store.put({
+                testDescription: this.testDescription,
+                testContentId: this.contentData.contentGuid,
+                publishedVersion: published[0],
+                variantVersion: draft[1],
+                testDuration: this.testDuration,
+                participationPercent: this.participationPercent,
+                conversionPage: this.conversionPage,
+                testTitle: this.testTitle,
+                startDate: this.startDate,
+                start: this.start,
+                confidencelevel: this.confidencelevel
+            }).then(function () {
+                var contextParameters = { uri: "epi.cms.contentdata:///" + published[0] };
+                me.topic.publish("/epi/shell/context/request", contextParameters);
+            }).otherwise(function () {
+                console.log("Error occured while creating Marketing Test - Unable to create test");
+            });
         }
-    };
+    });
+
 });

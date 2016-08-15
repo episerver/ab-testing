@@ -121,14 +121,16 @@ hr {
 }
 
 .controlLeaderBody,
-.controlTrailingBody {
+.controlTrailingBody,
+.controlPublishedBody {
     width: 48.5%;
     display: inline-block;
     float: left;
     margin-right: 2%;
 }
 
-.challengerLeaderBody {
+.challengerLeaderBody,
+.challengerPublishedBody {
     width: 49%;
     display: inline-block;
 }
@@ -136,6 +138,11 @@ hr {
 .controlLeaderBody,
 .challengerLeaderBody {
     border: 3px solid #95c532;
+}
+
+.controlPublishedBody,
+.challengerPublishedBody {
+    border: 3px solid #ffd700;
 }
 
 .challengerDefaultBody h3 {
@@ -152,11 +159,18 @@ hr {
     background-color: #95c532;
 }
 
+.controlPublishedBody h3,
+.challengerPublishedBody h3 {
+    background-color: #ffd700;
+}
+
 .controlDefaultBody h3,
 .controlLeaderBody h3,
 .controlTrailingBody h3,
 .challengerLeaderBody h3,
-.challengerDefaultBody h3 {
+.challengerDefaultBody h3,
+.controlPublishedBody h3,
+.challengerPublishedBody h3 {
     color: #fff;
     font-size: 20px;
     font-weight: bold;
@@ -167,13 +181,16 @@ hr {
 
 .controlDefaultBody #controlPercent,
 .controlTrailingBody #controlPercent,
-.challengerDefaultBody #challengerPercent {
+.challengerDefaultBody #challengerPercent
+ {
     font-family: arial;
     font-size: 32px;
 }
 
 .controlLeaderBody #controlPercent,
-.challengerLeaderBody #challengerPercent {
+.challengerLeaderBody #challengerPercent,
+.controlPublishedBody #controlPercent,
+.challengerPublishedBody #challengerPercent {
     font-weight: bold;
     font-family: arial;
     font-size: 48px;

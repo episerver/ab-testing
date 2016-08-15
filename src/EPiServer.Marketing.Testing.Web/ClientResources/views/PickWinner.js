@@ -144,13 +144,13 @@
             }
             else { me.statusIndicatorClass = "winningContent"; }
 
-            if (this.publishedPercent > this.draftPercent) {
+            if (textHelper.publishedPercent > textHelper.draftPercent) {
                 domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
             }
-            else if (this.publishedPercent < this.draftPercent) {
+            else if (textHelper.publishedPercent < textHelper.draftPercent) {
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");

@@ -46,6 +46,34 @@
         <start_default>Start Test</start_default>
         <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
       </addtestview>
+      <archiveview>
+        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
+        <advanced_options_header>Advanced Options</advanced_options_header>
+        <button_close>Close</button_close>
+        <by> by </by>
+        <content_challenger_header>B / Challenger</content_challenger_header>
+        <content_challenger_header_picked>B / Challenger - Picked to publish.</content_challenger_header_picked>
+        <content_control_header>A / Control</content_control_header>
+        <content_control_header_picked>A / Control - Picked to publish.</content_control_header_picked>
+        <conversions>conversions</conversions>
+        <conversion_header>Conversion goal</conversion_header>
+        <conversion_rate>conversion rate</conversion_rate>
+        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <days_divider> days / </days_divider>
+        <days_remaining>day(s) remaining.</days_remaining>
+        <description_heading>Overall goal for this test</description_heading>
+        <draft_prefix>Draft - Edited by</draft_prefix>
+        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
+        <published_prefix>Published by</published_prefix>
+        <remaining_increment>Days</remaining_increment>
+        <started> Started </started>
+        <test_duration_header>Duration of the A/B test</test_duration_header>
+        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
+        <test_scheduled>It is scheduled to begin </test_scheduled>
+        <test_status_completed>Test completed, and content has been chosen to publish.</test_status_completed>
+        <total_participants_details>Current number of test participants:</total_participants_details>
+        <views>views</views>
+      </archiveview>
       <canceltestcommand>
         <label_text>Cancel A/B test and edit page</label_text>
         <tooltip_text>Cancel A/B test and edit page</tooltip_text>

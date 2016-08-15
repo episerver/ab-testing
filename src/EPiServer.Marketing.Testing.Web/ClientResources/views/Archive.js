@@ -20,7 +20,6 @@
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
  "dijit/form/Button"
-
 ], function (
     declare,
     dependency,
@@ -37,7 +36,6 @@
     username,
     domClass,
     textHelper
-
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -52,7 +50,7 @@
         },
 
         postCreate: function () {
-            textHelper.initializeHelper(this.context, resources.pickwinnerview);
+            textHelper.initializeHelper(this.context, resources.archiveview);
             this._renderData();
         },
 
@@ -67,7 +65,7 @@
                 return;
             }
             me.context = newContext;
-            textHelper.initializeHelper(this.context, resources.pickwinnerview);
+            textHelper.initializeHelper(this.context, resources.archiveview);
 
             me._renderData();
             textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
@@ -98,13 +96,53 @@
                 this.challengerViews,
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
-            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
-                this.variantStatusIcon,
-                this.controlWrapper,
-                this.challengerWrapper);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
             textHelper.renderSignificance(this.pickAWinnerMessage);
+            this.renderStatusIndicatorStyles();
+
+        },
+
+        renderStatusIndicatorStyles: function () {
+            var me = this;
+            var draftVersion = this.context.data.draftVersionContentLink.split("_")[1];
+            var winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner });
+
+            if (draftVersion == winningVersion.itemVersion) {
+                me.controlBody = "controlTrailingBody";
+                me.challengerBody = "challengerPublishedBody";
+                this.controlHeader.innerText = resources.archiveview.content_control_header;
+                this.controlHeader.innerText = resources.archiveview.content_challenger_header_picked;
+            } else {
+                me.controlBody = "controlPublishedBody";
+                me.challengerBody = "challengerDefaultBody";
+                this.controlHeader.innerText = resources.archiveview.content_control_header_picked;
+                this.controlHeader.innerText = resources.archiveview.content_challenger_header;
+            }
+
+            if (this.context.data.test.state < 2) {
+                me.statusIndicatorClass = "leadingContent";
+            }
+            else { me.statusIndicatorClass = "winningContent"; }
+
+            if (textHelper.publishedPercent > textHelper.draftPercent) {
+                domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column " + me.controlBody);
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column " + me.challengerBody);
+
+            }
+            else if (textHelper.publishedPercent < textHelper.draftPercent) {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.controlWrapper, "cardWrapper 2column " + me.controlBody);
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column " + me.challengerBody);
+            } else {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column " + me.controlBody);
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column " + me.challengerBody);
+            }
         }
     });
 });
