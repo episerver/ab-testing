@@ -11,9 +11,17 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         public ActionResult Index()
         {
-            var model = new AdminConfigTestSettings() { TestDuration = 30, ConfidenceLevel = 98, ParticipationPercentage = 15 };
+            var model = AdminConfigTestSettings.Current;
 
             return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", model);
+        }
+
+
+        [HttpPost]
+        public ActionResult SaveConfigSettings(AdminConfigTestSettings testSettings)
+        {
+            testSettings.Save();
+            return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", testSettings);
         }
     }
 
@@ -22,9 +30,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         public void Initialize(InitializationEngine context)
         {
+            RouteTable.Routes.RouteExistingFiles = true;
             RouteTable.Routes.MapRoute(
                 null,
-                "EPiServer/EPiserver.Marketing.Testing.Web/Config/Index",
+                "EPiServer/EPiserver.Marketing.Testing.Web/{controller}/{action}",
                 new { controller = "Config", action = "Index" },
                 new[] { "EPiServer.Marketing.Testing.Web.Controllers" });
         }

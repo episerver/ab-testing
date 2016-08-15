@@ -7,34 +7,40 @@
 
 <!DOCTYPE html>
 
-<h2>AB Testing Configuration Settings</h2>
-<h4>These are used as the default settings for creating an AB Test.</h4>
-<table class="table">
-    <tr>
-        <td>
-            <p>@Html.DisplayNameFor(model => Model.TestDuration)</p>
-        </td>
-        <td>
-            <p>@Html.TextBoxFor(model => Model.TestDuration)</p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <p>@Html.DisplayNameFor(model => Model.ParticipationPercentage)</p>
-        </td>
-        <td>
-            <p>@Html.TextBoxFor(model => Model.ParticipationPercentage)</p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <p>@Html.DisplayNameFor(model => Model.ConfidenceLevel)</p>
-        </td>
-        <td>
-            <p>
-                @Html.DropDownListFor(model => model.ConfidenceLevel,
-                    new SelectList(AvailableConfidenceLevels.ConfidenceLevels, "Value", "Name"))
-            </p>
-        </td>
-    </tr>
-</table>
+@using (Html.BeginForm("SaveConfigSettings", "Config", FormMethod.Post))
+{
+    <h2>AB Testing Configuration Settings</h2>
+    <h4>These are used as the default settings for creating an AB Test.</h4>
+    <table class="table">
+        <tr>
+            <td>
+                <p>@Html.DisplayNameFor(model => Model.TestDuration)</p>
+            </td>
+            <td>
+                <p>@Html.TextBoxFor(model => Model.TestDuration)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>@Html.DisplayNameFor(model => Model.ParticipationPercentage)</p>
+            </td>
+            <td>
+                <p>@Html.TextBoxFor(model => Model.ParticipationPercentage)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>@Html.DisplayNameFor(model => Model.ConfidenceLevel)</p>
+            </td>
+            <td>
+                <p>
+                    @Html.DropDownListFor(model => model.ConfidenceLevel,
+                        new SelectList(AvailableConfidenceLevels.ConfidenceLevels, "Value", "Name"))
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <input type="submit" value="Save"/>
+    <input type="submit" value="Cancel"/>
+}
