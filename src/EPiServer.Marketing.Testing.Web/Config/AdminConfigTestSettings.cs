@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
         public int TestDuration { get; set; }
 
-        public int ParticipationPercentage { get; set; }
+        public int ParticipationPercent { get; set; }
 
         public int ConfidenceLevel { get; set; }
 
@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
         public AdminConfigTestSettings()
         {
             TestDuration = 30;
-            ParticipationPercentage = 10;
+            ParticipationPercent = 10;
             ConfidenceLevel = 95;
         }
 

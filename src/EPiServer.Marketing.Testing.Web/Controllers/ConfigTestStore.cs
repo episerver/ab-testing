@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Web.Mvc;
 using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 
@@ -33,12 +34,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             ActionResult result;
             try
             {
-                result = Rest(new ConfigViewModel()
-                {
-                    TestDuration = 30,
-                    ParticipationPercent = 10,
-                    ConfidenceLevel = 95
-                });
+                result = Rest(AdminConfigTestSettings.Current);
             }
             catch (Exception e)
             {
