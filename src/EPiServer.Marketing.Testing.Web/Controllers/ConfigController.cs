@@ -19,10 +19,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
         [HttpPost]
         public ActionResult SaveConfigSettings(AdminConfigTestSettings testSettings)
-        {
-            testSettings.Save();
+        {           
+            if (ModelState.IsValid)
+            {
+                testSettings.Save();
+            }
+
             return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", testSettings);
         }
+
+
     }
 
     [InitializableModule]

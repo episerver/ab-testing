@@ -7,8 +7,16 @@
 
 <!DOCTYPE html>
 
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+<script language="javascript" type="text/javascript"></script>
+
 @using (Html.BeginForm("SaveConfigSettings", "Config", FormMethod.Post))
 {
+    @Html.ValidationSummary(true)
+
     <h2>AB Testing Configuration Settings</h2>
     <h4>These are used as the default settings for creating an AB Test.</h4>
     <table class="table">
@@ -19,6 +27,9 @@
             <td>
                 <p>@Html.TextBoxFor(model => Model.TestDuration)</p>
             </td>
+            <td>
+                <p>@Html.ValidationMessageFor(model => model.TestDuration)</p>
+            </td>
         </tr>
         <tr>
             <td>
@@ -26,6 +37,9 @@
             </td>
             <td>
                 <p>@Html.TextBoxFor(model => Model.ParticipationPercent)</p>
+            </td>
+            <td>
+                <p>@Html.ValidationMessageFor(model => model.ParticipationPercent)</p>
             </td>
         </tr>
         <tr>

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 using System.Linq;
@@ -43,8 +45,12 @@ namespace EPiServer.Marketing.Testing.Web.Config
     {
         public Identity Id { get; set; }
 
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Must be a positive number.")]
         public int TestDuration { get; set; }
 
+        [Required]
+        [Range(1, 100, ErrorMessage = "Must be between 1 and 100.")]
         public int ParticipationPercent { get; set; }
 
         public int ConfidenceLevel { get; set; }
