@@ -41,13 +41,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         public void Dispose()
         {
-            _contentReferenceList.Clear();
+            // This works for this test framework because it creates new class instance
+            // for each test. if we change frameworks you will need to put this in a tear 
+            // down method or in each test.
+            Assert.False(_logger.ErrorCalled, "Did you forget to mock something? Unexpected exception occured.");
         }
 
         private Mock<ITestDataCookieHelper> _mockTestDataCookieHelper;
         private Mock<ITestManager> _mockTestManager;
         private Mock<ITestingContextHelper> _mockContextHelper;
-        private MyLogger _logger;
+        private MyLogger _logger = new MyLogger();
 
         private readonly Dictionary<Guid, int> _contentReferenceList;
 
@@ -61,8 +64,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestHandler GetUnitUnderTest(Dictionary<Guid, int> contentList)
         {
-            _logger = new MyLogger();
-
             _mockTestDataCookieHelper = new Mock<ITestDataCookieHelper>();
             _mockTestManager = new Mock<ITestManager>();
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
@@ -78,6 +79,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 });
             _mockTestManager.Setup(call => call.Stop(It.IsAny<Guid>()));
             _mockTestManager.Setup(call => call.Delete(It.IsAny<Guid>()));
+            Variant testVariant = new Variant()
+            {
+                Id = _matchingVariantId,
+                ItemVersion = 5,
+                TestId = _activeTestGuid,
+                ItemId = _associatedTestGuid
+            };
+            _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
+
             _mockContextHelper = new Mock<ITestingContextHelper>();
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
 
@@ -98,24 +108,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             // For this test we dont actually care what the exception is just that it is catching and
             // logging one.
             Assert.True(_logger.ErrorCalled, "Exception was not logged.");
-        }
-
-        [Fact]
-        public void TestHandler_Null_Content_Argument_Does_Not_Attempt_To_Process_ContentSwitching()
-        {
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-                .Returns(true);
-
-            var args = new ContentEventArgs((BasicContent)null);
-            testHandler.LoadedContent(new object(), args);
-
-            //if cookie managemenet is attempted the null content made it through.    
-            _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
+            _logger.ErrorCalled = false; 
         }
 
         [Fact]
@@ -128,18 +121,35 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-                .Returns(true);
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>());
+            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to update cookie data");
+            _mockTestDataCookieHelper.Verify(call => call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to expire cookie data");
 
             Assert.Equal(content, args.Content);
             Assert.Equal(content.ContentLink, args.ContentLink);
+        }
+
+        [Fact]
+        public void TestHandler_Returns_when_TargetLinkNull_and_PageData()
+        {
+            IContent content = new PageData(); // we have to use page data for this test
+
+            _contentReferenceList.Add(content.ContentGuid, 0);
+
+            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
+
+            // and targetlink must be null for this test
+            ContentEventArgs args = new ContentEventArgs(content) { TargetLink = null }; 
+            testHandler.LoadedContent(new object(), args);
+
+            _mockTestDataCookieHelper.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Never(), "Short circut eval not working. This could be a performance issue.");
+            Assert.False(_logger.ErrorCalled, "Exception in LoadedContent when it should not have been.");
         }
 
         [Fact]
@@ -419,6 +429,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>());
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(content);
