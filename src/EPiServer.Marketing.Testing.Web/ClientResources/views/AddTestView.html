@@ -39,15 +39,15 @@
         <!-- Header / Test Title & Description-->
         <div class="cardWrapper">
             <div class="cardBody">
-                <h1 class="objectIcon" style="font-size: 2em; font-weight: bold; font-family: arial"
+                <h1 class="objectIcon"
                     data-dojo-attach-point="pageName"></h1>
-                <h2 style="text-align: left; margin-bottom: 0; font-weight: bold; font-family: arial">
+                <h2>
                     ${resources.addtestview.test_description}
                 </h2>
             </div>
         </div>
         <!-- Control/Published Version -->
-        <div class="cardWrapper 2column" style="width: 49%; display: inline-block; float: left; margin-right: 2%;">
+        <div class="cardWrapper 2column controlDefaultBody">
             <h3 style="background-color: #1ba4fa;color: #fff;font-size: 20px;font-weight: bold;font-family: arial;padding: 14px 8px 12px 20px; ">
                 ${resources.addtestview.control}
             </h3>
@@ -63,7 +63,7 @@
             </div>
         </div>
         <!-- Challenger/Draft Version-->
-        <div class="cardWrapper 2column" style="width: 49%; display: inline-block;">
+        <div class="cardWrapper 2column challengerDefaultBody">
             <h3 style="background-color: #f7542b; color: #fff; font-size: 20px; font-weight: bold; font-family: arial; padding: 14px 8px 12px 20px;">
                 ${resources.addtestview.challenger}
             </h3>
@@ -86,7 +86,6 @@
                     </h4>
                     <textarea id="testDescription"
                               maxlength="2048"
-                              style="width: 75%;"
                               placeholder="${resources.addtestview.goals_default_text}"
                               data-dojo-attach-point="descriptionText"
                               data-dojo-attach-event="onChange: _onTestDescriptionChanged"></textarea>
