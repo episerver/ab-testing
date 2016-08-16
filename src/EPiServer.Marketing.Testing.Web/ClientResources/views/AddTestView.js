@@ -226,7 +226,7 @@
                 var errorIconNode = dom.byId("durationErrorIcon");
                 var duration = dom.byId("durationSpinner").value;
 
-                if (!this._isUnsignedNumeric(duration) || duration < 0) {
+                if (!this._isUnsignedNumeric(duration) || duration < 1) {
                     this._setError(resources.addtestview.error_duration, errorTextNode, errorIconNode);
                     return false;
                 }
