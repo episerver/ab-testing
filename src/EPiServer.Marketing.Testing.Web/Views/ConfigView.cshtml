@@ -7,13 +7,7 @@
 
 <!DOCTYPE html>
 
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-<script language="javascript" type="text/javascript"></script>
-
-@using (Html.BeginForm("SaveConfigSettings", "Config", FormMethod.Post))
+@using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
 
@@ -55,6 +49,6 @@
         </tr>
     </table>
 
-    <input type="submit" value="Save"/>
-    <input type="submit" value="Cancel"/>
+    <input type="submit" name="action" value="Save" />
+    <input type="submit" name="action" value="Cancel" />
 }

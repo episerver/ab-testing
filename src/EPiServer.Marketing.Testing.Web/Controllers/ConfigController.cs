@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Reflection;
+using System.Web.Mvc;
 using System.Web.Routing;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
@@ -16,10 +18,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", model);
         }
 
-
         [HttpPost]
-        public ActionResult SaveConfigSettings(AdminConfigTestSettings testSettings)
-        {           
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "Save")]
+        public ActionResult Save(string action, AdminConfigTestSettings testSettings)
+        {
             if (ModelState.IsValid)
             {
                 testSettings.Save();
@@ -28,7 +30,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", testSettings);
         }
 
-
+        [HttpPost]
+        [MultiButton(MatchFormKey = "action", MatchFormValue = "Cancel")]
+        public ActionResult Cancel()
+        {
+            var model = AdminConfigTestSettings.Current;
+            return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", model);
+        }
     }
 
     [InitializableModule]
@@ -46,6 +54,19 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
         public void Uninitialize(InitializationEngine context)
         {
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class MultiButtonAttribute : ActionNameSelectorAttribute
+    {
+        public string MatchFormKey { get; set; }
+        public string MatchFormValue { get; set; }
+
+        public override bool IsValidName(ControllerContext controllerContext, string actionName, MethodInfo methodInfo)
+        {
+            return controllerContext.HttpContext.Request[MatchFormKey] != null &&
+                controllerContext.HttpContext.Request[MatchFormKey] == MatchFormValue;
         }
     }
 }
