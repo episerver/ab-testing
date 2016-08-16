@@ -62,11 +62,6 @@ em {
     font-style: normal;
 }
 
-textarea {
-    width: 600px;
-    height: 80px;
-}
-
 hr {
     border-bottom: 1px solid #eee;
     border-top: none;
