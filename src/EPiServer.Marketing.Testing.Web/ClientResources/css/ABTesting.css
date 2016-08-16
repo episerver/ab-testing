@@ -259,3 +259,11 @@ hr {
     width: 70%;
     max-width: 99.75%;     
 }
+
+#trailingToolBar {
+    padding-right: 15px;
+}
+
+#leadingToolBar {
+    padding-left: 15px;
+}

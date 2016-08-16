@@ -3,7 +3,7 @@
     <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="uniqName_110_0" widgetid="uniqName_110_0">
         <div class="epi-toolbarGroupContainer">
             <!-- Breadcrumb Widget -->
-            <div class="epi-toolbarLeading epi-toolbarGroup">
+            <div id="leadingToolBar" class="epi-toolbarLeading epi-toolbarGroup">
                 <div id="breadcrumb" style="overflow-x: hidden;"
                      data-dojo-type="epi-cms/widget/Breadcrumb"
                      data-dojo-attach-point="breadcrumbWidget"
@@ -17,14 +17,16 @@
             <!-- Empty toolbar section -->
             <div class="epi-toolbarCenter epi-toolbarGroup">&nbsp;</div>
             <!-- Start Test and Cancel Buttons-->
-            <div class="epi-toolbarTrailing  epi-toolbarGroup">
-                <button class="epi-primary" data-dojo-type="dijit/form/Button"
+            <div id="trailingToolBar" class="epi-toolbarTrailing  epi-toolbarGroup ">
+                <button class="epi-primary epi-button--bold"
+                        data-dojo-type="dijit/form/Button"
                         id="StartButton"
                         data-dojo-attach-event="onClick: _onStartButtonClick"
                         type="button">
                     ${resources.addtestview.start_default}
                 </button>
-                <button data-dojo-type="dijit/form/Button"
+                <button class="epi-button--bold"
+                        data-dojo-type="dijit/form/Button"
                         id="CancelButton"
                         data-dojo-attach-event="onClick: _onCancelButtonClick"
                         type="button">
