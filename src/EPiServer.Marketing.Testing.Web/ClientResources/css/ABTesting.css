@@ -254,3 +254,8 @@ hr {
     height: 100px;
     width: 100px;
 }
+
+#testDescription {
+    width: 75%;
+    max-width: 99.75%;     
+}
