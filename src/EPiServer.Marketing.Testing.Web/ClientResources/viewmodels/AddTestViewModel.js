@@ -96,13 +96,14 @@ define([
         },
 
         createTest: function () {
-            var version = this.currentVersion.contentLink.split('_');
+            var published = this.publishedVersion.contentLink.split('_');
+            var draft = this.currentVersion.contentLink.split('_');
             var me = this;
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
-                publishedVersion: version[0],
-                variantVersion: version[1],
+                publishedVersion: published[0],
+                variantVersion: draft[1],
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,
                 conversionPage: this.conversionPage,
@@ -111,7 +112,7 @@ define([
                 start: this.start,
                 confidencelevel: this.confidencelevel
             }).then(function () {
-                var contextParameters = { uri: "epi.cms.contentdata:///"+version[0] };
+                var contextParameters = { uri: "epi.cms.contentdata:///" + published[0] };
                 me.topic.publish("/epi/shell/context/request", contextParameters);
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");

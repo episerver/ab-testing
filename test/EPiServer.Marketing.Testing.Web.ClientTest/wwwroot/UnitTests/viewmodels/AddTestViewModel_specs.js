@@ -1,12 +1,21 @@
-﻿define(['marketing-testing/viewmodels/AddTestViewModel', 
+﻿define(['marketing-testing/viewmodels/AddTestViewModel',
         'epi/_Module'],
     function (AddTestViewModel, Module) {
         describe("AddTestViewModel", function () {
             it("sets up the object dependencies on postscript", function () {
                 var me = this,
+                aGuidString = "5F0B06A7-12C0-405F-8F55-C60D7187AB34",
+                aPrefixString = "6",
+                aVersionString = "168",
+                aDraftVersionString = "169",
+
                 aContentResult = {
-                    id: "12345",
-                    data: "stuff"
+                    contentLink: aPrefixString + "_" + aVersionString,
+                    contentGuid: aGuidString
+                },
+                aContentData = {
+                    contentLink: aPrefixString + "_" + aDraftVersionString,
+                    contentGuid: aGuidString
                 },
                 aContentVersionStore = {
                     query: function (queryObject) {
@@ -21,14 +30,12 @@
                         return this;
                     }
                 },
-                aContentData = {
-                    contentLink: "up_down"
-                },
                 aLanguageContext = {
                     language: "mycontentlanguage"
                 },
+
                 aViewModel = AddTestViewModel({
-                    store: {}, 
+                    store: {},
                     _contentVersionStore: aContentVersionStore,
                     contentData: aContentData,
                     languageContext: aLanguageContext
@@ -41,30 +48,37 @@
 
             it("creates a test with the data stored in the view model", function () {
                 var me = this,
-                aGuidString = "updownupdown",
-                aVersionString = "babaselectstart",
+                aGuidString = "5F0B06A7-12C0-405F-8F55-C60D7187AB34",
+                aPrefixString = "6",
+                aVersionString = "168",
+                aDraftVersionString = "169",
+
                 aContentResult = {
-                    id: "12345",
-                    data: "stuff"
+                    contentLink: aPrefixString + "_" + aVersionString,
+                    contentGuid: aGuidString
                 },
+                aContentData = {
+                    contentLink: aPrefixString + "_" + aDraftVersionString,
+                    contentGuid: aGuidString
+                },
+
                 aContentVersionStore = {
                     query: function (queryObject) {
+                        me.retQueryObj = queryObject;
                         return this;
                     },
                     then: function (successFunction) {
+                        successFunction(aContentResult);
                         return this;
                     },
                     otherwise: function (otherwiseFunction) {
                         return this;
                     }
                 },
-                aContentData = {
-                    contentLink: aGuidString + "_" + aVersionString,
-                    contentGuid: "theGuid"
-                },
                 aLanguageContext = {
                     language: "mycontentlanguage"
                 },
+
                 aViewModel = AddTestViewModel({
                     store: {
                         put: function (data) {
@@ -75,14 +89,16 @@
                             return this;
                         },
                         otherwise: function(otherwiseFunction) {
-
                         }
                     },
+
                     _contentVersionStore: aContentVersionStore,
                     contentData: aContentData,
                     languageContext: aLanguageContext
                 });
+
                 aViewModel.currentVersion = aContentData;
+                aViewModel.publishedVersion = aContentResult;
                 aViewModel.testTitle = "title";
                 aViewModel.testDescription = "desc";
                 aViewModel.conversionPage = "kpiPage";
@@ -94,8 +110,8 @@
 
                 expect(me.retTest.testDescription).to.equal(aViewModel.testDescription);
                 expect(me.retTest.testContentId).to.equal(aContentData.contentGuid);
-                expect(me.retTest.publishedVersion).to.equal(aGuidString);
-                expect(me.retTest.variantVersion).to.equal(aVersionString);
+                expect(me.retTest.publishedVersion).to.equal(aPrefixString);
+                expect(me.retTest.variantVersion).to.equal(aDraftVersionString);
                 expect(me.retTest.testDuration).to.equal(aViewModel.testDuration);
                 expect(me.retTest.participationPercent).to.equal(aViewModel.participationPercent);
                 expect(me.retTest.conversionPage).to.equal(aViewModel.conversionPage);
@@ -104,13 +120,24 @@
             });
 
             it("goes back to the previous page on a successful test creation", function () {
-                var me = this,retCall, retParams,
-                aGuidString = "updownupdown",
-                aVersionString = "babaselectstart",
+                var me = this, retCall, retParams,
+
+                aGuidString = "5F0B06A7-12C0-405F-8F55-C60D7187AB34",
+                aPrefixString = "6",
+                aVersionString = "168",
+                aDraftVersionString = "169",
+
                 aContentResult = {
-                    id: "12345",
-                    data: "stuff"
+                    contentLink: aPrefixString + "_" + aVersionString,
+                    contentGuid: aGuidString,
+                    contentLink: aPrefixString
                 },
+                aContentData = {
+                    contentLink: aPrefixString + "_" + aDraftVersionString,
+                    contentGuid: aGuidString,
+                    contentLink: aPrefixString
+                },
+
                 aContentVersionStore = {
                     query: function (queryObject) {
                         return this;
@@ -122,10 +149,7 @@
                         return this;
                     }
                 },
-                aContentData = {
-                    contentLink: aGuidString + "_" + aVersionString,
-                    contentGuid: "theGuid"
-                },
+
                 aLanguageContext = {
                     language: "mycontentlanguage"
                 };
@@ -142,21 +166,23 @@
                         }
                     },
                     topic: {
-                        publish: function (action,params) {
+                        publish: function (action, params) {
                             me.retCall = action;
                             me.retParams = params;
                             return this;
                         }
                     },
+
                     _contentVersionStore: aContentVersionStore,
                     contentData: aContentData,
                     languageContext: aLanguageContext
                 });
 
                 aViewModel.currentVersion = aContentData;
+                aViewModel.publishedVersion = aContentResult;
                 aViewModel.createTest();
                 expect(me.retCall).to.equal("/epi/shell/context/request");
-                expect(me.retParams.uri).to.equal("epi.cms.contentdata:///"+aGuidString);
+                expect(me.retParams.uri).to.equal("epi.cms.contentdata:///" + aPrefixString);
             });
         });
     });

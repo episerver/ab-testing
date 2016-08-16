@@ -12,19 +12,18 @@ namespace EPiServer.Marketing.Testing.Web
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class TestHandlerInitializer : IInitializableHttpModule
     {
-        private readonly TestHandler _testHandler;
+        private TestHandler _testHandler;
         private UrlResolver _pageRouteHelper;
 
         [ExcludeFromCodeCoverage]
         public TestHandlerInitializer()
         {
-            _testHandler = new TestHandler();
         }
 
         [ExcludeFromCodeCoverage]
         public void Initialize(InitializationEngine context)
         {
-            _testHandler.Initialize();
+            _testHandler = new TestHandler();
         }
 
         [ExcludeFromCodeCoverage]

@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;
-        
+
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             return IsInSystemFolder() && e.Content != null;
         }
-       
+
         /// <summary>
         /// Checks the current loaded content with the requested page.
         /// Page Data content is loaded even if not the requested page, wheras Block Data is only
@@ -97,20 +97,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             // Map users publishing rights
             model.UserHasPublishRights = publishedContent.QueryDistinctAccess(AccessLevel.Publish);
-            
-            //Test Details may be viewed before the test has started.   
-            //Check state and set the contextmodel days elapsed and days remaining to appropriate strings
-            //Text message if Inactive, Remaining Days if active, and adjusted days for done and archived.
-            //Days Elapsed will be parsed and displayed using episervers friendly datetime method on the client side.
+
+            // Map elapsed and remaining days.
             if (testData.State == TestState.Active)
             {
                 model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
                 model.DaysRemaining = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
-            }
-            else if (testData.State == TestState.Inactive)
-            {
-                model.DaysElapsed = "Test has not been started";
-                model.DaysRemaining = "Test has not been started";
             }
             else
             {
@@ -124,7 +116,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             if (kpi != null)
             {
                 var conversionContent = repo.Get<IContent>(kpi.ContentGuid);
-               
+
                 model.ConversionLink = uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
                 model.ConversionContentName = conversionContent.Name;
             }
@@ -136,7 +128,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
 
             return model;
-            }
+        }
 
         /// <summary>
         /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)

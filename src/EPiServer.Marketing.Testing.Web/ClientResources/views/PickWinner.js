@@ -1,29 +1,45 @@
 ﻿define([
-'dojo/_base/declare',
- 'epi/dependency',
- 'dojo/topic',
- 'dijit/_WidgetBase',
- 'dijit/_TemplatedMixin',
- 'dijit/_WidgetsInTemplateMixin',
- 'dojo/text!marketing-testing/views/PickWinner.html',
- 'epi/i18n!marketing-testing/nls/abtesting',
- 'epi/datetime',
- 'xstyle/css!marketing-testing/css/style.css',
- 'xstyle/css!marketing-testing/css/GridForm.css',
- 'dijit/form/Button'
+ "dojo/_base/declare",
+ "epi/dependency",
+ "dojo/dom",
+ "dijit/registry",
+ "dojo/dom-style",
+ "dojo/topic",
+ "dijit/_WidgetBase",
+ "dijit/_TemplatedMixin",
+ "dijit/_WidgetsInTemplateMixin",
+ "dojo/text!marketing-testing/views/PickWinner.html",
+ "epi/i18n!marketing-testing/nls/abtesting",
+ "epi/datetime",
+ "epi/username",
+ "dojo/dom-class",
+ "marketing-testing/scripts/abTestTextHelper",
+ "xstyle/css!marketing-testing/css/ABTesting.css",
+ "xstyle/css!marketing-testing/css/GridForm.css",
+ "xstyle/css!marketing-testing/css/dijit.css",
+ "dijit/form/DropDownButton",
+ "dijit/TooltipDialog",
+ "dijit/form/Button"
+
 ], function (
     declare,
     dependency,
+    dom,
+    registry,
+    domStyle,
     topic,
-    _WidgetBase,
-    _TemplatedMixin,
+    widgetBase,
+    templatedMixin,
     widgetsInTemplateMixin,
     template,
     resources,
-    datetime
+    datetime,
+    username,
+    domClass,
+    textHelper
 
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, widgetsInTemplateMixin],
+    return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
         templateString: template,
         resources: resources,
@@ -36,40 +52,78 @@
         },
 
         postCreate: function () {
+            textHelper.initializeHelper(this.context, resources.pickwinnerview);
             this._renderData();
+        },
+
+        startup: function () {
+            textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
         },
 
         _contextChanged: function (newContext) {
             var me = this;
-            if (!newContext || newContext.type != 'epi.marketing.testing') {
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
             me.context = newContext;
+            textHelper.initializeHelper(this.context, resources.pickwinnerview);
+
             me._renderData();
+            textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
+            textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
         },
 
-        _onCloseButtonClick: function () {
+        _onCancelClick: function () {
             var me = this;
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
+        _renderData: function () {
+            this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.topic = this.topic || topic;
+
+            textHelper.renderTitle(this.title);
+            textHelper.renderTestStatus(this.testStatus, this.testStarted);
+            textHelper.renderTestDuration(this.testDuration);
+            textHelper.renderTestRemaining(this.testRemaining);
+            textHelper.renderConfidence(this.confidence);
+            textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
+            textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
+            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
+                this.publishedViews,
+                this.publishedConversionPercent);
+            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
+                this.challengerViews,
+                this.challengerConversionPercent);
+            textHelper.renderDescription(this.testDescription);
+            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
+                this.variantStatusIcon,
+                this.controlWrapper,
+                this.challengerWrapper,
+                "true");
+            textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
+            textHelper.renderConversion(this.contentLinkAnchor);
+            textHelper.renderSignificance(this.pickAWinnerMessage);
+        },
+
         _onPublishedVersionClick: function () {
             this.store.put({
-                    publishedContentLink: this.context.data.publishedVersionContentLink,
-                    draftContentLink: this.context.data.draftVersionContentLink,
-                    winningContentLink: this.context.data.publishedVersionContentLink,
-                    testId: this.context.data.test.id
+                publishedContentLink: this.context.data.publishedVersionContentLink,
+                draftContentLink: this.context.data.draftVersionContentLink,
+                winningContentLink: this.context.data.publishedVersionContentLink,
+                testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false })  // Force a put
                     .then(function (data) {
                         var contextParameters = { uri: "epi.cms.contentdata:///" + data };
                         topic.publish("/epi/shell/context/request", contextParameters);
-                }).otherwise(function () {
-                    alert("Error Processing Winner: Unable to process and save selected version");
-                    console.log("Error occurred while processing winning content");
-            });
+                    }).otherwise(function () {
+                        alert("Error Processing Winner: Unable to process and save selected version");
+                        console.log("Error occurred while processing winning content");
+                    });
         },
-        
+
         _onVariantVersionClick: function () {
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
@@ -83,120 +137,7 @@
                 }).otherwise(function () {
                     alert("Error Processing Winner: Unable to process and save selected version");
                     console.log("Error occurred while processing winning content");
-            });
-        },
-
-        _renderData: function () {
-            var publishedVariant, draftVariant, publishedConversionPercent, variantConversionPercent;
-
-            //reset the div sizes for the versions to prevent errors viewing multiple tests
-            this._resetVersionDivs();
-
-            this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
-            this.topic = this.topic || topic;
-
-            if (this.context.data.test.state === 0) {
-                this.scheduleStatusText.innerHTML =
-                    resources.pickwinnerview.test_not_started + "&nbsp" +
-                    resources.pickwinnerview.test_scheduled +
-                    datetime.toUserFriendlyString(this.context.data.test.startDate) + ".";
-            } else if (this.context.data.test.state === 1) {
-                this.scheduleStatusText.innerHTML =
-                    resources.pickwinnerview.started_by_text +
-                    "<span class='epi-username'>" + this.context.data.test.owner + "</span>" + ".&nbsp" +
-                    resources.pickwinnerview.test_scheduled_finish +
-                    datetime.toUserFriendlyString(this.context.data.test.endDate) + ".";
-            } else {
-                this.scheduleStatusText.innerHTML =
-                    resources.pickwinnerview.started_by_text +
-                    "<span class='epi-username'>" + this.context.data.test.owner + "</span>" + ".&nbsp" +
-                    resources.pickwinnerview.completed_text +
-                    datetime.toUserFriendlyString(this.context.data.test.endDate) + ".";
-            }
-
-            //display result significance
-            if (this.context.data.test.state === 2) {
-                if (this.context.data.test.isSignificant) {
-                    this.isSignificant.innerHTML = resources.pickwinnerview.result_is_significant;
-                } else {
-                    this.isSignificant.innerHTML = resources.pickwinnerview.result_is_not_significant;
-                }
-            }
-
-            //Set the correct corresponding variant data
-            if (this.context.data.test.variants[0].itemVersion == this.context.data.publishedVersionContentLink.split('_')[0]) {
-                publishedVariant = this.context.data.test.variants[0];
-                draftVariant = this.context.data.test.variants[1];
-            } else {
-                publishedVariant = this.context.data.test.variants[1];
-                draftVariant = this.context.data.test.variants[0];
-            }
-
-            publishedConversionPercent = getPercent(publishedVariant.conversions, publishedVariant.views);
-            variantConversionPercent = getPercent(draftVariant.conversions, draftVariant.views);
-
-            this._setVersionDivs(publishedConversionPercent, variantConversionPercent);
-
-            this.testTitle.textContent = this.context.data.test.title;
-
-            //Published version data
-            this.publishedVersionName.textContent = this.context.data.publishedVersionName;
-            this.publishedVersionContentLink.textContent = this.context.data.publishedVersionContentLink;
-            this.publishedByUser.textContent = this.context.data.publishedVersionPublishedBy;
-            this.publishedDate.textContent = datetime.toUserFriendlyString(this.context.data.publishedVersionPublishedDate);
-            this.publishedConversionPercent.textContent = publishedConversionPercent + "%";
-            //Draft version data
-            this.variantName.textContent = this.context.data.draftVersionName;
-            this.variantContentLink.textContent = this.context.data.draftVersionContentLink;
-            this.editedByUser.textContent = this.context.data.draftVersionChangedBy;
-            this.savedDate.textContent = datetime.toUserFriendlyString(this.context.data.draftVersionChangedDate);
-            this.variantConversionPercent.textContent = variantConversionPercent + "%";
-
-            //Test information and stats
-            this.descriptionText.textContent = this.context.data.test.description;
-            this.participationPercent.textContent = this.context.data.visitorPercentage + "%";
-            this.totalParticipants.textContent = this.context.data.totalParticipantCount;
-
-            if (this.context.data.test.state === 0) {
-                this.testDuration.textContent = this.context.data.daysElapsed;
-                this.durationText.textContent = "";
-            } else {
-                this.testDuration.textContent = this.context.data.daysElapsed;
-                this.durationText.textContent = resources.pickwinnerview.duration_text;
-            }
-
-            //Conversion content
-            this.contentLinkAnchor.href = this.context.data.conversionLink;
-            this.contentLinkAnchor.textContent = this.context.data.conversionContentName;
-        },
-
-        _resetVersionDivs: function () {
-            this.publishedDiv.style.height = "auto";
-            this.publishedDiv.style.width = "auto";
-            this.variantDiv.style.height = "auto";
-            this.variantDiv.style.width = "auto";
-        },
-
-        _setVersionDivs: function (publishedConversionPercent, variantConversionPercent) {
-            if (publishedConversionPercent == variantConversionPercent) {
-                //do not change the default div dimensions.
-            }
-            else if (publishedConversionPercent > variantConversionPercent) {
-                this.publishedDiv.style.height = "20em";
-                this.publishedDiv.style.width = "20em";
-            } else {
-                this.variantDiv.style.height = "20em";
-                this.variantDiv.style.width = "20em";
-            }
+                });
         }
-
     });
-
-    function getPercent(visitors, conversions) {
-        if (conversions === 0) {
-            return 0;
-        }
-        var percent = (visitors / conversions) * 100;
-        return Math.round(percent);
-    }
 });

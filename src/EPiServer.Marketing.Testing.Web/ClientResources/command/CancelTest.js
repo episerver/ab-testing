@@ -32,7 +32,9 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
         _onModelChange: function () {
             var me = this,
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting"),
+                menu = this.menu || dependency.resolve("epi.globalcommandregistry").get("epi.cms.publishmenu"),
                 contentData = me.model.contentData;
+
             //call the rest store to see if there is a test associated with the content being looked at
             //set isAvailable and canExecute to true when there is a test set up and the test is not completed(2) or archived(3)
             //disable the other publish options
@@ -45,6 +47,15 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                         isClickable = true;
                     }
                 }
+
+                if (isClickable) {
+                    for (var i = 0; i < menu.providers.length; i++) {
+                        for (var j = 0; j < menu.providers[i].commands.length; j++) {
+                            menu.providers[i].commands[j].set("canExecute", false);
+                        }
+                    }
+                }
+
                 me.set("isAvailable", isVisible);
                 me.set("canExecute", isClickable);
             });
