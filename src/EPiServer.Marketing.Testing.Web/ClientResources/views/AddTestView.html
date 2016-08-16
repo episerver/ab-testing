@@ -109,6 +109,7 @@
                         <span id="pickerErrorText" style="color: #f7542b; visibility: hidden"></span>
                     </p>
                 </div>
+                <hr style="margin-top: -10px;margin-bottom: 15px" />
                 <!-- Participation Percentage -->
                 <div class="formsRow">
                     <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">
@@ -126,6 +127,7 @@
                         <span id="participationErrorText" style="color: #f7542b; visibility: hidden"></span>
                     <p>
                 </div>
+                <hr style="margin-top: -10px;margin-bottom: 15px" />
                 <!-- Test Duration -->
                 <div class="formsRow">
                     <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">
@@ -186,22 +188,23 @@
             <!-- Header / Toggle-->
             <div class="cardBody">
                 <button data-dojo-type="dijit/form/ToggleButton" onclick="showSettings();" class="epi-chromeless epi-flat"
-                        style="background-color: #ffffff; font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold"
+                        style="background-color: #ffffff; font-size: 18px; margin: 8px 0 0 0; font-family: arial; font-weight: bold"
                         data-dojo-props="iconClass:'epi-iconSettings', checked: false">
                     ${resources.addtestview.advanced_options}
                 </button>
-            </div>
-            <!-- Confidence Level -->
-            <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none">
-                <div class="cardBody" style="padding-top: 4px;">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.addtestview.confidence_level_header}</h4>
-                    <p>${resources.addtestview.confidence_level_description}</p>
-                    <select id="confidence">
-                        <option value="99">${resources.addtestview.confidence_99}</option>
-                        <option value="98">${resources.addtestview.confidence_98}</option>
-                        <option value="95" selected>${resources.addtestview.confidence_95} ${resources.addtestview.default}</option>
-                        <option value="90">${resources.addtestview.confidence_90}</option>
-                    </select>
+                <hr style="margin-right: -18px;margin-left: -18px" />
+                <!-- Confidence Level -->
+                <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;margin-top:-25px">
+                    <div class="cardBody" style="padding-top: 4px;">
+                        <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.addtestview.confidence_level_header}</h4>
+                        <p>${resources.addtestview.confidence_level_description}</p>
+                        <select id="confidence">
+                            <option value="99">${resources.addtestview.confidence_99}</option>
+                            <option value="98">${resources.addtestview.confidence_98}</option>
+                            <option value="95" selected>${resources.addtestview.confidence_95} ${resources.addtestview.default}</option>
+                            <option value="90">${resources.addtestview.confidence_90}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
