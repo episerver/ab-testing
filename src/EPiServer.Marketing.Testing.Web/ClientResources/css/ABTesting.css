@@ -1,4 +1,20 @@
-﻿.abBody {
+﻿input, textarea {
+    font-size: 14px;
+}
+
+em {
+    box-shadow: inset 0 -4px 0 #cbe25e;
+    font-style: normal;
+}
+
+hr {
+    border-bottom: 1px solid #eee;
+    border-top: none;
+    border-left: none;
+    margin-bottom: 24px;
+}
+
+.abBody {
     background-color: #eee;
     padding: 16px 32px;
     font-family: arial;
@@ -41,10 +57,6 @@
         font-family: arial;
     }
 
-.formsRow {
-    margin-bottom: 24px;
-}
-
     .cardBody h4,
     .formsRow h4 {
         font-size: 18px;
@@ -52,28 +64,6 @@
         font-family: arial;
         font-weight: bold;
     }
-
-input, textarea {
-    font-size: 14px;
-}
-
-em {
-    box-shadow: inset 0 -4px 0 #cbe25e;
-    font-style: normal;
-}
-
-hr {
-    border-bottom: 1px solid #eee;
-    border-top: none;
-    border-left: none;
-    margin-bottom: 24px;
-}
-
-.pickWinnerMessage {
-    font-style: italic;
-    font-family: arial;
-    font-size: 16px;
-}
 
 .contentInfo {
     text-align: center;
@@ -174,6 +164,74 @@ hr {
     font-size: 48px;
 }
 
+.draftIcon {
+    background-image: url('../../images/drafticon.png');
+    background-repeat: no-repeat;
+    padding-left: 20px;
+}
+
+.errorIcon {
+    visibility: hidden;
+}
+
+.errorText {
+    color: #f7542b;
+    visibility: hidden;
+}
+
+.formsRow {
+    margin-bottom: 24px;
+}
+
+.leadingContent {
+    background-image: url('../../Images/hot.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    right: -20px;
+    top: -5px;
+    height: 64px;
+    width: 64px;
+}
+
+.noStatusIndicator {
+    position: absolute;
+    right: -20px;
+    top: -5px;
+    height: 64px;
+    width: 64px;
+}
+
+.objectIcon {
+    background-image: url('../../images/pageIcon.png');
+    background-repeat: no-repeat;
+    padding-left: 36px;
+    background-size: 28px,28px;
+    margin-top: 20px;
+}
+
+.pickWinnerMessage {
+    font-style: italic;
+    font-family: arial;
+    font-size: 16px;
+}
+
+.partialHr {
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.publishedIcon {
+    background-image: url('../../images/publishedIcon.png');
+    background-repeat: no-repeat;
+    padding-left: 18px;
+    padding-top: 2px;
+}
+
+.scheduleLabel {
+    vertical-align: middle;
+    padding-top: 2px;
+}
+
 .versiona {
     height: 200px;
     background-image: url('../../Images/pageIcon.png');
@@ -197,35 +255,8 @@ hr {
 
 }
 
-.objectIcon {
-    background-image: url('../../images/pageIcon.png');
-    background-repeat: no-repeat;
-    padding-left: 36px;
-    background-size: 28px,28px;
-    margin-top: 20px;
-}
-
-.publishedIcon {
-    background-image: url('../../images/publishedIcon.png');
-    background-repeat: no-repeat;
-    padding-left: 18px;
-    padding-top: 2px;
-}
-
-.draftIcon {
-    background-image: url('../../images/drafticon.png');
-    background-repeat: no-repeat;
-    padding-left: 20px;
-}
-
-.leadingContent {
-    background-image: url('../../Images/hot.png');
-    background-repeat: no-repeat;
-    position: absolute;
-    right: -20px;
-    top: -5px;
-    height: 64px;
-    width: 64px;
+.viewsAndConversions {
+    font-size: 24px;
 }
 
 .winningContent {
@@ -238,35 +269,8 @@ hr {
     width: 64px;
 }
 
-.noStatusIndicator {
-    position: absolute;
-    right: -20px;
-    top: -5px;
-    height: 64px;
-    width: 64px;
-}
-
-.viewsAndConversions {
-    font-size: 24px;
-}
-
-.partialHr {
-    margin-top: -10px;
-    margin-bottom: 15px;
-}
-
-.scheduleLabel {
-    vertical-align: middle;
-    padding-top: 2px;
-}
-
-.errorText {
-    color: #f7542b;
-    visibility: hidden;
-}
-
-.errorIcon {
-    visibility: hidden;
+#breadcrumb {
+     overflow-x: hidden;
 }
 
 #controlPieChart,
@@ -278,11 +282,6 @@ hr {
     width: 100px;
 }
 
-#testDescription {
-    width: 70%;
-    max-width: 99.75%;     
-}
-
 #trailingToolBar {
     padding-right: 15px;
 }
@@ -291,12 +290,12 @@ hr {
     padding-left: 15px;
 }
 
-#breadcrumb {
-     overflow-x: hidden;
-}
-
 #dateSelector {
     vertical-align: middle;
     visibility: hidden;
 }
 
+#testDescription {
+    width: 70%;
+    max-width: 99.75%;     
+}
