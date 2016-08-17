@@ -19,7 +19,7 @@
         <control>A / Control</control>
         <conversion_header>What's the conversion goal?</conversion_header>
         <conversion_label>Visitor navigates to page</conversion_label>
-        <days_text> days(s).</days_text>
+        <days_text> day(s).</days_text>
         <default> (default)</default>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_header>For how long do you wish to run the A/B test?</duration_header>

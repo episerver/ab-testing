@@ -190,17 +190,26 @@ hr {
     background-position: center;
 }
 
+.versionData {
+     text-align: center;
+     padding: 16px 32px;
+     font-family: arial;
+
+}
+
 .objectIcon {
     background-image: url('../../images/pageIcon.png');
     background-repeat: no-repeat;
     padding-left: 36px;
     background-size: 28px,28px;
+    margin-top: 20px;
 }
 
 .publishedIcon {
     background-image: url('../../images/publishedIcon.png');
     background-repeat: no-repeat;
     padding-left: 18px;
+    padding-top: 2px;
 }
 
 .draftIcon {
@@ -241,6 +250,25 @@ hr {
     font-size: 24px;
 }
 
+.partialHr {
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.scheduleLabel {
+    vertical-align: middle;
+    padding-top: 2px;
+}
+
+.errorText {
+    color: #f7542b;
+    visibility: hidden;
+}
+
+.errorIcon {
+    visibility: hidden;
+}
+
 #controlPieChart,
 #challengerPieChart,
 #controlPickWinnerPieChart,
@@ -262,3 +290,13 @@ hr {
 #leadingToolBar {
     padding-left: 15px;
 }
+
+#breadcrumb {
+     overflow-x: hidden;
+}
+
+#dateSelector {
+    vertical-align: middle;
+    visibility: hidden;
+}
+

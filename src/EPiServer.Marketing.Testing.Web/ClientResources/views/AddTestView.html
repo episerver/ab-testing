@@ -4,7 +4,7 @@
         <div class="epi-toolbarGroupContainer">
             <!-- Breadcrumb Widget -->
             <div id="leadingToolBar" class="epi-toolbarLeading epi-toolbarGroup">
-                <div id="breadcrumb" style="overflow-x: hidden;"
+                <div id="breadcrumb"
                      data-dojo-type="epi-cms/widget/Breadcrumb"
                      data-dojo-attach-point="breadcrumbWidget"
                      data-dojo-props="showCurrentNode: false">
@@ -50,15 +50,13 @@
         </div>
         <!-- Control/Published Version -->
         <div class="cardWrapper 2column controlDefaultBody">
-            <h3 style="background-color: #1ba4fa;color: #fff;font-size: 20px;font-weight: bold;font-family: arial;padding: 14px 8px 12px 20px; ">
+            <h3>
                 ${resources.addtestview.control}
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versiona"></div>
-                <p style="text-align: center; padding: 16px 32px; font-family: arial;">
-                    <span class="publishedIcon" style="padding-top: 2px">
-                        ${resources.addtestview.published_prefix}
-                    </span>
+                <p class="versionData">
+                    <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
                     <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
                     <span data-dojo-attach-point="datePublished"></span>
                 </p>
@@ -66,15 +64,15 @@
         </div>
         <!-- Challenger/Draft Version-->
         <div class="cardWrapper 2column challengerDefaultBody">
-            <h3 style="background-color: #f7542b; color: #fff; font-size: 20px; font-weight: bold; font-family: arial; padding: 14px 8px 12px 20px;">
+            <h3>
                 ${resources.addtestview.challenger}
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versionb"></div>
-                <p style="text-align: center; padding: 16px 32px; font-family: arial;">
-                    <span class="draftIcon" style="padding-top: 2px">${resources.addtestview.draft_prefix}</span>
-                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="savedBy"></span>,
-                    <span style="vertical-align: middle" data-dojo-attach-point="dateSaved"></span>
+                <p class="versionData">
+                    <span class="draftIcon">${resources.addtestview.draft_prefix}</span>
+                    <span class="epi-username" data-dojo-attach-point="savedBy"></span>,
+                    <span data-dojo-attach-point="dateSaved"></span>
                 </p>
             </div>
         </div>
@@ -83,7 +81,7 @@
             <div class="cardBody">
                 <!-- Test Goals -->
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">
+                    <h4>
                         ${resources.addtestview.goals_header}
                     </h4>
                     <textarea id="testDescription"
@@ -94,7 +92,7 @@
                 </div>
                 <!-- Conversion Selector -->
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-weight: bold; font-family: arial">
+                    <h4>
                         ${resources.addtestview.conversion_header}
                     </h4>
                     <p>
@@ -105,14 +103,14 @@
                               data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
                               data-dojo-attach-event="onChange: _onConversionPageChanged">
                         </span>
-                        <span id="pickerErrorIcon" style="visibility: hidden" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                        <span id="pickerErrorText" style="color: #f7542b; visibility: hidden"></span>
+                        <span id="pickerErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                        <span id="pickerErrorText" class="errorText"></span>
                     </p>
                 </div>
-                <hr style="margin-top: -10px;margin-bottom: 15px" />
+                <hr class="partialHr" />
                 <!-- Participation Percentage -->
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">
+                    <h4>
                         ${resources.addtestview.participation_header}
                     </h4>
                     <p>${resources.addtestview.participant_percentage_tip}</p>
@@ -123,14 +121,14 @@
                              data-dojo-attach-point="participationPercentText"
                              data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
                         </div><label>%</label>
-                        <span id="participationErrorIcon" style="visibility: hidden" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                        <span id="participationErrorText" style="color: #f7542b; visibility: hidden"></span>
-                    <p>
+                        <span id="participationErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                        <span id="participationErrorText" class="errorText"></span>
+                    </p>
                 </div>
-                <hr style="margin-top: -10px;margin-bottom: 15px" />
+                <hr class="partialHr" />
                 <!-- Test Duration -->
                 <div class="formsRow">
-                    <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">
+                    <h4>
                         ${resources.addtestview.duration_header}
                     </h4>
                     <p>
@@ -140,13 +138,13 @@
                              data-dojo-attach-point="durationText"
                              data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
                         </div><label>${resources.addtestview.days_text}</label> &nbsp;
-                        <span id="durationErrorIcon" style="visibility: hidden" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                        <span id="durationErrorText" style="color: #f7542b; visibility: hidden"></span>
+                        <span id="durationErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                        <span id="durationErrorText" class="errorText"></span>
                     </p>
                 </div>
                 <!-- Test Scheduling (radio and date selector) -->
                 <div class="formsRow">
-                    <h4 id="x" style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">
+                    <h4>
                         ${resources.addtestview.schedule_header}
                     </h4>
                     <div class="formsRow" style="float: left; padding-right: 20px; vertical-align: text-bottom">
@@ -154,7 +152,7 @@
                                value="hide" style="vertical-align: middle" checked
                                data-dojo-type="dijit/form/RadioButton"
                                data-dojo-attach-event="onClick: _toggleTimeSelector">
-                        <label style="vertical-align: middle; padding-top: 2px">
+                        <label class="scheduleLabel">
                             ${resources.addtestview.schedule_selector_start}
                         </label>
                         <br>
@@ -162,14 +160,14 @@
                                value="show" style="padding-top: 10px; vertical-align: middle"
                                data-dojo-type="dijit/form/RadioButton"
                                data-dojo-attach-event="onClick: _toggleTimeSelector">
-                        <label style="vertical-align: middle; padding-top: 2px">
+                        <label class="scheduleLabel">
                             ${resources.addtestview.schedule_selector_delay}
                         </label>
                     </div>
-                    <div class="formsRow" style="vertical-align: middle; visibility: hidden" id="dateSelector" data-dojo-attach-point="scheduleDiv">
+                    <div class="formsRow" id="dateSelector" data-dojo-attach-point="scheduleDiv">
                         <div>
-                            <span id="datePickerErrorIcon" style="visibility: hidden; padding-bottom: 2px" class="media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                            <span id="datePickerErrorText" style="color: #f7542b; visibility: hidden"></span>
+                            <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                            <span id="datePickerErrorText" class="errorText"></span>
                         </div>
                         <div id="StartDateTimeSelector" data-dojo-attach-point="startDatePicker"
                              data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown"
@@ -196,7 +194,7 @@
                 <!-- Confidence Level -->
                 <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;margin-top:-25px">
                     <div class="cardBody" style="padding-top: 4px;">
-                        <h4 style="font-size: 18px; margin: 8px 0; font-family: arial; font-weight: bold">${resources.addtestview.confidence_level_header}</h4>
+                        <h4>${resources.addtestview.confidence_level_header}</h4>
                         <p>${resources.addtestview.confidence_level_description}</p>
                         <select id="confidence">
                             <option value="99">${resources.addtestview.confidence_99}</option>
