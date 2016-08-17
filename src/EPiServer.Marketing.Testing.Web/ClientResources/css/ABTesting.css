@@ -72,6 +72,7 @@ hr {
 }
 
 .cardWrapperShadowed {
+    box-sizing: border-box;
     background-color: white;
     background-position: center bottom;
     background-repeat: no-repeat;
@@ -107,20 +108,22 @@ hr {
 
 .controlLeaderBody,
 .controlTrailingBody {
-    width: 48.5%;
+    box-sizing: border-box;
+    width: 49%;
     display: inline-block;
     float: left;
     margin-right: 2%;
 }
 
 .challengerLeaderBody {
+    box-sizing: border-box;
     width: 49%;
     display: inline-block;
 }
 
 .controlLeaderBody,
 .challengerLeaderBody {
-    border: 3px solid #95c532;
+    border: 2px solid #95c532;
 }
 
 .challengerDefaultBody h3 {
