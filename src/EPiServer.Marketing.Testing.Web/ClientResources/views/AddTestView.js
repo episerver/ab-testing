@@ -178,23 +178,9 @@
                     if (!rb) {
                         return;
                     } else if (rb.value === viewConfidenceLevel.toString()) {
-                        switch (viewConfidenceLevel) {
-                            case 99:
-                                this.confidence_99.set("Checked", "Checked");
-                                break;
-                            case 98:
-                                this.confidence_98.set("Checked", "Checked");
-                                break;
-                            case 90:
-                                this.confidence_90.set("Checked", "Checked");
-                                break;
-                            case 95:
-                            default:
-                                this.confidence_95.set("Checked", "Checked");
-                                break;
-                        }
+                        rb.setAttribute("selected", "selected");
                     } else {
-                        rb.checked = false;
+                        rb.removeAttribute("selected");
                     }
                 }
             },
