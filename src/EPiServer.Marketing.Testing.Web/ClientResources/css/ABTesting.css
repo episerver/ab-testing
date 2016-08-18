@@ -43,6 +43,10 @@ hr {
     padding-top: 4px;
 }
 
+    .cardBody h1, x:-moz-any-link, x:default {
+        margin-top: 15px;
+    }
+
     .cardBody h1 {
         font-size: 2em;
         font-weight: bold;
@@ -231,8 +235,6 @@ hr {
     font-family: arial;
     font-size: 16px;
 }
-
-
 
 .publishedIcon {
     background-image: url('../../images/publishedIcon.png');
