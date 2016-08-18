@@ -370,10 +370,10 @@
                 }
             },
 
-            _toggleTimeSelector: function (event) {
+            _toggleTimeSelector: function () {
                 var dateSelector = dom.byId("dateSelector");
 
-                if (event.srcElement.value === "show") {
+                if (dateSelector.style.visibility === "hidden") {
                     dateSelector.style.visibility = "visible";
                 } else {
                     this.startDatePicker.reset();
