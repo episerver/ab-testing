@@ -30,7 +30,6 @@
                 <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
                 <h2>
                     <span data-dojo-attach-point="testStatus"></span>
-                    &nbsp;
                     <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStarted"></span>
                 </h2>
             </div>
@@ -44,7 +43,7 @@
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versiona"></div>
                 <p class="contentInfo">
-                    <span class="publishedIcon" style="padding-top: 2px">
+                    <span class="publishedIcon">
                         ${resources.detailsview.published_prefix}
                     </span>
                     <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
@@ -80,8 +79,8 @@
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versionb"></div>
                 <p class="contentInfo">
-                    <span class="draftIcon" style="padding-top: 2px">${resources.detailsview.draft_prefix}</span>
-                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
+                    <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
+                    <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
                     <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
                 </p>
                 <table width="100%">
@@ -118,14 +117,14 @@
                         <label>${resources.detailsview.conversion_selector_description}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span><a href="" data-dojo-attach-point="contentLinkAnchor"></a>
                     </p>
                 </div>
-                <hr>
+                <hr class="partialHr">
                 <div class="formsRow">
                     <h4>${resources.detailsview.percent_participation_header}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
                     </p>
                 </div>
-                <hr>
+                <hr class="partialHr">
                 <div class="formsRow">
                     <h4>${resources.detailsview.test_duration_header}</h4>
                     <p>
@@ -136,7 +135,8 @@
         </div>
         <div class="cardWrapper">
             <h3>${resources.detailsview.advanced_options_header}</h3>
-            <div class="cardBody" style="padding-top: 4px;">
+            <hr style="margin-right: -18px; margin-left: -18px" />
+            <div class="cardBody">
                 <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
                 <p>
                     <strong><span data-dojo-attach-point="confidence"></span></strong>
