@@ -35,73 +35,75 @@
             </div>
         </div>
         <!-- Control/Published Version -->
-        <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column">
-            <div class="leadingContent" data-dojo-attach-point="publishedStatusIcon"></div>
-            <h3>
-                ${resources.detailsview.content_control_header}
-            </h3>
-            <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versiona"></div>
-                <p class="contentInfo">
-                    <span class="publishedIcon">
-                        ${resources.detailsview.published_prefix}
-                    </span>
-                    <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
-                    <span data-dojo-attach-point="datePublished"></span>
-                </p>
-                <!-- Control Statistics -->
-                <table width="100%">
-                    <tr>
-                        <td style="text-align:center;">
-                            <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
-                        </td>
-                        <td style="text-align:center;">
-                            <div id="controlPieChart"></div>
-                        </td>
-                        <td style="text-align:center;">
-                            <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.detailsview.conversions}
-                            </p>
-                            <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.detailsview.views}
-                            </p>
-                        </td>
-                    </tr>
-                </table>
+        <div class="row">
+            <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column">
+                <div class="leadingContent" data-dojo-attach-point="publishedStatusIcon"></div>
+                <h3>
+                    ${resources.detailsview.content_control_header}
+                </h3>
+                <div class="cardBody" style="padding-bottom: 0;">
+                    <div class="versiona"></div>
+                    <p class="contentInfo">
+                        <span class="publishedIcon">
+                            ${resources.detailsview.published_prefix}
+                        </span>
+                        <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
+                        <span data-dojo-attach-point="datePublished"></span>
+                    </p>
+                    <!-- Control Statistics -->
+                    <table width="100%">
+                        <tr>
+                            <td style="text-align:center;">
+                                <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
+                            </td>
+                            <td style="text-align:center;">
+                                <div id="controlPieChart"></div>
+                            </td>
+                            <td style="text-align:center;">
+                                <p>
+                                    <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.detailsview.conversions}
+                                </p>
+                                <p>
+                                    <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.detailsview.views}
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
-        <!-- Challenger/Draft Version-->
-        <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column">
-            <div class="winningContent" data-dojo-attach-point="variantStatusIcon"></div>
-            <h3>
-                ${resources.detailsview.content_challenger_header}
-            </h3>
-            <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versionb"></div>
-                <p class="contentInfo">
-                    <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
-                    <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
-                    <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
-                </p>
-                <table width="100%">
-                    <tr>
-                        <td style="text-align: center;">
-                            <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
-                        </td>
-                        <td style="text-align:center;">
-                            <div id="challengerPieChart"></div>
-                        </td>
-                        <td style="text-align: center;">
-                            <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.detailsview.conversions}
-                            </p>
-                            <p>
-                                <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.detailsview.views}
-                            </p>
-                        </td>
-                        <td></td>
-                    </tr>
-                </table>
+            <!-- Challenger/Draft Version-->
+            <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column">
+                <div class="winningContent" data-dojo-attach-point="variantStatusIcon"></div>
+                <h3>
+                    ${resources.detailsview.content_challenger_header}
+                </h3>
+                <div class="cardBody" style="padding-bottom: 0;">
+                    <div class="versionb"></div>
+                    <p class="contentInfo">
+                        <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
+                        <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
+                        <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
+                    </p>
+                    <table width="100%">
+                        <tr>
+                            <td style="text-align: center;">
+                                <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
+                            </td>
+                            <td style="text-align: center;">
+                                <div id="challengerPieChart"></div>
+                            </td>
+                            <td style="text-align: center;">
+                                <p>
+                                    <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.detailsview.conversions}
+                                </p>
+                                <p>
+                                    <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.detailsview.views}
+                                </p>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- Test Information -->

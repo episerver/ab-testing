@@ -129,6 +129,25 @@ hr {
     border: 2px solid #95c532;
 }
 
+.controlDefaultBody h3,
+.controlTrailingBody h3,
+.challengerDefaultBody h3,
+.controlLeaderBody h3,
+.challengerLeaderBody h3 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: arial;
+    padding: 14px 8px 12px 20px;
+    margin-top: 0;
+}
+
+.controlDefaultBody h3,
+.controlTrailingBody h3,
+.challengerDefaultBody h3{
+    padding: 14px 8px 12px 20px;
+ }
+
 .challengerDefaultBody h3 {
     background-color: #f7542b;
 }
@@ -140,20 +159,8 @@ hr {
 
 .controlLeaderBody h3,
 .challengerLeaderBody h3 {
-    background-color: #95c532;
-}
-
-.controlDefaultBody h3,
-.controlLeaderBody h3,
-.controlTrailingBody h3,
-.challengerLeaderBody h3,
-.challengerDefaultBody h3 {
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: arial;
-    padding: 14px 8px 12px 20px;
-    margin-top: 0;
+  padding: 14px 8px 10px 20px;
+  background-color: #95c532;
 }
 
 .controlDefaultBody #controlPercent,
@@ -183,6 +190,10 @@ hr {
 .errorText {
     color: #f7542b;
     visibility: hidden;
+}
+
+.row {
+    display: flex;
 }
 
 .formsRow {
