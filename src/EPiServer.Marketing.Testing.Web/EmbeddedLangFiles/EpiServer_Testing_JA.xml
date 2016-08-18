@@ -64,7 +64,7 @@
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> days / </days_divider>
+        <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
@@ -103,7 +103,7 @@
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> days / </days_divider>
+        <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>

@@ -22,7 +22,6 @@
                 <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
                 <h2>
                     <span data-dojo-attach-point="testStatus"></span>
-                    &nbsp;
                     <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStarted"></span>
                 </h2><br />
                 <span class="pickWinnerMessage" data-dojo-attach-point="pickAWinnerMessage"></span>
@@ -112,14 +111,14 @@
                         <label>${resources.detailsview.conversion_selector_description}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span><a href="" data-dojo-attach-point="contentLinkAnchor"></a>
                     </p>
                 </div>
-                <hr>
+                <hr class="partialHr">
                 <div class="formsRow">
                     <h4>${resources.detailsview.percent_participation_header}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
                     </p>
                 </div>
-                <hr>
+                <hr class="partialHr">
                 <div class="formsRow">
                     <h4>${resources.detailsview.test_duration_header}</h4>
                     <p>
@@ -128,8 +127,9 @@
                 </div>
             </div>
         </div>
-        <div class="cardWrapper">
+        <div class="cardWrapper" style="margin-bottom: 80px">
             <h3>${resources.detailsview.advanced_options_header}</h3>
+            <hr class="hrAdvanced" />
             <div class="cardBody" style="padding-top: 4px;">
                 <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
                 <p>

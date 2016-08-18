@@ -11,7 +11,6 @@ hr {
     border-bottom: 1px solid #eee;
     border-top: none;
     border-left: none;
-    margin-bottom: 24px;
 }
 
 .abBody {
@@ -36,7 +35,7 @@ hr {
         font-size: 16px;
         font-weight: bold;
         font-family: arial;
-        padding: 14px 8px 12px 20px;
+        padding: 14px 8px 5px 20px;
     }
 
 .cardBody {
@@ -83,16 +82,16 @@ hr {
     overflow: visible;
 }
 
-.cardWrapperShadowed:hover {
-    background-color: white;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    padding: 0;
-    margin-bottom: 12px;
-    box-shadow: 0px 6px 8px 3px #FFFF66;
-    position: relative;
-    overflow: visible;
-}
+    .cardWrapperShadowed:hover {
+        background-color: white;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        padding: 0;
+        margin-bottom: 12px;
+        box-shadow: 0px 6px 8px 3px #FFFF66;
+        position: relative;
+        overflow: visible;
+    }
 
 .controlDefaultBody {
     width: 49%;
@@ -186,6 +185,21 @@ hr {
     margin-bottom: 24px;
 }
 
+.hrToolbar {
+    margin-bottom: 24px;
+}
+
+.hrDetails {
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.hrAdvanced {
+    margin-right: -18px;
+    margin-left: -18px;
+    margin-bottom: 0;
+}
+
 .leadingContent {
     background-image: url('../../Images/hot.png');
     background-repeat: no-repeat;
@@ -218,10 +232,7 @@ hr {
     font-size: 16px;
 }
 
-.partialHr {
-    margin-top: -10px;
-    margin-bottom: 15px;
-}
+
 
 .publishedIcon {
     background-image: url('../../images/publishedIcon.png');
@@ -252,10 +263,9 @@ hr {
 }
 
 .versionData {
-     text-align: center;
-     padding: 16px 32px;
-     font-family: arial;
-
+    text-align: center;
+    padding: 16px 32px;
+    font-family: arial;
 }
 
 .viewsAndConversions {
@@ -273,7 +283,7 @@ hr {
 }
 
 #breadcrumb {
-     overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 #controlPieChart,
@@ -300,5 +310,5 @@ hr {
 
 #testDescription {
     width: 70%;
-    max-width: 99.75%;     
+    max-width: 99.75%;
 }
