@@ -64,7 +64,7 @@
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> days / </days_divider>
+        <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
@@ -77,7 +77,7 @@
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
         <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
-        <test_status_not_started>Test has not yet started, </test_status_not_started>
+        <test_status_not_started>Test has not yet started. </test_status_not_started>
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views>views</views>
@@ -103,7 +103,7 @@
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> days / </days_divider>
+        <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
@@ -123,7 +123,7 @@
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
         <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
-        <test_status_not_started>Test has not yet started, </test_status_not_started>
+        <test_status_not_started>Test has not yet started. </test_status_not_started>
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views>views</views>
