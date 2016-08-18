@@ -33,7 +33,7 @@ md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"
 xcopy "%ProjectPath%\Images" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"  /I /F /R /Y /S
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\Views"
-xcopy "%ProjectPath%\Views\*.*" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\Views"  /I /F /R /Y /S
+xcopy "%ProjectPath%\Views\*.*" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Admin"  /I /F /R /Y /S
 
 md "%PackagePath%\temp"
 

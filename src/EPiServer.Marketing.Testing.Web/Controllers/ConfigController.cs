@@ -8,14 +8,17 @@ using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
-    [EPiServer.PlugIn.GuiPlugIn(Area = EPiServer.PlugIn.PlugInArea.AdminConfigMenu, Url = "/EPiServer/EPiserver.Marketing.Testing.Web/Config/Index", DisplayName = "AB Testing Configuration")]
+    [EPiServer.PlugIn.GuiPlugIn(
+        Area = EPiServer.PlugIn.PlugInArea.AdminConfigMenu, 
+        Url = "/EPiServer/EPiserver.Marketing.Testing.Web/Config/Index", 
+        DisplayName = "AB Testing Configuration")]
     public class ConfigController : Controller
     {
         public ActionResult Index()
         {
             var model = AdminConfigTestSettings.Current;
 
-            return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", model);
+            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/Views/ConfigView.cshtml", model);
         }
 
         [HttpPost]
@@ -27,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 testSettings.Save();
             }
 
-            return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", testSettings);
+            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/Views/ConfigView.cshtml", testSettings);
         }
 
         [HttpPost]
@@ -35,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Cancel()
         {
             var model = AdminConfigTestSettings.Current;
-            return View("~/modules/_protected/Episerver.Marketing.Testing/ClientResources/views/ConfigView.cshtml", model);
+            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/Views/ConfigView.cshtml", model);
         }
     }
 
