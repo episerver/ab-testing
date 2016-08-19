@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             var model = AdminConfigTestSettings.Current;
 
-            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/Views/ConfigView.cshtml", model);
+            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/ConfigView.cshtml", model);
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 testSettings.Save();
             }
 
-            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/Views/ConfigView.cshtml", testSettings);
+            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/ConfigView.cshtml", testSettings);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Cancel()
         {
             var model = AdminConfigTestSettings.Current;
-            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/Views/ConfigView.cshtml", model);
+            return View("~/modules/_protected/Episerver.Marketing.Testing/Admin/Config/ConfigView.cshtml", model);
         }
     }
 
