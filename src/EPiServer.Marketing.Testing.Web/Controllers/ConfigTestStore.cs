@@ -15,17 +15,20 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class ABTestConfigStore : RestControllerBase
     {
         private ILogger _logger;
+        private AdminConfigTestSettings _settings;
 
         [ExcludeFromCodeCoverage]
         public ABTestConfigStore()
         {
             _logger = LogManager.GetLogger();
+            _settings = AdminConfigTestSettings.Current;
         }
 
         // For unit test support.
         internal ABTestConfigStore(IServiceLocator serviceLocator)
         {
             _logger = serviceLocator.GetInstance<ILogger>();
+            _settings = serviceLocator.GetInstance<AdminConfigTestSettings>();
         }
 
         [HttpGet]
@@ -34,24 +37,15 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             ActionResult result;
             try
             {
-                result = Rest(AdminConfigTestSettings.Current);
+                result = Rest(_settings);
             }
             catch (Exception e)
             {
-                _logger.Error("Internal error getting test using content Guid : " +  e);
+                _logger.Error("Internal error getting admin config settings : " +  e);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
 
             return result;
         }
-    }
-
-    public class ConfigViewModel
-    {
-        public int TestDuration { get; set; }
-
-        public int ParticipationPercent { get; set; }
-
-        public int ConfidenceLevel { get; set; }
     }
 }

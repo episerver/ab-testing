@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 using System.Linq;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {
     /// <summary>
     /// Used to populate the dropdown in the admin config settings page for ABTesting
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class AvailableConfidenceLevels
     {
         public static IEnumerable<ConfidenceLevel> ConfidenceLevels = new List<ConfidenceLevel>
@@ -55,8 +58,9 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
         public int ConfidenceLevel { get; set; }
 
-        private static AdminConfigTestSettings _currentSettings;
+        internal static AdminConfigTestSettings _currentSettings;
 
+       [ExcludeFromCodeCoverage]
         public static AdminConfigTestSettings Current
         {
             get
@@ -81,6 +85,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ConfidenceLevel = 95;
         }
 
+        [ExcludeFromCodeCoverage]
         public void Save()
         {
             var store = DynamicDataStoreFactory.Instance.GetStore(typeof(AdminConfigTestSettings));
@@ -99,6 +104,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
     }
 
+    [ExcludeFromCodeCoverage]
     public class ConfidenceLevel
     {
         public string Name { get; set; }
