@@ -12,6 +12,8 @@
         'dojo/topic',
         'dojo/html',
         'dojo/dom',
+        "dojo/dom-class",
+        "dijit/registry",
         'epi/dependency',
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
@@ -41,6 +43,8 @@
     topic,
     html,
     dom,
+    domClass,
+    registry,
     dependency
 ) {
         viewPublishedVersion: null;
@@ -346,7 +350,7 @@
             },
 
             _onDateTimeChange: function (event) {
-                var startButton = dom.byId("StartButton");
+                var startButton = registry.byId("StartButton");
                 var scheduleText = dom.byId("ScheduleText");
                 var startDateSelector = dom.byId("StartDateTimeSelector");
 
@@ -358,12 +362,12 @@
                     if (event !== "") {
                         var localDate = new Date(event).toLocaleDateString();
                         var localTime = new Date(event).toLocaleTimeString();
-                        startButton.innerText = resources.addtestview.schedule_test;
+                        startButton.set("label", resources.addtestview.schedule_test);
                         scheduleText.innerText = resources.addtestview.schedule_tobegin_on + localDate + "," + localTime;
                         this.model.startDate = new Date(event).toUTCString();
                         this.model.start = false;
                     } else {
-                        startButton.innerText = resources.addtestview.start_default;
+                        startButton.set("label", resources.addtestview.start_default);
                         scheduleText.innerText = resources.addtestview.notscheduled_text;
                         this.model.start = true;
                     }
