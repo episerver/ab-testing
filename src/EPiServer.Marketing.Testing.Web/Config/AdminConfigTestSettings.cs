@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 using System.Linq;
-using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {

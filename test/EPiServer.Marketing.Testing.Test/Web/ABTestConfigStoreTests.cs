@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using EPiServer.Data.Dynamic;
 using EPiServer.Logging;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.ServiceLocation;
@@ -20,14 +17,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<DynamicDataStoreFactory> _factory = new Mock<DynamicDataStoreFactory>();
         Mock<DynamicDataStore> _store = new Mock<DynamicDataStore>();
         Mock<AdminConfigTestSettings> _settings = new Mock<AdminConfigTestSettings>();
-        //IEnumerable<AdminConfigTestSettings> _settings = new List<AdminConfigTestSettings>() {new AdminConfigTestSettings()};
 
         private ABTestConfigStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<AdminConfigTestSettings>()).Returns(_settings.Object);
-            //_factory.Setup(call => call.GetStore(typeof(AdminConfigTestSettings))).Returns(_store.Object);
-            //_store.Setup(call => call.LoadAll<AdminConfigTestSettings>()).Returns(_settings);
             var testStore = new ABTestConfigStore(_locator.Object);
             return testStore;
         }
@@ -40,8 +34,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             Assert.True(result.Data is AdminConfigTestSettings, "Data in result is not AdminConfigTestSettings instance.");
             Assert.True((result.Data as AdminConfigTestSettings).ConfidenceLevel == 95, "AdminConfigTestSettings.ConfidenceLevel value does not match");
-            Assert.True((result.Data as AdminConfigTestSettings).ParticipationPercent == 10, "AdminConfigTestSettings.ConfidenceLevel value does not match");
-            Assert.True((result.Data as AdminConfigTestSettings).TestDuration == 30, "AdminConfigTestSettings.ConfidenceLevel value does not match");
+            Assert.True((result.Data as AdminConfigTestSettings).ParticipationPercent == 10, "AdminConfigTestSettings.ParticipationPercent value does not match");
+            Assert.True((result.Data as AdminConfigTestSettings).TestDuration == 30, "AdminConfigTestSettings.TestDuration value does not match");
         }
 
         [Fact]
