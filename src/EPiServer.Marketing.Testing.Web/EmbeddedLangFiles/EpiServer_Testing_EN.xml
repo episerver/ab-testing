@@ -145,6 +145,14 @@
         <completedtests>Completed A/B Tests</completedtests>
         <inactivetests>Scheduled A/B Tests</inactivetests>
       </tasks>
+      <admin>
+        <displayname>AB Testing Configuration</displayname>
+        <testduration>Test Duration:</testduration>
+        <participationpercent>Participation Percent:</participationpercent>
+        <confidencelevel>Confidence Level:</confidencelevel>
+        <save>Save</save>
+        <cancel>Cancel</cancel>
+      </admin>
     </abtesting>
   </language>
 </languages>
