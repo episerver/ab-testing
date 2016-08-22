@@ -81,6 +81,8 @@
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views>views</views>
+        <view_challenger_content>View challenger content</view_challenger_content>
+        <view_control_content>View control content</view_control_content>
       </detailsview>
       <notificationbar>
         <completed_test>An A/B test was completed on this page. </completed_test>
