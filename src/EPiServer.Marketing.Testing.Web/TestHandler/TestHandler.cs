@@ -40,6 +40,12 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
+            _testManager.TestSaved += OnTestSaved;
+        }
+
+        private void OnTestSaved(object sender, TestEventArgs e)
+        {
+            var x = e.Test.Id;
         }
 
         //To support unit testing

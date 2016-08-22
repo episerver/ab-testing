@@ -9,6 +9,9 @@ namespace EPiServer.Marketing.KPI.Manager
     /// </summary>
     public interface IKpiManager
     {
+        event EventHandler<KpiEventArgs> KpiConverted;
+
+
         /// <summary>
         /// Returns a KPI object based on its Id.
         /// </summary>

@@ -13,6 +13,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
+using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -33,7 +34,15 @@ namespace EPiServer.Marketing.Testing
         private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
 
-        public event EventHandler<TestEventArgs> SavingTestEvent;
+        public event EventHandler<TestEventArgs> TestSaved;
+        public event EventHandler<TestEventArgs> TestCreated;
+        public event EventHandler<TestEventArgs> ContentSwitched;
+        public event EventHandler<TestEventArgs> KPIConverted;
+        public event EventHandler<TestEventArgs> TestStarted;
+        public event EventHandler<TestEventArgs> TestStopped;
+        public event EventHandler<TestEventArgs> TestArchived;
+        public event EventHandler<TestEventArgs> TestDeleted;
+        public event EventHandler<TestEventArgs> UserIncludedInTest;
 
         public List<IMarketingTest> ActiveCachedTests
         {
@@ -163,10 +172,10 @@ namespace EPiServer.Marketing.Testing
                 UpdateCache(multivariateTest, CacheOperator.Add);
             }
 
-            if (SavingTestEvent != null)
+            if (TestSaved != null)
             {
                 var eventarg = new TestEventArgs(multivariateTest);
-                SavingTestEvent(this, eventarg);
+                TestSaved(this, eventarg);
             }
 
             return testId;
@@ -186,17 +195,22 @@ namespace EPiServer.Marketing.Testing
             {
                 UpdateCache(test, CacheOperator.Remove);
             }
+
+            Task.Factory.StartNew(()=> TestDeleted?.Invoke(this,new TestEventArgs(test)));
         }
 
         public void Start(Guid testObjectId)
         {
             var dalTest = _dataAccess.Start(testObjectId);
+            var managerTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest);
 
             // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest), CacheOperator.Add);
+                UpdateCache(managerTest, CacheOperator.Add);
             }
+
+            Task.Factory.StartNew(()=> TestStarted?.Invoke(this,new TestEventArgs(managerTest)));
         }
 
         public void Stop(Guid testObjectId)
@@ -219,6 +233,8 @@ namespace EPiServer.Marketing.Testing
 
                 UpdateCache(test, CacheOperator.Remove);
             }
+
+            Task.Factory.StartNew(()=> TestStopped?.Invoke(this,new TestEventArgs(test)));
         }
 
         public void Archive(Guid testObjectId, Guid winningVariantId)
@@ -231,6 +247,8 @@ namespace EPiServer.Marketing.Testing
             {
                 UpdateCache(test,CacheOperator.Remove);
             }
+
+            Task.Factory.StartNew(() => TestArchived?.Invoke(this,new TestEventArgs(test)));
         }
 
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
@@ -256,6 +274,8 @@ namespace EPiServer.Marketing.Testing
                             activePage = TestManagerHelper.ConvertToManagerVariant(currentTest.Variants[1]);
                             break;
                     }
+                    Task.Factory.StartNew(()=> 
+                    UserIncludedInTest?.Invoke(this,new TestEventArgs(TestManagerHelper.ConvertToManagerTest(_kpiManager,currentTest))));
                 }
             }
             return activePage;

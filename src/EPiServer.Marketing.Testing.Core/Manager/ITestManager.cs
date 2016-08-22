@@ -47,6 +47,20 @@ namespace EPiServer.Marketing.Testing
         /// <summary>
         /// Event handler for callers to get notified when a test is saved.
         /// </summary>
-        event EventHandler<TestEventArgs> SavingTestEvent;
+        event EventHandler<TestEventArgs> TestCreated;
+        event EventHandler<TestEventArgs> TestDeleted;
+        event EventHandler<TestEventArgs> TestSaved;
+
+        event EventHandler<TestEventArgs> TestStarted;
+        event EventHandler<TestEventArgs> TestStopped;
+        event EventHandler<TestEventArgs> TestArchived;
+
+        event EventHandler<TestEventArgs> ContentSwitched;
+        event EventHandler<TestEventArgs> UserIncludedInTest;
+
+        
+
+        
+
     }
 }
