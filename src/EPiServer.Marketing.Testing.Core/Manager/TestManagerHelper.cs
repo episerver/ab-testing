@@ -123,13 +123,6 @@ namespace EPiServer.Marketing.Testing
             return retState;
         }
 
-        internal static void SafeEventInvoke(EventHandler eventToInvoke, object sender, EventArgs args)
-        {
-            Task.Factory.StartNew(() => eventToInvoke?.Invoke(sender,args));
-        }
-    
-
-
     #region VariantConversion
         internal static List<Variant> AdaptToManagerVariant(IList<DalVariant> theVariantList)
         {

@@ -171,12 +171,9 @@ namespace EPiServer.Marketing.Testing
             {
                 UpdateCache(multivariateTest, CacheOperator.Add);
             }
+            
+            Task.Factory.StartNew(() => TestSaved?.Invoke(this, new TestEventArgs(multivariateTest)));
 
-            if (TestSaved != null)
-            {
-                var eventarg = new TestEventArgs(multivariateTest);
-                TestSaved(this, eventarg);
-            }
 
             return testId;
         }
