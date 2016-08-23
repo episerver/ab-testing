@@ -83,6 +83,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
             TestDuration.Text = TestSettings.TestDuration.ToString();
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
+
+            DurationValidator.IsValid = ParticipationValidator.IsValid = true;
         }
     }
 }
