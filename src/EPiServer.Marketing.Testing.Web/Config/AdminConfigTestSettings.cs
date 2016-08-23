@@ -8,37 +8,6 @@ using System.Linq;
 namespace EPiServer.Marketing.Testing.Web.Config
 {
     /// <summary>
-    /// Used to populate the dropdown in the admin config settings page for ABTesting
-    /// </summary>
-    [ExcludeFromCodeCoverage]
-    public static class AvailableConfidenceLevels
-    {
-        public static IEnumerable<ConfidenceLevel> ConfidenceLevels = new List<ConfidenceLevel>
-        {
-            new ConfidenceLevel
-            {
-                Value = 99,
-                Name = "99%"
-            },
-            new ConfidenceLevel
-            {
-                Value = 98,
-                Name = "98%"
-            },
-            new ConfidenceLevel
-            {
-                Value = 95,
-                Name = "95%"
-            },
-            new ConfidenceLevel
-            {
-                Value = 90,
-                Name = "90%"
-            }
-        };
-    }
-
-    /// <summary>
     /// ABTest settings that are configurable via the admin config page
     /// </summary>
     [EPiServerDataStore(AutomaticallyCreateStore = true, AutomaticallyRemapStore = true)]
@@ -101,13 +70,4 @@ namespace EPiServer.Marketing.Testing.Web.Config
         }
 
     }
-
-    [ExcludeFromCodeCoverage]
-    public class ConfidenceLevel
-    {
-        public string Name { get; set; }
-
-        public int Value { get; set; }
-    }
-
 }
