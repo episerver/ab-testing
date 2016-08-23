@@ -46,6 +46,14 @@
         <start_default>Start Test</start_default>
         <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
       </addtestview>
+      <admin>
+        <cancel>Cancel</cancel>
+        <confidencelevel>Confidence Level:</confidencelevel>
+        <displayname>AB Testing Configuration</displayname>
+        <participationpercent>Participation Percent:</participationpercent>
+        <save>Save</save>
+        <testduration>Test Duration:</testduration>
+      </admin>
       <canceltestcommand>
         <label_text>Cancel A/B test and edit page</label_text>
         <tooltip_text>Cancel A/B test and edit page</tooltip_text>
@@ -145,14 +153,6 @@
         <completedtests>Completed A/B Tests</completedtests>
         <inactivetests>Scheduled A/B Tests</inactivetests>
       </tasks>
-      <admin>
-        <displayname>AB Testing Configuration</displayname>
-        <testduration>Test Duration:</testduration>
-        <participationpercent>Participation Percent:</participationpercent>
-        <confidencelevel>Confidence Level:</confidencelevel>
-        <save>Save</save>
-        <cancel>Cancel</cancel>
-      </admin>
     </abtesting>
   </language>
 </languages>
