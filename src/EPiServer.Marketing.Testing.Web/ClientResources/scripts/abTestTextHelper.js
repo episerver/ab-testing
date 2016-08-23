@@ -33,12 +33,12 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             context = testContext;
 
             if (context.data.test.variants[0].itemVersion ===
-                context.data.publishedVersionContentLink.split('_')[0]) {
-                this.publishedVariant = context.data.test.variants[0];
-                this.draftVariant = context.data.test.variants[1];
-            } else {
-                this.publishedVariant = context.data.test.variants[1];
+                context.data.draftVersionContentLink.split('_')[0]) {
                 this.draftVariant = context.data.test.variants[0];
+                this.publishedVariant = context.data.test.variants[1];
+            } else {
+                this.draftVariant = context.data.test.variants[1];
+                this.publishedVariant = context.data.test.variants[0];
             }
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
