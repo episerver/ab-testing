@@ -57,8 +57,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         ///  matches requested page</returns>
         public bool IsRequestedContent(IContent loadedContent)
         {
-            return !(loadedContent is PageData) ||
-               (GetCurrentPageFromUrl().ContentLink == loadedContent.ContentLink);
+            var content = GetCurrentPageFromUrl();
+            if (content != null)
+            {
+                return !(loadedContent is PageData) ||
+                    (content.ContentLink == loadedContent.ContentLink);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

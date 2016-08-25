@@ -135,24 +135,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_Returns_when_TargetLinkNull_and_PageData()
-        {
-            IContent content = new PageData(); // we have to use page data for this test
-
-            _contentReferenceList.Add(content.ContentGuid, 0);
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-
-            // and targetlink must be null for this test
-            ContentEventArgs args = new ContentEventArgs(content) { TargetLink = null }; 
-            testHandler.LoadedContent(new object(), args);
-
-            _mockTestDataCookieHelper.Verify(call => call.GetTestDataFromCookie(It.IsAny<string>()), Times.Never(), "Short circut eval not working. This could be a performance issue.");
-            Assert.False(_logger.ErrorCalled, "Exception in LoadedContent when it should not have been.");
-        }
-
-        [Fact]
         public void TestHandler_System_With_Valid_TestData_Cookie_And_No_Active_Test_Calls_Expire_Cookie()
         {
             var content = new BasicContent();
@@ -304,98 +286,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
-        [Fact]
-        public void TestHandler_ContentUnderTest_Returning_User_Included_In_A_Test_Marked_As_Seeing_Published_Gets_The_Published_Page_But_Does_Not_Count_As_A_View()
-        {
-
-            IContent content = new BasicContent();
-            content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference();
-            _contentReferenceList.Add(content.ContentGuid, 0);
-
-            List<IMarketingTest> testList = new List<IMarketingTest>()
-            {
-                new ABTest() {
-                    OriginalItemId = _associatedTestGuid,
-                    KpiInstances = new List<IKpi>()
-                }
-            };
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(testList);
-            _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-                .Returns(true);
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = false, Viewed = true });
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
-            _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
-            _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
-
-            ContentEventArgs args = new ContentEventArgs(content);
-            testHandler.LoadedContent(new object(), args);
-
-            _mockTestManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
-            _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once, "Content should have triggered call to update cookie data");
-
-            Assert.Equal(content, args.Content);
-            Assert.Equal(content.ContentLink, args.ContentLink);
-        }
-
-        [Fact]
-        public void TestHandler_ContentUnderTest_Returning_User_Included_In_A_Test_Marked_As_Seeing_Variant_Gets_The_Variant_Page_But_Does_Not_Count_As_A_View()
-        {
-            IContent content = new BasicContent();
-            content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference() { ID = 1, WorkID = 1 };
-
-            var pageRef = new PageReference() { ID = 2, WorkID = 2 };
-            var variantPage = new PageData(pageRef);
-
-            IMarketingTest test = new ABTest()
-            {
-                Id = _activeTestGuid,
-                OriginalItemId = _associatedTestGuid,
-                State = TestState.Active,
-                KpiInstances = new List<IKpi>()
-            };
-
-            List<IMarketingTest> testList = new List<IMarketingTest>() { test };
-
-            Variant testVariant = new Variant()
-            {
-                Id = _matchingVariantId,
-                ItemVersion = 5,
-                TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
-            };
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-
-            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
-            _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid, int>>())).Returns(variantPage);
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = true });
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
-            _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
-            _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-            .Returns(true);
-
-            ContentEventArgs args = new ContentEventArgs(content);
-            testHandler.LoadedContent(new object(), args);
-
-            _mockTestManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should  not have triggered IncrementCount View call");
-            _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once(), "Content should have triggered call to update cookie data");
-            Assert.Equal(variantPage, args.Content);
-            Assert.Equal(variantPage.ContentLink, args.ContentLink);
-        }
-
+ 
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
@@ -550,7 +441,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest(_contentReferenceList);
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
-                .Returns(new List<IMarketingTest>());
+                .Returns(new List<IMarketingTest>() { test });
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()))
@@ -569,143 +460,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Once, "Test should have attempted to increment count");
         }
 
-        [Fact]
-        public void TestHandler_EvaluateKpi_Catch_Throws_TestNotFound_Exception()
-        {
-            IContent content = new BasicContent();
-            content.ContentGuid = Guid.NewGuid();
-            content.ContentLink = new ContentReference(); ContentReference testTargetLink = new ContentReference(2, 101);
-
-            TestDataCookie testCookieOne = new TestDataCookie
-            {
-                Viewed = true,
-                Converted = false,
-                TestVariantId = _matchingVariantId
-            };
-            testCookieOne.KpiConversionDictionary.Add(_firstKpiId, true);
-
-            List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-
-            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
-                .Returns(new List<IMarketingTest>());
-            _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
-            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Throws(new TestNotFoundException());
-            _mockTestManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<IContent>()))
-                .Returns(new List<Guid> { Guid.NewGuid() });
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-
-            ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
-            {
-                Content = content,
-                TargetLink = testTargetLink
-            };
-            testHandler.LoadedContent(new object(), args);
-            _mockTestDataCookieHelper.Verify(call => call.ExpireTestDataCookie(It.IsAny<TestDataCookie>()), Times.Once, "Expected expire test data cookie to be called");
-        }
-
-        [Fact]
-        public void TestHandler_ActiveTest_Does_Not_Increment_View_If_Content_Is_Not_The_Page_Requested()
-        {
-            IContent content = new BasicContent();
-            content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference();
-            _contentReferenceList.Add(content.ContentGuid, 0);
-
-            List<IMarketingTest> testList = new List<IMarketingTest>()
-            {
-                new ABTest() {
-                    OriginalItemId = _associatedTestGuid,
-                    KpiInstances = new List<IKpi>(),
-                    Id = _activeTestGuid
-                }
-            };
-
-            Variant testVariant = new Variant()
-            {
-                Id = Guid.Empty,
-                ItemVersion = 0,
-                TestId = _activeTestGuid,
-                ItemId = Guid.Empty
-            };
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(testList);
-            _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
-            _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-                .Returns(false);
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = false, Viewed = true });
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
-            _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
-            _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
-
-            ContentEventArgs args = new ContentEventArgs(content);
-            testHandler.LoadedContent(new object(), args);
-
-            _mockTestManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
-            _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
-
-            Assert.Equal(content, args.Content);
-            Assert.Equal(content.ContentLink, args.ContentLink);
-        }
-
-        [Fact]
-        public void TestHandler_ActiveTest_Does_Not_Increment_View_If_User_Is_Not_A_Participant()
-        {
-            IContent content = new BasicContent();
-            content.ContentGuid = _associatedTestGuid;
-            content.ContentLink = new ContentReference();
-            _contentReferenceList.Add(content.ContentGuid, 0);
-
-            List<IMarketingTest> testList = new List<IMarketingTest>()
-            {
-                new ABTest() {
-                    OriginalItemId = _associatedTestGuid,
-                    KpiInstances = new List<IKpi>(),
-                    Id = _activeTestGuid
-                }
-            };
-
-            Variant testVariant = new Variant()
-            {
-                Id = Guid.Empty,
-                ItemVersion = 0,
-                TestId = _activeTestGuid,
-                ItemId = Guid.Empty
-            };
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
-            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(testList);
-            _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
-            _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
-            _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
-                .Returns(true);
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = false, Viewed = true });
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
-            _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
-            _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
-
-            ContentEventArgs args = new ContentEventArgs(content);
-            testHandler.LoadedContent(new object(), args);
-
-            _mockTestManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Never, "Content should not have triggered IncrementCount View call");
-            _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
-            _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
-
-            Assert.Equal(content, args.Content);
-            Assert.Equal(content.ContentLink, args.ContentLink);
-        }
-
-
-        [Fact]
+         [Fact]
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest(_contentReferenceList);

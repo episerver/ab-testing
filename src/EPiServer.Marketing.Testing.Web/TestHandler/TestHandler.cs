@@ -12,12 +12,13 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Logging;
+using System.Collections.Concurrent;
 
 namespace EPiServer.Marketing.Testing.Web
 {
     internal class TestHandler : ITestHandler
     {
-        internal Dictionary<Guid, int> ProcessedContentList;
+        internal IDictionary<Guid, int> ProcessedContentList;
 
         private readonly ITestingContextHelper _contextHelper;
         private readonly ITestDataCookieHelper _testDataCookieHelper;
@@ -33,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Web
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
 
             // init our processed contentlist
-            ProcessedContentList = new Dictionary<Guid, int>();
+            ProcessedContentList = new ConcurrentDictionary<Guid, int>();
 
             // Setup our content events
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
@@ -141,31 +142,19 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
+                    EvaluateCookies();
                     EvaluateKpis(e);
 
                     // get the test from the cache
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
-                    if( activeTest != null )
-                    {
-                        // When TargetLink is null and the content is of type PageData we can skip the processing.
-                        // For an abtest that is blockdata (and probably other formes of content data on a page)
-                        // we need to process each time the loadcontent method is called because TargetLink is always null 
-                        // example. for blocks, TargetLink is always null
-                        if (e.TargetLink == null && (e.Content is PageData) )
-                        {
-                            return;
-                        }
-                    }
-
-                    var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
-                    var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-
                     if (activeTest != null)
                     {
+                        var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+                        var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
                         var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
 
-                        ProcessedContentList = AddProcessedContent(e.Content.ContentGuid, ProcessedContentList);
+                        AddProcessedContent(e.Content.ContentGuid);
 
                         if (!hasData && ProcessedContentList[e.Content.ContentGuid] == 1)
                         {
@@ -173,12 +162,7 @@ namespace EPiServer.Marketing.Testing.Web
                         }
 
                         Swap(testCookieData, e);
-                        testCookieData = EvaluateViews(testCookieData, contentVersion, originalContent);
-                        _testDataCookieHelper.UpdateTestDataCookie(testCookieData);
-                    }
-                    else if (hasData)
-                    {
-                        _testDataCookieHelper.ExpireTestDataCookie(testCookieData);
+                        EvaluateViews(testCookieData, contentVersion, originalContent);
                     }
                 }
                 catch (Exception err)
@@ -188,14 +172,13 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        private Dictionary<Guid, int> AddProcessedContent(Guid contentGuid, Dictionary<Guid, int> processedContent)
+        private void AddProcessedContent(Guid contentGuid)
         {
-            if (!processedContent.ContainsKey(contentGuid))
+            if (!ProcessedContentList.ContainsKey(contentGuid))
             {
-                processedContent.Add(contentGuid, 0);
+                ProcessedContentList.Add(contentGuid, 0);
             }
-            processedContent[contentGuid]++;
-            return ProcessedContentList;
+            ProcessedContentList[contentGuid]++;
         }
 
         private void SetTestData(IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion )
@@ -249,33 +232,64 @@ namespace EPiServer.Marketing.Testing.Web
                     _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
                         CountType.View);
                     cookie.Viewed = true;
+
+                    _testDataCookieHelper.UpdateTestDataCookie(cookie);
                 }
             }
 
             return cookie;
         }
 
-        //Processes the Kpis, determining conversions and handling incrementing conversion counts.
+        /// <summary>
+        /// Analyzes existing cookies and expires / updates any depending on what tests are in the cache.
+        /// It is assumed that only tests in the cache are active.
+        /// </summary>
+        private void EvaluateCookies()
+        {
+            var testCookieList = _testDataCookieHelper.GetTestDataFromCookies();
+            foreach (var testCookie in testCookieList)
+            {
+                var activeTest = _testManager.GetActiveTestsByOriginalItemId(testCookie.TestContentId).FirstOrDefault();
+                if (activeTest == null)
+                {
+                    // if cookie exists but there is no associated test, expire it 
+                    if (_testDataCookieHelper.HasTestData(testCookie))
+                    {
+                        _testDataCookieHelper.ExpireTestDataCookie(testCookie);
+                    }
+                }
+                else if (activeTest.Id != testCookie.TestId)
+                {
+                    // else we have a valid test but the cookie test id doesnt match because user created a new test 
+                    // on the same content.
+                    _testDataCookieHelper.ResetTestDataCookie(testCookie);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Processes the Kpis, determining conversions and handling incrementing conversion counts.
+        /// </summary>
+        /// <param name="e"></param>
         private void EvaluateKpis(ContentEventArgs e)
         {
+            // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
             if (e.TargetLink != null)
             {
-                var cdl = _testDataCookieHelper.GetTestDataFromCookies();
-                foreach (var testdata in cdl)
+                var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
+                foreach (var tdcookie in cookielist)
                 {
                     // for every test cookie we have, check for the converted and the viewed flag
-                    if (!testdata.Converted && testdata.Viewed)
+                    if (!tdcookie.Converted && tdcookie.Viewed)
                     {
-                        try
+                        var test = _testManager.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
+                        if (test != null)
                         {
-                            var test = _testManager.Get(testdata.TestId);
-
-                            // optimization : create the list of kpis that have not evaluated 
-                            // to true and then evaluate them
+                            // optimization : Evalute only the kpis that have not currently evaluated to true.
                             var kpis = new List<IKpi>();
                             foreach (var kpi in test.KpiInstances)
                             {
-                                var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
+                                var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
                                 if (!converted)
                                     kpis.Add(kpi);
                             }
@@ -286,29 +300,25 @@ namespace EPiServer.Marketing.Testing.Web
                                 // add each kpi to testdata cookie data
                                 foreach (var eval in evaluated)
                                 {
-                                    testdata.KpiConversionDictionary.Remove(eval);
-                                    testdata.KpiConversionDictionary.Add(eval, true);
+                                    tdcookie.KpiConversionDictionary.Remove(eval);
+                                    tdcookie.KpiConversionDictionary.Add(eval, true);
                                 }
 
                                 // now check to see if all kpi objects have evalated
-                                testdata.Converted = testdata.KpiConversionDictionary.All(x => x.Value);
+                                tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
 
                                 // now save the testdata to the cookie
-                                _testDataCookieHelper.UpdateTestDataCookie(testdata);
+                                _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
 
                                 // now if we have converted, fire the converted message 
                                 // note : we wouldnt be here if we already converted on a previous loop
-                                if (testdata.Converted)
+                                if (tdcookie.Converted)
                                 {
-                                    Variant varUserSees = test.Variants.First(x => x.Id == testdata.TestVariantId);
+                                    Variant varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
                                     _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion,
                                         CountType.Conversion);
                                 }
                             }
-                        }
-                        catch (TestNotFoundException)
-                        {
-                            _testDataCookieHelper.ExpireTestDataCookie(testdata);
                         }
                     }
                 }

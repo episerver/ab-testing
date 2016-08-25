@@ -261,7 +261,7 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
-        public IContent GetVariantContent(Guid contentGuid, Dictionary<Guid,int> processedList)
+        public IContent GetVariantContent(Guid contentGuid, IDictionary<Guid,int> processedList)
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid);
 
@@ -319,7 +319,7 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        internal IContent UpdateVariantContentCache(Guid contentGuid, Dictionary<Guid,int> processedList)
+        internal IContent UpdateVariantContentCache(Guid contentGuid, IDictionary<Guid,int> processedList)
         {
             IVersionable versionableContent = null;
 
