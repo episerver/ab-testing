@@ -101,10 +101,10 @@
         },
 
         renderStatus: function () {
-            this.testStatus.innerText = "This test was completed " +
+            this.testStatus.innerText = resources.archiveview.test_status_completed +
+                " " +
                 datetime.toUserFriendlyString(this.context.data.test.endDate) +
-                ", " +
-                "and content has been chosen to publish.";
+                resources.archiveview.content_chosen;
         },
 
         renderTestDuration: function () {
