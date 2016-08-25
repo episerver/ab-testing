@@ -112,7 +112,8 @@ hr {
 .controlLeaderBody,
 .controlTrailingBody,
 .controlPublishedBody {
-    width: 48.5%;
+    box-sizing: border-box;
+    width: 49%;
     display: inline-block;
     float: left;
     margin-right: 2%;
@@ -120,6 +121,7 @@ hr {
 
 .challengerLeaderBody,
 .challengerPublishedBody {
+    box-sizing: border-box;
     width: 49%;
     display: inline-block;
 }
