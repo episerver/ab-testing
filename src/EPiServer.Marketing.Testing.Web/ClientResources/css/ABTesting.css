@@ -97,16 +97,16 @@ hr {
     overflow: visible;
 }
 
-.cardWrapperShadowed:hover {
-    background-color: white;
-    background-position: center bottom;
-    background-repeat: no-repeat;
-    padding: 0;
-    margin-bottom: 12px;
-    box-shadow: 0px 6px 8px 3px #FFFF66;
-    position: relative;
-    overflow: visible;
-}
+    .cardWrapperShadowed:hover {
+        background-color: white;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        padding: 0;
+        margin-bottom: 12px;
+        box-shadow: 0px 6px 8px 3px #FFFF66;
+        position: relative;
+        overflow: visible;
+    }
 
 .controlDefaultBody {
     width: 49%;
@@ -142,7 +142,7 @@ hr {
 
 .controlPublishedBody,
 .challengerPublishedBody {
-    border: 3px solid #ffd700;
+    border: 3px solid #779f23;
 }
 
 .challengerDefaultBody h3 {
@@ -161,7 +161,7 @@ hr {
 
 .controlPublishedBody h3,
 .challengerPublishedBody h3 {
-    background-color: #ffd700;
+    background-color: #779f23;
 }
 
 .controlDefaultBody h3,
@@ -181,8 +181,7 @@ hr {
 
 .controlDefaultBody #controlPercent,
 .controlTrailingBody #controlPercent,
-.challengerDefaultBody #challengerPercent
- {
+.challengerDefaultBody #challengerPercent {
     font-family: arial;
     font-size: 32px;
 }
@@ -231,8 +230,10 @@ hr {
     padding-left: 20px;
 }
 
-.leadingContent {
-    background-image: url('../../Images/hot.png');
+
+.leadingContent,
+.winningContent,
+.pickedContent {
     background-repeat: no-repeat;
     position: absolute;
     right: -20px;
@@ -241,14 +242,16 @@ hr {
     width: 64px;
 }
 
+.leadingContent {
+    background-image: url('../../Images/hot.png');
+}
+
 .winningContent {
     background-image: url('../../Images/winner.png');
-    background-repeat: no-repeat;
-    position: absolute;
-    right: -20px;
-    top: -5px;
-    height: 64px;
-    width: 64px;
+}
+
+.pickedContent {
+    background-image: url('../../Images/picked.png');
 }
 
 .noStatusIndicator {
