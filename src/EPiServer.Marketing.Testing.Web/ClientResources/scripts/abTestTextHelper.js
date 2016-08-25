@@ -33,7 +33,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             context = testContext;
 
             if (context.data.test.variants[0].itemVersion ===
-                context.data.draftVersionContentLink.split('_')[0]) {
+                context.data.draftVersionContentLink.split('_')[1]) {
                 this.draftVariant = context.data.test.variants[0];
                 this.publishedVariant = context.data.test.variants[1];
             } else {
