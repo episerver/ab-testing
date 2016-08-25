@@ -59,8 +59,7 @@
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> days / </days_divider>
-        <days_remaining>day(s) remaining.</days_remaining>
+        <days_divider> day(s), </days_divider>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
@@ -71,6 +70,7 @@
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
         <test_status_completed>Test completed, and content has been chosen to publish.</test_status_completed>
+        <to>to</to>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views>views</views>
       </archiveview>

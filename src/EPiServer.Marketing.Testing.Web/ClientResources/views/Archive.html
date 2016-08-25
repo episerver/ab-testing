@@ -22,10 +22,7 @@
                 <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
                 <h2>
                     <span data-dojo-attach-point="testStatus"></span>
-                    &nbsp;
-                    <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStarted"></span>
-                </h2><br />
-                <span class="pickWinnerMessage" data-dojo-attach-point="pickAWinnerMessage"></span>
+                </h2>
             </div>
 
         </div>
@@ -121,7 +118,10 @@
                 <div class="formsRow">
                     <h4>${resources.archiveview.test_duration_header}</h4>
                     <p>
-                        <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.archiveview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong> ${resources.archiveview.days_remaining}
+                        <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.archiveview.days_divider}
+                        <span data-dojo-attach-point="testStartDate"> </span>
+                        ${resources.archiveview.to}
+                        <span data-dojo-attach-point="testEndDate"> </span>
                     </p>
                 </div>
             </div>

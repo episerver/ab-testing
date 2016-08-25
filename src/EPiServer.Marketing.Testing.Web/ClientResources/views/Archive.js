@@ -83,9 +83,6 @@
             this.topic = this.topic || topic;
 
             textHelper.renderTitle(this.title);
-            textHelper.renderTestStatus(this.testStatus, this.testStarted);
-            textHelper.renderTestDuration(this.testDuration);
-            textHelper.renderTestRemaining(this.testRemaining);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
@@ -99,7 +96,21 @@
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
             this.renderStatusIndicatorStyles();
+            this.renderStatus();
+            this.renderTestDuration();
+        },
 
+        renderStatus: function () {
+            this.testStatus.innerText = "This test was completed " +
+                datetime.toUserFriendlyString(this.context.data.test.endDate) +
+                ", " +
+                "and content has been chosen to publish.";
+        },
+
+        renderTestDuration: function () {
+            this.testDuration.innerText = this.context.data.daysElapsed;
+            this.testStartDate.innerText = datetime.toUserFriendlyString(this.context.data.test.startDate);
+            this.testEndDate.innerText = datetime.toUserFriendlyString(this.context.data.test.endDate);
         },
 
         renderStatusIndicatorStyles: function () {
