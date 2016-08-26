@@ -155,6 +155,7 @@ namespace EPiServer.Marketing.Testing.Web
                         var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
 
                         AddProcessedContent(e.Content.ContentGuid);
+                        _testManager.GetVariantContent(e.Content.ContentGuid, ProcessedContentList);
 
                         if (!hasData && ProcessedContentList[e.Content.ContentGuid] == 1)
                         {
