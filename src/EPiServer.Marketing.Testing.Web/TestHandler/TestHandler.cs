@@ -142,7 +142,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    EvaluateCookies();
+                    EvaluateCookies(e);
                     EvaluateKpis(e);
 
                     // get the test from the cache
@@ -245,7 +245,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Analyzes existing cookies and expires / updates any depending on what tests are in the cache.
         /// It is assumed that only tests in the cache are active.
         /// </summary>
-        private void EvaluateCookies()
+        private void EvaluateCookies(ContentEventArgs e)
         {
             var testCookieList = _testDataCookieHelper.GetTestDataFromCookies();
             foreach (var testCookie in testCookieList)
@@ -263,7 +263,12 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     // else we have a valid test but the cookie test id doesnt match because user created a new test 
                     // on the same content.
-                    _testDataCookieHelper.ResetTestDataCookie(testCookie);
+                    _testDataCookieHelper.ExpireTestDataCookie(testCookie);
+
+                    var originalContent = e.Content;
+                    var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+                    TestDataCookie tc = new TestDataCookie();
+                    SetTestData(activeTest, tc, contentVersion, out tc, out contentVersion);
                 }
             }
         }
