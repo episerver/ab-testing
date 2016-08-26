@@ -46,6 +46,14 @@
         <start_default>Start Test</start_default>
         <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
       </addtestview>
+      <admin>
+        <cancel>Cancel</cancel>
+        <confidencelevel>Confidence Level:</confidencelevel>
+        <displayname>AB Testing Configuration</displayname>
+        <participationpercent>Participation Percent:</participationpercent>
+        <save>Save</save>
+        <testduration>Test Duration:</testduration>
+      </admin>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>
