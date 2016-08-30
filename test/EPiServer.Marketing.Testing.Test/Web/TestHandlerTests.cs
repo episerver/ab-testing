@@ -10,8 +10,8 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
-using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Test.Core;
+using System.Web;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -90,6 +90,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _mockContextHelper = new Mock<ITestingContextHelper>();
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
+
+            HttpContext.Current = new HttpContext(
+               new HttpRequest(null, "http://tempuri.org", null),
+               new HttpResponse(null));
+            HttpContext.Current.Items[TestHandler.ABTestFirstRequestFlag] = true;
 
             return new TestHandler(_mockTestManager.Object, _mockTestDataCookieHelper.Object, contentList, _mockContextHelper.Object, _logger);
         }
@@ -276,6 +281,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
 
             ContentEventArgs args = new ContentEventArgs(content);
+
             testHandler.LoadedContent(new object(), args);
 
             _mockTestManager.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), CountType.View), Times.Once, "Content should have triggered IncrementCount View call");

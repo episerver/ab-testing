@@ -233,9 +233,13 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
+        private Object thisLock = new Object();
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
         {
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+            lock (thisLock)
+            {
+                _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+            }
         }
 
         public Variant ReturnLandingPage(Guid testId)

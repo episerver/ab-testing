@@ -10,9 +10,9 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Logging;
 using System.Collections.Concurrent;
+using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -24,6 +24,11 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
         private ITestManager _testManager;
+
+        /// <summary>
+        /// Flag used to determine the first time a http request hits loadContent
+        /// </summary>
+        public const string ABTestFirstRequestFlag = "ABTestFirstRequestFlag";
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -157,8 +162,10 @@ namespace EPiServer.Marketing.Testing.Web
                         AddProcessedContent(e.Content.ContentGuid);
                         _testManager.GetVariantContent(e.Content.ContentGuid, ProcessedContentList);
 
-                        if (!hasData && ProcessedContentList[e.Content.ContentGuid] == 1)
+                        if (!hasData && HttpContext.Current.Items.Contains(ABTestFirstRequestFlag) )
                         {
+
+                            HttpContext.Current.Items.Remove(ABTestFirstRequestFlag);
                             SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                         }
 
