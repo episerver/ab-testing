@@ -143,7 +143,9 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (!_contextHelper.SwapDisabled(e))
             {
-                if(HttpContext.Current.Items.Contains(ABTestHandlerSkipFlag))
+                // if the skip flag is set, or the e.Content is null (happens sometimes during startup)
+                // bail out there is nothing we can do anyway.
+                if(HttpContext.Current.Items.Contains(ABTestHandlerSkipFlag) || e.Content == null)
                 {
                     return;
                 }
