@@ -36,7 +36,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         public TestHandlerTests()
         {
-            _contentReferenceList = new Dictionary<Guid, int>();
         }
 
         public void Dispose()
@@ -52,8 +51,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestingContextHelper> _mockContextHelper;
         private MyLogger _logger = new MyLogger();
 
-        private readonly Dictionary<Guid, int> _contentReferenceList;
-
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
         private readonly Guid _activeTestGuid = Guid.Parse("d9866579-ea05-4c74-a508-ab1c95766660");
@@ -62,7 +59,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private Guid _originalItemId = Guid.NewGuid();
 
-        private TestHandler GetUnitUnderTest(Dictionary<Guid, int> contentList)
+        private TestHandler GetUnitUnderTest()
         {
             _mockTestDataCookieHelper = new Mock<ITestDataCookieHelper>();
             _mockTestManager = new Mock<ITestManager>();
@@ -96,13 +93,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                new HttpResponse(null));
             HttpContext.Current.Items[TestHandler.ABTestFirstRequestFlag] = true;
 
-            return new TestHandler(_mockTestManager.Object, _mockTestDataCookieHelper.Object, contentList, _mockContextHelper.Object, _logger);
+            return new TestHandler(_mockTestManager.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
         }
 
         [Fact]
         public void TestHandler_VerifyExceptionHandler()
         {
-            var th = GetUnitUnderTest(_contentReferenceList);
+            var th = GetUnitUnderTest();
 
             var content = new BasicContent();
             content.ContentGuid = _noAssociatedTestGuid;
@@ -123,7 +120,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             content.ContentGuid = _noAssociatedTestGuid;
             content.ContentLink = new ContentReference();
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>());
@@ -146,7 +143,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             content.ContentGuid = _noAssociatedTestGuid;
             content.ContentLink = new ContentReference();
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
@@ -171,9 +168,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference();
 
-            _contentReferenceList.Add(content.ContentGuid, 0);
-
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(true);
             _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
@@ -217,11 +212,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestId = _activeTestGuid,
                 ItemId = _associatedTestGuid
             };
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid, int>>())).Returns(variantPage);
+            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(variantPage);
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = false });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
@@ -266,11 +261,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = _associatedTestGuid
             };
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid, int>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new PageData(content.ContentLink as PageReference));
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
             _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
             _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
@@ -318,11 +313,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Empty
             };
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
             _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
-            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), It.IsAny<Dictionary<Guid, int>>())).Returns(new PageData(content.ContentLink as PageReference));
+            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new PageData(content.ContentLink as PageReference));
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(false);
@@ -356,7 +351,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new TestDataCookie() {Converted = true, Viewed = true},
             };
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
@@ -396,7 +391,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
                 .Returns(new List<IMarketingTest> { test });
@@ -444,7 +439,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             List<TestDataCookie> convertedAndViewedCookieData = new List<TestDataCookie> { testCookieOne };
 
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
                 .Returns(new List<IMarketingTest>() { test });
@@ -469,7 +464,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
          [Fact]
         public void TestHandler_CheckForActiveTest()
         {
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
 
             // find test for published page
             Assert.Equal(1, testHandler.CheckForActiveTests(_originalItemId, 0));
@@ -484,7 +479,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_CheckForActiveTests_Returns_0_If_No_Tests_Found()
         {
-            var testHandler = GetUnitUnderTest(_contentReferenceList);
+            var testHandler = GetUnitUnderTest();
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
                 .Returns((List<IMarketingTest>) null);
             Assert.Equal(0,testHandler.CheckForActiveTests(Guid.NewGuid(), 1));

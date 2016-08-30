@@ -11,24 +11,26 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
-using System.Collections.Concurrent;
 using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web
 {
     internal class TestHandler : ITestHandler
     {
-        internal IDictionary<Guid, int> ProcessedContentList;
-
         private readonly ITestingContextHelper _contextHelper;
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
         private ITestManager _testManager;
 
         /// <summary>
-        /// Flag used to determine the first time a http request hits loadContent
+        /// HTTPContext Flag used to determine the first time a http request hits loadContent
         /// </summary>
         public const string ABTestFirstRequestFlag = "ABTestFirstRequestFlag";
+
+        /// <summary>
+        /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
+        /// </summary>
+        public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -38,9 +40,6 @@ namespace EPiServer.Marketing.Testing.Web
             _logger = LogManager.GetLogger();
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
 
-            // init our processed contentlist
-            ProcessedContentList = new ConcurrentDictionary<Guid, int>();
-
             // Setup our content events
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedContent += LoadedContent;
@@ -49,10 +48,9 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //To support unit testing
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, Dictionary<Guid, int> processedList, ITestingContextHelper contextHelper, ILogger logger)
+        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
-            ProcessedContentList = processedList;
             _testManager = testManager;
             _contextHelper = contextHelper;
             _logger = logger;
@@ -145,6 +143,11 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (!_contextHelper.SwapDisabled(e))
             {
+                if(HttpContext.Current.Items.Contains(ABTestHandlerSkipFlag))
+                {
+                    return;
+                }
+
                 try
                 {
                     EvaluateCookies(e);
@@ -159,13 +162,18 @@ namespace EPiServer.Marketing.Testing.Web
                         var originalContent = e.Content;
                         var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
 
-                        AddProcessedContent(e.Content.ContentGuid);
-                        _testManager.GetVariantContent(e.Content.ContentGuid, ProcessedContentList);
+                        // Preload the cache if needed. Note that this causes an extra call to loadContent Event
+                        // so set the skip flag so we dont try to process the test.
+                        HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
+                        _testManager.GetVariantContent(e.Content.ContentGuid);
+                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
                         if (!hasData && HttpContext.Current.Items.Contains(ABTestFirstRequestFlag) )
                         {
-
+                            // Remove the first request flag
                             HttpContext.Current.Items.Remove(ABTestFirstRequestFlag);
+
+                            // Make sure the cookie has data in it.
                             SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                         }
 
@@ -178,15 +186,6 @@ namespace EPiServer.Marketing.Testing.Web
                     _logger.Error("TestHandler", err);
                 }
             }
-        }
-
-        private void AddProcessedContent(Guid contentGuid)
-        {
-            if (!ProcessedContentList.ContainsKey(contentGuid))
-            {
-                ProcessedContentList.Add(contentGuid, 0);
-            }
-            ProcessedContentList[contentGuid]++;
         }
 
         private void SetTestData(IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion )
@@ -219,7 +218,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             if (cookie.ShowVariant && _testDataCookieHelper.IsTestParticipant(cookie))
             {
-                var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid, ProcessedContentList);
+                var variant = _testManager.GetVariantContent(activeContent.Content.ContentGuid);
                 //swap it with the cached version
                 if (variant != null)
                 {

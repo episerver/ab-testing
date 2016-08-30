@@ -50,7 +50,6 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         private void EndRequest(object sender, EventArgs e)
         {
-            _testHandler.ProcessedContentList.Clear();
         }
 
         //Interface Requirement but not used.
