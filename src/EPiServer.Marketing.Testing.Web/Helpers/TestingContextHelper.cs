@@ -44,7 +44,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //currently, our only restriction is user being logged into a system folder (e.g edit).
             //Other conditions have been brought up such as permissions, ip restrictions etc
             //which can be evaluated together here or individually.
-            return IsInSystemFolder() && e.Content != null;
+            return (e.Content == null ||
+                    HttpContext.Current == null ||
+                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    IsInSystemFolder() );
         }
 
         /// <summary>
