@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
+using System.Threading;
 using Castle.Core.Internal;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -22,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ITestingContextHelper _contextHelper;
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
-        private ITestManager _testManager;
+        private readonly ITestManager _testManager;
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -31,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Web
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
-
+            
             // init our processed contentlist
             ProcessedContentList = new Dictionary<Guid, int>();
 
@@ -40,12 +41,58 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
-            _testManager.TestSaved += OnTestSaved;
+
+            // Setup our Marketing Testing events
+            var testMarketingEvents = ServiceLocator.Current.GetInstance<IMarketingTestingEvents>();
+            testMarketingEvents.TestDeleted += onTestDeleted;
+            testMarketingEvents.TestSaved += onTestSaved;
+            testMarketingEvents.TestArchived += onTestArchived;
+            testMarketingEvents.TestStarted += onTestStarted;
+            testMarketingEvents.TestStopped += onTestStopped;
+            testMarketingEvents.ContentSwitched += onContentSwitched;
+            testMarketingEvents.UserIncludedInTest += onUserIncludedIntest;
         }
 
-        private void OnTestSaved(object sender, TestEventArgs e)
+        private void onUserIncludedIntest(object sender, TestEventArgs e)
         {
-            var x = e.Test.Id;
+            Thread.Sleep(10000);
+            var x = e;
+        }
+
+        private void onContentSwitched(object sender, TestEventArgs e)
+        {
+            Thread.Sleep(10000);
+            var x = e;
+        }
+
+        private void onTestStopped(object sender, TestEventArgs e)
+        {
+            Thread.Sleep(10000);
+            var x = e;
+        }
+
+        private void onTestStarted(object sender, TestEventArgs e)
+        {
+            Thread.Sleep(10000);
+            var x = e;
+        }
+
+        private void onTestArchived(object sender, TestEventArgs e)
+        {
+            Thread.Sleep(10000);
+            var x = e;
+        }
+
+        private void onTestDeleted(object sender, TestEventArgs e)
+        {
+            Thread.Sleep(10000);
+            var x = e;
+        }
+
+        private void onTestSaved(object sender, TestEventArgs e)
+        {
+            Thread.Sleep(10000);
+            var x = e;
         }
 
         //To support unit testing

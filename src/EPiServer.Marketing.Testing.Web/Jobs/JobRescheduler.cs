@@ -34,15 +34,15 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         public void Initialize(InitializationEngine context)
         {
             _serviceLocator = context.Locate.Advanced;
-            var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.TestSaved += OnTestSaved;
+            var marketingtestingEvents = _serviceLocator.GetInstance<IMarketingTestingEvents>();
+            marketingtestingEvents.TestSaved += OnTestSaved;
         }
 
         [ExcludeFromCodeCoverage]
         public void Uninitialize(InitializationEngine context)
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.TestSaved -= OnTestSaved;
+            var marketingtestingEvents = _serviceLocator.GetInstance<IMarketingTestingEvents>();
+            marketingtestingEvents.TestSaved -= OnTestSaved;
         }
 
         public void OnTestSaved(object sender, TestEventArgs e)

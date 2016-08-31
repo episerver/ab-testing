@@ -18,6 +18,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
 using System.Runtime.Caching;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -29,6 +30,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private Guid testId = Guid.NewGuid();
         private Mock<IKpiManager> _kpiManager;
         private Mock<IKpiDataAccess> _kpiDataAccess;
+        private Mock<MarketingTestingEvents> _marketingEvents;
 
         private TestManager GetUnitUnderTest()
         {
@@ -73,6 +75,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _contentLoader.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(new PageData());
             _contentLoader.Setup(call => call.Get<ContentData>(It.IsAny<ContentReference>())).Returns(contentData);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentLoader>()).Returns(_contentLoader.Object);
+
+            _marketingEvents = new Mock<MarketingTestingEvents>();
+            _serviceLocator.Setup(sl => sl.GetInstance<MarketingTestingEvents>()).Returns(_marketingEvents.Object);
 
             return new TestManager(_serviceLocator.Object);
         }
@@ -288,7 +293,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     Id = theGuid,
                     OriginalItemId = originalItemId,
                     Variants = variantList,
-                    ParticipationPercentage = 100
+                    ParticipationPercentage = 100,
+                    KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 });
 
             var count = 0;
