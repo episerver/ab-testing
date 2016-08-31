@@ -15,6 +15,7 @@
         "dojo/dom-class",
         "dijit/registry",
         'epi/dependency',
+        "marketing-testing/scripts/rasterizeHTML",
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
@@ -27,7 +28,7 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"
+        "dijit/layout/ContentPane"        
 ],
     function (
     declare,
@@ -45,7 +46,8 @@
     dom,
     domClass,
     registry,
-    dependency
+    dependency,
+    rasterizehtml
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -156,6 +158,19 @@
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
+                var pubThumb = document.getElementById("publishThumbnail")
+
+                if (pubThumb) {
+                    //Hack to build published versions preview link below
+                    var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
+                        previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                        previewUrlStart = this.contentData.previewUrl.split('_'),
+                        previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
+                   
+                    pubThumb.height = 768;
+                    pubThumb.width = 1024;
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                }
             },
 
             _setViewCurrentVersionAttr: function () {
@@ -165,6 +180,16 @@
                 this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
                 this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
                 this.pageName.textContent = this.contentData.name + " A/B Test";
+
+                var pubThumb = document.getElementById("draftThumbnail");
+
+                if (pubThumb) {
+                    var previewUrl = this.model.contentData.previewUrl;
+
+                    pubThumb.height = 768;
+                    pubThumb.width = 1024;
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                }
             },
 
             _setViewParticipationPercentAttr: function (viewParticipationPercent) {
