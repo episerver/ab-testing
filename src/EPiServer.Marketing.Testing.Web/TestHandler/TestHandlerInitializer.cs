@@ -41,10 +41,6 @@ namespace EPiServer.Marketing.Testing.Web
             //Convert URL to content and stores it in the current requests items collection
             //This collection is volatile and will be cleared at the end of the session, preventing threading issues.
             HttpContext.Current.Items["CurrentPage"] = _pageRouteHelper.Route(new UrlBuilder(HttpContext.Current.Request.Url));
-
-            // TestHandler needs to know when the request starts, loadContent will clear 
-            // this flag after it does its first time processing.
-            HttpContext.Current.Items[TestHandler.ABTestFirstRequestFlag] = true;
         }
 
         [ExcludeFromCodeCoverage]

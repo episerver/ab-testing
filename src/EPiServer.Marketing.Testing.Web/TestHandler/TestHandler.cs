@@ -23,11 +23,6 @@ namespace EPiServer.Marketing.Testing.Web
         private ITestManager _testManager;
 
         /// <summary>
-        /// HTTPContext Flag used to determine the first time a http request hits loadContent
-        /// </summary>
-        public const string ABTestFirstRequestFlag = "ABTestFirstRequestFlag";
-
-        /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
         /// </summary>
         public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
@@ -170,11 +165,8 @@ namespace EPiServer.Marketing.Testing.Web
                         _testManager.GetVariantContent(e.Content.ContentGuid);
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
-                        if (!hasData && HttpContext.Current.Items.Contains(ABTestFirstRequestFlag) )
+                        if (!hasData )
                         {
-                            // Remove the first request flag
-                            HttpContext.Current.Items.Remove(ABTestFirstRequestFlag);
-
                             // Make sure the cookie has data in it.
                             SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                         }

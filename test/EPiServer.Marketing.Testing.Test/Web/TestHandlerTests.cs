@@ -91,7 +91,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             HttpContext.Current = new HttpContext(
                new HttpRequest(null, "http://tempuri.org", null),
                new HttpResponse(null));
-            HttpContext.Current.Items[TestHandler.ABTestFirstRequestFlag] = true;
 
             return new TestHandler(_mockTestManager.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
         }
