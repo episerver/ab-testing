@@ -6,7 +6,7 @@
 "epi/username",
 "dojo/dom-class"
 
-], 
+],
 
 function (dom, chart, pie, datetime, userModule, dojoDomClass) {
     //"privates"
@@ -29,16 +29,16 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
         draftPercent: null,
 
         //sets the helpers context value as well as initializes calculated variables
-        initializeHelper: function (testContext,stringResources,mModules) {
+        initializeHelper: function (testContext, stringResources, mModules) {
             context = testContext;
 
             if (context.data.test.variants[0].itemVersion ===
-                context.data.publishedVersionContentLink.split('_')[0]) {
-                this.publishedVariant = context.data.test.variants[0];
-                this.draftVariant = context.data.test.variants[1];
-            } else {
-                this.publishedVariant = context.data.test.variants[1];
+                context.data.draftVersionContentLink.split('_')[1]) {
                 this.draftVariant = context.data.test.variants[0];
+                this.publishedVariant = context.data.test.variants[1];
+            } else {
+                this.draftVariant = context.data.test.variants[1];
+                this.publishedVariant = context.data.test.variants[0];
             }
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
@@ -68,7 +68,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                     datetime.toUserFriendlyString(context.data.test.startDate);
             } else if (context.data.test.state === 1) {
                 testStatusNode
-                    .textContent = resources.test_status_running + context.data.daysRemaining +" "+resources.days_remaining;
+                    .textContent = resources.test_status_running + context.data.daysRemaining + " " + resources.days_remaining;
                 testStartedNode.textContent = resources.started +
                     datetime.toUserFriendlyString(context.data.test.startDate) +
                     " " +
@@ -131,38 +131,6 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                     context.data.test.description +
                     "\" - " + username.toUserFriendlyString(context.data.test.owner);
             } else testDescriptionNode.textContent = "";
-        },
-
-        //sets the styling of the control and challnger sections based on their conversion percentages
-        renderStatusIndicatorStyles: function (controlStatusIconNode, challengerStatusIconNode, controlWrapperNode, challengerWrapperNode, isPickWinner) {
-            var me = this;
-            me.baseWrapper = "cardWrapper";
-            if (context.data.test.state < 2) {
-                me.statusIndicatorClass = "leadingContent";
-            }
-            else { me.statusIndicatorClass = "winningContent"; }
-
-            if (isPickWinner) {
-                me.baseWrapper = "cardWrapperShadowed";
-            }
-            if (this.publishedPercent > this.draftPercent) {
-                domClass.replace(controlStatusIconNode, me.statusIndicatorClass);
-                domClass.replace(challengerStatusIconNode, "noIndicator");
-                domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlLeaderBody");
-                domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerDefaultBody");
-            }
-            else if (this.publishedPercent < this.draftPercent) {
-                domClass.replace(controlStatusIconNode, "noIndicator");
-                domClass.replace(challengerStatusIconNode, me.statusIndicatorClass);
-                domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlTrailingBody");
-                domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerLeaderBody");
-            }
-            else {
-                domClass.replace(controlStatusIconNode, "noIndicator");
-                domClass.replace(challengerStatusIconNode, "noIndicator");
-                domClass.replace(controlWrapperNode, me.baseWrapper + " 2column controlDefaultBody");
-                domClass.replace(challengerWrapperNode, me.baseWrapper + " 2column challengerDefaultBody");
-            }
         },
 
         //sets text content of provided nodes to the context participation percentage and total participation values

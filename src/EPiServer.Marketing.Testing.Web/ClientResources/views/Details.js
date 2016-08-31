@@ -12,6 +12,7 @@
  "epi/i18n!marketing-testing/nls/abtesting",
  "epi/datetime",
  "epi/username",
+  "dojo/dom-class",
  "marketing-testing/scripts/abTestTextHelper",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
@@ -34,6 +35,7 @@
     resources,
     datetime,
     username,
+    domClass,
     textHelper
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -128,12 +130,9 @@
                 this.challengerViews,
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
-            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
-                this.variantStatusIcon,
-                this.controlWrapper,
-                this.challengerWrapper);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
+            this.renderStatusIndicatorStyles();
         },
 
         _displayOptionsButton: function (show) {
@@ -143,6 +142,34 @@
                 dropDownButton.startup(); //Avoids conditions where the widget is rendered but not active.
             } else {
                 domStyle.set(dropDownButton.domNode, "visibility", "hidden");
+            }
+        },
+
+        renderStatusIndicatorStyles: function () {
+            var me = this;
+            me.baseWrapper = "cardWrapper";
+            if (this.context.data.test.state < 2) {
+                me.statusIndicatorClass = "leadingContent";
+            }
+            else { me.statusIndicatorClass = "winningContent"; }
+
+            if (textHelper.publishedPercent > textHelper.draftPercent) {
+                domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+            }
+            else if (textHelper.publishedPercent < textHelper.draftPercent) {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
+            }
+            else {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
             }
         }
     });

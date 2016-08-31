@@ -37,7 +37,7 @@
         <!-- Control/Published Version -->
         <div class="row">
             <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column">
-                <div class="leadingContent" data-dojo-attach-point="publishedStatusIcon"></div>
+                <div class="leadingContent" data-dojo-attach-point="controlStatusIcon"></div>
                 <h3>
                     ${resources.detailsview.content_control_header}
                 </h3>
@@ -49,6 +49,8 @@
                         </span>
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
                         <span data-dojo-attach-point="datePublished"></span>
+                        <br />
+                        <a href="#" class=".epi-iconPreview" data-dojo-attach-event="onclick: _onControlViewClick">${resources.detailsview.view_control_content}</a>
                     </p>
                     <!-- Control Statistics -->
                     <table width="100%">
@@ -73,7 +75,7 @@
             </div>
             <!-- Challenger/Draft Version-->
             <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column">
-                <div class="winningContent" data-dojo-attach-point="variantStatusIcon"></div>
+                <div class="winningContent" data-dojo-attach-point="challengerStatusIcon"></div>
                 <h3>
                     ${resources.detailsview.content_challenger_header}
                 </h3>
@@ -83,6 +85,8 @@
                         <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
                         <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
+                        <br />
+                        <a href="#" data-dojo-attach-event="onclick: _onChallengerViewClick">${resources.detailsview.view_challenger_content}</a>
                     </p>
                     <table width="100%">
                         <tr>

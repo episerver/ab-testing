@@ -250,7 +250,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results",ex);
                 }
             }
-            return publishedVersionReference;
+            return testResult.TestId;
         }
 
         private
