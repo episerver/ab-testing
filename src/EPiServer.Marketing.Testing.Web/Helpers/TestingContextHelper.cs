@@ -11,6 +11,8 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using EPiServer.Globalization;
 using EPiServer.Security;
+using EPiServer.Web;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -77,12 +79,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
-
+            
             //get variant (draft) version
             var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
             int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
             tempContentClone.WorkID = variantVersion;
             var draftContent = repo.Get<IContent>(tempContentClone);
+
+            var currentCulture = ContentLanguage.PreferredCulture;
+            var publishPreview = UrlResolver.Current.GetUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var draftPreview = UrlResolver.Current.GetUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
@@ -91,6 +97,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
+
+            // preview urls
+            model.PublishPreviewUrl = publishPreview;
+            model.DraftPreviewUrl = draftPreview;
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);

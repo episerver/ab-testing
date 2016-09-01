@@ -2,6 +2,7 @@
  "dojo/_base/declare",
  "epi/dependency",
  "dojo/dom",
+ "dojo/ready",
  "dijit/registry",
  "dojo/dom-style",
  "dojo/topic",
@@ -13,6 +14,7 @@
  "epi/datetime",
  "epi/username",
  "marketing-testing/scripts/abTestTextHelper",
+ "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
@@ -24,6 +26,7 @@
     declare,
     dependency,
     dom,
+    ready,
     registry,
     domStyle,
     topic,
@@ -34,7 +37,8 @@
     resources,
     datetime,
     username,
-    textHelper
+    textHelper,
+    rasterizehtml
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -114,6 +118,7 @@
         },
 
         _renderData: function () {
+            var me = this;
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
@@ -134,6 +139,11 @@
                 this.challengerWrapper);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
+
+            ready(function () {
+                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail');
+                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail');
+            });
         },
 
         _displayOptionsButton: function (show) {
@@ -143,6 +153,15 @@
                 dropDownButton.startup(); //Avoids conditions where the widget is rendered but not active.
             } else {
                 domStyle.set(dropDownButton.domNode, "visibility", "hidden");
+            }
+        },
+        _generateThumbnail: function (previewUrl, canvasId) {
+            var pubThumb = dom.byId(canvasId);
+
+            if (pubThumb) {
+                pubThumb.height = 768;
+                pubThumb.width = 1024;
+                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
             }
         }
     });
