@@ -20,13 +20,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         #region Event Keys
 
-        internal const string TestSavedEvent = "TestSavedEvent";
-        internal const string TestDeletedEvent = "TestDeletedEvent";
-        internal const string TestStartedEvent = "TestStartedEvent";
-        internal const string TestStoppedEvent = "TestStoppedEvent";
-        internal const string TestArchivedEvent = "TestArchivedEvent";
-        internal const string ContentSwitchedEvent = "ContentSwitchedEvent";
-        internal const string UserIncludedInTestEvent = "UserIncludedInTestEvent";
+        public const string TestSavedEvent = "TestSavedEvent";
+        public const string TestDeletedEvent = "TestDeletedEvent";
+        public const string TestStartedEvent = "TestStartedEvent";
+        public const string TestStoppedEvent = "TestStoppedEvent";
+        public const string TestArchivedEvent = "TestArchivedEvent";
+        public const string ContentSwitchedEvent = "ContentSwitchedEvent";
+        public const string UserIncludedInTestEvent = "UserIncludedInTestEvent";
+        public const string KpiConvertedEvent = "KpiConvertedEvent";
         
         #endregion
 
@@ -109,7 +110,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             remove { Events.RemoveHandler(GetEventKey(TestArchivedEvent), value); }
         }
 
-        public event EventHandler<TestEventArgs> ContentSwitched
+        public event EventHandler<ContentEventArgs> ContentSwitched
         {
             add { Events.AddHandler(GetEventKey(ContentSwitchedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(ContentSwitchedEvent), value); }
@@ -121,11 +122,27 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             remove { Events.RemoveHandler(GetEventKey(UserIncludedInTestEvent), value); }
         }
 
+        public event EventHandler<KpiEventArgs> KpiConverted
+        {
+            add { Events.AddHandler(GetEventKey(KpiConvertedEvent), value);}
+            remove {  Events.RemoveHandler(GetEventKey(KpiConvertedEvent),value);}
+        }
+
        #endregion
 
-        internal virtual void RaiseMarketingTestingEvent(string key, TestEventArgs eventArgs)
+        public virtual void RaiseMarketingTestingEvent(string key, TestEventArgs eventArgs)
         {
             Task.Factory.StartNew(()=>(Events[GetEventKey(key)] as EventHandler<TestEventArgs>)?.Invoke(this, eventArgs));
+        }
+
+        public virtual void RaiseMarketingTestingEvent(string key, ContentEventArgs eventArgs)
+        {
+            Task.Factory.StartNew(() => (Events[GetEventKey(key)] as EventHandler<ContentEventArgs>)?.Invoke(this, eventArgs));
+        }
+
+        public virtual void RaiseMarketingTestingEvent(string key, KpiEventArgs eventArgs)
+        {
+            Task.Factory.StartNew(() => (Events[GetEventKey(key)] as EventHandler<KpiEventArgs>)?.Invoke(this, eventArgs));
         }
 
         public void Dispose()

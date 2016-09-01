@@ -1,4 +1,5 @@
 ﻿using System;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 
 namespace EPiServer.Marketing.Testing
@@ -37,12 +38,17 @@ namespace EPiServer.Marketing.Testing
         /// Occurs when content has the published content has been switched out with the
         /// test variant
         /// </summary>
-        event EventHandler<TestEventArgs> ContentSwitched;
+        event EventHandler<ContentEventArgs> ContentSwitched;
 
         /// <summary>
         /// Occurs when a user is included in an active test.
         /// </summary>
         event EventHandler<TestEventArgs> UserIncludedInTest;
+
+        /// <summary>
+        /// Occurs when a Kpi is successfully converted.
+        /// </summary>
+        event EventHandler<KpiEventArgs> KpiConverted;
 
     }
 }

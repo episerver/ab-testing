@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Eventing.Reader;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
@@ -13,6 +14,7 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -24,6 +26,7 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
         private readonly ITestManager _testManager;
+        private MarketingTestingEvents _marketingTestingEvents;
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -32,6 +35,7 @@ namespace EPiServer.Marketing.Testing.Web
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+            _marketingTestingEvents = ServiceLocator.Current.GetInstance<MarketingTestingEvents>();
             
             // init our processed contentlist
             ProcessedContentList = new Dictionary<Guid, int>();
@@ -42,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
 
-            // Setup our Marketing Testing events
+            // Setup handlers for our Marketing Testing events
             var testMarketingEvents = ServiceLocator.Current.GetInstance<IMarketingTestingEvents>();
             testMarketingEvents.TestDeleted += onTestDeleted;
             testMarketingEvents.TestSaved += onTestSaved;
@@ -51,6 +55,8 @@ namespace EPiServer.Marketing.Testing.Web
             testMarketingEvents.TestStopped += onTestStopped;
             testMarketingEvents.ContentSwitched += onContentSwitched;
             testMarketingEvents.UserIncludedInTest += onUserIncludedIntest;
+
+
         }
 
         private void onUserIncludedIntest(object sender, TestEventArgs e)
@@ -59,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Web
             var x = e;
         }
 
-        private void onContentSwitched(object sender, TestEventArgs e)
+        private void onContentSwitched(object sender, ContentEventArgs e)
         {
             Thread.Sleep(10000);
             var x = e;
@@ -287,6 +293,8 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     activeContent.ContentLink = variant.ContentLink;
                     activeContent.Content = variant;
+                    _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.ContentSwitchedEvent,activeContent);
+
                 }
             }
         }
@@ -330,7 +338,13 @@ namespace EPiServer.Marketing.Testing.Web
                             {
                                 var converted = testdata.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
                                 if (!converted)
+                                {
                                     kpis.Add(kpi);
+                                }
+                                else
+                                {
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.KpiConvertedEvent,new KpiEventArgs(kpi));
+                                }
                             }
 
                             var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);

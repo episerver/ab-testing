@@ -13,8 +13,6 @@ namespace EPiServer.Marketing.KPI.Manager
     [ServiceConfiguration(ServiceType = typeof(IKpiManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiManager : IKpiManager
     {
-        public event EventHandler<KpiEventArgs> KpiConverted;
-
         private IKpiDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
 

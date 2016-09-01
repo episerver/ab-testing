@@ -209,6 +209,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var tm = GetUnitUnderTest();
             tm.Archive(theGuid,theVariantGuid);
             _dataAccessLayer.Verify(da => da.Archive(It.Is<Guid>(arg => arg.Equals(theGuid)),It.Is<Guid>(arg=>arg.Equals(theVariantGuid))),"DataAcessLayer Archive was never called or Guid did not match.");
+            _marketingEvents.Verify(me => me.RaiseMarketingTestingEvent(It.IsAny<string>(),It.IsAny<TestEventArgs>()),"Marketing Test Event was never raised or the event key was incorrect");
         }
 
         [Fact]
