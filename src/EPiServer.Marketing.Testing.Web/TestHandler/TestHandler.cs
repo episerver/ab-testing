@@ -37,6 +37,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             // Setup our content events
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
+            contentEvents.LoadedChildren += LoadedChildren;
             contentEvents.LoadedContent += LoadedContent;
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
@@ -132,6 +133,76 @@ namespace EPiServer.Marketing.Testing.Web
             return testsDeleted;
         }
 
+        /// <summary>
+        /// Event handler to swap out content when children are loaded, however this does not
+        /// cause a conversion or view, simply creates cookie if needed and swaps content
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void LoadedChildren(object sender, ChildrenEventArgs e)
+        {
+            if (!_contextHelper.SwapDisabled(e))
+            {
+                Boolean modified = false;
+                IList<IContent> childList = new List<IContent>();
+
+                // its possible that something in the children changed, so we need to replace it with a variant 
+                // if its in test. This method gets called once after the main page is loaded. (i.e. this is how
+                // the links at the top of alloy get created)
+                foreach (var content in e.ChildrenItems)
+                {
+                    try
+                    {
+
+                        // get the test from the cache
+                        var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
+                        if (activeTest != null)
+                        {
+                            var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
+                            var hasData = _testDataCookieHelper.HasTestData(testCookieData);
+                            var originalContent = content;
+                            var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
+                                content.ContentLink.WorkID;
+
+                            if (!hasData)
+                            {
+                                // Make sure the cookie has data in it. There are cases where you can load
+                                // content directly from a url after opening a browser and if the cookie is not set
+                                // the first pass through you end up seeing original content not content under test.
+                                SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                            }
+
+                            if (testCookieData.ShowVariant && _testDataCookieHelper.IsTestParticipant(testCookieData))
+                            {
+                                modified = true;
+                                childList.Add(_testManager.GetVariantContent(content.ContentGuid));
+                            }
+                            else
+                            {
+                                childList.Add(content);
+                            }
+                        }
+                        else
+                        {
+                            childList.Add(content);
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        _logger.Error("TestHandler.LoadChildren", err);
+                    }
+                }
+
+                // if we modified the data, update the children list. Note that original order
+                // is important else links do not show up in same order.
+                if( modified )
+                {
+                    e.ChildrenItems.Clear();
+                    e.ChildrenItems.AddRange(childList);
+                }
+            }
+        }
+
         /// Main worker method.  Processes each content which triggers a
         /// content loaded event to determine the state of a test and what content to display.
         public void LoadedContent(object sender, ContentEventArgs e)
@@ -170,7 +241,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
                 catch (Exception err)
                 {
-                    _logger.Error("TestHandler", err);
+                    _logger.Error("TestHandler.LoadedContent", err);
                 }
             }
         }

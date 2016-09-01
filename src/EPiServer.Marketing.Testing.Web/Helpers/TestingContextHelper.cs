@@ -37,6 +37,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         /// <summary>
         /// Evaluates a set of conditions which would preclue a test from swapping content
+        /// * Specific to loading regular content
         /// </summary>
         /// <returns></returns>
         public bool SwapDisabled(ContentEventArgs e)
@@ -48,6 +49,23 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     HttpContext.Current == null ||
                     HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
                     IsInSystemFolder() );
+        }
+
+        /// <summary>
+        /// Evaluates a set of conditions which would preclue a test from swapping content
+        /// * Specific to loading children
+        /// </summary>
+        /// <returns></returns>
+        public bool SwapDisabled(ChildrenEventArgs e)
+        {
+            //currently, our only restriction is user being logged into a system folder (e.g edit).
+            //Other conditions have been brought up such as permissions, ip restrictions etc
+            //which can be evaluated together here or individually.
+            return (e.ContentLink == null ||
+                    e.ChildrenItems == null ||
+                    HttpContext.Current == null ||
+                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    IsInSystemFolder());
         }
 
         /// <summary>
