@@ -87,7 +87,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var draftContent = repo.Get<IContent>(tempContentClone);
 
             var currentCulture = ContentLanguage.PreferredCulture;
-            var publishPreview = UrlResolver.Current.GetUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var publishPreview = UrlResolver.Current.GetUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Default });
             var draftPreview = UrlResolver.Current.GetUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
 
             // map the test data into the model using epi icontent and test object 
