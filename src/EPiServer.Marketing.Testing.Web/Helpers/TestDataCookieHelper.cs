@@ -115,38 +115,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.Viewed = bool.Parse(cookie["Viewed"]);
                 retCookie.Converted = bool.Parse(cookie["Converted"]);
 
-                try
+                var t = _testManager.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
+                if (t != null)
                 {
-                    //Throws test not found exception and expires the cookie if test does not exist
-                    var t = _testManager.Get(retCookie.TestId); 
-
-                    //Checks if cookie is part of an active test and resets the cookie if not.
-                    //Used in cases where a users cookie may be for a completed test with the same test content Id.
-                    if (t.State != TestState.Active)
-                    {
-                        retCookie =  ResetTestDataCookie(retCookie);
-                    }
-                    
-                    //If cookie checks out, process KPIs
                     foreach (var kpi in t.KpiInstances)
                     {
-                        bool converted = bool.Parse(cookie[kpi.Id + "-Flag"]);
+                        bool converted = false;
+                        bool.TryParse(cookie[kpi.Id + "-Flag"], out converted);
                         retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
                     }
-                }
-                catch (TestNotFoundException)
-                {
-                    // test doesnt exist but this user has a cookie for content.
-                    // Reset the cookie if an active test exists for this content.
-                    // Expire the cookie if no active tests exist for this content.
-                    if (_testManager.GetActiveTestsByOriginalItemId(retCookie.TestContentId).Count > 0)
-                    {
-                        retCookie = ResetTestDataCookie(retCookie);
-                    }
-                    else
-                    {
-                        ExpireTestDataCookie(new TestDataCookie() { TestContentId = Guid.Parse(testContentId) });
-                    };
                 }
             }
 
