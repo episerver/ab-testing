@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Eventing.Reader;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
@@ -24,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
         private readonly ITestManager _testManager;
-        private MarketingTestingEvents _marketingTestingEvents;
+        private readonly MarketingTestingEvents _marketingTestingEvents;
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -56,8 +55,6 @@ namespace EPiServer.Marketing.Testing.Web
             testMarketingEvents.TestStopped += onTestStopped;
             testMarketingEvents.ContentSwitched += onContentSwitched;
             testMarketingEvents.UserIncludedInTest += onUserIncludedIntest;
-
-
         }
 
         private void onUserIncludedIntest(object sender, TestEventArgs e)
@@ -103,7 +100,7 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //To support unit testing
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
+        internal TestHandler(IServiceLocator serviceLocator, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
             _testManager = serviceLocator.GetInstance<ITestManager>();
@@ -213,14 +210,12 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     try
                     {
-
                         // get the test from the cache
                         var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
                         if (activeTest != null)
                         {
                             var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-                            var originalContent = content;
                             var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
                                 content.ContentLink.WorkID;
 
@@ -229,7 +224,7 @@ namespace EPiServer.Marketing.Testing.Web
                                 // Make sure the cookie has data in it. There are cases where you can load
                                 // content directly from a url after opening a browser and if the cookie is not set
                                 // the first pass through you end up seeing original content not content under test.
-                                SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                                SetTestData(content,activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                             }
 
                             if (testCookieData.ShowVariant && _testDataCookieHelper.IsTestParticipant(testCookieData))
@@ -292,7 +287,7 @@ namespace EPiServer.Marketing.Testing.Web
                         if (!hasData )
                         {
                             // Make sure the cookie has data in it.
-                            SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                            SetTestData(e.Content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                         }
 
                         Swap(testCookieData, e);
@@ -306,7 +301,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        private void SetTestData(IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion )
+        private void SetTestData(IContent e, IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion )
         {
             var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
             testCookieData.TestId = activeTest.Id;
@@ -320,7 +315,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
-                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.UserIncludedInTestEvent,new TestEventArgs(activeTest));
+                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.ContentSwitchedEvent,new ContentEventArgs(e));
                 if (newVariant.ItemVersion != contentVersion)
                 {
                     contentVersion = newVariant.ItemVersion;
@@ -350,7 +345,7 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //Handles the incrementing of view counts on a version
-        private TestDataCookie EvaluateViews(TestDataCookie cookie, int contentVersion, IContent originalContent)
+        private void EvaluateViews(TestDataCookie cookie, int contentVersion, IContent originalContent)
         {
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
@@ -364,8 +359,6 @@ namespace EPiServer.Marketing.Testing.Web
                     _testDataCookieHelper.UpdateTestDataCookie(cookie);
                 }
             }
-
-            return cookie;
         }
 
         /// <summary>
@@ -395,7 +388,7 @@ namespace EPiServer.Marketing.Testing.Web
                     var originalContent = e.Content;
                     var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
                     TestDataCookie tc = new TestDataCookie();
-                    SetTestData(activeTest, tc, contentVersion, out tc, out contentVersion);
+                    SetTestData(e.Content, activeTest, tc, contentVersion, out tc, out contentVersion);
                 }
             }
         }

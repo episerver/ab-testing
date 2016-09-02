@@ -12,6 +12,8 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Test.Core;
 using System.Web;
+using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -49,6 +51,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestDataCookieHelper> _mockTestDataCookieHelper;
         private Mock<ITestManager> _mockTestManager;
         private Mock<ITestingContextHelper> _mockContextHelper;
+        private Mock<IServiceLocator> _mockServiceLocator;
+        private Mock<MarketingTestingEvents> _mockMarketingTestingEvents;
         private MyLogger _logger = new MyLogger();
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
@@ -61,6 +65,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestHandler GetUnitUnderTest()
         {
+            _mockServiceLocator = new Mock<IServiceLocator>();
             _mockTestDataCookieHelper = new Mock<ITestDataCookieHelper>();
             _mockTestManager = new Mock<ITestManager>();
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
@@ -88,11 +93,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContextHelper = new Mock<ITestingContextHelper>();
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
 
+            _mockMarketingTestingEvents = new Mock<MarketingTestingEvents>();
+
+            _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<MarketingTestingEvents>())
+                .Returns(_mockMarketingTestingEvents.Object);
+
             HttpContext.Current = new HttpContext(
                new HttpRequest(null, "http://tempuri.org", null),
                new HttpResponse(null));
 
-            return new TestHandler(_mockTestManager.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
+            return new TestHandler(_mockServiceLocator.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
         }
 
         [Fact]

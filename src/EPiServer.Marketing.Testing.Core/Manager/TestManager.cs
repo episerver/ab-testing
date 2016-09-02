@@ -161,7 +161,7 @@ namespace EPiServer.Marketing.Testing
 
             if (multivariateTest.State == TestState.Active)
             {
-                UpdateCache(multivariateTest, CacheOperator.Add);
+                Start(multivariateTest.Id);
             }
 
             _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestSavedEvent,new TestEventArgs(multivariateTest));
