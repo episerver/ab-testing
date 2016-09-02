@@ -16,13 +16,30 @@ using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    #region UnitTestWorkaround
+    internal interface IPreviewUrlBuilder
+    {
+        string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args);
+    }
+    [ExcludeFromCodeCoverage]
+    internal class PreviewUrlBuilder : IPreviewUrlBuilder
+    {
+        public string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args)
+        {
+            return UrlResolver.Current.GetUrl(cr, language, args);
+        }
+    }
+    #endregion UnitTestWorkaround
+
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;
+        private IPreviewUrlBuilder _previewUrlBuilder;
 
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
+            _previewUrlBuilder = new PreviewUrlBuilder();
         }
 
         /// <summary>
@@ -31,10 +48,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="context"></param>
         /// <param name="mockServiceLocator"></param>
         [ExcludeFromCodeCoverage]
-        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator)
+        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator, IPreviewUrlBuilder mockUrlBuilder)
         {
             HttpContext.Current = context;
             _serviceLocator = mockServiceLocator;
+            _previewUrlBuilder = mockUrlBuilder;
         }
 
         /// <summary>
@@ -87,8 +105,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var draftContent = repo.Get<IContent>(tempContentClone);
 
             var currentCulture = ContentLanguage.PreferredCulture;
-            var publishPreview = UrlResolver.Current.GetUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Default });
-            var draftPreview = UrlResolver.Current.GetUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var publishPreview = _previewUrlBuilder.GetPreviewUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Default });
+            var draftPreview = _previewUrlBuilder.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
