@@ -4,7 +4,7 @@ using System;
 namespace EPiServer.Marketing.Testing
 {
     /// <summary>
-    /// Used with testmanager events
+    /// Used with testmanager IMarketing Test events
     /// </summary>
     public class TestEventArgs : EventArgs
     {

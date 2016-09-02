@@ -102,13 +102,14 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //To support unit testing
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, Dictionary<Guid, int> processedList, ITestingContextHelper contextHelper, ILogger logger)
+        internal TestHandler(IServiceLocator serviceLocator, ITestDataCookieHelper cookieHelper, Dictionary<Guid, int> processedList, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
             ProcessedContentList = processedList;
-            _testManager = testManager;
+            _testManager = serviceLocator.GetInstance<ITestManager>();
             _contextHelper = contextHelper;
             _logger = logger;
+            _marketingTestingEvents = serviceLocator.GetInstance<MarketingTestingEvents>();
         }
 
         /// <summary>
@@ -271,6 +272,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
+                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.UserIncludedInTestEvent,new TestEventArgs(activeTest));
                 if (newVariant.ItemVersion != contentVersion)
                 {
                     contentVersion = newVariant.ItemVersion;
