@@ -23,7 +23,7 @@
     "EPiServer.Packaging": "3.2.3",
     "EPiServer.Packaging.UI": "3.2.3",
     "log4net": "2.0.3",
-    "Microsoft.AspNet.Mvc": "4.0.20710",
+    "Microsoft.AspNet.Mvc": "5.2.3",
     "Microsoft.Web.Infrastructure": "1.0.0.0",
     "Newtonsoft.Json": "6.0.8",
     "NuGet.Core": "2.5.0",

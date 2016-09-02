@@ -7,7 +7,7 @@
     "EPiServer.CMS.Core": "9.10.1",
     "EPiServer.Framework": "9.10.1",
     "EPiServer.Marketing.Testing.Web": "1.0.0-*",
-    "Microsoft.AspNet.Mvc": "4.0.20710.0",
+    "Microsoft.AspNet.Mvc": "5.2.3",
     "Microsoft.AspNet.Razor": "2.0.20710.0",
     "Microsoft.AspNet.WebPages": "2.0.20710.0",
     "Microsoft.Web.Infrastructure": "1.0.0.0",

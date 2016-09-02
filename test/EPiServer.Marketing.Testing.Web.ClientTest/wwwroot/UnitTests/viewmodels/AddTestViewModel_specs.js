@@ -17,6 +17,9 @@
                     contentLink: aPrefixString + "_" + aDraftVersionString,
                     contentGuid: aGuidString
                 },
+                aConfigResult = {
+
+                },
                 aContentVersionStore = {
                     query: function (queryObject) {
                         me.retQueryObj = queryObject;
@@ -30,6 +33,19 @@
                         return this;
                     }
                 },
+                aConfigStore = {
+                    get: function () {
+                        //me.retQueryObj = queryObject;
+                        return this;
+                    },
+                    then: function (successFunction) {
+                        successFunction(aConfigResult);
+                        return this;
+                    },
+                    otherwise: function (otherwiseFunction) {
+                        return this;
+                    }
+                },
                 aLanguageContext = {
                     language: "mycontentlanguage"
                 },
@@ -37,6 +53,7 @@
                 aViewModel = AddTestViewModel({
                     store: {},
                     _contentVersionStore: aContentVersionStore,
+                    configStore: aConfigStore,
                     contentData: aContentData,
                     languageContext: aLanguageContext
                 });
@@ -61,6 +78,11 @@
                     contentLink: aPrefixString + "_" + aDraftVersionString,
                     contentGuid: aGuidString
                 },
+                aConfigResult = {
+                    testDuration: 30,
+                    participationPercent: 10,
+                    confidenceLevel: 95
+                },
 
                 aContentVersionStore = {
                     query: function (queryObject) {
@@ -69,6 +91,19 @@
                     },
                     then: function (successFunction) {
                         successFunction(aContentResult);
+                        return this;
+                    },
+                    otherwise: function (otherwiseFunction) {
+                        return this;
+                    }
+                },
+                aConfigStore = {
+                    get: function () {
+                        //me.retQueryObj = queryObject;
+                        return this;
+                    },
+                    then: function (successFunction) {
+                        successFunction(aConfigResult);
                         return this;
                     },
                     otherwise: function (otherwiseFunction) {
@@ -85,15 +120,16 @@
                             me.retTest = data;
                             return this;
                         },
-                        then: function(successFunction) {
+                        then: function (successFunction) {
                             return this;
                         },
-                        otherwise: function(otherwiseFunction) {
+                        otherwise: function (otherwiseFunction) {
                         }
                     },
 
                     _contentVersionStore: aContentVersionStore,
                     contentData: aContentData,
+                    configStore: aConfigStore,
                     languageContext: aLanguageContext
                 });
 
@@ -102,8 +138,9 @@
                 aViewModel.testTitle = "title";
                 aViewModel.testDescription = "desc";
                 aViewModel.conversionPage = "kpiPage";
-                aViewModel.participationPercent = 55;
-                aViewModel.testDuration = 7;
+                aViewModel.participationPercent = aConfigResult.participationPercent;
+                aViewModel.testDuration = aConfigResult.testDuration;
+                aViewModel.confidencelevel = aConfigResult.confidenceLevel;
                 aViewModel.startDate = "today";
 
                 aViewModel.createTest();
@@ -114,6 +151,7 @@
                 expect(me.retTest.variantVersion).to.equal(aDraftVersionString);
                 expect(me.retTest.testDuration).to.equal(aViewModel.testDuration);
                 expect(me.retTest.participationPercent).to.equal(aViewModel.participationPercent);
+                expect(me.retTest.confidencelevel).to.equal(aViewModel.confidencelevel);
                 expect(me.retTest.conversionPage).to.equal(aViewModel.conversionPage);
                 expect(me.retTest.testTitle).to.equal(aViewModel.testTitle);
                 expect(me.retTest.startDate).to.equal(aViewModel.startDate);
@@ -137,12 +175,28 @@
                     contentGuid: aGuidString,
                     contentLink: aPrefixString
                 },
+                aConfigResult = {
+
+                },
 
                 aContentVersionStore = {
                     query: function (queryObject) {
                         return this;
                     },
                     then: function (successFunction) {
+                        return this;
+                    },
+                    otherwise: function (otherwiseFunction) {
+                        return this;
+                    }
+                },
+                aConfigStore = {
+                    get: function () {
+                        //me.retQueryObj = queryObject;
+                        return this;
+                    },
+                    then: function (successFunction) {
+                        successFunction(aConfigResult);
                         return this;
                     },
                     otherwise: function (otherwiseFunction) {
@@ -174,6 +228,7 @@
                     },
 
                     _contentVersionStore: aContentVersionStore,
+                    configStore: aConfigStore,
                     contentData: aContentData,
                     languageContext: aLanguageContext
                 });

@@ -9,14 +9,12 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
     [ExcludeFromCodeCoverage]
     public class PickWinnerViewConfiguration : ViewConfiguration<IMarketingTest>
     {
-
         public PickWinnerViewConfiguration()
         {
             Key = "PickWinnerView";
             ControllerType = "marketing-testing/views/PickWinner";
             ViewType = "marketing-testing/views/PickWinner";
             HideFromViewMenu = true;
-
         }
     }
 }

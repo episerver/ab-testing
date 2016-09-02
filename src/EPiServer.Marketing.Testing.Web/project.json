@@ -18,6 +18,7 @@
     "EPiServer.Marketing.KPI": "1.0.0-*",
     "EPiServer.Marketing.Testing.Core": "1.0.0-*",
     "EPiServer.Marketing.Testing.Dal": "1.0.0-*",
+    "Microsoft.AspNet.Mvc": "5.2.3",
     "Microsoft.AspNet.WebApi": "5.2.3",
     "Microsoft.AspNet.WebApi.Client": "5.2.3",
     "Microsoft.AspNet.WebApi.Core": "5.2.3",

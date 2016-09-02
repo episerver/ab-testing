@@ -491,11 +491,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void GetVariantPageData_Test()
         {
-            var testProcessedList = new Dictionary<Guid,int>();
-            testProcessedList.Add(testId,1);
             var testManager = GetUnitUnderTest();
 
-            var pageData = testManager.GetVariantContent(testId, testProcessedList);
+            var pageData = testManager.GetVariantContent(testId);
 
             Assert.NotNull(pageData);
         }
