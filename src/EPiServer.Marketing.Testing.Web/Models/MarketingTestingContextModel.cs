@@ -25,6 +25,9 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public string VisitorPercentage { get; set; }
         public int TotalParticipantCount { get; set; }
         public string PublishedUrl { get; set; }
+        public string PublishPreviewUrl { get; set; }
+        public string DraftPreviewUrl { get; set; }
         public bool UserHasPublishRights { get; set; }
+        
     }
 }

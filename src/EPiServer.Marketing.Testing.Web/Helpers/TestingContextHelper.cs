@@ -11,16 +11,35 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using EPiServer.Globalization;
 using EPiServer.Security;
+using EPiServer.Web;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    #region UnitTestWorkaround
+    internal interface IPreviewUrlBuilder
+    {
+        string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args);
+    }
+    [ExcludeFromCodeCoverage]
+    internal class PreviewUrlBuilder : IPreviewUrlBuilder
+    {
+        public string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args)
+        {
+            return UrlResolver.Current.GetUrl(cr, language, args);
+        }
+    }
+    #endregion UnitTestWorkaround
+
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;
+        private IPreviewUrlBuilder _previewUrlBuilder;
 
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
+            _previewUrlBuilder = new PreviewUrlBuilder();
         }
 
         /// <summary>
@@ -29,10 +48,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="context"></param>
         /// <param name="mockServiceLocator"></param>
         [ExcludeFromCodeCoverage]
-        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator)
+        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator, IPreviewUrlBuilder mockUrlBuilder)
         {
             HttpContext.Current = context;
             _serviceLocator = mockServiceLocator;
+            _previewUrlBuilder = mockUrlBuilder;
         }
 
         /// <summary>
@@ -77,12 +97,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
-
+            
             //get variant (draft) version
             var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
             int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
             tempContentClone.WorkID = variantVersion;
             var draftContent = repo.Get<IContent>(tempContentClone);
+
+            var currentCulture = ContentLanguage.PreferredCulture;
+            var publishPreview = _previewUrlBuilder.GetPreviewUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Default });
+            var draftPreview = _previewUrlBuilder.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
@@ -91,6 +115,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
+
+            // preview urls
+            model.PublishPreviewUrl = publishPreview;
+            model.DraftPreviewUrl = draftPreview;
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
