@@ -2,6 +2,7 @@
  "dojo/_base/declare",
  "epi/dependency",
  "dojo/dom",
+ "dojo/ready",
  "dijit/registry",
  "dojo/dom-style",
  "dojo/topic",
@@ -14,6 +15,7 @@
  "epi/username",
   "dojo/dom-class",
  "marketing-testing/scripts/abTestTextHelper",
+ "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
@@ -25,6 +27,7 @@
     declare,
     dependency,
     dom,
+    ready,
     registry,
     domStyle,
     topic,
@@ -36,7 +39,8 @@
     datetime,
     username,
     domClass,
-    textHelper
+    textHelper,
+    rasterizehtml
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -116,6 +120,7 @@
         },
 
         _renderData: function () {
+            var me = this;
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
@@ -132,6 +137,11 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
+
+            ready(function () {
+                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail');
+                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail');
+            });
             this.renderStatusIndicatorStyles();
         },
 
@@ -170,6 +180,15 @@
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+            }
+        },
+        _generateThumbnail: function (previewUrl, canvasId) {
+            var pubThumb = dom.byId(canvasId);
+
+            if (pubThumb) {
+                pubThumb.height = 768;
+                pubThumb.width = 1024;
+                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
             }
         }
     });
