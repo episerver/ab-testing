@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
         public Identity Id { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "Must be a positive number.")]
+        [Range(1, 365, ErrorMessage = "Must be a positive number between 1 and 365.")]
         public int TestDuration { get; set; }
 
         [Required]
