@@ -233,9 +233,13 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
+        private Object thisLock = new Object();
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
         {
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+            lock (thisLock)
+            {
+                _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+            }
         }
 
         public Variant ReturnLandingPage(Guid testId)
@@ -261,11 +265,11 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
-        public IContent GetVariantContent(Guid contentGuid, Dictionary<Guid,int> processedList)
+        public IContent GetVariantContent(Guid contentGuid)
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid);
 
-            return retData ?? UpdateVariantContentCache(contentGuid, processedList);
+            return retData ?? UpdateVariantContentCache(contentGuid);
         }
 
         public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
@@ -319,40 +323,37 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        internal IContent UpdateVariantContentCache(Guid contentGuid, Dictionary<Guid,int> processedList)
+        internal IContent UpdateVariantContentCache(Guid contentGuid)
         {
             IVersionable versionableContent = null;
 
-            if (processedList[contentGuid] == 1)
+            var test =
+                GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+            if (test != null)
             {
-                var test =
-                    GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+                var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
+                var testContent = contentLoader.Get<IContent>(contentGuid);
+                var contentVersion = testContent.ContentLink.WorkID == 0
+                    ? testContent.ContentLink.ID
+                    : testContent.ContentLink.WorkID;
 
-                if (test != null)
+                if (testContent != null)
                 {
-                    var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
-                    var testContent = contentLoader.Get<IContent>(contentGuid);
-                    var contentVersion = testContent.ContentLink.WorkID == 0
-                        ? testContent.ContentLink.ID
-                        : testContent.ContentLink.WorkID;
-
-                    if (testContent != null)
+                    foreach (var variant in test.Variants)
                     {
-                        foreach (var variant in test.Variants)
+                        if (variant.ItemVersion != contentVersion)
                         {
-                            if (variant.ItemVersion != contentVersion)
+                            versionableContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
+                            versionableContent.Status = VersionStatus.Published;
+                            versionableContent.StartPublish = DateTime.Now.AddDays(-1);
+
+                            var cacheItemPolicy = new CacheItemPolicy
                             {
-                                versionableContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
-                                versionableContent.Status = VersionStatus.Published;
-                                versionableContent.StartPublish = DateTime.Now.AddDays(-1);
+                                AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
+                            };
 
-                                var cacheItemPolicy = new CacheItemPolicy
-                                {
-                                    AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
-                                };
-
-                                _variantCache.Add("epi" + contentGuid, (IContent)versionableContent, cacheItemPolicy);
-                            }
+                            _variantCache.Add("epi" + contentGuid, (IContent)versionableContent, cacheItemPolicy);
                         }
                     }
                 }

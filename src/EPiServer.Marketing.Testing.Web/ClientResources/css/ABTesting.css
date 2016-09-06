@@ -110,7 +110,8 @@ hr {
 }
 
 .controlLeaderBody,
-.controlTrailingBody {
+.controlTrailingBody,
+.controlPublishedBody {
     box-sizing: border-box;
     width: 49%;
     display: inline-block;
@@ -118,7 +119,8 @@ hr {
     margin-right: 2%;
 }
 
-.challengerLeaderBody {
+.challengerLeaderBody,
+.challengerPublishedBody {
     box-sizing: border-box;
     width: 49%;
     display: inline-block;
@@ -129,24 +131,29 @@ hr {
     border: 2px solid #95c532;
 }
 
-.controlDefaultBody h3,
-.controlTrailingBody h3,
-.challengerDefaultBody h3,
-.controlLeaderBody h3,
-.challengerLeaderBody h3 {
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-    font-family: arial;
-    padding: 14px 8px 12px 20px;
-    margin-top: 0;
-}
+    .controlDefaultBody h3,
+    .controlTrailingBody h3,
+    .challengerDefaultBody h3,
+    .controlLeaderBody h3,
+    .challengerLeaderBody h3 {
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        font-family: arial;
+        padding: 14px 8px 12px 20px;
+        margin-top: 0;
+    }
 
 .controlDefaultBody h3,
 .controlTrailingBody h3,
-.challengerDefaultBody h3{
+.challengerDefaultBody h3 {
     padding: 14px 8px 12px 20px;
- }
+}
+
+.controlPublishedBody,
+.challengerPublishedBody {
+    border: 3px solid #779f23;
+}
 
 .challengerDefaultBody h3 {
     background-color: #f7542b;
@@ -159,8 +166,28 @@ hr {
 
 .controlLeaderBody h3,
 .challengerLeaderBody h3 {
-  padding: 14px 8px 10px 20px;
-  background-color: #95c532;
+    padding: 14px 8px 10px 20px;
+    background-color: #95c532;
+}
+
+.controlPublishedBody h3,
+.challengerPublishedBody h3 {
+    background-color: #779f23;
+}
+
+.controlDefaultBody h3,
+.controlLeaderBody h3,
+.controlTrailingBody h3,
+.challengerLeaderBody h3,
+.challengerDefaultBody h3,
+.controlPublishedBody h3,
+.challengerPublishedBody h3 {
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: arial;
+    padding: 14px 8px 12px 20px;
+    margin-top: 0;
 }
 
 .controlDefaultBody #controlPercent,
@@ -171,7 +198,9 @@ hr {
 }
 
 .controlLeaderBody #controlPercent,
-.challengerLeaderBody #challengerPercent {
+.challengerLeaderBody #challengerPercent,
+.controlPublishedBody #controlPercent,
+.challengerPublishedBody #challengerPercent {
     font-weight: bold;
     font-family: arial;
     font-size: 48px;
@@ -259,18 +288,23 @@ hr {
     padding-top: 2px;
 }
 
-.versiona {
+.versiona,
+.versionb {
     background-image: url('../../Images/pageIcon.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
 
-.versionb {
-    background-image: url('../../Images/pageIcon.png');
+.leadingContent,
+.winningContent,
+.pickedContent {
     background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+    position: absolute;
+    right: -20px;
+    top: -5px;
+    height: 64px;
+    width: 64px;
 }
 .abThumbnailCanvas {
     height: 364px;
@@ -292,14 +326,16 @@ hr {
     font-size: 24px;
 }
 
+.leadingContent {
+    background-image: url('../../Images/hot.png');
+}
+
 .winningContent {
     background-image: url('../../Images/winner.png');
-    background-repeat: no-repeat;
-    position: absolute;
-    right: -20px;
-    top: -5px;
-    height: 64px;
-    width: 64px;
+}
+
+.pickedContent {
+    background-image: url('../../Images/picked.png');
 }
 
 #breadcrumb {

@@ -49,5 +49,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <param name="testData"></param>
         void ExpireTestDataCookie(TestDataCookie testData);
+
+        // <summary>
+        /// Resets the cookie associated with the supplied testData to an empty Test Data cookie.
+        /// </summary>
+        /// <param name="testData"></param>
+        /// <returns></returns>
+        TestDataCookie ResetTestDataCookie(TestDataCookie testData);
     }
 }
