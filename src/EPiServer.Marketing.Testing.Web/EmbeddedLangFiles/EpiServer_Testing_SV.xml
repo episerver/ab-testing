@@ -25,7 +25,7 @@
         <duration_header>For how long do you wish to run the A/B test?</duration_header>
         <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
-        <error_duration>Duration must be a valid integer and cannot be less than 1</error_duration>
+        <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
         <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
         <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
