@@ -104,10 +104,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             tempContentClone.WorkID = variantVersion;
             var draftContent = repo.Get<IContent>(tempContentClone);
 
-            var currentCulture = ContentLanguage.PreferredCulture;
-            var publishPreview = _previewUrlBuilder.GetPreviewUrl(publishedContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Default });
-            var draftPreview = _previewUrlBuilder.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
-
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
             model.Test = testData;
@@ -115,10 +111,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
-
-            // preview urls
-            model.PublishPreviewUrl = publishPreview;
-            model.DraftPreviewUrl = draftPreview;
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
@@ -195,6 +187,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
             model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+
+            //Set previewUrl's from version data
+            var currentCulture = ContentLanguage.PreferredCulture;
+            var publishPreview = _previewUrlBuilder.GetPreviewUrl(publishedVersionData.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var draftPreview = _previewUrlBuilder.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+
+            model.PublishPreviewUrl = publishPreview;
+            model.DraftPreviewUrl = draftPreview;
         }
     }
 }
