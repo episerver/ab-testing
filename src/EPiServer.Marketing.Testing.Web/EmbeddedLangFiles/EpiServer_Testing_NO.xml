@@ -122,11 +122,11 @@
         <view_control_content>View control content</view_control_content>
       </detailsview>
       <notificationbar>
-        <completed_test>An A/B test was completed on this content. </completed_test>
+        <completed_test>An A/B test was completed on a version of this content. </completed_test>
         <details_link_text>View test</details_link_text>
         <details_link_tooltip>View test details</details_link_tooltip>
-        <ongoing_test>This content is part of a running A/B test. </ongoing_test>
-        <scheduled_test>An A/B test is scheduled to run on this content </scheduled_test>
+        <ongoing_test>A version of this content is part of a running A/B test. </ongoing_test>
+        <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
         <version_in_test>A version of this content is part of an ongoing A/B test. </version_in_test>
         <winner_link_text>Pick winner</winner_link_text>
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
