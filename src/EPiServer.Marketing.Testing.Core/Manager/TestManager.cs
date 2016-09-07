@@ -158,13 +158,14 @@ namespace EPiServer.Marketing.Testing
             }
 
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
+            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestSavedEvent, new TestEventArgs(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
             {
-                Start(multivariateTest.Id);
+                UpdateCache(multivariateTest, CacheOperator.Add);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStartedEvent, new TestEventArgs(multivariateTest));
             }
 
-            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestSavedEvent,new TestEventArgs(multivariateTest));
             return testId;
         }
 
@@ -196,9 +197,8 @@ namespace EPiServer.Marketing.Testing
             if (dalTest != null)
             {
                 UpdateCache(managerTest, CacheOperator.Add);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStartedEvent, new TestEventArgs(managerTest));
             }
-
-            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStartedEvent, new TestEventArgs(managerTest));
         }
 
         public void Stop(Guid testObjectId)
@@ -220,9 +220,9 @@ namespace EPiServer.Marketing.Testing
                 Save(test);
 
                 UpdateCache(test, CacheOperator.Remove);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStoppedEvent, new TestEventArgs(test));
             }
 
-            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStoppedEvent, new TestEventArgs(test));
         }
 
         public void Archive(Guid testObjectId, Guid winningVariantId)
@@ -234,9 +234,9 @@ namespace EPiServer.Marketing.Testing
             if (test != null)
             {
                 UpdateCache(test,CacheOperator.Remove);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestArchivedEvent, new TestEventArgs(test));
             }
 
-            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestArchivedEvent, new TestEventArgs(test));
         }
 
         private Object thisLock = new Object();

@@ -7,13 +7,13 @@ namespace EPiServer.Marketing.Testing
     public interface IMarketingTestingEvents
     {
         /// <summary>
-        /// Occurs after a test has been created or updated and all related state and cache changes
+        /// Occurs after a test has been created or updated.
         /// have been made.
         /// </summary>
         event EventHandler<TestEventArgs> TestSaved;
 
         /// <summary>
-        /// Occurs after a test has been deleted and all related state and cache changes
+        /// Occurs after a test has been deleted.
         /// have been made
         /// </summary>
         event EventHandler<TestEventArgs> TestDeleted;
@@ -36,9 +36,9 @@ namespace EPiServer.Marketing.Testing
 
         /// <summary>
         /// Occurs when content has the published content has been switched out with the
-        /// test variant
+        /// test variant. This event will often fire multiple times for a single IContent.
         /// </summary>
-        event EventHandler<ContentEventArgs> ContentSwitched;
+        event EventHandler<TestEventArgs> ContentSwitched;
 
         /// <summary>
         /// Occurs when a user is included in an active test.
