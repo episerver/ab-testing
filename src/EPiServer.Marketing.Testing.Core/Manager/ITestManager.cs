@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Testing
 
         Variant ReturnLandingPage(Guid testId);
 
-        IContent GetVariantContent(Guid contentGuid, Dictionary<Guid,int> processedList);
+        IContent GetVariantContent(Guid contentGuid);
 
         /// <summary>
         /// Given a specific test id and the content, iterates over all the Kpi objects and returns 

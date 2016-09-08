@@ -50,12 +50,13 @@ define([
         start: true,
 
         //confidence level
-        confidencelevel: 95,
+        confidenceLevel: 95,
 
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
             this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.configStore = this.configStore || dependency.resolve("epi.storeregistry").get("marketing.abtestingconfig");
             this.topic = this.topic || topic;
 
             this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
@@ -77,6 +78,15 @@ define([
                     var publishedVersion = result;
                     this.set("publishedVersion", publishedVersion);
                     this.set("currentVersion", this.contentData);
+
+                    this.configStore.get()
+                        .then(function (config) {
+                            console.log(config);
+                            this.set("testDuration", config.testDuration);
+                            this.set("participationPercent", config.participationPercent);
+                            this.set("confidenceLevel", config.confidenceLevel);
+                        }.bind(this));
+                    
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this))

@@ -11,16 +11,35 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using EPiServer.Globalization;
 using EPiServer.Security;
+using EPiServer.Web;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    #region UnitTestWorkaround
+    internal interface IPreviewUrlBuilder
+    {
+        string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args);
+    }
+    [ExcludeFromCodeCoverage]
+    internal class PreviewUrlBuilder : IPreviewUrlBuilder
+    {
+        public string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args)
+        {
+            return UrlResolver.Current.GetUrl(cr, language, args);
+        }
+    }
+    #endregion UnitTestWorkaround
+
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;
+        private IPreviewUrlBuilder _previewUrlBuilder;
 
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
+            _previewUrlBuilder = new PreviewUrlBuilder();
         }
 
         /// <summary>
@@ -29,14 +48,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="context"></param>
         /// <param name="mockServiceLocator"></param>
         [ExcludeFromCodeCoverage]
-        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator)
+        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator, IPreviewUrlBuilder mockUrlBuilder)
         {
             HttpContext.Current = context;
             _serviceLocator = mockServiceLocator;
+            _previewUrlBuilder = mockUrlBuilder;
         }
 
         /// <summary>
         /// Evaluates a set of conditions which would preclue a test from swapping content
+        /// * Specific to loading regular content
         /// </summary>
         /// <returns></returns>
         public bool SwapDisabled(ContentEventArgs e)
@@ -44,7 +65,27 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //currently, our only restriction is user being logged into a system folder (e.g edit).
             //Other conditions have been brought up such as permissions, ip restrictions etc
             //which can be evaluated together here or individually.
-            return IsInSystemFolder() && e.Content != null;
+            return (e.Content == null ||
+                    HttpContext.Current == null ||
+                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    IsInSystemFolder() );
+        }
+
+        /// <summary>
+        /// Evaluates a set of conditions which would preclue a test from swapping content
+        /// * Specific to loading children
+        /// </summary>
+        /// <returns></returns>
+        public bool SwapDisabled(ChildrenEventArgs e)
+        {
+            //currently, our only restriction is user being logged into a system folder (e.g edit).
+            //Other conditions have been brought up such as permissions, ip restrictions etc
+            //which can be evaluated together here or individually.
+            return (e.ContentLink == null ||
+                    e.ChildrenItems == null ||
+                    HttpContext.Current == null ||
+                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    IsInSystemFolder());
         }
 
         /// <summary>
@@ -57,8 +98,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         ///  matches requested page</returns>
         public bool IsRequestedContent(IContent loadedContent)
         {
-            return !(loadedContent is PageData) ||
-               (GetCurrentPageFromUrl().ContentLink == loadedContent.ContentLink);
+            var content = GetCurrentPageFromUrl();
+            if (content != null)
+            {
+                return !(loadedContent is PageData) ||
+                    (content.ContentLink == loadedContent.ContentLink);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -77,7 +126,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //get published version
             var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
-
+            
             //get variant (draft) version
             var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
             int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
@@ -167,6 +216,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
             model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+
+            //Set previewUrl's from version data
+            var currentCulture = ContentLanguage.PreferredCulture;
+            var publishPreview = _previewUrlBuilder.GetPreviewUrl(publishedVersionData.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var draftPreview = _previewUrlBuilder.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+
+            model.PublishPreviewUrl = publishPreview;
+            model.DraftPreviewUrl = draftPreview;
         }
     }
 }

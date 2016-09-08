@@ -134,7 +134,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
             string aResult = webRepo.PublishWinningVariant(testResultmodel);
-            Assert.True(aResult == testResultmodel.DraftContentLink.Split('_')[0]);
+            Assert.True(aResult == testResultmodel.TestId);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Once);
         }
@@ -184,7 +184,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                .Returns(new ContentReference { ID = 10, WorkID = 0 });
 
             string aResult = webRepo.PublishWinningVariant(testResultmodel);
-            Assert.True(aResult == testResultmodel.DraftContentLink);
+            Assert.True(aResult == testResultmodel.TestId);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Never);
         }
@@ -222,7 +222,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
             string aResult = webRepo.PublishWinningVariant(testResultmodel);
-            Assert.Null(aResult);
+            Assert.True(aResult == testResultmodel.TestId);
         }
 
         [Fact]
@@ -238,7 +238,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
             string aResult = webRepo.PublishWinningVariant(testResultModel);
-            Assert.True(aResult == null);
+            Assert.True(aResult == testResultModel.TestId);
         }
     }
 }
