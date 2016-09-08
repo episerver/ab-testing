@@ -35,6 +35,16 @@ namespace EPiServer.Marketing.Testing
         event EventHandler<TestEventArgs> TestArchived;
 
         /// <summary>
+        /// Occurs after a test has been added to the active test cache
+        /// </summary>
+        event EventHandler<TestEventArgs> TestAddedToCache;
+
+        /// <summary>
+        /// Occurs after a test has been removed from the active test cache
+        /// </summary>
+        event EventHandler<TestEventArgs> TestRemovedFromCache;
+
+        /// <summary>
         /// Occurs when content has the published content has been switched out with the
         /// test variant. This event will often fire multiple times for a single IContent.
         /// </summary>
@@ -49,6 +59,11 @@ namespace EPiServer.Marketing.Testing
         /// Occurs when a Kpi is successfully converted.
         /// </summary>
         event EventHandler<KpiEventArgs> KpiConverted;
+
+        /// <summary>
+        /// Occurs when all Kpis associated with a given test have been converted
+        /// </summary>
+        event EventHandler<KpiEventArgs> AllKpisConverted;
 
     }
 }
