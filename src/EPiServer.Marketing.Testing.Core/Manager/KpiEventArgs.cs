@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Principal;
-using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Security;
@@ -23,7 +21,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             KpiConversionDictionary = kpiConversionDictionary;
         }
-
         
         public IKpi Kpi { get; private set; }
         public IDictionary<Guid,bool> KpiConversionDictionary { get; private set; }

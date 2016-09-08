@@ -1,7 +1,6 @@
 ﻿using System;
 using EPiServer.Marketing.Testing.Core.Manager;
 
-
 namespace EPiServer.Marketing.Testing
 {
     public interface IMarketingTestingEvents
@@ -64,6 +63,5 @@ namespace EPiServer.Marketing.Testing
         /// Occurs when all Kpis associated with a given test have been converted
         /// </summary>
         event EventHandler<KpiEventArgs> AllKpisConverted;
-
     }
 }

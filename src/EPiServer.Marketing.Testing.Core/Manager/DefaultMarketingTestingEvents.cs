@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.ComponentModel;
 
@@ -186,7 +184,5 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 }
             }
         }
-
-
     }
 }
