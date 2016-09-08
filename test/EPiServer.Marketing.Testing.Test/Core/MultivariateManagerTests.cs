@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private Guid testId = Guid.NewGuid();
         private Mock<IKpiManager> _kpiManager;
         private Mock<IKpiDataAccess> _kpiDataAccess;
-        private Mock<MarketingTestingEvents> _marketingEvents;
+        private Mock<DefaultMarketingTestingEvents> _marketingEvents;
 
         private TestManager GetUnitUnderTest()
         {
@@ -76,8 +76,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _contentLoader.Setup(call => call.Get<ContentData>(It.IsAny<ContentReference>())).Returns(contentData);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentLoader>()).Returns(_contentLoader.Object);
 
-            _marketingEvents = new Mock<MarketingTestingEvents>();
-            _serviceLocator.Setup(sl => sl.GetInstance<MarketingTestingEvents>()).Returns(_marketingEvents.Object);
+            _marketingEvents = new Mock<DefaultMarketingTestingEvents>();
+            _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents.Object);
 
             return new TestManager(_serviceLocator.Object);
         }

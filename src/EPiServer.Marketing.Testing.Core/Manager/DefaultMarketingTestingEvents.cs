@@ -9,11 +9,11 @@ using System.ComponentModel;
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
     [ServiceConfiguration(typeof(IMarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]
-    [ServiceConfiguration(typeof(MarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]
-    public class MarketingTestingEvents : IMarketingTestingEvents, IDisposable
+    [ServiceConfiguration(typeof(DefaultMarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]
+    public class DefaultMarketingTestingEvents : IMarketingTestingEvents, IDisposable
     {
         private EventHandlerList _events = new EventHandlerList();
-        private static MarketingTestingEvents _instance;
+        private static DefaultMarketingTestingEvents _instance;
 
         private static object _keyLock = new object();
         private Dictionary<string, object> _eventKeys = new Dictionary<string, object>();
@@ -25,13 +25,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public const string TestStartedEvent = "TestStartedEvent";
         public const string TestStoppedEvent = "TestStoppedEvent";
         public const string TestArchivedEvent = "TestArchivedEvent";
+        public const string TestAddedToCacheEvent = "TestAddedToCacheEvent";
+        public const string TestRemovedFromCacheEvent = "TestRemovedFromCacheEvent";
         public const string ContentSwitchedEvent = "ContentSwitchedEvent";
         public const string UserIncludedInTestEvent = "UserIncludedInTestEvent";
         public const string KpiConvertedEvent = "KpiConvertedEvent";
+        public const string AllKpisConvertedEvent = "AllKpisConvertedEvent";
 
         #endregion
 
-        public static MarketingTestingEvents Instance
+        public static DefaultMarketingTestingEvents Instance
         {
             get
             {
@@ -41,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     {
                         if (_instance == null)
                         {
-                            _instance = new MarketingTestingEvents();
+                            _instance = new DefaultMarketingTestingEvents();
                         }
                     }
                 }
@@ -110,6 +113,18 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             remove { Events.RemoveHandler(GetEventKey(TestArchivedEvent), value); }
         }
 
+        public event EventHandler<TestEventArgs> TestAddedToCache
+        {
+            add { Events.AddHandler(GetEventKey(TestAddedToCacheEvent), value); }
+            remove { Events.RemoveHandler(GetEventKey(TestAddedToCacheEvent), value); }
+        }
+
+        public event EventHandler<TestEventArgs> TestRemovedFromCache
+        {
+            add { Events.AddHandler(GetEventKey(TestRemovedFromCacheEvent), value); }
+            remove { Events.RemoveHandler(GetEventKey(TestRemovedFromCacheEvent), value); }
+        }
+
         public event EventHandler<TestEventArgs> ContentSwitched
         {
             add { Events.AddHandler(GetEventKey(ContentSwitchedEvent), value); }
@@ -126,6 +141,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             add { Events.AddHandler(GetEventKey(KpiConvertedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(KpiConvertedEvent), value); }
+        }
+
+        public event EventHandler<KpiEventArgs> AllKpisConverted
+        {
+            add { Events.AddHandler(GetEventKey(AllKpisConvertedEvent), value); }
+            remove { Events.RemoveHandler(GetEventKey(AllKpisConvertedEvent), value); }
         }
         #endregion
 

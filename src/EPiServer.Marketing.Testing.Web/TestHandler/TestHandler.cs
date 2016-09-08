@@ -23,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
         private readonly ITestManager _testManager;
-        private readonly MarketingTestingEvents _marketingTestingEvents;
+        private readonly DefaultMarketingTestingEvents _marketingTestingEvents;
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.Testing.Web
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
-            _marketingTestingEvents = ServiceLocator.Current.GetInstance<MarketingTestingEvents>();
+            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
 
             // Setup our content events
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
@@ -50,23 +50,8 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
-
-
-            var marketingTestingEvents = ServiceLocator.Current.GetInstance<MarketingTestingEvents>();
-            marketingTestingEvents.ContentSwitched += onContentSwitched;
-            marketingTestingEvents.KpiConverted += onKpiConverted;
         }
-
-        private void onKpiConverted(object sender, KpiEventArgs e)
-        {
-        }
-
-        private void onContentSwitched(object sender, TestEventArgs e)
-        {
-            Thread.Sleep(20000);
-            var x = e;
-        }
-
+        
         //To support unit testing
         internal TestHandler(IServiceLocator serviceLocator, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
         {
@@ -74,7 +59,7 @@ namespace EPiServer.Marketing.Testing.Web
             _testManager = serviceLocator.GetInstance<ITestManager>();
             _contextHelper = contextHelper;
             _logger = logger;
-            _marketingTestingEvents = serviceLocator.GetInstance<MarketingTestingEvents>();
+            _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
         }
 
         /// <summary>
@@ -283,7 +268,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
-                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.UserIncludedInTestEvent, new TestEventArgs(activeTest, e));
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.UserIncludedInTestEvent, new TestEventArgs(activeTest, e));
                 if (newVariant.ItemVersion != contentVersion)
                 {
                     contentVersion = newVariant.ItemVersion;
@@ -306,9 +291,13 @@ namespace EPiServer.Marketing.Testing.Web
                     activeContent.ContentLink = variant.ContentLink;
                     activeContent.Content = variant;
 
-                    _marketingTestingEvents.RaiseMarketingTestingEvent(
-                        MarketingTestingEvents.ContentSwitchedEvent,
-                        new TestEventArgs(activeTest, activeContent.Content));
+                    if (!HttpContext.Current.Items.Contains(activeContent + "skipevent"))
+                    {
+                        _marketingTestingEvents.RaiseMarketingTestingEvent(
+                            DefaultMarketingTestingEvents.ContentSwitchedEvent,
+                            new TestEventArgs(activeTest, activeContent.Content));
+                        HttpContext.Current.Items[activeContent + "skipevent"] = true;
+                    }
                 }
             }
         }
@@ -399,7 +388,7 @@ namespace EPiServer.Marketing.Testing.Web
                                 {
                                     tdcookie.KpiConversionDictionary.Remove(eval);
                                     tdcookie.KpiConversionDictionary.Add(eval, true);
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval), test));
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval), test));
                                 }
 
                                 // now check to see if all kpi objects have evalated
@@ -416,8 +405,7 @@ namespace EPiServer.Marketing.Testing.Web
                                     _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion,
                                         CountType.Conversion);
 
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
-
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
                                 }
                             }
                         }

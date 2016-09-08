@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Testing
         private ObjectCache _testCache = MemoryCache.Default;
         private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
-        private MarketingTestingEvents _marketingTestingEvents;
+        private DefaultMarketingTestingEvents _marketingTestingEvents;
 
         public List<IMarketingTest> ActiveCachedTests
         {
@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Testing
             _dataAccess = new TestingDataAccess();
             _kpiManager = new KpiManager();
             initCache();
-            _marketingTestingEvents = ServiceLocator.Current.GetInstance<MarketingTestingEvents>();
+            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
@@ -55,7 +55,7 @@ namespace EPiServer.Marketing.Testing
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            _marketingTestingEvents = _serviceLocator.GetInstance<MarketingTestingEvents>();
+            _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
 
             initCache();
         }
@@ -158,12 +158,12 @@ namespace EPiServer.Marketing.Testing
             }
 
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
-            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestSavedEvent, new TestEventArgs(multivariateTest));
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestSavedEvent, new TestEventArgs(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
             {
                 UpdateCache(multivariateTest, CacheOperator.Add);
-                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStartedEvent, new TestEventArgs(multivariateTest));
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStartedEvent, new TestEventArgs(multivariateTest));
             }
 
             return testId;
@@ -184,7 +184,7 @@ namespace EPiServer.Marketing.Testing
                 UpdateCache(test, CacheOperator.Remove);
             }
 
-            _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestDeletedEvent, new TestEventArgs(test));
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestDeletedEvent, new TestEventArgs(test));
 
         }
 
@@ -197,7 +197,7 @@ namespace EPiServer.Marketing.Testing
             if (dalTest != null)
             {
                 UpdateCache(managerTest, CacheOperator.Add);
-                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStartedEvent, new TestEventArgs(managerTest));
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStartedEvent, new TestEventArgs(managerTest));
             }
         }
 
@@ -220,7 +220,7 @@ namespace EPiServer.Marketing.Testing
                 Save(test);
 
                 UpdateCache(test, CacheOperator.Remove);
-                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestStoppedEvent, new TestEventArgs(test));
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStoppedEvent, new TestEventArgs(test));
             }
 
         }
@@ -234,7 +234,7 @@ namespace EPiServer.Marketing.Testing
             if (test != null)
             {
                 UpdateCache(test,CacheOperator.Remove);
-                _marketingTestingEvents.RaiseMarketingTestingEvent(MarketingTestingEvents.TestArchivedEvent, new TestEventArgs(test));
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestArchivedEvent, new TestEventArgs(test));
             }
 
         }
@@ -268,7 +268,7 @@ namespace EPiServer.Marketing.Testing
                             break;
                     }
                     _marketingTestingEvents.
-                        RaiseMarketingTestingEvent(MarketingTestingEvents.ContentSwitchedEvent,
+                        RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.ContentSwitchedEvent,
                         new TestEventArgs(managerTest));
                 }
             }
@@ -314,12 +314,14 @@ namespace EPiServer.Marketing.Testing
                     if (!cachedTests.Contains(test))
                     {
                         cachedTests.Add(test);
+                        _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent,new TestEventArgs(test));
                     }
                     break;
                 case CacheOperator.Remove:
                     if (cachedTests.Contains(test))
                     {
                         cachedTests.Remove(test);
+                        _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,new TestEventArgs(test));
                     }
                     break;
             }

@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestManager> _mockTestManager;
         private Mock<ITestingContextHelper> _mockContextHelper;
         private Mock<IServiceLocator> _mockServiceLocator;
-        private Mock<MarketingTestingEvents> _mockMarketingTestingEvents;
+        private Mock<DefaultMarketingTestingEvents> _mockMarketingTestingEvents;
         private MyLogger _logger = new MyLogger();
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
@@ -93,10 +93,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContextHelper = new Mock<ITestingContextHelper>();
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
 
-            _mockMarketingTestingEvents = new Mock<MarketingTestingEvents>();
+            _mockMarketingTestingEvents = new Mock<DefaultMarketingTestingEvents>();
 
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
-            _mockServiceLocator.Setup(sl => sl.GetInstance<MarketingTestingEvents>())
+            _mockServiceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>())
                 .Returns(_mockMarketingTestingEvents.Object);
 
             HttpContext.Current = new HttpContext(
