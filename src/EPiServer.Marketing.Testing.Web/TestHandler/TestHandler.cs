@@ -30,11 +30,6 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
 
-        /// <summary>
-        /// HTTPContext flag used to skip raising contentswapped events 
-        /// </summary>
-        public const string ABContentSwapSkipFlag = "ABContentSwapSkipFlag";
-
         [ExcludeFromCodeCoverage]
         public TestHandler()
         {
