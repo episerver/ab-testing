@@ -120,7 +120,7 @@
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
-            textHelper.renderTestRemaining(this.testRemaining);
+            textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
