@@ -21,7 +21,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             var kpi = GetUnitUnderTest();
             _content.SetupGet(c => c.ContentGuid).Returns(LandingPageGuid);
-            var result = kpi.Evaluate(_content.Object);
+            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object });
             Assert.True(result, "Evaluate should have returned true");
         }
 
@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             var kpi = GetUnitUnderTest();
             _content.SetupGet(c => c.ContentGuid).Returns(Guid.NewGuid());
-            var result = kpi.Evaluate(_content.Object);
+            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object });
             Assert.False(result, "Evaluate should have returned false");
         }
 

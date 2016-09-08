@@ -1,5 +1,4 @@
-﻿using EPiServer.Core;
-using System;
+﻿using System;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -26,7 +25,8 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Determines if a conversion has happened.
         /// </summary>
-        /// <param name="content"></param>
-        bool Evaluate(IContent content);
+        /// <param name="sender"></param>
+        /// <param name="e">Event Argument</param>
+        bool Evaluate(object sender, EventArgs e);
     }
 }

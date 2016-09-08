@@ -364,7 +364,7 @@ namespace EPiServer.Marketing.Testing.Web
                                     kpis.Add(kpi);
                             }
 
-                            var evaluated = _testManager.EvaluateKPIs(kpis, e.Content);
+                            var evaluated = _testManager.EvaluateKPIs(kpis, e);
                             if (evaluated.Count > 0)
                             {
                                 // add each kpi to testdata cookie data

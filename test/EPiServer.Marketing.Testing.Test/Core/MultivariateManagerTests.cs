@@ -368,7 +368,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Mock<IContent> content = new Mock<IContent>();
             IContent c = content.Object;
             c.ContentGuid = Guid.NewGuid();
-            var retList = testManager.EvaluateKPIs(kpis, c);
+            var retList = testManager.EvaluateKPIs(kpis, new ContentEventArgs(new ContentReference()) { Content = c } );
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
             Assert.True(retList.Count() == 0, "EvaluateKPI method returned a list but it was not empty");
         }
@@ -388,7 +388,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Mock<IContent> content = new Mock<IContent>();
             IContent c = content.Object;
             c.ContentGuid = Guid.NewGuid();
-            var retList = testManager.EvaluateKPIs(kpis, c);
+            var retList = testManager.EvaluateKPIs(kpis, new ContentEventArgs(new ContentReference()) { Content = c } );
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
             Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list that did not have one item in it");
         }
@@ -497,7 +497,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         Guid _g;
         public TestKpi(Guid g) { _g = g; }
 
-        override public Boolean Evaluate(IContent content)
+        override public Boolean Evaluate(object sender, EventArgs e)
         {
             if (_g == Guid.Empty)
                 return true;
