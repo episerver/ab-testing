@@ -63,6 +63,7 @@ BEGIN
         [IsWinner] [bit] NOT NULL,
         [Conversions] [int] NOT NULL,
         [Views] [int] NOT NULL,
+		[IsPublished] [bit] NOT NULL,
         [CreatedDate] [datetime] NOT NULL,
         [ModifiedDate] [datetime] NOT NULL,
         CONSTRAINT [PK_dbo.tblABVariant] PRIMARY KEY ([Id])
