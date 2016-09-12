@@ -50,6 +50,8 @@
         <cancel>Cancel</cancel>
         <confidencelevel>Confidence Level:</confidencelevel>
         <displayname>AB Testing Configuration</displayname>
+        <durationerror>Must be between 1 and 365.</durationerror>
+        <participationerror>Must be between 1 and 100.</participationerror>
         <participationpercent>Participation Percent:</participationpercent>
         <save>Save</save>
         <testduration>Test Duration:</testduration>
