@@ -394,5 +394,10 @@ namespace EPiServer.Marketing.Testing.Web
                 }
             }
         }
+
+        public void ProxyEventHandler(object sender, EventArgs e)
+        {
+            _logger.Error("ProxyEventHandler called " + e.GetType());
+        }
     }
 }
