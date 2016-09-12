@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using EPiServer.ServiceLocation;
 using System.ComponentModel;
 
-namespace EPiServer.Marketing.Testing.Core.Manager
+namespace EPiServer.Marketing.Testing
 {
     [ServiceConfiguration(typeof(IMarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]
     [ServiceConfiguration(typeof(DefaultMarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]

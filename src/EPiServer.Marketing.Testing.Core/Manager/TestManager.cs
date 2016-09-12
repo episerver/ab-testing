@@ -13,7 +13,6 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
-using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing
 {

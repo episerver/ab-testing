@@ -1,5 +1,4 @@
 ﻿using System;
-using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing
 {

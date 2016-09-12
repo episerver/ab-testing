@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using System.Linq;
-using System.Threading;
 using Castle.Core.Internal;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -13,7 +12,6 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using System.Web;
-using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -29,6 +27,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
         /// </summary>
         public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
+        public const string SkipRaiseContentSwitchEvent = "SkipRaiseContentSwitchEvent";
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -286,12 +285,15 @@ namespace EPiServer.Marketing.Testing.Web
                     activeContent.ContentLink = variant.ContentLink;
                     activeContent.Content = variant;
 
-                    if (!HttpContext.Current.Items.Contains(activeContent + "skipevent"))
+                    //The SkipRaiseContentSwitchEvent flag is necessary in order to only raise our ContentSwitchedEvent
+                    //once per content per request.  We save an item of activecontent+flag because we may have multiple 
+                    //content items per request which will need to be handled.
+                    if (!HttpContext.Current.Items.Contains(activeContent + SkipRaiseContentSwitchEvent))
                     {
                         _marketingTestingEvents.RaiseMarketingTestingEvent(
                             DefaultMarketingTestingEvents.ContentSwitchedEvent,
                             new TestEventArgs(activeTest, activeContent.Content));
-                        HttpContext.Current.Items[activeContent + "skipevent"] = true;
+                        HttpContext.Current.Items[activeContent + SkipRaiseContentSwitchEvent] = true;
                     }
                 }
             }

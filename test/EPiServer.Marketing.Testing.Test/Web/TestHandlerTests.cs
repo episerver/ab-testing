@@ -12,7 +12,6 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Test.Core;
 using System.Web;
-using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Test.Web

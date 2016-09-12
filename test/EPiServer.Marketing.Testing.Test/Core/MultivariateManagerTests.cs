@@ -18,7 +18,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
 using System.Runtime.Caching;
-using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Marketing.Testing;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
