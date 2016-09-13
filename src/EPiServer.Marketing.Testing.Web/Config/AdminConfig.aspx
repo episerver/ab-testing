@@ -10,19 +10,28 @@
 <asp:content contentplaceholderid="FullRegion" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePageMethods="true" LoadScriptsBeforeUI="true"/>
 
-    <div class="epi-contentContainer epi-padding">               
+    <div class="epi-contentContainer epi-padding">          
+        <div class="epi-contentArea">
+            <h1 class="EP-prefix">
+                <%= Translate("/abtesting/admin/displayname")%>
+            </h1>
+            <asp:Panel ID="ConnectionNote" runat="server" />
+            <asp:ValidationSummary runat="server" CssClass="EP-validationSummary" />
+            <asp:Panel ID="MessagePanel" runat="server" Visible="false" />
+        </div>
+     
         <asp:Panel runat="server" class="epi-formArea">
             <fieldset>
-                <legend><%= Translate("/abtesting/admin/displayname")%></legend>
+                <legend><%= Translate("/abtesting/admin/description")%></legend>
                 <div class="epi-size15">
                     <asp:Label AssociatedControlID="TestDuration" runat="server"><%# Translate("/abtesting/admin/testduration") %></asp:Label>
                     <asp:TextBox ID="TestDuration" runat="server" MaxLength="255" Text="<%# TestSettings.TestDuration %>" />
-                    <asp:RangeValidator ID="DurationValidator" ErrorMessage='<%# Translate("/abtesting/admin/durationerror") %>' runat="server" ControlToValidate="TestDuration" MaximumValue="365" MinimumValue="1" Type="Integer" />
+                    
                 </div>
                 <div class="epi-size15">
                     <asp:Label AssociatedControlID="ParticipationPercent" runat="server"><%# Translate("/abtesting/admin/participationpercent") %></asp:Label>
                     <asp:TextBox ID="ParticipationPercent" runat="server" MaxLength="255" Text="<%# TestSettings.ParticipationPercent %>" />
-                    <asp:RangeValidator ID="ParticipationValidator" ErrorMessage='<%# Translate("/abtesting/admin/participationerror") %>' runat="server" ControlToValidate="ParticipationPercent" MaximumValue="100" MinimumValue="1" Type="Integer" />
+                   
                 </div>
                 <div class="epi-size15">
                     <asp:Label AssociatedControlID="ConfidenceLevel" runat="server"><%# Translate("/abtesting/admin/confidencelevel") %></asp:Label>
@@ -34,8 +43,8 @@
                     </asp:DropDownList>
                 </div>
                 <div align="right">
-                    <EPiServerUI:ToolButton runat="server" Text="<%$ Resources: EPiServer, abtesting.admin.save %>" OnClick="Save_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
-                    <EPiServerUI:ToolButton runat="server" Text="<%$ Resources: EPiServer, abtesting.admin.cancel %>" OnClick="Cancel_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
+                    <EPiServerUI:ToolButton runat="server" SkinID="Save" Text="<%$ Resources: EPiServer, abtesting.admin.save %>" OnClick="Save_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
+                    <EPiServerUI:ToolButton runat="server" SkinID="Cancel" Text="<%$ Resources: EPiServer, abtesting.admin.cancel %>" OnClick="Cancel_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>
                 </div>
             </fieldset>
         </asp:Panel>

@@ -50,11 +50,14 @@
         <cancel>Cancel</cancel>
         <confidencelevel>Confidence Level:</confidencelevel>
         <displayname>AB Testing Configuration</displayname>
-        <durationerror>Must be between 1 and 365.</durationerror>
-        <participationerror>Must be between 1 and 100.</participationerror>
-        <participationpercent>Participation Percent:</participationpercent>
+        <durationerror>Test duration must be between 1 and 365.</durationerror>
+        <participationerror>Participation percentage must be between 1 and 100.</participationerror>
+        <participationpercent>Participation Percentage:</participationpercent>
         <save>Save</save>
         <testduration>Test Duration:</testduration>
+        <description>These settings are the defaults values used for when creating AB tests.</description>
+        <success>Configuration settings saved successfully.</success>
+        <invalid>One or more values are not of the correct format.</invalid>
       </admin>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
