@@ -53,7 +53,7 @@
         viewCurrentVersion: null;
         viewParticipationPercent: null;
         viewTestDuration: null;
-        confidenceLevel: null;
+        viewConfidenceLevel: null;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -141,7 +141,7 @@
                 }
 
                 if (dom.byId("confidence")) {
-                    dom.byId("confidence").value = "95";
+                    dom.byId("confidence").value = this.confidenceLevel.value;
                 }
 
                 this._setViewPublishedVersionAttr(true);
