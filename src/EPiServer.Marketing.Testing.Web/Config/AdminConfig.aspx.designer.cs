@@ -10,5 +10,7 @@
 
         protected global::System.Web.UI.WebControls.Panel ConnectionNote;
         protected global::System.Web.UI.WebControls.Panel MessagePanel;
+
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
     }
 }
