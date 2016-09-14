@@ -48,5 +48,7 @@ namespace EPiServer.Marketing.Testing
         /// Event handler for callers to get notified when a test is saved.
         /// </summary>
         event EventHandler<TestEventArgs> SavingTestEvent;
+
+        List<IMarketingTest> ActiveCachedTests { get; }
     }
 }

@@ -14,5 +14,13 @@ namespace EPiServer.Marketing.KPI.Common.Attributes
         public Type service;
         [DataMember]
         public string methodname { get; set; }
+
+        /// <summary>
+        /// returns a unique identifier that represents this service/methodnmame combo
+        /// </summary>
+        public string key
+        {
+            get { return service.FullName + methodname; }
+        }
     }
 }

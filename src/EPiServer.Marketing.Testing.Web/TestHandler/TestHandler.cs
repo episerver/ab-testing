@@ -12,6 +12,8 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using System.Web;
+using EPiServer.Marketing.KPI.Common.Attributes;
+using System.Reflection;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -38,9 +40,11 @@ namespace EPiServer.Marketing.Testing.Web
             // Setup our content events
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;
-            contentEvents.LoadedContent += LoadedContent;
+            contentEvents.LoadedContent += LoadedContent; // todo remove this and use the generic calls
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
+
+            initProxyEventHandler();
         }
 
         //To support unit testing
@@ -395,9 +399,90 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
+        #region ProxyEventHandlerSupport
+        /// Used to keep track of how many times for the same service/event we add the proxy event handler
+        private IReferenceCounter _ReferenceCounter = new ReferenceCounter();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ProxyEventHandler(object sender, EventArgs e)
         {
-            _logger.Error("ProxyEventHandler called " + e.GetType());
+            // todo do something useful like loadedcontent does.
         }
+
+        /// <summary>
+        /// At startup, initializes all the ProxyEventHandler's for all Kpi objects found in all active tests.
+        /// </summary>
+        private void initProxyEventHandler()
+        {
+            foreach (var test in _testManager.ActiveCachedTests)
+            {
+                foreach (var kpi in test.KpiInstances)
+                {
+                    AddProxyEventHandler(kpi);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the ProxyEventHandler for the given Kpi instance if it supports the EventSpecificationAttribute.
+        /// </summary>
+        /// <param name="kpi"></param>
+        private void AddProxyEventHandler(IKpi kpi)
+        {
+            // Get eventspec of the KPI instance.
+            EventSpecificationAttribute att =
+                (EventSpecificationAttribute)Attribute.GetCustomAttribute(kpi.GetType(),
+                    typeof(EventSpecificationAttribute));
+            if (att != null)
+            {
+                // Add the proxyeventhandler only once, if its in our reference counter, just increment
+                // the reference.
+                if (!_ReferenceCounter.hasReference(att.key))
+                {
+                    // try to load the service so we can add the proxy handler
+                    Object service;
+                    if (ServiceLocator.Current.TryGetExistingInstance(att.service, out service))
+                    {   // todo fix the code to use the service locator passed in.
+                        try
+                        {
+                            // get the event method infor
+                            var serviceEventInfo = att.service.GetEvent(att.methodname);
+                            // get our proxyeventhandler method info
+                            var proxyEventHandlerMethod = this.GetType().GetMethod("ProxyEventHandler");
+                            // create our delegate that will be invoked when the event is fired
+                            var delegateToInvoke = Delegate.CreateDelegate(
+                                    serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
+
+                            // Call the addHandler method for this event
+                            MethodInfo addHandler = serviceEventInfo.GetAddMethod();
+                            Object[] addHandlerArgs = { delegateToInvoke };
+                            addHandler.Invoke(service, addHandlerArgs);
+
+                            _ReferenceCounter.AddReference(att.key);
+                        }
+                        catch (Exception e)
+                        {   // there is alot that can go wrong in the above code which is why we will
+                            // catch the exception and log the stack trace. Hopefully this is enough info
+                            // to figure out what is going on.
+                            _logger.Error("Unable to add AB Testing ProxyEventHandler.", e);
+                        }
+                    }
+                    else
+                    {
+                        _logger.Error("Unable to add AB Testing ProxyEventHandler.");
+                        _logger.Error("     Service not found : " + att.service.FullName);
+                    }
+                }
+                else
+                {
+                    _ReferenceCounter.AddReference(att.key);
+                }
+            }
+        }
+        #endregion
     }
 }
