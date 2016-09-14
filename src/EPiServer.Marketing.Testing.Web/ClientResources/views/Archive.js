@@ -2,6 +2,7 @@
  "dojo/_base/declare",
  "epi/dependency",
  "dojo/dom",
+ "dojo/ready",
  "dijit/registry",
  "dojo/dom-style",
  "dojo/topic",
@@ -14,6 +15,7 @@
  "epi/username",
  "dojo/dom-class",
  "marketing-testing/scripts/abTestTextHelper",
+ "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
@@ -24,6 +26,7 @@
     declare,
     dependency,
     dom,
+    ready,
     registry,
     domStyle,
     topic,
@@ -35,7 +38,8 @@
     datetime,
     username,
     domClass,
-    textHelper
+    textHelper,
+    rasterizehtml
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -79,6 +83,7 @@
         },
 
         _renderData: function () {
+            var me = this;
             this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
 
@@ -98,6 +103,12 @@
             this.renderStatusIndicatorStyles();
             this.renderStatus();
             this.renderTestDuration();
+
+            ready(function () {
+                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive');
+                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive');
+            });
+
         },
 
         renderStatus: function () {
@@ -131,6 +142,15 @@
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlPublishedBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
+            }
+        },
+        _generateThumbnail: function (previewUrl, canvasId) {
+            var pubThumb = dom.byId(canvasId);
+
+            if (pubThumb) {
+                pubThumb.height = 768;
+                pubThumb.width = 1024;
+                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
             }
         }
     });

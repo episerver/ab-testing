@@ -75,6 +75,7 @@
                 return;
             }
             me.context = newContext;
+            this._displayOptionsButton(this.context.data.userHasPublishRights);
             textHelper.initializeHelper(me.context, resources.detailsview);
             me._renderData();
             //redraw the charts when the context changes to update the stored dom.
@@ -124,7 +125,7 @@
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
-            textHelper.renderTestRemaining(this.testRemaining);
+            textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
@@ -147,7 +148,14 @@
 
         _displayOptionsButton: function (show) {
             var dropDownButton = registry.byId("optionsDropdown");
+            var pickWinnerOption = registry.byId("pickWinnerMenuItem");
             if (show) {
+                //If the test is not running, disable the pick a winner option item
+                if (this.context.data.test.state === 0) {
+                    pickWinnerOption.set("disabled", true);
+                } else {
+                    pickWinnerOption.set("disabled", false);
+                }
                 domStyle.set(dropDownButton.domNode, "visibility", "visible");
                 dropDownButton.startup(); //Avoids conditions where the widget is rendered but not active.
             } else {
