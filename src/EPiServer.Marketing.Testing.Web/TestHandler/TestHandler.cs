@@ -19,6 +19,7 @@ namespace EPiServer.Marketing.Testing.Web
 {
     internal class TestHandler : ITestHandler
     {
+        private readonly IServiceLocator _serviceLocator;
         private readonly ITestingContextHelper _contextHelper;
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
@@ -34,14 +35,17 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public TestHandler()
         {
+            _serviceLocator = ServiceLocator.Current;
+
             _testDataCookieHelper = new TestDataCookieHelper();
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
-            _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
-            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
+
+            _testManager = _serviceLocator.GetInstance<ITestManager>();
+            _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
 
             // Setup our content events
-            var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
+            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;
             contentEvents.LoadedContent += LoadedContent; // todo remove this and use the generic calls
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
@@ -51,12 +55,14 @@ namespace EPiServer.Marketing.Testing.Web
         }
         
         //To support unit testing
-        internal TestHandler(IServiceLocator serviceLocator, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
+        internal TestHandler(IServiceLocator serviceLocator)
         {
-            _testDataCookieHelper = cookieHelper;
+            _serviceLocator = serviceLocator;
+
+            _testDataCookieHelper = serviceLocator.GetInstance<ITestDataCookieHelper>();
+            _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
+            _logger = serviceLocator.GetInstance<ILogger>();
             _testManager = serviceLocator.GetInstance<ITestManager>();
-            _contextHelper = contextHelper;
-            _logger = logger;
             _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
         }
 
@@ -70,8 +76,7 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         internal void ContentEventsOnDeletingContentVersion(object sender, ContentEventArgs contentEventArgs)
         {
-            var serviceLocator = ServiceLocator.Current;
-            var repo = serviceLocator.GetInstance<IContentRepository>();
+            var repo = _serviceLocator.GetInstance<IContentRepository>();
 
             IContent draftContent;
 
@@ -443,7 +448,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
 
             // Setup our listener so when tests are added and removed and update our proxyEventHandler
-            var e = ServiceLocator.Current.GetInstance<IMarketingTestingEvents>();
+            var e = _serviceLocator.GetInstance<IMarketingTestingEvents>();
             e.TestAddedToCache += TestAddedToCache;
             e.TestRemovedFromCache += TestRemovedFromCache;
         }
@@ -492,7 +497,7 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     // try to load the service so we can add the proxy handler
                     Object service;
-                    if (ServiceLocator.Current.TryGetExistingInstance(att.service, out service))
+                    if (_serviceLocator.TryGetExistingInstance(att.service, out service))
                     {   // todo fix the code to use the service locator passed in.
                         try
                         {
@@ -550,7 +555,7 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     // try to load the service so we can add the proxy handler
                     Object service;
-                    if (ServiceLocator.Current.TryGetExistingInstance(att.service, out service))
+                    if (_serviceLocator.TryGetExistingInstance(att.service, out service))
                     {   // todo fix the code to use the service locator passed in.
                         try
                         {

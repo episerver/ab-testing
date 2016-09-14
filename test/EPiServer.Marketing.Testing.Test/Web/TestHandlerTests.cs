@@ -102,7 +102,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                new HttpRequest(null, "http://tempuri.org", null),
                new HttpResponse(null));
 
-            return new TestHandler(_mockServiceLocator.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<ITestDataCookieHelper>())
+                .Returns(_mockTestDataCookieHelper.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<ITestingContextHelper>())
+                .Returns(_mockContextHelper.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<ILogger>())
+                .Returns(_logger);
+            return new TestHandler(_mockServiceLocator.Object);
         }
 
         [Fact]
