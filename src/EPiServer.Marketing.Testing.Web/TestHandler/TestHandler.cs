@@ -441,6 +441,37 @@ namespace EPiServer.Marketing.Testing.Web
                     AddProxyEventHandler(kpi);
                 }
             }
+
+            // Setup our listener so when tests are added and removed and update our proxyEventHandler
+            var e = ServiceLocator.Current.GetInstance<IMarketingTestingEvents>();
+            e.TestAddedToCache += TestAddedToCache;
+            e.TestRemovedFromCache += TestRemovedFromCache;
+        }
+
+        /// <summary>
+        /// When a test is added to the active cache, this method will be fired.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TestAddedToCache(object sender, TestEventArgs e)
+        {
+            foreach (var kpi in e.Test.KpiInstances)
+            {
+                AddProxyEventHandler(kpi);
+            }
+        }
+
+        /// <summary>
+        /// When a test is removed to the active cache, this method will be fired.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TestRemovedFromCache(object sender, TestEventArgs e)
+        {
+            foreach (var kpi in e.Test.KpiInstances)
+            {
+                RemoveProxyEventHandler(kpi);
+            }
         }
 
         /// <summary>
@@ -479,6 +510,62 @@ namespace EPiServer.Marketing.Testing.Web
                             addHandler.Invoke(service, addHandlerArgs);
 
                             _ReferenceCounter.AddReference(att.key);
+                        }
+                        catch (Exception e)
+                        {   // there is alot that can go wrong in the above code which is why we will
+                            // catch the exception and log the stack trace. Hopefully this is enough info
+                            // to figure out what is going on.
+                            _logger.Error("Unable to add AB Testing ProxyEventHandler.", e);
+                        }
+                    }
+                    else
+                    {
+                        _logger.Error("Unable to add AB Testing ProxyEventHandler.");
+                        _logger.Error("     Service not found : " + att.service.FullName);
+                    }
+                }
+                else
+                {
+                    _ReferenceCounter.AddReference(att.key);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the ProxyEventHandler for the given Kpi instance if it supports the EventSpecificationAttribute.
+        /// </summary>
+        /// <param name="kpi"></param>
+        private void RemoveProxyEventHandler(IKpi kpi)
+        {
+            // Get eventspec of the KPI instance.
+            EventSpecificationAttribute att =
+                (EventSpecificationAttribute)Attribute.GetCustomAttribute(kpi.GetType(),
+                    typeof(EventSpecificationAttribute));
+            if (att != null)
+            {
+                _ReferenceCounter.RemoveReference(att.key);
+
+                // Remove the proxyeventhandler only once, when the last reference is removed.
+                if (!_ReferenceCounter.hasReference(att.key))
+                {
+                    // try to load the service so we can add the proxy handler
+                    Object service;
+                    if (ServiceLocator.Current.TryGetExistingInstance(att.service, out service))
+                    {   // todo fix the code to use the service locator passed in.
+                        try
+                        {
+                            // get the event method infor
+                            var serviceEventInfo = att.service.GetEvent(att.methodname);
+                            // get our proxyeventhandler method info
+                            var proxyEventHandlerMethod = this.GetType().GetMethod("ProxyEventHandler");
+                            // create our delegate that will be invoked when the event is fired
+                            var delegateToInvoke = Delegate.CreateDelegate(
+                                    serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
+
+                            // Call the addHandler method for this event
+                            MethodInfo removeHandler = serviceEventInfo.GetRemoveMethod();
+                            Object[] removeHandlerArgs = { delegateToInvoke };
+                            removeHandler.Invoke(service, removeHandlerArgs);
                         }
                         catch (Exception e)
                         {   // there is alot that can go wrong in the above code which is why we will
