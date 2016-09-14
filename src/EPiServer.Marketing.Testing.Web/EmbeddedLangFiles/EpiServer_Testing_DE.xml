@@ -49,11 +49,14 @@
       <admin>
         <cancel>Cancel</cancel>
         <confidencelevel>Confidence Level:</confidencelevel>
+        <description>These settings are the defaults values used for when creating AB tests.</description>
         <displayname>AB Testing Configuration</displayname>
         <durationerror>Must be between 1 and 365.</durationerror>
+        <invalid>One or more values are not of the correct format.</invalid>
         <participationerror>Must be between 1 and 100.</participationerror>
         <participationpercent>Participation Percent:</participationpercent>
         <save>Save</save>
+        <success>Configuration settings saved successfully.</success>
         <testduration>Test Duration:</testduration>
       </admin>
       <archiveview>
@@ -73,6 +76,7 @@
         <days_divider> day(s), </days_divider>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
+        <from>from</from>
         <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
