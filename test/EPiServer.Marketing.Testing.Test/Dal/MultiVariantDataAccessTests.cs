@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using EPiServer.Core;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
@@ -25,12 +24,14 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         private TestManager _tm;
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IKpiManager> _kpiManager;
+        private DefaultMarketingTestingEvents _marketingEvents;
 
         public MultiVariantDataAccessTests()
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
             _mtm = new TestingDataAccess(new Core.TestRepository(_context));
+            _marketingEvents = new DefaultMarketingTestingEvents();
 
             _kpiManager = new Mock<IKpiManager>();
             _kpiManager.Setup(call => call.Save(It.IsAny<IKpi>())).Returns(It.IsAny<Guid>());
@@ -38,7 +39,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _serviceLocator = new Mock<IServiceLocator>();
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_mtm);
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
-
+            _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents);
 
             _tm = new TestManager(_serviceLocator.Object);
         }
