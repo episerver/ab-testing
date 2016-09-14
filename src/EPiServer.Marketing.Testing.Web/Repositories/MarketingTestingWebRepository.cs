@@ -175,7 +175,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
+                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0},
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
                 KpiInstances = new List<IKpi> { kpi },
@@ -205,7 +205,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 ContentReference publishedReference = new ContentReference();
                 //setup versions as ints for repository
-                int publishedVersion,variantVersion;
+                int publishedVersion, variantVersion;
 
                 int.TryParse(testResult.WinningContentLink.Split('_')[0], out publishedVersion);
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out variantVersion);
@@ -247,7 +247,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results",ex);
+                    _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results", ex);
                 }
             }
             return testResult.TestId;

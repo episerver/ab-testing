@@ -28,7 +28,7 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"        
+        "dijit/layout/ContentPane"
 ],
     function (
     declare,
@@ -166,7 +166,7 @@
                         previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-                   
+
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
                     rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
@@ -317,7 +317,7 @@
             },
 
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
