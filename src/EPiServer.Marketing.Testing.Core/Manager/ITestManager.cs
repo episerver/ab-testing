@@ -36,19 +36,12 @@ namespace EPiServer.Marketing.Testing
         IContent GetVariantContent(Guid contentGuid);
 
         /// <summary>
-        /// Given a list of Kpi's and an EventArg object, each KPI will be evaluated and a list of Kpi instances 
-        /// that have been evaluated will be returned.
+        /// Given a specific test id and the content, iterates over all the Kpi objects and returns 
+        /// the list of Kpi Guids that evaluated as true.
         /// </summary>
-        /// <param name="kpis"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        IList<Guid> EvaluateKPIs(IList<IKpi> kpis, EventArgs e);
-
-        /// <summary>
-        /// Event handler for callers to get notified when a test is saved.
-        /// </summary>
-        event EventHandler<TestEventArgs> SavingTestEvent;
-
-        List<IMarketingTest> ActiveCachedTests { get; }
+        /// <param name="testId"></param>
+        /// <param name="content"></param>
+        /// <returns>list - can be empty, never null</returns>
+        IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content);
     }
 }

@@ -35,7 +35,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void VerifyOnSavingTestEvent()
+        public void VerifyOnTestSaved()
         {
             var list = new List<IMarketingTest>()
             {
@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             var unit = GetUnitUnderTest();
-            unit.OnSavingTestEvent(this, new TestEventArgs(list.ToArray()[0]));
+            unit.OnTestSaved(this, new TestEventArgs(list.ToArray()[0]));
 
             _jobRepo.Verify(sa => sa.Save(It.IsAny<ScheduledJob>()), Times.Once, "Failed to save update job with update time");
         }

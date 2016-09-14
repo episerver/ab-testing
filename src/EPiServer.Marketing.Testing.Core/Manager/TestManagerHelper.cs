@@ -7,7 +7,6 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -122,7 +121,7 @@ namespace EPiServer.Marketing.Testing
             return retState;
         }
 
-        #region VariantConversion
+    #region VariantConversion
         internal static List<Variant> AdaptToManagerVariant(IList<DalVariant> theVariantList)
         {
             var retList = new List<Variant>();
@@ -199,7 +198,6 @@ namespace EPiServer.Marketing.Testing
         {
             return _kpiManager.Get(dalKpi.KeyPerformanceIndicatorId);
         }
-
 
         internal static IList<DalKeyPerformanceIndicator> AdaptToDalKPI(Guid testId, IList<IKpi> keyPerformanceIndicators)
         {

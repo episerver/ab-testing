@@ -22,12 +22,14 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ITestingContextHelper _contextHelper;
         private readonly ITestDataCookieHelper _testDataCookieHelper;
         private readonly ILogger _logger;
-        private ITestManager _testManager;
+        private readonly ITestManager _testManager;
+        private readonly DefaultMarketingTestingEvents _marketingTestingEvents;
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
         /// </summary>
         public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
+        public const string SkipRaiseContentSwitchEvent = "SkipRaiseContentSwitchEvent";
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -36,6 +38,7 @@ namespace EPiServer.Marketing.Testing.Web
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
             _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
 
             // Setup our content events
             var contentEvents = ServiceLocator.Current.GetInstance<IContentEvents>();
@@ -46,14 +49,15 @@ namespace EPiServer.Marketing.Testing.Web
 
             initProxyEventHandler();
         }
-
+        
         //To support unit testing
-        internal TestHandler(ITestManager testManager, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
+        internal TestHandler(IServiceLocator serviceLocator, ITestDataCookieHelper cookieHelper, ITestingContextHelper contextHelper, ILogger logger)
         {
             _testDataCookieHelper = cookieHelper;
-            _testManager = testManager;
+            _testManager = serviceLocator.GetInstance<ITestManager>();
             _contextHelper = contextHelper;
             _logger = logger;
+            _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
         }
 
         /// <summary>
@@ -157,14 +161,12 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     try
                     {
-
                         // get the test from the cache
                         var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
                         if (activeTest != null)
                         {
                             var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-                            var originalContent = content;
                             var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
                                 content.ContentLink.WorkID;
 
@@ -173,7 +175,7 @@ namespace EPiServer.Marketing.Testing.Web
                                 // Make sure the cookie has data in it. There are cases where you can load
                                 // content directly from a url after opening a browser and if the cookie is not set
                                 // the first pass through you end up seeing original content not content under test.
-                                SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                                SetTestData(content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                             }
 
                             if (testCookieData.ShowVariant && _testDataCookieHelper.IsTestParticipant(testCookieData))
@@ -199,7 +201,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                 // if we modified the data, update the children list. Note that original order
                 // is important else links do not show up in same order.
-                if( modified )
+                if (modified)
                 {
                     e.ChildrenItems.Clear();
                     e.ChildrenItems.AddRange(childList);
@@ -233,13 +235,13 @@ namespace EPiServer.Marketing.Testing.Web
                         _testManager.GetVariantContent(e.Content.ContentGuid);
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
-                        if (!hasData )
+                        if (!hasData)
                         {
                             // Make sure the cookie has data in it.
-                            SetTestData(activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                            SetTestData(e.Content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
                         }
 
-                        Swap(testCookieData, e);
+                        Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, contentVersion, originalContent);
                     }
                 }
@@ -250,7 +252,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        private void SetTestData(IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion )
+        private void SetTestData(IContent e, IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion)
         {
             var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
             testCookieData.TestId = activeTest.Id;
@@ -264,6 +266,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.UserIncludedInTestEvent, new TestEventArgs(activeTest, e));
                 if (newVariant.ItemVersion != contentVersion)
                 {
                     contentVersion = newVariant.ItemVersion;
@@ -274,9 +277,8 @@ namespace EPiServer.Marketing.Testing.Web
             retCookieData = testCookieData;
             retContentVersion = contentVersion;
         }
-
         //Handles the swapping of content data
-        private void Swap(TestDataCookie cookie, ContentEventArgs activeContent)
+        private void Swap(TestDataCookie cookie, IMarketingTest activeTest, ContentEventArgs activeContent)
         {
             if (cookie.ShowVariant && _testDataCookieHelper.IsTestParticipant(cookie))
             {
@@ -286,12 +288,23 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     activeContent.ContentLink = variant.ContentLink;
                     activeContent.Content = variant;
+
+                    //The SkipRaiseContentSwitchEvent flag is necessary in order to only raise our ContentSwitchedEvent
+                    //once per content per request.  We save an item of activecontent+flag because we may have multiple 
+                    //content items per request which will need to be handled.
+                    if (!HttpContext.Current.Items.Contains(activeContent + SkipRaiseContentSwitchEvent))
+                    {
+                        _marketingTestingEvents.RaiseMarketingTestingEvent(
+                            DefaultMarketingTestingEvents.ContentSwitchedEvent,
+                            new TestEventArgs(activeTest, activeContent.Content));
+                        HttpContext.Current.Items[activeContent + SkipRaiseContentSwitchEvent] = true;
+                    }
                 }
             }
         }
 
         //Handles the incrementing of view counts on a version
-        private TestDataCookie EvaluateViews(TestDataCookie cookie, int contentVersion, IContent originalContent)
+        private void EvaluateViews(TestDataCookie cookie, int contentVersion, IContent originalContent)
         {
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
@@ -305,8 +318,6 @@ namespace EPiServer.Marketing.Testing.Web
                     _testDataCookieHelper.UpdateTestDataCookie(cookie);
                 }
             }
-
-            return cookie;
         }
 
         /// <summary>
@@ -336,7 +347,7 @@ namespace EPiServer.Marketing.Testing.Web
                     var originalContent = e.Content;
                     var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
                     TestDataCookie tc = new TestDataCookie();
-                    SetTestData(activeTest, tc, contentVersion, out tc, out contentVersion);
+                    SetTestData(e.Content, activeTest, tc, contentVersion, out tc, out contentVersion);
                 }
             }
         }
@@ -365,7 +376,9 @@ namespace EPiServer.Marketing.Testing.Web
                             {
                                 var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
                                 if (!converted)
+                                {
                                     kpis.Add(kpi);
+                                }
                             }
 
                             var evaluated = _testManager.EvaluateKPIs(kpis, e);
@@ -376,6 +389,7 @@ namespace EPiServer.Marketing.Testing.Web
                                 {
                                     tdcookie.KpiConversionDictionary.Remove(eval);
                                     tdcookie.KpiConversionDictionary.Add(eval, true);
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval), test));
                                 }
 
                                 // now check to see if all kpi objects have evalated
@@ -391,6 +405,8 @@ namespace EPiServer.Marketing.Testing.Web
                                     Variant varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
                                     _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion,
                                         CountType.Conversion);
+
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
                                 }
                             }
                         }
