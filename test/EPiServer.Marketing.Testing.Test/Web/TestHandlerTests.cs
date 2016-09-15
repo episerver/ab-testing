@@ -400,7 +400,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             TestDataCookie testCookieOne = new TestDataCookie
             {
                 Viewed = true,
-                Converted = false
+                Converted = false,
+                TestId = _activeTestGuid
             };
             testCookieOne.KpiConversionDictionary.Add(_firstKpiId, false);
 
@@ -424,7 +425,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             testHandler.LoadedContent(new object(), args);
 
-            _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(testCookieOne), Times.Once, "Test should have called save test data to cookie");
             _mockTestManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Never, "Test should not have attempted to increment count");
         }
 
@@ -470,7 +470,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Content = content,
                 TargetLink = testTargetLink
             };
-            testHandler.LoadedContent(new object(), args);
+            testHandler.ProxyEventHandler(new object(), args);
 
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(testCookieOne), Times.Once, "Test should have called save test data to cookie");
             _mockTestManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Once, "Test should have attempted to increment count");

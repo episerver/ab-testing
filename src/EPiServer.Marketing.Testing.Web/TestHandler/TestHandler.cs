@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Web
             // Setup our content events
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;
-            contentEvents.LoadedContent += LoadedContent; // todo remove this and use the generic calls
+            contentEvents.LoadedContent += LoadedContent; 
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
 
@@ -223,7 +223,6 @@ namespace EPiServer.Marketing.Testing.Web
                 try
                 {
                     EvaluateCookies(e);
-                    EvaluateKpis(e);
 
                     // get the test from the cache
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
@@ -361,11 +360,15 @@ namespace EPiServer.Marketing.Testing.Web
         /// Processes the Kpis, determining conversions and handling incrementing conversion counts.
         /// </summary>
         /// <param name="e"></param>
-        private void EvaluateKpis(ContentEventArgs e)
+        private void EvaluateKpis(EventArgs e)
         {
-            // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
-            if (e.TargetLink != null)
+            // if we are loadcontent event we only want to evaluate when TargetLink is not null
+            // (i.e. we only want to evaluate once) else we will always have to evaluate.
+            // this is a performance issue because loadcontent gets called a lot. 
+            ContentEventArgs cea = e as ContentEventArgs;
+            if( !(cea != null && cea.TargetLink == null) )
             {
+                // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
                 var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
                 foreach (var tdcookie in cookielist)
                 {
@@ -425,13 +428,23 @@ namespace EPiServer.Marketing.Testing.Web
         private IReferenceCounter _ReferenceCounter = new ReferenceCounter();
 
         /// <summary>
-        /// 
+        /// Handles KPI evaluation logic for KPIs that are triggered from an event.  
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void ProxyEventHandler(object sender, EventArgs e)
         {
-            // todo do something useful like loadedcontent does.
+            if (!_contextHelper.SwapDisabled(e))
+            {
+                try
+                {
+                    EvaluateKpis(e);
+                }
+                catch (Exception err)
+                {
+                    _logger.Error("TestHandler.ProxyEventHandler", err);
+                }
+            }
         }
 
         /// <summary>

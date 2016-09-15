@@ -60,12 +60,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// * Specific to loading regular content
         /// </summary>
         /// <returns></returns>
-        public bool SwapDisabled(ContentEventArgs e)
+        public bool SwapDisabled(EventArgs e)
         {
             //currently, our only restriction is user being logged into a system folder (e.g edit).
             //Other conditions have been brought up such as permissions, ip restrictions etc
             //which can be evaluated together here or individually.
-            return (e.Content == null ||
+            ContentEventArgs ea = e as ContentEventArgs;
+            return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
                     HttpContext.Current == null ||
                     HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
                     IsInSystemFolder() );
