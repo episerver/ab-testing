@@ -172,10 +172,7 @@
                     pubThumb.width = 1024;
                     rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
                         query('.versiona').addClass('hide-bg');
-                    },
-                        function error(e) {
-                            query('.versiona').removeClass('hide-bg');
-                        });
+                    });
                 }
             },
 
@@ -196,10 +193,7 @@
                     pubThumb.width = 1024;
                     rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
                         query('.versionb').addClass('hide-bg');
-                    },
-                        function error(e) {
-                            query('.versionb').removeClass('hide-bg');
-                        });
+                    });
                 }
             },
 

@@ -201,9 +201,6 @@
                 rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(
                     function success(renderResult) {
                         query('.' + parentContainerClass).addClass('hide-bg');
-                    },
-                    function error(e) {
-                        query('.' + parentContainerClass).removeClass('hide-bg');
                     });
             }
         }
