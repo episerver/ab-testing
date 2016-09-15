@@ -205,10 +205,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 ContentReference publishedReference = new ContentReference();
                 //setup versions as ints for repository
-                int publishedVersion, variantVersion;
+                int winningVersion;
 
-                int.TryParse(testResult.WinningContentLink.Split('_')[0], out publishedVersion);
-                int.TryParse(testResult.WinningContentLink.Split('_')[1], out variantVersion);
+                int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
                 //get current test data and content data for published and variant content
                 IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
@@ -232,18 +231,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
                         //get the appropriate variant and set IsWinner to True. Archive test to show completion.
                         workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == publishedVersion).Id;
+                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
 
                         ArchiveMarketingTest(currentTest.Id, workingVariantId);
                     }
                     else
                     {
                         workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == variantVersion).Id;
+                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
                         ArchiveMarketingTest(currentTest.Id, workingVariantId);
                     }
-
-                    publishedVersionReference = publishedReference.ToString();
                 }
                 catch (Exception ex)
                 {

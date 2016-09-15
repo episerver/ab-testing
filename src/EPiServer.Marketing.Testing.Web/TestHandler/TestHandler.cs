@@ -221,7 +221,7 @@ namespace EPiServer.Marketing.Testing.Web
                         var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
-                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+                        var contentVersion = e.ContentLink.WorkID == 0 ? activeTest.Variants.First(variant => variant.IsPublished).ItemVersion : e.ContentLink.WorkID;
 
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
@@ -260,7 +260,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
-                if (newVariant.ItemVersion != contentVersion)
+                if (!newVariant.IsPublished)
                 {
                     contentVersion = newVariant.ItemVersion;
                     testCookieData.ShowVariant = true;

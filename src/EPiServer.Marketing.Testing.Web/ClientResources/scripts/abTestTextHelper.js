@@ -32,14 +32,8 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
         initializeHelper: function (testContext, stringResources, mModules) {
             context = testContext;
 
-            if (context.data.test.variants[0].itemVersion ===
-                Number(context.data.draftVersionContentLink.split('_')[1])) {
-                this.draftVariant = context.data.test.variants[0];
-                this.publishedVariant = context.data.test.variants[1];
-            } else {
-                this.draftVariant = context.data.test.variants[1];
-                this.publishedVariant = context.data.test.variants[0];
-            }
+            this.publishedVariant = context.data.test.variants.find(function (obj) { return obj.isPublished });
+            this.draftVariant = context.data.test.variants.find(function (obj) { return !obj.isPublished });
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
