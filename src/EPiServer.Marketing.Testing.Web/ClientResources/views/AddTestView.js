@@ -13,6 +13,7 @@
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
+        "dojo/query",
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
@@ -28,7 +29,7 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"        
+        "dijit/layout/ContentPane"
 ],
     function (
     declare,
@@ -45,6 +46,7 @@
     html,
     dom,
     domClass,
+    query,
     registry,
     dependency,
     rasterizehtml
@@ -158,7 +160,7 @@
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
-                var pubThumb = document.getElementById("publishThumbnail")
+                var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
                     //Hack to build published versions preview link below
@@ -166,10 +168,14 @@
                         previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-                   
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versiona').addClass('hide-bg');
+                    },
+                        function error(e) {
+                            query('.versiona').removeClass('hide-bg');
+                        });
                 }
             },
 
@@ -188,7 +194,12 @@
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versionb').addClass('hide-bg');
+                    },
+                        function error(e) {
+                            query('.versionb').removeClass('hide-bg');
+                        });
                 }
             },
 
