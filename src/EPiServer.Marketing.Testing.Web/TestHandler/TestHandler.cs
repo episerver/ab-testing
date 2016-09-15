@@ -25,6 +25,8 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly ILogger _logger;
         private readonly ITestManager _testManager;
         private readonly DefaultMarketingTestingEvents _marketingTestingEvents;
+        /// Used to keep track of how many times for the same service/event we add the proxy event handler
+        private readonly IReferenceCounter _ReferenceCounter = new ReferenceCounter();
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -64,6 +66,9 @@ namespace EPiServer.Marketing.Testing.Web
             _logger = serviceLocator.GetInstance<ILogger>();
             _testManager = serviceLocator.GetInstance<ITestManager>();
             _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
+
+            IReferenceCounter rc = serviceLocator.GetInstance<IReferenceCounter>();
+            _ReferenceCounter = rc;
         }
 
         /// <summary>
@@ -424,8 +429,6 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         #region ProxyEventHandlerSupport
-        /// Used to keep track of how many times for the same service/event we add the proxy event handler
-        private IReferenceCounter _ReferenceCounter = new ReferenceCounter();
 
         /// <summary>
         /// Handles KPI evaluation logic for KPIs that are triggered from an event.  
@@ -450,7 +453,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// <summary>
         /// At startup, initializes all the ProxyEventHandler's for all Kpi objects found in all active tests.
         /// </summary>
-        private void initProxyEventHandler()
+        internal void initProxyEventHandler()
         {
             foreach (var test in _testManager.ActiveCachedTests)
             {
@@ -496,7 +499,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Adds the ProxyEventHandler for the given Kpi instance if it supports the EventSpecificationAttribute.
         /// </summary>
         /// <param name="kpi"></param>
-        private void AddProxyEventHandler(IKpi kpi)
+        internal void AddProxyEventHandler(IKpi kpi)
         {
             // Get eventspec of the KPI instance.
             EventSpecificationAttribute att =
@@ -547,13 +550,17 @@ namespace EPiServer.Marketing.Testing.Web
                     _ReferenceCounter.AddReference(att.key);
                 }
             }
+            else
+            {
+                _logger.Warning("kpi type " + kpi.GetType() + "doesnt support EventSpecificationAttribute and will not be evaluated.");
+            }
         }
 
         /// <summary>
         /// Removes the ProxyEventHandler for the given Kpi instance if it supports the EventSpecificationAttribute.
         /// </summary>
         /// <param name="kpi"></param>
-        private void RemoveProxyEventHandler(IKpi kpi)
+        internal void RemoveProxyEventHandler(IKpi kpi)
         {
             // Get eventspec of the KPI instance.
             EventSpecificationAttribute att =
@@ -580,7 +587,7 @@ namespace EPiServer.Marketing.Testing.Web
                             var delegateToInvoke = Delegate.CreateDelegate(
                                     serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
 
-                            // Call the addHandler method for this event
+                            // Call the removeHandler method for this event
                             MethodInfo removeHandler = serviceEventInfo.GetRemoveMethod();
                             Object[] removeHandlerArgs = { delegateToInvoke };
                             removeHandler.Invoke(service, removeHandlerArgs);
@@ -597,10 +604,6 @@ namespace EPiServer.Marketing.Testing.Web
                         _logger.Error("Unable to add AB Testing ProxyEventHandler.");
                         _logger.Error("     Service not found : " + att.service.FullName);
                     }
-                }
-                else
-                {
-                    _ReferenceCounter.AddReference(att.key);
                 }
             }
         }
