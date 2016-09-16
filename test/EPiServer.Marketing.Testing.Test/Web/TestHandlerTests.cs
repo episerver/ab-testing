@@ -199,18 +199,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
             };
-
+            
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
 
             Variant testVariant = new Variant()
             {
                 Id = _matchingVariantId,
-                ItemVersion = 5,
+                ItemVersion = 2,
                 TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
+                ItemId = _associatedTestGuid,
+                IsPublished = false
             };
+
+            Variant testVariant2 = new Variant()
+            {
+                Id = _matchingVariantId,
+                ItemVersion = 1,
+                TestId = _activeTestGuid,
+                ItemId = _associatedTestGuid,
+                IsPublished = true
+            };
+
+            test.Variants.Add(testVariant);
+            test.Variants.Add(testVariant2);
+
             var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
@@ -247,7 +262,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } },
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -257,8 +273,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _matchingVariantId,
                 ItemVersion = 0,
                 TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
+                ItemId = _associatedTestGuid,
+                IsPublished = true
             };
+
+            test.Variants.Add(testVariant);
 
             var testHandler = GetUnitUnderTest();
 
@@ -299,7 +318,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -309,8 +329,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.Empty,
                 ItemVersion = 0,
                 TestId = _activeTestGuid,
-                ItemId = Guid.Empty
+                ItemId = Guid.Empty,
+                IsPublished = true
             };
+
+            test.Variants.Add(testVariant);
 
             var testHandler = GetUnitUnderTest();
 

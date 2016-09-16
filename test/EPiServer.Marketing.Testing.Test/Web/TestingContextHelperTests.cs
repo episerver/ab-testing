@@ -47,12 +47,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator = new Mock<IServiceLocator>();
             _mockContentRepository = new Mock<IContentRepository>();
             _mockContentRepository.Setup(call => call.Get<IContent>(It.Is<Guid>(g => g == Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664")))).Returns(testPublishedData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testPublishedData.Object);
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
 
             _mockContentVersionRepository = new Mock<IContentVersionRepository>();
             _mockContentVersionRepository.Setup(
-               call => call.LoadPublished(It.IsAny<ContentReference>(), It.IsAny<string>()))
+               call => call.Load(It.IsAny<ContentReference>()))
                .Returns(new ContentVersion(new ContentReference(10,100), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
             _mockContentVersionRepository.Setup(
                call => call.Load(It.IsAny<ContentReference>()))
@@ -109,7 +110,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
                 ItemVersion = 5,
                 Views = 25,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = true
             };
 
             Variant draftVariant = new Variant()
@@ -172,7 +174,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
                 ItemVersion = 5,
                 Views = 25,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = true
             };
 
             Variant draftVariant = new Variant()
@@ -183,7 +186,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
                 ItemVersion = 190,
                 Views = 50,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = false
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
@@ -235,7 +239,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
                 ItemVersion = 5,
                 Views = 25,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = true
             };
 
             Variant draftVariant = new Variant()
@@ -246,7 +251,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
                 ItemVersion = 190,
                 Views = 50,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = false
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
@@ -296,7 +302,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
                 ItemVersion = 5,
                 Views = 25,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = true
             };
 
             Variant draftVariant = new Variant()
@@ -307,7 +314,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
                 ItemVersion = 190,
                 Views = 50,
-                TestId = test.Id
+                TestId = test.Id,
+                IsPublished = false
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
