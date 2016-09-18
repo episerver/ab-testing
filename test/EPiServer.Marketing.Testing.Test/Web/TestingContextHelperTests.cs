@@ -55,10 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContentVersionRepository.Setup(
                call => call.Load(It.IsAny<ContentReference>()))
                .Returns(new ContentVersion(new ContentReference(10,100), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
-            _mockContentVersionRepository.Setup(
-               call => call.Load(It.IsAny<ContentReference>()))
-               .Returns(new ContentVersion(new ContentReference(), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
-
+           
             _mockUIHelper = new Mock<IUIHelper>();
             _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
 
