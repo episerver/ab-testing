@@ -78,7 +78,8 @@ namespace EPiServer.Marketing.KPI.Test
         {
             var kpi = new Kpi();
             var content = new Mock<IContent>();
-            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(content.Object));
+            ContentEventArgs arg = new ContentEventArgs(new ContentReference()) { Content = content.Object };
+            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(this,arg));
         }
 
     }

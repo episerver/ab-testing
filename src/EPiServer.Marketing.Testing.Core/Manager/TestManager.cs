@@ -290,12 +290,12 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
-        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content)
+        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
         {
             List<Guid> guids = new List<Guid>();
             foreach (var kpi in kpis)
             {
-                if (kpi.Evaluate(content))
+                if (kpi.Evaluate(this, e))
                 {
                     guids.Add(kpi.Id);
                 }
