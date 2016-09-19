@@ -218,29 +218,20 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         ContentReference.Parse(testResult.PublishedContentLink));
                 try
                 {
-                    Guid workingVariantId;
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
                     //had been on the site as published.
-                    publishedReference = _testResultHelper.PublishContent(draftContent);
+                    _testResultHelper.PublishContent(draftContent);
 
                     if (testResult.WinningContentLink == testResult.PublishedContentLink)
                     {
                         //republish original published version as winner.
-                        publishedReference = _testResultHelper.PublishContent(publishedContent);
-
-                        //get the appropriate variant and set IsWinner to True. Archive test to show completion.
-                        workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
-
-                        ArchiveMarketingTest(currentTest.Id, workingVariantId);
+                        _testResultHelper.PublishContent(publishedContent);
                     }
-                    else
-                    {
-                        workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
-                        ArchiveMarketingTest(currentTest.Id, workingVariantId);
-                    }
+                    //get the appropriate variant and set IsWinner to True. Archive test to show completion.
+                    var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
+
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
                 }
                 catch (Exception ex)
                 {
