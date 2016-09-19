@@ -514,7 +514,7 @@ namespace EPiServer.Marketing.Testing.Web
                     // try to load the service so we can add the proxy handler
                     Object service;
                     if (_serviceLocator.TryGetExistingInstance(att.service, out service))
-                    {   // todo fix the code to use the service locator passed in.
+                    {
                         try
                         {
                             // get the event method infor
@@ -576,7 +576,7 @@ namespace EPiServer.Marketing.Testing.Web
                     // try to load the service so we can add the proxy handler
                     Object service;
                     if (_serviceLocator.TryGetExistingInstance(att.service, out service))
-                    {   // todo fix the code to use the service locator passed in.
+                    {   
                         try
                         {
                             // get the event method infor
