@@ -6,6 +6,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -290,14 +291,15 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
-        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
+        public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
         {
-            List<Guid> guids = new List<Guid>();
+            List<IKpiResult> guids = new List<IKpiResult>();
             foreach (var kpi in kpis)
             {
-                if (kpi.Evaluate(this, e))
+                var result = kpi.Evaluate(this, e) as KpiResult;
+                if (result.HasConverted)
                 {
-                    guids.Add(kpi.Id);
+                    guids.Add(result);
                 }
             }
             return guids;

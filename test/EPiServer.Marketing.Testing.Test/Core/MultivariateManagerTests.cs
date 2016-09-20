@@ -18,6 +18,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
 using System.Runtime.Caching;
+using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing;
 
 namespace EPiServer.Marketing.Testing.Test.Core
@@ -503,12 +504,12 @@ namespace EPiServer.Marketing.Testing.Test.Core
         Guid _g;
         public TestKpi(Guid g) { _g = g; }
 
-        override public Boolean Evaluate(object sender, EventArgs e)
+        public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             if (_g == Guid.Empty)
-                return true;
+                return new KpiResult() {HasConverted = true};
             else
-                return false;
+                return new KpiResult() { HasConverted = false };
         }
     }
 }

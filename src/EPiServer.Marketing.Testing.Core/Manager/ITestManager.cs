@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.KPI.Manager.DataClass;
@@ -42,7 +43,7 @@ namespace EPiServer.Marketing.Testing
         /// <param name="kpis"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        IList<Guid> EvaluateKPIs(IList<IKpi> kpis, EventArgs e);
+        IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e);
 
         List<IMarketingTest> ActiveCachedTests { get; }
     }

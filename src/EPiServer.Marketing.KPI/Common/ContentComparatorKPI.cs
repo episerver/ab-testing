@@ -22,15 +22,17 @@ namespace EPiServer.Marketing.KPI.Common
             ContentGuid = contentGuid;
         }
 
-        public override bool Evaluate(object sender, EventArgs e)
+        public override IKpiResult Evaluate(object sender, EventArgs e)
         {
-            bool retval = false;
+            var retval = false;
             var ea = e as ContentEventArgs;
+
             if( ea != null  )
             {
                 retval = ContentGuid.Equals(ea.Content.ContentGuid);
             }
-            return retval;
+
+            return new KpiResult() { HasConverted = retval };
         }
     }
 }

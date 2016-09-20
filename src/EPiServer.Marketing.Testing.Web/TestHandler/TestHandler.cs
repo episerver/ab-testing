@@ -395,14 +395,15 @@ namespace EPiServer.Marketing.Testing.Web
                             }
 
                             var evaluated = _testManager.EvaluateKPIs(kpis, e);
+
                             if (evaluated.Count > 0)
                             {
                                 // add each kpi to testdata cookie data
                                 foreach (var eval in evaluated)
                                 {
-                                    tdcookie.KpiConversionDictionary.Remove(eval);
-                                    tdcookie.KpiConversionDictionary.Add(eval, true);
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval), test));
+                                    tdcookie.KpiConversionDictionary.Remove(eval.Id);
+                                    tdcookie.KpiConversionDictionary.Add(eval.Id, true);
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval.Id), test));
                                 }
 
                                 // now check to see if all kpi objects have evalated

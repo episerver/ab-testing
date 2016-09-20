@@ -21,8 +21,8 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             var kpi = GetUnitUnderTest();
             _content.SetupGet(c => c.ContentGuid).Returns(LandingPageGuid);
-            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object });
-            Assert.True(result, "Evaluate should have returned true");
+            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiResult;
+            Assert.True(result.HasConverted, "Evaluate should have returned true");
         }
 
         [Fact]
@@ -30,8 +30,8 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             var kpi = GetUnitUnderTest();
             _content.SetupGet(c => c.ContentGuid).Returns(Guid.NewGuid());
-            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object });
-            Assert.False(result, "Evaluate should have returned false");
+            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiResult;
+            Assert.False(result.HasConverted, "Evaluate should have returned false");
         }
 
         [Fact]

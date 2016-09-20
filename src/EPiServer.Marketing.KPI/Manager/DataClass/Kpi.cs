@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using EPiServer.Marketing.KPI.Common;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -38,7 +39,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e">Event Argument</param>
-        public virtual bool Evaluate(object sender, EventArgs e)
+        public virtual IKpiResult Evaluate(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
