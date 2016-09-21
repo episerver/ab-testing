@@ -213,9 +213,10 @@
                         return;
                     } else if (rb.value === viewConfidenceLevel.toString()) {
                         rb.setAttribute("selected", "selected");
-                        rb.label = viewConfidenceLevel.toString() + "% " + resources.addtestview.default;
+                        rb.label = rb.value + "% " + resources.addtestview.default;
                     } else {
                         rb.removeAttribute("selected");
+                        rb.label = rb.value + "% ";
                     }
                 }
             },
