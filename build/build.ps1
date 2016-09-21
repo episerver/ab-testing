@@ -52,7 +52,7 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 &"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
 
-# TODO:
+# TODO: 
 # Build the Client Resources
 
 # Run tests
@@ -68,5 +68,5 @@ if([System.Convert]::ToBoolean($pack) -eq $true) {
 		$packageVersion = $match.Groups[1].Value
 	}
 
-    &"$cwd\pack.ps1" $configuration $pack $packageVersion
+    &"$cwd\pack.ps1" $configuration $pack $packageVersion  
 }
