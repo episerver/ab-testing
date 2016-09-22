@@ -149,6 +149,7 @@
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
+                this._setViewConfidenceLevelAttr();
             },
 
             //setters for bound properties
@@ -207,6 +208,7 @@
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
                 var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
+                this._clearCurrentConfidenceSelection(rbs);
                 for (var i = 0; i < rbs.length; i++) {
                     var rb = dom.byId(rbs[i]);
                     if (!rb) {
@@ -217,6 +219,17 @@
                     } else {
                         rb.removeAttribute("selected");
                         rb.textContent = rb.value + "%";
+                    }
+                }
+            },
+
+            _clearCurrentConfidenceSelection: function (rbs) {
+                for (var i = 0; i < rbs.length; i++) {
+                    var rb = dom.byId(rbs[i]);
+                    if (!rb) {
+                        return;
+                    } else {
+                        rb.selected = false;
                     }
                 }
             },
