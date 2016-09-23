@@ -208,7 +208,7 @@
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
                 var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                this._clearCurrentConfidenceSelection(rbs);
+                this._resetConfidenceSelection(rbs);
                 for (var i = 0; i < rbs.length; i++) {
                     var rb = dom.byId(rbs[i]);
                     if (!rb) {
@@ -223,11 +223,13 @@
                 }
             },
 
-            _clearCurrentConfidenceSelection: function (rbs) {
+            _resetConfidenceSelection: function (rbs) {
                 for (var i = 0; i < rbs.length; i++) {
                     var rb = dom.byId(rbs[i]);
                     if (!rb) {
                         return;
+                    } else if (rb.textContent.indexOf("(default)") != -1) {
+                        rb.selected = true;
                     } else {
                         rb.selected = false;
                     }
