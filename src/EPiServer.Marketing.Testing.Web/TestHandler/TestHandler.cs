@@ -28,6 +28,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
         public const string SkipRaiseContentSwitchEvent = "SkipRaiseContentSwitchEvent";
+        public const string ABTestHandlerSkipKpiEval = "ABTestHandlerSkipKpiEval";
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -354,9 +355,11 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         private void EvaluateKpis(ContentEventArgs e)
         {
-            // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
-            if (e.TargetLink != null)
+            // We only want to evaluate Kpis one time per request.
+            if (!HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
             {
+                HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+
                 var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
                 foreach (var tdcookie in cookielist)
                 {
