@@ -14,6 +14,9 @@
 .Sleek .panel--trailing {
   background: url('/images/blocks.png') top left no-repeat;
 }
+.Sleek .panel--center .panel--center {
+  padding-bottom: 2em;
+}
 .Sleek .tasks-pane {
   padding: 20px;
 }
@@ -93,6 +96,36 @@
 .Sleek hgroup h1 {
   margin-bottom: 10px;
 }
+.Sleek .advanced-options {
+  margin-top: 2em;
+  position: relative;
+  text-align: center;
+}
+.Sleek .advanced-options__button-container {
+  background: #fff;
+  display: inline-block;
+  padding: 0 10px;
+  position: relative;
+  z-index: 1;
+}
+.Sleek .advanced-options::after {
+  border-bottom: 1px solid #e9e9e9;
+  content: "";
+  left: 0;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
+.Sleek .epi-radio-list label {
+  display: block;
+}
+.Sleek .advanced-options__content {
+  display: none;
+}
+.Sleek .epi-pick-winner-text {
+  text-align: center;
+}
+
 ul,
 li {
   margin: 0;

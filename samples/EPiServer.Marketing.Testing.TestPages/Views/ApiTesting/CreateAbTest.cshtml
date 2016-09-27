@@ -1,5 +1,5 @@
 @using System.Web.Optimization
-@model EPiServer.Marketing.Testing.Data.ABTest
+@model EPiServer.Marketing.Testing.TestPages.Models.TestPagesCreateTestViewModel
 
 @{
     Layout = null;
@@ -34,9 +34,17 @@
                 $("#Variants_0_ItemVersion").empty();
                 $("#Variants_1_ItemVersion").empty();
 
-                $.each(returnedData, function(i, val) {
-                    $("#Variants_0_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
-                    $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                $.each(returnedData, function (i, val) {
+                    if (typeof val.Status == 'undefined' && typeof val != 'boolean') {
+                        alert("Error: " + val);
+                    }
+                    if (val.Status == 4) { // 4 = VersionStatus.Published
+                        var version = val.Reference.substring(0, val.Reference.indexOf('_'));
+                        $("#Variants_0_ItemVersion").append("<option value='" + version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                    } else {
+                        $("#Variants_1_ItemVersion").append("<option value='" + val.Version + "'>" + val.Name + "[" + val.Reference + "]</option>");
+                    }
+
 
                 });
                 $('#Variants_0_ItemId').val($('#originalItem').val());
@@ -66,8 +74,8 @@
 
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.Title)
-                @Html.ValidationMessageFor(model => model.Title)
+                @Html.EditorFor(model => model.Test.Title)
+                @Html.ValidationMessageFor(model => model.Test.Title)
             </div>
             <div class="editor-label">
                 Test Description
@@ -75,8 +83,8 @@
 
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.Description)
-                @Html.ValidationMessageFor(model => model.Description)
+                @Html.EditorFor(model => model.Test.Description)
+                @Html.ValidationMessageFor(model => model.Test.Description)
             </div>
 
             <div class="editor-label">
@@ -85,8 +93,18 @@
 
             </div>
             <div class="editor-field">
-                @Html.EditorFor(model => model.Owner)
-                @Html.ValidationMessageFor(model => model.Owner)
+                @Html.EditorFor(model => model.Test.Owner)
+                @Html.ValidationMessageFor(model => model.Test.Owner)
+            </div>
+
+            <div class="editor-label">
+                Conversion Page
+                <span style="color:red">*</span>
+
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ContentGuid)
+                @Html.ValidationMessageFor(model => model.ContentGuid)
             </div>
 
             <div class="editor-label">
@@ -95,8 +113,8 @@
 
             </div>
             <div class="editor-field">
-                <input type="date" name="StartDate" value="@Model.StartDate" />
-                @Html.ValidationMessageFor(model => model.StartDate)
+                <input type="date" name="Test.StartDate" value="@Model.Test.StartDate" />
+                @Html.ValidationMessageFor(model => model.Test.StartDate)
             </div>
 
             <div class="editor-label">
@@ -105,8 +123,8 @@
 
             </div>
             <div class="editor-field">
-                <input type="date" name="EndDate" value="@Model.EndDate" />
-                @Html.ValidationMessageFor(model => model.EndDate)
+                <input type="date" name="Test.EndDate" value="@Model.Test.EndDate" />
+                @Html.ValidationMessageFor(model => model.Test.EndDate)
             </div>
 
             <div class="editor-label">
@@ -116,7 +134,7 @@
 
             </div>
             <div class="editor-field">
-                @Html.TextBoxFor(model => model.OriginalItemId, new { @id = "originalItem", @onchange = "javascript:GetVersions(this.value);" })
+                @Html.TextBoxFor(model => model.Test.OriginalItemId, new { @id = "originalItem", @onchange = "javascript:GetVersions(this.value);" })
             </div>
 
             <div>
@@ -125,28 +143,28 @@
                         Version A:
                         <span style="color:red">*</span>
                     </div>
-                    <select id="Variants_0_ItemVersion" name="Variants[0].ItemVersion">
+                    <select id="Variants_0_ItemVersion" name="Test.Variants[0].ItemVersion">
                         <option>No Available Versions</option>
                     </select>
-                    <input type="hidden" id="Variants_0_ItemId" name="Variants[0].ItemId" />
-                    <input type="hidden" id="Variants_0_Id" name="Variants[0].Id" value="@Guid.NewGuid()" />
+                    <input type="hidden" id="Variants_0_ItemId" name="Test.Variants[0].ItemId" />
+                    <input type="hidden" id="Variants_0_Id" name="Test.Variants[0].Id" value="@Guid.NewGuid()" />
                 </div>
                 <div class="editor-field">
                     <div class="editor-label">
                         Version B
                         <span style="color:red">*</span>
                     </div>
-                    <select id="Variants_1_ItemVersion" name="Variants[1].ItemVersion">
+                    <select id="Variants_1_ItemVersion" name="Test.Variants[1].ItemVersion">
                         <option>No Available Versions</option>
                     </select>
-                    <input type="hidden" id="Variants_1_ItemId" name="Variants[1].ItemId" />
-                    <input type="hidden" id="Variants_1_Id" name="Variants[1].Id" value="@Guid.NewGuid()" />
+                    <input type="hidden" id="Variants_1_ItemId" name="Test.Variants[1].ItemId" />
+                    <input type="hidden" id="Variants_1_Id" name="Test.Variants[1].Id" value="@Guid.NewGuid()" />
                 </div>
             </div>
 
 
             <p>
-                @if (Model.Id == Guid.Empty)
+                @if (Model.Test.Id == Guid.Empty)
                 {
                     <input type="submit" value="Create" />
                 }

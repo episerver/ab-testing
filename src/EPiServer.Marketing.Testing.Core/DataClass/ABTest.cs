@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data.Enums;
 
 namespace EPiServer.Marketing.Testing.Data
@@ -52,6 +53,22 @@ namespace EPiServer.Marketing.Testing.Data
         public int ParticipationPercentage { get; set; }
 
         /// <summary>
+        /// Percentage of accuracy required.
+        /// Default: 95 %
+        /// </summary>
+        public double ConfidenceLevel { get; set; }
+
+        /// <summary>
+        /// Calculated z-score to determine statistical significance.
+        /// </summary>
+        public double ZScore { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsSignificant { get; set; }
+
+        /// <summary>
         /// Last person that modified the test.
         /// </summary>
         public string LastModifiedBy { get; set; }
@@ -62,14 +79,9 @@ namespace EPiServer.Marketing.Testing.Data
         public List<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of results for the test.  There will be a TestResult for the OriginalItem and each Variant item.
-        /// </summary>
-        public List<TestResult> TestResults { get; set; }
-
-        /// <summary>
         /// List of KeyPerformanceIndicators.  These can be time on a page, form submission, etc.
         /// </summary>
-        public List<KeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
+        public List<IKpi> KpiInstances { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

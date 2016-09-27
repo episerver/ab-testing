@@ -15,7 +15,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 namespace EPiServer.Marketing.Testing.Dal
 {
     [ExcludeFromCodeCoverage]
-    public class BaseRepository : IRepository
+    internal class BaseRepository : IRepository
     {
         #region Constants and Tables
         #endregion
@@ -74,19 +74,25 @@ namespace EPiServer.Marketing.Testing.Dal
                     scope.Complete();
                 }
             }
-            
+
             return records;
         }
 
         public IABTest GetById(object id)
         {
-            return DatabaseContext.Set<DalABTest>().Find(id);
+            return DatabaseContext.ABTests
+                        .Include(t => t.Variants)
+                        .Include(t => t.KeyPerformanceIndicators)
+                        .FirstOrDefault(t => t.Id == (Guid)id);
         }
 
         public IQueryable<IABTest> GetAll()
         {
-            return DatabaseContext.Set<DalABTest>().AsQueryable();
-        } 
+            return DatabaseContext.ABTests
+                .Include(t => t.Variants)
+                .Include(t => t.KeyPerformanceIndicators)
+                .AsQueryable();
+        }
 
         public void DeleteTest(object id)
         {

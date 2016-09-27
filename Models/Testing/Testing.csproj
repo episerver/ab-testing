@@ -65,9 +65,6 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestCriteria.cs">
       <Link>EntityModel\DalTestCriteria.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestResult.cs">
-      <Link>EntityModel\DalTestResult.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalVariant.cs">
       <Link>EntityModel\DalVariant.cs</Link>
     </Compile>
@@ -92,15 +89,12 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyPerformanceIndicatorMap.cs">
       <Link>Mappings\KeyPerformanceIndicatorMap.cs</Link>
     </Compile>
-    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\TestResultMap.cs">
-      <Link>Mappings\TestResultMap.cs</Link>
-    </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\VariantMap.cs">
       <Link>Mappings\VariantMap.cs</Link>
     </Compile>
-    <Compile Include="Migrations\201603241337050_Initial.cs" />
-    <Compile Include="Migrations\201603241337050_Initial.Designer.cs">
-      <DependentUpon>201603241337050_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201606291147071_Initial.cs" />
+    <Compile Include="Migrations\201606291147071_Initial.Designer.cs">
+      <DependentUpon>201606291147071_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -110,8 +104,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201603241337050_Initial.resx">
-      <DependentUpon>201603241337050_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201606291147071_Initial.resx">
+      <DependentUpon>201606291147071_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

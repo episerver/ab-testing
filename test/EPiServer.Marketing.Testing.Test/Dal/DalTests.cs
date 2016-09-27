@@ -155,45 +155,5 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             Assert.Equal(1, _context.KeyPerformanceIndicators.Count());
         }
-
-        [Fact]
-        public void AddTestResultToTest()
-        {
-            var id = Guid.NewGuid();
-
-            var test = new DalABTest()
-            {
-                Id = id,
-                Title = "Test",
-                Description = "Description",
-                Owner = "me",
-                OriginalItemId = new Guid(),
-                State = DalTestState.Active,
-                StartDate = DateTime.UtcNow,
-                EndDate = DateTime.Now,
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow,
-                TestResults = new List<DalTestResult>()
-            };
-
-            _context.ABTests.Add(test);
-
-            var tr = new DalTestResult()
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ItemId = Guid.NewGuid(),
-                Conversions = 1,
-                Views = 1,
-                ItemVersion = 1
-            };
-
-            test.TestResults.Add(tr);
-            _context.SaveChanges();
-
-            Assert.Equal(1, test.TestResults.Count());
-
-            Assert.Equal(1, _context.ABTestsResults.Count());
-        }
     }
 }

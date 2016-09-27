@@ -1,15 +1,21 @@
-﻿define([
-     'dojo/_base/declare',
-    'epi/dependency',
-    'dojo/Stateful',
-    'dojo/topic'
+﻿function showSettings() {
+    $('.advanced-options__content').animate({
+        height: "toggle"
+    }, "fast");
+};
+
+define([
+    "dojo/_base/declare",
+    "epi/dependency",
+    "dojo/Stateful",
+    "dojo/topic"
 ], function (
     declare,
     dependency,
-    Stateful,
+    stateful,
     topic
 ) {
-    return declare([Stateful], {
+    return declare([stateful], {
 
         //First Content version to be used as potential content swap
         //during active A/B test.
@@ -40,48 +46,78 @@
         //start date (currently set to "now" when they hit the start test button
         startDate: null,
 
+        //property to start a test immediately upon creation
+        start: true,
+
+        //confidence level
+        confidenceLevel: null,
+
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
-            this.store = dependency.resolve("epi.storeregistry").get("marketing.testing");
+            this.store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.configStore = this.configStore || dependency.resolve("epi.storeregistry").get("marketing.abtestingconfig");
+            this.topic = this.topic || topic;
+
+            this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
+        },
+
+        _onContextChange: function (context, caller) {
+            // Widget will update itself using the new context.
+            this.contentData = caller.contentData;
+            this.contentData.contentLink = caller.contentData.contentLink;
+            this.setupContentData();
         },
 
         setupContentData: function () {
             //get published version
-            this._contentVersionStore = dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
-            this._contentVersionStore.query({ contentLink: this.contentData.contentLink, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
+            this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+            this._contentVersionStore
+                .query({ contentLink: this.contentData.contentLink, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
                 .then(function (result) {
                     var publishedVersion = result;
                     this.set("publishedVersion", publishedVersion);
                     this.set("currentVersion", this.contentData);
+
+                    this.configStore.get()
+                        .then(function (config) {
+                            console.log(config);
+                            this.set("testDuration", config.testDuration);
+                            this.set("participationPercent", config.participationPercent);
+                            this.set("confidenceLevel", config.confidenceLevel);
+                        }.bind(this));
+                    
                     console.log(result);
                     console.log(this.contentData);
-                }.bind(this)).otherwise(function (result) {
+                }.bind(this))
+                .otherwise(function () {
                     console.log("Query did not return valid result");
                 });
         },
 
         createTest: function () {
+            var published = this.publishedVersion.contentLink.split('_');
+            var draft = this.currentVersion.contentLink.split('_');
+            var me = this;
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
-                publishedVersion: parseVersion(this.publishedVersion.contentLink),
-                variantVersion: parseVersion(this.currentVersion.contentLink),
+                publishedVersion: published[0],
+                variantVersion: draft[1],
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,
                 conversionPage: this.conversionPage,
                 testTitle: this.testTitle,
-                startDate: this.startDate
+                startDate: this.startDate,
+                start: this.start,
+                confidencelevel: this.confidencelevel
             }).then(function () {
-                topic.publish("/epi/shell/action/changeview/back");
+                var contextParameters = { uri: "epi.cms.contentdata:///" + published[0] };
+                me.topic.publish("/epi/shell/context/request", contextParameters);
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");
             });
         }
     });
 
-    function parseVersion(contentlink) {
-        var linkinfo = contentlink.split('_');
-        return linkinfo[1];
-    }
 });

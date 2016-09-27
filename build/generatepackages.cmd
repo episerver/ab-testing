@@ -19,7 +19,9 @@ xcopy "%ProjectPath%\ClientResources"\* "%PackagePath%\content\modules\_protecte
 
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 
-xcopy "..\src\Database"\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
+xcopy "%ProjectPath%\web.config.install.xdt" "%PackagePath%\content"  /I /F /R /Y
+
+xcopy "..\src\Database"\Testing\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles"
 xcopy "%ProjectPath%\EmbeddedLangFiles\EPiServer_Testing_EN.xml" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles\"  /I /F /R /Y
@@ -29,6 +31,9 @@ xcopy "%ProjectPath%\Scripts" "%PackagePath%\content\modules\_protected\EPiServe
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"
 xcopy "%ProjectPath%\Images" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"  /I /F /R /Y /S
+
+md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\Admin"
+xcopy "%ProjectPath%\Config\AdminConfig.aspx" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Admin\"  /I /F /R /Y
 
 md "%PackagePath%\temp"
 

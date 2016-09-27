@@ -1,24 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Web
  {
     //Required by TestingStore.
     //Gets data from UI and transforms it to IMarketingTest data
     //to create and manage MarketingTests
+    [ExcludeFromCodeCoverage]
     public class TestingStoreModel
     {
-        public Guid testContentId { get; set; }
-        public string testDescription { get; set; }
-        public int publishedVersion { get; set; }
-        public int variantVersion { get; set; }
-        public string startDate { get; set; }
-        public int testDuration { get; set; }
-        public int participationPercent { get; set; }
-        public int conversionPage { get; set; }
-        public string testTitle { get; set; }
+        public Guid TestContentId { get; set; }
+        public string TestDescription { get; set; }
+        public int PublishedVersion { get; set; }
+        public int VariantVersion { get; set; }
+        public string StartDate { get; set; }
+        public int TestDuration { get; set; }
+        public int ParticipationPercent { get; set; }
+        public int ConversionPage { get; set; }
+        public string TestTitle { get; set; }
+        public bool Start { get; set; }
+        public double ConfidenceLevel { get; set; }
 
     }
 }

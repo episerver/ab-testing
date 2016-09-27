@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
-using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
@@ -15,16 +16,14 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
     {
 
         private TestManager _mtm;
-        private List<KeyPerformanceIndicator> Kpis;
+        private List<IKpi> Kpis;
         private Guid originalItemGuid;
         private List<Variant> variantsToSave;
-        private List<TestResult> testResults = new List<TestResult>();
 
         public List<IMarketingTest> GetTests(ViewModel viewModel = null)
         {
             TestManager mtm = new TestManager();
             List<IMarketingTest> discoveredTests = new List<IMarketingTest>();
-            ITestRepository testRepo = new TestRepository();
 
             if (viewModel == null)
             {
@@ -72,25 +71,28 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
             return discoveredTests;
         }
 
-        public Guid CreateAbTest(ABTest dataToSave)
+        public Guid CreateAbTest(TestPagesCreateTestViewModel dataToSave)
         {
             TestManager _mtm = new TestManager();
-            dataToSave.Id = Guid.NewGuid();
+            dataToSave.Test.Id = Guid.NewGuid();
 
-            dataToSave.KeyPerformanceIndicators = new List<KeyPerformanceIndicator>()
-                {
-                    new KeyPerformanceIndicator() {Id=Guid.NewGuid(),KeyPerformanceIndicatorId = Guid.NewGuid()},
-                };
+            dataToSave.Test.KpiInstances = new List<IKpi>() {new ContentComparatorKPI() {ContentGuid = dataToSave.ContentGuid} };
 
-            dataToSave.TestResults = new List<TestResult>()
+            dataToSave.Test.Variants = new List<Variant>()
             {
-                new TestResult() {Id=Guid.NewGuid(),ItemId = dataToSave.Variants[0].Id, ItemVersion = dataToSave.Variants[0].ItemVersion},
-                new TestResult() {Id = Guid.NewGuid(),ItemId = dataToSave.Variants[1].Id, ItemVersion = dataToSave.Variants[1].ItemVersion}
+                new Variant()
+                {
+                    Id = Guid.NewGuid(), ItemId = dataToSave.Test.Variants[0].ItemId, ItemVersion = dataToSave.Test.Variants[0].ItemVersion, Views = 0, Conversions = 0
+                },
+                new Variant()
+                {
+                    Id = Guid.NewGuid(), ItemId = dataToSave.Test.Variants[1].ItemId, ItemVersion = dataToSave.Test.Variants[1].ItemVersion, Views = 0, Conversions = 0
+                }
             };
 
-            _mtm.Save(dataToSave);
+            _mtm.Save(dataToSave.Test);
 
-            return dataToSave.Id;
+            return dataToSave.Test.Id;
         }
 
         /// <summary>
@@ -120,8 +122,8 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
                 case TestState.Inactive:
                     _mtm.Stop(testId);
                     break;
-                case TestState.Archived:
-                    _mtm.Archive(testId);
+                //case TestState.Archived:
+                //    _mtm.Archive(testId);
                     break;
                 default:
                     return null;
@@ -137,12 +139,12 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             for (int x = 0; x < 50; x++)
             {
-                Guid result = _mtm.ReturnLandingPage(testId);
+                Variant variant = _mtm.ReturnLandingPage(testId);
 
-                var version = test.Variants.First(v => v.Id == result);
-                _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.View);
+                var version = test.Variants.First(v => v.Id == variant.Id);
+                _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.View);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.Conversion);
+                    _mtm.IncrementCount(testId, variant.ItemId, version.ItemVersion, Data.Enums.CountType.Conversion);
             }
 
             _mtm.Stop(testId);
@@ -154,15 +156,6 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         {
             _mtm = new TestManager();
             _mtm.Start(testId);
-            var test = _mtm.Get(testId);
-            for (int x = 0; x < 5; x++)
-            {
-                Guid result = _mtm.ReturnLandingPage(testId);
-                var version = test.Variants.First(v => v.Id == result);
-                _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.View);
-                if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, result, version.ItemVersion, Data.Enums.CountType.Conversion);
-            }
 
             return _mtm.Get(testId);
         }
@@ -171,7 +164,6 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
         {
             _mtm = new TestManager();
             _mtm.Stop(testId);
-
 
             return _mtm.Get(testId);
         }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal.Model;
-using EPiServer.Marketing.KPI.Dal.Model.Enums;
 using EPiServer.Marketing.KPI.DataAccess;
-using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.ServiceLocation;
+using Newtonsoft.Json;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -22,6 +22,7 @@ namespace EPiServer.Marketing.KPI.Manager
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new KpiDataAccess();
         }
+
         internal KpiManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
@@ -48,13 +49,20 @@ namespace EPiServer.Marketing.KPI.Manager
             _dataAccess.Delete(kpiId);
         }
 
-
-        private Dal.Model.IDalKpi ConvertToDalTest(IKpi kpi)
+        /// <summary>
+        /// Serialize the kpi to a Json string and save it in the properties field.
+        /// </summary>
+        /// <param name="kpi">Kpi to save to the db (i.e. contentcomparatorkpi, timeonpagekpi, etc.</param>
+        /// <returns>EF Kpi object to save in the db.</returns>
+        private IDalKpi ConvertToDalTest(IKpi kpi)
         {
+            var serializedKpi = JsonConvert.SerializeObject(kpi);
+
             var dalKpi = new DalKpi()
             {
                 Id = kpi.Id,
-                Properties = kpi.Properties,
+                ClassName = kpi.GetType().AssemblyQualifiedName,
+                Properties = serializedKpi,
                 CreatedDate = kpi.CreatedDate,
                 ModifiedDate = kpi.ModifiedDate
             };
@@ -62,15 +70,24 @@ namespace EPiServer.Marketing.KPI.Manager
             return dalKpi;
         }
 
+        /// <summary>
+        /// Takes EF Kpi from the db and deserializes the Json string from properties, then creates/populates the correct kpi class instance.
+        /// </summary>
+        /// <param name="dalKpi">EF Kpi object.</param>
+        /// <returns>User defined Kpi object.</returns>
         private IKpi ConvertToManagerKpi(IDalKpi dalKpi)
         {
-            var managerKpi = new DataClass.Kpi()
-            {
-                Id = dalKpi.Id,
-                Properties = dalKpi.Properties,
-                CreatedDate = dalKpi.CreatedDate,
-                ModifiedDate = dalKpi.ModifiedDate
-            };
+            // split up saved assembly/class info
+            var parts = dalKpi.ClassName.Split(',');
+            
+            // create class instance of specific type of kpi
+            var kpi = Activator.CreateInstance(parts[1], parts[0]);
+            
+            // unwrap to actually get the kpi class object so we can populate its properties
+            var managerKpi = (IKpi)kpi.Unwrap();
+            
+            // fill in class properties with values saved to the db
+            JsonConvert.PopulateObject(dalKpi.Properties, managerKpi);
 
             return managerKpi;
         }

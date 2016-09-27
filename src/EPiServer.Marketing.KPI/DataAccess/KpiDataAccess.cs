@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Dal;
 using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.DataAccess
 {
-    public class KpiDataAccess : IKpiDataAccess
+    internal class KpiDataAccess : IKpiDataAccess
     {
         internal IRepository _repository;
+        internal bool _UseEntityFramework;
 
         public KpiDataAccess()
         {
+            _UseEntityFramework = true;
             // TODO : Load repository from service locator.
-            _repository = new BaseRepository(new DatabaseContext());
         }
         internal KpiDataAccess(IRepository repository)
         {
@@ -26,8 +28,24 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <param name="kpiId">Id of the KPI to delete.</param>
         public void Delete(Guid kpiId)
         {
-            _repository.DeleteKpi(kpiId);
-            _repository.SaveChanges();
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    DeleteHelper(repository, kpiId);
+                }
+            }
+            else
+            {
+                DeleteHelper(_repository, kpiId);
+            }
+        }
+
+        private void DeleteHelper(IRepository repo, Guid kpiId)
+        {
+            repo.DeleteKpi(kpiId);
+            repo.SaveChanges();
         }
 
         /// <summary>
@@ -37,7 +55,27 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <returns>KPI object.</returns>
         public IDalKpi Get(Guid kpiId)
         {
-            return _repository.GetById(kpiId);
+            IDalKpi kpi;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    kpi = GetHelper(repository, kpiId);
+                }
+            }
+            else
+            {
+                kpi = GetHelper(_repository, kpiId);
+            }
+
+            return kpi;
+        }
+
+        private IDalKpi GetHelper(IRepository repo, Guid kpiId)
+        {
+            return repo.GetById(kpiId);
         }
 
         /// <summary>
@@ -46,7 +84,27 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <returns>List of KPI objects.</returns>
         public List<IDalKpi> GetKpiList()
         {
-            return _repository.GetAll().ToList();
+            List<IDalKpi> kpis;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    kpis = GetKpiListHelper(repository);
+                }
+            }
+            else
+            {
+                kpis = GetKpiListHelper(_repository);
+            }
+
+            return kpis;
+        }
+
+        private List<IDalKpi> GetKpiListHelper(IRepository repo)
+        {
+            return repo.GetAll().ToList();
         }
 
         /// <summary>
@@ -56,25 +114,46 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <returns>The Id of the KPI object that was added/updated.</returns>
         public Guid Save(IDalKpi kpiObject)
         {
-            var kpi = _repository.GetById(kpiObject.Id) as DalKpi;
+            Guid id;
+
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    id = SaveHelper(repository, kpiObject);
+                }
+            }
+            else
+            {
+                id = SaveHelper(_repository, kpiObject);
+            }
+
+            return id;
+        }
+
+
+        public Guid SaveHelper(IRepository repo, IDalKpi kpiObject)
+        {
+            var kpi = repo.GetById(kpiObject.Id) as DalKpi;
             Guid id;
 
             // if a test doesn't exist, add it to the db
             if (kpi == null)
             {
-                _repository.Add(kpiObject);
+                repo.Add(kpiObject);
                 id = kpiObject.Id;
             }
             else
             {
+                kpi.ClassName = kpiObject.ClassName;
                 kpi.Properties = kpiObject.Properties;
                 id = kpi.Id;
             }
 
-            _repository.SaveChanges();
+            repo.SaveChanges();
 
             return id;
         }
-
     }
 }

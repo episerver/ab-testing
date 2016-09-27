@@ -9,7 +9,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 namespace EPiServer.Marketing.KPI.Dal
 {
     [ExcludeFromCodeCoverage]
-    public class BaseRepository : IRepository
+    internal class BaseRepository : IRepository
     {
         #region Constants and Tables
         #endregion

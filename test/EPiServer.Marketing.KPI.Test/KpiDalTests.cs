@@ -4,7 +4,7 @@ using Xunit;
 
 namespace EPiServer.Marketing.KPI.Test
 {
-    public class KpiDalTests : KpiTestBase
+    internal class KpiDalTests : KpiTestBase
     {
         private KpiTestContext _context;
         private DbConnection _dbConnection;
@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.KPI.Test
         [Fact]
         public void AddMultivariateTest()
         {
-            var newTests = AddMultivariateTests(_context, 2);
+            var newTests = AddKpis(_context, 2);
             _context.SaveChanges();
 
             Assert.Equal(_context.Kpis.Count(), 2);
@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.KPI.Test
         [Fact]
         public void DeleteMultivariateTest()
         {
-            var newTests = AddMultivariateTests(_context, 3);
+            var newTests = AddKpis(_context, 3);
             _context.SaveChanges();
 
             

@@ -8,6 +8,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 using Xunit;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.KPI.Test
 {
@@ -18,7 +19,11 @@ namespace EPiServer.Marketing.KPI.Test
 
         private DalKpi GetDalKpi()
         {
-            return new DalKpi();
+            return new DalKpi()
+            {
+                ClassName = "EPiServer.Marketing.KPI.Manager.DataClass.Kpi, EPiServer.Marketing.KPI",
+                Properties = "{ \"Id\":\"fa76a408-1fb4-44a9-9231-954961f0676b\", \"CreatedDate\":\"2016-04-08T18:24:30.3161712Z\", \"ModifiedDate\":\"2016-04-08T18:24:30.3161712Z\" }"
+            };
         }
 
         private KpiManager GetUnitUnderTest()
@@ -47,10 +52,9 @@ namespace EPiServer.Marketing.KPI.Test
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            var kpi = new Manager.DataClass.Kpi()
+            var kpi = new Kpi()
             {
-                Id = theGuid,
-                Properties = "test"
+                Id = theGuid
             };
             tm.Save(kpi);
 
@@ -73,7 +77,8 @@ namespace EPiServer.Marketing.KPI.Test
         public void Kpi_Success_Throws_Exception()
         {
             var kpi = new Kpi();
-            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(new object()));
+            var content = new Mock<IContent>();
+            Assert.Throws<NotImplementedException>(() => kpi.Evaluate(content.Object));
         }
 
     }

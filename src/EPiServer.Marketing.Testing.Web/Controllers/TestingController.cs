@@ -1,5 +1,8 @@
-﻿using EPiServer.Marketing.Testing.Messaging;
+﻿using EPiServer.Framework;
+using EPiServer.Framework.Initialization;
 using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using System;
@@ -12,9 +15,13 @@ using System.Web.Http;
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     /// <summary>
-    /// Provides a web interface for getting tests, getting a single test, and updateing views and conversions.
+    /// Provides a web interface for getting tests, getting a single test, 
+    /// updateing views and conversions. Note this is provided as a rest end point
+    /// for customers to use via jscript on thier site. do not delete
     /// </summary>
-    public class TestingController : ApiController
+    [InitializableModule]
+    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+    public class TestingController : ApiController, IConfigurableModule
     {
         private IServiceLocator _serviceLocator;
 
@@ -29,29 +36,46 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             _serviceLocator = serviceLocator;
         }
 
+        public void ConfigureContainer(ServiceConfigurationContext context) { }
+        public void Uninitialize(InitializationEngine context) { }
+
+        public void Initialize(InitializationEngine context)
+        {
+            // configure out route
+            GlobalConfiguration.Configure(config =>
+            {
+                config.Routes.MapHttpRoute(
+                name: "EPiServerContentOptimization",
+                routeTemplate: "api/episerver/{controller}/{action}",
+                defaults: new { controller = "Testing", action = "GetAllTests" }
+                );
+            });
+        }
+
         // Get api/episerver/testing/GetAllTests
         [HttpGet]
         public HttpResponseMessage GetAllTests()
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(tm.GetTestList(new TestCriteria()), Formatting.Indented,
-                            new JsonSerializerSettings
-                            {
-                                // Apparently there is some loop referenceing problem with the 
-                                // KeyPerformace indicators, this gets rid of that issue so we can actually convert the 
-                                // data to json
-                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                            }));
+                new JsonSerializerSettings
+                {
+                    // Apparently there is some loop referenceing problem with the 
+                    // KeyPerformace indicators, this gets rid of that issue so we can actually convert the 
+                    // data to json
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }));
         }
 
         // Get api/episerver/testing/GetTest?id=2a74262e-ec1c-4aaf-bef9-0654721239d6
         [HttpGet]
         public HttpResponseMessage GetTest(string id)
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
             var testId = Guid.Parse(id);
-            var test = tm.Get(testId);
+            var test = tm.GetTestById(testId);
             if (test != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(test, Formatting.Indented,

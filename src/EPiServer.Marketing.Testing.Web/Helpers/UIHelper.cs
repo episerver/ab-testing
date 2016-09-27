@@ -1,15 +1,19 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
+using EPiServer.Web.Mvc.Html;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    [ServiceConfiguration(ServiceType = typeof(IUIHelper), Lifecycle = ServiceInstanceScope.Singleton)]
+
     public class UIHelper : IUIHelper
     {
         private IServiceLocator _serviceLocator;
@@ -77,6 +81,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 return new BasicContent() { Name = "ContentNotFound" };
             }
+        }
+
+        public string getEpiUrlFromLink(ContentReference contentLink)
+        {
+            var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+            return urlHelper.ContentUrl(contentLink);
+
+
         }
     }
 }
