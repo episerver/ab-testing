@@ -42,7 +42,9 @@
                     ${resources.detailsview.content_control_header}
                 </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versiona"><canvas id="publishThumbnaildetail" class="abThumbnailCanvas" /></div>
+                    <div class="versiona">
+                        <canvas title="${resources.detailsview.view_control_content}" id="publishThumbnaildetail" class="abThumbnailCanvas" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
+                    </div>
                     <p class="contentInfo">
                         <span class="publishedIcon">
                             ${resources.detailsview.published_prefix}
@@ -50,7 +52,6 @@
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
                         <span data-dojo-attach-point="datePublished"></span>
                         <br />
-                        <a href="#" class=".epi-iconPreview" data-dojo-attach-event="onclick: _onControlViewClick">${resources.detailsview.view_control_content}</a>
                     </p>
                     <!-- Control Statistics -->
                     <table width="100%">
@@ -80,13 +81,13 @@
                     ${resources.detailsview.content_challenger_header}
                 </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versionb"><canvas id="draftThumbnaildetail" class="abThumbnailCanvas" /></div>
+                    <div class="versionb">
+                        <canvas title="${resources.detailsview.view_challenger_content}" id="draftThumbnaildetail" class="abThumbnailCanvas" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />
+                    </div>
                     <p class="contentInfo">
                         <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
                         <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
-                        <br />
-                        <a href="#" data-dojo-attach-event="onclick: _onChallengerViewClick">${resources.detailsview.view_challenger_content}</a>
                     </p>
                     <table width="100%">
                         <tr>

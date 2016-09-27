@@ -10,7 +10,7 @@
     <description>Create A/B Tests for your EPiServer Site</description>
     <releaseNotes>First release.</releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>EPiServerModulePackage EPiServerAddon EPiServer Marketing Testing</tags>
+    <tags>EPiServerModulePackage EPiServerAddon EPiServer Marketing Testing EPiServerBetaAddon</tags>
     <dependencies>
       <dependency id="EPiServer.CMS.Core" version="[9.10.1,10)" />
       <dependency id="EPiServer.CMS.UI" version="[9.8.0,10)" />

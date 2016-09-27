@@ -31,7 +31,9 @@
             <div class="leadingContent" data-dojo-attach-point="controlStatusIcon"></div>
             <h3 data-dojo-attach-point="controlHeader"></h3>
             <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versiona"><canvas id="publishThumbnailarchive" class="abThumbnailCanvas" /></div>
+                <div class="versiona">
+                    <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="abThumbnailCanvas"  data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer"/>
+                </div>
                 <p class="contentInfo">
                     <span class="publishedIcon" style="padding-top: 2px">
                         ${resources.archiveview.published_prefix}
@@ -67,7 +69,9 @@
                 ${resources.archiveview.content_challenger_header}
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versionb"><canvas id="draftThumbnailarchive" class="abThumbnailCanvas" /></div>
+                <div class="versionb">
+                    <canvas title="${resources.archiveview.view_challenger_content}"  id="draftThumbnailarchive" class="abThumbnailCanvas"  data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />/>
+                </div>
                 <p class="contentInfo">
                     <span class="draftIcon" style="padding-top: 2px">${resources.archiveview.draft_prefix}</span>
                     <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
@@ -119,6 +123,7 @@
                     <h4>${resources.archiveview.test_duration_header}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.archiveview.days_divider}
+                        ${resources.archiveview.from}
                         <span data-dojo-attach-point="testStartDate"> </span>
                         ${resources.archiveview.to}
                         <span data-dojo-attach-point="testEndDate"> </span>

@@ -67,6 +67,6 @@ if([System.Convert]::ToBoolean($pack) -eq $true) {
 		$match = (Select-String -Path $cwd\..\AssemblyVersionAuto.cs -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
 		$packageVersion = $match.Groups[1].Value
 	}
-	
-    &"$cwd\pack.ps1" $configuration $pack $packageVersion	
+
+    &"$cwd\pack.ps1" $configuration $pack $packageVersion  
 }
