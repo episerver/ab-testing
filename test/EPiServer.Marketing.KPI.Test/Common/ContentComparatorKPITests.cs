@@ -24,6 +24,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _content.SetupGet(c => c.ContentGuid).Returns(LandingPageGuid);
             var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiConversionResult;
             Assert.True(result.HasConverted, "Evaluate should have returned true");
+            Assert.Equal(result.KpiId, kpi.Id);
         }
 
         [Fact]
