@@ -13,6 +13,7 @@
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
+        "dojo/query",
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
@@ -28,7 +29,7 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"        
+        "dijit/layout/ContentPane"
 ],
     function (
     declare,
@@ -45,6 +46,7 @@
     html,
     dom,
     domClass,
+    query,
     registry,
     dependency,
     rasterizehtml
@@ -53,7 +55,7 @@
         viewCurrentVersion: null;
         viewParticipationPercent: null;
         viewTestDuration: null;
-        confidenceLevel: null;
+        viewConfidenceLevel: null;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -141,12 +143,13 @@
                 }
 
                 if (dom.byId("confidence")) {
-                    dom.byId("confidence").value = "95";
+                    dom.byId("confidence").value = this.confidenceLevel.value;
                 }
 
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
+                this._setViewConfidenceLevelAttr();
             },
 
             //setters for bound properties
@@ -158,18 +161,20 @@
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
-                var pubThumb = document.getElementById("publishThumbnail")
+                var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
                     //Hack to build published versions preview link below
+                    var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1;
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                        previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                        previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-                   
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versiona').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -188,7 +193,9 @@
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versionb').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -202,14 +209,30 @@
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
                 var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
+                this._resetConfidenceSelection(rbs);
                 for (var i = 0; i < rbs.length; i++) {
                     var rb = dom.byId(rbs[i]);
                     if (!rb) {
                         return;
                     } else if (rb.value === viewConfidenceLevel.toString()) {
                         rb.setAttribute("selected", "selected");
+                        rb.textContent = rb.value + "% " + resources.addtestview.default;
                     } else {
                         rb.removeAttribute("selected");
+                        rb.textContent = rb.value + "%";
+                    }
+                }
+            },
+
+            _resetConfidenceSelection: function (rbs) {
+                for (var i = 0; i < rbs.length; i++) {
+                    var rb = dom.byId(rbs[i]);
+                    if (!rb) {
+                        return;
+                    } else if (rb.textContent.indexOf("(default)") != -1) {
+                        rb.selected = true;
+                    } else {
+                        rb.selected = false;
                     }
                 }
             },

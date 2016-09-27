@@ -41,6 +41,7 @@
         "System.Runtime.Caching": "4.0.0.0",
         "System.Web": "",
         "System.Web.ApplicationServices": "",
+        "System.Web.Extensions": "4.0.0.0",
         "System.Xml": "",
         "System.Xml.Linq": ""
       }

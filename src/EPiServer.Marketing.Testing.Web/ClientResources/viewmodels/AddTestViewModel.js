@@ -50,7 +50,7 @@ define([
         start: true,
 
         //confidence level
-        confidenceLevel: 95,
+        confidenceLevel: null,
 
         postscript: function () {
             this.inherited(arguments);
