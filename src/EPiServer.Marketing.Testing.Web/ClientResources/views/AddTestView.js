@@ -162,8 +162,9 @@
 
                 if (pubThumb) {
                     //Hack to build published versions preview link below
+                    var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1;
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                        previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                        previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
                    
