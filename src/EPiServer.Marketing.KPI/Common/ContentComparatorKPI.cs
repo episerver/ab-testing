@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.KPI.Common
                 retval = ContentGuid.Equals(ea.Content.ContentGuid);
             }
 
-            return new KpiConversionResult() { HasConverted = retval };
+            return new KpiConversionResult() { KpiId = Id, HasConverted = retval };
         }
     }
 }

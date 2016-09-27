@@ -292,20 +292,15 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
+        /// <summary>
+        /// This should only evaluate the kpis that are passed in.  It should do anything based on the results the kpis return.
+        /// </summary>
+        /// <param name="kpis"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
         {
-            List<IKpiResult> guids = new List<IKpiResult>();
-            foreach (var kpi in kpis)
-            {
-                var result = kpi.Evaluate(this, e);
-                result.KpiId = kpi.Id;
-
-                if (((KpiConversionResult)result).HasConverted)
-                {
-                    guids.Add(result);
-                }
-            }
-            return guids;
+            return kpis.Select(kpi => kpi.Evaluate(this, e)).ToList();
         }
 
         internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)

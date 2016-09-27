@@ -15,6 +15,7 @@ using System.Web;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Reflection;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -371,64 +372,89 @@ namespace EPiServer.Marketing.Testing.Web
             // if we are loadcontent event we only want to evaluate when TargetLink is not null
             // (i.e. we only want to evaluate once) else we will always have to evaluate.
             // this is a performance issue because loadcontent gets called a lot. 
-            ContentEventArgs cea = e as ContentEventArgs;
-            if( !(cea != null && cea.TargetLink == null) )
+            var cea = e as ContentEventArgs;
+            if (cea != null && cea.TargetLink == null)
             {
-                // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
-                var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
-                foreach (var tdcookie in cookielist)
+                return;
+            }
+
+            // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
+            var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
+            foreach (var tdcookie in cookielist)
+            {
+                // for every test cookie we have, check for the converted and the viewed flag
+                if (tdcookie.Converted || !tdcookie.Viewed)
                 {
-                    // for every test cookie we have, check for the converted and the viewed flag
-                    if (!tdcookie.Converted && tdcookie.Viewed)
+                    continue;
+                }
+
+                var test = _testManager.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
+                if (test == null)
+                {
+                    continue;
+                }
+
+                // optimization : Evalute only the kpis that have not currently evaluated to true.
+                var kpis = new List<IKpi>();
+                foreach (var kpi in test.KpiInstances)
+                {
+                    var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
+                    if (!converted)
                     {
-                        var test = _testManager.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
-                        if (test != null)
-                        {
-                            // optimization : Evalute only the kpis that have not currently evaluated to true.
-                            var kpis = new List<IKpi>();
-                            foreach (var kpi in test.KpiInstances)
-                            {
-                                var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
-                                if (!converted)
-                                {
-                                    kpis.Add(kpi);
-                                }
-                            }
-
-                            var evaluated = _testManager.EvaluateKPIs(kpis, e);
-
-                            if (evaluated.Count > 0)
-                            {
-                                // add each kpi to testdata cookie data
-                                foreach (var eval in evaluated)
-                                {
-                                    tdcookie.KpiConversionDictionary.Remove(eval.KpiId);
-                                    tdcookie.KpiConversionDictionary.Add(eval.KpiId, true);
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval.KpiId), test));
-                                }
-
-                                // now check to see if all kpi objects have evalated
-                                tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
-
-                                // now save the testdata to the cookie
-                                _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
-
-                                // now if we have converted, fire the converted message 
-                                // note : we wouldnt be here if we already converted on a previous loop
-                                if (tdcookie.Converted)
-                                {
-                                    Variant varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
-                                    _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion,
-                                        CountType.Conversion);
-
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
-                                }
-                            }
-                        }
+                        kpis.Add(kpi);
                     }
                 }
+
+                var kpiResults = _testManager.EvaluateKPIs(kpis, e);
+                var conversionResults = kpiResults.OfType<KpiConversionResult>();
+
+                // TODO: process results for different kpi types as they come into existance here...
+                ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);
             }
         }
+
+        /// <summary>
+        /// Loop through conversion results to see if any have converted, if so update views/conversions as necessary
+        /// </summary>
+        /// <param name="tdcookie"></param>
+        /// <param name="test"></param>
+        /// <param name="kpis"></param>
+        /// <param name="results"></param>
+        private void ProcessKpiConversionResults(TestDataCookie tdcookie, IMarketingTest test, List<IKpi> kpis, IEnumerable<KpiConversionResult> results)
+        {
+            // add each kpi to testdata cookie data
+            foreach (var result in results)
+            {
+                if (!result.HasConverted)
+                {
+                    continue;
+                }
+
+                tdcookie.KpiConversionDictionary.Remove(result.KpiId);
+                tdcookie.KpiConversionDictionary.Add(result.KpiId, true);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent,
+                    new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == result.KpiId), test));
+            }
+
+            // now check to see if all kpi objects have evalated
+            tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
+
+            // now save the testdata to the cookie
+            _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
+
+            // now if we have converted, fire the converted message 
+            // note : we wouldnt be here if we already converted on a previous loop
+            if (!tdcookie.Converted)
+            {
+                return;
+            }
+
+            var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
+            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
+
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
+        }
+
 
         #region ProxyEventHandlerSupport
 
