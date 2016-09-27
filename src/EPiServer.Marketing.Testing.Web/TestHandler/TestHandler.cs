@@ -14,6 +14,7 @@ using EPiServer.Logging;
 using System.Web;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Reflection;
+using EPiServer.Marketing.KPI.Common;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -401,9 +402,9 @@ namespace EPiServer.Marketing.Testing.Web
                                 // add each kpi to testdata cookie data
                                 foreach (var eval in evaluated)
                                 {
-                                    tdcookie.KpiConversionDictionary.Remove(eval.Id);
-                                    tdcookie.KpiConversionDictionary.Add(eval.Id, true);
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval.Id), test));
+                                    tdcookie.KpiConversionDictionary.Remove(eval.KpiId);
+                                    tdcookie.KpiConversionDictionary.Add(eval.KpiId, true);
+                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval.KpiId), test));
                                 }
 
                                 // now check to see if all kpi objects have evalated

@@ -14,6 +14,7 @@ using EPiServer.Marketing.Testing.Test.Core;
 using System.Web;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -424,7 +425,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<EventArgs>()))
-                .Returns(new List<IKpiResult> { new KpiResult() { Id = Guid.NewGuid()} });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -471,7 +472,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<EventArgs>()))
-                .Returns(new List<IKpiResult> { new KpiResult() { Id = Guid.NewGuid()} });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 

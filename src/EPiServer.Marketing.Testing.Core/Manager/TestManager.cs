@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -296,8 +297,10 @@ namespace EPiServer.Marketing.Testing
             List<IKpiResult> guids = new List<IKpiResult>();
             foreach (var kpi in kpis)
             {
-                var result = kpi.Evaluate(this, e) as KpiResult;
-                if (result.HasConverted)
+                var result = kpi.Evaluate(this, e);
+                result.KpiId = kpi.Id;
+
+                if (((KpiConversionResult)result).HasConverted)
                 {
                     guids.Add(result);
                 }

@@ -5,6 +5,7 @@ using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing
 {

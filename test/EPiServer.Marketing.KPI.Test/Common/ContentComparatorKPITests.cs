@@ -1,5 +1,6 @@
 ﻿using EPiServer.Core;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 using Moq;
 using System;
 using Xunit;
@@ -21,7 +22,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             var kpi = GetUnitUnderTest();
             _content.SetupGet(c => c.ContentGuid).Returns(LandingPageGuid);
-            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiResult;
+            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiConversionResult;
             Assert.True(result.HasConverted, "Evaluate should have returned true");
         }
 
@@ -30,7 +31,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             var kpi = GetUnitUnderTest();
             _content.SetupGet(c => c.ContentGuid).Returns(Guid.NewGuid());
-            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiResult;
+            var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiConversionResult;
             Assert.False(result.HasConverted, "Evaluate should have returned false");
         }
 

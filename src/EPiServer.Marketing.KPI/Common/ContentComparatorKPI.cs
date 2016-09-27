@@ -3,6 +3,7 @@ using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System;
 using System.Runtime.Serialization;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -32,7 +33,7 @@ namespace EPiServer.Marketing.KPI.Common
                 retval = ContentGuid.Equals(ea.Content.ContentGuid);
             }
 
-            return new KpiResult() { HasConverted = retval };
+            return new KpiConversionResult() { HasConverted = retval };
         }
     }
 }

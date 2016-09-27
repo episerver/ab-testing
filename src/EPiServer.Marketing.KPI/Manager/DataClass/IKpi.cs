@@ -1,5 +1,6 @@
 ﻿using System;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
