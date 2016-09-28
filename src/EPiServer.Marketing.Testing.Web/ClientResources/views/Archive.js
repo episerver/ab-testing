@@ -157,6 +157,18 @@
                         query('.' + parentContainerClass).addClass('hide-bg');
                     });
             }
+        },
+
+        _onControlViewClick: function () {
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _onChallengerViewClick: function () {
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
         }
     });
 });

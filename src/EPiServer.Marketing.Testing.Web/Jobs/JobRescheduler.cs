@@ -9,7 +9,7 @@ using EPiServer.Marketing.Testing.Web.Initializers;
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
     /// <summary>
-    /// Listens for SavingTestEvent and updates the next job run 
+    /// Listens for TestSaved and updates the next job run 
     /// if the test is marked to start before the next job run
     /// </summary>
     [InitializableModule]
@@ -34,18 +34,18 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         public void Initialize(InitializationEngine context)
         {
             _serviceLocator = context.Locate.Advanced;
-            var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.SavingTestEvent += OnSavingTestEvent;
+            var marketingtestingEvents = _serviceLocator.GetInstance<IMarketingTestingEvents>();
+            marketingtestingEvents.TestSaved += OnTestSaved;
         }
 
         [ExcludeFromCodeCoverage]
         public void Uninitialize(InitializationEngine context)
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.SavingTestEvent -= OnSavingTestEvent;
+            var marketingtestingEvents = _serviceLocator.GetInstance<IMarketingTestingEvents>();
+            marketingtestingEvents.TestSaved -= OnTestSaved;
         }
 
-        public void OnSavingTestEvent(object sender, TestEventArgs e)
+        public void OnTestSaved(object sender, TestEventArgs e)
         {
             var repo = _serviceLocator.GetInstance<IScheduledJobRepository>();
             var job = repo.Get("Execute", "EPiServer.Marketing.Testing.Web.Jobs.TestSchedulingJob", "EPiServer.Marketing.Testing.Web");

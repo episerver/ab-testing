@@ -99,15 +99,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public bool IsRequestedContent(IContent loadedContent)
         {
             var content = GetCurrentPageFromUrl();
+            var isMatchedPage = false;
             if (content != null)
             {
-                return !(loadedContent is PageData) ||
-                    (content.ContentLink == loadedContent.ContentLink);
+                isMatchedPage = !(loadedContent is PageData) || (content.ContentLink == loadedContent.ContentLink);
             }
-            else
+            else if (!(loadedContent is PageData))
             {
-                return false;
+                isMatchedPage = true;
             }
+
+            return isMatchedPage;
         }
 
         /// <summary>

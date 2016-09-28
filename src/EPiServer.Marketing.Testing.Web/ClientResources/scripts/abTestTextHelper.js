@@ -78,12 +78,23 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided node to the context test duration
         renderTestDuration: function (testDurationNode) {
-            testDurationNode.textContent = context.data.daysElapsed;
+            if (Number(context.data.test.state) === 0) {
+                testDurationNode.textContent = 0;
+            } else {
+                testDurationNode.textContent = context.data.daysElapsed;
+            }
         },
 
         //sets text content of provided node to the context test time remaining
-        renderTestRemaining: function (testRemainingNode) {
-            testRemainingNode.textContent = context.data.daysRemaining;
+        renderTestRemaining: function (testRemainingNode,testRemainingTextNode) {
+            if (Number(context.data.test.state) === 0) {
+                testRemainingNode.textContent = resources.test_not_started_text;
+                testRemainingTextNode.textContent = "";
+            } else {
+                testRemainingNode.textContent = context.data.daysRemaining;
+                testRemainingTextNode.textContent = resources.days_remaining;
+            }
+
         },
 
         //sets text content of provided node to the context confidence level
