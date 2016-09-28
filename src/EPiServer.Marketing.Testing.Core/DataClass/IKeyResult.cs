@@ -10,5 +10,9 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         Guid Id { get; set; }
 
         Guid KpiId { get; set; }
+
+        DateTime CreatedDate { get; set; }
+
+        DateTime ModifiedDate { get; set; }
     }
 }

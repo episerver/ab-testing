@@ -42,6 +42,6 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// </summary>
         public virtual DalABTest DalABTest { get; set; }
 
-        public virtual IList<DalKeyConversionResult> DalKpiConversionResults { get; set; }
+        public virtual IList<DalKeyFinancialResult> DalKeyFinancialResults { get; set; }
     }
 }

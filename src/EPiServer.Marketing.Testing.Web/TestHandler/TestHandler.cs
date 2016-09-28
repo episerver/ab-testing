@@ -405,10 +405,13 @@ namespace EPiServer.Marketing.Testing.Web
                 }
 
                 var kpiResults = _testManager.EvaluateKPIs(kpis, e);
-                var conversionResults = kpiResults.OfType<KpiConversionResult>();
 
-                // TODO: process results for different kpi types as they come into existance here...
+                var conversionResults = kpiResults.OfType<KpiConversionResult>();
                 ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);
+
+                var financialResults = kpiResults.OfType<KpiFinancialResult>();
+                ProcessKeyFinancialResults(tdcookie, test, financialResults);
+
             }
         }
 
@@ -419,13 +422,14 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="test"></param>
         /// <param name="kpis"></param>
         /// <param name="results"></param>
-        private void ProcessKpiConversionResults(TestDataCookie tdcookie, IMarketingTest test, List<IKpi> kpis, IEnumerable<KpiConversionResult> results)
-                            {
-                                // add each kpi to testdata cookie data
+        private void ProcessKpiConversionResults(TestDataCookie tdcookie, IMarketingTest test, List<IKpi> kpis,
+            IEnumerable<KpiConversionResult> results)
+        {
+            // add each kpi to testdata cookie data
             foreach (var result in results)
             {
                 if (!result.HasConverted)
-                                {
+                {
                     continue;
                 }
 
@@ -433,26 +437,46 @@ namespace EPiServer.Marketing.Testing.Web
                 tdcookie.KpiConversionDictionary.Add(result.KpiId, true);
                 _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent,
                     new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == result.KpiId), test));
-                                }
+            }
 
-                                // now check to see if all kpi objects have evalated
-                                tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
+            // now check to see if all kpi objects have evalated
+            tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
 
-                                // now save the testdata to the cookie
-                                _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
+            // now save the testdata to the cookie
+            _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
 
-                                // now if we have converted, fire the converted message 
-                                // note : we wouldnt be here if we already converted on a previous loop
+            // now if we have converted, fire the converted message 
+            // note : we wouldnt be here if we already converted on a previous loop
             if (!tdcookie.Converted)
-                                {
+            {
                 return;
             }
 
             var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
             _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
 
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
-                                }
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent,
+                new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
+        }
+
+        private void ProcessKeyFinancialResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiFinancialResult> results)
+        {
+            var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
+
+            foreach (var kpiFinancialResult in results)
+            {
+                var keyFinancialResult = new KeyFinancialResult()
+                {
+                    Id = Guid.NewGuid(),
+                    KpiId = kpiFinancialResult.KpiId,
+                    Total = kpiFinancialResult.Total
+                };
+
+                varUserSees.KeyFinancialResults.Add(keyFinancialResult);
+            }
+
+            _testManager.Save(test);
+        }
 
 
         #region ProxyEventHandlerSupport

@@ -2,13 +2,13 @@
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
-    public class DalKeyConversionResult : IDalKeyResult
+    public class DalKeyFinancialResult : EntityBase, IDalKeyResult
     {
         public Guid Id { get; set; }
 
         public Guid KpiId { get; set; }
 
-        public bool HasConverted { get; set; }
+        public decimal Total { get; set; }
 
         public Guid? VariantId { get; set; }
 

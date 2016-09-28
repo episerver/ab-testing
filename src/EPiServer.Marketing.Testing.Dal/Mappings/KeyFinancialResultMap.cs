@@ -3,22 +3,22 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal.Mappings
 {
-    public class KeyConversionResultMap : EntityTypeConfiguration<DalKeyConversionResult>
+    public class KeyFinancialResultMap : EntityTypeConfiguration<DalKeyFinancialResult>
     {
-        public KeyConversionResultMap()
+        public KeyFinancialResultMap()
         {
-            this.ToTable("tblABKpiConversionResult");
+            this.ToTable("tblABKeyFinancialResult");
 
             this.HasKey(m => m.Id);
 
             this.Property(m => m.KpiId)
                 .IsRequired();
 
-            this.Property(m => m.HasConverted)
+            this.Property(m => m.Total)
                 .IsRequired();
 
             this.HasRequired(m => m.DalVariant)
-                .WithMany(m => m.DalKpiConversionResults)
+                .WithMany(m => m.DalKeyFinancialResults)
                 .HasForeignKey(m => m.VariantId)
                 .WillCascadeOnDelete();
         }

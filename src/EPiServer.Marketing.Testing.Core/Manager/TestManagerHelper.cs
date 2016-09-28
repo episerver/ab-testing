@@ -146,33 +146,35 @@ namespace EPiServer.Marketing.Testing
                 Conversions = theDalVariant.Conversions,
                 Views = theDalVariant.Views,
                 IsWinner = theDalVariant.IsWinner,
-                KpiConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKpiConversionResults)
+                KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults)
             };
 
             return retVariant;
         }
 
-        internal static IList<KeyConversionResult> AdaptToManagerKeyConversionResult(IList<DalKeyConversionResult> dalConversionResults)
+        internal static IList<KeyFinancialResult> AdaptToManagerKeyFinancialResult(IList<DalKeyFinancialResult> dalConversionResults)
         {
-            var retList = new List<KeyConversionResult>();
+            var retList = new List<KeyFinancialResult>();
 
             foreach (var result in dalConversionResults)
             {
-                retList.Add(ConvertToManagerKeyConversionResult(result));
+                retList.Add(ConvertToManagerKeyFinancialResult(result));
             }
 
             return retList;
         }
 
-        internal static KeyConversionResult ConvertToManagerKeyConversionResult(
-            DalKeyConversionResult dalConversionResult)
+        internal static KeyFinancialResult ConvertToManagerKeyFinancialResult(
+            DalKeyFinancialResult dalConversionResult)
         {
-            var retVariant = new KeyConversionResult
+            var retVariant = new KeyFinancialResult
             {
                 Id = dalConversionResult.Id,
                 KpiId = dalConversionResult.KpiId,
-                HasConverted = dalConversionResult.HasConverted,
-                VariantId = dalConversionResult.VariantId
+                Total = dalConversionResult.Total,
+                VariantId = dalConversionResult.VariantId,
+                CreatedDate = dalConversionResult.CreatedDate,
+                ModifiedDate = dalConversionResult.ModifiedDate
             };
 
             return retVariant;
@@ -201,15 +203,15 @@ namespace EPiServer.Marketing.Testing
                 Conversions = managerVariant.Conversions,
                 Views = managerVariant.Views,
                 IsWinner = managerVariant.IsWinner,
-                DalKpiConversionResults = AdaptToDalKeyConversionResult(managerVariant.KpiConversionResults)
+                DalKeyFinancialResults = AdaptToDalKeyConversionResult(managerVariant.KeyFinancialResults)
             };
 
             return retVariant;
         }
 
-        internal static IList<DalKeyConversionResult> AdaptToDalKeyConversionResult(IList<KeyConversionResult> managerConversionResults)
+        internal static IList<DalKeyFinancialResult> AdaptToDalKeyConversionResult(IList<KeyFinancialResult> managerConversionResults)
         {
-            var retList = new List<DalKeyConversionResult>();
+            var retList = new List<DalKeyFinancialResult>();
 
             foreach (var result in managerConversionResults)
             {
@@ -219,15 +221,17 @@ namespace EPiServer.Marketing.Testing
             return retList;
         }
 
-        internal static DalKeyConversionResult ConvertToDalKeyConversionResult(
-            KeyConversionResult managerConversionResult)
+        internal static DalKeyFinancialResult ConvertToDalKeyConversionResult(
+            KeyFinancialResult managerConversionResult)
         {
-            var retVariant = new DalKeyConversionResult
+            var retVariant = new DalKeyFinancialResult
             {
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
-                HasConverted = managerConversionResult.HasConverted,
-                VariantId = managerConversionResult.VariantId
+                Total = managerConversionResult.Total,
+                VariantId = managerConversionResult.VariantId,
+                CreatedDate = managerConversionResult.CreatedDate,
+                ModifiedDate = managerConversionResult.ModifiedDate
             };
 
             return retVariant;
