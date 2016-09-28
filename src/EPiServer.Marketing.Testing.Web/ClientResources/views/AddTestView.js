@@ -12,7 +12,10 @@
         'dojo/topic',
         'dojo/html',
         'dojo/dom',
+        "dojo/dom-class",
+        "dijit/registry",
         'epi/dependency',
+        "marketing-testing/scripts/rasterizeHTML",
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
@@ -41,10 +44,16 @@
     topic,
     html,
     dom,
-    dependency
+    domClass,
+    registry,
+    dependency,
+    rasterizehtml
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
+        viewParticipationPercent: null;
+        viewTestDuration: null;
+        confidenceLevel: null;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -56,6 +65,9 @@
             modelBindingMap: {
                 publishedVersion: ["viewPublishedVersion"],
                 currentVersion: ["viewCurrentVersion"],
+                participationPercent: ["viewParticipationPercent"],
+                testDuration: ["viewTestDuration"],
+                confidenceLevel: ["viewConfidenceLevel"]
             },
 
             //sets views starting data from view model
@@ -146,6 +158,19 @@
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
+                var pubThumb = document.getElementById("publishThumbnail")
+
+                if (pubThumb) {
+                    //Hack to build published versions preview link below
+                    var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
+                        previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                        previewUrlStart = this.contentData.previewUrl.split('_'),
+                        previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
+
+                    pubThumb.height = 768;
+                    pubThumb.width = 1024;
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                }
             },
 
             _setViewCurrentVersionAttr: function () {
@@ -155,6 +180,38 @@
                 this.savedBy.textContent = username.toUserFriendlyString(this.contentData.changedBy);
                 this.dateSaved.textContent = datetime.toUserFriendlyString(this.contentData.saved);
                 this.pageName.textContent = this.contentData.name + " A/B Test";
+
+                var pubThumb = document.getElementById("draftThumbnail");
+
+                if (pubThumb) {
+                    var previewUrl = this.model.contentData.previewUrl;
+
+                    pubThumb.height = 768;
+                    pubThumb.width = 1024;
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                }
+            },
+
+            _setViewParticipationPercentAttr: function (viewParticipationPercent) {
+                this.participationPercentText.set("Value", viewParticipationPercent);
+            },
+
+            _setViewTestDurationAttr: function (viewTestDuration) {
+                this.durationText.set("Value", viewTestDuration);
+            },
+
+            _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
+                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
+                for (var i = 0; i < rbs.length; i++) {
+                    var rb = dom.byId(rbs[i]);
+                    if (!rb) {
+                        return;
+                    } else if (rb.value === viewConfidenceLevel.toString()) {
+                        rb.setAttribute("selected", "selected");
+                    } else {
+                        rb.removeAttribute("selected");
+                    }
+                }
             },
 
             _clearConversionErrors: function () {
@@ -226,7 +283,7 @@
                 var errorIconNode = dom.byId("durationErrorIcon");
                 var duration = dom.byId("durationSpinner").value;
 
-                if (!this._isUnsignedNumeric(duration) || duration < 0) {
+                if (!this._isUnsignedNumeric(duration) || duration < 1) {
                     this._setError(resources.addtestview.error_duration, errorTextNode, errorIconNode);
                     return false;
                 }
@@ -260,7 +317,7 @@
             },
 
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
@@ -346,7 +403,7 @@
             },
 
             _onDateTimeChange: function (event) {
-                var startButton = dom.byId("StartButton");
+                var startButton = registry.byId("StartButton");
                 var scheduleText = dom.byId("ScheduleText");
                 var startDateSelector = dom.byId("StartDateTimeSelector");
 
@@ -358,22 +415,22 @@
                     if (event !== "") {
                         var localDate = new Date(event).toLocaleDateString();
                         var localTime = new Date(event).toLocaleTimeString();
-                        startButton.innerText = resources.addtestview.schedule_test;
+                        startButton.set("label", resources.addtestview.schedule_test);
                         scheduleText.innerText = resources.addtestview.schedule_tobegin_on + localDate + "," + localTime;
                         this.model.startDate = new Date(event).toUTCString();
                         this.model.start = false;
                     } else {
-                        startButton.innerText = resources.addtestview.start_default;
+                        startButton.set("label", resources.addtestview.start_default);
                         scheduleText.innerText = resources.addtestview.notscheduled_text;
                         this.model.start = true;
                     }
                 }
             },
 
-            _toggleTimeSelector: function (event) {
+            _toggleTimeSelector: function () {
                 var dateSelector = dom.byId("dateSelector");
 
-                if (event.srcElement.value === "show") {
+                if (dateSelector.style.visibility === "hidden") {
                     dateSelector.style.visibility = "visible";
                 } else {
                     this.startDatePicker.reset();

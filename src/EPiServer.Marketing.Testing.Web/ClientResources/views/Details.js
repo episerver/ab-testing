@@ -2,6 +2,7 @@
  "dojo/_base/declare",
  "epi/dependency",
  "dojo/dom",
+ "dojo/ready",
  "dijit/registry",
  "dojo/dom-style",
  "dojo/topic",
@@ -12,7 +13,9 @@
  "epi/i18n!marketing-testing/nls/abtesting",
  "epi/datetime",
  "epi/username",
+  "dojo/dom-class",
  "marketing-testing/scripts/abTestTextHelper",
+ "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "xstyle/css!marketing-testing/css/GridForm.css",
  "xstyle/css!marketing-testing/css/dijit.css",
@@ -24,6 +27,7 @@
     declare,
     dependency,
     dom,
+    ready,
     registry,
     domStyle,
     topic,
@@ -34,7 +38,9 @@
     resources,
     datetime,
     username,
-    textHelper
+    domClass,
+    textHelper,
+    rasterizehtml
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -101,7 +107,20 @@
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
+        _onControlViewClick: function () {
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _onChallengerViewClick: function () {
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink };
+            topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
         _renderData: function () {
+            var me = this;
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
@@ -116,12 +135,14 @@
                 this.challengerViews,
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
-            textHelper.renderStatusIndicatorStyles(this.publishedStatusIcon,
-                this.variantStatusIcon,
-                this.controlWrapper,
-                this.challengerWrapper);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
+
+            ready(function () {
+                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail');
+                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail');
+            });
+            this.renderStatusIndicatorStyles();
         },
 
         _displayOptionsButton: function (show) {
@@ -131,6 +152,43 @@
                 dropDownButton.startup(); //Avoids conditions where the widget is rendered but not active.
             } else {
                 domStyle.set(dropDownButton.domNode, "visibility", "hidden");
+            }
+        },
+
+        renderStatusIndicatorStyles: function () {
+            var me = this;
+            me.baseWrapper = "cardWrapper";
+            if (this.context.data.test.state < 2) {
+                me.statusIndicatorClass = "leadingContent";
+            }
+            else { me.statusIndicatorClass = "winningContent"; }
+
+            if (textHelper.publishedPercent > textHelper.draftPercent) {
+                domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+            }
+            else if (textHelper.publishedPercent < textHelper.draftPercent) {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
+            }
+            else {
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+            }
+        },
+        _generateThumbnail: function (previewUrl, canvasId) {
+            var pubThumb = dom.byId(canvasId);
+
+            if (pubThumb) {
+                pubThumb.height = 768;
+                pubThumb.width = 1024;
+                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
             }
         }
     });

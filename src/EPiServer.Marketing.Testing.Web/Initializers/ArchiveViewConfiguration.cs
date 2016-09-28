@@ -7,13 +7,13 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 {
     [ServiceConfiguration(typeof(ViewConfiguration))]
     [ExcludeFromCodeCoverage]
-    public class PickWinnerViewConfiguration : ViewConfiguration<IMarketingTest>
+    public class ArchiveViewConfiguration : ViewConfiguration<IMarketingTest>
     {
-        public PickWinnerViewConfiguration()
+        public ArchiveViewConfiguration()
         {
-            Key = "PickWinnerView";
-            ControllerType = "marketing-testing/views/PickWinner";
-            ViewType = "marketing-testing/views/PickWinner";
+            Key = "ArchiveView";
+            ControllerType = "marketing-testing/views/Archive";
+            ViewType = "marketing-testing/views/Archive";
             HideFromViewMenu = true;
         }
     }

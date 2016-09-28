@@ -283,7 +283,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
             if (DateTime.UtcNow < test.EndDate)
             {
-                test.EndDate = DateTime.UtcNow;
+                test.EndDate = DateTime.Now;
             }
 
             repo.SaveChanges();
@@ -367,7 +367,9 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                             existingVariant.ModifiedDate = DateTime.UtcNow;
                             existingVariant.Views = newVariant.Views;
                             existingVariant.Conversions = newVariant.Conversions;
-                                existingVariant.IsWinner = newVariant.IsWinner;
+                            existingVariant.IsWinner = newVariant.IsWinner;
+                            existingVariant.IsPublished = newVariant.IsPublished;
+
                         }
                         else
                         {

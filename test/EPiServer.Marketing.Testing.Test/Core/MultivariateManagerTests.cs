@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Components.DictionaryAdapter;
 using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
@@ -18,6 +17,7 @@ using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
+using System.Runtime.Caching;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -32,6 +32,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         private TestManager GetUnitUnderTest()
         {
+            // make sure the global mem cache that test manager uses is clean.
+            MemoryCache.Default.Remove(TestManager.TestingCacheName);
+
             var dalList = new List<IABTest>()
             {
                 new DalABTest() {
@@ -40,7 +43,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     OriginalItemId = testId,
                     ConfidenceLevel = 95,
                     State = DalTestState.Active,
-                    Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant() {ItemVersion = 4, Views = 5000, Conversions = 130} },
+                    Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1, IsPublished=true, Views = 5000, Conversions = 100}, new DalVariant() {ItemVersion = 4, IsPublished=false, Views = 5000, Conversions = 130} },
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>() {new DalKeyPerformanceIndicator()} }
             };
 
@@ -165,7 +168,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             //var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            tm.RemoveCacheForUnitTests();
             tm.Delete(testId);
 
             _dataAccessLayer.Verify(da => da.Delete(It.Is<Guid>(arg => arg.Equals(testId))),
@@ -188,7 +190,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             //var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            tm.RemoveCacheForUnitTests();
             tm.Stop(testId);
 
             _dataAccessLayer.Verify(da => da.Stop(It.Is<Guid>(arg => arg.Equals(testId))),
@@ -399,10 +400,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var test = GetManagerTest();
             testManager.UpdateCache(test, CacheOperator.Add);
 
-            Assert.Equal(2, testManager.CreateOrGetCache().Count());
+            Assert.Equal(2, testManager.ActiveCachedTests.Count());
 
             testManager.UpdateCache(test, CacheOperator.Remove);
-            Assert.Equal(1, testManager.CreateOrGetCache().Count());
+            Assert.Equal(1, testManager.ActiveCachedTests.Count());
         }
 
         [Fact]
@@ -483,12 +484,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void GetVariantPageData_Test()
         {
-            var testProcessedList = new Dictionary<Guid,int>();
-            testProcessedList.Add(testId,1);
             var testManager = GetUnitUnderTest();
-            testManager.RemoveCacheForUnitTests();
 
-            var pageData = testManager.GetVariantContent(testId, testProcessedList);
+            var pageData = testManager.GetVariantContent(testId);
 
             Assert.NotNull(pageData);
         }

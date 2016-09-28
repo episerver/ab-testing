@@ -1,8 +1,8 @@
 ﻿define([
         'marketing-testing/scripts/abTestTextHelper',
         'epi/_Module'
-    ],
-    function(abTestTextHelper, Module) {
+],
+    function (abTestTextHelper, Module) {
         describe("abTestTextHelper - Details View",
             function () {
                 var mockStringResources = {
@@ -47,21 +47,21 @@
                     },
                     mockDependencies = {
                         username: {
-                            toUserFriendlyString: function(name) {
+                            toUserFriendlyString: function (name) {
                                 return name;
                             }
                         },
                         domClass: {
-                            replace: function(oldClass, newClass) {
+                            replace: function (oldClass, newClass) {
                                 oldClass.mockClass = newClass;
                             }
                         }
                     };
-                context.data.test.variants.push({ itemVersion: "3", conversions: 10, views: 100 });
-                context.data.test.variants.push({ itemVersion: "150", conversions: 150, views: 200 });
+                context.data.test.variants.push({ itemVersion: "3", isPublished: true,conversions: 10, views: 100 });
+                context.data.test.variants.push({ itemVersion: "150", isPublished: false, conversions: 150, views: 200 });
 
                 it("Correctly initializes properties based on given context",
-                    function() {
+                    function () {
                         abTestTextHelper.initializeHelper(context);
                         expect(abTestTextHelper.publishedVariant.itemVersion).to.equal("3");
                         expect(abTestTextHelper.publishedVariant.conversions).to.equal(10);
@@ -74,7 +74,7 @@
                     });
 
                 it("Correctly sets the textContent of the provided title element",
-                    function() {
+                    function () {
                         var mockTitleElement = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context);
@@ -84,12 +84,12 @@
                     });
 
                 it("Renders correct status and messaging for a test which is not started (state = 0)",
-                    function() {
+                    function () {
                         var mockStatusElement = { textContent: defaultTextContent };
                         var mockStartedElement = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context, mockStringResources);
-                        abTestTextHelper.renderTestStatus(mockStatusElement,mockStartedElement);
+                        abTestTextHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
                         expect(mockStatusElement.textContent).to.equal("Test has not yet started, ");
                         expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
@@ -97,7 +97,7 @@
                     });
 
                 it("Renders correct status and messaging for a test which is active (state = 1)",
-                    function() {
+                    function () {
                         var mockStatusElement = { textContent: defaultTextContent };
                         var mockStartedElement = { textContent: defaultTextContent };
                         context.data.test.state = 1;
@@ -111,7 +111,7 @@
                     });
 
                 it("Renders correct status and messaging for a test which is done (state = 2)",
-                    function() {
+                    function () {
                         var mockStatusElement = { textContent: defaultTextContent };
                         var mockStartedElement = { textContent: defaultTextContent };
                         context.data.test.state = 2;
@@ -125,7 +125,7 @@
                     });
 
                 it("Renders correct daysElapsed based on the context provided",
-                    function() {
+                    function () {
                         var mockDaysElapsedElement = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context);
@@ -135,7 +135,7 @@
                     });
 
                 it("Renders correct timeRemaining based on the context provided",
-                    function() {
+                    function () {
                         var mockDaysRemainingElement = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context);
@@ -145,7 +145,7 @@
                     });
 
                 it("Renders correct confidence based on the context provided",
-                    function() {
+                    function () {
                         var mockConfidenceLevelElement = { defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context);
@@ -155,7 +155,7 @@
                     });
 
                 it("Renders correct published(control) content information based on the context provided",
-                    function() {
+                    function () {
                         var mockPublishedElement = { textContent: defaultTextContent },
                             mockDatePublishedElement = { textContent: defaultTextContent };
 
@@ -167,7 +167,7 @@
                     });
 
                 it("Renders correct draft(challenger) content information based on the context provided",
-                    function() {
+                    function () {
                         var mockChangedByElement = { textContent: defaultTextContent },
                             mockdateChangedElement = { textContent: defaultTextContent };
 
@@ -179,7 +179,7 @@
                     });
 
                 it("Renders correct published(control) variant views, conversions and conversion percent based on the context provided",
-                    function() {
+                    function () {
                         var mockPublishedConversionsNode = { textContent: defaultTextContent },
                             mockPublishedViewsNode = { textContent: defaultTextContent },
                             mockPublishedConversionPercentNode = { textContent: defaultTextContent };
@@ -196,7 +196,7 @@
                     });
 
                 it("Renders correct draft(challenger) variant views, conversions and conversion percent based on the context provided",
-                    function() {
+                    function () {
                         var mockchallengerConversionsNode = { textContent: defaultTextContent },
                             mockchallengerViewsNode = { textContent: defaultTextContent },
                             mockchallengerConversionPercentNode = { textContent: defaultTextContent };
@@ -212,7 +212,7 @@
                     });
 
                 it("Renders a properly formatted description when description is not null",
-                    function() {
+                    function () {
                         var mockDescriptionNode = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
@@ -222,7 +222,7 @@
                     });
 
                 it("Renders description as an empty string when description is null",
-                    function() {
+                    function () {
                         var mockDescriptionNode = { textContent: defaultTextContent };
                         context.data.test.description = null;
 
@@ -233,175 +233,19 @@
 
                     });
 
-                it("Renders proper control and challenger styles when conversions percents are equal",
-                    function() {
-                        var mockControlStatusIconNode = { mockClass: defaultTextContent },
-                            mockChallengerStatusIconNode = { mockClass: defaultTextContent },
-                            mockControlWrapperNode = { mockClass: defaultTextContent },
-                            mockCallengerWrapperNode = { mockClass: defaultTextContent };
-                        context.data.test.variants[0].views = 2;
-                        context.data.test.variants[0].conversions = 2;
-                        context.data.test.variants[1].views = 2;
-                        context.data.test.variants[1].conversions = 2;
-                        context.data.test.state = 1;
+                it("Renders correct participation percent and total visitors based on the context provided", function () {
+                    var mockParticipationPercentageNode = { textContent: defaultTextContent },
+                        mockTotalParticipantNode = { textContent: defaultTextContent };
 
-                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderStatusIndicatorStyles(mockControlStatusIconNode,
-                            mockChallengerStatusIconNode,
-                            mockControlWrapperNode,
-                            mockCallengerWrapperNode);
+                    abTestTextHelper.initializeHelper(context);
+                    abTestTextHelper.renderVisitorStats(mockParticipationPercentageNode, mockTotalParticipantNode);
 
-                        expect(mockControlStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockChallengerStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockControlWrapperNode.mockClass).to.equal("cardWrapper 2column controlDefaultBody");
-                        expect(mockCallengerWrapperNode
-                                .mockClass)
-                            .to.equal("cardWrapper 2column challengerDefaultBody");
-                    });
-
-                it("Renders proper control and challenger styles when control conversion percent is higher and test is not done ",
-                    function() {
-                        var mockControlStatusIconNode = { mockClass: defaultTextContent },
-                            mockChallengerStatusIconNode = { mockClass: defaultTextContent },
-                            mockControlWrapperNode = { mockClass: defaultTextContent },
-                            mockCallengerWrapperNode = { mockClass: defaultTextContent };
-                        context.data.test.variants[0].views = 100;
-                        context.data.test.variants[0].conversions = 75;
-                        context.data.test.variants[1].views = 100;
-                        context.data.test.variants[1].conversions = 25;
-                        context.data.test.state = 1;
-
-                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderStatusIndicatorStyles(mockControlStatusIconNode,
-                            mockChallengerStatusIconNode,
-                            mockControlWrapperNode,
-                            mockCallengerWrapperNode);
-
-                        expect(mockControlStatusIconNode.mockClass).to.equal("leadingContent");
-                        expect(mockChallengerStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockControlWrapperNode.mockClass).to.equal("cardWrapper 2column controlLeaderBody");
-                        expect(mockCallengerWrapperNode
-                                .mockClass)
-                            .to.equal("cardWrapper 2column challengerDefaultBody");
-                    });
-
-                it("Renders proper control and challenger styles when challenger conversion percent is higher and test is not done",
-                    function() {
-                        var mockControlStatusIconNode = { mockClass: defaultTextContent },
-                            mockChallengerStatusIconNode = { mockClass: defaultTextContent },
-                            mockControlWrapperNode = { mockClass: defaultTextContent },
-                            mockCallengerWrapperNode = { mockClass: defaultTextContent };
-
-                        context.data.test.variants[0].views = 100;
-                        context.data.test.variants[0].conversions = 25;
-                        context.data.test.variants[1].views = 100;
-                        context.data.test.variants[1].conversions = 50;
-                        context.data.test.state = 1;
-
-                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderStatusIndicatorStyles(mockControlStatusIconNode,
-                            mockChallengerStatusIconNode,
-                            mockControlWrapperNode,
-                            mockCallengerWrapperNode);
-
-                        expect(mockControlStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockChallengerStatusIconNode.mockClass).to.equal("leadingContent");
-                        expect(mockControlWrapperNode.mockClass).to.equal("cardWrapper 2column controlTrailingBody");
-                        expect(mockCallengerWrapperNode.mockClass).to.equal("cardWrapper 2column challengerLeaderBody");
-                    });
-
-                it("Renders proper control and challenger styles when control conversion percent is higher and test is finished ",
-                    function() {
-                        var mockControlStatusIconNode = { mockClass: defaultTextContent },
-                            mockChallengerStatusIconNode = { mockClass: defaultTextContent },
-                            mockControlWrapperNode = { mockClass: defaultTextContent },
-                            mockCallengerWrapperNode = { mockClass: defaultTextContent };
-
-                        context.data.test.variants[0].views = 100;
-                        context.data.test.variants[0].conversions = 50;
-                        context.data.test.variants[1].views = 100;
-                        context.data.test.variants[1].conversions = 10;
-                        context.data.test.state = 2;
-
-                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderStatusIndicatorStyles(mockControlStatusIconNode,
-                            mockChallengerStatusIconNode,
-                            mockControlWrapperNode,
-                            mockCallengerWrapperNode);
-
-                        expect(mockControlStatusIconNode.mockClass).to.equal("winningContent");
-                        expect(mockChallengerStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockControlWrapperNode.mockClass).to.equal("cardWrapper 2column controlLeaderBody");
-                        expect(mockCallengerWrapperNode
-                                .mockClass)
-                            .to.equal("cardWrapper 2column challengerDefaultBody");
-                    });
-
-                it("Renders proper control and challenger styles when challenger conversion percent is higher and test finished",
-                    function() {
-                        var mockControlStatusIconNode = { mockClass: defaultTextContent },
-                            mockChallengerStatusIconNode = { mockClass: defaultTextContent },
-                            mockControlWrapperNode = { mockClass: defaultTextContent },
-                            mockCallengerWrapperNode = { mockClass: defaultTextContent };
-                        context.data.test.variants[0].views = 100;
-                        context.data.test.variants[0].conversions = 25;
-                        context.data.test.variants[1].views = 100;
-                        context.data.test.variants[1].conversions = 75;
-                        context.data.test.state = 2;
-
-                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderStatusIndicatorStyles(mockControlStatusIconNode,
-                            mockChallengerStatusIconNode,
-                            mockControlWrapperNode,
-                            mockCallengerWrapperNode);
-
-                        expect(mockControlStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockChallengerStatusIconNode.mockClass).to.equal("winningContent");
-                        expect(mockControlWrapperNode.mockClass).to.equal("cardWrapper 2column controlTrailingBody");
-                        expect(mockCallengerWrapperNode.mockClass).to.equal("cardWrapper 2column challengerLeaderBody");
-                    });
-
-                it("Renders shadow styles when pickawinner is set",
-                    function() {
-                        var mockControlStatusIconNode = { mockClass: defaultTextContent },
-                            mockChallengerStatusIconNode = { mockClass: defaultTextContent },
-                            mockControlWrapperNode = { mockClass: defaultTextContent },
-                            mockCallengerWrapperNode = { mockClass: defaultTextContent };
-                        context.data.test.variants[0].views = 100;
-                        context.data.test.variants[0].conversions = 25;
-                        context.data.test.variants[1].views = 100;
-                        context.data.test.variants[1].conversions = 75;
-                        context.data.test.state = 2;
-
-                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderStatusIndicatorStyles(mockControlStatusIconNode,
-                            mockChallengerStatusIconNode,
-                            mockControlWrapperNode,
-                            mockCallengerWrapperNode,
-                            "true");
-
-                        expect(mockControlStatusIconNode.mockClass).to.equal("noIndicator");
-                        expect(mockChallengerStatusIconNode.mockClass).to.equal("winningContent");
-                        expect(mockControlWrapperNode.mockClass)
-                            .to.equal("cardWrapperShadowed 2column controlTrailingBody");
-                        expect(mockCallengerWrapperNode.mockClass)
-                            .to.equal("cardWrapperShadowed 2column challengerLeaderBody");
-                    });
-
-                it("Renders correct participation percent and total visitors based on the context provided",
-                    function() {
-                        var mockParticipationPercentageNode = { textContent: defaultTextContent },
-                            mockTotalParticipantNode = { textContent: defaultTextContent };
-
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderVisitorStats(mockParticipationPercentageNode, mockTotalParticipantNode);
-
-                        expect(mockParticipationPercentageNode.textContent).to.equal(50);
-                        expect(mockTotalParticipantNode.textContent).to.equal(200);
-                    });
+                    expect(mockParticipationPercentageNode.textContent).to.equal(50);
+                    expect(mockTotalParticipantNode.textContent).to.equal(200);
+                });
 
                 it("Renders correct conversion anchor properties based on the context provided",
-                    function() {
+                    function () {
                         var contentLinkAnchorNode = { href: "badReference", textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context);
@@ -412,7 +256,7 @@
                     });
 
                 it("Informs user test is not significant when test is done and significance is false",
-                    function() {
+                    function () {
                         var pickAWinnerMessageNode = { innerHTML: defaultTextContent };
                         context.data.test.state = 2;
                         context.data.test.isSignificant = false;
@@ -425,7 +269,7 @@
                     });
 
                 it("Informs user test is significant when test is done and significance is true",
-                    function() {
+                    function () {
                         var pickAWinnerMessageNode = { innerHTML: defaultTextContent };
                         context.data.test.state = 2;
                         context.data.test.isSignificant = true;
@@ -437,7 +281,7 @@
                     });
 
                 it("Informs user a winner may be chosen even though the test is not complete if on the pick a winner page",
-                    function() {
+                    function () {
                         var mockPickAWinnerMessageNode = { innerHTML: defaultTextContent };
 
                         context.data.test.state = 1;

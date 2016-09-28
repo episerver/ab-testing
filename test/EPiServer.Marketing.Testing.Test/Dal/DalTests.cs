@@ -108,7 +108,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ItemId = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ItemVersion = 1,
-                IsWinner = false
+                IsWinner = false,
+                IsPublished = false
             };
 
             test.Variants.Add(variant);

@@ -1,0 +1,139 @@
+﻿<div class="epi-form-container epi-grid-form dijitContainer">
+    <!-- button bar -->
+    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="dijit_Toolbar_1" lang="en" widgetid="dijit_Toolbar_1">
+        <div class="epi-toolbarGroupContainer">
+            <!-- Empty Leading Toolbar Group -->
+            <div class="epi-toolbarGroup epi-toolbarLeading"></div>
+            <!-- Empty Center Toolbar Group -->
+            <div class="epi-toolbarGroup epi-toolbarCenter"></div>
+            <!-- Options and Cancel Buttons -->
+            <div class="epi-toolbarGroup epi-toolbarTrailing">
+                <!--Close Button-->
+                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCloseClick">${resources.archiveview.button_close}</button>
+                &nbsp;
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="abBody">
+        <!-- Header Test Title and Running Time / Status -->
+        <div class="cardWrapper">
+            <div class="cardBody">
+                <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
+                <h2>
+                    <span data-dojo-attach-point="testStatus"></span>
+                </h2>
+            </div>
+
+        </div>
+        <!-- Control/Published Version -->
+        <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column">
+            <div class="leadingContent" data-dojo-attach-point="controlStatusIcon"></div>
+            <h3 data-dojo-attach-point="controlHeader"></h3>
+            <div class="cardBody" style="padding-bottom: 0;">
+                <div class="versiona"><canvas id="publishThumbnailarchive" class="abThumbnailCanvas" /></div>
+                <p class="contentInfo">
+                    <span class="publishedIcon" style="padding-top: 2px">
+                        ${resources.archiveview.published_prefix}
+                    </span>
+                    <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
+                    <span data-dojo-attach-point="datePublished"></span>
+                </p>
+                <!-- Control Statistics -->
+                <table width="100%">
+                    <tr>
+                        <td style="text-align:center;">
+                            <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.archiveview.conversion_rate}
+                        </td>
+                        <td style="text-align:center;">
+                            <div id="controlPickWinnerPieChart"></div>
+                        </td>
+                        <td style="text-align:center;">
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.archiveview.conversions}
+                            </p>
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.archiveview.views}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Challenger/Draft Version-->
+        <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column">
+            <div class="winningContent" data-dojo-attach-point="challengerStatusIcon"></div>
+            <h3 data-dojo-attach-point="challengerHeader">
+                ${resources.archiveview.content_challenger_header}
+            </h3>
+            <div class="cardBody" style="padding-bottom: 0;">
+                <div class="versionb"><canvas id="draftThumbnailarchive" class="abThumbnailCanvas" /></div>
+                <p class="contentInfo">
+                    <span class="draftIcon" style="padding-top: 2px">${resources.archiveview.draft_prefix}</span>
+                    <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
+                    <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
+                </p>
+                <table width="100%">
+                    <tr>
+                        <td style="text-align: center;">
+                            <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.archiveview.conversion_rate}
+                        </td>
+                        <td style="text-align:center;">
+                            <div id="challengerPickWinnerPieChart"></div>
+                        </td>
+                        <td style="text-align: center;">
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.archiveview.conversions}
+                            </p>
+                            <p>
+                                <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.archiveview.views}
+                            </p>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- Test Information -->
+        <div class="cardWrapper" style="clear: both">
+            <div class="cardBody">
+                <div class="formsRow">
+                    <h4>${resources.archiveview.description_heading}</h4>
+                    <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
+                </div>
+                <div class="formsRow">
+                    <h4>${resources.archiveview.conversion_header}</h4>
+                    <p>
+                        <label>${resources.archiveview.conversion_selector_description}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span><a href="" data-dojo-attach-point="contentLinkAnchor"></a>
+                    </p>
+                </div>
+                <hr>
+                <div class="formsRow">
+                    <h4>${resources.archiveview.percent_participation_header}</h4>
+                    <p>
+                        <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.archiveview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
+                    </p>
+                </div>
+                <hr>
+                <div class="formsRow">
+                    <h4>${resources.archiveview.test_duration_header}</h4>
+                    <p>
+                        <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.archiveview.days_divider}
+                        <span data-dojo-attach-point="testStartDate"> </span>
+                        ${resources.archiveview.to}
+                        <span data-dojo-attach-point="testEndDate"> </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="cardWrapper">
+            <h3>${resources.archiveview.advanced_options_header}</h3>
+            <div class="cardBody" style="padding-top: 4px;">
+                <h4>${resources.archiveview.advanced_options_confidence_level}</h4>
+                <p>
+                    <strong><span data-dojo-attach-point="confidence"></span></strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

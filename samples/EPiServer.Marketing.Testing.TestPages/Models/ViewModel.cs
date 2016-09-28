@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Models
 
     public class CacheTestingViewModel
     {
-        public List<PageData> CachedVersionPageData { get; set; }
+        public List<IContent> CachedVersionPageData { get; set; }
         public List<IMarketingTest> ActiveTestCache { get; set; }
     }
 

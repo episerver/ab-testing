@@ -9,6 +9,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         bool IsRequestedContent(IContent loadedContent);
         IContent GetCurrentPageFromUrl();
         bool SwapDisabled(ContentEventArgs e);
+        bool SwapDisabled(ChildrenEventArgs e);
         MarketingTestingContextModel GenerateContextData(IMarketingTest testData);
 
     }

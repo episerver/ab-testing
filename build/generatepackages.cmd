@@ -32,6 +32,9 @@ xcopy "%ProjectPath%\Scripts" "%PackagePath%\content\modules\_protected\EPiServe
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"
 xcopy "%ProjectPath%\Images" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"  /I /F /R /Y /S
 
+md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\Admin"
+xcopy "%ProjectPath%\Config\AdminConfig.aspx" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Admin\"  /I /F /R /Y
+
 md "%PackagePath%\temp"
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildzip.ps1" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing" "%PackagePath%\temp\EPiServer.Marketing.Testing.zip"

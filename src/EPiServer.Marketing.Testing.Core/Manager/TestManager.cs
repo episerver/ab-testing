@@ -25,23 +25,19 @@ namespace EPiServer.Marketing.Testing
     [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
-        private const string TestingCacheName = "TestingCache";
+        internal const string TestingCacheName = "TestingCache";
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private Random _randomParticiaption = new Random();
-        private MemoryCache _testCache = MemoryCache.Default;
-        private MemoryCache _variantCache = MemoryCache.Default;
+        private ObjectCache _testCache = MemoryCache.Default;
+        private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
 
         public event EventHandler<TestEventArgs> SavingTestEvent;
 
         public List<IMarketingTest> ActiveCachedTests
         {
-            get
-            {
-                var x = MemoryCache.Default.Get(TestingCacheName) as List<IMarketingTest>;
-                return x ?? new List<IMarketingTest>();
-            }
+            get { return _testCache.Get(TestingCacheName) as List<IMarketingTest>; }
         }
 
         [ExcludeFromCodeCoverage]
@@ -50,7 +46,8 @@ namespace EPiServer.Marketing.Testing
             _serviceLocator = ServiceLocator.Current;
             _dataAccess = new TestingDataAccess();
             _kpiManager = new KpiManager();
-            CreateOrGetCache();
+
+            initCache();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
@@ -58,15 +55,27 @@ namespace EPiServer.Marketing.Testing
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            CreateOrGetCache();
+
+            initCache();
         }
 
-        /// <summary>
-        /// For some reason, some unit tests run into issues with the cache being dirty from  other tests, this ensures it doesn't exist from a previous test.
-        /// </summary>
-        internal void RemoveCacheForUnitTests()
+        private void initCache()
         {
-            _testCache.Remove("TestingCache");
+            if (!_testCache.Contains(TestingCacheName))
+            {
+                var activeTestCriteria = new TestCriteria();
+                var activeTestStateFilter = new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                };
+
+                activeTestCriteria.AddFilter(activeTestStateFilter);
+
+                var tests = GetTestList(activeTestCriteria);
+                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+            }
         }
 
         /// <summary>
@@ -93,8 +102,7 @@ namespace EPiServer.Marketing.Testing
         /// <returns>List of IMarketingTest</returns>
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            var cachedTests = CreateOrGetCache();
-
+            var cachedTests = ActiveCachedTests;
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
@@ -171,7 +179,7 @@ namespace EPiServer.Marketing.Testing
             _dataAccess.Delete(testObjectId);
 
             // if the test is in the cache remove it.  This should only happen if someone deletes an Active test - which really shouldn't happen...
-            var cachedTests = CreateOrGetCache();
+            var cachedTests = ActiveCachedTests;
             var test = cachedTests.FirstOrDefault(t => t.Id == testObjectId);
 
             if (test != null)
@@ -197,7 +205,7 @@ namespace EPiServer.Marketing.Testing
 
             RemoveCachedVariant(Get(testObjectId).OriginalItemId);
 
-            var cachedTests = CreateOrGetCache();
+            var cachedTests = ActiveCachedTests;
 
             // remove test from cache
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
@@ -217,7 +225,7 @@ namespace EPiServer.Marketing.Testing
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
             RemoveCachedVariant(Get(testObjectId).OriginalItemId);
-            var cachedTests = CreateOrGetCache();
+            var cachedTests = ActiveCachedTests;
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
             if (test != null)
             {
@@ -225,9 +233,13 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
+        private Object thisLock = new Object();
         public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
         {
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+            lock (thisLock)
+            {
+                _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+            }
         }
 
         public Variant ReturnLandingPage(Guid testId)
@@ -253,11 +265,11 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
-        public IContent GetVariantContent(Guid contentGuid, Dictionary<Guid,int> processedList)
+        public IContent GetVariantContent(Guid contentGuid)
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid);
 
-            return retData ?? UpdateVariantContentCache(contentGuid, processedList);
+            return retData ?? UpdateVariantContentCache(contentGuid);
         }
 
         public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
@@ -282,32 +294,9 @@ namespace EPiServer.Marketing.Testing
             return guids;
         }
 
-        internal List<IMarketingTest> CreateOrGetCache()
-        {
-            var activeTests = _testCache.Get(TestingCacheName) as List<IMarketingTest>;
-
-            if (activeTests == null || activeTests.Count == 0)
-            {
-                var activeTestCriteria = new TestCriteria();
-                var activeTestStateFilter = new ABTestFilter()
-                {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                };
-
-                activeTestCriteria.AddFilter(activeTestStateFilter);
-
-                var tests = GetTestList(activeTestCriteria);
-                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
-                activeTests = tests;
-            }
-            return activeTests;
-        }
-
         internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {
-            var cachedTests = CreateOrGetCache();
+            var cachedTests = ActiveCachedTests;
 
             switch (cacheOperator)
             {
@@ -321,15 +310,9 @@ namespace EPiServer.Marketing.Testing
                     if (cachedTests.Contains(test))
                     {
                         cachedTests.Remove(test);
-
-                        if (cachedTests.Count == 0)
-                        {
-                            _testCache.Remove(TestingCacheName);
-                        }
                     }
                     break;
             }
-            _testCache.Add(TestingCacheName, cachedTests, DateTimeOffset.MaxValue);
         }
 
         internal void RemoveCachedVariant(Guid contentGuid)
@@ -340,40 +323,37 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        internal IContent UpdateVariantContentCache(Guid contentGuid, Dictionary<Guid,int> processedList)
+        internal IContent UpdateVariantContentCache(Guid contentGuid)
         {
             IVersionable versionableContent = null;
 
-            if (processedList[contentGuid] == 1)
+            var test =
+                GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+            if (test != null)
             {
-                var test =
-                    GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+                var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
+                var testContent = contentLoader.Get<IContent>(contentGuid);
+                var contentVersion = testContent.ContentLink.WorkID == 0
+                    ? test.Variants.First(variant => variant.IsPublished).ItemVersion
+                    : testContent.ContentLink.WorkID;
 
-                if (test != null)
+                if (testContent != null)
                 {
-                    var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
-                    var testContent = contentLoader.Get<IContent>(contentGuid);
-                    var contentVersion = testContent.ContentLink.WorkID == 0
-                        ? testContent.ContentLink.ID
-                        : testContent.ContentLink.WorkID;
-
-                    if (testContent != null)
+                    foreach (var variant in test.Variants)
                     {
-                        foreach (var variant in test.Variants)
+                        if (variant.ItemVersion != contentVersion)
                         {
-                            if (variant.ItemVersion != contentVersion)
+                            versionableContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
+                            versionableContent.Status = VersionStatus.Published;
+                            versionableContent.StartPublish = DateTime.Now.AddDays(-1);
+
+                            var cacheItemPolicy = new CacheItemPolicy
                             {
-                                versionableContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
-                                versionableContent.Status = VersionStatus.Published;
-                                versionableContent.StartPublish = DateTime.Now.AddDays(-1);
+                                AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
+                            };
 
-                                var cacheItemPolicy = new CacheItemPolicy
-                                {
-                                    AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
-                                };
-
-                                _variantCache.Add("epi" + contentGuid, (IContent)versionableContent, cacheItemPolicy);
-                            }
+                            _variantCache.Add("epi" + contentGuid, (IContent)versionableContent, cacheItemPolicy);
                         }
                     }
                 }
