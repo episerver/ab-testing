@@ -32,6 +32,8 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<DalKeyPerformanceIndicator> KeyPerformanceIndicators { get; set; }
 
+        public DbSet<DalKeyConversionResult> DalKeyConversionResults { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             if (modelBuilder != null)
@@ -41,6 +43,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 _modelBuilder.Configurations.Add(new Mappings.ABTestMap());
                 _modelBuilder.Configurations.Add(new Mappings.VariantMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());
+                _modelBuilder.Configurations.Add(new Mappings.KeyConversionResultMap());
             }
         }
 

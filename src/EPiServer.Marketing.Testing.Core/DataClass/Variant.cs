@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Core.DataClass;
 
 namespace EPiServer.Marketing.Testing.Data
 {
@@ -40,5 +42,7 @@ namespace EPiServer.Marketing.Testing.Data
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual ABTest ABTest { get; set; }
+
+        public IList<KeyConversionResult> KpiConversionResults { get; set; }
     }
 }

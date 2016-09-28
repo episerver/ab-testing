@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
@@ -40,5 +41,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual DalABTest DalABTest { get; set; }
+
+        public virtual IList<DalKeyConversionResult> DalKpiConversionResults { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;
@@ -144,13 +145,39 @@ namespace EPiServer.Marketing.Testing
                 ItemVersion = theDalVariant.ItemVersion,
                 Conversions = theDalVariant.Conversions,
                 Views = theDalVariant.Views,
-                IsWinner = theDalVariant.IsWinner
+                IsWinner = theDalVariant.IsWinner,
+                KpiConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKpiConversionResults)
             };
 
             return retVariant;
         }
 
+        internal static IList<KeyConversionResult> AdaptToManagerKeyConversionResult(IList<DalKeyConversionResult> dalConversionResults)
+        {
+            var retList = new List<KeyConversionResult>();
 
+            foreach (var result in dalConversionResults)
+            {
+                retList.Add(ConvertToManagerKeyConversionResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static KeyConversionResult ConvertToManagerKeyConversionResult(
+            DalKeyConversionResult dalConversionResult)
+        {
+            var retVariant = new KeyConversionResult
+            {
+                Id = dalConversionResult.Id,
+                KpiId = dalConversionResult.KpiId,
+                HasConverted = dalConversionResult.HasConverted,
+                VariantId = dalConversionResult.VariantId
+            };
+
+            return retVariant;
+        }
+        
         internal static IList<DalVariant> AdaptToDalVariant(IList<Variant> variants)
         {
             var retList = new List<DalVariant>();
@@ -173,7 +200,34 @@ namespace EPiServer.Marketing.Testing
                 ItemVersion = managerVariant.ItemVersion,
                 Conversions = managerVariant.Conversions,
                 Views = managerVariant.Views,
-                IsWinner = managerVariant.IsWinner
+                IsWinner = managerVariant.IsWinner,
+                DalKpiConversionResults = AdaptToDalKeyConversionResult(managerVariant.KpiConversionResults)
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<DalKeyConversionResult> AdaptToDalKeyConversionResult(IList<KeyConversionResult> managerConversionResults)
+        {
+            var retList = new List<DalKeyConversionResult>();
+
+            foreach (var result in managerConversionResults)
+            {
+                retList.Add(ConvertToDalKeyConversionResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static DalKeyConversionResult ConvertToDalKeyConversionResult(
+            KeyConversionResult managerConversionResult)
+        {
+            var retVariant = new DalKeyConversionResult
+            {
+                Id = managerConversionResult.Id,
+                KpiId = managerConversionResult.KpiId,
+                HasConverted = managerConversionResult.HasConverted,
+                VariantId = managerConversionResult.VariantId
             };
 
             return retVariant;
