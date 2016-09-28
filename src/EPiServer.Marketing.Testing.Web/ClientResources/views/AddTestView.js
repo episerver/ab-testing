@@ -340,7 +340,7 @@
             },
 
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
