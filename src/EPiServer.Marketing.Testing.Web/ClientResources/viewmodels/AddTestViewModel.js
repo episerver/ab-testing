@@ -50,7 +50,7 @@ define([
         start: true,
 
         //confidence level
-        confidenceLevel: 95,
+        confidenceLevel: null,
 
         postscript: function () {
             this.inherited(arguments);
@@ -86,7 +86,7 @@ define([
                             this.set("participationPercent", config.participationPercent);
                             this.set("confidenceLevel", config.confidenceLevel);
                         }.bind(this));
-                    
+
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this))
@@ -102,7 +102,7 @@ define([
             this.store.put({
                 testDescription: this.testDescription,
                 testContentId: this.contentData.contentGuid,
-                publishedVersion: published[0],
+                publishedVersion: published[1],
                 variantVersion: draft[1],
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,

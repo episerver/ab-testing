@@ -175,7 +175,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
+                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0},
                     new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
                 },
                 KpiInstances = new List<IKpi> { kpi },
@@ -205,10 +205,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 ContentReference publishedReference = new ContentReference();
                 //setup versions as ints for repository
-                int publishedVersion,variantVersion;
+                int winningVersion;
 
-                int.TryParse(testResult.WinningContentLink.Split('_')[0], out publishedVersion);
-                int.TryParse(testResult.WinningContentLink.Split('_')[1], out variantVersion);
+                int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
                 //get current test data and content data for published and variant content
                 IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
@@ -219,35 +218,24 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         ContentReference.Parse(testResult.PublishedContentLink));
                 try
                 {
-                    Guid workingVariantId;
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
                     //had been on the site as published.
-                    publishedReference = _testResultHelper.PublishContent(draftContent);
+                    _testResultHelper.PublishContent(draftContent);
 
                     if (testResult.WinningContentLink == testResult.PublishedContentLink)
                     {
                         //republish original published version as winner.
-                        publishedReference = _testResultHelper.PublishContent(publishedContent);
-
-                        //get the appropriate variant and set IsWinner to True. Archive test to show completion.
-                        workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == publishedVersion).Id;
-
-                        ArchiveMarketingTest(currentTest.Id, workingVariantId);
+                        _testResultHelper.PublishContent(publishedContent);
                     }
-                    else
-                    {
-                        workingVariantId =
-                            currentTest.Variants.FirstOrDefault(x => x.ItemVersion == variantVersion).Id;
-                        ArchiveMarketingTest(currentTest.Id, workingVariantId);
-                    }
+                    //get the appropriate variant and set IsWinner to True. Archive test to show completion.
+                    var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
 
-                    publishedVersionReference = publishedReference.ToString();
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results",ex);
+                    _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results", ex);
                 }
             }
             return testResult.TestId;

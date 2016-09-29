@@ -346,7 +346,7 @@ namespace EPiServer.Marketing.Testing
                 var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
                 var testContent = contentLoader.Get<IContent>(contentGuid);
                 var contentVersion = testContent.ContentLink.WorkID == 0
-                    ? testContent.ContentLink.ID
+                    ? test.Variants.First(variant => variant.IsPublished).ItemVersion
                     : testContent.ContentLink.WorkID;
 
                 if (testContent != null)
