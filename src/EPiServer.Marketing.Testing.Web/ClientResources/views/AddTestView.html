@@ -106,6 +106,16 @@
                         <span id="pickerErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
                         <span id="pickerErrorText" class="errorText"></span>
                     </p>
+                    <div>
+                        <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onSelectChange"></select>
+                    </div>
+                    <div>
+                        <form id="kpiForm">
+                            <div id="kpiui">
+                                <!-- Choosing a KPI will generate UI markup which will be injected here-->
+                            </div>
+                        </form>
+                    </div>
                 </div>
                 <hr class="partialHr" />
                 <!-- Participation Percentage -->

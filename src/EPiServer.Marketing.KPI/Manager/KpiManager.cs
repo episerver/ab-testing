@@ -7,6 +7,7 @@ using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
+using StructureMap.TypeRules;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -48,6 +49,24 @@ namespace EPiServer.Marketing.KPI.Manager
         {
             _dataAccess.Delete(kpiId);
         }
+
+        public List<IKpi> GetAllKpis()
+        {
+            List<IKpi> KpiList = new List<IKpi>();
+            var type = typeof(IKpi);
+            var types =
+                AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract());
+
+            foreach (Type t in types)
+            {
+                var newKpi = Activator.CreateInstance(t) as IKpi;
+                KpiList.Add(newKpi);
+            }
+            return (KpiList);
+        }
+             
 
         /// <summary>
         /// Serialize the kpi to a Json string and save it in the properties field.
@@ -91,5 +110,8 @@ namespace EPiServer.Marketing.KPI.Manager
 
             return managerKpi;
         }
+
     }
+
+
 }

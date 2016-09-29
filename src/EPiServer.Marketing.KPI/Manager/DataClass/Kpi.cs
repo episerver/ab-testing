@@ -21,6 +21,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public Guid Id { get; set; }
 
+        [DataMember]
+        public string FriendlyName => "Generic KPI";
+
+        [DataMember]
+        public string UiMarkup => "I am a generic KPI";
+
         /// <summary>
         /// Date the kpi was created.
         /// </summary>

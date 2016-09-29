@@ -16,6 +16,8 @@
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
+         "dojo/dom-form",
+        "dojo/json",
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
@@ -47,7 +49,9 @@
     domClass,
     registry,
     dependency,
-    rasterizehtml
+    rasterizehtml,
+    domForm,
+    JSON
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -147,6 +151,7 @@
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
+                this._setKpiSelectList();
             },
 
             //setters for bound properties
@@ -336,10 +341,18 @@
                 }
             },
 
+            _processKpi:function() {
+                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
+                var formData = dojo.toJson(kpiFormObject,true);
+                //sends formdata to Rest store? Service? to create the KPI  and ulitmately return the guid
+                alert(formData);
+            },
+
             //EVENT HANDLERS
             //Start and Cancel Events
-
             _onStartButtonClick: function () {
+                this.processKpi(); //Handle the custom KPI based on the selected form.  This should ultimately return a GUI of a successfully created KPI
+                
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
@@ -436,6 +449,27 @@
                     this.startDatePicker.reset();
                     dateSelector.style.visibility = "hidden";
                 }
-            }
+            },
+
+            _onSelectChange: function (evt) {
+                //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+                var kpiuiElement = dom.byId("kpiui");
+                kpiuiElement.innerHTML = evt;
+            },
+
+        _setKpiSelectList: function () {
+            var me = this;
+            var kpiuiElement = registry.byId("kpiSelector");
+
+            //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+            me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+            me.kpistore.get()
+                .then(function (markup) {
+                    for (var x = 0; x < markup.length; x++) {
+                        var option = { value: markup[x].uiMarkup, label: markup[x].friendlyName };
+                        kpiuiElement.addOption(option);
+                    }
+                });
+        },
         });
     });
