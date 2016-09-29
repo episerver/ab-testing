@@ -44,5 +44,7 @@ namespace EPiServer.Marketing.Testing.Data
         public virtual ABTest ABTest { get; set; }
 
         public IList<KeyFinancialResult> KeyFinancialResults { get; set; }
+
+        public IList<KeyValueResult> KeyValueResults { get; set; }
     }
 }

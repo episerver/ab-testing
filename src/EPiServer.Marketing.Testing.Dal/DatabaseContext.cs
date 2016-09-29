@@ -34,6 +34,8 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<DalKeyFinancialResult> DalKeyFinancialResults { get; set; }
 
+        public DbSet<DalKeyValueResult> DalKeyValueResults { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             if (modelBuilder != null)
@@ -44,6 +46,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 _modelBuilder.Configurations.Add(new Mappings.VariantMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyFinancialResultMap());
+                _modelBuilder.Configurations.Add(new Mappings.KeyValueResultMap());
             }
         }
 

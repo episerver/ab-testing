@@ -412,6 +412,8 @@ namespace EPiServer.Marketing.Testing.Web
                 var financialResults = kpiResults.OfType<KpiFinancialResult>();
                 ProcessKeyFinancialResults(tdcookie, test, financialResults);
 
+                var valueResults = kpiResults.OfType<KpiValueResult>();
+                ProcessKeyValueResults(tdcookie, test, valueResults);
             }
         }
 
@@ -478,6 +480,24 @@ namespace EPiServer.Marketing.Testing.Web
             _testManager.Save(test);
         }
 
+        private void ProcessKeyValueResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiValueResult> results)
+        {
+            var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
+
+            foreach (var kpiValueResult in results)
+            {
+                var keyValueResult = new KeyValueResult()
+                {
+                    Id = Guid.NewGuid(),
+                    KpiId = kpiValueResult.KpiId,
+                    Value = kpiValueResult.Value
+                };
+
+                varUserSees.KeyValueResults.Add(keyValueResult);
+            }
+
+            _testManager.Save(test);
+        }
 
         #region ProxyEventHandlerSupport
 

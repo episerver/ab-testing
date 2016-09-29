@@ -146,7 +146,8 @@ namespace EPiServer.Marketing.Testing
                 Conversions = theDalVariant.Conversions,
                 Views = theDalVariant.Views,
                 IsWinner = theDalVariant.IsWinner,
-                KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults)
+                KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults),
+                KeyValueResults = AdaptToManagerKeyValueResult(theDalVariant.DalKeyValueResults)
             };
 
             return retVariant;
@@ -179,7 +180,35 @@ namespace EPiServer.Marketing.Testing
 
             return retVariant;
         }
-        
+
+        internal static IList<KeyValueResult> AdaptToManagerKeyValueResult(IList<DalKeyValueResult> dalConversionResults)
+        {
+            var retList = new List<KeyValueResult>();
+
+            foreach (var result in dalConversionResults)
+            {
+                retList.Add(ConvertToManagerKeyValueResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static KeyValueResult ConvertToManagerKeyValueResult(
+            DalKeyValueResult dalConversionResult)
+        {
+            var retVariant = new KeyValueResult
+            {
+                Id = dalConversionResult.Id,
+                KpiId = dalConversionResult.KpiId,
+                Value = dalConversionResult.Value,
+                VariantId = dalConversionResult.VariantId,
+                CreatedDate = dalConversionResult.CreatedDate,
+                ModifiedDate = dalConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
         internal static IList<DalVariant> AdaptToDalVariant(IList<Variant> variants)
         {
             var retList = new List<DalVariant>();
@@ -203,25 +232,26 @@ namespace EPiServer.Marketing.Testing
                 Conversions = managerVariant.Conversions,
                 Views = managerVariant.Views,
                 IsWinner = managerVariant.IsWinner,
-                DalKeyFinancialResults = AdaptToDalKeyConversionResult(managerVariant.KeyFinancialResults)
+                DalKeyFinancialResults = AdaptToDalKeyFinancialResult(managerVariant.KeyFinancialResults),
+                DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults)
             };
 
             return retVariant;
         }
 
-        internal static IList<DalKeyFinancialResult> AdaptToDalKeyConversionResult(IList<KeyFinancialResult> managerConversionResults)
+        internal static IList<DalKeyFinancialResult> AdaptToDalKeyFinancialResult(IList<KeyFinancialResult> managerConversionResults)
         {
             var retList = new List<DalKeyFinancialResult>();
 
             foreach (var result in managerConversionResults)
             {
-                retList.Add(ConvertToDalKeyConversionResult(result));
+                retList.Add(ConvertToDalKeyFinancialResult(result));
             }
 
             return retList;
         }
 
-        internal static DalKeyFinancialResult ConvertToDalKeyConversionResult(
+        internal static DalKeyFinancialResult ConvertToDalKeyFinancialResult(
             KeyFinancialResult managerConversionResult)
         {
             var retVariant = new DalKeyFinancialResult
@@ -229,6 +259,34 @@ namespace EPiServer.Marketing.Testing
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Total = managerConversionResult.Total,
+                VariantId = managerConversionResult.VariantId,
+                CreatedDate = managerConversionResult.CreatedDate,
+                ModifiedDate = managerConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<DalKeyValueResult> AdaptToDalKeyValueResult(IList<KeyValueResult> managerConversionResults)
+        {
+            var retList = new List<DalKeyValueResult>();
+
+            foreach (var result in managerConversionResults)
+            {
+                retList.Add(ConvertToDalKeyValueResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static DalKeyValueResult ConvertToDalKeyValueResult(
+            KeyValueResult managerConversionResult)
+        {
+            var retVariant = new DalKeyValueResult
+            {
+                Id = managerConversionResult.Id,
+                KpiId = managerConversionResult.KpiId,
+                Value = managerConversionResult.Value,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate
