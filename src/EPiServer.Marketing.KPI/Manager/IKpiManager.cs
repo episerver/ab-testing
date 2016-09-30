@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.KPI.Manager
         void Delete(Guid kpiId);
 
         /// <summary>
-        /// Gets all assemblies which are of type IKPI
+        /// Scans all assemblies and gets all instances of type IKPI
         /// </summary>
         /// <returns></returns>
         List<IKpi> GetAllKpis();

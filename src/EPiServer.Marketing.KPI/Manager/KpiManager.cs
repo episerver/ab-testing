@@ -54,10 +54,11 @@ namespace EPiServer.Marketing.KPI.Manager
         {
             List<IKpi> KpiList = new List<IKpi>();
             var type = typeof(IKpi);
+            // exclude interfaces, abstract instances, and the convience base class Kpi
             var types =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract());
+                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi) );
 
             foreach (Type t in types)
             {

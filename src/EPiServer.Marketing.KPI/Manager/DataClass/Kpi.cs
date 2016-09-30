@@ -1,4 +1,7 @@
-﻿using System;
+﻿using EPiServer.Marketing.KPI.Common.Attributes;
+using System;
+using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
@@ -21,11 +24,116 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public Guid Id { get; set; }
 
+        /// <summary>
+        /// Overide to specify the FriendlyName to be displayed in the UI.
+        /// </summary>
         [DataMember]
-        public string FriendlyName => "Generic KPI";
+        public string FriendlyName { get {
+                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
+                {
+                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
+                    return attr.text;
+                }
+                else
+                {
+                    return GetType().Name;
+                }
+            }
+        }
 
         [DataMember]
-        public string UiMarkup => "I am a generic KPI";
+        public string Description {
+            get
+            {
+                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
+                {
+                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
+                    return attr.description;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Call by the UI to get the markup for the configuration UI for the control. There are two ways you can use this, 
+        /// 1) decorate your class with the UIMarkupAttribute and specify the config markup resource found in your assembly or
+        /// 2) overide and return your markup string directly
+        /// </summary>
+        [DataMember]
+        public string UiMarkup
+        {
+            get
+            {
+                string value;
+                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
+                {
+                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
+                    if (!TryGetResourceString(attr.configmarkup, out value))
+                    {
+                        value = "failed to load " + attr.configmarkup + ":" + value;
+                    }
+                }
+                else
+                {
+                    value = "UIMarkupAttribute class attribute not defined.";
+                }
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Call by the UI to get the markup for the configuration UI for the control. There are two ways you can use this, 
+        /// 1) decorate your class with the UIMarkupAttribute and specify the config markup resource found in your assembly or
+        /// 2) overide and return your markup string directly
+        /// </summary>
+        [DataMember]
+        public string UiReadOnlyMarkup
+        {
+            get
+            {
+                string value;
+                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
+                {
+                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
+                    if( !TryGetResourceString(attr.readonlymarkup, out value) )
+                    {
+                        value = "failed to load " + attr.readonlymarkup + ":" + value;
+                    }
+                }
+                else
+                {
+                    value = "UIMarkupAttribute class attribute not defined.";
+                }
+                return value;
+            }
+        }
+
+        /// <summary>
+        /// Given the specified Namespace.filename key we will load the string from the file found in this assembly. If this fails 
+        /// its probably because the key is wrong or the resources is not in the assembly. See 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns>true if loaded, else false. If false value contains the exception message.</returns>
+        private bool TryGetResourceString(string key, out string value)
+        {
+            bool retval = false;
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var text = new StreamReader( assembly.GetManifestResourceStream(key) );
+                value = text.ReadToEnd();
+                retval = true;
+            }
+            catch(Exception e)
+            {
+                value = e.Message;
+            }
+            return retval;
+        }
 
         /// <summary>
         /// Date the kpi was created.

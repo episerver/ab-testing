@@ -12,10 +12,25 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         Guid Id { get; set; }
 
+        /// <summary>
+        /// Name displayed in the UI, default displays class type name
+        /// </summary>
         string FriendlyName { get; }
 
+        /// <summary>
+        /// Optional description for the UI
+        /// </summary>
+        string Description { get; }
+
+        /// <summary>
+        /// Markup used for configuration UI
+        /// </summary>
         string UiMarkup { get; }
 
+        /// <summary>
+        /// Markup to use for read only ui
+        /// </summary>
+        string UiReadOnlyMarkup { get; }
 
         /// <summary>
         /// Date the kpi was created.
