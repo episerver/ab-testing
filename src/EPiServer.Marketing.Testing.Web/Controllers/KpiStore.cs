@@ -13,5 +13,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             IKpiWebRepository kpiRepo = new KpiWebRepository();
             return Rest(kpiRepo.GetSystemKpis());
         }
+
+        [HttpPut]
+        public ActionResult put(string id)
+        {
+            return Rest("Ive been put");
+        }
     }
 }
