@@ -17,12 +17,12 @@
         <confidence_level_description>The confidence level dictates the amount of errors allowed. A higher percentage directly correlates to the accuracy of the test results. This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidence_level_description>
         <confidence_level_header>Confidence level</confidence_level_header>
         <control>A / Control</control>
-        <conversion_header>What's the conversion goal?</conversion_header>
+        <conversion_header>Conversion goal</conversion_header>
         <conversion_label>Visitor navigates to page</conversion_label>
         <days_text> day(s).</days_text>
         <default> (default)</default>
         <draft_prefix>Draft - Edited by</draft_prefix>
-        <duration_header>For how long do you wish to run the A/B test?</duration_header>
+        <duration_header>Test duration</duration_header>
         <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
@@ -31,20 +31,20 @@
         <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
         <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
-        <goals_default_text>Ex. By tweaking the copy in the first bullet point to directly address the ‘time issue’, I can motivate more visitors to download the ebook.</goals_default_text>
-        <goals_header>What is the overall goal for this test?</goals_header>
+        <goals_default_text>Example: Get more click-throughs to download the ebook by changing the advertisement image.</goals_default_text>
+        <goals_header>Test goal</goals_header>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
-        <participant_percentage_tip>A higher participation percentage reduces the time required to gather enough statistics to be able to pick a winner.</participant_percentage_tip>
-        <participation_header>What percentage of visitors should participate in this A/B test?</participation_header>
+        <participant_percentage_tip>More participation reduces time to gather statistics and pick a winner.</participant_percentage_tip>
+        <participation_header>Participation percentage</participation_header>
         <published_prefix>Published by</published_prefix>
-        <schedule_header>When should the A/B test be started?</schedule_header>
+        <schedule_header>Start test</schedule_header>
         <schedule_selector_delay>Schedule for later</schedule_selector_delay>
         <schedule_selector_start>Start immediately</schedule_selector_start>
         <schedule_test>Schedule Test</schedule_test>
         <schedule_text_prefix>A/B test is currently </schedule_text_prefix>
         <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
         <start_default>Start Test</start_default>
-        <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
+        <test_description>Determine whether new or changed content improves the conversion rate.</test_description>
       </addtestview>
       <admin>
         <cancel>Cancel</cancel>
@@ -74,22 +74,24 @@
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <days_divider> day(s), </days_divider>
-        <description_heading>Overall goal for this test</description_heading>
+        <description_heading>Test goal</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <from>from</from>
-        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
+        <losing_version_label>Saved in Versions</losing_version_label>
+        <percent_participation_header>Participation percentage</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
         <started> Started </started>
-        <test_duration_header>Duration of the A/B test</test_duration_header>
+        <test_duration_header>Test duration</test_duration_header>
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>This test was completed</test_status_completed>
+        <test_status_completed>Test complete.</test_status_completed>
         <to>to</to>
         <total_participants_details>Current number of test participants:</total_participants_details>
         <views>views</views>
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
+        <winning_verion_label>Winner (published)</winning_verion_label>
       </archiveview>
       <canceltestcommand>
         <label_text>Cancel A/B test and edit page</label_text>
@@ -111,13 +113,13 @@
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
-        <description_heading>Overall goal for this test</description_heading>
+        <description_heading>Test goal</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
-        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
+        <percent_participation_header>Participation percentage</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
         <started> Started </started>
-        <test_duration_header>Duration of the A/B test</test_duration_header>
+        <test_duration_header>Test duration</test_duration_header>
         <test_not_started_text>This test has not yet started.</test_not_started_text>
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
@@ -152,12 +154,12 @@
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
-        <description_heading>Overall goal for this test</description_heading>
+        <description_heading>Test goal</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <early_pick_winner_message>
           This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the chosen content.
         </early_pick_winner_message>
-        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
+        <percent_participation_header>Participation percentage</percent_participation_header>
         <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>
@@ -165,14 +167,14 @@
         <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
         <result_is_significant>The results of this test are significant.</result_is_significant>
         <started> Started </started>
-        <test_duration_header>Duration of the A/B test</test_duration_header>
+        <test_duration_header>Test duration</test_duration_header>
         <test_not_started_text>This test has not yet started.</test_not_started_text>
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
         <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
+        <test_status_completed>Test complete. Pick a winner.</test_status_completed>
         <test_status_not_started>Test has not yet started. </test_status_not_started>
         <test_status_running>Test is running, </test_status_running>
-        <total_participants_details>Current number of test participants:</total_participants_details>
+        <total_participants_details>Number of participants</total_participants_details>
         <views>views</views>
       </pickwinnerview>
       <publishing>
