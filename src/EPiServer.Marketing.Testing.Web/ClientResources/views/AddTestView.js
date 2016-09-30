@@ -16,8 +16,9 @@
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
-         "dojo/dom-form",
+        "dojo/dom-form",
         "dojo/json",
+        "dojox/layout/ContentPane",
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
@@ -25,12 +26,12 @@
         'dijit/form/NumberSpinner',
         'dijit/form/Textarea',
         'dijit/form/RadioButton',
-        'epi-cms/widget/ContentSelector',
         'epi/shell/widget/DateTimeSelectorDropDown',
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"        
+        "dijit/layout/ContentPane",
+        "dijit/form/Select"
 ],
     function (
     declare,
@@ -51,7 +52,8 @@
     dependency,
     rasterizehtml,
     domForm,
-    JSON
+    JSON,
+    ContentPane
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -87,6 +89,10 @@
 
             //sets default values once everything is loaded
             postCreate: function () {
+                var kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                //kpistore.post().then(function(kpiList) {
+                //    this.kpis = kpiList;
+                //});
                 this.reset();
                 this.inherited(arguments);
 
@@ -99,9 +105,17 @@
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
+                this._setKpiSelectList();
+                //var select = dijit.byId('kpiSelector');
+
+                //select.on('change', function (evt) {
+                //    alert("CHANGED");
+                //});
             },
 
             reset: function () {
+
+
                 //set view model properties to default form values.
                 if (this.descriptionText) {
                     this.descriptionText.value = this.model.testDescription = "";
@@ -171,7 +185,7 @@
                         previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-                   
+
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
                     rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
@@ -248,8 +262,10 @@
             // Master validations for all form fields. Used when hitting the start button and will pickup
             // errors not triggered by onChangeEvents.
             _isValidFormData: function () {
-                return this._isValidConversionPage() & this._isValidPercentParticipation() &
-                    this._isValidDuration() & this._isValidStartDate();
+                return this._isValidConversionPage() &
+                    this._isValidPercentParticipation() &
+                    this._isValidDuration() &
+                    this._isValidStartDate();
             },
 
             //Validates a value has been selected for the conversion page.
@@ -273,7 +289,9 @@
                 var errorIconNode = dom.byId("participationErrorIcon");
                 var participationPercentage = dom.byId("percentageSpinner").value;
 
-                if (!this._isUnsignedNumeric(participationPercentage) || participationPercentage <= 0 || participationPercentage > 100) {
+                if (!this._isUnsignedNumeric(participationPercentage) ||
+                    participationPercentage <= 0 ||
+                    participationPercentage > 100) {
                     this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                     return false;
                 }
@@ -307,7 +325,9 @@
 
                 if (dateValue !== "") {
                     if (isNaN(new Date(dateValue))) {
-                        this._setError(resources.addtestview.error_invalid_date_time_value, errorTextNode, errorIconNode);
+                        this._setError(resources.addtestview.error_invalid_date_time_value,
+                            errorTextNode,
+                            errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
                     } else if (new Date(dateValue) < now) {
@@ -341,18 +361,25 @@
                 }
             },
 
-            _processKpi:function() {
-                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
-                var formData = dojo.toJson(kpiFormObject,true);
-                //sends formdata to Rest store? Service? to create the KPI  and ulitmately return the guid
-                alert(formData);
-            },
-
             //EVENT HANDLERS
             //Start and Cancel Events
+
+            _handleKpi: function () {
+                var me = this;
+                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
+                var formData = dojo.toJson(kpiFormObject, true);
+                alert(formData);
+                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                me.kpistore.put({ id: "This is it" })
+                    .then(function (ret) {
+                        alert(ret);
+                    });
+            },
+
             _onStartButtonClick: function () {
-                this.processKpi(); //Handle the custom KPI based on the selected form.  This should ultimately return a GUI of a successfully created KPI
-                
+
+                this._handleKpi(); //Handle the custom KPI stuff
+
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
@@ -364,9 +391,14 @@
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {
-                    this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
+                    this._contentVersionStore = this._contentVersionStore ||
+                        epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                     this._contentVersionStore
-                        .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
+                        .query({
+                            contentLink: this.model.conversionPage,
+                            language: this.languageContext ? this.languageContext.language : "",
+                            query: "getpublishedversion"
+                        })
                         .then(function (result) {
                             var errorTextNode = dom.byId("pickerErrorText");
                             var errorIconNode = dom.byId("pickerErrorIcon");
@@ -374,10 +406,14 @@
                                 if (result.contentLink !== this.model.publishedVersion.contentLink) {
                                     this.model.createTest();
                                 } else {
-                                    this._setError(resources.addtestview.error_selected_samepage, errorTextNode, errorIconNode);
+                                    this._setError(resources.addtestview.error_selected_samepage,
+                                        errorTextNode,
+                                        errorIconNode);
                                 }
                             } else {
-                                this._setError(resources.addtestview.error_selected_notpublished, errorTextNode, errorIconNode);
+                                this._setError(resources.addtestview.error_selected_notpublished,
+                                    errorTextNode,
+                                    errorIconNode);
                             }
                         }.bind(this))
                         .otherwise(function (result) {
@@ -388,8 +424,35 @@
 
             _onCancelButtonClick: function () {
                 var me = this;
-                me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
+                me.contextParameters = {
+                    uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
+                };
                 topic.publish("/epi/shell/context/request", me.contextParameters);
+            },
+
+
+            _onSelectChange: function (evt) {
+                //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+                var kpiuiElement = dom.byId("kpiui");
+                new ContentPane({
+                    content: evt.kpi.uiMarkup
+                },
+                   kpiuiElement);
+            },
+
+            _setKpiSelectList: function () {
+                var me = this;
+                var kpiuiElement = registry.byId("kpiSelector");
+
+                //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                me.kpistore.get()
+                    .then(function (markup) {
+                        for (var x = 0; x < markup.length; x++) {
+                            var option = { value: markup[x], label: markup[x].kpi.friendlyName };
+                            kpiuiElement.addOption(option);
+                        }
+                    });
             },
 
             // Form Field Events
@@ -449,27 +512,6 @@
                     this.startDatePicker.reset();
                     dateSelector.style.visibility = "hidden";
                 }
-            },
-
-            _onSelectChange: function (evt) {
-                //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
-                var kpiuiElement = dom.byId("kpiui");
-                kpiuiElement.innerHTML = evt;
-            },
-
-        _setKpiSelectList: function () {
-            var me = this;
-            var kpiuiElement = registry.byId("kpiSelector");
-
-            //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
-            me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-            me.kpistore.get()
-                .then(function (markup) {
-                    for (var x = 0; x < markup.length; x++) {
-                        var option = { value: markup[x].uiMarkup, label: markup[x].friendlyName };
-                        kpiuiElement.addOption(option);
-                    }
-                });
-        },
+            }
         });
     });
