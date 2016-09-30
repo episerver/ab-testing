@@ -365,9 +365,15 @@
             //Start and Cancel Events
 
             _handleKpi: function () {
+                var me = this;
                 var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
                 var formData = dojo.toJson(kpiFormObject, true);
                 alert(formData);
+                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                me.kpistore.put({ id: "This is it" })
+                    .then(function (ret) {
+                        alert(ret);
+                    });
             },
 
             _onStartButtonClick: function () {
