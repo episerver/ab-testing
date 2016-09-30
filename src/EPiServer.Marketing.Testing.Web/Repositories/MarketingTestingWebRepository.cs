@@ -11,6 +11,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -175,8 +176,18 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0},
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
+                    new Variant()
+                    {
+                        Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, Views = 0, Conversions = 0,
+                        KeyFinancialResults = new List<KeyFinancialResult>(),
+                        KeyValueResults = new List<KeyValueResult>()
+                    },
+                    new Variant()
+                    {
+                        Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0,
+                        KeyFinancialResults = new List<KeyFinancialResult>(),
+                        KeyValueResults = new List<KeyValueResult>()
+                    }
                 },
                 KpiInstances = new List<IKpi> { kpi },
                 ConfidenceLevel = testData.ConfidenceLevel

@@ -5,6 +5,10 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
     public class DalVariant : EntityBase
     {
+        public DalVariant()
+        {
+        }
+
         public Guid Id { get; set; }
 
         /// <summary>
@@ -42,8 +46,8 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// </summary>
         public virtual DalABTest DalABTest { get; set; }
 
-        public virtual IList<DalKeyFinancialResult> DalKeyFinancialResults { get; set; }
+        public virtual IList<DalKeyFinancialResult> DalKeyFinancialResults { get; set; } = new List<DalKeyFinancialResult>();
 
-        public virtual IList<DalKeyValueResult> DalKeyValueResults { get; set; }
+        public virtual IList<DalKeyValueResult> DalKeyValueResults { get; set; } = new List<DalKeyValueResult>();
     }
 }

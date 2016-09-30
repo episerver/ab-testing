@@ -477,7 +477,7 @@ namespace EPiServer.Marketing.Testing.Web
                 varUserSees.KeyFinancialResults.Add(keyFinancialResult);
             }
 
-            _testManager.Save(test);
+            //_testManager.Save(test);
         }
 
         private void ProcessKeyValueResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiValueResult> results)
@@ -496,7 +496,7 @@ namespace EPiServer.Marketing.Testing.Web
                 varUserSees.KeyValueResults.Add(keyValueResult);
             }
 
-            _testManager.Save(test);
+            //_testManager.Save(test);
         }
 
         #region ProxyEventHandlerSupport
