@@ -25,7 +25,21 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         public string FriendlyName => "Generic KPI";
 
         [DataMember]
-        public string UiMarkup => "I am a generic KPI";
+        public string UiMarkup => "<script>dojo.require(\"epi-cms/widget/ContentSelector\"</script>" +
+                                  "<p>" +
+                                  "<label>${resources.addtestview.conversion_label}" +
+                                  "</label>" +
+                                  "<span name = \"conversionPage2\"" +
+                                  "data-dojo-attach-point=\"conversionPageWidget2\"" +
+                                  "data-dojo-type=\"epi-cms/widget/ContentSelector\"" +
+                                  "data-dojo-props=\"repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null\"" +
+                                  "data-dojo-attach-event=\"onChange: _onConversionPageChanged\">" +
+                                  "</span>" +
+                                  "<span id=\"pickerErrorIcon\"" +
+                                  " class=\"errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger\">" +
+                                  "</span>" +
+                                  "<span id = \"pickerErrorText\" class=\"errorText\">" +
+                                  "</span></p>";
 
         /// <summary>
         /// Date the kpi was created.

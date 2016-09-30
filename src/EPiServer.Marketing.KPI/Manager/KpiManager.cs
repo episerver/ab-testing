@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.KPI.Manager
             _dataAccess.Delete(kpiId);
         }
 
-        public List<IKpi> GetAllKpis()
+        public IEnumerable<Type> GetAllKpis()
         {
             List<IKpi> KpiList = new List<IKpi>();
             var type = typeof(IKpi);
@@ -59,12 +59,12 @@ namespace EPiServer.Marketing.KPI.Manager
                     .SelectMany(s => s.GetTypes())
                     .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract());
 
-            foreach (Type t in types)
-            {
-                var newKpi = Activator.CreateInstance(t) as IKpi;
-                KpiList.Add(newKpi);
-            }
-            return (KpiList);
+            //foreach (Type t in types)
+            //{
+            //    var newKpi = Activator.CreateInstance(t) as IKpi;
+            //    KpiList.Add(newKpi);
+            //}
+            return (types);
         }
              
 

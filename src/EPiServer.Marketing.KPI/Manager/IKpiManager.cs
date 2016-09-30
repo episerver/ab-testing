@@ -39,7 +39,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// Gets all assemblies which are of type IKPI
         /// </summary>
         /// <returns></returns>
-        List<IKpi> GetAllKpis();
+        IEnumerable<Type> GetAllKpis();
 
     }
 }
