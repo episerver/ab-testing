@@ -25,5 +25,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
             return kpiData;
         }
+
+        public Guid Save(IKpi kpi)
+        {
+            return new Guid();
+        }
     }
 }

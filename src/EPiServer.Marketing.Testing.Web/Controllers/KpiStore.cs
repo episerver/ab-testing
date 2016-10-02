@@ -7,16 +7,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     [RestStore("KpiStore")]
     public class KpiStore : RestControllerBase
     {
-        [HttpGet]
-        public ActionResult Get()
+        
+        public RestResult Get()
         {
             IKpiWebRepository kpiRepo = new KpiWebRepository();
             return Rest(kpiRepo.GetSystemKpis());
         }
 
-        [HttpPut]
-        public ActionResult put(string id)
+        public RestResult put(string id,KpiStoreArgs entity)
         {
+               
             return Rest("Ive been put");
         }
     }

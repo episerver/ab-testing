@@ -366,11 +366,18 @@
 
             _handleKpi: function () {
                 var me = this;
+                var kpiTextField = dom.byId("kpiString");
                 var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
                 var formData = dojo.toJson(kpiFormObject, true);
                 alert(formData);
                 me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-                me.kpistore.put({ id: "This is it" })
+                me.kpistore.put({
+                    id: "myId",
+                    entity: {
+                        kpiData: "myData",
+                        kpiType: kpiTextField.value
+                    }
+                })
                     .then(function (ret) {
                         alert(ret);
                     });
@@ -432,7 +439,8 @@
 
 
             _onSelectChange: function (evt) {
-                //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+                var kpiTextField = dom.byId("kpiString");
+                kpiTextField.value = evt.kpiType;
                 var kpiuiElement = dom.byId("kpiui");
                 new ContentPane({
                     content: evt.kpi.uiMarkup

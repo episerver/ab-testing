@@ -10,6 +10,9 @@ namespace EPiServer.Marketing.KPI.Common
     /// 
     [DataContract]
     [EventSpecification(service = typeof(IContentEvents), methodname = "LoadedContent")]
+    [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html", 
+        readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.txt",
+        text = "Landing Page", description = "Choose a page for conversion.")]
     public class ContentComparatorKPI : Kpi
     {
         [DataMember]
