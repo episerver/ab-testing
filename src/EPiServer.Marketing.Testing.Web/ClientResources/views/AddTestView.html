@@ -96,18 +96,14 @@
                         ${resources.addtestview.conversion_header}
                     </h4>
                     <p>
-
                         <label>${resources.addtestview.conversion_label}</label>
-
                     </p>
                     <div>
-
                         <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onSelectChange"></select>
-
                     </div>
                     <div>
+                        <input type="text" id="kpiString" name="kpiTypeString" hidden />
                         <form id="kpiForm">
-                            <input type="text" id="kpiString" name="kpiTypeString" hidden />
                             <div id="kpiui">
                                 <input type="text" id="mytext" name="myTextBox" value="startertext" />
                             </div>

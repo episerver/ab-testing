@@ -369,12 +369,13 @@
                 var kpiTextField = dom.byId("kpiString");
                 var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
                 var formData = dojo.toJson(kpiFormObject, true);
-                alert(formData);
+                var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
+                alert(formattedFormData);
                 me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 me.kpistore.put({
                     id: "myId",
                     entity: {
-                        kpiData: "myData",
+                        kpiData: formattedFormData,
                         kpiType: kpiTextField.value
                     }
                 })
