@@ -212,7 +212,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void TestManager_CallsSaveWithProperArguments()
+        public void TestManager_CallsDataAccessLayerSaveWithProperArguments()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
@@ -239,12 +239,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     },
             };
 
-            Mock<IKpiManager> kpiManager = new Mock<IKpiManager>();
-            _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(kpiManager.Object);
-
             tm.Save(test);
 
-            kpiManager.Verify(km => km.Save(It.IsAny<IKpi>()), "KpiManager save was never called");
             _dataAccessLayer.Verify(da => da.Save(It.Is<DalABTest>(arg => arg.Id == theGuid)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
