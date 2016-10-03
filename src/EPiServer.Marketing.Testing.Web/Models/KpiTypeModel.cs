@@ -6,7 +6,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.Testing.Web.Models
 {
-    public class KpiViewModel
+    public class KpiTypeModel
     {
         public IKpi kpi { get; set; }
         public Type kpiType { get; set; }

@@ -13,22 +13,22 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     public class KpiWebRepository : IKpiWebRepository
     {
-        public List<KpiViewModel> GetSystemKpis()
+        /// <summary>
+        /// Retrieves all KPI's available to the system.
+        /// </summary>
+        /// <returns></returns>
+        public List<KpiTypeModel> GetKpiTypes()
         {
             IKpiManager kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
-            List<KpiViewModel> kpiData = new List<KpiViewModel>();
+            List<KpiTypeModel> kpiData = new List<KpiTypeModel>();
 
             var KpiTypes = kpiManager.GetAllKpis();
             foreach (Type t in KpiTypes)
             {
-                kpiData.Add(new KpiViewModel() {kpi = Activator.CreateInstance(t) as IKpi, kpiType = t});
+                kpiData.Add(new KpiTypeModel() {kpi = Activator.CreateInstance(t) as IKpi, kpiType = t});
             }
             return kpiData;
         }
 
-        public Guid Save(IKpi kpi)
-        {
-            return new Guid();
-        }
     }
 }

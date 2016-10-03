@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -46,7 +48,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
         /// <returns></returns>
-        KpiValidationResult Validate(object kpiData);
+        KpiValidationResult Validate(Dictionary<string,string> kpiData);
 
 
         /// <summary>

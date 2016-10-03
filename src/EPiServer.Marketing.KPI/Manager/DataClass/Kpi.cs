@@ -1,5 +1,7 @@
 ﻿using EPiServer.Marketing.KPI.Common.Attributes;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -147,7 +149,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
-        public virtual KpiValidationResult Validate(object kpiData)
+        /// <summary>
+        /// Provides specific validation of data prior to creating the KPI
+        /// </summary>
+        /// <param name="kpiData"></param>
+        /// <returns></returns>
+        public virtual KpiValidationResult Validate(Dictionary<string,string> kpiData)
         {
             return new KpiValidationResult { IsValid = true, Message = string.Empty };
         }

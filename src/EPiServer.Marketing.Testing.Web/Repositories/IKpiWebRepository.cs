@@ -7,6 +7,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     interface IKpiWebRepository
     {
-        List<KpiViewModel> GetSystemKpis();
+        List<KpiTypeModel> GetKpiTypes();
     }
 }
