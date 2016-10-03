@@ -147,9 +147,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
-        public virtual bool Validate(object kpiData)
+        public virtual KpiValidationResult Validate(object kpiData)
         {
-            return true;
+            return new KpiValidationResult { IsValid = true, Message = string.Empty };
         }
 
 
