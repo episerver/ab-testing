@@ -77,6 +77,7 @@
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <from>from</from>
+        <losing_version_label>Saved in Versions</losing_version_label>
         <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
@@ -90,6 +91,7 @@
         <views>views</views>
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
+        <winning_verion_label>Winner (published)</winning_verion_label>
       </archiveview>
       <canceltestcommand>
         <label_text>Cancel A/B test and edit page</label_text>

@@ -114,10 +114,7 @@
         },
 
         renderStatus: function () {
-            this.testStatus.innerText = resources.archiveview.test_status_completed +
-                " " +
-                datetime.toUserFriendlyString(this.context.data.test.endDate) +
-                resources.archiveview.content_chosen;
+            this.testStatus.innerText = resources.archiveview.test_status_completed + " " + resources.archiveview.content_chosen;
         },
 
         renderTestDuration: function () {
