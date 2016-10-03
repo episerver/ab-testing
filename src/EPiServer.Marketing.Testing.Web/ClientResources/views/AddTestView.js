@@ -375,7 +375,7 @@
                 me.kpistore.put({
                     id: "myId",
                     entity: {
-                        kpiData: formattedFormData,
+                        kpiJsonFormData: formattedFormData,
                         kpiType: kpiTextField.value
                     }
                 })
