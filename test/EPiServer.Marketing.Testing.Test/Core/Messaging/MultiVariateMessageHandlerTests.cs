@@ -6,6 +6,7 @@ using EPiServer.Marketing.Testing.Data;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 using Microsoft.Dnx.Testing.Abstractions;
 using Xunit;
 

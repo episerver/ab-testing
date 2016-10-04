@@ -3,6 +3,7 @@ using Moq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Threading;
+using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 using EPiServer.Marketing.Testing.Messaging;
 using Xunit;
 

@@ -1,4 +1,5 @@
 ﻿using EPiServer.Marketing.Messaging;
+using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
