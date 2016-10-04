@@ -155,16 +155,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var content = _serviceLocator.GetInstance<IContentRepository>()
                 .Get<IContent>(new ContentReference(testData.ConversionPage));
 
-            var kpi = new ContentComparatorKPI(content.ContentGuid)
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
-            };
-
+            var kpi = new ContentComparatorKPI(content.ContentGuid);
             test = new ABTest
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid(), // todo push this down
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,

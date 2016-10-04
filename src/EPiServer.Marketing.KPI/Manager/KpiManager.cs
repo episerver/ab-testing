@@ -69,6 +69,13 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <returns>EF Kpi object to save in the db.</returns>
         private IDalKpi ConvertToDalTest(IKpi kpi)
         {
+            if (Guid.Empty == kpi.Id)
+            {   // if the kpi.id is null, its because we are creating a new one.
+                kpi.Id = Guid.NewGuid();
+                kpi.CreatedDate = DateTime.UtcNow;
+                kpi.ModifiedDate = DateTime.UtcNow;
+            }
+
             var serializedKpi = JsonConvert.SerializeObject(kpi);
 
             var dalKpi = new DalKpi()
