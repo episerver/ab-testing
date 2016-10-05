@@ -11,6 +11,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -151,11 +152,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             }
+         
+            KpiManager kpiManager = new KpiManager();
+            var kpi = kpiManager.Get(testData.KpiId);
 
-            var content = _serviceLocator.GetInstance<IContentRepository>()
-                .Get<IContent>(new ContentReference(testData.ConversionPage));
-
-            var kpi = new ContentComparatorKPI(content.ContentGuid);
             test = new ABTest
             {
                 Id = Guid.NewGuid(), // todo push this down

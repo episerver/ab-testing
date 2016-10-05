@@ -6,12 +6,22 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Manager;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using System.Net;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     [RestStore("KpiStore")]
     public class KpiStore : RestControllerBase
     {
+        private ILogger _logger;
+
+        public KpiStore()
+        {
+            _logger = LogManager.GetLogger();
+
+        }
+
         /// <summary>
         /// Gets KPI types currently available to the system
         /// </summary>
@@ -30,21 +40,28 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public RestResult put(string id,KpiStoreArgs entity)
+        public ActionResult put(string id,KpiStoreArgs entity)
         {
+
+            ActionResult result;
             IKpi kpiInstance = Activator.CreateInstance(Type.GetType(entity.KpiType)) as IKpi;
             var javascriptSerializer = new JavaScriptSerializer();
             Dictionary<string, string> values = javascriptSerializer.Deserialize<Dictionary<string, string>>(entity.KpiJsonFormData);
-            KpiValidationResult result = kpiInstance.Validate(values);
 
-            if (!result.IsValid)
+            try
             {
-                return Rest("can't put");
+                kpiInstance.Validate(values);
+                KpiManager kpiManager = new KpiManager();
+                var kpiId = kpiManager.Save(kpiInstance);
+                result = Rest(kpiId);
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error creating Kpi" + e);
+                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, e.Message);
             }
 
-            KpiManager kpiManager = new KpiManager();
-            return Rest(kpiManager.Save(kpiInstance));
-            
+            return result;
         }
     }
 }

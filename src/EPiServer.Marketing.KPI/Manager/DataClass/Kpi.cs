@@ -154,9 +154,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         /// <param name="kpiData"></param>
         /// <returns></returns>
-        public virtual KpiValidationResult Validate(Dictionary<string,string> kpiData)
+        public virtual bool Validate(Dictionary<string,string> kpiData)
         {
-            return new KpiValidationResult { IsValid = true, Message = string.Empty };
+            return true;
         }
 
 

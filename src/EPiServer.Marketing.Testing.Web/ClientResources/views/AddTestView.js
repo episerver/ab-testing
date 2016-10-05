@@ -90,9 +90,6 @@
             //sets default values once everything is loaded
             postCreate: function () {
                 var kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-                //kpistore.post().then(function(kpiList) {
-                //    this.kpis = kpiList;
-                //});
                 this.reset();
                 this.inherited(arguments);
 
@@ -106,16 +103,9 @@
                     this.breadcrumbWidget.layout();
                 }
                 this._setKpiSelectList();
-                //var select = dijit.byId('kpiSelector');
-
-                //select.on('change', function (evt) {
-                //    alert("CHANGED");
-                //});
             },
 
             reset: function () {
-
-
                 //set view model properties to default form values.
                 if (this.descriptionText) {
                     this.descriptionText.value = this.model.testDescription = "";
@@ -166,6 +156,7 @@
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._setKpiSelectList();
+                this._clearCustomKpiMarkup();
             },
 
             //setters for bound properties
@@ -262,25 +253,9 @@
             // Master validations for all form fields. Used when hitting the start button and will pickup
             // errors not triggered by onChangeEvents.
             _isValidFormData: function () {
-                return this._isValidConversionPage() &
-                    this._isValidPercentParticipation() &
+                return this._isValidPercentParticipation() &
                     this._isValidDuration() &
                     this._isValidStartDate();
-            },
-
-            //Validates a value has been selected for the conversion page.
-            _isValidConversionPage: function () {
-                var errorTextNode = dom.byId("pickerErrorText");
-                var errorIconNode = dom.byId("pickerErrorIcon");
-                var conversionPage = this.conversionPageWidget.value;
-
-                if (!conversionPage) {
-                    this._setError(resources.addtestview.error_conversiongoal, errorTextNode, errorIconNode);
-                    return false;
-                }
-
-                this._setError("", errorTextNode, errorIconNode);
-                return true;
             },
 
             //Validates the participation percent entered is between 1 and 100
@@ -295,7 +270,6 @@
                     this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                     return false;
                 }
-
                 this._setError("", errorTextNode, errorIconNode);
                 return true;
             },
@@ -364,70 +338,51 @@
             //EVENT HANDLERS
             //Start and Cancel Events
 
-            _handleKpi: function () {
+            _getKpiFormData: function () {
                 var me = this;
-                var kpiTextField = dom.byId("kpiString");
                 var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
                 var formData = dojo.toJson(kpiFormObject, true);
                 var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
                 alert(formattedFormData);
+                return formattedFormData;
+            },
+
+            _onStartButtonClick: function () {
+                var me = this;
+                var kpiTextField = dom.byId("kpiString");
+                me.kpiFormData = this._getKpiFormData();
                 me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 me.kpistore.put({
                     id: "myId",
                     entity: {
-                        kpiJsonFormData: formattedFormData,
+                        kpiJsonFormData: me.kpiFormData,
                         kpiType: kpiTextField.value
                     }
                 })
                     .then(function (ret) {
                         alert(ret);
+                        me.model.kpiId = ret;
+                        me.model.testDescription = dom.byId("testDescription").value;
+                        var startDateSelector = dom.byId("StartDateTimeSelector");
+                        var utcNow = new Date(Date.now()).toUTCString();
+                        if (startDateSelector.value === "") {
+                            me.model.startDate = utcNow;
+                        }
+
+                        me.model.confidencelevel = dom.byId("confidence").value;
+                        me.model.testTitle = me.pageName.textContent;
+
+                        if (me._isValidFormData()) {
+                            me.model.createTest();
+                        }
+
+                    })
+                    .otherwise(function (ret) {
+                        var kpiErrorText = dom.byId("kpiErrorText");
+                        kpiErrorText.innerText = ret.response.xhr.statusText;
+                        kpiErrorText.style.visibility = "visible";
+                        kpiErrorIcon.style.visibility = "visible";
                     });
-            },
-
-            _onStartButtonClick: function () {
-
-                this._handleKpi(); //Handle the custom KPI stuff
-
-                this.model.testDescription = dom.byId("testDescription").value;
-                var startDateSelector = dom.byId("StartDateTimeSelector");
-                var utcNow = new Date(Date.now()).toUTCString();
-                if (startDateSelector.value === "") {
-                    this.model.startDate = utcNow;
-                }
-
-                this.model.confidencelevel = dom.byId("confidence").value;
-                this.model.testTitle = this.pageName.textContent;
-
-                if (this._isValidFormData()) {
-                    this._contentVersionStore = this._contentVersionStore ||
-                        epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
-                    this._contentVersionStore
-                        .query({
-                            contentLink: this.model.conversionPage,
-                            language: this.languageContext ? this.languageContext.language : "",
-                            query: "getpublishedversion"
-                        })
-                        .then(function (result) {
-                            var errorTextNode = dom.byId("pickerErrorText");
-                            var errorIconNode = dom.byId("pickerErrorIcon");
-                            if (result) {
-                                if (result.contentLink !== this.model.publishedVersion.contentLink) {
-                                    this.model.createTest();
-                                } else {
-                                    this._setError(resources.addtestview.error_selected_samepage,
-                                        errorTextNode,
-                                        errorIconNode);
-                                }
-                            } else {
-                                this._setError(resources.addtestview.error_selected_notpublished,
-                                    errorTextNode,
-                                    errorIconNode);
-                            }
-                        }.bind(this))
-                        .otherwise(function (result) {
-                            console.log("Query failed, we cannot tell if this page is a valid page or not.");
-                        });
-                }
             },
 
             _onCancelButtonClick: function () {
@@ -445,23 +400,36 @@
                 var kpiuiElement = dom.byId("kpiui");
                 new ContentPane({
                     content: evt.kpi.uiMarkup
-                },
-                   kpiuiElement);
+                }).placeAt(kpiuiElement);
             },
+
+            _clearCustomKpiMarkup: function () {
+                var kpiuiElement = dom.byId("kpiui");
+                if (kpiuiElement) {
+                    var contentPaneWidget = registry.byId("dojox_layout_ContentPane_0");
+                    dijit.byId("ConversionPageWidget").destroy(true);
+                    dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                    kpiuiElement.innerHTML = "";
+                }
+            },
+
 
             _setKpiSelectList: function () {
                 var me = this;
                 var kpiuiElement = registry.byId("kpiSelector");
-
-                //"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+                kpiuiElement//"EPiServer.Marketing.KPI.Manager.DataClass." + evt
                 me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 me.kpistore.get()
-                    .then(function (markup) {
-                        for (var x = 0; x < markup.length; x++) {
-                            var option = { value: markup[x], label: markup[x].kpi.friendlyName };
-                            kpiuiElement.addOption(option);
-                        }
-                    });
+                .then(function (markup) {
+                    kpiuiElement.set("value", "");
+                    dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
+                    var defaultOption = { value: "-1", label: "[Select Kpi]" };
+                    kpiuiElement.addOption(defaultOption);
+                    for (var x = 0; x < markup.length; x++) {
+                        var option = { value: markup[x], label: markup[x].kpi.friendlyName };
+                        kpiuiElement.addOption(option);
+                    }
+                });
             },
 
             // Form Field Events
