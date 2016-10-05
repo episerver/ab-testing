@@ -59,7 +59,8 @@ namespace EPiServer.Marketing.Testing.Messaging
 
             registry.Register<UpdateViewsMessage>(_handler);
             registry.Register<UpdateConversionsMessage>(_handler);
-            
+            registry.Register<AddKeyResultMessage>(_handler);
+
             // Create the dispatcher, queue store, and the memory reciever
             var messageDispatcher = new FanOutMessageDispatcher(registry);
             _queueStore = new InMemoryQueueStore(AppDomain.CurrentDomain);

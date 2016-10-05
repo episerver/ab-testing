@@ -5,7 +5,8 @@ namespace EPiServer.Marketing.Testing.Messaging
 {
     public interface ITestingMessageHandler :
         IMessageHandler<UpdateViewsMessage>,
-        IMessageHandler<UpdateConversionsMessage>
+        IMessageHandler<UpdateConversionsMessage>,
+        IMessageHandler<AddKeyResultMessage>
     {
     }
 }

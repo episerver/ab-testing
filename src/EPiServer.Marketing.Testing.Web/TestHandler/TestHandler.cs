@@ -463,7 +463,6 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void ProcessKeyFinancialResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiFinancialResult> results)
         {
-            results = new List<KpiFinancialResult>() {new KpiFinancialResult() {KpiId = Guid.NewGuid(), Total = (decimal)4.5 }, new KpiFinancialResult() { KpiId = Guid.NewGuid(), Total = (decimal)5.75 } };
             var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
 
             foreach (var kpiFinancialResult in results)
@@ -473,21 +472,18 @@ namespace EPiServer.Marketing.Testing.Web
                     Id = Guid.NewGuid(),
                     KpiId = kpiFinancialResult.KpiId,
                     Total = kpiFinancialResult.Total,
-                    VariantId = varUserSees.ItemId
+                    VariantId = varUserSees.ItemId,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow
                 };
 
-                //varUserSees.KeyFinancialResults.Add(keyFinancialResult);
                 //_testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, 0);
                 _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, 0);
-
             }
-
-            //_testManager.Save(test);
         }
 
         private void ProcessKeyValueResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiValueResult> results)
         {
-            results = new List<KpiValueResult>() { new KpiValueResult() { KpiId = Guid.NewGuid(), Value = 1500 }, new KpiValueResult() { KpiId = Guid.NewGuid(), Value = 3.14} };
             var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
 
             foreach (var kpiValueResult in results)
@@ -497,15 +493,14 @@ namespace EPiServer.Marketing.Testing.Web
                     Id = Guid.NewGuid(),
                     KpiId = kpiValueResult.KpiId,
                     Value = kpiValueResult.Value,
-                    VariantId = varUserSees.ItemId
+                    VariantId = varUserSees.ItemId,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow
                 };
 
                 //_testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, 1);
                 _testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, 1);
-                //varUserSees.KeyValueResults.Add(keyValueResult);
             }
-
-            //_testManager.Save(test);
         }
 
         #region ProxyEventHandlerSupport
