@@ -3,6 +3,7 @@ using Moq;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Threading;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 using EPiServer.Marketing.Testing.Messaging;
 using Xunit;
@@ -47,6 +48,16 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             Thread.Sleep(1000);
             _messageHandler.Verify(mh => mh.Handle(It.IsAny<UpdateConversionsMessage>()),
                 Times.AtLeastOnce, "MessageManager did not emit message or did not call handle for UpdateConversionsMessage");
+        }
+
+        [Fact]
+        public void EmitKpiResultDataEmitsMessageAndCallsMessageHandler()
+        {
+            var messageManager = GetUnitUnderTest();
+            messageManager.EmitKpiResultData(Guid.Empty, Guid.NewGuid(), 1, new KeyFinancialResult(), 0);
+            Thread.Sleep(1000);
+            _messageHandler.Verify(mh => mh.Handle(It.IsAny<AddKeyResultMessage>()),
+                Times.AtLeastOnce, "MessageManager did not emit message or did not call handle for EmitKpiResultData");
         }
     }
 }

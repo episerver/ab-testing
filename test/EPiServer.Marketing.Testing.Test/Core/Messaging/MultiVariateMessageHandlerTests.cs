@@ -6,6 +6,7 @@ using EPiServer.Marketing.Testing.Data;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 using Microsoft.Dnx.Testing.Abstractions;
 using Xunit;
@@ -68,6 +69,23 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
                 It.Is<Guid>(gg => gg.Equals(varient)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
                 It.Is<CountType>(ct => ct.Equals(CountType.View))),
+                Times.Once, "Repository save was not called or view value is not as expected");
+
+        }
+
+        [Fact]
+        public void EmitKpiResultDataCorrectValue()
+        {
+            var messageHandler = GetUnitUnderTest();
+            var result = new KeyFinancialResult() {Total = 22};
+
+            messageHandler.Handle(new AddKeyResultMessage() { TestId = testGuid, VariantId = varient, ItemVersion = itemVersion, Result = result, Type = 0 });
+            // Verify that save is called and conversion value is correct
+
+            _testManager.Verify(tm => tm.AddKpiResultData(It.Is<Guid>(gg => gg.Equals(testGuid)),
+                It.Is<Guid>(gg => gg.Equals(varient)),
+                It.Is<int>(gg => gg.Equals(itemVersion)), 
+                It.Is<IKeyResult>(ct => ct.Equals(result)), 0),
                 Times.Once, "Repository save was not called or view value is not as expected");
 
         }
