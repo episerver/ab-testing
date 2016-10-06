@@ -14,6 +14,7 @@
  "epi/datetime",
  "epi/username",
  "dojo/dom-class",
+ "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
   "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
@@ -39,6 +40,7 @@
     datetime,
     username,
     domClass,
+    query,
     textHelper,
     rasterizehtml
 
@@ -92,7 +94,7 @@
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
-            textHelper.renderTestRemaining(this.testRemaining,this.testRemainingText);
+            textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
@@ -108,8 +110,8 @@
             textHelper.renderSignificance(this.pickAWinnerMessage);
 
             ready(function () {
-                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner');
-                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner');
+                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
+                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
             });
             this.renderStatusIndicatorStyles();
         },
@@ -173,13 +175,16 @@
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
             }
         },
-        _generateThumbnail: function (previewUrl, canvasId) {
+        _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
             var pubThumb = dom.byId(canvasId);
 
             if (pubThumb) {
                 pubThumb.height = 768;
                 pubThumb.width = 1024;
-                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(
+                    function success(renderResult) {
+                        query('.' + parentContainerClass).addClass('hide-bg');
+                    });
             }
         }
     });

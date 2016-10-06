@@ -296,6 +296,10 @@ hr {
     background-position: center;
 }
 
+.versiona.hide-bg, .versionb.hide-bg {
+    background-image: none;
+}
+
 .leadingContent,
 .winningContent,
 .pickedContent {

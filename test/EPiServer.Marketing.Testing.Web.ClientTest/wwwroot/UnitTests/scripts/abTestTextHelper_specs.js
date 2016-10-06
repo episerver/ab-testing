@@ -57,8 +57,8 @@
                             }
                         }
                     };
-                context.data.test.variants.push({ itemVersion: "3", conversions: 10, views: 100 });
-                context.data.test.variants.push({ itemVersion: "150", conversions: 150, views: 200 });
+                context.data.test.variants.push({ itemVersion: "3", isPublished: true,conversions: 10, views: 100 });
+                context.data.test.variants.push({ itemVersion: "150", isPublished: false, conversions: 150, views: 200 });
 
                 it("Correctly initializes properties based on given context",
                     function () {

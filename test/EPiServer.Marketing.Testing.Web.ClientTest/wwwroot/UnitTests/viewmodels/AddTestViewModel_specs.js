@@ -6,11 +6,11 @@
                 var me = this,
                 aGuidString = "5F0B06A7-12C0-405F-8F55-C60D7187AB34",
                 aPrefixString = "6",
-                aVersionString = "168",
+                aPublishedVersionString = "168",
                 aDraftVersionString = "169",
 
                 aContentResult = {
-                    contentLink: aPrefixString + "_" + aVersionString,
+                    contentLink: aPrefixString + "_" + aPublishedVersionString,
                     contentGuid: aGuidString
                 },
                 aContentData = {
@@ -67,11 +67,11 @@
                 var me = this,
                 aGuidString = "5F0B06A7-12C0-405F-8F55-C60D7187AB34",
                 aPrefixString = "6",
-                aVersionString = "168",
+                aPublishedVersionString = "168",
                 aDraftVersionString = "169",
 
                 aContentResult = {
-                    contentLink: aPrefixString + "_" + aVersionString,
+                    contentLink: aPrefixString + "_" + aPublishedVersionString,
                     contentGuid: aGuidString
                 },
                 aContentData = {
@@ -147,7 +147,7 @@
 
                 expect(me.retTest.testDescription).to.equal(aViewModel.testDescription);
                 expect(me.retTest.testContentId).to.equal(aContentData.contentGuid);
-                expect(me.retTest.publishedVersion).to.equal(aPrefixString);
+                expect(me.retTest.publishedVersion).to.equal(aPublishedVersionString);
                 expect(me.retTest.variantVersion).to.equal(aDraftVersionString);
                 expect(me.retTest.testDuration).to.equal(aViewModel.testDuration);
                 expect(me.retTest.participationPercent).to.equal(aViewModel.participationPercent);
@@ -162,11 +162,11 @@
 
                 aGuidString = "5F0B06A7-12C0-405F-8F55-C60D7187AB34",
                 aPrefixString = "6",
-                aVersionString = "168",
+                aPublishedVersionString = "168",
                 aDraftVersionString = "169",
 
                 aContentResult = {
-                    contentLink: aPrefixString + "_" + aVersionString,
+                    contentLink: aPrefixString + "_" + aPublishedVersionString,
                     contentGuid: aGuidString,
                     contentLink: aPrefixString
                 },

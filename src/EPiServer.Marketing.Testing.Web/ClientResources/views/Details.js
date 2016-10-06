@@ -13,7 +13,8 @@
  "epi/i18n!marketing-testing/nls/abtesting",
  "epi/datetime",
  "epi/username",
-  "dojo/dom-class",
+ "dojo/dom-class",
+ "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
@@ -39,6 +40,7 @@
     datetime,
     username,
     domClass,
+    query,
     textHelper,
     rasterizehtml
 ) {
@@ -140,8 +142,8 @@
             textHelper.renderConversion(this.contentLinkAnchor);
 
             ready(function () {
-                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail');
-                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail');
+                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
+                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
             });
             this.renderStatusIndicatorStyles();
         },
@@ -190,13 +192,16 @@
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
             }
         },
-        _generateThumbnail: function (previewUrl, canvasId) {
+        _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
             var pubThumb = dom.byId(canvasId);
 
             if (pubThumb) {
                 pubThumb.height = 768;
                 pubThumb.width = 1024;
-                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(
+                    function success(renderResult) {
+                        query('.' + parentContainerClass).addClass('hide-bg');
+                    });
             }
         }
     });

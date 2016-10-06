@@ -144,7 +144,8 @@ namespace EPiServer.Marketing.Testing
                 ItemVersion = theDalVariant.ItemVersion,
                 Conversions = theDalVariant.Conversions,
                 Views = theDalVariant.Views,
-                IsWinner = theDalVariant.IsWinner
+                IsWinner = theDalVariant.IsWinner,
+                IsPublished = theDalVariant.IsPublished
             };
 
             return retVariant;
@@ -173,7 +174,8 @@ namespace EPiServer.Marketing.Testing
                 ItemVersion = managerVariant.ItemVersion,
                 Conversions = managerVariant.Conversions,
                 Views = managerVariant.Views,
-                IsWinner = managerVariant.IsWinner
+                IsWinner = managerVariant.IsWinner,
+                IsPublished = managerVariant.IsPublished
             };
 
             return retVariant;

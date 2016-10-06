@@ -33,6 +33,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public const string ABTestHandlerSkipFlag = "ABTestHandlerSkipFlag";
         public const string SkipRaiseContentSwitchEvent = "SkipRaiseContentSwitchEvent";
+        public const string ABTestHandlerSkipKpiEval = "ABTestHandlerSkipKpiEval";
 
         [ExcludeFromCodeCoverage]
         public TestHandler()
@@ -236,7 +237,7 @@ namespace EPiServer.Marketing.Testing.Web
                         var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
-                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+                        var contentVersion = e.ContentLink.WorkID == 0 ? activeTest.Variants.First(variant => variant.IsPublished).ItemVersion : e.ContentLink.WorkID;
 
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
@@ -275,8 +276,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
-                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.UserIncludedInTestEvent, new TestEventArgs(activeTest, e));
-                if (newVariant.ItemVersion != contentVersion)
+                if (!newVariant.IsPublished)
                 {
                     contentVersion = newVariant.ItemVersion;
                     testCookieData.ShowVariant = true;
@@ -367,13 +367,11 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         private void EvaluateKpis(EventArgs e)
         {
-            // if we are loadcontent event we only want to evaluate when TargetLink is not null
-            // (i.e. we only want to evaluate once) else we will always have to evaluate.
-            // this is a performance issue because loadcontent gets called a lot. 
-            ContentEventArgs cea = e as ContentEventArgs;
-            if( !(cea != null && cea.TargetLink == null) )
+            // We only want to evaluate Kpis one time per request.
+            if (!HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
             {
-                // TargetLink is only not null once during all the calls, this optimizes the calls to check for kpi conversions.
+                HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+
                 var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
                 foreach (var tdcookie in cookielist)
                 {

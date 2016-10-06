@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Web.UI.WebControls;
+using Castle.Core.Internal;
 using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.PlugIn;
@@ -36,10 +38,25 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
             if (!InputIsValid(TestDuration.Text, out duration) || !InputIsValid(ParticipationPercent.Text, out particiaption))
             {
+                ShowMessage(string.Format(Translate("/abtesting/admin/invalid")), false);
                 return;
             }
 
-            if (particiaption < 1 || particiaption > 100 || duration < 1 || duration > 365)
+            var returnError = false;
+            if (particiaption < 1 || particiaption > 100)
+            {
+                ShowMessage(string.Format(Translate("/abtesting/admin/participationerror")), false);
+                returnError = true;
+            }
+
+            if (duration < 1 || duration > 365)
+            {
+
+                ShowMessage(string.Format(Translate("/abtesting/admin/durationerror")), false);
+                returnError = true;
+            }
+
+            if (returnError)
             {
                 return;
             }
@@ -52,6 +69,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
             };
 
             settings.Save();
+
+            ShowMessage(string.Format(Translate("/abtesting/admin/success")), true);
         }
 
         private bool InputIsValid(string value, out int convertedValue)
@@ -83,8 +102,18 @@ namespace EPiServer.Marketing.Testing.Web.Config
             TestDuration.Text = TestSettings.TestDuration.ToString();
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
+        }
 
-            DurationValidator.IsValid = ParticipationValidator.IsValid = true;
+        private void ShowMessage(string msg, bool isWarning)
+        {
+            var message = new Panel
+            {
+                CssClass = isWarning ? "EP-systemMessage EP-systemMessage-Warning" : "EP-systemMessage"
+            };
+
+            message.Controls.Add(new Literal { Text = msg });
+            MessagePanel.Controls.Add(message);
+            MessagePanel.Visible = true;
         }
     }
 }
