@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Web.Models;
-using StructureMap.TypeRules;
-using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
@@ -29,6 +25,5 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
             return kpiData;
         }
-
     }
 }

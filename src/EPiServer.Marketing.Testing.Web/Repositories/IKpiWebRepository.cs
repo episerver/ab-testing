@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using EPiServer.Marketing.KPI.Manager.DataClass;
+﻿using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Web.Models;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
