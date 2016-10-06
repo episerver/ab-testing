@@ -7,19 +7,23 @@ using EPiServer.Marketing.KPI.Manager;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.Net;
+using EPiServer.Framework.Localization;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Exceptions;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     [RestStore("KpiStore")]
     public class KpiStore : RestControllerBase
     {
+        private LocalizationService _localizationService;
         private ILogger _logger;
 
         public KpiStore()
         {
             _logger = LogManager.GetLogger();
-
+            _localizationService = ServiceLocator.Current.GetInstance<LocalizationService>();
         }
 
         /// <summary>
@@ -42,25 +46,32 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <returns></returns>
         public ActionResult put(string id,KpiStoreArgs entity)
         {
-
             ActionResult result;
-            IKpi kpiInstance = Activator.CreateInstance(Type.GetType(entity.KpiType)) as IKpi;
-            var javascriptSerializer = new JavaScriptSerializer();
-            Dictionary<string, string> values = javascriptSerializer.Deserialize<Dictionary<string, string>>(entity.KpiJsonFormData);
-
-            try
+            if (entity.KpiType != "undefined")
             {
-                kpiInstance.Validate(values);
-                KpiManager kpiManager = new KpiManager();
-                var kpiId = kpiManager.Save(kpiInstance);
-                result = Rest(kpiId);
-            }
-            catch (Exception e)
-            {
-                _logger.Error("Error creating Kpi" + e);
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, e.Message);
-            }
+                IKpi kpiInstance = Activator.CreateInstance(Type.GetType(entity.KpiType)) as IKpi;
+                var javascriptSerializer = new JavaScriptSerializer();
+                Dictionary<string, string> values =
+                    javascriptSerializer.Deserialize<Dictionary<string, string>>(entity.KpiJsonFormData);
 
+                try
+                {
+                    kpiInstance.Validate(values);
+                    KpiManager kpiManager = new KpiManager();
+                    var kpiId = kpiManager.Save(kpiInstance);
+                    result = Rest(kpiId);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error("Error creating Kpi" + e);
+                    result = new RestStatusCodeResult((int) HttpStatusCode.InternalServerError, e.Message);
+                }
+            }
+            else
+            {
+                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError,_localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
+
+            }
             return result;
         }
     }

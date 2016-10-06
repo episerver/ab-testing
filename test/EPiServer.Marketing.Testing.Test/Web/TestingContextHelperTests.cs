@@ -28,6 +28,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IContentVersionRepository> _mockContentVersionRepository;
         private Mock<IUIHelper> _mockUIHelper;
         private Mock<IPreviewUrlBuilder> _mockPreviewUrlBuilder;
+    
 
         LocalizationService _localizationService = new FakeLocalizationService("test");
 

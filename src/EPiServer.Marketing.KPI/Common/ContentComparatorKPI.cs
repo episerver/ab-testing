@@ -1,14 +1,11 @@
 ﻿using EPiServer.Core;
 using EPiServer.Marketing.KPI.Common.Attributes;
-using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Web;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Web.Routing;
 
@@ -26,7 +23,9 @@ namespace EPiServer.Marketing.KPI.Common
         [DataMember]
         public Guid ContentGuid;
 
-        public ContentComparatorKPI() { }
+        public ContentComparatorKPI()
+        {
+        }
 
         public ContentComparatorKPI(Guid contentGuid)
         {
@@ -35,17 +34,22 @@ namespace EPiServer.Marketing.KPI.Common
 
         public override bool Validate(Dictionary<string, string> responseData)
         {
-           
-                var content = ServiceLocator.Current.GetInstance<IContentRepository>()
-                   .Get<IContent>(new ContentReference(responseData["ConversionPage"]));
-                if (IsContentPublished(content) && !IsCurrentContent(content))
-                    ContentGuid = content.ContentGuid;
-           return true;
+            if (responseData["ConversionPage"] == "")
+            {
+                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/abtesting/addtestview/error_conversionpage"));
+            }
+
+            var content = ServiceLocator.Current.GetInstance<IContentRepository>()
+                    .Get<IContent>(new ContentReference(responseData["ConversionPage"]));
+            if (IsContentPublished(content) && !IsCurrentContent(content))
+            { ContentGuid = content.ContentGuid; }
+
+            return true;
         }
 
         public override bool Evaluate(object sender, EventArgs e)
         {
-            bool retval = false;
+            var retval = false;
             var ea = e as ContentEventArgs;
             if (ea != null)
             {
@@ -56,7 +60,13 @@ namespace EPiServer.Marketing.KPI.Common
 
         private bool IsContentPublished(IContent content)
         {
-           return true;
+            IContentVersionRepository repo = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+            var publishedContent = repo.LoadPublished(content.ContentLink);
+            if (publishedContent == null)
+            {
+                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/abtesting/addtestview/error_selected_notpublished"));
+            }
+            return true;
         }
 
         private bool IsCurrentContent(IContent content)
@@ -64,16 +74,9 @@ namespace EPiServer.Marketing.KPI.Common
             IPageRouteHelper helper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             if (helper.PageLink.ID == content.ContentLink.ID)
             {
-                throw new KpiValidationException("Cannot convert to the same content you are testing");
+                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/abtesting/addtestview/error_selected_samepage"));
             }
             return false;
         }
-
-        private IContent GetCurrentContent()
-        {
-            return HttpContext.Current.Items["CurrentPage"] as IContent;
-        }
-
-
     }
 }

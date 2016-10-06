@@ -22,7 +22,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             IKpiManager kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
             List<KpiTypeModel> kpiData = new List<KpiTypeModel>();
 
-            var KpiTypes = kpiManager.GetAllKpis();
+            var KpiTypes = kpiManager.GetKpiTypes();
             foreach (Type t in KpiTypes)
             {
                 kpiData.Add(new KpiTypeModel() {kpi = Activator.CreateInstance(t) as IKpi, kpiType = t});

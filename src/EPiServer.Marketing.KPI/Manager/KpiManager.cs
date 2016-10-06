@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.KPI.Manager
             _dataAccess.Delete(kpiId);
         }
 
-        public IEnumerable<Type> GetAllKpis()
+        public IEnumerable<Type> GetKpiTypes()
         {
             var type = typeof(IKpi);
             // exclude interfaces, abstract instances, and the convience base class Kpi

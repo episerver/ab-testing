@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
@@ -49,7 +48,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         /// <returns></returns>
         bool Validate(Dictionary<string,string> kpiData);
-
 
         /// <summary>
         /// Determines if a conversion has happened.

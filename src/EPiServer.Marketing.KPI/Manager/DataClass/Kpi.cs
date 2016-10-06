@@ -1,5 +1,4 @@
 ﻿using EPiServer.Marketing.KPI.Common.Attributes;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -158,7 +157,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         {
             return true;
         }
-
 
         /// <summary>
         /// Determines if a conversion has happened.
