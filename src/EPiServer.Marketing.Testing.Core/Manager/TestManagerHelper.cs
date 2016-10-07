@@ -41,15 +41,15 @@ namespace EPiServer.Marketing.Testing
                 Owner = theDalTest.Owner,
                 OriginalItemId = theDalTest.OriginalItemId,
                 State = AdaptToManagerState(theDalTest.State),
-                StartDate = theDalTest.StartDate,
+                StartDate = DateTime.SpecifyKind(theDalTest.StartDate, DateTimeKind.Utc).ToLocalTime(),
                 EndDate = theDalTest.EndDate,
                 ParticipationPercentage = theDalTest.ParticipationPercentage,
                 IsSignificant = theDalTest.IsSignificant,
                 ZScore = theDalTest.ZScore,
                 ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
-                CreatedDate = theDalTest.CreatedDate,
-                ModifiedDate = theDalTest.ModifiedDate,
+                CreatedDate = DateTime.SpecifyKind(theDalTest.CreatedDate, DateTimeKind.Utc).ToLocalTime(),
+                ModifiedDate = DateTime.SpecifyKind(theDalTest.ModifiedDate, DateTimeKind.Utc).ToLocalTime(),
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
                 KpiInstances = AdaptToManagerKPI(_kpiManager, theDalTest.KeyPerformanceIndicators)
             };
