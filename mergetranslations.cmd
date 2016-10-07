@@ -16,6 +16,15 @@ mkdir diffs
 ..\..\..\TranslationSupport.exe normalize -r=".\\" -d=".\\diffs"
 rmdir /S /Q diffs
 cd ..\..\..\
+cd src\EPiServer.Marketing.KPI\EmbeddedLangFiles
+mkdir diffs
+@echo  *** Normalizing (keys in order and lower case) and generating diff files
+..\..\..\TranslationSupport.exe normalizeanddiff -r=".\\" -d=".\\diffs"
+@echo  *** Merging diff files into existing language files
+..\..\..\TranslationSupport.exe mergediff -r=".\\" -d=".\\diffs"
+@echo  *** Normalizing (puts all keys in order and lower case)
+..\..\..\TranslationSupport.exe normalize -r=".\\" -d=".\\diffs"
+rmdir /S /Q diffs
+cd ..\..\..\
 @echo.
 @echo on
-

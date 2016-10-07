@@ -1,0 +1,22 @@
+﻿<script>dojo.require("epi-cms/widget/ContentSelector")</script>
+<p>
+    <label id="pagePickerLabel">
+    </label>
+    <script>
+        require(["dojo/dom", "epi/i18n!marketing-testing/nls/abtesting"], function (dom, resources) {
+            var pagePickerLabelNode = dom.byId("pagePickerLabel");
+            pagePickerLabelNode.innerText = resources.addtestview.conversion_label;
+        });
+    </script>
+    <span name="ConversionPage"
+          id="ConversionPageWidget"
+          data-dojo-type="epi-cms/widget/ContentSelector"
+          data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
+          data-dojo-attach-event="onChange: _onConversionPageChanged">
+    </span>
+    <span id="pickerErrorIcon"
+          class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+    </span>
+    <span id="pickerErrorText" class="errorText">
+    </span>
+</p>

@@ -2,6 +2,7 @@
 using EPiServer.Marketing.KPI.Common;
 using Moq;
 using System;
+using EPiServer.Framework.Localization;
 using Xunit;
 
 namespace EPiServer.Marketing.KPI.Test.Common
