@@ -30,7 +30,7 @@
         </div>
         <!-- Control/Published Version -->
         <div class="row">
-            <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column" style="cursor: pointer" data-dojo-attach-event="onclick: _onPublishedVersionClick">
+            <div class="cardWrapper 2column controlDefaultBody">
                 <div class="leadingContent" data-dojo-attach-point="controlStatusIcon"></div>
                 <h3>
                     ${resources.detailsview.content_control_header}
@@ -44,6 +44,10 @@
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
                         <span data-dojo-attach-point="datePublished"></span>
                     </p>
+                    <div class="abPickWinnerAction" data-dojo-attach-point="controlPickWinnerBtn">
+                        <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onPublishedVersionClick">${resources.detailsview.button_pick_winner_option}</button>
+                    </div>
+                    <hr class="abResultLine" />
                     <!-- Control Statistics -->
                     <table width="100%">
                         <tr>
@@ -66,7 +70,7 @@
                 </div>
             </div>
             <!-- Challenger/Draft Version-->
-            <div data-dojo-attach-point="challengerWrapper" class="cardWrapper 2column" style="cursor: pointer" data-dojo-attach-event="onclick: _onVariantVersionClick">
+            <div class="cardWrapper 2column challengerDefaultBody">
                 <div class="winningContent" data-dojo-attach-point="challengerStatusIcon"></div>
                 <h3>
                     ${resources.detailsview.content_challenger_header}
@@ -78,6 +82,10 @@
                         <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
                         <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
                     </p>
+                    <div class="abPickWinnerAction" data-dojo-attach-point="challengerPickWinnerBtn">
+                        <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
+                    </div>
+                    <hr class="abResultLine" />
                     <table width="100%">
                         <tr>
                             <td style="text-align: center;">
