@@ -29,8 +29,6 @@
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
         <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
-        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
-        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
         <goals_default_text>Ex. By tweaking the copy in the first bullet point to directly address the ‘time issue’, I can motivate more visitors to download the ebook.</goals_default_text>
         <goals_header>What is the overall goal for this test?</goals_header>

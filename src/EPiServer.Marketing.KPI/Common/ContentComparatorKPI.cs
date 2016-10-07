@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             if (responseData["ConversionPage"] == "")
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/abtesting/addtestview/error_conversionpage"));
+                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/error_conversionpage"));
             }
 
             var content = ServiceLocator.Current.GetInstance<IContentRepository>()
@@ -64,7 +64,7 @@ namespace EPiServer.Marketing.KPI.Common
             var publishedContent = repo.LoadPublished(content.ContentLink);
             if (publishedContent == null)
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/abtesting/addtestview/error_selected_notpublished"));
+                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/error_selected_notpublished"));
             }
             return true;
         }

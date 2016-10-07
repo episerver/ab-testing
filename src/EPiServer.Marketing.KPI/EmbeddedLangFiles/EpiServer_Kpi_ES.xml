@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<languages>
+  <language name="español" id="es">
+    <content_comparator_kpi>
+      <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
+      <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
+    </content_comparator_kpi>
+  </language>
+</languages>
