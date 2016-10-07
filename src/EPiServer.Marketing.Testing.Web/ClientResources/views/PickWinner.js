@@ -150,29 +150,34 @@
 
         renderStatusIndicatorStyles: function () {
             var me = this;
-            me.baseWrapper = "cardWrapperShadowed";
             if (this.context.data.test.state < 2) {
                 me.statusIndicatorClass = "leadingContent";
             }
             else { me.statusIndicatorClass = "winningContent"; }
 
             if (textHelper.publishedPercent > textHelper.draftPercent) {
+                this.controlStatusIcon.title = resources.pickwinnerview.content_winning_tooltip;
+                this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+                domClass.replace(this.controlPickWinnerBtn, "epi-success abPickWinnerAction");
+                domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
             }
             else if (textHelper.publishedPercent < textHelper.draftPercent) {
+                this.controlStatusIcon.title = "";
+                this.challengerStatusIcon.title = resources.pickwinnerview.content_winning_tooltip;
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
+                domClass.replace(this.controlPickWinnerBtn, "abPickWinnerAction");
+                domClass.replace(this.challengerPickWinnerBtn, "epi-success abPickWinnerAction");
             }
             else {
+                this.controlStatusIcon.title = "";
+                this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+                domClass.replace(this.controlPickWinnerBtn, "abPickWinnerAction");
+                domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
             }
         },
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {

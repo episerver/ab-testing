@@ -400,3 +400,7 @@ hr {
 .abResultLine {
     margin-bottom: 6px;
 }
+.abPickWinnerAction {
+    text-align: center;
+    margin-bottom: 36px;
+}
