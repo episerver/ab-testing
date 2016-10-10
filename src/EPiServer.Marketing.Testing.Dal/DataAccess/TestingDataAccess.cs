@@ -401,8 +401,9 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                             existingVariant.ModifiedDate = DateTime.UtcNow;
                             existingVariant.Views = newVariant.Views;
                             existingVariant.Conversions = newVariant.Conversions;
-                            existingVariant.IsWinner = newVariant.IsWinner;
-                                
+                                existingVariant.IsWinner = newVariant.IsWinner;
+                            existingVariant.IsPublished = newVariant.IsPublished;
+
                         }
                         else
                         {

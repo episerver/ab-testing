@@ -239,7 +239,7 @@ namespace EPiServer.Marketing.Testing.Web
                         var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
-                        var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
+                        var contentVersion = e.ContentLink.WorkID == 0 ? activeTest.Variants.First(variant => variant.IsPublished).ItemVersion : e.ContentLink.WorkID;
 
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
@@ -278,8 +278,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (newVariant.Id != Guid.Empty)
             {
-                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.UserIncludedInTestEvent, new TestEventArgs(activeTest, e));
-                if (newVariant.ItemVersion != contentVersion)
+                if (!newVariant.IsPublished)
                 {
                     contentVersion = newVariant.ItemVersion;
                     testCookieData.ShowVariant = true;
@@ -376,33 +375,33 @@ namespace EPiServer.Marketing.Testing.Web
                 return;
             }
 
-            HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+                HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
 
-            var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
-            foreach (var tdcookie in cookielist)
-            {
-                // for every test cookie we have, check for the converted and the viewed flag
+                var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
+                foreach (var tdcookie in cookielist)
+                {
+                    // for every test cookie we have, check for the converted and the viewed flag
                 if (tdcookie.Converted || !tdcookie.Viewed)
-                {
-                    continue;
-                }
-
-                var test = _testManager.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
-                if (test == null)
-                {
-                    continue;
-                }
-
-                // optimization : Evalute only the kpis that have not currently evaluated to true.
-                var kpis = new List<IKpi>();
-                foreach (var kpi in test.KpiInstances)
-                {
-                    var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
-                    if (!converted)
                     {
-                        kpis.Add(kpi);
-                    }
+                    continue;
                 }
+
+                        var test = _testManager.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
+                if (test == null)
+                        {
+                    continue;
+                }
+
+                            // optimization : Evalute only the kpis that have not currently evaluated to true.
+                            var kpis = new List<IKpi>();
+                            foreach (var kpi in test.KpiInstances)
+                            {
+                                var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
+                                if (!converted)
+                                {
+                                    kpis.Add(kpi);
+                                }
+                            }
 
                 var kpiResults = _testManager.EvaluateKPIs(kpis, e);
 
@@ -426,14 +425,14 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="results"></param>
         private void ProcessKpiConversionResults(TestDataCookie tdcookie, IMarketingTest test, List<IKpi> kpis,
             IEnumerable<KpiConversionResult> results)
-        {
-            // add each kpi to testdata cookie data
+                            {
+                                // add each kpi to testdata cookie data
             foreach (var result in results)
-            {
+                                {
                 if (!result.HasConverted)
                 {
                     continue;
-                }
+                                }
 
                 tdcookie.KpiConversionDictionary.Remove(result.KpiId);
                 tdcookie.KpiConversionDictionary.Add(result.KpiId, true);
@@ -441,14 +440,14 @@ namespace EPiServer.Marketing.Testing.Web
                     new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == result.KpiId), test));
             }
 
-            // now check to see if all kpi objects have evalated
-            tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
+                                // now check to see if all kpi objects have evalated
+                                tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
 
-            // now save the testdata to the cookie
-            _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
+                                // now save the testdata to the cookie
+                                _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
 
-            // now if we have converted, fire the converted message 
-            // note : we wouldnt be here if we already converted on a previous loop
+                                // now if we have converted, fire the converted message 
+                                // note : we wouldnt be here if we already converted on a previous loop
             if (!tdcookie.Converted)
             {
                 return;
@@ -651,7 +650,7 @@ namespace EPiServer.Marketing.Testing.Web
                     // try to load the service so we can add the proxy handler
                     Object service;
                     if (_serviceLocator.TryGetExistingInstance(att.service, out service))
-                    {   
+                    {
                         try
                         {
                             // get the event method infor
@@ -660,7 +659,7 @@ namespace EPiServer.Marketing.Testing.Web
                             var proxyEventHandlerMethod = this.GetType().GetMethod("ProxyEventHandler");
                             // create our delegate that will be invoked when the event is fired
                             var delegateToInvoke = Delegate.CreateDelegate(
-                                    serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
+                                serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
 
                             // Call the removeHandler method for this event
                             MethodInfo removeHandler = serviceEventInfo.GetRemoveMethod();

@@ -107,9 +107,9 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\VariantMap.cs">
       <Link>Mappings\VariantMap.cs</Link>
     </Compile>
-    <Compile Include="Migrations\201606291147071_Initial.cs" />
-    <Compile Include="Migrations\201606291147071_Initial.Designer.cs">
-      <DependentUpon>201606291147071_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201609091719244_Initial.cs" />
+    <Compile Include="Migrations\201609091719244_Initial.Designer.cs">
+      <DependentUpon>201609091719244_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201609291731241_AddKpiResults.cs" />
     <Compile Include="Migrations\201609291731241_AddKpiResults.Designer.cs">
@@ -123,8 +123,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201606291147071_Initial.resx">
-      <DependentUpon>201606291147071_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201609091719244_Initial.resx">
+      <DependentUpon>201609091719244_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201609291731241_AddKpiResults.resx">
       <DependentUpon>201609291731241_AddKpiResults.cs</DependentUpon>

@@ -36,8 +36,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             else if (level == Level.Warning)
             {
                 WarningCalled = true;
-            }
         }
+    }
     }
 
     public class TestHandlerTests : IDisposable
@@ -135,7 +135,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             // For this test we dont actually care what the exception is just that it is catching and
             // logging one.
             Assert.True(_logger.ErrorCalled, "Exception was not logged.");
-            _logger.ErrorCalled = false;
+            _logger.ErrorCalled = false; 
             _logger.WarningCalled = false;
         }
 
@@ -226,7 +226,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -234,10 +235,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Variant testVariant = new Variant()
             {
                 Id = _matchingVariantId,
-                ItemVersion = 5,
+                ItemVersion = 2,
                 TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
+                ItemId = _associatedTestGuid,
+                IsPublished = false
             };
+
+            Variant testVariant2 = new Variant()
+            {
+                Id = _matchingVariantId,
+                ItemVersion = 1,
+                TestId = _activeTestGuid,
+                ItemId = _associatedTestGuid,
+                IsPublished = true
+            };
+
+            test.Variants.Add(testVariant);
+            test.Variants.Add(testVariant2);
+
             var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
@@ -274,7 +289,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } },
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -284,8 +300,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _matchingVariantId,
                 ItemVersion = 0,
                 TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
+                ItemId = _associatedTestGuid,
+                IsPublished = true
             };
+
+            test.Variants.Add(testVariant);
 
             var testHandler = GetUnitUnderTest();
 
@@ -313,7 +332,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
-
+ 
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
@@ -326,7 +345,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -336,8 +356,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.Empty,
                 ItemVersion = 0,
                 TestId = _activeTestGuid,
-                ItemId = Guid.Empty
+                ItemId = Guid.Empty,
+                IsPublished = true
             };
+
+            test.Variants.Add(testVariant);
 
             var testHandler = GetUnitUnderTest();
 
@@ -487,7 +510,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Once, "Test should have attempted to increment count");
         }
 
-        [Fact]
+         [Fact]
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest();

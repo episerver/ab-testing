@@ -145,9 +145,10 @@ namespace EPiServer.Marketing.Testing
                 ItemVersion = theDalVariant.ItemVersion,
                 Conversions = theDalVariant.Conversions,
                 Views = theDalVariant.Views,
-                IsWinner = theDalVariant.IsWinner,
                 KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults),
-                KeyValueResults = AdaptToManagerKeyValueResult(theDalVariant.DalKeyValueResults)
+                KeyValueResults = AdaptToManagerKeyValueResult(theDalVariant.DalKeyValueResults),
+                IsWinner = theDalVariant.IsWinner,
+                IsPublished = theDalVariant.IsPublished
             };
 
             return retVariant;
@@ -232,6 +233,7 @@ namespace EPiServer.Marketing.Testing
                 Conversions = managerVariant.Conversions,
                 Views = managerVariant.Views,
                 IsWinner = managerVariant.IsWinner,
+                IsPublished = managerVariant.IsPublished,
                 DalKeyFinancialResults = AdaptToDalKeyFinancialResult(managerVariant.KeyFinancialResults),
                 DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults)
             };

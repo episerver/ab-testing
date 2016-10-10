@@ -40,6 +40,11 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// 
         /// </summary>
         public int Views { get; set; }
+
+        /// <summary>
+        /// Marks the variant content as the one that is publshed i.e. not the draft that is part of the test.
+        /// </summary>
+        public bool IsPublished { get; set; }
         
         /// <summary>
         /// Reference to the test this is associated with.

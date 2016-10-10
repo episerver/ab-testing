@@ -340,7 +340,7 @@
             },
 
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
@@ -363,6 +363,7 @@
             //Start and Cancel Events
 
             _onStartButtonClick: function () {
+                
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
@@ -374,6 +375,8 @@
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {
+                    var startButton = registry.byId("StartButton");
+                    startButton.setDisabled(true);
                     this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                     this._contentVersionStore
                         .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -393,6 +396,7 @@
                         .otherwise(function (result) {
                             console.log("Query failed, we cannot tell if this page is a valid page or not.");
                         });
+                    startButton.setDisabled(false);
                 }
             },
 

@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     {
                         new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant()
                         {
-                            ItemVersion = 4, Views = 5000, Conversions = 130,
+                            ItemVersion = 4, Views = 5000, Conversions = 130, IsPublished=true,
                             DalKeyValueResults = new List<DalKeyValueResult>()
                             {
                                 new DalKeyValueResult()

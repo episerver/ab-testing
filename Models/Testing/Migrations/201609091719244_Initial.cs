@@ -56,6 +56,7 @@ namespace Testing.Migrations
                         IsWinner = c.Boolean(nullable: false),
                         Conversions = c.Int(nullable: false),
                         Views = c.Int(nullable: false),
+                        IsPublished = c.Boolean(nullable: false),
                         CreatedDate = c.DateTime(nullable: false),
                         ModifiedDate = c.DateTime(nullable: false),
                     })

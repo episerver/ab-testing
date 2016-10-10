@@ -15,7 +15,7 @@ namespace EPiServer.Marketing.KPI.Common
     {
         [DataMember]
         public Guid ContentGuid;
-         
+
         public ContentComparatorKPI() { }
 
         public ContentComparatorKPI(Guid contentGuid)
@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.KPI.Common
             var ea = e as ContentEventArgs;
 
             if( ea != null  )
-            {
+        {
                 retval = ContentGuid.Equals(ea.Content.ContentGuid);
             }
 

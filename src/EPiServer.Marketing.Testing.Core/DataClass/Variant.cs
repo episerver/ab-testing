@@ -39,6 +39,11 @@ namespace EPiServer.Marketing.Testing.Data
         public int Views { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public bool IsPublished { get; set; }
+
+        /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual ABTest ABTest { get; set; }
