@@ -16,6 +16,7 @@ using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Reflection;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -498,7 +499,7 @@ namespace EPiServer.Marketing.Testing.Web
                 };
 
                 //_testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, 1);
-                _testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, 1);
+                _testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
             }
         }
 

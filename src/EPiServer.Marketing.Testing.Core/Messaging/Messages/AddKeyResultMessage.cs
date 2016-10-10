@@ -1,5 +1,6 @@
 ﻿using System;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
 {
@@ -13,7 +14,7 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
 
         public IKeyResult Result { get; set; }
 
-        public int Type { get; set; }
+        public KeyResultType Type { get; set; }
 
     }
 }

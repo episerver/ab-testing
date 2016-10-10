@@ -9,6 +9,7 @@ using EPiServer.Core;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -250,20 +251,20 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        public void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, int type)
+        public void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
-            if (type == 0)
+            if (type == KeyResultType.Financial)
             {
-                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), type);
+                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
             }
             else
             {
-                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), type);
+                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
             }
         }
 
 
-        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, int type)
+        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             var messaging = _serviceLocator.GetInstance<IMessagingManager>();
             messaging.EmitKpiResultData(testId, itemId, itemVersion, keyResult, type);

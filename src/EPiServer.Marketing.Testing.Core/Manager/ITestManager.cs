@@ -6,6 +6,7 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -31,9 +32,9 @@ namespace EPiServer.Marketing.Testing
 
         void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType);
 
-        void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, int type);
+        void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
-        void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, int type);
+        void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
         void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType);
 

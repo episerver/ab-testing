@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 
 namespace EPiServer.Marketing.Testing.Messaging
@@ -102,7 +103,7 @@ namespace EPiServer.Marketing.Testing.Messaging
             emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, VariantId=VariantId, ItemVersion = itemVersion } );
         }
 
-        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, int type)
+        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
             emitterFactory.Emit(new AddKeyResultMessage()

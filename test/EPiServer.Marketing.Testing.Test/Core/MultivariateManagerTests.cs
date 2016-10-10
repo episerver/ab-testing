@@ -22,6 +22,7 @@ using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -305,7 +306,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var theTestItemGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
             var theItemVersion = 1;
-            var resultsType = 1;
+            var resultsType = KeyResultType.Value;
             var result = new KeyValueResult()
             {
                 KpiId = Guid.NewGuid(),
@@ -340,7 +341,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Verify(
                 da =>
                     da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
-                        It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals(resultsType))),
+                        It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
                 "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
 
             tm.AddKpiResultData(theGuid, theTestItemGuid, theItemVersion, result2, 0);
@@ -358,7 +359,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Verify(
                 da =>
                     da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
-                        It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals(resultsType))),
+                        It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
                 "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
         }
 
@@ -478,7 +479,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1)),
                 It.Is<IKeyResult>(arg => arg.Equals(result)),
-                It.Is<int>(arg => arg.Equals(0))),
+                It.Is<KeyResultType>(arg => arg.Equals(KeyResultType.Financial))),
                 "Guids are not correct or kpi result message not emmited");
         }
 
