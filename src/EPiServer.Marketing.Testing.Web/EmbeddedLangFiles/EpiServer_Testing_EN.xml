@@ -105,9 +105,7 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Control</content_control_header>
         <conversions>conversions</conversions>
-        <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>

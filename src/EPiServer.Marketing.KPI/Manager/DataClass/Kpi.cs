@@ -64,7 +64,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// 2) overide and return your markup string directly
         /// </summary>
         [DataMember]
-        public string UiMarkup
+        public virtual string UiMarkup
         {
             get
             {
@@ -91,7 +91,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// 2) overide and return your markup string directly
         /// </summary>
         [DataMember]
-        public string UiReadOnlyMarkup
+        public virtual string UiReadOnlyMarkup
         {
             get
             {
@@ -119,7 +119,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns>true if loaded, else false. If false value contains the exception message.</returns>
-        private bool TryGetResourceString(string key, out string value)
+        internal bool TryGetResourceString(string key, out string value)
         {
             bool retval = false;
             try

@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.KPI.Common
     [DataContract]
     [EventSpecification(service = typeof(IContentEvents), methodname = "LoadedContent")]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
-        readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.txt",
+        readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.html",
         text = "Landing Page", description = "Choose a page for conversion.")]
     public class ContentComparatorKPI : Kpi
     {
@@ -31,6 +31,35 @@ namespace EPiServer.Marketing.KPI.Common
         {
             ContentGuid = contentGuid;
         }
+
+        [DataMember]
+        public override string UiReadOnlyMarkup
+        {
+            get
+            {
+                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                    .GetString("/kpi/content_comparator_kpi/conversion_header");
+                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                    .GetString("/kpi/content_comparator_kpi/conversion_selector_description");
+                string markup;
+                string value;
+                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
+                {
+                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
+                    if (!TryGetResourceString(attr.readonlymarkup, out value))
+                    {
+                        markup = "failed to load " + attr.readonlymarkup + ":" + value;
+                    }
+                    markup = string.Format(value, conversionHeaderText, conversionDescription, "c", "d");
+                }
+                else
+                {
+                    markup = "UIMarkupAttribute class attribute not defined.";
+                }
+                return markup;
+            }
+        }
+
 
         public override bool Validate(Dictionary<string, string> responseData)
         {
