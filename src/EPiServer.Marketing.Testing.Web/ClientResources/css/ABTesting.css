@@ -320,8 +320,7 @@ hr {
     width: 64px;
 }
 .abThumbnailCanvas {
-    height: 364px;
-    width: 512px;
+    width: 100%;
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
