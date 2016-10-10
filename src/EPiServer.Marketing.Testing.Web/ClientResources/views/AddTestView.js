@@ -56,6 +56,7 @@
         viewParticipationPercent: null;
         viewTestDuration: null;
         viewConfidenceLevel: null;
+        startButtonClickCounter: 0;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -100,6 +101,10 @@
             },
 
             reset: function () {
+
+                // reset the start button click counter
+                startButtonClickCounter = 0;
+
                 //set view model properties to default form values.
                 if (this.descriptionText) {
                     this.descriptionText.value = this.model.testDescription = "";
@@ -363,7 +368,7 @@
             //Start and Cancel Events
 
             _onStartButtonClick: function () {
-                
+                if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
@@ -375,8 +380,6 @@
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {
-                    var startButton = registry.byId("StartButton");
-                    startButton.setDisabled(true);
                     this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
                     this._contentVersionStore
                         .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
@@ -396,7 +399,8 @@
                         .otherwise(function (result) {
                             console.log("Query failed, we cannot tell if this page is a valid page or not.");
                         });
-                    startButton.setDisabled(false);
+
+                    startButtonClickCounter++; // Increment click count
                 }
             },
 
