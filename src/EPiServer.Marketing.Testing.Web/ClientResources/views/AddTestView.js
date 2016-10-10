@@ -1,4 +1,4 @@
-﻿define([
+define([
      'dojo/_base/declare',
         'dijit/_WidgetBase',
         'dijit/_TemplatedMixin',
@@ -13,10 +13,12 @@
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
-        "dojo/query",
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
+       "dojo/dom-form",
+       "dojo/json",
+       "dojox/layout/ContentPane",
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
@@ -24,12 +26,12 @@
         'dijit/form/NumberSpinner',
         'dijit/form/Textarea',
         'dijit/form/RadioButton',
-        'epi-cms/widget/ContentSelector',
         'epi/shell/widget/DateTimeSelectorDropDown',
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"
+       "dijit/layout/ContentPane",
+       "dijit/form/Select"
 ],
     function (
     declare,
@@ -46,10 +48,12 @@
     html,
     dom,
     domClass,
-    query,
     registry,
     dependency,
-    rasterizehtml
+   rasterizehtml,
+   domForm,
+   JSON,
+   ContentPane
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -62,6 +66,8 @@
             templateString: template,
 
             resources: resources,
+
+           // DOJO WIDGET METHODS
 
             //set bindings to view model properties
             modelBindingMap: {
@@ -85,10 +91,12 @@
 
             //sets default values once everything is loaded
             postCreate: function () {
+               var kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.reset();
                 this.inherited(arguments);
 
             },
+
 
             startup: function () {
                 if (this.breadcrumbWidget) {
@@ -97,62 +105,10 @@
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
+               this._setKpiSelectList();
             },
 
-            reset: function () {
-                //set view model properties to default form values.
-                if (this.descriptionText) {
-                    this.descriptionText.value = this.model.testDescription = "";
-                }
-
-                if (this.participationPercentText) {
-                    this.participationPercentText.reset();
-                    this.model.participationPercent = this.participationPercentText.value;
-                }
-
-                if (this.durationText) {
-                    this.durationText.reset();
-                    this.model.testDuration = this.durationText.value;
-                }
-
-                if (this.startDatePicker) {
-                    this.startDatePicker.reset();
-                    this.model.startDate = new Date(Date.now()).toUTCString();
-                }
-
-                if (this.breadcrumbWidget) {
-                    this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
-                    this.contentNameNode.innerText = this.contentData.name;
-                    this.breadcrumbWidget.layout();
-                }
-
-                if (this.conversionPageWidget) {
-                    this.conversionPageWidget.reset();
-                }
-
-                if (this.start) {
-                    this.start.set("checked", true);
-                }
-
-                if (this.delay) {
-                    this.delay.set("checked", false);
-                }
-
-                if (this.scheduleDiv) {
-                    this.scheduleDiv.style.visibility = "hidden";
-                }
-
-                if (dom.byId("confidence")) {
-                    dom.byId("confidence").value = this.confidenceLevel.value;
-                }
-
-                this._setViewPublishedVersionAttr(true);
-                this._setViewCurrentVersionAttr();
-                this._clearConversionErrors();
-                this._setViewConfidenceLevelAttr();
-            },
-
-            //setters for bound properties
+           // TEST DATA MODEL & FORM SETTERS
             _setViewPublishedVersionAttr: function (viewPublishedVersion) {
                 //do dom stuff
                 if (!viewPublishedVersion) {
@@ -161,20 +117,18 @@
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
-                var pubThumb = document.getElementById("publishThumbnail");
+               var pubThumb = document.getElementById("publishThumbnail")
 
                 if (pubThumb) {
                     //Hack to build published versions preview link below
-                    var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1;
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                        previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
+                       previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
+
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versiona').addClass('hide-bg');
-                    });
+                   rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
                 }
             },
 
@@ -193,9 +147,7 @@
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versionb').addClass('hide-bg');
-                    });
+                   rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
                 }
             },
 
@@ -209,47 +161,19 @@
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
                 var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                this._resetConfidenceSelection(rbs);
                 for (var i = 0; i < rbs.length; i++) {
                     var rb = dom.byId(rbs[i]);
                     if (!rb) {
                         return;
                     } else if (rb.value === viewConfidenceLevel.toString()) {
                         rb.setAttribute("selected", "selected");
-                        rb.textContent = rb.value + "% " + resources.addtestview.default;
                     } else {
                         rb.removeAttribute("selected");
-                        rb.textContent = rb.value + "%";
                     }
                 }
             },
 
-            _resetConfidenceSelection: function (rbs) {
-                for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.textContent.indexOf("(default)") != -1) {
-                        rb.selected = true;
-                    } else {
-                        rb.selected = false;
-                    }
-                }
-            },
-
-            _clearConversionErrors: function () {
-                var errorText = dom.byId("pickerErrorText");
-
-                if (!errorText) {
-                    return;
-                }
-
-                errorText.innerText = "";
-                errorText.style.visibility = "hidden";
-                var et2 = dom.byId("pickerErrorIcon");
-                et2.style.visibility = "hidden";
-            },
-
+           // DATA GETTERS
             _getConfidenceLevel: function () {
                 var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
                 for (i = 0; i < rbs.length; i++) {
@@ -263,26 +187,43 @@
                 }
             },
 
-            // Master validations for all form fields. Used when hitting the start button and will pickup
-            // errors not triggered by onChangeEvents.
-            _isValidFormData: function () {
-                return this._isValidConversionPage() & this._isValidPercentParticipation() &
-                    this._isValidDuration() & this._isValidStartDate();
+           // Transforms custom KPI form data into json for processing
+           _getKpiFormData: function () {
+               var me = this;
+               var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
+               var formData = dojo.toJson(kpiFormObject, true);
+               var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
+               return formattedFormData;
             },
 
-            //Validates a value has been selected for the conversion page.
-            _isValidConversionPage: function () {
-                var errorTextNode = dom.byId("pickerErrorText");
-                var errorIconNode = dom.byId("pickerErrorIcon");
-                var conversionPage = this.conversionPageWidget.value;
+           // FORM ELEMENT CONTROL METHODS
 
-                if (!conversionPage) {
-                    this._setError(resources.addtestview.error_conversiongoal, errorTextNode, errorIconNode);
-                    return false;
+           //retrieves KPIs and displays them in a select control
+           _setKpiSelectList: function () {
+               var me = this;
+               var kpiuiElement = registry.byId("kpiSelector");
+               kpiuiElement//"EPiServer.Marketing.KPI.Manager.DataClass." + evt
+               me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+               me.kpistore.get()
+               .then(function (markup) {
+                   kpiuiElement.set("value", "");
+                   dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
+                   var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
+                   kpiuiElement.addOption(defaultOption);
+                   for (var x = 0; x < markup.length; x++) {
+                       var option = { value: markup[x], label: markup[x].kpi.friendlyName };
+                       kpiuiElement.addOption(option);
                 }
+               });
+           },
 
-                this._setError("", errorTextNode, errorIconNode);
-                return true;
+           //DATA VALIDATION
+           // Master validations for all form fields. Used when hitting the start button and will pickup
+           // errors not triggered by onChangeEvents.
+           _isValidFormData: function () {
+               return this._isValidPercentParticipation() &
+                   this._isValidDuration() &
+                   this._isValidStartDate();
             },
 
             //Validates the participation percent entered is between 1 and 100
@@ -291,11 +232,12 @@
                 var errorIconNode = dom.byId("participationErrorIcon");
                 var participationPercentage = dom.byId("percentageSpinner").value;
 
-                if (!this._isUnsignedNumeric(participationPercentage) || participationPercentage <= 0 || participationPercentage > 100) {
+               if (!this._isUnsignedNumeric(participationPercentage) ||
+                   participationPercentage <= 0 ||
+                   participationPercentage > 100) {
                     this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                     return false;
                 }
-
                 this._setError("", errorTextNode, errorIconNode);
                 return true;
             },
@@ -325,7 +267,9 @@
 
                 if (dateValue !== "") {
                     if (isNaN(new Date(dateValue))) {
-                        this._setError(resources.addtestview.error_invalid_date_time_value, errorTextNode, errorIconNode);
+                       this._setError(resources.addtestview.error_invalid_date_time_value,
+                           errorTextNode,
+                           errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
                     } else if (new Date(dateValue) < now) {
@@ -339,12 +283,106 @@
                 return true;
             },
 
+           //Validates the supplied string as a positive integer
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) === null) {
+               if (string.match(/^[0-9]+$/) == null) {
                     return false;
                 }
                 return true;
             },
+
+
+           // FORM DATA CLEANUP
+           reset: function () {
+               //set view model properties to default form values.
+               if (this.descriptionText) {
+                   this.descriptionText.value = this.model.testDescription = "";
+               }
+
+               if (this.participationPercentText) {
+                   this.participationPercentText.reset();
+                   this.model.participationPercent = this.participationPercentText.value;
+               }
+
+               if (this.durationText) {
+                   this.durationText.reset();
+                   this.model.testDuration = this.durationText.value;
+               }
+
+               if (this.startDatePicker) {
+                   this.startDatePicker.reset();
+                   this.model.startDate = new Date(Date.now()).toUTCString();
+               }
+
+               if (this.breadcrumbWidget) {
+                   this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
+                   this.contentNameNode.innerText = this.contentData.name;
+                   this.breadcrumbWidget.layout();
+               }
+
+               if (this.conversionPageWidget) {
+                   this.conversionPageWidget.reset();
+               }
+
+               if (this.start) {
+                   this.start.set("checked", true);
+               }
+
+               if (this.delay) {
+                   this.delay.set("checked", false);
+               }
+
+               if (this.scheduleDiv) {
+                   this.scheduleDiv.style.visibility = "hidden";
+               }
+
+               if (dom.byId("confidence")) {
+                   dom.byId("confidence").value = "95";
+               }
+
+               this._setViewPublishedVersionAttr(true);
+               this._setViewCurrentVersionAttr();
+               this._clearConversionErrors();
+               this._clearCustomKpiMarkup();
+               this._setKpiSelectList();
+           },
+
+           //Clears the KPI Error text and icon
+           _clearConversionErrors: function () {
+               var errorText = dom.byId("kpiErrorText");
+               if (!errorText) {
+                   return;
+               }
+               errorText.innerText = "";
+               errorText.style.visibility = "hidden";
+               var et2 = dom.byId("kpiErrorIcon");
+               et2.style.visibility = "hidden";
+           },
+
+           //Removes the custom KPI markup from the view & widget registry
+           _clearCustomKpiMarkup: function () {
+               var kpiuiElement = dom.byId("kpiui");
+               if (kpiuiElement) {
+                   kpiuiElement.innerHTML = "";
+                   if (dijit.byId("ConversionPageWidget")) {
+                       dijit.byId("ConversionPageWidget").destroy(true);
+                       dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                   }
+               }
+               this._setKpiSelectList();
+           },
+
+           // UI UTILITIES
+           _toggleTimeSelector: function () {
+               var dateSelector = dom.byId("dateSelector");
+
+               if (dateSelector.style.visibility === "hidden") {
+                   dateSelector.style.visibility = "visible";
+               } else {
+                   this.startDatePicker.reset();
+                   dateSelector.style.visibility = "hidden";
+               }
+           },
 
             //Toggles an errors text content and icon visibitlity based on the error and nodes supplied
             _setError: function (errorText, errorNode, iconNode) {
@@ -361,50 +399,63 @@
 
             //EVENT HANDLERS
             //Start and Cancel Events
-
             _onStartButtonClick: function () {
-                
-                this.model.testDescription = dom.byId("testDescription").value;
+               var me = this;
+               var kpiTextField = dom.byId("kpiString");
+               me.kpiFormData = this._getKpiFormData();
+               me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+               me.kpistore.put({
+                   id: "KpiFormData",
+                   entity: {
+                       kpiJsonFormData: me.kpiFormData,
+                       kpiType: kpiTextField.value
+                   }
+               })
+                   .then(function (ret) {
+                       var kpiErrorText = dom.byId("kpiErrorText");
+                       kpiErrorText.style.visibility = "hidden";
+                       kpiErrorIcon.style.visibility = "hidden";
+                       me.model.kpiId = ret;
+                       me.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
                 if (startDateSelector.value === "") {
-                    this.model.startDate = utcNow;
+                           me.model.startDate = utcNow;
                 }
 
-                this.model.confidencelevel = dom.byId("confidence").value;
-                this.model.testTitle = this.pageName.textContent;
+                       me.model.confidencelevel = dom.byId("confidence").value;
+                       me.model.testTitle = me.pageName.textContent;
 
-                if (this._isValidFormData()) {
-                    var startButton = registry.byId("StartButton");
-                    startButton.setDisabled(true);
-                    this._contentVersionStore = this._contentVersionStore || epi.dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
-                    this._contentVersionStore
-                        .query({ contentLink: this.model.conversionPage, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
-                        .then(function (result) {
-                            var errorTextNode = dom.byId("pickerErrorText");
-                            var errorIconNode = dom.byId("pickerErrorIcon");
-                            if (result) {
-                                if (result.contentLink !== this.model.publishedVersion.contentLink) {
-                                    this.model.createTest();
-                                } else {
-                                    this._setError(resources.addtestview.error_selected_samepage, errorTextNode, errorIconNode);
-                                }
-                            } else {
-                                this._setError(resources.addtestview.error_selected_notpublished, errorTextNode, errorIconNode);
+                       if (me._isValidFormData()) {
+                           me.model.createTest();
                             }
-                        }.bind(this))
-                        .otherwise(function (result) {
-                            console.log("Query failed, we cannot tell if this page is a valid page or not.");
+
+                   })
+                   .otherwise(function (ret) {
+                       var kpiErrorText = dom.byId("kpiErrorText");
+                       kpiErrorText.innerText = ret.response.xhr.statusText;
+                       kpiErrorText.style.visibility = "visible";
+                       kpiErrorIcon.style.visibility = "visible";
                         });
-                    startButton.setDisabled(false);
-                }
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
-                me.contextParameters = { uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0] };
+               this._clearCustomKpiMarkup();
+               me.contextParameters = {
+                   uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
+               };
                 topic.publish("/epi/shell/context/request", me.contextParameters);
             },
+
+           _onSelectChange: function (evt) {
+               var kpiTextField = dom.byId("kpiString");
+               kpiTextField.value = evt.kpiType;
+               var kpiuiElement = dom.byId("kpiui");
+               new ContentPane({
+                   content: evt.kpi.uiMarkup
+               }).placeAt(kpiuiElement);
+           },
 
             // Form Field Events
             _onTestDescriptionChanged: function (event) {
@@ -451,17 +502,6 @@
                         scheduleText.innerText = resources.addtestview.notscheduled_text;
                         this.model.start = true;
                     }
-                }
-            },
-
-            _toggleTimeSelector: function () {
-                var dateSelector = dom.byId("dateSelector");
-
-                if (dateSelector.style.visibility === "hidden") {
-                    dateSelector.style.visibility = "visible";
-                } else {
-                    this.startDatePicker.reset();
-                    dateSelector.style.visibility = "hidden";
                 }
             }
         });

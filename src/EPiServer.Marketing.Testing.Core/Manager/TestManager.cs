@@ -151,15 +151,6 @@ namespace EPiServer.Marketing.Testing
                 throw new SaveTestException("Unable to save test due to empty list of KPI's.  One or more KPI's are required.");
             }
 
-            // Todo : We should probably check to see if item Guid is empty or null and
-            // create a new unique guid here?
-            // Save the kpi objects first
-            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            foreach (var kpi in multivariateTest.KpiInstances)
-            {
-                kpi.Id = kpiManager.Save(kpi); // note that the method returns the Guid of the object 
-            }
-
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
             _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestSavedEvent, new TestEventArgs(multivariateTest));
 
