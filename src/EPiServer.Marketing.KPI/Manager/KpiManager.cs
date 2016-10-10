@@ -7,6 +7,7 @@ using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
+using StructureMap.TypeRules;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -49,6 +50,18 @@ namespace EPiServer.Marketing.KPI.Manager
             _dataAccess.Delete(kpiId);
         }
 
+        public IEnumerable<Type> GetKpiTypes()
+        {
+            var type = typeof(IKpi);
+            // exclude interfaces, abstract instances, and the convience base class Kpi
+            var types =
+                AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi) );
+            return (types);
+        }
+             
+
         /// <summary>
         /// Serialize the kpi to a Json string and save it in the properties field.
         /// </summary>
@@ -56,6 +69,13 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <returns>EF Kpi object to save in the db.</returns>
         private IDalKpi ConvertToDalTest(IKpi kpi)
         {
+            if (Guid.Empty == kpi.Id)
+            {   // if the kpi.id is null, its because we are creating a new one.
+                kpi.Id = Guid.NewGuid();
+                kpi.CreatedDate = DateTime.UtcNow;
+                kpi.ModifiedDate = DateTime.UtcNow;
+            }
+
             var serializedKpi = JsonConvert.SerializeObject(kpi);
 
             var dalKpi = new DalKpi()
@@ -91,5 +111,8 @@ namespace EPiServer.Marketing.KPI.Manager
 
             return managerKpi;
         }
+
     }
+
+
 }

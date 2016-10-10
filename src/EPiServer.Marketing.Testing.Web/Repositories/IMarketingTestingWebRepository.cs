@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Web.Mvc;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Models;
-using EPiServer.Shell.Services.Rest;
 using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories

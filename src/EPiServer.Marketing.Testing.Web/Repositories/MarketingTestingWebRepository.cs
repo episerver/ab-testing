@@ -6,11 +6,11 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -151,20 +151,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             }
-
-            var content = _serviceLocator.GetInstance<IContentRepository>()
-                .Get<IContent>(new ContentReference(testData.ConversionPage));
-
-            var kpi = new ContentComparatorKPI(content.ContentGuid)
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
-            };
+         
+            KpiManager kpiManager = new KpiManager();
+            var kpi = kpiManager.Get(testData.KpiId);
 
             test = new ABTest
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid(), // todo push this down
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,

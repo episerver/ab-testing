@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Web
         public string StartDate { get; set; }
         public int TestDuration { get; set; }
         public int ParticipationPercent { get; set; }
-        public int ConversionPage { get; set; }
+        public Guid KpiId { get; set; }
         public string TestTitle { get; set; }
         public bool Start { get; set; }
         public double ConfidenceLevel { get; set; }
