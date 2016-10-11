@@ -74,7 +74,8 @@ namespace EPiServer.Marketing.KPI.Common
             IPageRouteHelper helper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             if (helper.PageLink.ID == content.ContentLink.ID)
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/abtesting/addtestview/error_selected_samepage"));
+                
+                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/error_selected_samepage"));
             }
             return false;
         }
