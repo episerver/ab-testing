@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
+using EPiServer.Framework.Localization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -74,12 +75,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
                     if (!TryGetResourceString(attr.configmarkup, out value))
                     {
-                        value = "failed to load " + attr.configmarkup + ":" + value;
+                        value = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
                     }
                 }
                 else
                 {
-                    value = "UIMarkupAttribute class attribute not defined.";
+                    value = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
                 }
                 return value;
             }
@@ -101,12 +102,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
                     if( !TryGetResourceString(attr.readonlymarkup, out value) )
                     {
-                        value = "failed to load " + attr.readonlymarkup + ":" + value;
+                        value = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
                     }
                 }
                 else
                 {
-                    value = "UIMarkupAttribute class attribute not defined.";
+                    value = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
                 }
                 return value;
             }
