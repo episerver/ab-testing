@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
   <language name="deutsch" id="de">
-    <content_comparator_kpi></content_comparator_kpi>
+    <kpi>
+      <content_comparator_kpi>
+        <config_markup>
+          <conversion_label>Visitor navigates to page</conversion_label>
+          <error_conversionpage>You must select a conversion page before you can save the A/B test.</error_conversionpage>
+          <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
+          <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
+        </config_markup>
+        <readonly_markup>
+          <conversion_header>Conversion goal</conversion_header>
+          <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        </readonly_markup>
+      </content_comparator_kpi>
+    </kpi>
   </language>
 </languages>
