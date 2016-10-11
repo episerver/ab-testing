@@ -188,5 +188,10 @@
         <inactivetests>Scheduled A/B Tests</inactivetests>
       </tasks>
     </abtesting>
+    <kpi>
+      <content_comparator_kpi>
+        <error_selected_samepage>ERROR SAME PAGE</error_selected_samepage>
+      </content_comparator_kpi>
+    </kpi>
   </language>
 </languages>
