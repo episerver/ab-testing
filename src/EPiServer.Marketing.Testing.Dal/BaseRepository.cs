@@ -81,7 +81,8 @@ namespace EPiServer.Marketing.Testing.Dal
         public IABTest GetById(object id)
         {
             return DatabaseContext.ABTests
-                        .Include(t => t.Variants)
+                        .Include("Variants.DalKeyFinancialResults")
+                        .Include("Variants.DalKeyValueResults")
                         .Include(t => t.KeyPerformanceIndicators)
                         .FirstOrDefault(t => t.Id == (Guid)id);
         }
@@ -89,7 +90,8 @@ namespace EPiServer.Marketing.Testing.Dal
         public IQueryable<IABTest> GetAll()
         {
             return DatabaseContext.ABTests
-                .Include(t => t.Variants)
+                .Include("Variants.DalKeyFinancialResults")
+                .Include("Variants.DalKeyValueResults")
                 .Include(t => t.KeyPerformanceIndicators)
                 .AsQueryable();
         }

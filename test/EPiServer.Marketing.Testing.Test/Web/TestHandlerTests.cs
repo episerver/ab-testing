@@ -14,6 +14,7 @@ using EPiServer.Marketing.Testing.Test.Core;
 using System.Web;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -35,8 +36,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             else if (level == Level.Warning)
             {
                 WarningCalled = true;
-            }
         }
+    }
     }
 
     public class TestHandlerTests : IDisposable
@@ -134,7 +135,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             // For this test we dont actually care what the exception is just that it is catching and
             // logging one.
             Assert.True(_logger.ErrorCalled, "Exception was not logged.");
-            _logger.ErrorCalled = false;
+            _logger.ErrorCalled = false; 
             _logger.WarningCalled = false;
         }
 
@@ -228,7 +229,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KpiInstances = new List<IKpi>(),
                 Variants = new List<Variant>()
             };
-            
+
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
 
             Variant testVariant = new Variant()
@@ -331,7 +332,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
-
+ 
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
@@ -447,7 +448,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<EventArgs>()))
-                .Returns(new List<Guid> { Guid.NewGuid() });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -494,7 +495,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<EventArgs>()))
-                .Returns(new List<Guid> { Guid.NewGuid() });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -509,7 +510,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Verify(call => call.EmitUpdateCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>()), Times.Once, "Test should have attempted to increment count");
         }
 
-        [Fact]
+         [Fact]
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest();

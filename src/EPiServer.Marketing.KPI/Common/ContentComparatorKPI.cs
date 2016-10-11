@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Web.Routing;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -22,7 +23,7 @@ namespace EPiServer.Marketing.KPI.Common
     {
         [DataMember]
         public Guid ContentGuid;
-
+         
         public ContentComparatorKPI()
         {
         }
@@ -47,7 +48,7 @@ namespace EPiServer.Marketing.KPI.Common
             return true;
         }
 
-        public override bool Evaluate(object sender, EventArgs e)
+        public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;
             var ea = e as ContentEventArgs;
@@ -55,7 +56,8 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 retval = ContentGuid.Equals(ea.Content.ContentGuid);
             }
-            return retval;
+
+            return new KpiConversionResult() { KpiId = Id, HasConverted = retval };
         }
 
         private bool IsContentPublished(IContent content)

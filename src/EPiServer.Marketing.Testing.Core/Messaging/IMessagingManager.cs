@@ -1,4 +1,6 @@
 ﻿using System;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
@@ -18,6 +20,8 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <param name="VariantId">the Guid of the cms item that caused a converion</param>
         void EmitUpdateConversion(Guid TestId, Guid VariantId, int itemVersion);
 
+        void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
+        
         /// <summary>
         /// Returns the number of items in the queue
         /// </summary>

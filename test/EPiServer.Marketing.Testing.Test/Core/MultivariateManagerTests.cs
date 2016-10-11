@@ -18,7 +18,11 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
 using System.Runtime.Caching;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -45,7 +49,24 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     OriginalItemId = testId,
                     ConfidenceLevel = 95,
                     State = DalTestState.Active,
-                    Variants = new List<DalVariant>() {new DalVariant() {ItemVersion = 1, IsPublished=true, Views = 5000, Conversions = 100}, new DalVariant() {ItemVersion = 4, IsPublished=false, Views = 5000, Conversions = 130} },
+                    Variants = new List<DalVariant>()
+                    {
+                        new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant()
+                        {
+                            ItemVersion = 4, Views = 5000, Conversions = 130, IsPublished=true,
+                            DalKeyValueResults = new List<DalKeyValueResult>()
+                            {
+                                new DalKeyValueResult()
+                                {
+                                    KpiId = Guid.NewGuid(), Value = 12, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()
+                                }
+                            },
+                            DalKeyFinancialResults = new List<DalKeyFinancialResult>()
+                            {
+                                new DalKeyFinancialResult() { KpiId = Guid.NewGuid(), Total = 12, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()}
+                            }
+                        }
+                    },
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>() {new DalKeyPerformanceIndicator()} }
             };
 
@@ -216,7 +237,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            ABTest test = new ABTest
+            var test = new ABTest
             {
                 Id = theGuid,
                 ModifiedDate = DateTime.UtcNow,
@@ -229,7 +250,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                             ItemId = Guid.NewGuid(),
                             ItemVersion = 1,
                             Views = 0,
-                            Conversions = 0
+                            Conversions = 0,
+                            KeyFinancialResults = new List<KeyFinancialResult>(),
+                            KeyValueResults = new List<KeyValueResult>()
                         }
                     },
                 KpiInstances =
@@ -271,6 +294,69 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
                         It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
+        }
+
+        [Fact]
+        public void TestManager_CallsAddKpiResultWithProperArguments()
+        {
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var theTestItemGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A4");
+            var theItemVersion = 1;
+            var resultsType = KeyResultType.Value;
+            var result = new KeyValueResult()
+            {
+                KpiId = Guid.NewGuid(),
+                Value = 12,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Id = Guid.NewGuid()
+            };
+
+            var result2 = new KeyFinancialResult()
+            {
+                KpiId = Guid.NewGuid(),
+                Total = 12,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Id = Guid.NewGuid()
+            };
+
+            var tm = GetUnitUnderTest();
+            tm.AddKpiResultData(theGuid, theTestItemGuid, theItemVersion, result, resultsType);
+
+            _dataAccessLayer.Verify(
+                da =>
+                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                        It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
+                "DataAcessLayer AddKpiResultData was never called or Test Guid did not match.");
+            _dataAccessLayer.Verify(
+                da =>
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                        It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
+                "DataAcessLayer AddKpiResultData was never called or test item Guid did not match.");
+            _dataAccessLayer.Verify(
+                da =>
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                        It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
+                "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
+
+            tm.AddKpiResultData(theGuid, theTestItemGuid, theItemVersion, result2, 0);
+
+            _dataAccessLayer.Verify(
+                da =>
+                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                        It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
+                "DataAcessLayer AddKpiResultData was never called or Test Guid did not match.");
+            _dataAccessLayer.Verify(
+                da =>
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                        It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
+                "DataAcessLayer AddKpiResultData was never called or test item Guid did not match.");
+            _dataAccessLayer.Verify(
+                da =>
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                        It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
+                "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
         }
 
         [Fact]
@@ -363,6 +449,37 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void TestManager_EmitKpiResultData()
+        {
+            var testManager = GetUnitUnderTest();
+
+            // Mock up the message manager
+            Mock<IMessagingManager> messageManager = new Mock<IMessagingManager>();
+            _serviceLocator.Setup(sl => sl.GetInstance<IMessagingManager>()).Returns(messageManager.Object);
+
+            var original = Guid.NewGuid();
+            var testItemId = Guid.NewGuid();
+            var result = new KeyFinancialResult()
+            {
+                KpiId = Guid.NewGuid(),
+                Total = 12,
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                Id = Guid.NewGuid()
+            };
+
+            testManager.EmitKpiResultData(original, testItemId, 1, result, 0);
+
+            messageManager.Verify(mm => mm.EmitKpiResultData(
+                It.Is<Guid>(arg => arg.Equals(original)),
+                It.Is<Guid>(arg => arg.Equals(testItemId)),
+                It.Is<int>(arg => arg.Equals(1)),
+                It.Is<IKeyResult>(arg => arg.Equals(result)),
+                It.Is<KeyResultType>(arg => arg.Equals(KeyResultType.Financial))),
+                "Guids are not correct or kpi result message not emmited");
+        }
+
+        [Fact]
         public void TestManager_EvaluateKpisReturnsEmptyIDList()
         {
             var testManager = GetUnitUnderTest();
@@ -382,8 +499,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             IList<IKpi> kpis = new List<IKpi>()
             {
-                new TestKpi(Guid.NewGuid()),
-                new TestKpi(Guid.Empty),
                 new TestKpi(Guid.NewGuid())
             };
 
@@ -499,12 +614,12 @@ namespace EPiServer.Marketing.Testing.Test.Core
         Guid _g;
         public TestKpi(Guid g) { _g = g; }
 
-        override public Boolean Evaluate(object sender, EventArgs e)
+        public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             if (_g == Guid.Empty)
-                return true;
+                return new KpiConversionResult() {HasConverted = true};
             else
-                return false;
+                return new KpiConversionResult() { HasConverted = false };
         }
     }
 }

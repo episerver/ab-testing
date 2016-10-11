@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;
@@ -144,6 +145,8 @@ namespace EPiServer.Marketing.Testing
                 ItemVersion = theDalVariant.ItemVersion,
                 Conversions = theDalVariant.Conversions,
                 Views = theDalVariant.Views,
+                KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults),
+                KeyValueResults = AdaptToManagerKeyValueResult(theDalVariant.DalKeyValueResults),
                 IsWinner = theDalVariant.IsWinner,
                 IsPublished = theDalVariant.IsPublished
             };
@@ -151,6 +154,61 @@ namespace EPiServer.Marketing.Testing
             return retVariant;
         }
 
+        internal static IList<KeyFinancialResult> AdaptToManagerKeyFinancialResult(IList<DalKeyFinancialResult> dalConversionResults)
+        {
+            var retList = new List<KeyFinancialResult>();
+
+            foreach (var result in dalConversionResults)
+            {
+                retList.Add(ConvertToManagerKeyFinancialResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static KeyFinancialResult ConvertToManagerKeyFinancialResult(
+            DalKeyFinancialResult dalConversionResult)
+        {
+            var retVariant = new KeyFinancialResult
+            {
+                Id = dalConversionResult.Id,
+                KpiId = dalConversionResult.KpiId,
+                Total = dalConversionResult.Total,
+                VariantId = dalConversionResult.VariantId,
+                CreatedDate = dalConversionResult.CreatedDate,
+                ModifiedDate = dalConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<KeyValueResult> AdaptToManagerKeyValueResult(IList<DalKeyValueResult> dalConversionResults)
+        {
+            var retList = new List<KeyValueResult>();
+
+            foreach (var result in dalConversionResults)
+            {
+                retList.Add(ConvertToManagerKeyValueResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static KeyValueResult ConvertToManagerKeyValueResult(
+            DalKeyValueResult dalConversionResult)
+        {
+            var retVariant = new KeyValueResult
+            {
+                Id = dalConversionResult.Id,
+                KpiId = dalConversionResult.KpiId,
+                Value = dalConversionResult.Value,
+                VariantId = dalConversionResult.VariantId,
+                CreatedDate = dalConversionResult.CreatedDate,
+                ModifiedDate = dalConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
 
         internal static IList<DalVariant> AdaptToDalVariant(IList<Variant> variants)
         {
@@ -175,7 +233,65 @@ namespace EPiServer.Marketing.Testing
                 Conversions = managerVariant.Conversions,
                 Views = managerVariant.Views,
                 IsWinner = managerVariant.IsWinner,
-                IsPublished = managerVariant.IsPublished
+                IsPublished = managerVariant.IsPublished,
+                DalKeyFinancialResults = AdaptToDalKeyFinancialResult(managerVariant.KeyFinancialResults),
+                DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults)
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<DalKeyFinancialResult> AdaptToDalKeyFinancialResult(IList<KeyFinancialResult> managerConversionResults)
+        {
+            var retList = new List<DalKeyFinancialResult>();
+
+            foreach (var result in managerConversionResults)
+            {
+                retList.Add(ConvertToDalKeyFinancialResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static DalKeyFinancialResult ConvertToDalKeyFinancialResult(
+            KeyFinancialResult managerConversionResult)
+        {
+            var retVariant = new DalKeyFinancialResult
+            {
+                Id = managerConversionResult.Id,
+                KpiId = managerConversionResult.KpiId,
+                Total = managerConversionResult.Total,
+                VariantId = managerConversionResult.VariantId,
+                CreatedDate = managerConversionResult.CreatedDate,
+                ModifiedDate = managerConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<DalKeyValueResult> AdaptToDalKeyValueResult(IList<KeyValueResult> managerConversionResults)
+        {
+            var retList = new List<DalKeyValueResult>();
+
+            foreach (var result in managerConversionResults)
+            {
+                retList.Add(ConvertToDalKeyValueResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static DalKeyValueResult ConvertToDalKeyValueResult(
+            KeyValueResult managerConversionResult)
+        {
+            var retVariant = new DalKeyValueResult
+            {
+                Id = managerConversionResult.Id,
+                KpiId = managerConversionResult.KpiId,
+                Value = managerConversionResult.Value,
+                VariantId = managerConversionResult.VariantId,
+                CreatedDate = managerConversionResult.CreatedDate,
+                ModifiedDate = managerConversionResult.ModifiedDate
             };
 
             return retVariant;

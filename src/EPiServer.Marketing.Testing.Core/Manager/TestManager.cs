@@ -6,6 +6,10 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
@@ -238,6 +242,25 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
+        public void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        {
+            if (type == KeyResultType.Financial)
+            {
+                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
+            }
+            else
+            {
+                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
+            }
+        }
+
+
+        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        {
+            var messaging = _serviceLocator.GetInstance<IMessagingManager>();
+            messaging.EmitKpiResultData(testId, itemId, itemVersion, keyResult, type);
+        }
+
         public Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
@@ -281,17 +304,15 @@ namespace EPiServer.Marketing.Testing
                 messaging.EmitUpdateViews(testId, testItemId, itemVersion);
         }
 
-        public IList<Guid> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
+        /// <summary>
+        /// This should only evaluate the kpis that are passed in.  It should do anything based on the results the kpis return.
+        /// </summary>
+        /// <param name="kpis"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
         {
-            List<Guid> guids = new List<Guid>();
-            foreach (var kpi in kpis)
-            {
-                if (kpi.Evaluate(this, e))
-                {
-                    guids.Add(kpi.Id);
-                }
-            }
-            return guids;
+            return kpis.Select(kpi => kpi.Evaluate(this, e)).ToList();
         }
 
         internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
