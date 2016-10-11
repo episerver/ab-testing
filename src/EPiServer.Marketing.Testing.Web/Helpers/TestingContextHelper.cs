@@ -168,18 +168,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysRemaining = "0";
             }
 
-            //retrieve conversion content from kpis
-            //convert conversion content link to anchor link
-            var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
-            if (kpi != null)
-            {
-                var conversionContent = repo.Get<IContent>(kpi.ContentGuid);
-
-                model.ConversionLink = uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
-                model.ConversionContentName = conversionContent.Name;
-            }
-
-            // Calculate total participation count
+           // Calculate total participation count
             foreach (var variant in testData.Variants)
             {
                 model.TotalParticipantCount += variant.Views;
