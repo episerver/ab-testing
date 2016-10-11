@@ -369,6 +369,7 @@
 
             _onStartButtonClick: function () {
                 if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
+                startButtonClickCounter++; // Increment click count
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
@@ -400,7 +401,10 @@
                             console.log("Query failed, we cannot tell if this page is a valid page or not.");
                         });
 
-                    startButtonClickCounter++; // Increment click count
+
+                }
+                else {
+                    startButtonClickCounter = 0; // Validation failed, so reset it to zero.
                 }
             },
 
