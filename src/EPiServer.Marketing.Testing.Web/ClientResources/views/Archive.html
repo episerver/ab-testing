@@ -32,7 +32,7 @@
             <h3 data-dojo-attach-point="controlHeader"></h3>
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versiona">
-                    <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="abThumbnailCanvas"  data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer"/>
+                    <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="abThumbnailCanvas" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
                 </div>
                 <p class="contentInfo">
                     <span class="publishedIcon" style="padding-top: 2px">
@@ -70,7 +70,7 @@
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
                 <div class="versionb">
-                    <canvas title="${resources.archiveview.view_challenger_content}"  id="draftThumbnailarchive" class="abThumbnailCanvas"  data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />/>
+                    <canvas title="${resources.archiveview.view_challenger_content}" id="draftThumbnailarchive" class="abThumbnailCanvas" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />/>
                 </div>
                 <p class="contentInfo">
                     <span class="draftIcon" style="padding-top: 2px">${resources.archiveview.draft_prefix}</span>
@@ -106,10 +106,9 @@
                     <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
                 </div>
                 <div class="formsRow">
-                    <h4>${resources.archiveview.conversion_header}</h4>
-                    <p>
-                        <label>${resources.archiveview.conversion_selector_description}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span><a href="" data-dojo-attach-point="contentLinkAnchor"></a>
-                    </p>
+                    <div data-dojo-attach-point="kpiMarkup">
+                        <!-- KPI Generated Markup -->
+                    </div>
                 </div>
                 <hr>
                 <div class="formsRow">
