@@ -5,8 +5,10 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Web.Mvc;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
+using EPiServer.Web.Mvc.Html;
 using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.KPI.Common
@@ -33,39 +35,79 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         [DataMember]
-        public override string UiReadOnlyMarkup
+        public override string UiMarkup
         {
             get
             {
-                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/conversion_header");
-                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/conversion_selector_description");
                 string markup;
-                string value;
+
+                var conversionLabel =
+                    LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
+
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
                 {
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
-                    if (!TryGetResourceString(attr.readonlymarkup, out value))
+                    string value;
+                    if (!TryGetResourceString(attr.configmarkup, out value))
                     {
-                        markup = "failed to load " + attr.readonlymarkup + ":" + value;
+                        markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
                     }
-                    markup = string.Format(value, conversionHeaderText, conversionDescription, "c", "d");
+                    markup = string.Format(value, conversionLabel);
                 }
                 else
                 {
-                    markup = "UIMarkupAttribute class attribute not defined.";
+                    markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
                 }
                 return markup;
             }
         }
 
+        [DataMember]
+        public override string UiReadOnlyMarkup
+        {
+            get
+            {
+                string markup=string.Empty;
+
+                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                   .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
+                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                    .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
+                if (ContentGuid != Guid.Empty)
+                {
+                    if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
+                    {
+                        var attr =
+                            (UIMarkupAttribute) Attribute.GetCustomAttribute(GetType(), typeof(UIMarkupAttribute));
+                        string value;
+                        if (!TryGetResourceString(attr.readonlymarkup, out value))
+                        {
+                            markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") +
+                                     attr.readonlymarkup + ":" + value;
+                        }
+
+                        var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+                        var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+                        var conversionContent = contentRepository.Get<IContent>(ContentGuid);
+                        var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+
+                        markup = string.Format(value, conversionHeaderText, conversionDescription, conversionLink,
+                            conversionContent.Name);
+                    }
+                    else
+                    {
+                        markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
+                    }
+                }
+                return markup;
+            }
+        }
 
         public override bool Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionPage"] == "")
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/error_conversionpage"));
+                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
             }
 
             var content = ServiceLocator.Current.GetInstance<IContentRepository>()
@@ -93,7 +135,7 @@ namespace EPiServer.Marketing.KPI.Common
             var publishedContent = repo.LoadPublished(content.ContentLink);
             if (publishedContent == null)
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/error_selected_notpublished"));
+                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/config_markup/error_selected_notpublished"));
             }
             return true;
         }
@@ -103,7 +145,7 @@ namespace EPiServer.Marketing.KPI.Common
             IPageRouteHelper helper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
             if (helper.PageLink.ID == content.ContentLink.ID)
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/error_selected_samepage"));
+                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
             }
             return false;
         }
