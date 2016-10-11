@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using EPiServer.Core;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
