@@ -5,6 +5,7 @@ using System.Linq;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
@@ -85,8 +86,18 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             var variantItemId = new Guid("818D6FDF-271A-4B8C-82FA-785780AD658B");
             var tests = AddMultivariateTests(_context, 3);
-            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
-            tests[1].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId });
+            tests[0].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId,
+                DalKeyValueResults = new List<DalKeyValueResult>()
+                {
+                    new DalKeyValueResult() { KpiId = Guid.NewGuid(), Value = 12, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()}
+                }
+            });
+            tests[1].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId,
+                DalKeyFinancialResults = new List<DalKeyFinancialResult>()
+                {
+                    new DalKeyFinancialResult() { KpiId = Guid.NewGuid(), Total = 12, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()}
+                }
+            });
             _context.SaveChanges();
 
             var criteria = new DalTestCriteria();
@@ -438,8 +449,10 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 Variants =
                     new List<Variant>()
                     {
-                        new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 130 },
-                        new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100 }
+                        new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 130, KeyFinancialResults = new List<KeyFinancialResult>(),
+                            KeyValueResults = new List<KeyValueResult>() },
+                        new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100, KeyFinancialResults = new List<KeyFinancialResult>(),
+                            KeyValueResults = new List<KeyValueResult>() }
                     },
                 KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
                 Title = "test",
@@ -469,5 +482,47 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             Assert.Equal(id, _tm.Save(test));
         }
 
+
+        [Fact]
+        public void TestManagerSaveAddKpiResult()
+        {
+            var tests = AddMultivariateTests(_mtm, 1);
+            var originalItemId = Guid.NewGuid();
+            tests[0].OriginalItemId = originalItemId;
+            var variant = new DalVariant() { Id = Guid.NewGuid(), ItemId = originalItemId, ItemVersion = 1 };
+            tests[0].Variants.Add(variant);
+
+            _mtm.Save(tests[0]);
+
+            var variantId = Guid.NewGuid();
+            var variantItemId2 = Guid.NewGuid();
+            var variant2 = new DalVariant() { Id = variantId, ItemId = variantItemId2, ItemVersion = 1 };
+            tests[0].Variants.Add(variant2);
+
+            _mtm.Save(tests[0]);
+
+            Assert.Equal(originalItemId, _mtm.Get(tests[0].Id).OriginalItemId);
+            Assert.Equal(2, _mtm.Get(tests[0].Id).Variants.Count);
+
+            var result = new DalKeyFinancialResult()
+            {
+                Id = Guid.NewGuid(), Total = 12, KpiId = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow
+            };
+
+            var result1 = new DalKeyValueResult()
+            {
+                Id = Guid.NewGuid(),
+                Value = 12,
+                KpiId = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow
+            };
+
+            _mtm.AddKpiResultData(tests[0].Id, variantItemId2, 1, result, 0);
+            _mtm.AddKpiResultData(tests[0].Id, variantItemId2, 1, result1, 1);
+
+            Assert.Equal(1, _mtm.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyFinancialResults.Count);
+            Assert.Equal(1, _mtm.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyValueResults.Count);
+        }
     }
 }

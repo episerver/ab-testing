@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
     public class DalVariant : EntityBase
     {
+        public DalVariant()
+        {
+        }
+
         public Guid Id { get; set; }
 
         /// <summary>
@@ -45,5 +50,9 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual DalABTest DalABTest { get; set; }
+
+        public virtual IList<DalKeyFinancialResult> DalKeyFinancialResults { get; set; } = new List<DalKeyFinancialResult>();
+
+        public virtual IList<DalKeyValueResult> DalKeyValueResults { get; set; } = new List<DalKeyValueResult>();
     }
 }

@@ -14,6 +14,9 @@ using EPiServer.Logging;
 using System.Web;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Reflection;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -50,7 +53,7 @@ namespace EPiServer.Marketing.Testing.Web
             // Setup our content events
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;
-            contentEvents.LoadedContent += LoadedContent; 
+            contentEvents.LoadedContent += LoadedContent;
             contentEvents.DeletedContent += ContentEventsOnDeletedContent;
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
 
@@ -368,19 +371,28 @@ namespace EPiServer.Marketing.Testing.Web
         private void EvaluateKpis(EventArgs e)
         {
             // We only want to evaluate Kpis one time per request.
-            if (!HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
+            if (HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
             {
+                return;
+            }
+
                 HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
 
                 var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
                 foreach (var tdcookie in cookielist)
                 {
                     // for every test cookie we have, check for the converted and the viewed flag
-                    if (!tdcookie.Converted && tdcookie.Viewed)
+                if (tdcookie.Converted || !tdcookie.Viewed)
                     {
+                    continue;
+                }
+
                         var test = _testManager.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
-                        if (test != null)
+                if (test == null)
                         {
+                    continue;
+                }
+
                             // optimization : Evalute only the kpis that have not currently evaluated to true.
                             var kpis = new List<IKpi>();
                             foreach (var kpi in test.KpiInstances)
@@ -392,16 +404,42 @@ namespace EPiServer.Marketing.Testing.Web
                                 }
                             }
 
-                            var evaluated = _testManager.EvaluateKPIs(kpis, e);
-                            if (evaluated.Count > 0)
+                var kpiResults = _testManager.EvaluateKPIs(kpis, e);
+
+                var conversionResults = kpiResults.OfType<KpiConversionResult>();
+                ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);
+
+                var financialResults = kpiResults.OfType<KpiFinancialResult>();
+                ProcessKeyFinancialResults(tdcookie, test, financialResults);
+
+                var valueResults = kpiResults.OfType<KpiValueResult>();
+                ProcessKeyValueResults(tdcookie, test, valueResults);
+            }
+        }
+
+        /// <summary>
+        /// Loop through conversion results to see if any have converted, if so update views/conversions as necessary
+        /// </summary>
+        /// <param name="tdcookie"></param>
+        /// <param name="test"></param>
+        /// <param name="kpis"></param>
+        /// <param name="results"></param>
+        private void ProcessKpiConversionResults(TestDataCookie tdcookie, IMarketingTest test, List<IKpi> kpis,
+            IEnumerable<KpiConversionResult> results)
                             {
                                 // add each kpi to testdata cookie data
-                                foreach (var eval in evaluated)
+            foreach (var result in results)
                                 {
-                                    tdcookie.KpiConversionDictionary.Remove(eval);
-                                    tdcookie.KpiConversionDictionary.Add(eval, true);
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent, new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == eval), test));
+                if (!result.HasConverted)
+                {
+                    continue;
                                 }
+
+                tdcookie.KpiConversionDictionary.Remove(result.KpiId);
+                tdcookie.KpiConversionDictionary.Add(result.KpiId, true);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent,
+                    new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == result.KpiId), test));
+            }
 
                                 // now check to see if all kpi objects have evalated
                                 tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
@@ -411,18 +449,57 @@ namespace EPiServer.Marketing.Testing.Web
 
                                 // now if we have converted, fire the converted message 
                                 // note : we wouldnt be here if we already converted on a previous loop
-                                if (tdcookie.Converted)
-                                {
-                                    Variant varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
-                                    _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion,
-                                        CountType.Conversion);
+            if (!tdcookie.Converted)
+            {
+                return;
+            }
 
-                                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent, new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
-                                }
-                            }
-                        }
-                    }
-                }
+            var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
+            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
+
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent,
+                new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
+        }
+
+        private void ProcessKeyFinancialResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiFinancialResult> results)
+        {
+            var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
+
+            foreach (var kpiFinancialResult in results)
+            {
+                var keyFinancialResult = new KeyFinancialResult()
+                {
+                    Id = Guid.NewGuid(),
+                    KpiId = kpiFinancialResult.KpiId,
+                    Total = kpiFinancialResult.Total,
+                    VariantId = varUserSees.ItemId,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow
+                };
+
+                //_testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, 0);
+                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, 0);
+            }
+        }
+
+        private void ProcessKeyValueResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiValueResult> results)
+        {
+            var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
+
+            foreach (var kpiValueResult in results)
+            {
+                var keyValueResult = new KeyValueResult()
+                {
+                    Id = Guid.NewGuid(),
+                    KpiId = kpiValueResult.KpiId,
+                    Value = kpiValueResult.Value,
+                    VariantId = varUserSees.ItemId,
+                    CreatedDate = DateTime.UtcNow,
+                    ModifiedDate = DateTime.UtcNow
+                };
+
+                //_testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, 1);
+                _testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
             }
         }
 
@@ -536,13 +613,13 @@ namespace EPiServer.Marketing.Testing.Web
                             // to figure out what is going on.
                             _logger.Error("Unable to add AB Testing ProxyEventHandler.", e);
                         }
-                    }
+                            }
                     else
                     {
                         _logger.Error("Unable to add AB Testing ProxyEventHandler.");
                         _logger.Error("     Service not found : " + att.service.FullName);
+                        }
                     }
-                }
                 else
                 {
                     _ReferenceCounter.AddReference(att.key);
@@ -551,8 +628,8 @@ namespace EPiServer.Marketing.Testing.Web
             else
             {
                 _logger.Warning("kpi type " + kpi.GetType() + "doesnt support EventSpecificationAttribute and will not be evaluated.");
-            }
         }
+    }
 
         /// <summary>
         /// Removes the ProxyEventHandler for the given Kpi instance if it supports the EventSpecificationAttribute.
@@ -574,7 +651,7 @@ namespace EPiServer.Marketing.Testing.Web
                     // try to load the service so we can add the proxy handler
                     Object service;
                     if (_serviceLocator.TryGetExistingInstance(att.service, out service))
-                    {   
+                    {
                         try
                         {
                             // get the event method infor
@@ -583,7 +660,7 @@ namespace EPiServer.Marketing.Testing.Web
                             var proxyEventHandlerMethod = this.GetType().GetMethod("ProxyEventHandler");
                             // create our delegate that will be invoked when the event is fired
                             var delegateToInvoke = Delegate.CreateDelegate(
-                                    serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
+                                serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
 
                             // Call the removeHandler method for this event
                             MethodInfo removeHandler = serviceEventInfo.GetRemoveMethod();

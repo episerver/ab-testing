@@ -1,6 +1,7 @@
 ﻿using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
@@ -37,6 +38,12 @@ namespace EPiServer.Marketing.Testing.Messaging
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
             tm.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.Conversion);
+        }
+
+        public void Handle(AddKeyResultMessage message)
+        {
+            var tm = _serviceLocator.GetInstance<ITestManager>();
+            tm.AddKpiResultData(message.TestId, message.VariantId, message.ItemVersion, message.Result, message.Type);
         }
     }
 }

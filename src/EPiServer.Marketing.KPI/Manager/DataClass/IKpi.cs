@@ -1,4 +1,6 @@
 ﻿using System;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Results;
 using System.Collections.Generic;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
@@ -54,6 +56,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e">Event Argument</param>
-        bool Evaluate(object sender, EventArgs e);
+        IKpiResult Evaluate(object sender, EventArgs e);
     }
 }
