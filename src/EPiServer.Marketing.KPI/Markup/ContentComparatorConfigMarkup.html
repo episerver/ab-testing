@@ -1,13 +1,6 @@
 ﻿<script>dojo.require("epi-cms/widget/ContentSelector")</script>
 <p>
-    <label id="pagePickerLabel">
-    </label>
-    <script>
-        require(["dojo/dom", "epi/i18n!marketing-testing/nls/abtesting"], function (dom, resources) {
-            var pagePickerLabelNode = dom.byId("pagePickerLabel");
-            pagePickerLabelNode.innerText = resources.addtestview.conversion_label;
-        });
-    </script>
+    <label>{0}</label>
     <span name="ConversionPage"
           id="ConversionPageWidget"
           data-dojo-type="epi-cms/widget/ContentSelector"

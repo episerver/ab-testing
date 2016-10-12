@@ -1,9 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
   <language name="日本語 (Japanese)" id="ja">
-    <content_comparator_kpi>
-      <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
-      <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
-    </content_comparator_kpi>
+    <kpi>
+      <content_comparator_kpi>
+        <config_markup>
+          <conversion_label>Visitor navigates to page</conversion_label>
+          <error_conversionpage>You must select a conversion page before you can save the A/B test.</error_conversionpage>
+          <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
+          <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
+        </config_markup>
+        <readonly_markup>
+          <conversion_header>Conversion goal</conversion_header>
+          <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        </readonly_markup>
+      </content_comparator_kpi>
+      <kpi_messaging>
+        <failed_to_load>Failed to load</failed_to_load>
+        <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
+      </kpi_messaging>
+    </kpi>
   </language>
 </languages>
