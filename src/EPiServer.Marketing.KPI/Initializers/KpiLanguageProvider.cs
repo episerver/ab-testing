@@ -21,11 +21,11 @@ namespace EPiServer.Marketing.KPI.Initializers
             {
                 EmbeddedXmlLocalizationProviderInitializer localizationProviderInitializer =
                     new EmbeddedXmlLocalizationProviderInitializer();
-               
-                Assembly kpiAssembly = Assembly.GetAssembly(typeof(IKpi));
 
-                //a VPP with the path below must be registered in the sites configuration.
-                 XmlLocalizationProvider xmlProvider  = localizationProviderInitializer.GetInitializedProvider(ProviderName,kpiAssembly);
+                // Gets embedded xml resources from the given assembly creating a new xml provider
+                Assembly kpiAssembly = Assembly.GetAssembly(typeof(IKpi));
+                XmlLocalizationProvider xmlProvider  = localizationProviderInitializer.GetInitializedProvider(ProviderName,kpiAssembly);
+                
                 //Inserts the provider first in the provider list so that it is prioritized over default providers.
                 localizationService.Providers.Insert(0, xmlProvider);
             }
