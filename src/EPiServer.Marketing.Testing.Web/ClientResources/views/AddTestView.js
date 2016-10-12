@@ -91,7 +91,6 @@ define([
 
            //sets default values once everything is loaded
            postCreate: function () {
-               var kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                this.reset();
                this.inherited(arguments);
 
@@ -202,7 +201,6 @@ define([
            _setKpiSelectList: function () {
                var me = this;
                var kpiuiElement = registry.byId("kpiSelector");
-               kpiuiElement//"EPiServer.Marketing.KPI.Manager.DataClass." + evt
                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                me.kpistore.get()
                .then(function (markup) {
@@ -402,6 +400,8 @@ define([
            _onStartButtonClick: function () {
                var me = this;
                var kpiTextField = dom.byId("kpiString");
+               var kpiErrorText = dom.byId("kpiErrorText");
+               var kpiErrorIcon = dom.byId("kpiErrorIcon");
                me.kpiFormData = this._getKpiFormData();
                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                me.kpistore.put({
@@ -412,9 +412,7 @@ define([
                    }
                })
                    .then(function (ret) {
-                       var kpiErrorText = dom.byId("kpiErrorText");
-                       kpiErrorText.style.visibility = "hidden";
-                       kpiErrorIcon.style.visibility = "hidden";
+                       me._setError("", kpiErrorText, kpiErrorIcon);
                        me.model.kpiId = ret;
                        me.model.testDescription = dom.byId("testDescription").value;
                        var startDateSelector = dom.byId("StartDateTimeSelector");
@@ -432,10 +430,7 @@ define([
 
                    })
                    .otherwise(function (ret) {
-                       var kpiErrorText = dom.byId("kpiErrorText");
-                       kpiErrorText.innerText = ret.response.xhr.statusText;
-                       kpiErrorText.style.visibility = "visible";
-                       kpiErrorIcon.style.visibility = "visible";
+                       me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
                    });
            },
 
