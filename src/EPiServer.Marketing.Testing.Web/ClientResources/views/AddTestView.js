@@ -67,7 +67,7 @@ define([
 
             resources: resources,
 
-           // DOJO WIDGET METHODS
+            // DOJO WIDGET METHODS
 
             //set bindings to view model properties
             modelBindingMap: {
@@ -89,13 +89,11 @@ define([
                 this.reset();
             },
 
-           //sets default values once everything is loaded
-           postCreate: function () {
-               this.reset();
-               this.inherited(arguments);
-
+            //sets default values once everything is loaded
+            postCreate: function () {
+                this.reset();
+                this.inherited(arguments);
             },
-
 
             startup: function () {
                 if (this.breadcrumbWidget) {
@@ -104,10 +102,10 @@ define([
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
-               this._setKpiSelectList();
+                this._setKpiSelectList();
             },
 
-           // TEST DATA MODEL & FORM SETTERS
+            // TEST DATA MODEL & FORM SETTERS
             _setViewPublishedVersionAttr: function (viewPublishedVersion) {
                 //do dom stuff
                 if (!viewPublishedVersion) {
@@ -116,7 +114,7 @@ define([
                 this.publishedBy.textContent = username.toUserFriendlyString(this.contentData.publishedBy);
                 this.datePublished.textContent = datetime.toUserFriendlyString(this.contentData.lastPublished);
                 this.model.testContentId = this.contentData.contentGuid;
-               var pubThumb = document.getElementById("publishThumbnail")
+                var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
                     //Hack to build published versions preview link below
@@ -127,7 +125,7 @@ define([
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                   rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
                 }
             },
 
@@ -146,7 +144,7 @@ define([
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                   rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
                 }
             },
 
@@ -172,7 +170,7 @@ define([
                 }
             },
 
-           // DATA GETTERS
+            // DATA GETTERS
             _getConfidenceLevel: function () {
                 var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
                 for (i = 0; i < rbs.length; i++) {
@@ -186,42 +184,42 @@ define([
                 }
             },
 
-           // Transforms custom KPI form data into json for processing
-           _getKpiFormData: function () {
-               var me = this;
-               var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
-               var formData = dojo.toJson(kpiFormObject, true);
-               var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
-               return formattedFormData;
+            // Transforms custom KPI form data into json for processing
+            _getKpiFormData: function () {
+                var me = this;
+                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
+                var formData = dojo.toJson(kpiFormObject, true);
+                var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
+                return formattedFormData;
             },
 
-           // FORM ELEMENT CONTROL METHODS
+            // FORM ELEMENT CONTROL METHODS
 
-           //retrieves KPIs and displays them in a select control
-           _setKpiSelectList: function () {
-               var me = this;
-               var kpiuiElement = registry.byId("kpiSelector");
-               me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-               me.kpistore.get()
-               .then(function (markup) {
-                   kpiuiElement.set("value", "");
-                   dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                   var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
-                   kpiuiElement.addOption(defaultOption);
-                   for (var x = 0; x < markup.length; x++) {
-                       var option = { value: markup[x], label: markup[x].kpi.friendlyName };
-                       kpiuiElement.addOption(option);
-                }
-               });
-           },
+            //retrieves KPIs and displays them in a select control
+            _setKpiSelectList: function () {
+                var me = this;
+                var kpiuiElement = registry.byId("kpiSelector");
+                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                me.kpistore.get()
+                .then(function (markup) {
+                    kpiuiElement.set("value", "");
+                    dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
+                    var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
+                    kpiuiElement.addOption(defaultOption);
+                    for (var x = 0; x < markup.length; x++) {
+                        var option = { value: markup[x], label: markup[x].kpi.friendlyName };
+                        kpiuiElement.addOption(option);
+                    }
+                });
+            },
 
-           //DATA VALIDATION
-           // Master validations for all form fields. Used when hitting the start button and will pickup
-           // errors not triggered by onChangeEvents.
-           _isValidFormData: function () {
-               return this._isValidPercentParticipation() &
-                   this._isValidDuration() &
-                   this._isValidStartDate();
+            //DATA VALIDATION
+            // Master validations for all form fields. Used when hitting the start button and will pickup
+            // errors not triggered by onChangeEvents.
+            _isValidFormData: function () {
+                return this._isValidPercentParticipation() &
+                    this._isValidDuration() &
+                    this._isValidStartDate();
             },
 
             //Validates the participation percent entered is between 1 and 100
@@ -230,9 +228,9 @@ define([
                 var errorIconNode = dom.byId("participationErrorIcon");
                 var participationPercentage = dom.byId("percentageSpinner").value;
 
-               if (!this._isUnsignedNumeric(participationPercentage) ||
-                   participationPercentage <= 0 ||
-                   participationPercentage > 100) {
+                if (!this._isUnsignedNumeric(participationPercentage) ||
+                    participationPercentage <= 0 ||
+                    participationPercentage > 100) {
                     this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                     return false;
                 }
@@ -265,9 +263,9 @@ define([
 
                 if (dateValue !== "") {
                     if (isNaN(new Date(dateValue))) {
-                       this._setError(resources.addtestview.error_invalid_date_time_value,
-                           errorTextNode,
-                           errorIconNode);
+                        this._setError(resources.addtestview.error_invalid_date_time_value,
+                            errorTextNode,
+                            errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
                     } else if (new Date(dateValue) < now) {
@@ -281,106 +279,106 @@ define([
                 return true;
             },
 
-           //Validates the supplied string as a positive integer
+            //Validates the supplied string as a positive integer
             _isUnsignedNumeric: function (string) {
-               if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) == null) {
                     return false;
                 }
                 return true;
             },
 
 
-           // FORM DATA CLEANUP
-           reset: function () {
-               //set view model properties to default form values.
-               if (this.descriptionText) {
-                   this.descriptionText.value = this.model.testDescription = "";
-               }
+            // FORM DATA CLEANUP
+            reset: function () {
+                //set view model properties to default form values.
+                if (this.descriptionText) {
+                    this.descriptionText.value = this.model.testDescription = "";
+                }
 
-               if (this.participationPercentText) {
-                   this.participationPercentText.reset();
-                   this.model.participationPercent = this.participationPercentText.value;
-               }
+                if (this.participationPercentText) {
+                    this.participationPercentText.reset();
+                    this.model.participationPercent = this.participationPercentText.value;
+                }
 
-               if (this.durationText) {
-                   this.durationText.reset();
-                   this.model.testDuration = this.durationText.value;
-               }
+                if (this.durationText) {
+                    this.durationText.reset();
+                    this.model.testDuration = this.durationText.value;
+                }
 
-               if (this.startDatePicker) {
-                   this.startDatePicker.reset();
-                   this.model.startDate = new Date(Date.now()).toUTCString();
-               }
+                if (this.startDatePicker) {
+                    this.startDatePicker.reset();
+                    this.model.startDate = new Date(Date.now()).toUTCString();
+                }
 
-               if (this.breadcrumbWidget) {
-                   this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
-                   this.contentNameNode.innerText = this.contentData.name;
-                   this.breadcrumbWidget.layout();
-               }
+                if (this.breadcrumbWidget) {
+                    this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
+                    this.contentNameNode.innerText = this.contentData.name;
+                    this.breadcrumbWidget.layout();
+                }
 
-               if (this.conversionPageWidget) {
-                   this.conversionPageWidget.reset();
-               }
+                if (this.conversionPageWidget) {
+                    this.conversionPageWidget.reset();
+                }
 
-               if (this.start) {
-                   this.start.set("checked", true);
-               }
+                if (this.start) {
+                    this.start.set("checked", true);
+                }
 
-               if (this.delay) {
-                   this.delay.set("checked", false);
-               }
+                if (this.delay) {
+                    this.delay.set("checked", false);
+                }
 
-               if (this.scheduleDiv) {
-                   this.scheduleDiv.style.visibility = "hidden";
-               }
+                if (this.scheduleDiv) {
+                    this.scheduleDiv.style.visibility = "hidden";
+                }
 
-               if (dom.byId("confidence")) {
-                   dom.byId("confidence").value = "95";
-               }
+                if (dom.byId("confidence")) {
+                    dom.byId("confidence").value = "95";
+                }
 
-               this._setViewPublishedVersionAttr(true);
-               this._setViewCurrentVersionAttr();
-               this._clearConversionErrors();
-               this._clearCustomKpiMarkup();
-               this._setKpiSelectList();
-           },
+                this._setViewPublishedVersionAttr(true);
+                this._setViewCurrentVersionAttr();
+                this._clearConversionErrors();
+                this._clearCustomKpiMarkup();
+                this._setKpiSelectList();
+            },
 
-           //Clears the KPI Error text and icon
-           _clearConversionErrors: function () {
-               var errorText = dom.byId("kpiErrorText");
-               if (!errorText) {
-                   return;
-               }
-               errorText.innerText = "";
-               errorText.style.visibility = "hidden";
-               var et2 = dom.byId("kpiErrorIcon");
-               et2.style.visibility = "hidden";
-           },
+            //Clears the KPI Error text and icon
+            _clearConversionErrors: function () {
+                var errorText = dom.byId("kpiErrorText");
+                if (!errorText) {
+                    return;
+                }
+                errorText.innerText = "";
+                errorText.style.visibility = "hidden";
+                var et2 = dom.byId("kpiErrorIcon");
+                et2.style.visibility = "hidden";
+            },
 
-           //Removes the custom KPI markup from the view & widget registry
-           _clearCustomKpiMarkup: function () {
-               var kpiuiElement = dom.byId("kpiui");
-               if (kpiuiElement) {
-                   kpiuiElement.innerHTML = "";
-                   if (dijit.byId("ConversionPageWidget")) {
-                       dijit.byId("ConversionPageWidget").destroy(true);
-                       dijit.byId("dojox_layout_ContentPane_0").destroy(true);
-                   }
-               }
-               this._setKpiSelectList();
-           },
+            //Removes the custom KPI markup from the view & widget registry
+            _clearCustomKpiMarkup: function () {
+                var kpiuiElement = dom.byId("kpiui");
+                if (kpiuiElement) {
+                    kpiuiElement.innerHTML = "";
+                    if (dijit.byId("ConversionPageWidget")) {
+                        dijit.byId("ConversionPageWidget").destroy(true);
+                        dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                    }
+                }
+                this._setKpiSelectList();
+            },
 
-           // UI UTILITIES
-           _toggleTimeSelector: function () {
-               var dateSelector = dom.byId("dateSelector");
+            // UI UTILITIES
+            _toggleTimeSelector: function () {
+                var dateSelector = dom.byId("dateSelector");
 
-               if (dateSelector.style.visibility === "hidden") {
-                   dateSelector.style.visibility = "visible";
-               } else {
-                   this.startDatePicker.reset();
-                   dateSelector.style.visibility = "hidden";
-               }
-           },
+                if (dateSelector.style.visibility === "hidden") {
+                    dateSelector.style.visibility = "visible";
+                } else {
+                    this.startDatePicker.reset();
+                    dateSelector.style.visibility = "hidden";
+                }
+            },
 
             //Toggles an errors text content and icon visibitlity based on the error and nodes supplied
             _setError: function (errorText, errorNode, iconNode) {
@@ -398,59 +396,59 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
-               var me = this;
-               var kpiTextField = dom.byId("kpiString");
-               var kpiErrorText = dom.byId("kpiErrorText");
-               var kpiErrorIcon = dom.byId("kpiErrorIcon");
-               me.kpiFormData = this._getKpiFormData();
-               me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-               me.kpistore.put({
-                   id: "KpiFormData",
-                   entity: {
-                       kpiJsonFormData: me.kpiFormData,
-                       kpiType: kpiTextField.value
-                   }
-               })
-                   .then(function (ret) {
-                       me._setError("", kpiErrorText, kpiErrorIcon);
-                       me.model.kpiId = ret;
-                       me.model.testDescription = dom.byId("testDescription").value;
-                var startDateSelector = dom.byId("StartDateTimeSelector");
-                var utcNow = new Date(Date.now()).toUTCString();
-                if (startDateSelector.value === "") {
-                           me.model.startDate = utcNow;
-                }
+                var me = this;
+                var kpiTextField = dom.byId("kpiString");
+                var kpiErrorText = dom.byId("kpiErrorText");
+                var kpiErrorIcon = dom.byId("kpiErrorIcon");
+                me.kpiFormData = this._getKpiFormData();
+                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                me.kpistore.put({
+                    id: "KpiFormData",
+                    entity: {
+                        kpiJsonFormData: me.kpiFormData,
+                        kpiType: kpiTextField.value
+                    }
+                })
+                    .then(function (ret) {
+                        me._setError("", kpiErrorText, kpiErrorIcon);
+                        me.model.kpiId = ret;
+                        me.model.testDescription = dom.byId("testDescription").value;
+                        var startDateSelector = dom.byId("StartDateTimeSelector");
+                        var utcNow = new Date(Date.now()).toUTCString();
+                        if (startDateSelector.value === "") {
+                            me.model.startDate = utcNow;
+                        }
 
-                       me.model.confidencelevel = dom.byId("confidence").value;
-                       me.model.testTitle = me.pageName.textContent;
+                        me.model.confidencelevel = dom.byId("confidence").value;
+                        me.model.testTitle = me.pageName.textContent;
 
-                       if (me._isValidFormData()) {
-                           me.model.createTest();
-                            }
+                        if (me._isValidFormData()) {
+                            me.model.createTest();
+                        }
 
-                   })
-                   .otherwise(function (ret) {
-                       me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                   });
-           },
+                    })
+                    .otherwise(function (ret) {
+                        me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
+                    });
+            },
 
             _onCancelButtonClick: function () {
                 var me = this;
-               this._clearCustomKpiMarkup();
-               me.contextParameters = {
-                   uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
-               };
+                this._clearCustomKpiMarkup();
+                me.contextParameters = {
+                    uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
+                };
                 topic.publish("/epi/shell/context/request", me.contextParameters);
             },
 
-           _onSelectChange: function (evt) {
-               var kpiTextField = dom.byId("kpiString");
-               kpiTextField.value = evt.kpiType;
-               var kpiuiElement = dom.byId("kpiui");
-               new ContentPane({
-                   content: evt.kpi.uiMarkup
-               }).placeAt(kpiuiElement);
-           },
+            _onSelectChange: function (evt) {
+                var kpiTextField = dom.byId("kpiString");
+                kpiTextField.value = evt.kpiType;
+                var kpiuiElement = dom.byId("kpiui");
+                new ContentPane({
+                    content: evt.kpi.uiMarkup
+                }).placeAt(kpiuiElement);
+            },
 
             // Form Field Events
             _onTestDescriptionChanged: function (event) {
