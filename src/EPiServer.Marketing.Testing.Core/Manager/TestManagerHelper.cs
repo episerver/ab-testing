@@ -41,15 +41,15 @@ namespace EPiServer.Marketing.Testing
                 Owner = theDalTest.Owner,
                 OriginalItemId = theDalTest.OriginalItemId,
                 State = AdaptToManagerState(theDalTest.State),
-                StartDate = DateTime.SpecifyKind(theDalTest.StartDate, DateTimeKind.Utc).ToLocalTime(),
+                StartDate = theDalTest.StartDate.ToLocalTime(),
                 EndDate = theDalTest.EndDate,
                 ParticipationPercentage = theDalTest.ParticipationPercentage,
                 IsSignificant = theDalTest.IsSignificant,
                 ZScore = theDalTest.ZScore,
                 ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
-                CreatedDate = DateTime.SpecifyKind(theDalTest.CreatedDate, DateTimeKind.Utc).ToLocalTime(),
-                ModifiedDate = DateTime.SpecifyKind(theDalTest.ModifiedDate, DateTimeKind.Utc).ToLocalTime(),
+                CreatedDate = theDalTest.CreatedDate.ToLocalTime(),
+                ModifiedDate = theDalTest.ModifiedDate.ToLocalTime(),
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
                 KpiInstances = AdaptToManagerKPI(_kpiManager, theDalTest.KeyPerformanceIndicators)
             };
@@ -121,7 +121,7 @@ namespace EPiServer.Marketing.Testing
             return retState;
         }
 
-    #region VariantConversion
+        #region VariantConversion
         internal static List<Variant> AdaptToManagerVariant(IList<DalVariant> theVariantList)
         {
             var retList = new List<Variant>();
