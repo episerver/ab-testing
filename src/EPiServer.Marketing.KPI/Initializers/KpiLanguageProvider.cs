@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.KPI.Initializers
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class KpiLanguageProvider : IInitializableModule
     {
-        private const string ProviderName = "KpiCustomLanguageProvider";
+        private const string PROVIDER_NAME = "KpiCustomLanguageProvider";
         public void Initialize(InitializationEngine context)
         {
             ProviderBasedLocalizationService localizationService = context.Locate.Advanced.GetInstance<LocalizationService>() as ProviderBasedLocalizationService;
@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.KPI.Initializers
 
                 // Gets embedded xml resources from the given assembly creating a new xml provider
                 Assembly kpiAssembly = Assembly.GetAssembly(typeof(IKpi));
-                XmlLocalizationProvider xmlProvider  = localizationProviderInitializer.GetInitializedProvider(ProviderName,kpiAssembly);
+                XmlLocalizationProvider xmlProvider  = localizationProviderInitializer.GetInitializedProvider(PROVIDER_NAME,kpiAssembly);
                 
                 //Inserts the provider first in the provider list so that it is prioritized over default providers.
                 localizationService.Providers.Insert(0, xmlProvider);
@@ -34,15 +34,12 @@ namespace EPiServer.Marketing.KPI.Initializers
         public void Uninitialize(InitializationEngine context)
         {
             ProviderBasedLocalizationService localizationService = context.Locate.Advanced.GetInstance<LocalizationService>() as ProviderBasedLocalizationService;
-            if (localizationService != null)
+            //Gets any provider that has the same name as the one initialized.
+            LocalizationProvider localizationProvider = localizationService?.Providers.FirstOrDefault(p => p.Name.Equals(PROVIDER_NAME, StringComparison.Ordinal));
+            if (localizationProvider != null)
             {
-                //Gets any provider that has the same name as the one initialized.
-                LocalizationProvider localizationProvider = localizationService.Providers.FirstOrDefault(p => p.Name.Equals(ProviderName, StringComparison.Ordinal));
-                if (localizationProvider != null)
-                {
-                    //If found, remove it.
-                    localizationService.Providers.Remove(localizationProvider);
-                }
+                //If found, remove it.
+                localizationService.Providers.Remove(localizationProvider);
             }
         }
     }
