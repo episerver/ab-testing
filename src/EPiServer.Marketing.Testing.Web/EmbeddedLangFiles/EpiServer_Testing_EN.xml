@@ -76,6 +76,7 @@
         <description_heading>Test goal</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <from>from</from>
+        <goal_not_specified>A goal has not been specified.</goal_not_specified>
         <losing_version_label>Saved in Versions</losing_version_label>
         <percent_participation_header>Participation percentage</percent_participation_header>
         <published_prefix>Published by</published_prefix>
