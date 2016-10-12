@@ -267,7 +267,7 @@ namespace EPiServer.Marketing.Testing
                             break;
                     }
                     _marketingTestingEvents.
-                        RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.ContentSwitchedEvent,
+                        RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.UserIncludedInTestEvent,
                         new TestEventArgs(managerTest));
                 }
             }
