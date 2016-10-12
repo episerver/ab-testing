@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using EPiServer.Marketing.KPI.Common;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// 2) overide and return your markup string directly
         /// </summary>
         [DataMember]
-        public string UiMarkup
+        public virtual string UiMarkup
         {
             get
             {
@@ -76,12 +76,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
                     if (!TryGetResourceString(attr.configmarkup, out value))
                     {
-                        value = "failed to load " + attr.configmarkup + ":" + value;
+                        value = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
                     }
                 }
                 else
                 {
-                    value = "UIMarkupAttribute class attribute not defined.";
+                    value = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
                 }
                 return value;
             }
@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// 2) overide and return your markup string directly
         /// </summary>
         [DataMember]
-        public string UiReadOnlyMarkup
+        public virtual string UiReadOnlyMarkup
         {
             get
             {
@@ -103,12 +103,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
                     if( !TryGetResourceString(attr.readonlymarkup, out value) )
                     {
-                        value = "failed to load " + attr.readonlymarkup + ":" + value;
+                        value = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
                     }
                 }
                 else
                 {
-                    value = "UIMarkupAttribute class attribute not defined.";
+                    value = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
                 }
                 return value;
             }
@@ -121,7 +121,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns>true if loaded, else false. If false value contains the exception message.</returns>
-        private bool TryGetResourceString(string key, out string value)
+        internal bool TryGetResourceString(string key, out string value)
         {
             bool retval = false;
             try
