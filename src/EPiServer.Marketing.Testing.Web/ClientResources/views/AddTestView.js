@@ -29,7 +29,8 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"
+        "dijit/layout/ContentPane",
+        "dijit/form/Select"
 ],
     function (
     declare,
@@ -208,35 +209,30 @@
             },
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                this._resetConfidenceSelection(rbs);
+                var rbs = [
+                    { val: "confidence_99", label: 99 },
+                    { val: "confidence_98", label: 98 },
+                    { val: "confidence_95", label: 95 },
+                    { val: "confidence_90", label: 90 }
+                ];
+                var confidenceSelectWidget = registry.byId("confidence"), selectOption,defaultOption;
+                dijit.byId('confidence').removeOption(dijit.byId('confidence').getOptions());
+
                 for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.value === viewConfidenceLevel.toString()) {
-                        rb.setAttribute("selected", "selected");
-                        rb.textContent = rb.value + "% " + resources.addtestview.default;
-                    } else {
-                        rb.removeAttribute("selected");
-                        rb.textContent = rb.value + "%";
+                    if (viewConfidenceLevel) {
+                        if (rbs[i].label === viewConfidenceLevel) {
+                            selectOption = { value: rbs[i].val, label: rbs[i].label + "% (Default)"};
+                            confidenceSelectWidget.addOption(selectOption);
+                            defaultOption = rbs[i].val;
+                        } else {
+                            selectOption = { value: rbs[i].val, label: rbs[i].label + "%" };
+                            confidenceSelectWidget.addOption(selectOption);
+                        }
                     }
+                    confidenceSelectWidget.attr(defaultOption, "selected");
                 }
             },
-
-            _resetConfidenceSelection: function (rbs) {
-                for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.textContent.indexOf("(default)") != -1) {
-                        rb.selected = true;
-                    } else {
-                        rb.selected = false;
-                    }
-                }
-            },
-
+            
             _clearConversionErrors: function () {
                 var errorText = dom.byId("pickerErrorText");
 
@@ -363,7 +359,7 @@
             //Start and Cancel Events
 
             _onStartButtonClick: function () {
-                
+
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
