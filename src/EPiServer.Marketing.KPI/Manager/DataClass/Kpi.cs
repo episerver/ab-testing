@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using EPiServer.Marketing.KPI.Common;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass

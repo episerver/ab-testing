@@ -14,6 +14,10 @@
           <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         </readonly_markup>
       </content_comparator_kpi>
+      <kpi_messaging>
+        <failed_to_load>Failed to load</failed_to_load>
+        <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
+      </kpi_messaging>
     </kpi>
   </language>
 </languages>
