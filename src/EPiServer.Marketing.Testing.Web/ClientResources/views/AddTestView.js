@@ -210,29 +210,30 @@
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
                 var rbs = [
-                    { val: "confidence_99", label: 99 },
-                    { val: "confidence_98", label: 98 },
-                    { val: "confidence_95", label: 95 },
-                    { val: "confidence_90", label: 90 }
+                    { val: 99, label: "99%" },
+                    { val: 98, label: "98%" },
+                    { val: 95, label: "95%" },
+                    { val: 90, label: "90%" }
                 ];
-                var confidenceSelectWidget = registry.byId("confidence"), selectOption,defaultOption;
+                var confidenceSelectWidget = registry.byId("confidence"), selectOption, defaultOption;
                 dijit.byId('confidence').removeOption(dijit.byId('confidence').getOptions());
-
-                for (var i = 0; i < rbs.length; i++) {
-                    if (viewConfidenceLevel) {
-                        if (rbs[i].label === viewConfidenceLevel) {
-                            selectOption = { value: rbs[i].val, label: rbs[i].label + "% (Default)"};
-                            confidenceSelectWidget.addOption(selectOption);
-                            defaultOption = rbs[i].val;
-                        } else {
-                            selectOption = { value: rbs[i].val, label: rbs[i].label + "%" };
-                            confidenceSelectWidget.addOption(selectOption);
+                if (confidenceSelectWidget) {
+                    for (var i = 0; i < rbs.length; i++) {
+                        if (viewConfidenceLevel) {
+                            if (rbs[i].val === viewConfidenceLevel) {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label + " (Default)" };
+                                confidenceSelectWidget.addOption(selectOption);
+                                defaultOption = rbs[i].val;
+                            } else {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label };
+                                confidenceSelectWidget.addOption(selectOption);
+                            }
                         }
+                        confidenceSelectWidget.setValue(defaultOption);
                     }
-                    confidenceSelectWidget.attr(defaultOption, "selected");
                 }
             },
-            
+
             _clearConversionErrors: function () {
                 var errorText = dom.byId("pickerErrorText");
 
@@ -247,16 +248,9 @@
             },
 
             _getConfidenceLevel: function () {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                for (i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.checked) {
-                        this.model.confidencelevel = rb.value;
-                        return;
-                    }
-                }
+                var confidenceSelectWidget = dijit.byId("confidence");
+                return confidenceSelectWidget.value;
+
             },
 
             // Master validations for all form fields. Used when hitting the start button and will pickup
@@ -367,7 +361,7 @@
                     this.model.startDate = utcNow;
                 }
 
-                this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.confidencelevel = this._getConfidenceLevel();
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {
