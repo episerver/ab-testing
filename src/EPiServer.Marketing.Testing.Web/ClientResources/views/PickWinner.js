@@ -18,8 +18,6 @@
  "marketing-testing/scripts/abTestTextHelper",
   "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
- "xstyle/css!marketing-testing/css/GridForm.css",
- "xstyle/css!marketing-testing/css/dijit.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
  "dijit/form/Button"
