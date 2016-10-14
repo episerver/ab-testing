@@ -29,6 +29,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IUIHelper> _mockUIHelper;
         private Mock<IPreviewUrlBuilder> _mockPreviewUrlBuilder;
 
+
         LocalizationService _localizationService = new FakeLocalizationService("test");
 
         private IMarketingTest test;
@@ -54,8 +55,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContentVersionRepository = new Mock<IContentVersionRepository>();
             _mockContentVersionRepository.Setup(
                call => call.Load(It.IsAny<ContentReference>()))
-               .Returns(new ContentVersion(new ContentReference(10,100), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
-           
+               .Returns(new ContentVersion(new ContentReference(10, 100), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+
             _mockUIHelper = new Mock<IUIHelper>();
             _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
 
@@ -70,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentLanguage.PreferredCulture = new CultureInfo("en");
 
             _mockPreviewUrlBuilder = new Mock<IPreviewUrlBuilder>();
-            
+
             return new TestingContextHelper(context, _mockServiceLocator.Object, _mockPreviewUrlBuilder.Object);
         }
 
@@ -140,8 +141,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(testResult.TotalParticipantCount == (draftVariant.Views + publishedVariant.Views));
             Assert.True(testResult.PublishedVersionContentLink == "10_100");
             Assert.True(testResult.DraftVersionContentLink == "5_197");
-            Assert.True(testResult.ConversionLink == "TestLink");
-            Assert.True(testResult.ConversionContentName == "Conversion Content");
             Assert.True(testResult.PublishedVersionPublishedBy == "me");
         }
 
@@ -203,8 +202,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(testResult);
             Assert.True(testResult.Test.Id == testId);
             Assert.True(testResult.TotalParticipantCount == (draftVariant.Views + publishedVariant.Views));
-            Assert.True(testResult.ConversionLink == "TestLink");
-            Assert.True(testResult.ConversionContentName == "Conversion Content");
             Assert.True(testResult.PublishedVersionPublishedBy == "me");
             Assert.True(testResult.DaysRemaining == "0");
             Assert.True(testResult.DaysElapsed == "5");
@@ -268,8 +265,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.NotNull(testResult);
             Assert.True(testResult.Test.Id == testId);
             Assert.True(testResult.TotalParticipantCount == (draftVariant.Views + publishedVariant.Views));
-            Assert.True(testResult.ConversionLink == "TestLink");
-            Assert.True(testResult.ConversionContentName == "Conversion Content");
             Assert.True(testResult.PublishedVersionPublishedBy == "me");
             Assert.True(testResult.DaysRemaining == "0");
             Assert.True(testResult.DaysElapsed == "9");

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Testing.Messaging
+namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
 {
     public class UpdateConversionsMessage
     {

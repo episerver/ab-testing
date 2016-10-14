@@ -6,11 +6,12 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -151,20 +152,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
-           
-            var content = _serviceLocator.GetInstance<IContentRepository>()
-                .Get<IContent>(new ContentReference(testData.ConversionPage));
 
-            var kpi = new ContentComparatorKPI(content.ContentGuid)
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
-            };
+            KpiManager kpiManager = new KpiManager();
+            var kpi = kpiManager.Get(testData.KpiId);
 
             test = new ABTest
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid(), // todo push this down
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
@@ -175,8 +169,18 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0},
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
+                    new Variant()
+                    {
+                        Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0,
+                        KeyFinancialResults = new List<KeyFinancialResult>(),
+                        KeyValueResults = new List<KeyValueResult>()
+                    },
+                    new Variant()
+                    {
+                        Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0,
+                        KeyFinancialResults = new List<KeyFinancialResult>(),
+                        KeyValueResults = new List<KeyValueResult>()
+                    }
                 },
                 KpiInstances = new List<IKpi> { kpi },
                 ConfidenceLevel = testData.ConfidenceLevel

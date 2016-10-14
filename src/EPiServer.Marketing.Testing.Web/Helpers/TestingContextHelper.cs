@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using EPiServer.Core;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -60,12 +59,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// * Specific to loading regular content
         /// </summary>
         /// <returns></returns>
-        public bool SwapDisabled(ContentEventArgs e)
+        public bool SwapDisabled(EventArgs e)
         {
             //currently, our only restriction is user being logged into a system folder (e.g edit).
             //Other conditions have been brought up such as permissions, ip restrictions etc
             //which can be evaluated together here or individually.
-            return (e.Content == null ||
+            ContentEventArgs ea = e as ContentEventArgs;
+            return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
                     HttpContext.Current == null ||
                     HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
                     IsInSystemFolder());
@@ -167,18 +167,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysRemaining = "0";
             }
 
-            //retrieve conversion content from kpis
-            //convert conversion content link to anchor link
-            var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
-            if (kpi != null)
-            {
-                var conversionContent = repo.Get<IContent>(kpi.ContentGuid);
-
-                model.ConversionLink = uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
-                model.ConversionContentName = conversionContent.Name;
-            }
-
-            // Calculate total participation count
+           // Calculate total participation count
             foreach (var variant in testData.Variants)
             {
                 model.TotalParticipantCount += variant.Views;
