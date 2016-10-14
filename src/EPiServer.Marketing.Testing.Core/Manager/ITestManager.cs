@@ -43,10 +43,5 @@ namespace EPiServer.Marketing.Testing
         /// <param name="content"></param>
         /// <returns>list - can be empty, never null</returns>
         IList<Guid> EvaluateKPIs(IList<IKpi> kpis, IContent content);
-
-        /// <summary>
-        /// Event handler for callers to get notified when a test is saved.
-        /// </summary>
-        event EventHandler<TestEventArgs> SavingTestEvent;
     }
 }

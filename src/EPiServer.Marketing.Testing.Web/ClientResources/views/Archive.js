@@ -80,7 +80,7 @@
 
         _onCloseClick: function () {
             var me = this;
-            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink };
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split("_")[0] };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 

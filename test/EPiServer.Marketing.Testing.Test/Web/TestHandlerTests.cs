@@ -12,6 +12,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Test.Core;
 using System.Web;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -49,6 +50,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestDataCookieHelper> _mockTestDataCookieHelper;
         private Mock<ITestManager> _mockTestManager;
         private Mock<ITestingContextHelper> _mockContextHelper;
+        private Mock<IServiceLocator> _mockServiceLocator;
+        private Mock<DefaultMarketingTestingEvents> _mockMarketingTestingEvents;
         private MyLogger _logger = new MyLogger();
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
@@ -61,6 +64,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestHandler GetUnitUnderTest()
         {
+            _mockServiceLocator = new Mock<IServiceLocator>();
             _mockTestDataCookieHelper = new Mock<ITestDataCookieHelper>();
             _mockTestManager = new Mock<ITestManager>();
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
@@ -88,11 +92,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContextHelper = new Mock<ITestingContextHelper>();
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
 
+            _mockMarketingTestingEvents = new Mock<DefaultMarketingTestingEvents>();
+
+            _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>())
+                .Returns(_mockMarketingTestingEvents.Object);
+
             HttpContext.Current = new HttpContext(
                new HttpRequest(null, "http://tempuri.org", null),
                new HttpResponse(null));
 
-            return new TestHandler(_mockTestManager.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
+            return new TestHandler(_mockServiceLocator.Object, _mockTestDataCookieHelper.Object, _mockContextHelper.Object, _logger);
         }
 
         [Fact]
@@ -199,18 +209,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
             };
-
+            
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
 
             Variant testVariant = new Variant()
             {
                 Id = _matchingVariantId,
-                ItemVersion = 5,
+                ItemVersion = 2,
                 TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
+                ItemId = _associatedTestGuid,
+                IsPublished = false
             };
+
+            Variant testVariant2 = new Variant()
+            {
+                Id = _matchingVariantId,
+                ItemVersion = 1,
+                TestId = _activeTestGuid,
+                ItemId = _associatedTestGuid,
+                IsPublished = true
+            };
+
+            test.Variants.Add(testVariant);
+            test.Variants.Add(testVariant2);
+
             var testHandler = GetUnitUnderTest();
 
             _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(_associatedTestGuid)).Returns(testList);
@@ -247,7 +272,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } },
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -257,8 +283,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _matchingVariantId,
                 ItemVersion = 0,
                 TestId = _activeTestGuid,
-                ItemId = _associatedTestGuid
+                ItemId = _associatedTestGuid,
+                IsPublished = true
             };
+
+            test.Variants.Add(testVariant);
 
             var testHandler = GetUnitUnderTest();
 
@@ -299,7 +328,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = _activeTestGuid,
                 OriginalItemId = _associatedTestGuid,
                 State = TestState.Active,
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
             };
 
             List<IMarketingTest> testList = new List<IMarketingTest>() { test };
@@ -309,8 +339,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.Empty,
                 ItemVersion = 0,
                 TestId = _activeTestGuid,
-                ItemId = Guid.Empty
+                ItemId = Guid.Empty,
+                IsPublished = true
             };
+
+            test.Variants.Add(testVariant);
 
             var testHandler = GetUnitUnderTest();
 

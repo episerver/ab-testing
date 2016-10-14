@@ -99,15 +99,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public bool IsRequestedContent(IContent loadedContent)
         {
             var content = GetCurrentPageFromUrl();
+            var isMatchedPage = false;
             if (content != null)
             {
-                return !(loadedContent is PageData) ||
-                    (content.ContentLink == loadedContent.ContentLink);
+                isMatchedPage = !(loadedContent is PageData) || (content.ContentLink == loadedContent.ContentLink);
             }
-            else
+            else if (!(loadedContent is PageData))
             {
-                return false;
+                isMatchedPage = true;
             }
+
+            return isMatchedPage;
         }
 
         /// <summary>
@@ -125,13 +127,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var repo = _serviceLocator.GetInstance<IContentRepository>();
 
             //get published version
-            var publishedContent = repo.Get<IContent>(testData.OriginalItemId);
-            
+            var Content = repo.Get<IContent>(testData.OriginalItemId);
+
+            //get content which was published at time of test
+            var tempPublishedContentClone = Content.ContentLink.CreateWritableClone();
+            int publishedVersion = testData.Variants.First(x => x.IsPublished).ItemVersion;
+            tempPublishedContentClone.WorkID = publishedVersion;
+            var publishedContent = repo.Get<IContent>(tempPublishedContentClone);
+
             //get variant (draft) version
-            var tempContentClone = publishedContent.ContentLink.CreateWritableClone();
-            int variantVersion = testData.Variants.First(x => !x.ItemVersion.Equals(publishedContent.ContentLink.ID)).ItemVersion;
-            tempContentClone.WorkID = variantVersion;
-            var draftContent = repo.Get<IContent>(tempContentClone);
+            var tempVariantContentClone = Content.ContentLink.CreateWritableClone();
+            int variantVersion = testData.Variants.First(x => !x.IsPublished).ItemVersion;
+            tempVariantContentClone.WorkID = variantVersion;
+            var draftContent = repo.Get<IContent>(tempVariantContentClone);
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
@@ -145,7 +153,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             MapVersionData(publishedContent, draftContent, model);
 
             // Map users publishing rights
-            model.UserHasPublishRights = publishedContent.QueryDistinctAccess(AccessLevel.Publish);
+            model.UserHasPublishRights = Content.QueryDistinctAccess(AccessLevel.Publish);
 
             // Map elapsed and remaining days.
             if (testData.State == TestState.Active)
@@ -205,8 +213,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private void MapVersionData(IContent publishedContent, IContent draftContent, MarketingTestingContextModel model)
         {
             var versionRepo = _serviceLocator.GetInstance<IContentVersionRepository>();
-            var publishedVersionData = versionRepo.LoadPublished(publishedContent.ContentLink,
-                ContentLanguage.PreferredCulture.Name);
+            var publishedVersionData = versionRepo.Load(publishedContent.ContentLink);
             var draftVersionData = versionRepo.Load(draftContent.ContentLink);
 
             //set published and draft version info
