@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
                     HttpContext.Current == null ||
                     HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
-                    IsInSystemFolder() );
+                    IsInSystemFolder());
         }
 
         /// <summary>
@@ -207,11 +207,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //set published and draft version info
             model.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
-            model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+            model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString("o").ToString(CultureInfo.CurrentCulture); // In the view details.js, the function datetime.toUserFriendlyString() expects the input date to be in round - trip date / time pattern "o" (example: "2016-10-12T05:37:24Z") to convert it correctly for display purpose. Format prior to conversion was "10/12/2016 5:33:29 AM".
+
             model.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
 
             model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
-            model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+            model.DraftVersionChangedDate = draftVersionData.Saved.ToString("o").ToString(CultureInfo.CurrentCulture); // In the view details.js, the function datetime.toUserFriendlyString() expects the input date to be in round - trip date / time pattern "o" (example: "2016-10-12T05:37:24Z") to convert it correctly for display purpose. Format prior to conversion was "10/12/2016 5:33:29 AM".
 
             //Set previewUrl's from version data
             var currentCulture = ContentLanguage.PreferredCulture;
