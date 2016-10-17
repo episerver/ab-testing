@@ -15,7 +15,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
         name: "Cancel Test",
         label: resources.canceltestcommand.label_text,
         tooltip:resources.canceltestcommand.tooltip_text,
-        iconClass: "", //Define your own icon css class here.
+        iconClass: "epi-iconPen", //Define your own icon css class here.
 
         _contentActionSupport: ContentActionSupport,
 
@@ -51,7 +51,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                 if (isClickable) {
                     for (var i = 0; i < menu.providers.length; i++) {
                         for (var j = 0; j < menu.providers[i].commands.length; j++) {
-                            menu.providers[i].commands[j].set("canExecute", false);
+                            menu.providers[i].commands[j].set("isAvailable", false);
                         }
                     }
                 }
