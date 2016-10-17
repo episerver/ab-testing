@@ -16,12 +16,12 @@ namespace EPiServer.Marketing.Testing
         public TestEventArgs(IMarketingTest test)
         {
             this.Test = test;
+            this.CurrentUser = PrincipalInfo.Current.Principal.Identity;
         }
 
         public TestEventArgs(IMarketingTest test, IContent currentContent) : this(test)
         {
             this.CurrentContent = currentContent;
-            this.CurrentUser = PrincipalInfo.Current.Principal.Identity;
         }
 
         public IMarketingTest Test { get; private set; }

@@ -150,7 +150,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             if (testData.StartDate == null)
             {
-                testData.StartDate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+                testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
 
             KpiManager kpiManager = new KpiManager();
@@ -163,7 +163,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
-                StartDate = DateTime.Parse(testData.StartDate),
+                StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
                 State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,

@@ -60,6 +60,7 @@ define([
         viewParticipationPercent: null;
         viewTestDuration: null;
         viewConfidenceLevel: null;
+        startButtonClickCounter: 0;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -290,6 +291,9 @@ define([
 
             // FORM DATA CLEANUP
             reset: function () {
+                // reset the start button click counter
+                startButtonClickCounter = 0;
+
                 //set view model properties to default form values.
                 if (this.descriptionText) {
                     this.descriptionText.value = this.model.testDescription = "";
@@ -396,6 +400,8 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
+                if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
+                startButtonClickCounter++; // Increment click count
                 var me = this;
                 var kpiTextField = dom.byId("kpiString");
                 var kpiErrorText = dom.byId("kpiErrorText");
@@ -425,10 +431,13 @@ define([
                         if (me._isValidFormData()) {
                             me.model.createTest();
                         }
-
+                        else {
+                            startButtonClickCounter = 0; // Validation failed, so reset it to zero.
+                        }
                     })
                     .otherwise(function (ret) {
                         me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
+                        me.startButtonClickCounter = 0;
                     });
             },
 
