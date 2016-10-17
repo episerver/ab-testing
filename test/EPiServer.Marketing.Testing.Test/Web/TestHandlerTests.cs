@@ -15,6 +15,7 @@ using System.Web;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
+using EPiServer.Data;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -59,6 +60,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestingContextHelper> _mockContextHelper;
         private Mock<IServiceLocator> _mockServiceLocator;
         private Mock<DefaultMarketingTestingEvents> _mockMarketingTestingEvents;
+        private Mock<IDatabaseMode> _mockDatabaseMode;
         private MyLogger _logger = new MyLogger();
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
@@ -118,6 +120,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(_mockContextHelper.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<ILogger>())
                 .Returns(_logger);
+
+            _mockDatabaseMode = new Mock<IDatabaseMode>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IDatabaseMode>())
+                .Returns(_mockDatabaseMode.Object);
+
             return new TestHandler(_mockServiceLocator.Object);
         }
 
