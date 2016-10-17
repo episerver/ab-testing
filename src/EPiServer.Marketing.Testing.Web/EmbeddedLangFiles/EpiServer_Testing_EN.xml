@@ -23,7 +23,7 @@
         <default> (default)</default>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_header>Test duration</duration_header>
-        <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
+        <error_conversiongoal>You must select a conversion goal page before you can start the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
@@ -169,7 +169,6 @@
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
         <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
-        <result_is_significant>The results of this test are significant.</result_is_significant>
         <started> Started </started>
         <test_duration_header>Test duration</test_duration_header>
         <test_not_started_text>This test has not yet started.</test_not_started_text>

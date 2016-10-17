@@ -27,7 +27,8 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane"
+        "dijit/layout/ContentPane",
+        "dijit/form/Select"
 ],
     function (
     declare,
@@ -206,31 +207,27 @@
             },
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                this._resetConfidenceSelection(rbs);
-                for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.value === viewConfidenceLevel.toString()) {
-                        rb.setAttribute("selected", "selected");
-                        rb.textContent = rb.value + "% " + resources.addtestview.default;
-                    } else {
-                        rb.removeAttribute("selected");
-                        rb.textContent = rb.value + "%";
-                    }
-                }
-            },
-
-            _resetConfidenceSelection: function (rbs) {
-                for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.textContent.indexOf("(default)") != -1) {
-                        rb.selected = true;
-                    } else {
-                        rb.selected = false;
+                var rbs = [
+                    { val: 99, label: "99%" },
+                    { val: 98, label: "98%" },
+                    { val: 95, label: "95%" },
+                    { val: 90, label: "90%" }
+                ];
+                var confidenceSelectWidget = registry.byId("confidence"), selectOption, defaultOption;
+                dijit.byId('confidence').removeOption(dijit.byId('confidence').getOptions());
+                if (confidenceSelectWidget) {
+                    for (var i = 0; i < rbs.length; i++) {
+                        if (viewConfidenceLevel) {
+                            if (rbs[i].val === viewConfidenceLevel) {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label + " (Default)" };
+                                confidenceSelectWidget.addOption(selectOption);
+                                defaultOption = rbs[i].val;
+                            } else {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label };
+                                confidenceSelectWidget.addOption(selectOption);
+                            }
+                        }
+                        confidenceSelectWidget.setValue(defaultOption);
                     }
                 }
             },
@@ -249,16 +246,9 @@
             },
 
             _getConfidenceLevel: function () {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                for (i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.checked) {
-                        this.model.confidencelevel = rb.value;
-                        return;
-                    }
-                }
+                var confidenceSelectWidget = dijit.byId("confidence");
+                return confidenceSelectWidget.value;
+
             },
 
             // Master validations for all form fields. Used when hitting the start button and will pickup
@@ -361,7 +351,7 @@
             //Start and Cancel Events
 
             _onStartButtonClick: function () {
-                
+
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");
                 var utcNow = new Date(Date.now()).toUTCString();
@@ -369,7 +359,7 @@
                     this.model.startDate = utcNow;
                 }
 
-                this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.confidencelevel = this._getConfidenceLevel();
                 this.model.testTitle = this.pageName.textContent;
 
                 if (this._isValidFormData()) {

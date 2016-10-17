@@ -103,8 +103,8 @@
                                   data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
                                   data-dojo-attach-event="onChange: _onConversionPageChanged">
                             </span>
-                            <span id="pickerErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                            <span id="pickerErrorText" class="errorText"></span>
+                            <span id="pickerErrorIcon" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon epi-icon--colored epi-iconDanger"></span>
+                            <span id="pickerErrorText" class="epi-ab-errorText"></span>
                         </p>
                     </div>
                     <hr class="epi-abtest-hr" />
@@ -167,7 +167,7 @@
                         <div class="formsRow" id="dateSelector" data-dojo-attach-point="scheduleDiv">
                             <div>
                                 <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                                <span id="datePickerErrorText" class="errorText"></span>
+                                <span id="datePickerErrorText" class="epi-ab-errorText"></span>
                             </div>
                             <div id="StartDateTimeSelector" data-dojo-attach-point="startDatePicker"
                                  data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown"

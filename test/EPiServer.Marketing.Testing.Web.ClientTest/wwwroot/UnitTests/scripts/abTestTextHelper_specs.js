@@ -254,44 +254,6 @@
                         expect(contentLinkAnchorNode.href).to.equal("testLink");
                         expect(contentLinkAnchorNode.textContent).to.equal("conversion content");
                     });
-
-                it("Informs user test is not significant when test is done and significance is false",
-                    function () {
-                        var pickAWinnerMessageNode = { innerHTML: defaultTextContent };
-                        context.data.test.state = 2;
-                        context.data.test.isSignificant = false;
-
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderSignificance(pickAWinnerMessageNode);
-
-                        expect(pickAWinnerMessageNode.innerHTML)
-                            .to.equal("The results of this test are NOT significant.");
-                    });
-
-                it("Informs user test is significant when test is done and significance is true",
-                    function () {
-                        var pickAWinnerMessageNode = { innerHTML: defaultTextContent };
-                        context.data.test.state = 2;
-                        context.data.test.isSignificant = true;
-
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderSignificance(pickAWinnerMessageNode);
-
-                        expect(pickAWinnerMessageNode.innerHTML).to.equal("The results of this test are significant.");
-                    });
-
-                it("Informs user a winner may be chosen even though the test is not complete if on the pick a winner page",
-                    function () {
-                        var mockPickAWinnerMessageNode = { innerHTML: defaultTextContent };
-
-                        context.data.test.state = 1;
-
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderSignificance(mockPickAWinnerMessageNode);
-
-                        expect(mockPickAWinnerMessageNode.innerHTML)
-                            .to
-                            .equal("This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.");
-                    });
+             
             });
     });
