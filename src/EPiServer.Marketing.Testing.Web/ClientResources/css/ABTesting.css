@@ -1,23 +1,13 @@
-﻿input, textarea {
-    font-size: 14px;
-}
-
-em {
-    box-shadow: inset 0 -4px 0 #cbe25e;
-    font-style: normal;
-}
-
-hr {
-    border-bottom: 1px solid #eee;
-    border-top: none;
-    border-left: none;
-}
-
-.abBody {
+﻿.epi-abtest-body {
     background-color: #eee;
     padding: 16px 32px;
     font-family: arial;
     font-size: 14px;
+}
+
+.epi-abtest-body-container {
+    height:100%;
+    position: absolute;
 }
 
 .cardWrapper {
@@ -238,19 +228,16 @@ hr {
     margin-bottom: 24px;
 }
 
-.hrToolbar {
-    margin-bottom: 24px;
-}
-
 .hrDetails {
     margin-top: -10px;
     margin-bottom: 15px;
 }
 
-.hrAdvanced {
-    margin-right: -18px;
-    margin-left: -18px;
-    margin-bottom: 0;
+.epi-abtest-hr {
+    border-bottom: 1px solid #eee;
+    border-top: none;
+    border-left: none;
+    margin-bottom: 24px;
 }
 
 .leadingContent {
@@ -407,4 +394,13 @@ hr {
 .abPickWinnerAction {
     text-align: center;
     margin-bottom: 36px;
+}
+
+.epi-abtest-advanced-header {
+    color: #000;
+    margin: 8px 0;
+    padding: 14px 8px 12px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
 }
