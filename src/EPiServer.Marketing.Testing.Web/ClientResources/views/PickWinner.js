@@ -20,7 +20,8 @@
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
- "dijit/form/Button"
+ "dijit/form/Button",
+  "dijit/ProgressBar"
 
 ], function (
     declare,
@@ -93,6 +94,7 @@
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
+            textHelper.renderDurationProgress(durationProgressBar);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
