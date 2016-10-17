@@ -1,6 +1,6 @@
-﻿<div class="epi-form-container epi-grid-form dijitContainer">
+﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-bordercontainer" class="sleek epi-form-container epi-grid-form dijitContainer">
     <!-- Button Bar, Breadcrumb/Start Button and Cancel Button-->
-    <div class="epi-globalToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="uniqName_110_0" widgetid="uniqName_110_0">
+    <div data-dojo-type="dijit/layout/BorderContainer" class="epi-localToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="uniqName_110_0" widgetid="uniqName_110_0">
         <div class="epi-toolbarGroupContainer">
             <!-- Breadcrumb Widget -->
             <div id="leadingToolBar" class="epi-toolbarLeading epi-toolbarGroup">
@@ -34,7 +34,6 @@
                 </button>
             </div>
         </div>
-        <hr class="hrToolbar" />
     </div>
     <!-- Main Content -->
     <div class="abBody">
@@ -54,7 +53,7 @@
                 ${resources.addtestview.control}
             </h3>
             <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versiona"><canvas id="publishThumbnail" class="abThumbnailCanvas"/></div>
+                <div class="versiona"><canvas id="publishThumbnail" class="abThumbnailCanvas" /></div>
                 <p class="versionData">
                     <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
                     <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
