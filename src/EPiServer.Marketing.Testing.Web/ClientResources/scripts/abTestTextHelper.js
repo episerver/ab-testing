@@ -154,18 +154,6 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             contentLinkAnchorNode.textContent = context.data.conversionContentName;
         },
 
-        renderSignificance: function (pickAWinnerMessageNode) {
-            if (context.data.test.state < 2) {
-                pickAWinnerMessageNode.innerHTML = resources.early_pick_winner_message;
-            } else if (context.data.test.state === 2) {
-                if (context.data.test.isSignificant) {
-                    pickAWinnerMessageNode.innerHTML = resources.result_is_significant;
-                } else {
-                    pickAWinnerMessageNode.innerHTML = resources.result_is_not_significant;
-                }
-            }
-        },
-
         renderDurationProgress: function (durationProgressIndicatorNode) {
             var totalTestDuration = Number(context.data.daysElapsed) + Number(context.data.daysRemaining);
             durationProgressIndicatorNode.set({ maximum: totalTestDuration });
