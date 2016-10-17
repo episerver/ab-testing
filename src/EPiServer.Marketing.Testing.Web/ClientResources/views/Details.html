@@ -137,9 +137,12 @@
                         <p>
                             <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong>&nbsp;<span data-dojo-attach-point="testRemainingText"></span>
                         </p>
+                        <div data-dojo-type="dijit/ProgressBar"
+                             data-dojo-id="durationProgressBar"
+                             style="width: 35%"></div>
+                    </div>
                     </div>
                 </div>
-            </div>
             <div class="cardWrapper" style="margin-bottom: 114px">
                 <h3 class="epi-abtest-advanced-header">${resources.detailsview.advanced_options_header}</h3>
                 <div class="cardBody">
@@ -147,9 +150,6 @@
                     <p>
                         <strong><span data-dojo-attach-point="confidence"></span></strong>
                     </p>
-                    <div data-dojo-type="dijit/ProgressBar"
-                         data-dojo-id="durationProgressBar"
-                         style="width: 35%"></div>
                 </div>
             </div>
         </div>
