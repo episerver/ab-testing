@@ -78,6 +78,7 @@
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <from>from</from>
+        <goal_not_specified>A goal has not been specified.</goal_not_specified>
         <losing_version_label>Saved in Versions</losing_version_label>
         <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <published_prefix>Published by</published_prefix>
@@ -118,6 +119,7 @@
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Overall goal for this test</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
+        <goal_not_specified>A goal has not been specified.</goal_not_specified>
         <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
@@ -163,7 +165,8 @@
         <early_pick_winner_message>
           This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the chosen content.
         </early_pick_winner_message>
-        <percent_participation_header>Participation percentage</percent_participation_header>
+        <goal_not_specified>A goal has not been specified.</goal_not_specified>
+        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
         <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>

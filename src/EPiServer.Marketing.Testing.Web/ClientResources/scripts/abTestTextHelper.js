@@ -135,7 +135,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 testDescriptionNode.textContent = "\"" +
                     context.data.test.description +
                     "\" - " + username.toUserFriendlyString(context.data.test.owner);
-            } else testDescriptionNode.textContent = "";
+            } else testDescriptionNode.textContent = resources.goal_not_specified;
         },
 
         //sets text content of provided nodes to the context participation percentage and total participation values

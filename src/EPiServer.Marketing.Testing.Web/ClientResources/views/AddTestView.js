@@ -18,8 +18,6 @@
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
         'xstyle/css!marketing-testing/css/ABTesting.css',
-        'xstyle/css!marketing-testing/css/GridForm.css',
-        'xstyle/css!marketing-testing/css/dijit.css',
         'dijit/form/Button',
         'dijit/form/NumberSpinner',
         'dijit/form/Textarea',
