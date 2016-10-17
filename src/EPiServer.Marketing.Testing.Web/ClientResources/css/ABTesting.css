@@ -127,7 +127,7 @@ hr {
 }
 
 .controlLeaderBody {
-        border: 2px solid #1ba4fa;
+    border: 2px solid #1ba4fa;
 }
 
 .challengerLeaderBody {
@@ -221,11 +221,11 @@ hr {
     padding-left: 20px;
 }
 
-.errorIcon {
+.epi-element--hidden {
     visibility: hidden;
 }
 
-.errorText {
+.epi-ab-errorText {
     color: #f7542b;
     visibility: hidden;
 }
@@ -283,6 +283,7 @@ hr {
     font-style: italic;
     font-family: arial;
     font-size: 16px;
+    vertical-align: middle;
 }
 
 .publishedIcon {
@@ -305,9 +306,9 @@ hr {
     background-position: center;
 }
 
-.versiona.hide-bg, .versionb.hide-bg {
-    background-image: none;
-}
+    .versiona.hide-bg, .versionb.hide-bg {
+        background-image: none;
+    }
 
 .leadingContent,
 .winningContent,
@@ -319,6 +320,7 @@ hr {
     height: 64px;
     width: 64px;
 }
+
 .abThumbnailCanvas {
     width: 100%;
     padding-left: 0;
@@ -382,23 +384,26 @@ hr {
 }
 
 .abTestResult {
-    margin-bottom: 26px
+    margin-bottom: 26px;
 }
-.abTestResult > h2 {
-    text-align: center;
-}
+
+    .abTestResult > h2 {
+        text-align: center;
+    }
+
 .abWinnerStatusText {
     margin: 0 0 4px;
 }
 
 .abLoserStatusText {
-    margin:12px 0 28px;
-    color:#777
+    margin: 12px 0 28px;
+    color: #777;
 }
 
 .abResultLine {
     margin-bottom: 6px;
 }
+
 .abPickWinnerAction {
     text-align: center;
     margin-bottom: 36px;
