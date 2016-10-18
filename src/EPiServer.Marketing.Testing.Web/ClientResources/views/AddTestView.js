@@ -205,7 +205,7 @@ define([
                 .then(function (markup) {
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
+                    var defaultOption = { value: "-1", label: me.resources.addtestview.goals_selectlist_default };
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < markup.length; x++) {
                         var option = { value: markup[x], label: markup[x].kpi.friendlyName };
