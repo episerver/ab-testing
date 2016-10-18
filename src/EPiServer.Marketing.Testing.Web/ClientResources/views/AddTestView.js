@@ -437,7 +437,7 @@ define([
                     })
                     .otherwise(function (ret) {
                         me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        me.startButtonClickCounter = 0;
+                        startButtonClickCounter = 0;
                     });
             },
 
