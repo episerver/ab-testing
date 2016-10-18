@@ -361,15 +361,17 @@ define([
 
             //Removes the custom KPI markup from the view & widget registry
             _clearCustomKpiMarkup: function () {
+                this._clearConversionErrors();
                 var kpiuiElement = dom.byId("kpiui");
                 if (kpiuiElement) {
                     kpiuiElement.innerHTML = "";
                     if (dijit.byId("ConversionPageWidget")) {
                         dijit.byId("ConversionPageWidget").destroy(true);
-                        dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                        if (dijit.byId("dojox_layout_ContentPane_0")) {
+                            dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                        }
                     }
                 }
-                this._setKpiSelectList();
             },
 
             // UI UTILITIES
@@ -416,7 +418,7 @@ define([
                     }
                 })
                     .then(function (ret) {
-                        me._setError("", kpiErrorText, kpiErrorIcon);
+                        me._clearConversionErrors();
                         me.model.kpiId = ret;
                         me.model.testDescription = dom.byId("testDescription").value;
                         var startDateSelector = dom.byId("StartDateTimeSelector");
@@ -437,13 +439,14 @@ define([
                     })
                     .otherwise(function (ret) {
                         me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        me.startButtonClickCounter = 0;
+                        startButtonClickCounter = 0;
                     });
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
+                this._setKpiSelectList();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
@@ -451,6 +454,7 @@ define([
             },
 
             _onSelectChange: function (evt) {
+                this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
                 kpiTextField.value = evt.kpiType;
                 var kpiuiElement = dom.byId("kpiui");
