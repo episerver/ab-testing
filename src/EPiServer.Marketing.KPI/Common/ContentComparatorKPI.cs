@@ -17,7 +17,6 @@ namespace EPiServer.Marketing.KPI.Common
     /// Common KPI class that can be used to compare IContent Guid values 
     /// 
     [DataContract]
-    [EventSpecification(service = typeof(IContentEvents), methodname = "LoadedContent")]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.html",
         text = "Landing Page", description = "Choose a page for conversion.")]
@@ -150,6 +149,25 @@ namespace EPiServer.Marketing.KPI.Common
                 throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
             }
             return false;
+        }
+
+        private EventHandler<ContentEventArgs> _handler;
+        public override bool AddHandler(EventHandler handler)
+        {
+            var service = ServiceLocator.Current.GetInstance<IContentEvents>();
+            _handler = new EventHandler<ContentEventArgs>(handler);
+            service.LoadedContent += _handler;
+            return true;
+        }
+
+        public override bool RemoveHandler(EventHandler handler)
+        {
+            if (_handler != null)
+            {
+                var service = ServiceLocator.Current.GetInstance<IContentEvents>();
+                service.LoadedContent -= _handler;
+            }
+            return true;
         }
     }
 }

@@ -169,5 +169,15 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         {
             throw new NotImplementedException();
         }
+
+        public virtual bool AddHandler(EventHandler handler)
+        {
+            return false;
+        }
+
+        public virtual bool RemoveHandler(EventHandler handler)
+        {
+            return false;
+        }
     }
 }

@@ -542,38 +542,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         }
 
-        [Fact]
-        public void TestHandler_initProxyEventHandler_tries_allactivetests_logs_warning()
-        {
-            var testHandler = GetUnitUnderTest();
-            _mockTestManager.SetupGet(g => g.ActiveCachedTests).Returns(
-                new List<IMarketingTest>()
-                {
-                    new ABTest()
-                    {
-                        OriginalItemId = _originalItemId,
-                        State = TestState.Active,
-                        Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                        KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } }
-                    },
-                    new ABTest()
-                    {
-                        OriginalItemId = _activeTestGuid,
-                        State = TestState.Active,
-                        Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                        KpiInstances = new List<IKpi>() { new Kpi() { Id = Guid.NewGuid() } }
-                    }
-                });
-
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
-            testHandler.initProxyEventHandler();
-
-            _mockTestManager.VerifyGet(g => g.ActiveCachedTests, Times.AtLeastOnce, "ProxyEventHandler should be using ActiveTests collection");
-            Assert.True(_logger.WarningCalled, "Expected warning not logged, kpi instances do not support proper attributes");
-        }
-
+ 
         [Fact]
         public void TestHandler_initProxyEventHandler_checks_ref_and_adds_one()
         {
@@ -598,99 +567,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.initProxyEventHandler();
 
             _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should have been called once but it wasnt.");
-        }
-
-        [Fact]
-        public void TestHandler_TestAddedToCache_logs_error_on_failed_service_load()
-        {
-            var testHandler = GetUnitUnderTest();
-
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
-
-            _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(false);
-
-            Mock<IContentEvents> ce = new Mock<IContentEvents>();
-            object service = ce.Object;
-            _mockServiceLocator.Setup(m => m.TryGetExistingInstance(It.IsAny<Type>(), out service)).Returns(false);
-
-            testHandler.TestAddedToCache(this, new TestEventArgs( new ABTest()
-            {
-                OriginalItemId = _originalItemId,
-                State = TestState.Active,
-                Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
-            }));
-
-            Assert.True(_logger.ErrorCalled, "Expected error message not logged, we should have failed to load the service since its not mocked.");
-            _logger.ErrorCalled = false;
-            _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Never, "AddRef should NOT have been called since service wasnt loaded. ");
-        }
-
-        [Fact]
-        public void TestHandler_TestAddedToCache_adds_reference_onSuccess()
-        {
-            var testHandler = GetUnitUnderTest();
-
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
-
-            _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(false);
-
-            Mock<IContentEvents> ce = new Mock<IContentEvents>();
-            object service = ce.Object;
-            _mockServiceLocator.Setup(m => m.TryGetExistingInstance(It.IsAny<Type>(), out service)).Returns(true);
-
-            testHandler.TestAddedToCache(this, new TestEventArgs(new ABTest()
-            {
-                OriginalItemId = _originalItemId,
-                State = TestState.Active,
-                Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
-            }));
-
-            _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should be called once");
-        }
-
-        [Fact]
-        public void TestHandler_TestRemovedFromCache_logs_error_on_failed_service_load()
-        {
-            var testHandler = GetUnitUnderTest();
-            _mockTestManager.SetupGet(g => g.ActiveCachedTests).Returns(
-                new List<IMarketingTest>()
-                {
-                    new ABTest()
-                    {
-                        OriginalItemId = _originalItemId,
-                        State = TestState.Active,
-                        Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                        KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
-                    }
-                });
-
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
-
-            _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(false);
-
-            Mock<IContentEvents> ce = new Mock<IContentEvents>();
-            object service = ce.Object;
-            _mockServiceLocator.Setup(m => m.TryGetExistingInstance(It.IsAny<Type>(), out service)).Returns(false);
-
-            testHandler.TestRemovedFromCache(this, new TestEventArgs(new ABTest()
-            {
-                OriginalItemId = _originalItemId,
-                State = TestState.Active,
-                Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
-            }));
-
-            _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveReference should NOT have been called more than once since service is not mocked.");
-            Assert.True(_logger.ErrorCalled, "Expected error message not logged, we should have failed to load the service since its not mocked.");
-            _logger.ErrorCalled = false;
         }
 
         [Fact]

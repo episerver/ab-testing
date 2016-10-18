@@ -57,5 +57,19 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <param name="sender"></param>
         /// <param name="e">Event Argument</param>
         IKpiResult Evaluate(object sender, EventArgs e);
+
+        /// <summary>
+        /// When a test is started, this method is called (once per type)
+        /// </summary>
+        /// <param name="handler">the Event handler we will use to trigger an evaluate</param>
+        /// <returns></returns>
+        bool AddHandler(EventHandler handler);
+
+        /// <summary>
+        /// When a test is ended this method is called once per type when all of "these" types are stopped.
+        /// </summary>
+        /// <param name="handler">the handler that should be removed from any service it was added to</param>
+        /// <returns></returns>
+        bool RemoveHandler(EventHandler handler);
     }
 }
