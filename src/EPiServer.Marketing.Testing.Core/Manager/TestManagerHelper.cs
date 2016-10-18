@@ -59,6 +59,12 @@ namespace EPiServer.Marketing.Testing
 
         internal static IABTest ConvertToDalTest(IMarketingTest theManagerTest)
         {
+            if (Guid.Empty == theManagerTest.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                theManagerTest.Id = Guid.NewGuid();
+            }
+
             var aTest = new DalABTest
             {
                 Id = theManagerTest.Id,

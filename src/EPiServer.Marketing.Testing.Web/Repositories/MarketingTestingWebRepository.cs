@@ -158,7 +158,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             test = new ABTest
             {
-                Id = Guid.NewGuid(), // todo push this down
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
