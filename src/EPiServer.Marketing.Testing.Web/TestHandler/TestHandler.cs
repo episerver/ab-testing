@@ -593,7 +593,7 @@ namespace EPiServer.Marketing.Testing.Web
             if (!_ReferenceCounter.hasReference(kpi.GetType()))
             {
 
-                kpi.AddHandler(ProxyEventHandler);
+                kpi.EvaluateProxyEvent += ProxyEventHandler;
 
                 _ReferenceCounter.AddReference(kpi.GetType());
             }
@@ -614,7 +614,7 @@ namespace EPiServer.Marketing.Testing.Web
             // Remove the proxyeventhandler only once, when the last reference is removed.
             if (!_ReferenceCounter.hasReference(kpi.GetType()))
             {
-                kpi.RemoveHandler(ProxyEventHandler);
+                kpi.EvaluateProxyEvent -= ProxyEventHandler;
             }
         }
         #endregion

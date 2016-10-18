@@ -22,16 +22,24 @@ namespace EPiServer.Marketing.KPI.Common
         text = "Landing Page", description = "Choose a page for conversion.")]
     public class ContentComparatorKPI : Kpi
     {
+        IServiceLocator _servicelocator;
+
         [DataMember]
         public Guid ContentGuid;
          
         public ContentComparatorKPI()
         {
+            _servicelocator = ServiceLocator.Current;
         }
 
         public ContentComparatorKPI(Guid contentGuid)
         {
+            _servicelocator = ServiceLocator.Current;
             ContentGuid = contentGuid;
+        }
+        internal ContentComparatorKPI(IServiceLocator servicelocator)
+        {
+            _servicelocator = servicelocator;
         }
 
         [DataMember]
@@ -151,23 +159,18 @@ namespace EPiServer.Marketing.KPI.Common
             return false;
         }
 
-        private EventHandler<ContentEventArgs> _handler;
-        public override bool AddHandler(EventHandler handler)
+        private EventHandler<ContentEventArgs> _eh;
+        public override event EventHandler EvaluateProxyEvent
         {
-            var service = ServiceLocator.Current.GetInstance<IContentEvents>();
-            _handler = new EventHandler<ContentEventArgs>(handler);
-            service.LoadedContent += _handler;
-            return true;
-        }
-
-        public override bool RemoveHandler(EventHandler handler)
-        {
-            if (_handler != null)
-            {
-                var service = ServiceLocator.Current.GetInstance<IContentEvents>();
-                service.LoadedContent -= _handler;
+            add {
+                _eh = new EventHandler<ContentEventArgs>(value);
+                var service = _servicelocator.GetInstance<IContentEvents>();
+                service.LoadedContent += _eh;
             }
-            return true;
+            remove {
+                var service = _servicelocator.GetInstance<IContentEvents>();
+                service.LoadedContent -= _eh;
+            }
         }
     }
 }

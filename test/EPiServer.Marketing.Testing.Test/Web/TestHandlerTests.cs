@@ -581,15 +581,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(false);
 
             Mock<IContentEvents> ce = new Mock<IContentEvents>();
-            object service = ce.Object;
-            _mockServiceLocator.Setup(m => m.TryGetExistingInstance(It.IsAny<Type>(), out service)).Returns(true);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(ce.Object);
 
             testHandler.TestRemovedFromCache(this, new TestEventArgs(new ABTest()
             {
                 OriginalItemId = _originalItemId,
                 State = TestState.Active,
                 Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object) { Id = Guid.NewGuid() } }
             }));
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveReference should be called once");

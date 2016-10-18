@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-        /// <summary>
+         /// <summary>
         /// Given the specified Namespace.filename key we will load the string from the file found in this assembly. If this fails 
         /// its probably because the key is wrong or the resources is not in the assembly. See 
         /// </summary>
@@ -170,14 +170,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             throw new NotImplementedException();
         }
 
-        public virtual bool AddHandler(EventHandler handler)
-        {
-            return false;
-        }
-
-        public virtual bool RemoveHandler(EventHandler handler)
-        {
-            return false;
-        }
+        public virtual event EventHandler EvaluateProxyEvent;
     }
 }
