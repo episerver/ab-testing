@@ -11,7 +11,6 @@ using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager;
-using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -146,17 +145,15 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
         {
-            IMarketingTest test = new ABTest();
-
             if (testData.StartDate == null)
             {
                 testData.StartDate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
             }
 
-            KpiManager kpiManager = new KpiManager();
+            var kpiManager = new KpiManager();
             var kpi = kpiManager.Get(testData.KpiId);
 
-            test = new ABTest
+            var test = new ABTest
             {
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
@@ -165,20 +162,23 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 StartDate = DateTime.Parse(testData.StartDate),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
-                State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
+                State = testData.Start ? TestState.Active : TestState.Inactive,
                 Variants = new List<Variant>
                 {
                     new Variant()
                     {
-                        ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0,
-                        KeyFinancialResults = new List<KeyFinancialResult>(),
-                        KeyValueResults = new List<KeyValueResult>()
+                        ItemId = testData.TestContentId,
+                        ItemVersion = testData.PublishedVersion,
+                        IsPublished = true,
+                        Views = 0,
+                        Conversions = 0
                     },
                     new Variant()
                     {
-                        ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0,
-                        KeyFinancialResults = new List<KeyFinancialResult>(),
-                        KeyValueResults = new List<KeyValueResult>()
+                        ItemId = testData.TestContentId,
+                        ItemVersion = testData.VariantVersion,
+                        Views = 0,
+                        Conversions = 0
                     }
                 },
                 KpiInstances = new List<IKpi> { kpi },

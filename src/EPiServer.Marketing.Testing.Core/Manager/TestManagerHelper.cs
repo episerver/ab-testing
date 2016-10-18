@@ -236,6 +236,16 @@ namespace EPiServer.Marketing.Testing
                 managerVariant.Id = Guid.NewGuid();
             }
 
+            if (null == managerVariant.KeyFinancialResults)
+            {
+                managerVariant.KeyFinancialResults = new List<KeyFinancialResult>();
+            }
+
+            if (null == managerVariant.KeyValueResults)
+            {
+                managerVariant.KeyValueResults = new List<KeyValueResult>();
+            }
+
             var retVariant = new DalVariant
             {
                 Id = managerVariant.Id,
