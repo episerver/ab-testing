@@ -17,6 +17,7 @@ using System.Reflection;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Data;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -321,7 +322,7 @@ namespace EPiServer.Marketing.Testing.Web
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
                 //increment view if not already done
-                if (!cookie.Viewed)
+                if (!cookie.Viewed && DbReadWrite())
                 {
                     _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
                         CountType.View);
@@ -338,6 +339,11 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         private void EvaluateCookies(ContentEventArgs e)
         {
+            if (!DbReadWrite())
+            {
+                return;
+            }
+
             var testCookieList = _testDataCookieHelper.GetTestDataFromCookies();
             foreach (var testCookie in testCookieList)
             {
@@ -501,6 +507,12 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
+        private bool DbReadWrite()
+        {
+            var dbmode = _serviceLocator.GetInstance<IDatabaseMode>().DatabaseMode;
+            return dbmode == DatabaseMode.ReadWrite;
+        }
+
         #region ProxyEventHandlerSupport
 
         /// <summary>
@@ -510,7 +522,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         public void ProxyEventHandler(object sender, EventArgs e)
         {
-            if (!_contextHelper.SwapDisabled(e))
+            if (!_contextHelper.SwapDisabled(e) && DbReadWrite())
             {
                 try
                 {

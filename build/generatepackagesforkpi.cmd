@@ -11,11 +11,10 @@ xcopy "..\artifacts\%Configuration%\net45\EPiServer.Marketing.KPI.dll" "%Package
 
 xcopy "%ProjectPath%\Package.nuspec" "%PackagePath%\"  /I /F /R /Y
 
-xcopy "..\src\Database"\KPI\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
+xcopy "..\src\Database"\KPI\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" ".."
 
 xcopy "%PackagePath%"\*nupkg "..\artifacts"  /I /F /R /Y
 
 rd "%PackagePath%" /s /q
-
