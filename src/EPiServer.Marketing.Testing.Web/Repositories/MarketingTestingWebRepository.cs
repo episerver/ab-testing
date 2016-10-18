@@ -170,13 +170,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 {
                     new Variant()
                     {
-                        Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0,
+                        ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0,
                         KeyFinancialResults = new List<KeyFinancialResult>(),
                         KeyValueResults = new List<KeyValueResult>()
                     },
                     new Variant()
                     {
-                        Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0,
+                        ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0,
                         KeyFinancialResults = new List<KeyFinancialResult>(),
                         KeyValueResults = new List<KeyValueResult>()
                     }

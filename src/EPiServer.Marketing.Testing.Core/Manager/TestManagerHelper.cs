@@ -230,6 +230,12 @@ namespace EPiServer.Marketing.Testing
 
         internal static DalVariant ConvertToDalVariant(Variant managerVariant)
         {
+            if (Guid.Empty == managerVariant.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerVariant.Id = Guid.NewGuid();
+            }
+
             var retVariant = new DalVariant
             {
                 Id = managerVariant.Id,
