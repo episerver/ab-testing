@@ -3,10 +3,8 @@ using EPiServer.Marketing.Testing.Data;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
-    public class KeyFinancialResult : IKeyResult
+    public class KeyFinancialResult : CoreEntityBase, IKeyResult
     {
-        public Guid Id { get; set; }
-
         public Guid KpiId { get; set; }
 
         public decimal Total { get; set; }
@@ -15,8 +13,5 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
 
         public virtual Variant Variant { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
     }
 }

@@ -4,10 +4,8 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 
 namespace EPiServer.Marketing.Testing.Data
 {
-    public class Variant
+    public class Variant : CoreEntityBase
     {
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Id of the test this is associated with.
         /// </summary>
