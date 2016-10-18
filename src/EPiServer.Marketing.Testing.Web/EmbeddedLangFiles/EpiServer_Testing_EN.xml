@@ -94,8 +94,8 @@
         <winning_version_label>Winner (published)</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <label_text>Cancel A/B test and edit page</label_text>
-        <tooltip_text>Cancel A/B test and edit page</tooltip_text>
+        <label_text>Abort A/B Test and Edit Page</label_text>
+        <tooltip_text>Abort A/B Test and Edit Page</tooltip_text>
       </canceltestcommand>
       <detailsview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
