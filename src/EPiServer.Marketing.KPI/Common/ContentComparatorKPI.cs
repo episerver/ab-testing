@@ -17,22 +17,29 @@ namespace EPiServer.Marketing.KPI.Common
     /// Common KPI class that can be used to compare IContent Guid values 
     /// 
     [DataContract]
-    [EventSpecification(service = typeof(IContentEvents), methodname = "LoadedContent")]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.html",
         text = "Landing Page", description = "Choose a page for conversion.")]
     public class ContentComparatorKPI : Kpi
     {
+        IServiceLocator _servicelocator;
+
         [DataMember]
         public Guid ContentGuid;
          
         public ContentComparatorKPI()
         {
+            _servicelocator = ServiceLocator.Current;
         }
 
         public ContentComparatorKPI(Guid contentGuid)
         {
+            _servicelocator = ServiceLocator.Current;
             ContentGuid = contentGuid;
+        }
+        internal ContentComparatorKPI(IServiceLocator servicelocator)
+        {
+            _servicelocator = servicelocator;
         }
 
         [DataMember]
@@ -150,6 +157,20 @@ namespace EPiServer.Marketing.KPI.Common
                 throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
             }
             return false;
+        }
+
+        private EventHandler<ContentEventArgs> _eh;
+        public override event EventHandler EvaluateProxyEvent
+        {
+            add {
+                _eh = new EventHandler<ContentEventArgs>(value);
+                var service = _servicelocator.GetInstance<IContentEvents>();
+                service.LoadedContent += _eh;
+            }
+            remove {
+                var service = _servicelocator.GetInstance<IContentEvents>();
+                service.LoadedContent -= _eh;
+            }
         }
     }
 }
