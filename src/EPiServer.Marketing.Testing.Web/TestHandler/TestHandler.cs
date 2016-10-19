@@ -590,9 +590,7 @@ namespace EPiServer.Marketing.Testing.Web
             // the reference.
             if (!_ReferenceCounter.hasReference(kpi.GetType()))
             {
-
                 kpi.EvaluateProxyEvent += ProxyEventHandler;
-
                 _ReferenceCounter.AddReference(kpi.GetType());
             }
             else
