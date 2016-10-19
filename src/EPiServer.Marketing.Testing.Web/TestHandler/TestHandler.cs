@@ -483,8 +483,7 @@ namespace EPiServer.Marketing.Testing.Web
                     ModifiedDate = DateTime.UtcNow
                 };
 
-                //_testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, 0);
-                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, 0);
+                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
             }
         }
 
@@ -504,8 +503,7 @@ namespace EPiServer.Marketing.Testing.Web
                     ModifiedDate = DateTime.UtcNow
                 };
 
-                //_testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, 1);
-                _testManager.AddKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
+                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
             }
         }
 

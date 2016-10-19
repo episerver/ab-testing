@@ -59,6 +59,12 @@ namespace EPiServer.Marketing.Testing
 
         internal static IABTest ConvertToDalTest(IMarketingTest theManagerTest)
         {
+            if (Guid.Empty == theManagerTest.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                theManagerTest.Id = Guid.NewGuid();
+            }
+
             var aTest = new DalABTest
             {
                 Id = theManagerTest.Id,
@@ -224,6 +230,22 @@ namespace EPiServer.Marketing.Testing
 
         internal static DalVariant ConvertToDalVariant(Variant managerVariant)
         {
+            if (Guid.Empty == managerVariant.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerVariant.Id = Guid.NewGuid();
+            }
+
+            if (null == managerVariant.KeyFinancialResults)
+            {
+                managerVariant.KeyFinancialResults = new List<KeyFinancialResult>();
+            }
+
+            if (null == managerVariant.KeyValueResults)
+            {
+                managerVariant.KeyValueResults = new List<KeyValueResult>();
+            }
+
             var retVariant = new DalVariant
             {
                 Id = managerVariant.Id,
