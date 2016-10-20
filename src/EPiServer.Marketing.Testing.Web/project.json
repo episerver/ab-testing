@@ -1,6 +1,7 @@
 {
   "resource": [
-    "EmbeddedLangFiles/**/*"
+    "EmbeddedLangFiles/**/*",
+    "SchemaUpdater/Testing.zip"
   ],
   "version": "1.0.0-*",
   "description": "",
