@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations.History;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using EPiServer.Marketing.Testing.Dal;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
@@ -14,10 +13,16 @@ namespace EPiServer.Marketing.Testing.Test.Core
     internal class TestRepository : IRepository
     {
         public TestContext TestContext { get; set; }
+        public HistoryContext HistoryContext { get; set; }
 
         public TestRepository(TestContext testContext)
         {
             TestContext = testContext;
+        }
+
+        public TestRepository(HistoryContext testContext)
+        {
+            HistoryContext = testContext;
         }
 
         public void Dispose()
@@ -159,6 +164,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public IList<T> GetAllList<T>() where T : class
         {
             throw new NotImplementedException();
+        }
+
+        public string GetMigrationHistory(string contextKey)
+        {
+            return HistoryContext.History.Where(r => r.ContextKey == contextKey).OrderByDescending(row => row.MigrationId).First().MigrationId;
         }
 
         public void AddDetached(object instance)

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
@@ -313,6 +313,11 @@ namespace EPiServer.Marketing.Testing
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
         {
             return kpis.Select(kpi => kpi.Evaluate(this, e)).ToList();
+        }
+
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
+        {
+            return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
         internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)

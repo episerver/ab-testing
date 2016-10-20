@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Data.Common;
-using System.Data.Entity.Migrations.History;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
 using EPiServer.ServiceLocation;
@@ -16,8 +10,10 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
     [ServiceConfiguration(typeof(IDatabaseSchemaUpdater))]
     public class DatabaseVersionValidator : IDatabaseSchemaUpdater
     {
-        internal const long RequiredDatabaseVersion = 201609291731241;
-        internal const string UpdateDatabaseResource = "EPiServer.Marketing.Testing.Web.SchemaUpdater.Testing.zip";
+        private const long RequiredDatabaseVersion = 201609291731241;
+        private const string Schema = "dbo";
+        private const string ContextKey = "Testing.Migrations.Configuration";
+        private const string UpdateDatabaseResource = "EPiServer.Marketing.Testing.Web.SchemaUpdater.Testing.zip";
 
         private readonly IDatabaseHandler _databaseHandler;
         private readonly ScriptExecutor _scriptExecutor;
@@ -35,13 +31,10 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
         public DatabaseSchemaStatus GetStatus(ConnectionStringsSection connectionStrings)
         {
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
-            var hc = new HistoryContext(dbConnection, "dbo");
-            var history = hc.History;
-            var lastMigration = history.Where(r => r.ContextKey == "Testing.Migrations.Configuration").OrderByDescending(row => row.MigrationId).First();
-
-            var version = lastMigration.MigrationId.Split('_')[0];
-
-            if (Convert.ToInt64(version) < RequiredDatabaseVersion)
+            var testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+            var version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
+            
+            if (version < RequiredDatabaseVersion)
             {
                 // need to upgrade, versions can only be int, so we force it with fake versions based off our real veresions which are longs from EF
                 return new DatabaseSchemaStatus

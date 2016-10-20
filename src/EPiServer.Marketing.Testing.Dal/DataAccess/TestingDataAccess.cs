@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.Entity.Migrations.History;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
@@ -186,9 +187,38 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             SetTestState(testObjectId, DalTestState.Done);
         }
 
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
+        {
+            long version = 0;
 
+            if (_UseEntityFramework)
+            {
+                using (var historyContext = new HistoryContext(dbConnection, schema))
+                {
+                    var repository = new BaseRepository(historyContext);
+                    version = GetDatabaseVersionHelper(repository, contextKey);
+                }
+            }
+            else
+            {
+                version = GetDatabaseVersionHelper(_repository, contextKey);
+            }
+
+            return version;
+        }
 
         #region Private Helpers
+
+        private long GetDatabaseVersionHelper(IRepository repo, string contextKey)
+        {
+            var lastMigration = repo.GetMigrationHistory(contextKey);
+
+            // we are only interested in the numerical part of the key (i.e. 201609091719244_Initial)
+            var version = lastMigration.Split('_')[0];
+
+            return Convert.ToInt64(version);
+        }
+
         private void DeleteHelper(IRepository repo, Guid testId)
         {
             repo.DeleteTest(testId);
