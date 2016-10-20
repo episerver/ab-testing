@@ -47,26 +47,9 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                string markup;
-
-                var conversionLabel =
-                    LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
-
-                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
-                {
-                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
-                    string value;
-                    if (!TryGetResourceString(attr.configmarkup, out value))
-                    {
-                        markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
-                    }
-                    markup = string.Format(value, conversionLabel);
-                }
-                else
-                {
-                    markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
-                }
-                return markup;
+                var conversionLabel = LocalizationService.Current
+                    .GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
+                return string.Format(base.UiMarkup, conversionLabel);
             }
         }
 
@@ -75,38 +58,23 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                string markup=string.Empty;
+                string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                   .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
-                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
                 if (ContentGuid != Guid.Empty)
                 {
-                    if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
-                    {
-                        var attr =
-                            (UIMarkupAttribute) Attribute.GetCustomAttribute(GetType(), typeof(UIMarkupAttribute));
-                        string value;
-                        if (!TryGetResourceString(attr.readonlymarkup, out value))
-                        {
-                            markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") +
-                                     attr.readonlymarkup + ":" + value;
-                        }
+                    var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                        .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
+                    var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                        .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
 
-                        var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
-                        var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-                        var conversionContent = contentRepository.Get<IContent>(ContentGuid);
-                        var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
-
-                        markup = string.Format(value, conversionHeaderText, conversionDescription, conversionLink,
-                            conversionContent.Name);
-                    }
-                    else
-                    {
-                        markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
-                    }
+                    var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+                    var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+                    var conversionContent = contentRepository.Get<IContent>(ContentGuid);
+                    var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+                    markup = string.Format(markup, conversionHeaderText, conversionDescription, conversionLink,
+                        conversionContent.Name);
                 }
+
                 return markup;
             }
         }

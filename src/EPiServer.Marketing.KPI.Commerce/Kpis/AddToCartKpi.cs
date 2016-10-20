@@ -1,6 +1,8 @@
-﻿using EPiServer.Marketing.KPI.Common.Attributes;
+﻿using EPiServer.Framework.Localization;
+using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
+using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Orders;
 using System;
 using System.Runtime.Serialization;
@@ -40,6 +42,40 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
 
             return new KpiConversionResult() { KpiId = Id, HasConverted = retval };
+        }
+
+        [DataMember]
+        public override string UiMarkup
+        {
+            get
+            {
+                var conversionLabel = LocalizationService.Current
+                    .GetString("/commercekpi/config_markup/conversion_label");
+                return string.Format(base.UiMarkup, conversionLabel);
+            }
+        }
+
+        [DataMember]
+        public override string UiReadOnlyMarkup
+        {
+            get
+            {
+                string markup = base.UiReadOnlyMarkup;
+
+                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                    .GetString("/commercekpi/readonly_markup/conversion_header");
+                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                    .GetString("/commercekpi/readonly_markup/conversion_selector_description");
+/*
+                var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+                var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+                var conversionContent = contentRepository.Get<IContent>(ContentGuid);
+                var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+                markup = string.Format(markup, conversionHeaderText, conversionDescription, conversionLink,
+                    conversionContent.Name);
+*/
+                return markup;
+            }
         }
 
         private EventHandler<OrderGroupEventArgs> _eh;
