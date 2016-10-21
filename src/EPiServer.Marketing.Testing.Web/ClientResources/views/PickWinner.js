@@ -107,7 +107,7 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this.renderKpiUi();
-            textHelper.renderSignificance();
+            this._renderSignificance();
 
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');

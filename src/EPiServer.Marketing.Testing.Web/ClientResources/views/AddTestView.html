@@ -95,17 +95,24 @@
                         <h4>
                             ${resources.addtestview.conversion_header}
                         </h4>
-                        <p>
-                            <label>${resources.addtestview.conversion_label}</label>
-                            <span id="conversionPage"
-                                  data-dojo-attach-point="conversionPageWidget"
-                                  data-dojo-type="epi-cms/widget/ContentSelector"
-                                  data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
-                                  data-dojo-attach-event="onChange: _onConversionPageChanged">
-                            </span>
-                            <span id="pickerErrorIcon" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon epi-icon--colored epi-iconDanger"></span>
-                            <span id="pickerErrorText" class="epi-ab-errorText"></span>
-                        </p>
+                        <!-- Errors returned by custom validation will be displayed here-->
+                        <span id="kpiErrorIcon"
+                              class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                        </span>
+                        <span id="kpiErrorText" class="errorText">
+                        </span>
+                        <!-- KPI UI Element-->
+                        <div>
+                            <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onSelectChange"></select>
+                        </div>
+                        <div>
+                            <input type="text" id="kpiString" name="kpiTypeString" hidden />
+                            <form id="kpiForm">
+                                <div id="kpiui">
+                                    <!-- KPI Supplied UI will be injected here -->
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <hr class="epi-abtest-hr" />
                     <!-- Participation Percentage -->

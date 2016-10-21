@@ -1,4 +1,4 @@
-define([
+﻿define([
      'dojo/_base/declare',
         'dijit/_WidgetBase',
         'dijit/_TemplatedMixin',
@@ -436,8 +436,8 @@ define([
                             me.model.startDate = utcNow;
                         }
 
-                this.model.confidencelevel = this._getConfidenceLevel();
-                this.model.testTitle = this.pageName.textContent;
+                        me.model.confidencelevel = dom.byId("confidence").value;
+                        me.model.testTitle = me.pageName.textContent;
 
                         if (me._isValidFormData()) {
                             me.model.createTest();
