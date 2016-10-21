@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.KPI.Common
     {
         [DataMember]
         public Guid ContentGuid;
-         
+
         public ContentComparatorKPI()
         {
         }
@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                string markup=string.Empty;
+                string markup = string.Empty;
 
                 var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
                    .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
@@ -79,7 +79,7 @@ namespace EPiServer.Marketing.KPI.Common
                     if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
                     {
                         var attr =
-                            (UIMarkupAttribute) Attribute.GetCustomAttribute(GetType(), typeof(UIMarkupAttribute));
+                            (UIMarkupAttribute)Attribute.GetCustomAttribute(GetType(), typeof(UIMarkupAttribute));
                         string value;
                         if (!TryGetResourceString(attr.readonlymarkup, out value))
                         {
@@ -106,15 +106,17 @@ namespace EPiServer.Marketing.KPI.Common
 
         public override bool Validate(Dictionary<string, string> responseData)
         {
+            var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+
             if (responseData["ConversionPage"] == "")
             {
                 throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
             }
 
-            var content = ServiceLocator.Current.GetInstance<IContentRepository>()
-                    .Get<IContent>(new ContentReference(responseData["ConversionPage"]));
-            if (IsContentPublished(content) && !IsCurrentContent(content))
-            { ContentGuid = content.ContentGuid; }
+            var conversionContent = contentRepo.Get<IContent>(new ContentReference(responseData["ConversionPage"]));
+            var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
+            if (IsContentPublished(conversionContent) && !IsCurrentContent(conversionContent, currentContent))
+            { ContentGuid = conversionContent.ContentGuid; }
 
             return true;
         }
@@ -142,10 +144,9 @@ namespace EPiServer.Marketing.KPI.Common
             return true;
         }
 
-        private bool IsCurrentContent(IContent content)
+        private bool IsCurrentContent(IContent conversionContent, IContent currentContent)
         {
-            IPageRouteHelper helper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-            if (helper.PageLink.ID == content.ContentLink.ID)
+            if (conversionContent.ContentLink.ID == currentContent.ContentLink.ID)
             {
                 throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
             }
