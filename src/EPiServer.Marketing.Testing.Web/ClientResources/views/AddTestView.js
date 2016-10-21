@@ -13,6 +13,7 @@ define([
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
+        "dojo/query",
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
@@ -48,6 +49,7 @@ define([
     html,
     dom,
     domClass,
+    query,
     registry,
     dependency,
    rasterizehtml,
@@ -118,15 +120,19 @@ define([
                 var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
+                    var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1; // Check if the content is a product page
+
                     //Hack to build published versions preview link below
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                       previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                       previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versiona').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -145,7 +151,9 @@ define([
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versionb').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -282,7 +290,7 @@ define([
 
             //Validates the supplied string as a positive integer
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
