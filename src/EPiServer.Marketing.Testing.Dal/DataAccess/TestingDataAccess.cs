@@ -288,6 +288,8 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                 variant.Conversions++;
             }
 
+            variant.ModifiedDate = DateTime.UtcNow;
+
             repo.SaveChanges();
         }
 
@@ -304,6 +306,8 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             {
                 variant.DalKeyValueResults.Add((DalKeyValueResult)keyResult);
             }
+
+            variant.ModifiedDate = DateTime.UtcNow;
 
             repo.SaveChanges();
         }
