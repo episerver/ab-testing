@@ -20,7 +20,8 @@
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
- "dijit/form/Button"
+ "dijit/form/Button",
+  "dijit/ProgressBar"
 
 ], function (
     declare,
@@ -93,6 +94,7 @@
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
+            textHelper.renderDurationProgress(durationProgressBar);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
@@ -105,7 +107,7 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             textHelper.renderConversion(this.contentLinkAnchor);
-            textHelper.renderSignificance(this.pickAWinnerMessage);
+            this._renderSignificance();
 
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
@@ -144,6 +146,23 @@
                     alert("Error Processing Winner: Unable to process and save selected version");
                     console.log("Error occurred while processing winning content");
                 });
+        },
+
+        _renderSignificance: function () {
+            var pickWinnerMessage = this.pickAWinnerMessage;
+            var pickWinnerWarningIcon = this.pickWinnerWarningIcon;
+            var currentIconClass = pickWinnerWarningIcon.className;
+            var iconClassDisplayed = currentIconClass.replace("dijitHidden", "dijitInline");
+
+
+            if (this.context.data.test.state < 2) {
+                pickWinnerMessage.innerHTML = resources.pickwinnerview.early_pick_winner_message;
+            } else if (this.context.data.test.state === 2) {
+                if (!this.context.data.test.isSignificant) {
+                    pickWinnerMessage.innerHTML = resources.pickwinnerview.result_is_not_significant;
+                    domClass.replace(pickWinnerWarningIcon, iconClassDisplayed);
+                }
+            }
         },
 
         renderStatusIndicatorStyles: function () {

@@ -23,7 +23,7 @@
         <default> (default)</default>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_header>Test duration</duration_header>
-        <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
+        <error_conversiongoal>You must select a conversion goal page before you can start the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
@@ -94,8 +94,8 @@
         <winning_version_label>Winner (published)</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <label_text>Cancel A/B test and edit page</label_text>
-        <tooltip_text>Cancel A/B test and edit page</tooltip_text>
+        <label_text>Abort A/B Test and Edit Page</label_text>
+        <tooltip_text>Abort A/B Test and Edit Page</tooltip_text>
       </canceltestcommand>
       <detailsview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
@@ -129,6 +129,7 @@
         <test_status_not_started>Test has not yet started. </test_status_not_started>
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
+        <test_duration_completed>Completed after full duration</test_duration_completed>
         <views>views</views>
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
@@ -169,8 +170,8 @@
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
         <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
-        <result_is_significant>The results of this test are significant.</result_is_significant>
         <started> Started </started>
+        <test_duration_completed>Completed after full duration</test_duration_completed>
         <test_duration_header>Test duration</test_duration_header>
         <test_not_started_text>This test has not yet started.</test_not_started_text>
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>

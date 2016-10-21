@@ -86,11 +86,15 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
         },
 
         //sets text content of provided node to the context test time remaining
-        renderTestRemaining: function (testRemainingNode,testRemainingTextNode) {
+        renderTestRemaining: function (testRemainingNode, testRemainingTextNode) {
             if (Number(context.data.test.state) === 0) {
                 testRemainingNode.textContent = resources.test_not_started_text;
                 testRemainingTextNode.textContent = "";
-            } else {
+            } else if (Number(context.data.test.state) > 1) {
+                testRemainingNode.textContent = "";
+                testRemainingTextNode.textContent = resources.test_duration_completed;
+            }
+            else {
                 testRemainingNode.textContent = context.data.daysRemaining;
                 testRemainingTextNode.textContent = resources.days_remaining;
             }
@@ -150,16 +154,10 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             contentLinkAnchorNode.textContent = context.data.conversionContentName;
         },
 
-        renderSignificance: function (pickAWinnerMessageNode) {
-            if (context.data.test.state < 2) {
-                pickAWinnerMessageNode.innerHTML = resources.early_pick_winner_message;
-            } else if (context.data.test.state === 2) {
-                if (context.data.test.isSignificant) {
-                    pickAWinnerMessageNode.innerHTML = resources.result_is_significant;
-                } else {
-                    pickAWinnerMessageNode.innerHTML = resources.result_is_not_significant;
-                }
-            }
+        renderDurationProgress: function (durationProgressIndicatorNode) {
+            var totalTestDuration = Number(context.data.daysElapsed) + Number(context.data.daysRemaining);
+            durationProgressIndicatorNode.set({ maximum: totalTestDuration });
+            durationProgressIndicatorNode.set({ value: context.data.daysElapsed });
         },
 
         //Checks for an available node and attaches a pie chart widget
