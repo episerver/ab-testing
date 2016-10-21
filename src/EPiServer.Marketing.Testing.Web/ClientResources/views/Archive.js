@@ -18,8 +18,6 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
- "xstyle/css!marketing-testing/css/GridForm.css",
- "xstyle/css!marketing-testing/css/dijit.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
  "dijit/form/Button"
@@ -120,10 +118,7 @@
         },
 
         renderStatus: function () {
-            this.testStatus.innerText = resources.archiveview.test_status_completed +
-                " " +
-                datetime.toUserFriendlyString(this.context.data.test.endDate) +
-                resources.archiveview.content_chosen;
+            this.testStatus.innerText = resources.archiveview.test_status_completed + " " + resources.archiveview.content_chosen;
         },
 
         renderTestDuration: function () {
@@ -136,17 +131,26 @@
             var draftVersion = this.context.data.draftVersionContentLink.split("_")[1];
             var winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner });
 
+            this.controlHeader.innerText = resources.archiveview.content_control_header;
+            this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
+
             if (draftVersion == winningVersion.itemVersion) {
-                this.controlHeader.innerText = resources.archiveview.content_control_header;
-                this.challengerHeader.innerText = resources.archiveview.content_challenger_header_picked;
+                this.controlVersionTestResult.innerText = resources.archiveview.losing_version_label;
+                this.challengerVersionTestResult.innerText = resources.archiveview.winning_version_label;
+                this.challengerStatusIcon.title = resources.archiveview.content_selected;
+                this.controlStatusIcon.title = "";
+                domClass.replace(this.challengerVersionTestResult, "abWinnerStatusText");
+                domClass.replace(this.controlVersionTestResult, "abLoserStatusText");
                 domClass.replace(this.controlStatusIcon, "noIndicator");
-                domClass.replace(this.challengerStatusIcon, "pickedContent");
+                domClass.replace(this.challengerStatusIcon, "winningContent");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerPublishedBody");
             } else {
                 this.controlHeader.innerText = resources.archiveview.content_control_header_picked;
                 this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
-                domClass.replace(this.controlStatusIcon, "pickedContent");
+                this.controlStatusIcon.title = resources.archiveview.content_selected;
+                this.challengerStatusIcon.title = ""
+                domClass.replace(this.controlStatusIcon, "winningContent");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlPublishedBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");

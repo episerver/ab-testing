@@ -1,23 +1,13 @@
-﻿input, textarea {
-    font-size: 14px;
-}
-
-em {
-    box-shadow: inset 0 -4px 0 #cbe25e;
-    font-style: normal;
-}
-
-hr {
-    border-bottom: 1px solid #eee;
-    border-top: none;
-    border-left: none;
-}
-
-.abBody {
+﻿.epi-abtest-body {
     background-color: #eee;
     padding: 16px 32px;
     font-family: arial;
     font-size: 14px;
+}
+
+.epi-abtest-body-container {
+    height:100%;
+    position: absolute;
 }
 
 .cardWrapper {
@@ -126,9 +116,12 @@ hr {
     display: inline-block;
 }
 
-.controlLeaderBody,
+.controlLeaderBody {
+    border: 2px solid #1ba4fa;
+}
+
 .challengerLeaderBody {
-    border: 2px solid #95c532;
+    border: 2px solid #17bac0;
 }
 
     .controlDefaultBody h3,
@@ -150,29 +143,36 @@ hr {
     padding: 14px 8px 12px 20px;
 }
 
-.controlPublishedBody,
+.controlPublishedBody {
+    border: 3px solid #1ba4fa;
+}
+
 .challengerPublishedBody {
-    border: 3px solid #779f23;
+    border: 3px solid #17bac0;
 }
 
 .challengerDefaultBody h3 {
-    background-color: #f7542b;
+    background-color: #17bac0;
 }
 
 .controlDefaultBody h3,
-.controlTrailingBody h3 {
+.controlTrailingBody h3,
+.controlPublishedBody h3 {
     background-color: #1ba4fa;
 }
 
-.controlLeaderBody h3,
-.challengerLeaderBody h3 {
+.controlLeaderBody h3 {
     padding: 14px 8px 10px 20px;
-    background-color: #95c532;
+    background-color: #1ba4fa;
 }
 
-.controlPublishedBody h3,
+.challengerLeaderBody h3 {
+    padding: 14px 8px 10px 20px;
+    background-color: #17bac0;
+}
+
 .challengerPublishedBody h3 {
-    background-color: #779f23;
+    background-color: #17bac0;
 }
 
 .controlDefaultBody h3,
@@ -201,9 +201,8 @@ hr {
 .challengerLeaderBody #challengerPercent,
 .controlPublishedBody #controlPercent,
 .challengerPublishedBody #challengerPercent {
-    font-weight: bold;
     font-family: arial;
-    font-size: 48px;
+    font-size: 42px;
 }
 
 .draftIcon {
@@ -212,11 +211,11 @@ hr {
     padding-left: 20px;
 }
 
-.errorIcon {
+.epi-element--hidden {
     visibility: hidden;
 }
 
-.errorText {
+.epi-ab-errorText {
     color: #f7542b;
     visibility: hidden;
 }
@@ -229,19 +228,16 @@ hr {
     margin-bottom: 24px;
 }
 
-.hrToolbar {
-    margin-bottom: 24px;
-}
-
 .hrDetails {
     margin-top: -10px;
     margin-bottom: 15px;
 }
 
-.hrAdvanced {
-    margin-right: -18px;
-    margin-left: -18px;
-    margin-bottom: 0;
+.epi-abtest-hr {
+    border-bottom: 1px solid #eee;
+    border-top: none;
+    border-left: none;
+    margin-bottom: 24px;
 }
 
 .leadingContent {
@@ -274,6 +270,7 @@ hr {
     font-style: italic;
     font-family: arial;
     font-size: 16px;
+    vertical-align: middle;
 }
 
 .publishedIcon {
@@ -296,9 +293,9 @@ hr {
     background-position: center;
 }
 
-.versiona.hide-bg, .versionb.hide-bg {
-    background-image: none;
-}
+    .versiona.hide-bg, .versionb.hide-bg {
+        background-image: none;
+    }
 
 .leadingContent,
 .winningContent,
@@ -310,9 +307,9 @@ hr {
     height: 64px;
     width: 64px;
 }
+
 .abThumbnailCanvas {
-    height: 364px;
-    width: 512px;
+    width: 100%;
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
@@ -371,4 +368,39 @@ hr {
 #testDescription {
     width: 70%;
     max-width: 99.75%;
+}
+
+.abTestResult {
+    margin-bottom: 26px;
+}
+
+    .abTestResult > h2 {
+        text-align: center;
+    }
+
+.abWinnerStatusText {
+    margin: 0 0 4px;
+}
+
+.abLoserStatusText {
+    margin: 12px 0 28px;
+    color: #777;
+}
+
+.abResultLine {
+    margin-bottom: 6px;
+}
+
+.abPickWinnerAction {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.epi-abtest-advanced-header {
+    color: #000;
+    margin: 8px 0;
+    padding: 14px 8px 12px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    font-weight: bold;
 }
