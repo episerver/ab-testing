@@ -152,7 +152,7 @@ namespace EPiServer.Marketing.Testing.Dal
             DatabaseContext.Set<T>().Remove(instance as T);
         }
 
-        public string GetMigrationHistory(string contextKey)
+        public string GetDatabaseVersion(string contextKey)
         {
             return HistoryContext.History.Where(r => r.ContextKey == contextKey).OrderByDescending(row => row.MigrationId).First().MigrationId;
         }
