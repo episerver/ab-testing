@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
@@ -131,6 +132,22 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             else
             {
                 IncrementCountHelper(_repository, testId, testItemId, itemVersion, resultType);
+            }
+        }
+
+        public void AddKpiResultData(Guid testId, Guid testItemId, int itemVersion, IDalKeyResult keyResult, int keyType)
+        {
+            if (_UseEntityFramework)
+            {
+                using (var dbContext = new DatabaseContext())
+                {
+                    var repository = new BaseRepository(dbContext);
+                    AddKpiResultDataHelper(repository, testId, testItemId, itemVersion, keyResult, keyType);
+                }
+            }
+            else
+            {
+                AddKpiResultDataHelper(_repository, testId, testItemId, itemVersion, keyResult, keyType);
             }
         }
 
@@ -271,6 +288,27 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                 variant.Conversions++;
             }
 
+            variant.ModifiedDate = DateTime.UtcNow;
+
+            repo.SaveChanges();
+        }
+
+        private void AddKpiResultDataHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, IDalKeyResult keyResult, int type)
+        {
+            var test = repo.GetById(testId);
+            var variant = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+
+            if (type == 0)
+            {
+                variant.DalKeyFinancialResults.Add((DalKeyFinancialResult)keyResult);
+            }
+            else
+            {
+                variant.DalKeyValueResults.Add((DalKeyValueResult)keyResult);
+            }
+
+            variant.ModifiedDate = DateTime.UtcNow;
+
             repo.SaveChanges();
         }
 
@@ -367,7 +405,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                             existingVariant.ModifiedDate = DateTime.UtcNow;
                             existingVariant.Views = newVariant.Views;
                             existingVariant.Conversions = newVariant.Conversions;
-                            existingVariant.IsWinner = newVariant.IsWinner;
+                                existingVariant.IsWinner = newVariant.IsWinner;
                             existingVariant.IsPublished = newVariant.IsPublished;
 
                         }

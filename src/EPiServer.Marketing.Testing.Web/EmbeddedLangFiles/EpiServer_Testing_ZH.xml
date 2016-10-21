@@ -18,18 +18,15 @@
         <confidence_level_header>Confidence level</confidence_level_header>
         <control>A / Control</control>
         <conversion_header>What's the conversion goal?</conversion_header>
-        <conversion_label>Visitor navigates to page</conversion_label>
         <days_text> day(s).</days_text>
         <default> (default)</default>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <duration_header>For how long do you wish to run the A/B test?</duration_header>
-        <error_conversiongoal>You must select a conversion goal page before you can save the A/B test.</error_conversiongoal>
+        <error_conversiongoal>You must select a conversion goal before you can save the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
         <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
-        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
-        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
         <goals_default_text>Ex. By tweaking the copy in the first bullet point to directly address the ‘time issue’, I can motivate more visitors to download the ebook.</goals_default_text>
         <goals_header>What is the overall goal for this test?</goals_header>
@@ -199,5 +196,10 @@
         <inactivetests>Scheduled A/B Tests</inactivetests>
       </tasks>
     </abtesting>
+    <kpi>
+      <content_comparator_kpi>
+        <error_selected_samepage>ERROR SAME PAGE</error_selected_samepage>
+      </content_comparator_kpi>
+    </kpi>
   </language>
 </languages>

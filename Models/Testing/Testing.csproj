@@ -59,8 +59,14 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalABTest.cs">
       <Link>EntityModel\DalABTest.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyFinancialResult.cs">
+      <Link>EntityModel\DalKeyFinancialResult.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyPerformanceIndicator.cs">
       <Link>EntityModel\DalKeyPerformanceIndicator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyValueResult.cs">
+      <Link>EntityModel\DalKeyValueResult.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalTestCriteria.cs">
       <Link>EntityModel\DalTestCriteria.cs</Link>
@@ -80,14 +86,23 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\IABTest.cs">
       <Link>EntityModel\IABTest.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\IDalKeyResult.cs">
+      <Link>EntityModel\IDalKeyResult.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\IRepository.cs">
       <Link>IRepository.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\ABTestMap.cs">
       <Link>Mappings\ABTestMap.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyFinancialResultMap.cs">
+      <Link>Mappings\KeyFinancialResultMap.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyPerformanceIndicatorMap.cs">
       <Link>Mappings\KeyPerformanceIndicatorMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyValueResultMap.cs">
+      <Link>Mappings\KeyValueResultMap.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\VariantMap.cs">
       <Link>Mappings\VariantMap.cs</Link>
@@ -95,6 +110,10 @@
     <Compile Include="Migrations\201609091719244_Initial.cs" />
     <Compile Include="Migrations\201609091719244_Initial.Designer.cs">
       <DependentUpon>201609091719244_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201609291731241_AddKpiResults.cs" />
+    <Compile Include="Migrations\201609291731241_AddKpiResults.Designer.cs">
+      <DependentUpon>201609291731241_AddKpiResults.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +125,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201609091719244_Initial.resx">
       <DependentUpon>201609091719244_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609291731241_AddKpiResults.resx">
+      <DependentUpon>201609291731241_AddKpiResults.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

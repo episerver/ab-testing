@@ -99,7 +99,7 @@
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            textHelper.renderConversion(this.contentLinkAnchor);
+            this.renderKpiUi();
             this.renderStatusIndicatorStyles();
             this.renderStatus();
             this.renderTestDuration();
@@ -109,6 +109,12 @@
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
             });
 
+        },
+
+        renderKpiUi: function () {
+            if (this.kpiMarkup) {
+                this.kpiMarkup.innerHTML = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+            }
         },
 
         renderStatus: function () {

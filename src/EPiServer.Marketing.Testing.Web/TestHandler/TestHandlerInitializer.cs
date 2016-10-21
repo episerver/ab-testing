@@ -13,7 +13,6 @@ namespace EPiServer.Marketing.Testing.Web
     public class TestHandlerInitializer : IInitializableHttpModule
     {
         private TestHandler _testHandler;
-        private UrlResolver _pageRouteHelper;
 
         [ExcludeFromCodeCoverage]
         public TestHandlerInitializer()
@@ -36,11 +35,10 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         private void BeginRequest(object sender, EventArgs e)
         {
-            _pageRouteHelper = ServiceLocator.Current.GetInstance<UrlResolver>();
-
-            //Convert URL to content and stores it in the current requests items collection
-            //This collection is volatile and will be cleared at the end of the session, preventing threading issues.
-            HttpContext.Current.Items["CurrentPage"] = _pageRouteHelper.Route(new UrlBuilder(HttpContext.Current.Request.Url));
+            // Get the page associate with this request once
+            // and store in the request so we can use it later
+            var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+            HttpContext.Current.Items["CurrentPage"] = pageHelper.Page;
         }
 
         [ExcludeFromCodeCoverage]

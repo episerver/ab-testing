@@ -6,11 +6,11 @@ using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 
@@ -145,38 +145,41 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
         {
-            IMarketingTest test = new ABTest();
-
             if (testData.StartDate == null)
             {
-                testData.StartDate = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+                testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
 
-            var content = _serviceLocator.GetInstance<IContentRepository>()
-                .Get<IContent>(new ContentReference(testData.ConversionPage));
+            var kpiManager = new KpiManager();
+            var kpi = kpiManager.Get(testData.KpiId);
 
-            var kpi = new ContentComparatorKPI(content.ContentGuid)
+            var test = new ABTest
             {
-                Id = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
-            };
-
-            test = new ABTest
-            {
-                Id = Guid.NewGuid(),
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
-                StartDate = DateTime.Parse(testData.StartDate),
+                StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
-                State = testData.Start ? Data.Enums.TestState.Active : Data.Enums.TestState.Inactive,
+                State = testData.Start ? TestState.Active : TestState.Inactive,
                 Variants = new List<Variant>
                 {
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.PublishedVersion, IsPublished = true, Views = 0, Conversions = 0},
-                    new Variant() {Id=Guid.NewGuid(),ItemId = testData.TestContentId,ItemVersion = testData.VariantVersion, Views = 0, Conversions = 0}
+                    new Variant()
+                    {
+                        ItemId = testData.TestContentId,
+                        ItemVersion = testData.PublishedVersion,
+                        IsPublished = true,
+                        Views = 0,
+                        Conversions = 0
+                    },
+                    new Variant()
+                    {
+                        ItemId = testData.TestContentId,
+                        ItemVersion = testData.VariantVersion,
+                        Views = 0,
+                        Conversions = 0
+                    }
                 },
                 KpiInstances = new List<IKpi> { kpi },
                 ConfidenceLevel = testData.ConfidenceLevel

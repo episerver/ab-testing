@@ -106,7 +106,7 @@ define([
                 variantVersion: draft[1],
                 testDuration: this.testDuration,
                 participationPercent: this.participationPercent,
-                conversionPage: this.conversionPage,
+                kpiId: this.kpiId,
                 testTitle: this.testTitle,
                 startDate: this.startDate,
                 start: this.start,

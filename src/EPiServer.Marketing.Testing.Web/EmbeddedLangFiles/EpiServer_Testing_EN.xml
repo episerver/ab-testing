@@ -28,8 +28,6 @@
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
         <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
-        <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
-        <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
         <goals_default_text>Example: Get more click-throughs to download the ebook by changing the advertisement image.</goals_default_text>
         <goals_header>Test goal</goals_header>
@@ -109,9 +107,7 @@
         <content_control_header>A / Control</content_control_header>
         <content_winning_tooltip>This version is performing better</content_winning_tooltip>
         <conversions>conversions</conversions>
-        <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Test goal</description_heading>

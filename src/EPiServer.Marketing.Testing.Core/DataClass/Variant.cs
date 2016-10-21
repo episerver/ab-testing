@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Core.DataClass;
 
 namespace EPiServer.Marketing.Testing.Data
 {
-    public class Variant
+    public class Variant : CoreEntityBase
     {
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Id of the test this is associated with.
         /// </summary>
@@ -45,5 +45,9 @@ namespace EPiServer.Marketing.Testing.Data
         /// Reference to the test this is associated with.
         /// </summary>
         public virtual ABTest ABTest { get; set; }
+
+        public IList<KeyFinancialResult> KeyFinancialResults { get; set; }
+
+        public IList<KeyValueResult> KeyValueResults { get; set; }
     }
 }
