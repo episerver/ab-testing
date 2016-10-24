@@ -96,7 +96,7 @@
             var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             store.remove(this.context.data.test.originalItemId);
             me.contextParameters = {
-                uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0]
+                uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink
             };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -104,7 +104,7 @@
         _onCancelClick: function () {
             var me = this;
             me.contextParameters = {
-                uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0]
+                uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink
             };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },

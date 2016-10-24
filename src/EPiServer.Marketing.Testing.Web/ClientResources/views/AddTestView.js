@@ -467,7 +467,7 @@
                 this._clearCustomKpiMarkup();
                 this._setKpiSelectList();
                 me.contextParameters = {
-                    uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
+                    uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
                 topic.publish("/epi/shell/context/request", me.contextParameters);
             },

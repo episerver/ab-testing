@@ -81,7 +81,7 @@
 
         _onCancelClick: function () {
             var me = this;
-            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
