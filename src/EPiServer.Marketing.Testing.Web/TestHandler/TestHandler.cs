@@ -400,7 +400,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
                 catch (Exception err)
                 {
-                    // this should never happen when viewing pages 
+                    // this should never happen when in view mode and we should never be here in edit mode.
                     _logger.Warning("EvaluateKpis : pagehelper error - evaluating all kpis", err);
                 }
             }
