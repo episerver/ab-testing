@@ -77,18 +77,8 @@
         },
 
         _onCloseClick: function () {
-            var me = this,
-                winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner }),
-                draftVersion = this.context.data.draftVersionContentLink.split("_")[1],
-                contentLink;
-
-            if (draftVersion == winningVersion.itemVersion) {
-                contentLink = this.context.data.draftVersionContentLink;
-            } else {
-                contentLink = this.context.data.publishedVersionContentLink;
-            }
-  
-            me.contextParameters = { uri: "epi.cms.contentdata:///" + contentLink };
+            var me = this;
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + me.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
