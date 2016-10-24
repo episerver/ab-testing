@@ -390,10 +390,18 @@ namespace EPiServer.Marketing.Testing.Web
             var cea = e as ContentEventArgs; 
             if (cea != null) 
             {
-                var pageHelper = _serviceLocator.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
-                if (pageHelper.PageLink.ID == cea.ContentLink.ID)
-                {    
-                    HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+                try
+                {
+                    var pageHelper = _serviceLocator.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+                    if (pageHelper.PageLink.ID == cea.ContentLink.ID)
+                    {
+                        HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+                    }
+                }
+                catch (Exception err)
+                {
+                    // this should never happen when viewing pages 
+                    _logger.Warning("EvaluateKpis : pagehelper error - evaluating all kpis", err);
                 }
             }
 
