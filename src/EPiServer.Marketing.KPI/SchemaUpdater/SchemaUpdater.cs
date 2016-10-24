@@ -33,10 +33,10 @@ namespace EPiServer.Marketing.KPI.SchemaUpdater
         {
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
             long version = 0;
-            IKpiManager testManager;
-            ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out testManager);
+            IKpiManager kpiManager;
+            ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out kpiManager);
 
-            version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
+            version = kpiManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
 
             if (version < RequiredDatabaseVersion)
             {
@@ -64,11 +64,11 @@ namespace EPiServer.Marketing.KPI.SchemaUpdater
             _scriptExecutor.OrderScriptsByVersion = true;
             _scriptExecutor.ExecuteEmbeddedZippedScripts(connectionStringSettings.ConnectionString, typeof(DatabaseVersionValidator).Assembly, UpdateDatabaseResource);
 
-            IKpiManager testManager;
-            ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out testManager);
+            IKpiManager kpiManager;
+            ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out kpiManager);
 
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
-            var version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
+            var version = kpiManager.GetDatabaseVersion(dbConnection, Schema, ContextKey, true);
 
             if (RequiredDatabaseVersion != version)
             {

@@ -89,18 +89,11 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public IQueryable<IABTest> GetAll()
         {
-            try
-            {
-                return DatabaseContext.ABTests
-                    .Include("Variants.DalKeyFinancialResults")
-                    .Include("Variants.DalKeyValueResults")
-                    .Include(t => t.KeyPerformanceIndicators)
-                    .AsQueryable();
-            }
-            catch (Exception e)
-            {
-                throw new DatabaseDoesNotExistException();
-            }
+            return DatabaseContext.ABTests
+                .Include("Variants.DalKeyFinancialResults")
+                .Include("Variants.DalKeyValueResults")
+                .Include(t => t.KeyPerformanceIndicators)
+                .AsQueryable();
         }
 
         public void DeleteTest(object id)
@@ -256,11 +249,5 @@ namespace EPiServer.Marketing.Testing.Dal
         public HistoryContext HistoryContext { get; private set; }
 
         #endregion
-    }
-
-    public class DatabaseDoesNotExistException : Exception
-    {
-        public DatabaseDoesNotExistException() { }
-
     }
 }

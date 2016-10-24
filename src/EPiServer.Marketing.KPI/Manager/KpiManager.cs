@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.DataAccess;
+using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
@@ -17,12 +18,21 @@ namespace EPiServer.Marketing.KPI.Manager
     {
         private IKpiDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
+        public bool DatabaseNeedsConfiguring;
 
         [ExcludeFromCodeCoverage]
         public KpiManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _dataAccess = new KpiDataAccess();
+
+            try
+            {
+                _dataAccess = new KpiDataAccess();
+            }
+            catch (DatabaseDoesNotExistException e)
+            {
+                DatabaseNeedsConfiguring = true;
+            }
         }
 
         internal KpiManager(IServiceLocator serviceLocator)
@@ -62,8 +72,19 @@ namespace EPiServer.Marketing.KPI.Manager
             return (types);
         }
 
-        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false)
         {
+            if (DatabaseNeedsConfiguring)
+            {
+                DatabaseNeedsConfiguring = false;
+                return 0;
+            }
+
+            if (setupDataAccess)
+            {
+                _dataAccess = new KpiDataAccess();
+            }
+
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 

@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
-using EPiServer.Marketing.Testing.Dal;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.SchemaUpdater

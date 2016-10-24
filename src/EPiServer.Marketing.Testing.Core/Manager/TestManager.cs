@@ -17,7 +17,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
-using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.Testing.Dal.Exceptions;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -51,7 +51,6 @@ namespace EPiServer.Marketing.Testing
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _kpiManager = new KpiManager();
             _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
 
             try
@@ -64,6 +63,7 @@ namespace EPiServer.Marketing.Testing
                 return;
             }
 
+            _kpiManager = new KpiManager();
             initCache();
         }
 
@@ -340,6 +340,7 @@ namespace EPiServer.Marketing.Testing
             if (populateCache)
             {
                 _dataAccess = new TestingDataAccess();
+                _kpiManager = new KpiManager();
                 initCache();
             }
 

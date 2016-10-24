@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity.Migrations.History;
 using System.Linq;
-using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Dal;
 using EPiServer.Marketing.KPI.Dal.Model;
+using EPiServer.Marketing.KPI.Exceptions;
 
 namespace EPiServer.Marketing.KPI.DataAccess
 {
@@ -17,6 +17,17 @@ namespace EPiServer.Marketing.KPI.DataAccess
         public KpiDataAccess()
         {
             _UseEntityFramework = true;
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var repository = new BaseRepository(dbContext);
+
+                if (!HasTableNamed(repository, "tblKeyPerformaceIndicator"))
+                {
+                    // the sql scripts need to be run!
+                    throw new DatabaseDoesNotExistException();
+                }
+            }
             // TODO : Load repository from service locator.
         }
         internal KpiDataAccess(IRepository repository)
@@ -186,6 +197,15 @@ namespace EPiServer.Marketing.KPI.DataAccess
             var version = lastMigration.Split('_')[0];
 
             return Convert.ToInt64(version);
+        }
+
+        private static bool HasTableNamed(BaseRepository repository, string table, string schema = "dbo")
+        {
+            string sql = @"SELECT CASE WHEN EXISTS
+            (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA=@p0 AND TABLE_NAME=@p1) THEN 1 ELSE 0 END";
+
+            return repository.DatabaseContext.Database.SqlQuery<int>(sql, schema, table).Single() == 1;
         }
     }
 }

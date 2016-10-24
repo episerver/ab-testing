@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <returns></returns>
         IEnumerable<Type> GetKpiTypes();
 
-        long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey );
+        long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false );
 
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.Entity;
 using System.Data.Entity.Migrations.History;
 using System.Linq;
 using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
+using EPiServer.Marketing.Testing.Dal.Exceptions;
 
 namespace EPiServer.Marketing.Testing.Dal.DataAccess
 {
