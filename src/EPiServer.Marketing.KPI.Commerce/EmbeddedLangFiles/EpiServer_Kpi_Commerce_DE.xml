@@ -2,6 +2,14 @@
 <languages>
   <language name="deutsch" id="de">
     <commercekpi>
+      <config_markup>
+        <conversion_label>Visitor adds product to cart</conversion_label>
+      </config_markup>
+      <error_conversionpage>You must select a product before you can save the A/B test.</error_conversionpage>
+      <readonly_markup>
+        <conversion_header>Add Product to Cart</conversion_header>
+        <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
+      </readonly_markup>
     </commercekpi>
   </language>
 </languages>
