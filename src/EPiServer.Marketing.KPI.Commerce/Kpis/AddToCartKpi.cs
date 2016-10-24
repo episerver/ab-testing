@@ -1,11 +1,17 @@
-﻿using EPiServer.Framework.Localization;
+﻿using EPiServer.Commerce.Catalog.ContentTypes;
+using EPiServer.Core;
+using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Common.Attributes;
+using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.ServiceLocation;
+using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using EPiServer.Web.Mvc.Html;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -15,6 +21,46 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         text = "Product", description = "Choose a product for conversion.")]
     public class AddToCartKpi : Kpi
     {
+        IServiceLocator _servicelocator;
+
+        [DataMember]
+        public Guid ContentGuid;
+
+        public AddToCartKpi()
+        {
+            _servicelocator = ServiceLocator.Current;
+        }
+        internal AddToCartKpi(IServiceLocator servicelocator)
+        {
+            _servicelocator = servicelocator;
+        }
+
+        public override bool Validate(Dictionary<string, string> responseData)
+        {
+            if (responseData["ConversionProduct"] == "")
+            {
+                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
+            }
+
+            //Get the currently configured content loader and reference converter from the service locator
+            var contentLoader = _servicelocator.GetInstance<IContentLoader>();
+            var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
+
+            //Get the correct product id as it's represented in EPiServer Commerce
+            //In this example we arbitrarily use the integer 1
+            var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];
+
+            //We use the content link builder to get the contentlink to our product
+            var productLink = referenceConverter.GetContentLink(Int32.Parse(productIdFromCommerce), 
+                CatalogContentType.CatalogEntry, 0);
+
+            //Get the product using CMS API
+            var content = contentLoader.Get<CatalogContentBase>(productLink);
+            ContentGuid = content.ContentGuid;
+
+            return true;
+        }
+
         /// <summary>
         /// Called when we are expected to evaluate. 
         /// </summary>
@@ -24,6 +70,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;
+                
+            var contentLoader = _servicelocator.GetInstance<IContentLoader>();
+            var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
+
             var ea = e as OrderGroupEventArgs;
             var ordergroup = sender as OrderGroup;
             if (ea != null && ordergroup != null)
@@ -31,14 +81,27 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 // todo, figure out how we convert based on what we have.
                 // note that the order group has actual info in it, not the eventargs.
                 //
-                /* Some sample code we might need.
-                           foreach (var o in ordergroup.OrderForms.ToArray())
-                           {
-                               var a = o.LineItems.ToArray();
-                           }
-                  
-                 */
-                retval = false; 
+                foreach (var o in ordergroup.OrderForms.ToArray())
+                {
+                    foreach( var lineitem in o.LineItems.ToArray())
+                    {
+                        
+                        //We use the content link builder to get the contentlink to our product
+                        var productLink = referenceConverter.GetContentLink(lineitem.Code);
+
+                        //Get the product using CMS API
+                        var productContent = contentLoader.Get<CatalogContentBase>(productLink);
+
+                        //The commerce content name represents the name of the product
+                        var productName = productContent.Name;
+
+                        retval = ContentGuid.Equals(productContent.ContentGuid);
+                        if (retval)
+                        {
+                            break;
+                        }
+                    }
+                }
             }
 
             return new KpiConversionResult() { KpiId = Id, HasConverted = retval };
@@ -62,18 +125,19 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             {
                 string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                var conversionHeaderText = LocalizationService.Current
                     .GetString("/commercekpi/readonly_markup/conversion_header");
-                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                var conversionDescription = LocalizationService.Current
                     .GetString("/commercekpi/readonly_markup/conversion_selector_description");
-/*
-                var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
-                var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-                var conversionContent = contentRepository.Get<IContent>(ContentGuid);
-                var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
-                markup = string.Format(markup, conversionHeaderText, conversionDescription, conversionLink,
-                    conversionContent.Name);
-*/
+
+                if (!Guid.Empty.Equals(ContentGuid))
+                {
+                    var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+                    var content = contentRepository.Get<IContent>(ContentGuid);
+                    markup = string.Format(markup, conversionHeaderText, conversionDescription, 
+                        content.Name, content.Name);
+                }
+
                 return markup;
             }
         }
