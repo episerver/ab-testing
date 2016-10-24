@@ -5,6 +5,7 @@ define([
         'dojo/text!marketing-testing/views/AddTestView.html',
         'epi/i18n!marketing-testing/nls/abtesting',
         'marketing-testing/viewmodels/AddTestViewModel',
+        'marketing-testing/viewmodels/KpiViewModel',
         'dijit/_WidgetsInTemplateMixin',
         'epi/shell/widget/_ModelBindingMixin',
         'epi/datetime',
@@ -42,6 +43,7 @@ define([
     template,
     resources,
     AddTestViewModel,
+    KpiViewModel,
     _WidgetsInTemplateMixin,
     _ModelBindingMixing,
     datetime,
@@ -79,13 +81,20 @@ define([
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"]
+                confidenceLevel: ["viewConfidenceLevel"],
             },
 
             //sets views starting data from view model
             postMixInProperties: function () {
+                var me = this;
                 this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
+                this.kpiModel = this.kpiModel || new KpiViewModel();
+                this.kpiModel.watch("availableKpi",
+                    function (name, oldvalue, value) {
+                        me._setKpiSelectList(value);
+                    });
                 this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
+
             },
 
             _onContextChange: function (context, caller) {
@@ -97,6 +106,7 @@ define([
             postCreate: function () {
                 this.reset();
                 this.inherited(arguments);
+
             },
 
             startup: function () {
@@ -106,7 +116,7 @@ define([
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
-                this._setKpiSelectList();
+
             },
 
             // TEST DATA MODEL & FORM SETTERS
@@ -200,21 +210,20 @@ define([
             // FORM ELEMENT CONTROL METHODS
 
             //retrieves KPIs and displays them in a select control
-            _setKpiSelectList: function () {
+            _setKpiSelectList: function (kpiList) {
                 var me = this;
                 var kpiuiElement = registry.byId("kpiSelector");
-                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-                me.kpistore.get()
-                .then(function (markup) {
+                if (kpiuiElement) {
+
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "", label: me.resources.addtestview.goals_selectlist_default };
+                    var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
                     kpiuiElement.addOption(defaultOption);
-                    for (var x = 0; x < markup.length; x++) {
-                        var option = { value: markup[x].kpi.uiMarkup, label: markup[x].kpi.friendlyName };
+                    for (var x = 0; x < kpiList.length; x++) {
+                        var option = { value: x.toString(), label: kpiList[x].kpi.friendlyName };
                         kpiuiElement.addOption(option);
                     }
-                });
+                }
             },
 
             //DATA VALIDATION
@@ -347,7 +356,7 @@ define([
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
-                this._setKpiSelectList();
+                // this._setKpiSelectList();
             },
 
             //Clears the KPI Error text and icon
@@ -407,6 +416,10 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
+                var contentRepositoryDescriptors = dependency.resolve("epi.cms.contentRepositoryDescriptors");
+                var widgetElement = dom.byId("Widget2");
+
+
                 if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 startButtonClickCounter++; // Increment click count
                 var me = this;
@@ -451,7 +464,7 @@ define([
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
-                this._setKpiSelectList();
+                //  this._setKpiSelectList();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
@@ -461,11 +474,14 @@ define([
             _onSelectChange: function (evt) {
                 this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
-                kpiTextField.value = evt.kpiType;
                 var kpiuiElement = dom.byId("kpiui");
-                new ContentPane({
-                    content: evt
-                }).placeAt(kpiuiElement);
+                if (evt > -1) {
+                    var kpiObject = this.kpiModel.getKpiByIndex(evt);
+                    kpiTextField.value = kpiObject.kpiType;
+                    new ContentPane({
+                        content: kpiObject.kpi.uiMarkup
+                    }).placeAt(kpiuiElement);
+                }
             },
 
             // Form Field Events
