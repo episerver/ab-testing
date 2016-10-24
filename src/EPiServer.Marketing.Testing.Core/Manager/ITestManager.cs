@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing
         /// <returns></returns>
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e);
 
-        long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey);
+        long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false);
 
         List<IMarketingTest> ActiveCachedTests { get; }
     }

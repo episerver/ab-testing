@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal.Model;
@@ -60,7 +61,12 @@ namespace EPiServer.Marketing.KPI.Manager
                     .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi) );
             return (types);
         }
-             
+
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
+        {
+            return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
+        }
+
 
         /// <summary>
         /// Serialize the kpi to a Json string and save it in the properties field.

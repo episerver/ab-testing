@@ -3,18 +3,18 @@ using System.Configuration;
 using System.Data.SqlClient;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
-using EPiServer.Marketing.Testing.Dal;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.ServiceLocation;
 
-namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
+namespace EPiServer.Marketing.KPI.SchemaUpdater
 {
     [ServiceConfiguration(typeof(IDatabaseSchemaUpdater))]
     public class DatabaseVersionValidator : IDatabaseSchemaUpdater
     {
         private const long RequiredDatabaseVersion = 201609291731241;
         private const string Schema = "dbo";
-        private const string ContextKey = "Testing.Migrations.Configuration";
-        private const string UpdateDatabaseResource = "EPiServer.Marketing.Testing.Web.SchemaUpdater.Testing.zip";
+        private const string ContextKey = "KPI.Migrations.Configuration";
+        private const string UpdateDatabaseResource = "EPiServer.Marketing.KPI.SchemaUpdater.Kpi.zip";
 
         private readonly IDatabaseHandler _databaseHandler;
         private readonly ScriptExecutor _scriptExecutor;
@@ -33,11 +33,10 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
         {
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
             long version = 0;
-            ITestManager testManager;
-            ServiceLocator.Current.TryGetExistingInstance<ITestManager>(out testManager);
+            IKpiManager testManager;
+            ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out testManager);
 
             version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
-            
 
             if (version < RequiredDatabaseVersion)
             {
@@ -65,11 +64,11 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             _scriptExecutor.OrderScriptsByVersion = true;
             _scriptExecutor.ExecuteEmbeddedZippedScripts(connectionStringSettings.ConnectionString, typeof(DatabaseVersionValidator).Assembly, UpdateDatabaseResource);
 
-            ITestManager testManager;
-            ServiceLocator.Current.TryGetExistingInstance<ITestManager>(out testManager);
+            IKpiManager testManager;
+            ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out testManager);
 
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
-            var version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey, true);
+            var version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
 
             if (RequiredDatabaseVersion != version)
             {

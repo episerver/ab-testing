@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
+using EPiServer.Marketing.Testing.Dal;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -38,6 +39,9 @@ namespace EPiServer.Marketing.Testing
         private IKpiManager _kpiManager;
         private DefaultMarketingTestingEvents _marketingTestingEvents;
 
+        public bool DatabaseNeedsConfiguring;
+    
+
         public List<IMarketingTest> ActiveCachedTests
         {
             get { return _testCache.Get(TestingCacheName) as List<IMarketingTest>; }
@@ -47,10 +51,20 @@ namespace EPiServer.Marketing.Testing
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _dataAccess = new TestingDataAccess();
             _kpiManager = new KpiManager();
-            initCache();
             _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
+
+            try
+            {
+                _dataAccess = new TestingDataAccess();
+            }
+            catch (DatabaseDoesNotExistException e)
+            {
+                DatabaseNeedsConfiguring = true;
+                return;
+            }
+
+            initCache();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
@@ -315,8 +329,20 @@ namespace EPiServer.Marketing.Testing
             return kpis.Select(kpi => kpi.Evaluate(this, e)).ToList();
         }
 
-        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false)
         {
+            if (DatabaseNeedsConfiguring)
+            {
+                DatabaseNeedsConfiguring = false;
+                return 0;
+            }
+
+            if (populateCache)
+            {
+                _dataAccess = new TestingDataAccess();
+                initCache();
+            }
+
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 

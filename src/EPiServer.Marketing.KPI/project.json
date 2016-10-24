@@ -1,7 +1,8 @@
 {
   "resource": [
     "Markup/**/*",
-    "EmbeddedLangFiles/**/*"
+    "EmbeddedLangFiles/**/*",
+    "SchemaUpdater/Kpi.zip"
   ],
   "version": "1.0.0-*",
   "description": "",
