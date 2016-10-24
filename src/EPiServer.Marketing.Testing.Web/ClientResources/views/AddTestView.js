@@ -19,7 +19,8 @@ define([
        "dojo/dom-form",
        "dojo/json",
        "dojox/layout/ContentPane",
-        'xstyle/css!marketing-testing/css/ABTesting.css',
+       "epi-cms/widget/ContentSelector",
+       'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
         'dijit/form/Button',
@@ -32,6 +33,7 @@ define([
         "dijit/layout/AccordionContainer",
        "dijit/layout/ContentPane",
        "dijit/form/Select"
+
 ],
     function (
     declare,
@@ -53,7 +55,8 @@ define([
    rasterizehtml,
    domForm,
    JSON,
-   ContentPane
+   ContentPane,
+   ContentSelector
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -205,10 +208,10 @@ define([
                 .then(function (markup) {
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
+                    var defaultOption = { value: "", label: me.resources.addtestview.goals_selectlist_default };
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < markup.length; x++) {
-                        var option = { value: markup[x], label: markup[x].kpi.friendlyName };
+                        var option = { value: markup[x].kpi.uiMarkup, label: markup[x].kpi.friendlyName };
                         kpiuiElement.addOption(option);
                     }
                 });
@@ -361,15 +364,19 @@ define([
 
             //Removes the custom KPI markup from the view & widget registry
             _clearCustomKpiMarkup: function () {
+                this._clearConversionErrors();
                 var kpiuiElement = dom.byId("kpiui");
                 if (kpiuiElement) {
-                    kpiuiElement.innerHTML = "";
-                    if (dijit.byId("ConversionPageWidget")) {
-                        dijit.byId("ConversionPageWidget").destroy(true);
-                        dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                    var contentPane = dojo.query('#kpiui > *');
+                    if (contentPane[0]) {
+                        dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                            w.destroyRecursive();
+                        };
+                        var dijitContentPane = dijit.byId(contentPane[0].id);
+                        dijitContentPane.destroy();
+                        kpiuiElement.innerHTML = "";
                     }
                 }
-                this._setKpiSelectList();
             },
 
             // UI UTILITIES
@@ -416,7 +423,7 @@ define([
                     }
                 })
                     .then(function (ret) {
-                        me._setError("", kpiErrorText, kpiErrorIcon);
+                        me._clearConversionErrors();
                         me.model.kpiId = ret;
                         me.model.testDescription = dom.byId("testDescription").value;
                         var startDateSelector = dom.byId("StartDateTimeSelector");
@@ -437,13 +444,14 @@ define([
                     })
                     .otherwise(function (ret) {
                         me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        me.startButtonClickCounter = 0;
+                        startButtonClickCounter = 0;
                     });
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
+                this._setKpiSelectList();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
@@ -451,11 +459,12 @@ define([
             },
 
             _onSelectChange: function (evt) {
+                this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
                 kpiTextField.value = evt.kpiType;
                 var kpiuiElement = dom.byId("kpiui");
                 new ContentPane({
-                    content: evt.kpi.uiMarkup
+                    content: evt
                 }).placeAt(kpiuiElement);
             },
 
