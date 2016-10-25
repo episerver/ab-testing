@@ -7,13 +7,12 @@ using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Dal.Exceptions;
+using EPiServer.Marketing.Testing.Dal.Migrations;
 
 namespace EPiServer.Marketing.Testing.Dal.DataAccess
 {
     internal class TestingDataAccess : ITestingDataAccess
     {
-        // TODO: if a new table is added, this needs to reflect that
-        private const string tableToCheckFor = "tblABTest";
         internal IRepository _repository;
         internal bool _UseEntityFramework;
         private bool _databaseExists = false;
@@ -26,15 +25,15 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             {
                 var repository = new BaseRepository(dbContext);
 
-                if (!HasTableNamed(repository, tableToCheckFor))
+                if (!HasTableNamed(repository, DatabaseVersion.TableToCheckFor))
                 {
                     // the sql scripts need to be run!
                     throw new DatabaseDoesNotExistException();
                 }
 
-                var version = GetDatabaseVersion(dbContext.Database.Connection, "dbo", "Testing.Migrations.Configuration");
+                var version = GetDatabaseVersion(dbContext.Database.Connection, "dbo", DatabaseVersion.ContextKey);
 
-                if (version < 201609291731241)
+                if (version < DatabaseVersion.RequiredDbVersion)
                 {
                     throw new DatabaseNeedsUpdating();
                 }

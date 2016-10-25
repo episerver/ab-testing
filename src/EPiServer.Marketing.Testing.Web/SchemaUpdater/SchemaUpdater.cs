@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
+using EPiServer.Marketing.Testing.Dal.Migrations;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
@@ -10,11 +11,7 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
     [ServiceConfiguration(typeof(IDatabaseSchemaUpdater))]
     public class DatabaseVersionValidator : IDatabaseSchemaUpdater
     {
-        private const long RequiredDatabaseVersion = 201609291731241;
-        private const string Schema = "dbo";
-        private const string ContextKey = "Testing.Migrations.Configuration";
         private const string UpdateDatabaseResource = "EPiServer.Marketing.Testing.Web.SchemaUpdater.Testing.zip";
-
         private readonly IDatabaseHandler _databaseHandler;
         private readonly ScriptExecutor _scriptExecutor;
 
@@ -35,9 +32,9 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             ITestManager testManager;
             ServiceLocator.Current.TryGetExistingInstance<ITestManager>(out testManager);
 
-            version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
+            version = testManager.GetDatabaseVersion(dbConnection, DatabaseVersion.Schema, DatabaseVersion.ContextKey);
 
-            if (version < RequiredDatabaseVersion)
+            if (version < DatabaseVersion.RequiredDbVersion)
             {
                 // need to upgrade, versions can only be int, so we force it with fake versions based off our real veresions which are longs from EF
                 return new DatabaseSchemaStatus
@@ -67,9 +64,9 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             ServiceLocator.Current.TryGetExistingInstance<ITestManager>(out testManager);
 
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
-            var version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey, true);
+            var version = testManager.GetDatabaseVersion(dbConnection, DatabaseVersion.Schema, DatabaseVersion.ContextKey, true);
 
-            if (RequiredDatabaseVersion != version)
+            if (DatabaseVersion.RequiredDbVersion != version)
             {
                 //something went wrong!
             }
