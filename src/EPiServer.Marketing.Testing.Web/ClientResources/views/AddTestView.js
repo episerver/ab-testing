@@ -5,6 +5,7 @@ define([
         'dojo/text!marketing-testing/views/AddTestView.html',
         'epi/i18n!marketing-testing/nls/abtesting',
         'marketing-testing/viewmodels/AddTestViewModel',
+        'marketing-testing/viewmodels/KpiViewModel',
         'dijit/_WidgetsInTemplateMixin',
         'epi/shell/widget/_ModelBindingMixin',
         'epi/datetime',
@@ -19,7 +20,8 @@ define([
        "dojo/dom-form",
        "dojo/json",
        "dojox/layout/ContentPane",
-        'xstyle/css!marketing-testing/css/ABTesting.css',
+       "epi-cms/widget/ContentSelector",
+       'xstyle/css!marketing-testing/css/ABTesting.css',
         'xstyle/css!marketing-testing/css/GridForm.css',
         'xstyle/css!marketing-testing/css/dijit.css',
         'dijit/form/Button',
@@ -32,6 +34,7 @@ define([
         "dijit/layout/AccordionContainer",
        "dijit/layout/ContentPane",
        "dijit/form/Select"
+
 ],
     function (
     declare,
@@ -40,6 +43,7 @@ define([
     template,
     resources,
     AddTestViewModel,
+    KpiViewModel,
     _WidgetsInTemplateMixin,
     _ModelBindingMixing,
     datetime,
@@ -53,7 +57,8 @@ define([
    rasterizehtml,
    domForm,
    JSON,
-   ContentPane
+   ContentPane,
+   ContentSelector
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -76,13 +81,20 @@ define([
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"]
+                confidenceLevel: ["viewConfidenceLevel"],
             },
 
             //sets views starting data from view model
             postMixInProperties: function () {
+                var me = this;
                 this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
+                this.kpiModel = this.kpiModel || new KpiViewModel();
+                this.kpiModel.watch("availableKpi",
+                    function (name, oldvalue, value) {
+                        me._setKpiSelectList(value);
+                    });
                 this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
+
             },
 
             _onContextChange: function (context, caller) {
@@ -94,6 +106,7 @@ define([
             postCreate: function () {
                 this.reset();
                 this.inherited(arguments);
+
             },
 
             startup: function () {
@@ -103,7 +116,7 @@ define([
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
-                this._setKpiSelectList();
+
             },
 
             // TEST DATA MODEL & FORM SETTERS
@@ -197,21 +210,20 @@ define([
             // FORM ELEMENT CONTROL METHODS
 
             //retrieves KPIs and displays them in a select control
-            _setKpiSelectList: function () {
+            _setKpiSelectList: function (kpiList) {
                 var me = this;
                 var kpiuiElement = registry.byId("kpiSelector");
-                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-                me.kpistore.get()
-                .then(function (markup) {
+                if (kpiuiElement) {
+
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
+                    var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
                     kpiuiElement.addOption(defaultOption);
-                    for (var x = 0; x < markup.length; x++) {
-                        var option = { value: markup[x], label: markup[x].kpi.friendlyName };
+                    for (var x = 0; x < kpiList.length; x++) {
+                        var option = { value: x.toString(), label: kpiList[x].kpi.friendlyName };
                         kpiuiElement.addOption(option);
                     }
-                });
+                }
             },
 
             //DATA VALIDATION
@@ -344,7 +356,7 @@ define([
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
-                this._setKpiSelectList();
+                // this._setKpiSelectList();
             },
 
             //Clears the KPI Error text and icon
@@ -361,15 +373,19 @@ define([
 
             //Removes the custom KPI markup from the view & widget registry
             _clearCustomKpiMarkup: function () {
+                this._clearConversionErrors();
                 var kpiuiElement = dom.byId("kpiui");
                 if (kpiuiElement) {
-                    kpiuiElement.innerHTML = "";
-                    if (dijit.byId("ConversionPageWidget")) {
-                        dijit.byId("ConversionPageWidget").destroy(true);
-                        dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                    var contentPane = dojo.query('#kpiui > *');
+                    if (contentPane[0]) {
+                        dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                            w.destroyRecursive();
+                        };
+                        var dijitContentPane = dijit.byId(contentPane[0].id);
+                        dijitContentPane.destroy();
+                        kpiuiElement.innerHTML = "";
                     }
                 }
-                this._setKpiSelectList();
             },
 
             // UI UTILITIES
@@ -400,6 +416,10 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
+                var contentRepositoryDescriptors = dependency.resolve("epi.cms.contentRepositoryDescriptors");
+                var widgetElement = dom.byId("Widget2");
+
+
                 if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 startButtonClickCounter++; // Increment click count
                 var me = this;
@@ -416,7 +436,7 @@ define([
                     }
                 })
                     .then(function (ret) {
-                        me._setError("", kpiErrorText, kpiErrorIcon);
+                        me._clearConversionErrors();
                         me.model.kpiId = ret;
                         me.model.testDescription = dom.byId("testDescription").value;
                         var startDateSelector = dom.byId("StartDateTimeSelector");
@@ -437,13 +457,14 @@ define([
                     })
                     .otherwise(function (ret) {
                         me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        me.startButtonClickCounter = 0;
+                        startButtonClickCounter = 0;
                     });
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
+                //  this._setKpiSelectList();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
@@ -451,12 +472,16 @@ define([
             },
 
             _onSelectChange: function (evt) {
+                this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
-                kpiTextField.value = evt.kpiType;
                 var kpiuiElement = dom.byId("kpiui");
-                new ContentPane({
-                    content: evt.kpi.uiMarkup
-                }).placeAt(kpiuiElement);
+                if (evt > -1) {
+                    var kpiObject = this.kpiModel.getKpiByIndex(evt);
+                    kpiTextField.value = kpiObject.kpiType;
+                    new ContentPane({
+                        content: kpiObject.kpi.uiMarkup
+                    }).placeAt(kpiuiElement);
+                }
             },
 
             // Form Field Events

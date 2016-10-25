@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
@@ -126,7 +125,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             bool retval = false;
             try
             {
-                var assembly = Assembly.GetExecutingAssembly();
+                var assembly = this.GetType().Assembly;
                 var text = new StreamReader( assembly.GetManifestResourceStream(key) );
                 value = text.ReadToEnd();
                 retval = true;

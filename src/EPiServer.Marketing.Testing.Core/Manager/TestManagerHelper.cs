@@ -8,6 +8,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -328,7 +329,14 @@ namespace EPiServer.Marketing.Testing
 
             foreach (var dalKPI in theDalKPIs)
             {
-                retList.Add(ConvertToManagerKPI(_kpiManager, dalKPI));
+                try
+                {
+                    retList.Add(ConvertToManagerKPI(_kpiManager, dalKPI));
+                }
+                catch(Exception ex)
+                {
+                    LogManager.GetLogger().Error("Failed to convert get the kpi associated with the test.", ex);
+                }
             }
 
             return retList;

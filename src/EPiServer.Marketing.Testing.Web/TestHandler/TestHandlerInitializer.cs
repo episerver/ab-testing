@@ -38,7 +38,10 @@ namespace EPiServer.Marketing.Testing.Web
             // Get the page associate with this request once
             // and store in the request so we can use it later
             var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
-            HttpContext.Current.Items["CurrentPage"] = pageHelper.Page;
+            if (pageHelper.Page != null)
+            {
+                HttpContext.Current.Items["CurrentPage"] = pageHelper.Page;
+            }
         }
 
         [ExcludeFromCodeCoverage]
