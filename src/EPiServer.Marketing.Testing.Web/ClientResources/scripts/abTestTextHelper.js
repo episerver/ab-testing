@@ -157,7 +157,12 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
         renderDurationProgress: function (durationProgressIndicatorNode) {
             var totalTestDuration = Number(context.data.daysElapsed) + Number(context.data.daysRemaining);
             durationProgressIndicatorNode.set({ maximum: totalTestDuration });
-            durationProgressIndicatorNode.set({ value: context.data.daysElapsed });
+
+            if (context.data.test.state === 0) {
+                durationProgressIndicatorNode.set({ value: 0 });
+            } else {
+                durationProgressIndicatorNode.set({ value: context.data.daysElapsed });
+            }
         },
 
         //Checks for an available node and attaches a pie chart widget
