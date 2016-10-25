@@ -24,7 +24,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
 
             store.remove(me.model.contentData.contentGuid).then(function () {
-                var contentId = me.model.contentData.contentLink.split("_"), contextParameters = { uri: "epi.cms.contentdata:///" + contentId[0] };
+                var contextParameters = { uri: "epi.cms.contentdata:///" + me.model.contentData.contentLink };
                 topic.publish("/epi/shell/context/request", contextParameters);
             });
         },
