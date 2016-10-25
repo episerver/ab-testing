@@ -11,6 +11,12 @@
     position: absolute;
 }
 
+.epi-abtest-hr {
+    border-bottom: 1px solid #eee;
+    border-top: none;
+    border-left: none;
+}
+
 .cardWrapper {
     background-color: white;
     background-position: center bottom;
@@ -309,13 +315,17 @@
     width: 64px;
 }
 
-.abThumbnailCanvas {
+.epi-abtest-thumbnail {
     width: 100%;
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+.epi-abtest-thumbnail--losing {
+    opacity: .4;
 }
 
 .versionData {
@@ -386,10 +396,6 @@
 .abLoserStatusText {
     margin: 12px 0 28px;
     color: #777;
-}
-
-.abResultLine {
-    margin-bottom: 6px;
 }
 
 .abPickWinnerAction {
