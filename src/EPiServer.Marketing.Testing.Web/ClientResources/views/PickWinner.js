@@ -112,8 +112,9 @@
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
+                me.renderStatusIndicatorStyles();
             });
-            this.renderStatusIndicatorStyles();
+            
         },
 
         renderKpiUi: function () {
@@ -185,6 +186,8 @@
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlPickWinnerBtn, "epi-success abPickWinnerAction");
                 domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
+                query("#publishThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailpickwinner").addClass("epi-abtest-thumbnail--losing");
             }
             else if (textHelper.publishedPercent < textHelper.draftPercent) {
                 this.controlStatusIcon.title = "";
@@ -193,6 +196,8 @@
                 domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.controlPickWinnerBtn, "abPickWinnerAction");
                 domClass.replace(this.challengerPickWinnerBtn, "epi-success abPickWinnerAction");
+                query("#publishThumbnailpickwinner").addClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
             }
             else {
                 this.controlStatusIcon.title = "";
@@ -201,6 +206,8 @@
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlPickWinnerBtn, "abPickWinnerAction");
                 domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
+                query("#publishThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
             }
         },
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
