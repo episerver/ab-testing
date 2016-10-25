@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
     internal class TestingDataAccess : ITestingDataAccess
     {
         // TODO: if a new table is added, this needs to reflect that
-        private const string tableToCheckFor = "tblABKeyFinancialResult";
+        private const string tableToCheckFor = "tblABTest";
         internal IRepository _repository;
         internal bool _UseEntityFramework;
         private bool _databaseExists = false;
@@ -31,6 +31,14 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                     // the sql scripts need to be run!
                     throw new DatabaseDoesNotExistException();
                 }
+
+                var version = GetDatabaseVersion(dbContext.Database.Connection, "dbo", "Testing.Migrations.Configuration");
+
+                if (version < 201609291731241)
+                {
+                    throw new DatabaseNeedsUpdating();
+                }
+
             }
 
             // TODO : Load repository from service locator.

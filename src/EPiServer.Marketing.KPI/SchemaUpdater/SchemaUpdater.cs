@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.KPI.SchemaUpdater
     [ServiceConfiguration(typeof(IDatabaseSchemaUpdater))]
     public class DatabaseVersionValidator : IDatabaseSchemaUpdater
     {
-        private const long RequiredDatabaseVersion = 201609291731241;
+        private const long RequiredDatabaseVersion = 201604051658334;
         private const string Schema = "dbo";
         private const string ContextKey = "KPI.Migrations.Configuration";
         private const string UpdateDatabaseResource = "EPiServer.Marketing.KPI.SchemaUpdater.Kpi.zip";

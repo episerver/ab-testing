@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.KPI.Manager
             {
                 _dataAccess = new KpiDataAccess();
             }
-            catch (DatabaseDoesNotExistException e)
+            catch (DatabaseDoesNotExistException)
             {
                 DatabaseNeedsConfiguring = true;
             }

@@ -57,7 +57,12 @@ namespace EPiServer.Marketing.Testing
             {
                 _dataAccess = new TestingDataAccess();
             }
-            catch (DatabaseDoesNotExistException e)
+            catch (DatabaseDoesNotExistException)
+            {
+                DatabaseNeedsConfiguring = true;
+                return;
+            }
+            catch (DatabaseNeedsUpdating)
             {
                 DatabaseNeedsConfiguring = true;
                 return;

@@ -36,7 +36,6 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             ServiceLocator.Current.TryGetExistingInstance<ITestManager>(out testManager);
 
             version = testManager.GetDatabaseVersion(dbConnection, Schema, ContextKey);
-            
 
             if (version < RequiredDatabaseVersion)
             {
