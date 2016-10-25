@@ -146,10 +146,12 @@
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerPublishedBody");
             } else {
-                this.controlHeader.innerText = resources.archiveview.content_control_header_picked;
-                this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
+                this.controlVersionTestResult.innerText = resources.archiveview.winning_version_label;
+                this.challengerVersionTestResult.innerText = resources.archiveview.losing_version_label;
                 this.controlStatusIcon.title = resources.archiveview.content_selected;
                 this.challengerStatusIcon.title = ""
+                domClass.replace(this.challengerVersionTestResult, "abLoserStatusText");
+                domClass.replace(this.controlVersionTestResult, "abWinnerStatusText");
                 domClass.replace(this.controlStatusIcon, "winningContent");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlPublishedBody");
