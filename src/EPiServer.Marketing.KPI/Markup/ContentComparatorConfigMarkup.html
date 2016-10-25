@@ -4,7 +4,8 @@
     <span name="ConversionPage"
           id="ConversionPageWidget"
           data-dojo-type="epi-cms/widget/ContentSelector"
-          data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null">
+          data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null"
+          data-dojo-attach-event="onChange: _onConversionPageChanged">
     </span>
     <span id="pickerErrorIcon"
           class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
