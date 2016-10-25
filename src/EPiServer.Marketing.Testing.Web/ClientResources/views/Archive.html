@@ -29,7 +29,9 @@
             <!-- Control/Published Version -->
             <div data-dojo-attach-point="controlWrapper" class="cardWrapper 2column">
                 <div class="leadingContent" data-dojo-attach-point="controlStatusIcon"></div>
-                <h3 data-dojo-attach-point="controlHeader"></h3>
+                <h3 data-dojo-attach-point="controlHeader">
+                    ${resources.archiveview.content_control_header}
+                </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
                     <div class="versiona">
                         <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="abThumbnailCanvas" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
