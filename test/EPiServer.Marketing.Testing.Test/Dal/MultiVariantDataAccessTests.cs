@@ -35,18 +35,18 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         {
             _dbConnection = Effort.DbConnectionFactory.CreateTransient();
             _context = new TestContext(_dbConnection);
-            
+
             _dataAccess = new TestingDataAccess(new Core.TestRepository(_context));
-            
+
             _marketingEvents = new DefaultMarketingTestingEvents();
 
             _kpiManager = new Mock<IKpiManager>();
             _kpiManager.Setup(call => call.Save(It.IsAny<IKpi>())).Returns(It.IsAny<Guid>());
 
-            _serviceLocator = new Mock<IServiceLocator>();
-            _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccess);
-            _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
-            _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents);
+             _serviceLocator = new Mock<IServiceLocator>();
+             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccess);
+             _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
+             _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents);
 
             _tm = new TestManager(_serviceLocator.Object);
         }
@@ -374,13 +374,6 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _dataAccess._repository.SaveChanges();
 
             Assert.Equal(1, _dataAccess._repository.GetAll().Count());
-        }
-
-        [Fact]
-        public void MultivariteTestManagerMultivariateDataAccess()
-        {
-            TestingDataAccess mda = new TestingDataAccess();
-            Assert.True(mda._UseEntityFramework);
         }
 
         [Fact]

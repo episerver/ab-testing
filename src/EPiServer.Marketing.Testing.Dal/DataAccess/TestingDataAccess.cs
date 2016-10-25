@@ -15,7 +15,6 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
     {
         internal IRepository _repository;
         internal bool _UseEntityFramework;
-        private bool _databaseExists = false;
 
         public TestingDataAccess()
         {
@@ -23,9 +22,9 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
             using (var dbContext = new DatabaseContext())
             {
-                var repository = new BaseRepository(dbContext);
+                var baseRepository = new BaseRepository(dbContext);
 
-                if (!HasTableNamed(repository, DatabaseVersion.TableToCheckFor))
+                if (!HasTableNamed(baseRepository, DatabaseVersion.TableToCheckFor))
                 {
                     // the sql scripts need to be run!
                     throw new DatabaseDoesNotExistException();
@@ -37,10 +36,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                 {
                     throw new DatabaseNeedsUpdating();
                 }
-
             }
-
-            // TODO : Load repository from service locator.
         }
 
         internal TestingDataAccess(IRepository repository)
