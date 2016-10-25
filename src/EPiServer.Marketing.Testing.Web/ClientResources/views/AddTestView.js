@@ -355,10 +355,7 @@
                     this.scheduleDiv.style.visibility = "hidden";
                 }
 
-                if (dom.byId("confidence")) {
-                    dom.byId("confidence").value = "95";
-                }
-
+                this._setViewConfidenceLevelAttr();
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
@@ -446,7 +443,7 @@
                             me.model.startDate = utcNow;
                         }
 
-                        me.model.confidencelevel = dom.byId("confidence").value;
+                        me.model.confidencelevel = me._getConfidenceLevel();
                         me.model.testTitle = me.pageName.textContent;
 
                         if (me._isValidFormData()) {
