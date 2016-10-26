@@ -1,4 +1,4 @@
-define([
+﻿define([
      'dojo/_base/declare',
         'dijit/_WidgetBase',
         'dijit/_TemplatedMixin',
@@ -13,6 +13,7 @@ define([
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
+        "dojo/query",
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
@@ -20,8 +21,6 @@ define([
        "dojo/json",
        "dojox/layout/ContentPane",
         'xstyle/css!marketing-testing/css/ABTesting.css',
-        'xstyle/css!marketing-testing/css/GridForm.css',
-        'xstyle/css!marketing-testing/css/dijit.css',
         'dijit/form/Button',
         'dijit/form/NumberSpinner',
         'dijit/form/Textarea',
@@ -30,8 +29,8 @@ define([
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-       "dijit/layout/ContentPane",
-       "dijit/form/Select"
+        "dijit/layout/ContentPane",
+        "dijit/form/Select"
 ],
     function (
     declare,
@@ -48,6 +47,7 @@ define([
     html,
     dom,
     domClass,
+    query,
     registry,
     dependency,
    rasterizehtml,
@@ -118,15 +118,19 @@ define([
                 var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
+                    var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1; // Check if the content is a product page
+
                     //Hack to build published versions preview link below
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                       previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                       previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versiona').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -145,7 +149,9 @@ define([
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versionb').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -158,31 +164,44 @@ define([
             },
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.value === viewConfidenceLevel.toString()) {
-                        rb.setAttribute("selected", "selected");
-                    } else {
-                        rb.removeAttribute("selected");
+                var rbs = [
+                    { val: 99, label: "99%" },
+                    { val: 98, label: "98%" },
+                    { val: 95, label: "95%" },
+                    { val: 90, label: "90%" }
+                ];
+                var confidenceSelectWidget = registry.byId("confidence"), selectOption, defaultOption;
+                dijit.byId('confidence').removeOption(dijit.byId('confidence').getOptions());
+                if (confidenceSelectWidget) {
+                    for (var i = 0; i < rbs.length; i++) {
+                        if (viewConfidenceLevel) {
+                            if (rbs[i].val === viewConfidenceLevel) {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label + " (Default)" };
+                                confidenceSelectWidget.addOption(selectOption);
+                                defaultOption = rbs[i].val;
+                            } else {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label };
+                                confidenceSelectWidget.addOption(selectOption);
+                            }
+                        }
+                        confidenceSelectWidget.setValue(defaultOption);
                     }
+                }
+            },
+
+            _clearConversionErrors: function () {
+                var errorText = dom.byId("pickerErrorText");
+
+                if (!errorText) {
+                    return;
                 }
             },
 
             // DATA GETTERS
             _getConfidenceLevel: function () {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                for (i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.checked) {
-                        this.model.confidencelevel = rb.value;
-                        return;
-                    }
-                }
+                var confidenceSelectWidget = dijit.byId("confidence");
+                return confidenceSelectWidget.value;
+
             },
 
             // Transforms custom KPI form data into json for processing
@@ -205,7 +224,7 @@ define([
                 .then(function (markup) {
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "-1", label: "&ltSelect Kpi&gt" };
+                    var defaultOption = { value: "-1", label: me.resources.addtestview.goals_selectlist_default };
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < markup.length; x++) {
                         var option = { value: markup[x], label: markup[x].kpi.friendlyName };
@@ -282,7 +301,7 @@ define([
 
             //Validates the supplied string as a positive integer
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
@@ -361,15 +380,17 @@ define([
 
             //Removes the custom KPI markup from the view & widget registry
             _clearCustomKpiMarkup: function () {
+                this._clearConversionErrors();
                 var kpiuiElement = dom.byId("kpiui");
                 if (kpiuiElement) {
                     kpiuiElement.innerHTML = "";
                     if (dijit.byId("ConversionPageWidget")) {
                         dijit.byId("ConversionPageWidget").destroy(true);
-                        dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                        if (dijit.byId("dojox_layout_ContentPane_0")) {
+                            dijit.byId("dojox_layout_ContentPane_0").destroy(true);
+                        }
                     }
                 }
-                this._setKpiSelectList();
             },
 
             // UI UTILITIES
@@ -416,7 +437,7 @@ define([
                     }
                 })
                     .then(function (ret) {
-                        me._setError("", kpiErrorText, kpiErrorIcon);
+                        me._clearConversionErrors();
                         me.model.kpiId = ret;
                         me.model.testDescription = dom.byId("testDescription").value;
                         var startDateSelector = dom.byId("StartDateTimeSelector");
@@ -437,13 +458,14 @@ define([
                     })
                     .otherwise(function (ret) {
                         me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        me.startButtonClickCounter = 0;
+                        startButtonClickCounter = 0;
                     });
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
+                this._setKpiSelectList();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
@@ -451,6 +473,7 @@ define([
             },
 
             _onSelectChange: function (evt) {
+                this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
                 kpiTextField.value = evt.kpiType;
                 var kpiuiElement = dom.byId("kpiui");

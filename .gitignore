@@ -201,3 +201,4 @@ ModelManifest.xml
 /test/EPiServer.Marketing.Testing.Web.ClientTest/project.lock.json
 /build/EPiServer.Marketing.Testing.1.0.0.nupkg
 /.vs/restore.dg
+/buildprocess.cmd

@@ -1,6 +1,6 @@
-﻿<div class="epi-form-container epi-grid-form dijitContainer">
+﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-add-bordercontainer" class="sleek epi-form-container epi-grid-form dijitContainer">
     <!-- Button Bar, Breadcrumb/Start Button and Cancel Button-->
-    <div class="dijit epi-globalToolbar dijitToolbar" role="toolbar" tabindex="0" data-dojo-attach-point="containerNode" id="uniqName_110_0" widgetid="uniqName_110_0">
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false" class="epi-localToolbar">
         <div class="epi-toolbarGroupContainer">
             <!-- Breadcrumb Widget -->
             <div id="leadingToolBar" class="epi-toolbarLeading epi-toolbarGroup">
@@ -10,8 +10,8 @@
                      data-dojo-props="showCurrentNode: false">
                 </div>
                 <div class="epi-breadCrumbs-title-wrapper">
-                    <div data-dojo-attach-point="iconNode" class="dijitInline dijitIcon epi-breadCrumbsCurrentItem-icon epi-iconObjectPage"></div>
-                    <h1 data-dojo-attach-point="contentNameNode" class="epi-breadCrumbsCurrentItem dojoxEllipsis"></h1>
+                    <div data-dojo-attach-point="iconNode" class="epi-breadCrumbsCurrentItem-icon epi-iconObjectPage"></div>
+                    <h1 data-dojo-attach-point="contentNameNode" class="epi-breadCrumbsCurrentItem"></h1>
                 </div>
             </div>
             <!-- Empty toolbar section -->
@@ -34,181 +34,176 @@
                 </button>
             </div>
         </div>
-        <hr class="hrToolbar" />
     </div>
     <!-- Main Content -->
-    <div class="abBody">
-        <!-- Header / Test Title & Description-->
-        <div class="cardWrapper">
-            <div class="cardBody">
-                <h1 class="objectIcon"
-                    data-dojo-attach-point="pageName"></h1>
-                <h2>
-                    ${resources.addtestview.test_description}
-                </h2>
-            </div>
-        </div>
-        <!-- Control/Published Version -->
-        <div class="cardWrapper 2column controlDefaultBody">
-            <h3>
-                ${resources.addtestview.control}
-            </h3>
-            <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versiona"><canvas id="publishThumbnail" class="abThumbnailCanvas" /></div>
-                <p class="versionData">
-                    <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
-                    <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
-                    <span data-dojo-attach-point="datePublished"></span>
-                </p>
-            </div>
-        </div>
-        <!-- Challenger/Draft Version-->
-        <div class="cardWrapper 2column challengerDefaultBody">
-            <h3>
-                ${resources.addtestview.challenger}
-            </h3>
-            <div class="cardBody" style="padding-bottom: 0;">
-                <div class="versionb"><canvas id="draftThumbnail" class="abThumbnailCanvas" /></div>
-                <p class="versionData">
-                    <span class="draftIcon">${resources.addtestview.draft_prefix}</span>
-                    <span class="epi-username" data-dojo-attach-point="savedBy"></span>,
-                    <span data-dojo-attach-point="dateSaved"></span>
-                </p>
-            </div>
-        </div>
-        <!-- Test Settings Section -->
-        <div class="cardWrapper" style="clear: both">
-            <div class="cardBody">
-                <!-- Test Goals -->
-                <div class="formsRow">
-                    <h4>
-                        ${resources.addtestview.goals_header}
-                    </h4>
-                    <textarea id="testDescription"
-                              maxlength="2048"
-                              placeholder="${resources.addtestview.goals_default_text}"
-                              data-dojo-attach-point="descriptionText"
-                              data-dojo-attach-event="onChange: _onTestDescriptionChanged"></textarea>
+    <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:false" class="epi-abtest-body-container">
+        <div class="epi-abtest-body">
+            <!-- Header / Test Title & Description-->
+            <div class="cardWrapper">
+                <div class="cardBody">
+                    <h1 class="objectIcon"
+                        data-dojo-attach-point="pageName"></h1>
+                    <h2>
+                        ${resources.addtestview.test_description}
+                    </h2>
                 </div>
-                <!-- Conversion Selector -->
-                <div class="formsRow">
-                    <h4>
-                        ${resources.addtestview.conversion_header}
-                    </h4>
-                    <!-- Errors returned by custom validation will be displayed here-->
-                    <span id="kpiErrorIcon"
-                          class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
-                    </span>
-                    <span id="kpiErrorText" class="errorText">
-                    </span>
-                    <!-- KPI UI Element-->
-                    <div>
-                        <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onSelectChange"></select>
-                    </div>
-                    <div>
-                        <input type="text" id="kpiString" name="kpiTypeString" hidden />
-                        <form id="kpiForm">
-                            <div id="kpiui">
-                                <!-- KPI Supplied UI will be injected here -->
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <hr class="partialHr" />
-                <!-- Participation Percentage -->
-                <div class="formsRow">
-                    <h4>
-                        ${resources.addtestview.participation_header}
-                    </h4>
-                    <p>${resources.addtestview.participant_percentage_tip}</p>
-                    <p>
-                        <div id="percentageSpinner"
-                             data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:1,max:100},value:10"
-                             data-dojo-attach-point="participationPercentText"
-                             data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
-                        </div><label>%</label>
-                        <span id="participationErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                        <span id="participationErrorText" class="errorText"></span>
+            </div>
+            <!-- Control/Published Version -->
+            <div class="cardWrapper 2column controlDefaultBody">
+                <h3>
+                    ${resources.addtestview.control}
+                </h3>
+                <div class="cardBody" style="padding-bottom: 0;">
+                    <div class="versiona"><canvas id="publishThumbnail" class="abThumbnailCanvas" /></div>
+                    <p class="versionData">
+                        <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
+                        <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
+                        <span data-dojo-attach-point="datePublished"></span>
                     </p>
                 </div>
-                <hr class="partialHr" />
-                <!-- Test Duration -->
-                <div class="formsRow">
-                    <h4>
-                        ${resources.addtestview.duration_header}
-                    </h4>
-                    <p>
-                        <div id="durationSpinner"
-                             data-dojo-type="dijit/form/NumberSpinner"
-                             data-dojo-props="constraints:{min:1,max:365},value:30"
-                             data-dojo-attach-point="durationText"
-                             data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
-                        </div><label>${resources.addtestview.days_text}</label>
-                        <span id="durationErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                        <span id="durationErrorText" class="errorText"></span>
+            </div>
+            <!-- Challenger/Draft Version-->
+            <div class="cardWrapper 2column challengerDefaultBody">
+                <h3>
+                    ${resources.addtestview.challenger}
+                </h3>
+                <div class="cardBody" style="padding-bottom: 0;">
+                    <div class="versionb"><canvas id="draftThumbnail" class="abThumbnailCanvas" /></div>
+                    <p class="versionData">
+                        <span class="draftIcon">${resources.addtestview.draft_prefix}</span>
+                        <span class="epi-username" data-dojo-attach-point="savedBy"></span>,
+                        <span data-dojo-attach-point="dateSaved"></span>
                     </p>
                 </div>
-                <!-- Test Scheduling (radio and date selector) -->
-                <div class="formsRow">
-                    <h4>
-                        ${resources.addtestview.schedule_header}
-                    </h4>
-                    <div class="formsRow" style="float: left; padding-right: 20px; vertical-align: text-bottom">
-                        <input data-dojo-attach-point="start" type="radio" name="startOption" id="startNowOption"
-                               value="hide" style="vertical-align: middle" checked
-                               data-dojo-type="dijit/form/RadioButton"
-                               data-dojo-attach-event="onClick: _toggleTimeSelector">
-                        <label class="scheduleLabel">
-                            ${resources.addtestview.schedule_selector_start}
-                        </label>
-                        <br>
-                        <input data-dojo-attach-point="delay" type="radio" name="startOption" id="delayStartOption"
-                               value="show" style="padding-top: 10px; vertical-align: middle"
-                               data-dojo-type="dijit/form/RadioButton"
-                               data-dojo-attach-event="onClick: _toggleTimeSelector">
-                        <label class="scheduleLabel">
-                            ${resources.addtestview.schedule_selector_delay}
-                        </label>
+            </div>
+            <!-- Test Settings Section -->
+            <div class="cardWrapper" style="clear: both">
+                <div class="cardBody">
+                    <!-- Test Goals -->
+                    <div class="formsRow">
+                        <h4>
+                            ${resources.addtestview.goals_header}
+                        </h4>
+                        <textarea id="testDescription"
+                                  maxlength="2048"
+                                  placeholder="${resources.addtestview.goals_default_text}"
+                                  data-dojo-attach-point="descriptionText"
+                                  data-dojo-attach-event="onChange: _onTestDescriptionChanged"></textarea>
                     </div>
-                    <div class="formsRow" id="dateSelector" data-dojo-attach-point="scheduleDiv">
+                    <!-- Conversion Selector -->
+                    <div class="formsRow">
+                        <h4>
+                            ${resources.addtestview.conversion_header}
+                        </h4>
+                        <!-- Errors returned by custom validation will be displayed here-->
+                        <span id="kpiErrorIcon"
+                              class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                        </span>
+                        <span id="kpiErrorText" class="errorText">
+                        </span>
+                        <!-- KPI UI Element-->
                         <div>
-                            <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                            <span id="datePickerErrorText" class="errorText"></span>
+                            <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onSelectChange"></select>
                         </div>
-                        <div id="StartDateTimeSelector" data-dojo-attach-point="startDatePicker"
-                             data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown"
-                             data-dojo-attach-event="onChange: _onDateTimeChange"></div>
-                        <span class="dijitInline dijitIcon epi-iconClock"></span>
-                        <label>
-                            ${resources.addtestview.schedule_text_prefix}
-                            <span id="ScheduleText">${resources.addtestview.notscheduled_text}</span>
-                        </label>
+                        <div>
+                            <input type="text" id="kpiString" name="kpiTypeString" hidden />
+                            <form id="kpiForm">
+                                <div id="kpiui">
+                                    <!-- KPI Supplied UI will be injected here -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class="epi-abtest-hr" />
+                    <!-- Participation Percentage -->
+                    <div class="formsRow">
+                        <h4>
+                            ${resources.addtestview.participation_header}
+                        </h4>
+                        <p>${resources.addtestview.participant_percentage_tip}</p>
+                        <p>
+                            <div id="percentageSpinner"
+                                 data-dojo-type="dijit/form/NumberSpinner"
+                                 data-dojo-props="constraints:{min:1,max:100},value:10"
+                                 data-dojo-attach-point="participationPercentText"
+                                 data-dojo-attach-event="onChange: _onPercentageSpinnerChanged">
+                            </div><label>%</label>
+                            <span id="participationErrorIcon" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                            <span id="participationErrorText" class="epi-ab-errorText"></span>
+                        </p>
+                    </div>
+                    <hr class="epi-abtest-hr" />
+                    <!-- Test Duration -->
+                    <div class="formsRow">
+                        <h4>
+                            ${resources.addtestview.duration_header}
+                        </h4>
+                        <p>
+                            <div id="durationSpinner"
+                                 data-dojo-type="dijit/form/NumberSpinner"
+                                 data-dojo-props="constraints:{min:1,max:365},value:30"
+                                 data-dojo-attach-point="durationText"
+                                 data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
+                            </div><label>${resources.addtestview.days_text}</label>
+                            <span id="durationErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                            <span id="durationErrorText" class="errorText"></span>
+                        </p>
+                    </div>
+                    <!-- Test Scheduling (radio and date selector) -->
+                    <div class="formsRow">
+                        <h4>
+                            ${resources.addtestview.schedule_header}
+                        </h4>
+                        <div class="formsRow" style="float: left; padding-right: 20px; vertical-align: text-bottom">
+                            <input data-dojo-attach-point="start" type="radio" name="startOption" id="startNowOption"
+                                   value="hide" style="vertical-align: middle" checked
+                                   data-dojo-type="dijit/form/RadioButton"
+                                   data-dojo-attach-event="onClick: _toggleTimeSelector">
+                            <label class="scheduleLabel">
+                                ${resources.addtestview.schedule_selector_start}
+                            </label>
+                            <br>
+                            <input data-dojo-attach-point="delay" type="radio" name="startOption" id="delayStartOption"
+                                   value="show" style="padding-top: 10px; vertical-align: middle"
+                                   data-dojo-type="dijit/form/RadioButton"
+                                   data-dojo-attach-event="onClick: _toggleTimeSelector">
+                            <label class="scheduleLabel">
+                                ${resources.addtestview.schedule_selector_delay}
+                            </label>
+                        </div>
+                        <div class="formsRow" id="dateSelector" data-dojo-attach-point="scheduleDiv">
+                            <div>
+                                <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                                <span id="datePickerErrorText" class="epi-ab-errorText"></span>
+                            </div>
+                            <div id="StartDateTimeSelector" data-dojo-attach-point="startDatePicker"
+                                 data-dojo-type="epi/shell/widget/DateTimeSelectorDropDown"
+                                 data-dojo-attach-event="onChange: _onDateTimeChange"></div>
+                            <span class="dijitInline dijitIcon epi-iconClock"></span>
+                            <label>
+                                ${resources.addtestview.schedule_text_prefix}
+                                <span id="ScheduleText">${resources.addtestview.notscheduled_text}</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Advanced Settings -->
-        <div class="cardWrapper">
-            <!-- Header / Toggle-->
-            <div class="cardBody">
-                <button data-dojo-type="dijit/form/ToggleButton" onclick="showSettings();" class="epi-chromeless epi-flat"
-                        style="background-color: #ffffff; font-size: 18px; margin: 8px 0 0 0; font-family: arial; font-weight: bold"
-                        data-dojo-props="iconClass:'epi-iconSettings', checked: false">
-                    ${resources.addtestview.advanced_options}
-                </button>
-                <hr class="hrAdvanced" />
-                <!-- Confidence Level -->
-                <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;">
-                    <div class="cardBody" style="padding-top: 4px;">
-                        <h4>${resources.addtestview.confidence_level_header}</h4>
-                        <p>${resources.addtestview.confidence_level_description}</p>
-                        <select id="confidence">
-                            <option id="confidence_99" value="99">${resources.addtestview.confidence_99}</option>
-                            <option id="confidence_98" value="98">${resources.addtestview.confidence_98}</option>
-                            <option id="confidence_95" value="95">${resources.addtestview.confidence_95}</option>
-                            <option id="confidence_90" value="90">${resources.addtestview.confidence_90}</option>
-                        </select>
+            <!-- Advanced Settings -->
+            <div class="cardWrapper">
+                <!-- Header / Toggle-->
+                <div class="cardBody">
+                    <button data-dojo-type="dijit/form/ToggleButton" onclick="showSettings();" class="epi-chromeless epi-flat"
+                            style="background-color: #ffffff; font-size: 18px; margin: 8px 0 0 0; font-family: arial; font-weight: bold"
+                            data-dojo-props="iconClass:'epi-iconSettings', checked: false">
+                        ${resources.addtestview.advanced_options}
+                    </button>
+                    <!-- Confidence Level -->
+                    <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;">
+                        <div class="cardBody" style="padding-top: 4px;">
+                            <h4>${resources.addtestview.confidence_level_header}</h4>
+                            <p>${resources.addtestview.confidence_level_description}</p>
+                            <select id="confidence" data-dojo-type="dijit/form/Select"></select>
+                        </div>
                     </div>
                 </div>
             </div>
