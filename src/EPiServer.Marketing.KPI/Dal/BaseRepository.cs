@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations.History;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Transactions;
@@ -24,6 +25,11 @@ namespace EPiServer.Marketing.KPI.Dal
         public BaseRepository(DatabaseContext dbContext)
         {
             DatabaseContext = dbContext;
+        }
+
+        public BaseRepository(HistoryContext historyContext)
+        {
+            HistoryContext = historyContext;
         }
         #endregion
 
@@ -135,6 +141,11 @@ namespace EPiServer.Marketing.KPI.Dal
             DatabaseContext.Set<T>().Remove(instance as T);
         }
 
+        public string GetDatabaseVersion(string contextKey)
+        {
+            return HistoryContext.History.Where(r => r.ContextKey == contextKey).OrderByDescending(row => row.MigrationId).First().MigrationId;
+        }
+
         /// <summary>
         /// Add the given object to the database context.
         /// </summary>
@@ -222,6 +233,8 @@ namespace EPiServer.Marketing.KPI.Dal
 
         #region Internal Members
         public DatabaseContext DatabaseContext { get; private set; }
+
+        public HistoryContext HistoryContext { get; private set; }
 
         #endregion
     }

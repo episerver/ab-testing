@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
+using EPiServer.Marketing.Testing.Dal.Exceptions;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -38,6 +39,9 @@ namespace EPiServer.Marketing.Testing
         private IKpiManager _kpiManager;
         private DefaultMarketingTestingEvents _marketingTestingEvents;
 
+        public bool DatabaseNeedsConfiguring;
+    
+
         public List<IMarketingTest> ActiveCachedTests
         {
             get { return _testCache.Get(TestingCacheName) as List<IMarketingTest>; }
@@ -47,10 +51,25 @@ namespace EPiServer.Marketing.Testing
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _dataAccess = new TestingDataAccess();
+            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
+
+            try
+            {
+                _dataAccess = new TestingDataAccess();
+            }
+            catch (DatabaseDoesNotExistException)
+            {
+                DatabaseNeedsConfiguring = true;
+                return;
+            }
+            catch (DatabaseNeedsUpdating)
+            {
+                DatabaseNeedsConfiguring = true;
+                return;
+            }
+
             _kpiManager = new KpiManager();
             initCache();
-            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
@@ -313,6 +332,24 @@ namespace EPiServer.Marketing.Testing
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
         {
             return kpis.Select(kpi => kpi.Evaluate(this, e)).ToList();
+        }
+
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false)
+        {
+            if (DatabaseNeedsConfiguring)
+            {
+                DatabaseNeedsConfiguring = false;
+                return 0;
+            }
+
+            if (populateCache)
+            {
+                _dataAccess = new TestingDataAccess();
+                _kpiManager = new KpiManager();
+                initCache();
+            }
+
+            return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
         internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)

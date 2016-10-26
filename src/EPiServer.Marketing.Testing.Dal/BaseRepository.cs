@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Validation;
-using System.Data.SqlClient;
+using System.Data.Entity.Migrations.History;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Transactions;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 
@@ -30,6 +25,11 @@ namespace EPiServer.Marketing.Testing.Dal
         public BaseRepository(DatabaseContext dbContext)
         {
             DatabaseContext = dbContext;
+        }
+
+        public BaseRepository(HistoryContext historyContext)
+        {
+            HistoryContext = historyContext;
         }
         #endregion
 
@@ -152,6 +152,11 @@ namespace EPiServer.Marketing.Testing.Dal
             DatabaseContext.Set<T>().Remove(instance as T);
         }
 
+        public string GetDatabaseVersion(string contextKey)
+        {
+            return HistoryContext.History.Where(r => r.ContextKey == contextKey).OrderByDescending(row => row.MigrationId).First().MigrationId;
+        }
+
         /// <summary>
         /// Add the given object to the database context.
         /// </summary>
@@ -240,6 +245,8 @@ namespace EPiServer.Marketing.Testing.Dal
 
         #region Internal Members
         public DatabaseContext DatabaseContext { get; private set; }
+
+        public HistoryContext HistoryContext { get; private set; }
 
         #endregion
     }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.Entity.Migrations.History;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
+using EPiServer.Marketing.Testing.Dal.Exceptions;
+using EPiServer.Marketing.Testing.Dal.Migrations;
 
 namespace EPiServer.Marketing.Testing.Dal.DataAccess
 {
@@ -16,8 +19,26 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         public TestingDataAccess()
         {
             _UseEntityFramework = true;
-            // TODO : Load repository from service locator.
+
+            using (var dbContext = new DatabaseContext())
+            {
+                var baseRepository = new BaseRepository(dbContext);
+
+                if (!HasTableNamed(baseRepository, DatabaseVersion.TableToCheckFor))
+                {
+                    // the sql scripts need to be run!
+                    throw new DatabaseDoesNotExistException();
+                }
+
+                var version = GetDatabaseVersion(dbContext.Database.Connection, "dbo", DatabaseVersion.ContextKey);
+
+                if (version < DatabaseVersion.RequiredDbVersion)
+                {
+                    throw new DatabaseNeedsUpdating();
+                }
+            }
         }
+
         internal TestingDataAccess(IRepository repository)
         {
             _repository = repository;
@@ -108,6 +129,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
+                    
                     tests = GetTestListHelper(repository, criteria);
                 }
             }
@@ -186,9 +208,38 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             SetTestState(testObjectId, DalTestState.Done);
         }
 
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
+        {
+            long version = 0;
 
+            if (_UseEntityFramework)
+            {
+                using (var historyContext = new HistoryContext(dbConnection, schema))
+                {
+                    var repository = new BaseRepository(historyContext);
+                    version = GetDatabaseVersionHelper(repository, contextKey);
+                }
+            }
+            else
+            {
+                version = GetDatabaseVersionHelper(_repository, contextKey);
+            }
+
+            return version;
+        }
 
         #region Private Helpers
+
+        private long GetDatabaseVersionHelper(IRepository repo, string contextKey)
+        {
+            var lastMigration = repo.GetDatabaseVersion(contextKey);
+
+            // we are only interested in the numerical part of the key (i.e. 201609091719244_Initial)
+            var version = lastMigration.Split('_')[0];
+
+            return Convert.ToInt64(version);
+        }
+
         private void DeleteHelper(IRepository repo, Guid testId)
         {
             repo.DeleteTest(testId);
@@ -242,8 +293,17 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             }
 
             IQueryable<IABTest> results = null;
-            var tests = repo.GetAll().AsQueryable();
+            IQueryable<IABTest> tests;
 
+            try
+            {
+                tests = repo.GetAll().AsQueryable();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseDoesNotExistException();
+            }
+            
             // if we have created an expression tree, then execute it against the tests to get the results
             if (wholeExpression != null)
             {
@@ -487,6 +547,15 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             aTest.State = theState;
             repo.SaveChanges();
             return aTest;
+        }
+
+        private static bool HasTableNamed(BaseRepository repository, string table, string schema = "dbo")
+        {
+            string sql = @"SELECT CASE WHEN EXISTS
+            (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_SCHEMA=@p0 AND TABLE_NAME=@p1) THEN 1 ELSE 0 END";
+
+            return repository.DatabaseContext.Database.SqlQuery<int>(sql, schema, table).Single() == 1;
         }
         #endregion
     }
