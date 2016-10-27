@@ -1,4 +1,4 @@
-define([
+﻿define([
      'dojo/_base/declare',
         'dijit/_WidgetBase',
         'dijit/_TemplatedMixin',
@@ -89,6 +89,10 @@ define([
                 var me = this;
                 this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
                 this.kpiModel = this.kpiModel || new KpiViewModel();
+                if (this.kpiModel.availableKpi) {
+                    this._setKpiSelectList(this.kpiModel.availableKpi);
+                };
+
                 this.kpiModel.watch("availableKpi",
                     function (name, oldvalue, value) {
                         me._setKpiSelectList(value);
@@ -304,7 +308,7 @@ define([
             // FORM DATA CLEANUP
             reset: function () {
                 // reset the start button click counter
-                startButtonClickCounter = 0;
+                this.startButtonClickCounter = 0;
 
                 //set view model properties to default form values.
                 if (this.descriptionText) {
@@ -356,7 +360,6 @@ define([
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
-                // this._setKpiSelectList();
             },
 
             //Clears the KPI Error text and icon
@@ -442,7 +445,7 @@ define([
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
-                //  this._setKpiSelectList();
+                this._setKpiSelectList(this.kpiModel.availableKpi);
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
