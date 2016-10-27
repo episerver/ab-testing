@@ -27,6 +27,25 @@
 
             getKpiByIndex(index) {
                 return this.availableKpi[index];
-            }
+            },
+
+            createKpi(caller) {
+                var me = this;
+                this.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore.put({
+                    id: "KpiFormData",
+                    entity: caller.kpiFormData
+                })
+                    .then(function (ret) {
+                        caller._clearConversionErrors();
+                        caller.model.kpiId = ret;
+                        caller.model.createTest();
+                    })
+                    .otherwise(function (ret) {
+                        caller._setError(ret.response.xhr.statusText, caller.kpiErrorTextNode, caller.kpiErrorIconNode);
+                        caller.startButtonClickCounter = 0;
+                    });
+            },
         });
+
     });
