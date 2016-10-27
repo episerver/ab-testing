@@ -442,6 +442,23 @@
 
             },
 
+            createTest(kpiId) {
+                this._clearConversionErrors();
+                this.model.kpiId = kpiId;
+                if (this._isValidFormData()) {
+                    this.model.createTest();
+                    this._clearConversionErrors();
+                    this._setKpiSelectList(this.kpiModel.availableKpi);
+                } else {
+                    this.startButtonClickCounter = 0;
+                }
+            },
+
+            setKpiError(ret) {
+                this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                this.startButtonClickCounter = 0;
+            },
+
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();

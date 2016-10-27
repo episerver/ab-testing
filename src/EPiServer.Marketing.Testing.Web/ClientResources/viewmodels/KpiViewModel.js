@@ -37,19 +37,10 @@
                     entity: caller.kpiFormData
                 })
                     .then(function (ret) {
-                        caller._clearConversionErrors();
-                        caller.model.kpiId = ret;
-                        if (caller._isValidFormData()) {
-                            caller.model.createTest();
-                            caller._clearConversionErrors();
-                            caller._setKpiSelectList(caller.kpiModel.availableKpi);
-                        } else {
-                            caller.startButtonClickCounter = 0;
-                        }
+                        caller.createTest(ret);
                     })
                     .otherwise(function (ret) {
-                        caller._setError(ret.response.xhr.statusText, caller.kpiErrorTextNode, caller.kpiErrorIconNode);
-                        caller.startButtonClickCounter = 0;
+                        caller.setKpiError(ret);
                     });
             },
         });
