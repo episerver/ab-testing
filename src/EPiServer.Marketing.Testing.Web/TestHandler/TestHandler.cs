@@ -14,7 +14,6 @@ using EPiServer.Logging;
 using System.Web;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Reflection;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
@@ -431,7 +430,10 @@ namespace EPiServer.Marketing.Testing.Web
                     }
                 }
 
+                // if kpi object loads content we dont want to get triggered.
+                HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
                 var kpiResults = _testManager.EvaluateKPIs(kpis, e);
+                HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
                 var conversionResults = kpiResults.OfType<KpiConversionResult>();
                 ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);
