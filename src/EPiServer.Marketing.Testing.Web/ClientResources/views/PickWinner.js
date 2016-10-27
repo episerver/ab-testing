@@ -160,7 +160,7 @@
             var pickWinnerWarningIcon = this.pickWinnerWarningIcon;
             var currentIconClass = pickWinnerWarningIcon.className;
             var iconClassDisplayed = currentIconClass.replace("dijitHidden", "dijitInline");
-
+            var iconClassHidden = currentIconClass.replace("dijitInline", "dijitHidden")
 
             if (this.context.data.test.state < 2) {
                 pickWinnerMessage.innerHTML = resources.pickwinnerview.early_pick_winner_message;
@@ -168,6 +168,9 @@
                 if (!this.context.data.test.isSignificant) {
                     pickWinnerMessage.innerHTML = resources.pickwinnerview.result_is_not_significant;
                     domClass.replace(pickWinnerWarningIcon, iconClassDisplayed);
+                } else {
+                    pickWinnerMessage.innerHTML = "";
+                    domClass.replace(pickWinnerWarningIcon, iconClassHidden);
                 }
             }
         },
