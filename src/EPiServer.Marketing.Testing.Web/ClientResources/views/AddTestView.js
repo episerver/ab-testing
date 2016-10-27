@@ -449,7 +449,7 @@ define([
                 topic.publish("/epi/shell/context/request", me.contextParameters);
             },
 
-            _onSelectChange: function (evt) {
+            _onGoalSelectChange: function (evt) {
                 this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
                 var kpiuiElement = dom.byId("kpiui");
