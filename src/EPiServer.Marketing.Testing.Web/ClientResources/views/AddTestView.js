@@ -451,9 +451,9 @@ define([
 
             _onGoalSelectChange: function (evt) {
                 this._clearCustomKpiMarkup();
-                var kpiTextField = dom.byId("kpiString");
+                var kpiTextField = dom.byId("kpiType");
                 var kpiuiElement = dom.byId("kpiui");
-                if (evt != "default") {
+                if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
                     kpiTextField.value = kpiObject.kpiType;
                     new ContentPane({
