@@ -39,7 +39,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             if (responseData["ConversionProduct"] == "")
             {
-                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
+                throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/config_markup/error_conversionproduct"));
             }
 
             //Get the currently configured content loader and reference converter from the service locator
