@@ -416,49 +416,27 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
-                var contentRepositoryDescriptors = dependency.resolve("epi.cms.contentRepositoryDescriptors");
-                var widgetElement = dom.byId("Widget2");
-
-
-                if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
-                startButtonClickCounter++; // Increment click count
+                if (this.startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
+                this.startButtonClickCounter++; // Increment click count
                 var me = this;
-                var kpiTextField = dom.byId("kpiString");
-                var kpiErrorText = dom.byId("kpiErrorText");
-                var kpiErrorIcon = dom.byId("kpiErrorIcon");
-                me.kpiFormData = this._getKpiFormData();
-                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-                me.kpistore.put({
-                    id: "KpiFormData",
-                    entity: {
-                        kpiJsonFormData: me.kpiFormData,
-                        kpiType: kpiTextField.value
-                    }
-                })
-                    .then(function (ret) {
-                        me._clearConversionErrors();
-                        me.model.kpiId = ret;
-                        me.model.testDescription = dom.byId("testDescription").value;
-                        var startDateSelector = dom.byId("StartDateTimeSelector");
-                        var utcNow = new Date(Date.now()).toUTCString();
-                        if (startDateSelector.value === "") {
-                            me.model.startDate = utcNow;
-                        }
 
-                        me.model.confidencelevel = dom.byId("confidence").value;
-                        me.model.testTitle = me.pageName.textContent;
+                this.kpiErrorTextNode = dom.byId("kpiErrorText");
+                this.kpiErrorIconNode = dom.byId("kpiErrorIcon");
 
-                        if (me._isValidFormData()) {
-                            me.model.createTest();
-                        }
-                        else {
-                            startButtonClickCounter = 0; // Validation failed, so reset it to zero.
-                        }
-                    })
-                    .otherwise(function (ret) {
-                        me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        startButtonClickCounter = 0;
-                    });
+                this.model.testDescription = dom.byId("testDescription").value;
+                var startDateSelector = dom.byId("StartDateTimeSelector");
+                var utcNow = new Date(Date.now()).toUTCString();
+                if (startDateSelector.value === "") {
+                    this.model.startDate = utcNow;
+                }
+
+                this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.testTitle = me.pageName.textContent;
+
+                this.kpiFormData = this._getKpiFormData();
+
+                this.kpiModel.createKpi(this);
+
             },
 
             _onCancelButtonClick: function () {
@@ -475,12 +453,14 @@ define([
                 this._clearCustomKpiMarkup();
                 var kpiTextField = dom.byId("kpiString");
                 var kpiuiElement = dom.byId("kpiui");
-                if (evt > -1) {
+                if (evt != "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
                     kpiTextField.value = kpiObject.kpiType;
                     new ContentPane({
                         content: kpiObject.kpi.uiMarkup
                     }).placeAt(kpiuiElement);
+                } else {
+                    kpiTextField.value = "";
                 }
             },
 
