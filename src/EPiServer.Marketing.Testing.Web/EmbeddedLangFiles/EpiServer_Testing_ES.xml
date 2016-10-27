@@ -30,6 +30,7 @@
         <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
         <goals_default_text>Ex. By tweaking the copy in the first bullet point to directly address the ‘time issue’, I can motivate more visitors to download the ebook.</goals_default_text>
         <goals_header>What is the overall goal for this test?</goals_header>
+        <goals_selectlist_default>Select Goal</goals_selectlist_default>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
         <participant_percentage_tip>A higher participation percentage reduces the time required to gather enough statistics to be able to pick a winner.</participant_percentage_tip>
         <participation_header>What percentage of visitors should participate in this A/B test?</participation_header>

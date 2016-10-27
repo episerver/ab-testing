@@ -27,6 +27,22 @@
 
             getKpiByIndex(index) {
                 return this.availableKpi[index];
-            }
+            },
+
+            createKpi(caller) {
+                var me = this;
+                this.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore.put({
+                    id: "KpiFormData",
+                    entity: caller.kpiFormData
+                })
+                    .then(function (ret) {
+                        caller.createTest(ret);
+                    })
+                    .otherwise(function (ret) {
+                        caller.setKpiError(ret);
+                    });
+            },
         });
+
     });

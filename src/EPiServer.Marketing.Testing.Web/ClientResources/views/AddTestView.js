@@ -1,4 +1,4 @@
-define([
+﻿define([
      'dojo/_base/declare',
         'dijit/_WidgetBase',
         'dijit/_TemplatedMixin',
@@ -89,6 +89,10 @@ define([
                 var me = this;
                 this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
                 this.kpiModel = this.kpiModel || new KpiViewModel();
+                if (this.kpiModel.availableKpi) {
+                    this._setKpiSelectList(this.kpiModel.availableKpi);
+                };
+
                 this.kpiModel.watch("availableKpi",
                     function (name, oldvalue, value) {
                         me._setKpiSelectList(value);
@@ -304,7 +308,7 @@ define([
             // FORM DATA CLEANUP
             reset: function () {
                 // reset the start button click counter
-                startButtonClickCounter = 0;
+                this.startButtonClickCounter = 0;
 
                 //set view model properties to default form values.
                 if (this.descriptionText) {
@@ -356,7 +360,6 @@ define([
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
-                // this._setKpiSelectList();
             },
 
             //Clears the KPI Error text and icon
@@ -416,71 +419,68 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
-                var contentRepositoryDescriptors = dependency.resolve("epi.cms.contentRepositoryDescriptors");
-                var widgetElement = dom.byId("Widget2");
-
-
-                if (startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
-                startButtonClickCounter++; // Increment click count
+                if (this.startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
+                this.startButtonClickCounter++; // Increment click count
                 var me = this;
-                var kpiTextField = dom.byId("kpiString");
-                var kpiErrorText = dom.byId("kpiErrorText");
-                var kpiErrorIcon = dom.byId("kpiErrorIcon");
-                me.kpiFormData = this._getKpiFormData();
-                me.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
-                me.kpistore.put({
-                    id: "KpiFormData",
-                    entity: {
-                        kpiJsonFormData: me.kpiFormData,
-                        kpiType: kpiTextField.value
-                    }
-                })
-                    .then(function (ret) {
-                        me._clearConversionErrors();
-                        me.model.kpiId = ret;
-                        me.model.testDescription = dom.byId("testDescription").value;
-                        var startDateSelector = dom.byId("StartDateTimeSelector");
-                        var utcNow = new Date(Date.now()).toUTCString();
-                        if (startDateSelector.value === "") {
-                            me.model.startDate = utcNow;
-                        }
 
-                        me.model.confidencelevel = dom.byId("confidence").value;
-                        me.model.testTitle = me.pageName.textContent;
+                this.kpiErrorTextNode = dom.byId("kpiErrorText");
+                this.kpiErrorIconNode = dom.byId("kpiErrorIcon");
 
-                        if (me._isValidFormData()) {
-                            me.model.createTest();
-                        }
-                        else {
-                            startButtonClickCounter = 0; // Validation failed, so reset it to zero.
-                        }
-                    })
-                    .otherwise(function (ret) {
-                        me._setError(ret.response.xhr.statusText, kpiErrorText, kpiErrorIcon);
-                        startButtonClickCounter = 0;
-                    });
+                this.model.testDescription = dom.byId("testDescription").value;
+                var startDateSelector = dom.byId("StartDateTimeSelector");
+                var utcNow = new Date(Date.now()).toUTCString();
+                if (startDateSelector.value === "") {
+                    this.model.startDate = utcNow;
+                }
+
+                this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.testTitle = me.pageName.textContent;
+
+                this.kpiFormData = this._getKpiFormData();
+
+                this.kpiModel.createKpi(this);
+
+            },
+
+            createTest(kpiId) {
+                this._clearConversionErrors();
+                this.model.kpiId = kpiId;
+                if (this._isValidFormData()) {
+                    this.model.createTest();
+                    this._clearConversionErrors();
+                    this._setKpiSelectList(this.kpiModel.availableKpi);
+                } else {
+                    this.startButtonClickCounter = 0;
+                }
+            },
+
+            setKpiError(ret) {
+                this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                this.startButtonClickCounter = 0;
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
-                //  this._setKpiSelectList();
+                this._setKpiSelectList(this.kpiModel.availableKpi);
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
                 };
                 topic.publish("/epi/shell/context/request", me.contextParameters);
             },
 
-            _onSelectChange: function (evt) {
+            _onGoalSelectChange: function (evt) {
                 this._clearCustomKpiMarkup();
-                var kpiTextField = dom.byId("kpiString");
+                var kpiTextField = dom.byId("kpiType");
                 var kpiuiElement = dom.byId("kpiui");
-                if (evt > -1) {
+                if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
                     kpiTextField.value = kpiObject.kpiType;
                     new ContentPane({
                         content: kpiObject.kpi.uiMarkup
                     }).placeAt(kpiuiElement);
+                } else {
+                    kpiTextField.value = "";
                 }
             },
 

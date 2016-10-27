@@ -4,6 +4,7 @@
     <commercekpi>
       <config_markup>
         <conversion_label>Visitor adds product to cart</conversion_label>
+        <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
       </config_markup>
       <error_conversionpage>You must select a product before you can save the A/B test.</error_conversionpage>
       <readonly_markup>
