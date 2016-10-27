@@ -39,7 +39,13 @@
                     .then(function (ret) {
                         caller._clearConversionErrors();
                         caller.model.kpiId = ret;
-                        caller.model.createTest();
+                        if (caller._isValidFormData()) {
+                            caller.model.createTest();
+                            caller._clearConversionErrors();
+                            caller._setKpiSelectList(caller.kpiModel.availableKpi);
+                        } else {
+                            caller.startButtonClickCounter = 0;
+                        }
                     })
                     .otherwise(function (ret) {
                         caller._setError(ret.response.xhr.statusText, caller.kpiErrorTextNode, caller.kpiErrorIconNode);
