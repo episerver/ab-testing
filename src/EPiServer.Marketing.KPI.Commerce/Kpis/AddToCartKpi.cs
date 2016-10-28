@@ -39,7 +39,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             if (responseData["ConversionProduct"] == "")
             {
-                throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/config_markup/error_conversionproduct"));
+                throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/addtocart/config_markup/error_conversionproduct"));
             }
 
             //Get the currently configured content loader and reference converter from the service locator
@@ -113,7 +113,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             get
             {
                 var conversionLabel = LocalizationService.Current
-                    .GetString("/commercekpi/config_markup/conversion_label");
+                    .GetString("/commercekpi/addtocart/config_markup/conversion_label");
                 return string.Format(base.UiMarkup, conversionLabel);
             }
         }
@@ -126,9 +126,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 string markup = base.UiReadOnlyMarkup;
 
                 var conversionHeaderText = LocalizationService.Current
-                    .GetString("/commercekpi/readonly_markup/conversion_header");
+                    .GetString("/commercekpi/addtocart/readonly_markup/conversion_header");
                 var conversionDescription = LocalizationService.Current
-                    .GetString("/commercekpi/readonly_markup/conversion_selector_description");
+                    .GetString("/commercekpi/addtocart/readonly_markup/conversion_selector_description");
 
                 if (!Guid.Empty.Equals(ContentGuid))
                 {

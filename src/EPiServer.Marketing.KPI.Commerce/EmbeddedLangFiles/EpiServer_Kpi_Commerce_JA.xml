@@ -2,15 +2,17 @@
 <languages>
   <language name="日本語 (Japanese)" id="ja">
     <commercekpi>
-      <config_markup>
-        <conversion_label>Visitor adds product to cart</conversion_label>
-        <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-      </config_markup>
-      <error_conversionpage>You must select a product before you can save the A/B test.</error_conversionpage>
-      <readonly_markup>
-        <conversion_header>Add Product to Cart</conversion_header>
-        <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
-      </readonly_markup>
-    </commercekpi>
+      <commercekpi>
+        <addtocart>
+          <config_markup>
+            <conversion_label>Visitor adds product to cart</conversion_label>
+            <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
+          </config_markup>
+          <readonly_markup>
+            <conversion_header>Add Product to Cart</conversion_header>
+            <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
+          </readonly_markup>
+        </addtocart>
+      </commercekpi>
   </language>
 </languages>
