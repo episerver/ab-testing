@@ -9,8 +9,9 @@ using System.Web.Mvc;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Web.Mvc.Html;
-using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Results;
+using EPiServer.Web.Routing;
+using System.Web;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -25,6 +26,9 @@ namespace EPiServer.Marketing.KPI.Common
     {
         [DataMember]
         public Guid ContentGuid;
+
+        public IContent _content;
+        public string   _startpagepath;
 
         public ContentComparatorKPI()
         {
@@ -127,7 +131,25 @@ namespace EPiServer.Marketing.KPI.Common
             var ea = e as ContentEventArgs;
             if (ea != null)
             {
-                retval = ContentGuid.Equals(ea.Content.ContentGuid);
+                if (_content == null)
+                {   
+                    var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+                    _content = contentRepo.Get<IContent>(ContentGuid);
+                    _startpagepath = UrlResolver.Current.GetUrl(ContentReference.StartPage);
+                }
+
+                if ( ContentReference.StartPage.ID == _content.ContentLink.ID )
+                {
+                    // if the target content is the start page, we also need to check 
+                    // the path to make sure its not just a request for some other static
+                    // resources such as css or jscript
+                    retval = (_startpagepath == HttpContext.Current.Request.Path 
+                        && ContentGuid.Equals(ea.Content.ContentGuid));
+                }
+                else
+                {
+                    retval = ContentGuid.Equals(ea.Content.ContentGuid);
+                }
             }
 
             return new KpiConversionResult() { KpiId = Id, HasConverted = retval };

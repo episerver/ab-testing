@@ -1,4 +1,4 @@
-﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-add-bordercontainer" class="sleek epi-form-container epi-grid-form dijitContainer">
+﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-add-bordercontainer" class="epi-form-container epi-grid-form dijitContainer">
     <!-- Button Bar, Breadcrumb/Start Button and Cancel Button-->
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false" class="epi-localToolbar">
         <div class="epi-toolbarGroupContainer">
@@ -10,8 +10,8 @@
                      data-dojo-props="showCurrentNode: false">
                 </div>
                 <div class="epi-breadCrumbs-title-wrapper">
-                    <div data-dojo-attach-point="iconNode" class="epi-breadCrumbsCurrentItem-icon epi-iconObjectPage"></div>
-                    <h1 data-dojo-attach-point="contentNameNode" class="epi-breadCrumbsCurrentItem"></h1>
+                    <div data-dojo-attach-point="iconNode" class="dijitInline dijitIcon epi-breadCrumbsCurrentItem-icon epi-iconObjectPage"></div>
+                    <h1 data-dojo-attach-point="contentNameNode" class="epi-breadCrumbsContentItem dojoxEllipsis"></h1>
                 </div>
             </div>
             <!-- Empty toolbar section -->
@@ -54,7 +54,7 @@
                     ${resources.addtestview.control}
                 </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versiona"><canvas id="publishThumbnail" class="abThumbnailCanvas" /></div>
+                    <div class="versiona"><canvas id="publishThumbnail" class="epi-abtest-thumbnail" /></div>
                     <p class="versionData">
                         <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
@@ -68,7 +68,7 @@
                     ${resources.addtestview.challenger}
                 </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versionb"><canvas id="draftThumbnail" class="abThumbnailCanvas" /></div>
+                    <div class="versionb"><canvas id="draftThumbnail" class="epi-abtest-thumbnail" /></div>
                     <p class="versionData">
                         <span class="draftIcon">${resources.addtestview.draft_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="savedBy"></span>,
@@ -97,7 +97,7 @@
                         </h4>
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
-                              class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                              class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
                         </span>
                         <span id="kpiErrorText" class="errorText">
                         </span>
@@ -145,7 +145,7 @@
                                  data-dojo-attach-point="durationText"
                                  data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
                             </div><label>${resources.addtestview.days_text}</label>
-                            <span id="durationErrorIcon" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                            <span id="durationErrorIcon" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
                             <span id="durationErrorText" class="errorText"></span>
                         </p>
                     </div>
@@ -173,7 +173,7 @@
                         </div>
                         <div class="formsRow" id="dateSelector" data-dojo-attach-point="scheduleDiv">
                             <div>
-                                <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                                <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
                                 <span id="datePickerErrorText" class="epi-ab-errorText"></span>
                             </div>
                             <div id="StartDateTimeSelector" data-dojo-attach-point="startDatePicker"

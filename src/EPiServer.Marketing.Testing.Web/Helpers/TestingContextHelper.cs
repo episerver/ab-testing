@@ -148,6 +148,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
+            model.LatestVersionContentLink = Content.ContentLink.ToString();
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
