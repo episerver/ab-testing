@@ -18,11 +18,10 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
- "xstyle/css!marketing-testing/css/GridForm.css",
- "xstyle/css!marketing-testing/css/dijit.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
- "dijit/form/Button"
+ "dijit/form/Button",
+ "dijit/ProgressBar"
 
 ], function (
     declare,
@@ -97,7 +96,7 @@
             var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             store.remove(this.context.data.test.originalItemId);
             me.contextParameters = {
-                uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0]
+                uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink
             };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -105,7 +104,7 @@
         _onCancelClick: function () {
             var me = this;
             me.contextParameters = {
-                uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0]
+                uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink
             };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -128,6 +127,7 @@
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
+            textHelper.renderDurationProgress(durationProgressBar);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
@@ -139,13 +139,18 @@
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            textHelper.renderConversion(this.contentLinkAnchor);
-
+            this.renderKpiUi();
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
             });
             this.renderStatusIndicatorStyles();
+        },
+
+        renderKpiUi: function () {
+            if (this.kpiMarkup) {
+                this.kpiMarkup.innerHTML = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+            }
         },
 
         _displayOptionsButton: function (show) {
@@ -174,18 +179,24 @@
             else { me.statusIndicatorClass = "winningContent"; }
 
             if (textHelper.publishedPercent > textHelper.draftPercent) {
+                this.controlStatusIcon.title = resources.detailsview.content_winning_tooltip;
+                this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
             }
             else if (textHelper.publishedPercent < textHelper.draftPercent) {
+                this.controlStatusIcon.title = "";
+                this.challengerStatusIcon.title = resources.detailsview.content_winning_tooltip;
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
             }
             else {
+                this.controlStatusIcon.title = "";
+                this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");

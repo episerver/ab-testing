@@ -4,6 +4,9 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Messaging.Messages;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
@@ -57,7 +60,8 @@ namespace EPiServer.Marketing.Testing.Messaging
 
             registry.Register<UpdateViewsMessage>(_handler);
             registry.Register<UpdateConversionsMessage>(_handler);
-            
+            registry.Register<AddKeyResultMessage>(_handler);
+
             // Create the dispatcher, queue store, and the memory reciever
             var messageDispatcher = new FanOutMessageDispatcher(registry);
             _queueStore = new InMemoryQueueStore(AppDomain.CurrentDomain);
@@ -97,6 +101,19 @@ namespace EPiServer.Marketing.Testing.Messaging
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
             emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, VariantId=VariantId, ItemVersion = itemVersion } );
+        }
+
+        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        {
+            var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
+            emitterFactory.Emit(new AddKeyResultMessage()
+            {
+                TestId = testId,
+                VariantId = itemId,
+                ItemVersion = itemVersion,
+                Result = keyResult,
+                Type = type
+            });
         }
     }
 }

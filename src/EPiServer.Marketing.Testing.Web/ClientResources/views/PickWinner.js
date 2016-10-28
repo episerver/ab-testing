@@ -18,11 +18,10 @@
  "marketing-testing/scripts/abTestTextHelper",
   "marketing-testing/scripts/rasterizeHTML",
  "xstyle/css!marketing-testing/css/ABTesting.css",
- "xstyle/css!marketing-testing/css/GridForm.css",
- "xstyle/css!marketing-testing/css/dijit.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
- "dijit/form/Button"
+ "dijit/form/Button",
+  "dijit/ProgressBar"
 
 ], function (
     declare,
@@ -82,7 +81,7 @@
 
         _onCancelClick: function () {
             var me = this;
-            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split('_')[0] };
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
@@ -95,6 +94,7 @@
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
+            textHelper.renderDurationProgress(durationProgressBar);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
@@ -106,14 +106,21 @@
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            textHelper.renderConversion(this.contentLinkAnchor);
-            textHelper.renderSignificance(this.pickAWinnerMessage);
+            this.renderKpiUi();
+            this._renderSignificance();
 
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
+                me.renderStatusIndicatorStyles();
             });
-            this.renderStatusIndicatorStyles();
+            
+        },
+
+        renderKpiUi: function () {
+            if (this.kpiMarkup) {
+                this.kpiMarkup.innerHTML = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+            }
         },
 
         _onPublishedVersionClick: function () {
@@ -148,31 +155,62 @@
                 });
         },
 
+        _renderSignificance: function () {
+            var pickWinnerMessage = this.pickAWinnerMessage;
+            var pickWinnerWarningIcon = this.pickWinnerWarningIcon;
+            var currentIconClass = pickWinnerWarningIcon.className;
+            var iconClassDisplayed = currentIconClass.replace("dijitHidden", "dijitInline");
+            var iconClassHidden = currentIconClass.replace("dijitInline", "dijitHidden")
+
+            if (this.context.data.test.state < 2) {
+                pickWinnerMessage.innerHTML = resources.pickwinnerview.early_pick_winner_message;
+            } else if (this.context.data.test.state === 2) {
+                if (!this.context.data.test.isSignificant) {
+                    pickWinnerMessage.innerHTML = resources.pickwinnerview.result_is_not_significant;
+                    domClass.replace(pickWinnerWarningIcon, iconClassDisplayed);
+                } else {
+                    pickWinnerMessage.innerHTML = "";
+                    domClass.replace(pickWinnerWarningIcon, iconClassHidden);
+                }
+            }
+        },
+
         renderStatusIndicatorStyles: function () {
             var me = this;
-            me.baseWrapper = "cardWrapperShadowed";
             if (this.context.data.test.state < 2) {
                 me.statusIndicatorClass = "leadingContent";
             }
             else { me.statusIndicatorClass = "winningContent"; }
 
             if (textHelper.publishedPercent > textHelper.draftPercent) {
+                this.controlStatusIcon.title = resources.pickwinnerview.content_winning_tooltip;
+                this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+                domClass.replace(this.controlPickWinnerBtn, "epi-success abPickWinnerAction");
+                domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
+                query("#publishThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailpickwinner").addClass("epi-abtest-thumbnail--losing");
             }
             else if (textHelper.publishedPercent < textHelper.draftPercent) {
+                this.controlStatusIcon.title = "";
+                this.challengerStatusIcon.title = resources.pickwinnerview.content_winning_tooltip;
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
+                domClass.replace(this.controlPickWinnerBtn, "abPickWinnerAction");
+                domClass.replace(this.challengerPickWinnerBtn, "epi-success abPickWinnerAction");
+                query("#publishThumbnailpickwinner").addClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
             }
             else {
+                this.controlStatusIcon.title = "";
+                this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+                domClass.replace(this.controlPickWinnerBtn, "abPickWinnerAction");
+                domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
+                query("#publishThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
             }
         },
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {

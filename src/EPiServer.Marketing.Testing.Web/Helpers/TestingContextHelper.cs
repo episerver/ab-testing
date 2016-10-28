@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using EPiServer.Core;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -60,15 +59,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// * Specific to loading regular content
         /// </summary>
         /// <returns></returns>
-        public bool SwapDisabled(ContentEventArgs e)
+        public bool SwapDisabled(EventArgs e)
         {
             //currently, our only restriction is user being logged into a system folder (e.g edit).
             //Other conditions have been brought up such as permissions, ip restrictions etc
             //which can be evaluated together here or individually.
-            return (e.Content == null ||
+            ContentEventArgs ea = e as ContentEventArgs;
+            return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
                     HttpContext.Current == null ||
                     HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
-                    IsInSystemFolder() );
+                    IsInSystemFolder());
         }
 
         /// <summary>
@@ -148,6 +148,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
+            model.LatestVersionContentLink = Content.ContentLink.ToString();
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
@@ -167,18 +168,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysRemaining = "0";
             }
 
-            //retrieve conversion content from kpis
-            //convert conversion content link to anchor link
-            var kpi = testData.KpiInstances[0] as ContentComparatorKPI;
-            if (kpi != null)
-            {
-                var conversionContent = repo.Get<IContent>(kpi.ContentGuid);
-
-                model.ConversionLink = uiHelper.getEpiUrlFromLink(conversionContent.ContentLink);
-                model.ConversionContentName = conversionContent.Name;
-            }
-
-            // Calculate total participation count
+           // Calculate total participation count
             foreach (var variant in testData.Variants)
             {
                 model.TotalParticipantCount += variant.Views;
@@ -218,11 +208,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //set published and draft version info
             model.PublishedVersionPublishedBy = string.IsNullOrEmpty(publishedVersionData.StatusChangedBy) ? publishedVersionData.SavedBy : publishedVersionData.StatusChangedBy;
-            model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+            model.PublishedVersionPublishedDate = publishedVersionData.Saved.ToString("o").ToString(CultureInfo.CurrentCulture); // In the view details.js, the function datetime.toUserFriendlyString() expects the input date to be in round - trip date / time pattern "o" (example: "2016-10-12T05:37:24Z") to convert it correctly for display purpose. Format prior to conversion was "10/12/2016 5:33:29 AM".
+
             model.PublishedVersionContentLink = publishedVersionData.ContentLink.ToString();
 
             model.DraftVersionChangedBy = string.IsNullOrEmpty(draftVersionData.StatusChangedBy) ? draftVersionData.SavedBy : draftVersionData.StatusChangedBy;
-            model.DraftVersionChangedDate = draftVersionData.Saved.ToString(CultureInfo.CurrentCulture);
+            model.DraftVersionChangedDate = draftVersionData.Saved.ToString("o").ToString(CultureInfo.CurrentCulture); // In the view details.js, the function datetime.toUserFriendlyString() expects the input date to be in round - trip date / time pattern "o" (example: "2016-10-12T05:37:24Z") to convert it correctly for display purpose. Format prior to conversion was "10/12/2016 5:33:29 AM".
 
             //Set previewUrl's from version data
             var currentCulture = ContentLanguage.PreferredCulture;
