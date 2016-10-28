@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Runtime.Serialization;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
@@ -114,7 +113,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-        /// <summary>
+         /// <summary>
         /// Given the specified Namespace.filename key we will load the string from the file found in this assembly. If this fails 
         /// its probably because the key is wrong or the resources is not in the assembly. See 
         /// </summary>
@@ -126,7 +125,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             bool retval = false;
             try
             {
-                var assembly = Assembly.GetExecutingAssembly();
+                var assembly = this.GetType().Assembly;
                 var text = new StreamReader( assembly.GetManifestResourceStream(key) );
                 value = text.ReadToEnd();
                 retval = true;
@@ -169,5 +168,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         {
             throw new NotImplementedException();
         }
+
+        public virtual event EventHandler EvaluateProxyEvent;
     }
 }

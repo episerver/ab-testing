@@ -329,9 +329,9 @@ namespace EPiServer.Marketing.Testing
         /// <param name="kpis"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e)
+        public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
         {
-            return kpis.Select(kpi => kpi.Evaluate(this, e)).ToList();
+            return kpis.Select(kpi => kpi.Evaluate(sender, e)).ToList();
         }
 
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false)
