@@ -432,7 +432,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                 // if kpi object loads content we dont want to get triggered.
                 HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
-                var kpiResults = _testManager.EvaluateKPIs(kpis, e);
+                var kpiResults = _testManager.EvaluateKPIs(kpis, sender, e);
                 HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
                 var conversionResults = kpiResults.OfType<KpiConversionResult>();
