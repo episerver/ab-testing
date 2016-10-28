@@ -78,7 +78,7 @@
 
         _onCloseClick: function () {
             var me = this;
-            me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.publishedVersionContentLink.split("_")[0] };
+            me.contextParameters = { uri: "epi.cms.contentdata:///" + me.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
@@ -107,6 +107,7 @@
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
+                me.renderStatusIndicatorStyles();
             });
 
         },
@@ -145,15 +146,21 @@
                 domClass.replace(this.challengerStatusIcon, "winningContent");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerPublishedBody");
+                query("#publishThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
             } else {
-                this.controlHeader.innerText = resources.archiveview.content_control_header_picked;
-                this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
+                this.controlVersionTestResult.innerText = resources.archiveview.winning_version_label;
+                this.challengerVersionTestResult.innerText = resources.archiveview.losing_version_label;
                 this.controlStatusIcon.title = resources.archiveview.content_selected;
                 this.challengerStatusIcon.title = ""
+                domClass.replace(this.challengerVersionTestResult, "abLoserStatusText");
+                domClass.replace(this.controlVersionTestResult, "abWinnerStatusText");
                 domClass.replace(this.controlStatusIcon, "winningContent");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
                 domClass.replace(this.controlWrapper, "cardWrapper 2column controlPublishedBody");
                 domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
+                query("#publishThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
             }
         },
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
