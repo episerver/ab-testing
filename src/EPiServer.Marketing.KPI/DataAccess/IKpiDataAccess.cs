@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.DataAccess
@@ -13,5 +14,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
         Guid Save(IDalKpi kpiObject);
 
         void Delete(Guid kpiObjectId);
+
+        long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey);
     }
 }

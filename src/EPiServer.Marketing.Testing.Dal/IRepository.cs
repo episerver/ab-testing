@@ -76,6 +76,8 @@ namespace EPiServer.Marketing.Testing.Dal
         /// <returns>IList of all the entity object of the given type in the repository</returns>
         IList<T> GetAllList<T>() where T : class;
 
+        string GetDatabaseVersion(string contextKey);
+
         /// <summary>
         /// Add a detached object to the repository
         /// </summary>

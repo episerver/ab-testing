@@ -112,7 +112,7 @@ define([
                 start: this.start,
                 confidencelevel: this.confidencelevel
             }).then(function () {
-                var contextParameters = { uri: "epi.cms.contentdata:///" + published[0] };
+                var contextParameters = { uri: "epi.cms.contentdata:///" + me.currentVersion.contentLink };
                 me.topic.publish("/epi/shell/context/request", contextParameters);
             }).otherwise(function () {
                 console.log("Error occured while creating Marketing Test - Unable to create test");

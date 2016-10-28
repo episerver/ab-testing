@@ -18,6 +18,9 @@ namespace EPiServer.Marketing.KPI.Test.Common
             return new ContentComparatorKPI(LandingPageGuid);
         }
 
+/** Removed for now because code is different in mar-455 and tests 
+ * will be merged then.
+ * 
         [Fact]
         public void Call_Evaluate_ReturnsTrue()
         {
@@ -36,7 +39,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var result = kpi.Evaluate(this, new ContentEventArgs(new ContentReference()) { Content = _content.Object }) as KpiConversionResult;
             Assert.False(result.HasConverted, "Evaluate should have returned false");
         }
-
+*/
         [Fact]
         public void VerifyGet()
         {

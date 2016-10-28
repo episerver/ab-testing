@@ -26,6 +26,7 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public string PublishPreviewUrl { get; set; }
         public string DraftPreviewUrl { get; set; }
         public bool UserHasPublishRights { get; set; }
+        public string LatestVersionContentLink { get; set; }
         
     }
 }

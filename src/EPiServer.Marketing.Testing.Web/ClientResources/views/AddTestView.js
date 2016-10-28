@@ -14,16 +14,14 @@
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
+        "dojo/query",
         "dijit/registry",
         'epi/dependency',
         "marketing-testing/scripts/rasterizeHTML",
        "dojo/dom-form",
        "dojo/json",
        "dojox/layout/ContentPane",
-       "epi-cms/widget/ContentSelector",
-       'xstyle/css!marketing-testing/css/ABTesting.css',
-        'xstyle/css!marketing-testing/css/GridForm.css',
-        'xstyle/css!marketing-testing/css/dijit.css',
+        'xstyle/css!marketing-testing/css/ABTesting.css',
         'dijit/form/Button',
         'dijit/form/NumberSpinner',
         'dijit/form/Textarea',
@@ -32,9 +30,8 @@
         'dijit/form/TextBox',
         'epi-cms/widget/Breadcrumb',
         "dijit/layout/AccordionContainer",
-       "dijit/layout/ContentPane",
-       "dijit/form/Select"
-
+        "dijit/layout/ContentPane",
+        "dijit/form/Select"
 ],
     function (
     declare,
@@ -52,6 +49,7 @@
     html,
     dom,
     domClass,
+    query,
     registry,
     dependency,
    rasterizehtml,
@@ -110,7 +108,6 @@
             postCreate: function () {
                 this.reset();
                 this.inherited(arguments);
-
             },
 
             startup: function () {
@@ -135,15 +132,19 @@
                 var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
+                    var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1; // Check if the content is a product page
+
                     //Hack to build published versions preview link below
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                       previewUrlEnd = publishContentVersion[1] + '/?epieditmode=False',
+                       previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                         previewUrlStart = this.contentData.previewUrl.split('_'),
                         previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versiona').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -162,7 +163,9 @@
 
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 });
+                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
+                        query('.versionb').addClass('hide-bg');
+                    });
                 }
             },
 
@@ -175,31 +178,44 @@
             },
 
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                for (var i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.value === viewConfidenceLevel.toString()) {
-                        rb.setAttribute("selected", "selected");
-                    } else {
-                        rb.removeAttribute("selected");
+                var rbs = [
+                    { val: 99, label: "99%" },
+                    { val: 98, label: "98%" },
+                    { val: 95, label: "95%" },
+                    { val: 90, label: "90%" }
+                ];
+                var confidenceSelectWidget = registry.byId("confidence"), selectOption, defaultOption;
+                dijit.byId('confidence').removeOption(dijit.byId('confidence').getOptions());
+                if (confidenceSelectWidget) {
+                    for (var i = 0; i < rbs.length; i++) {
+                        if (viewConfidenceLevel) {
+                            if (rbs[i].val === viewConfidenceLevel) {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label + " (Default)" };
+                                confidenceSelectWidget.addOption(selectOption);
+                                defaultOption = rbs[i].val;
+                            } else {
+                                selectOption = { value: rbs[i].val, label: rbs[i].label };
+                                confidenceSelectWidget.addOption(selectOption);
+                            }
+                        }
+                        confidenceSelectWidget.setValue(defaultOption);
                     }
+                }
+            },
+
+            _clearConversionErrors: function () {
+                var errorText = dom.byId("pickerErrorText");
+
+                if (!errorText) {
+                    return;
                 }
             },
 
             // DATA GETTERS
             _getConfidenceLevel: function () {
-                var rbs = ["confidence_99", "confidence_98", "confidence_95", "confidence_90"];
-                for (i = 0; i < rbs.length; i++) {
-                    var rb = dom.byId(rbs[i]);
-                    if (!rb) {
-                        return;
-                    } else if (rb.checked) {
-                        this.model.confidencelevel = rb.value;
-                        return;
-                    }
-                }
+                var confidenceSelectWidget = dijit.byId("confidence");
+                return confidenceSelectWidget.value;
+
             },
 
             // Transforms custom KPI form data into json for processing
@@ -298,7 +314,7 @@
 
             //Validates the supplied string as a positive integer
             _isUnsignedNumeric: function (string) {
-                if (string.match(/^[0-9]+$/) == null) {
+                if (string.match(/^[0-9]+$/) === null) {
                     return false;
                 }
                 return true;
@@ -352,10 +368,7 @@
                     this.scheduleDiv.style.visibility = "hidden";
                 }
 
-                if (dom.byId("confidence")) {
-                    dom.byId("confidence").value = "95";
-                }
-
+                this._setViewConfidenceLevelAttr();
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
@@ -464,7 +477,7 @@
                 this._clearCustomKpiMarkup();
                 this._setKpiSelectList(this.kpiModel.availableKpi);
                 me.contextParameters = {
-                    uri: "epi.cms.contentdata:///" + this.model.publishedVersion.contentLink.split('_')[0]
+                    uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
                 topic.publish("/epi/shell/context/request", me.contextParameters);
             },

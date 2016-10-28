@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Manager
@@ -40,6 +41,8 @@ namespace EPiServer.Marketing.KPI.Manager
         /// </summary>
         /// <returns></returns>
         IEnumerable<Type> GetKpiTypes();
+
+        long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false );
 
     }
 }

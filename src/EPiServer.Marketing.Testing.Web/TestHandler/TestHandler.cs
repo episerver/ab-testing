@@ -12,6 +12,8 @@ using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using System.Web;
+using EPiServer.Marketing.KPI.Common.Attributes;
+using System.Reflection;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
@@ -373,13 +375,34 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         private void EvaluateKpis(object sender, EventArgs e)
         {
-            // We only want to evaluate Kpis one time per request.
+            // We only want to evaluate Kpis one time per request. 
+            // If the flag is set we already evaluated, bail out
             if (HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
             {
                 return;
             }
 
-            HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+            // Set the flag to stop evaluating ONLY if the current page link is the same link in the
+            // content event args. This allows us to evaluate all pages, blocks, and sub pages
+            // one time per request when we get to the content being evaluated
+            // MAR -565 (not converting on sub pages)
+            var cea = e as ContentEventArgs; 
+            if (cea != null) 
+            {
+                try
+                {
+                    var pageHelper = _serviceLocator.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+                    if (pageHelper.PageLink.ID == cea.ContentLink.ID)
+                    {
+                        HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+                    }
+                }
+                catch (Exception err)
+                {
+                    // this should never happen when in view mode and we should never be here in edit mode.
+                    _logger.Warning("EvaluateKpis : pagehelper error - evaluating all kpis", err);
+                }
+            }
 
             var cookielist = _testDataCookieHelper.GetTestDataFromCookies();
             foreach (var tdcookie in cookielist)
@@ -407,7 +430,10 @@ namespace EPiServer.Marketing.Testing.Web
                     }
                 }
 
-                var kpiResults = _testManager.EvaluateKPIs(kpis, sender, e);
+                // if kpi object loads content we dont want to get triggered.
+                HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
+                var kpiResults = _testManager.EvaluateKPIs(kpis, e);
+                HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
                 var conversionResults = kpiResults.OfType<KpiConversionResult>();
                 ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);
