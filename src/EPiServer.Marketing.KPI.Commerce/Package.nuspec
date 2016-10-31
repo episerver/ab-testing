@@ -13,6 +13,9 @@
         </releaseNotes>
         <tags>EPiServerModulePackage EPiServer KPI</tags>
         <dependencies>
+          <dependency id="EPiServer.Marketing.KPI" version="[1.0.3-beta,2)" />
+          <dependency id="EPiServer.CMS.Core" version="[9.12.3,11)" />
+          <dependency id="EPiServer.Commerce" version="[9.24.1,11)" />
         </dependencies>
     </metadata>
 </package>
