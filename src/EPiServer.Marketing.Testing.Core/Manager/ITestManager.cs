@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing
         /// <param name="kpis"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, EventArgs e);
+        IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
 
         long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false);
 

@@ -97,17 +97,17 @@
                         </h4>
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
-                              class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                              class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
                         </span>
                         <span id="kpiErrorText" class="errorText">
                         </span>
                         <!-- KPI UI Element-->
                         <div>
-                            <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onSelectChange"></select>
+                            <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onGoalSelectChange"></select>
                         </div>
                         <div>
-                            <input type="text" id="kpiString" name="kpiTypeString" hidden />
                             <form id="kpiForm">
+                                <input type="text" id="kpiType" name="kpiType" hidden />
                                 <div id="kpiui">
                                     <!-- KPI Supplied UI will be injected here -->
                                 </div>

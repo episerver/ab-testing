@@ -24,6 +24,7 @@ if (!(Test-Path $artifactsPath))
 & "$cwd\generatepackagesformessaging"
 & "$cwd\generatepackagesfortestpages"
 & "$cwd\generatepackagesforkpi"
+& "$cwd\generatepackagesforkpicommerce"
 
 
 # Creating daily site package.

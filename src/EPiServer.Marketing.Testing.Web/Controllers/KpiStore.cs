@@ -44,16 +44,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public ActionResult put(string id,KpiStoreArgs entity)
+        public ActionResult put(string id,string entity)
         {
             ActionResult result;
-            if (entity.KpiType != "undefined")
-            {
-                IKpi kpiInstance = Activator.CreateInstance(Type.GetType(entity.KpiType)) as IKpi;
-                var javascriptSerializer = new JavaScriptSerializer();
-                Dictionary<string, string> values =
-                    javascriptSerializer.Deserialize<Dictionary<string, string>>(entity.KpiJsonFormData);
-
+            var javascriptSerializer = new JavaScriptSerializer();
+            Dictionary<string, string> values =
+                javascriptSerializer.Deserialize<Dictionary<string, string>>(entity);
+            if (!string.IsNullOrEmpty(entity) && values["kpiType"] != "")
+            {              
+                IKpi kpiInstance = Activator.CreateInstance(Type.GetType(values["kpiType"])) as IKpi;
+                
                 try
                 {
                     kpiInstance.Validate(values);
