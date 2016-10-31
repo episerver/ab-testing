@@ -35,7 +35,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             _servicelocator = servicelocator;
         }
 
-        public override bool Validate(Dictionary<string, string> responseData)
+        public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionProduct"] == "")
             {
@@ -57,8 +57,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             //Get the product using CMS API
             var content = contentLoader.Get<CatalogContentBase>(productLink);
             ContentGuid = content.ContentGuid;
-
-            return true;
         }
 
         /// <summary>

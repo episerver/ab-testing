@@ -83,7 +83,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
-        public override bool Validate(Dictionary<string, string> responseData)
+        public override void Validate(Dictionary<string, string> responseData)
         {
             var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
 
@@ -95,9 +95,9 @@ namespace EPiServer.Marketing.KPI.Common
             var conversionContent = contentRepo.Get<IContent>(new ContentReference(responseData["ConversionPage"]));
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
             if (IsContentPublished(conversionContent) && !IsCurrentContent(conversionContent, currentContent))
-            { ContentGuid = conversionContent.ContentGuid; }
-
-            return true;
+            {
+                ContentGuid = conversionContent.ContentGuid;
+            }
         }
 
         public override IKpiResult Evaluate(object sender, EventArgs e)
