@@ -446,7 +446,7 @@
                     this.model.startDate = utcNow;
                 }
 
-                this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.confidencelevel = this._getConfidenceLevel();
                 this.model.testTitle = me.pageName.textContent;
 
                 this.kpiFormData = this._getKpiFormData();
