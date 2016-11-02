@@ -1,7 +1,7 @@
 ﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-add-bordercontainer" class="epi-form-container epi-grid-form dijitContainer">
     <!-- Button Bar, Breadcrumb/Start Button and Cancel Button-->
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false" class="epi-localToolbar">
-        <div class="epi-toolbarGroupContainer">
+        <div class="epi-toolbarGroupContainer" id="toolbarGroup">
             <!-- Breadcrumb Widget -->
             <div id="leadingToolBar" class="epi-toolbarLeading epi-toolbarGroup">
                 <div id="breadcrumb"
@@ -37,7 +37,7 @@
     </div>
     <!-- Main Content -->
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:false" class="epi-abtest-body-container">
-        <div class="epi-abtest-body">
+        <div class="epi-abtest-body" id="abTestBody">
             <!-- Header / Test Title & Description-->
             <div class="cardWrapper">
                 <div class="cardBody">
