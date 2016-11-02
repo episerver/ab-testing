@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AddToCartConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AddToCartReadOnlyMarkup.html",
-        text = "Product", description = "Choose a product for conversion.")]
+        text = "Add To Cart", description = "Choose a product for conversion.")]
     public class AddToCartKpi : Kpi
     {
         IServiceLocator _servicelocator;
