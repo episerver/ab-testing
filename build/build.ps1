@@ -3,7 +3,8 @@ param ([string]$configuration = "Release",
 	[string]$jsreporter = "",
     [string]$pack = "false",
 	[string]$packageVersion = "",
-	[string]$signAssemblies = "false"
+	[string]$signAssemblies = "false",
+	[string]$signPath = ""
 	)
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
@@ -81,7 +82,7 @@ if([System.Convert]::ToBoolean($signAssemblies) -eq $true) {
 	{
 	   Write-Host ("Signing " + $assembly.FullName)
 	   $LASTEXITCODE = 0
-	   &"%WindowsSDKv8.0A_Path%\bin\NETFX 4.0 Tools\sn.exe " -q -Rc  $assembly.FullName "EPiServerProduct"
+	   &$signPath + "\bin\NETFX 4.0 Tools\sn.exe" -q -Rc  $assembly.FullName "EPiServerProduct"
 	   if ($LASTEXITCODE -ne 0)
 	   {
 		   exit $LASTEXITCODE
