@@ -144,8 +144,8 @@
                 domClass.replace(this.controlVersionTestResult, "abLoserStatusText");
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, "winningContent");
-                domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
-                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerPublishedBody");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlTrailingBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerPublishedBody");
                 query("#publishThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
                 query("#draftThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
             } else {
@@ -157,8 +157,8 @@
                 domClass.replace(this.controlVersionTestResult, "abWinnerStatusText");
                 domClass.replace(this.controlStatusIcon, "winningContent");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, "cardWrapper 2column controlPublishedBody");
-                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlPublishedBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerDefaultBody");
                 query("#publishThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
                 query("#draftThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
             }

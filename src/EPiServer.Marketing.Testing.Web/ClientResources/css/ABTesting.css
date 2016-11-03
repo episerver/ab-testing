@@ -412,3 +412,14 @@
     font-weight: bold;
 }
 
+@media screen and (max-width: 900px) {
+   .epi-abtest-preview-left-side { 
+    float: none;
+    margin-right:0;
+    width:auto; 
+  }
+   .epi-abtest-preview-right-side{
+       float:left;
+       width:auto;
+   }
+}
