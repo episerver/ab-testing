@@ -82,7 +82,7 @@ if([System.Convert]::ToBoolean($signAssemblies) -eq $true) {
 	{
 	   Write-Host ("Signing " + $assembly.FullName)
 	   $LASTEXITCODE = 0
-	   &"$signPath" + "\bin\NETFX 4.0 Tools\sn.exe" -q -Rc  $assembly.FullName "EPiServerProduct"
+	   &"$signPath\bin\NETFX 4.0 Tools\sn.exe" -q -Rc  $assembly.FullName "EPiServerProduct"
 	   if ($LASTEXITCODE -ne 0)
 	   {
 		   exit $LASTEXITCODE
