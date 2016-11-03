@@ -2,7 +2,9 @@ param ([string]$configuration = "Release",
     [string]$runTests = "false",
 	[string]$jsreporter = "",
     [string]$pack = "false",
-	[string]$packageVersion = "")
+	[string]$packageVersion = "",
+	[string]$signAssemblies = "false"
+	)
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
 $cwd = Split-Path -parent $PSCommandPath
@@ -58,6 +60,33 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 # Run tests
 if([System.Convert]::ToBoolean($runTests) -eq $true) {
     &"$cwd\test.ps1" $configuration $jsreporter
+}
+
+
+# Signs assemblies
+if([System.Convert]::ToBoolean($signAssemblies) -eq $true) {
+	$rootDir = Get-Location
+	$srcProjects = (Get-ChildItem -Directory -Path (Join-Path ($rootDir) ".\src") -Exclude Database)
+	$signError = $false
+	$assemblies = @()
+
+	foreach($item in $srcProjects)
+	{
+		$assemblies = $assemblies + (Get-ChildItem -Recurse -Path (Join-Path ($rootDir) ".\artifacts") -File -Filter ($item.Name + ".dll") -Exclude *Sources.dll)
+		$assemblies = $assemblies + (Get-ChildItem -Recurse -Path (Join-Path ($rootDir) ".\src\$($item.Name)") -File -Filter ($item.Name + ".dll") -Exclude *Sources.dll)
+		$assemblies = $assemblies + (Get-ChildItem -Recurse -Path (Join-Path ($rootDir) ".\test\$($item.Name)") -File -Filter ($item.Name + ".dll") -Exclude *Sources.dll)
+	}
+
+	foreach ($assembly in $assemblies)
+	{
+	   Write-Host ("Signing " + $assembly.FullName)
+	   $LASTEXITCODE = 0
+	   &"%WindowsSDKv8.0A_Path%\bin\NETFX 4.0 Tools\sn.exe " -q -Rc  $assembly.FullName "EPiServerProduct"
+	   if ($LASTEXITCODE -ne 0)
+	   {
+		   exit $LASTEXITCODE
+	   }
+	}
 }
 
 # Create packages
