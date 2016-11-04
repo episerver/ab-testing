@@ -184,7 +184,7 @@ namespace EPiServer.Marketing.Testing.Web
                             var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
                                 content.ContentLink.WorkID;
 
-                            if (!hasData)
+                            if (!hasData && DbReadWrite() )
                             {
                                 // Make sure the cookie has data in it. There are cases where you can load
                                 // content directly from a url after opening a browser and if the cookie is not set
@@ -248,7 +248,7 @@ namespace EPiServer.Marketing.Testing.Web
                         _testManager.GetVariantContent(e.Content.ContentGuid);
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
-                        if (!hasData)
+                        if (!hasData && DbReadWrite() )
                         {
                             // Make sure the cookie has data in it.
                             SetTestData(e.Content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
@@ -323,7 +323,8 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId, 
+                        contentVersion,
                         CountType.View);
                     cookie.Viewed = true;
 
@@ -373,7 +374,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Processes the Kpis, determining conversions and handling incrementing conversion counts.
         /// </summary>
         /// <param name="e"></param>
-        private void EvaluateKpis(EventArgs e)
+        private void EvaluateKpis(object sender, EventArgs e)
         {
             // We only want to evaluate Kpis one time per request. 
             // If the flag is set we already evaluated, bail out
@@ -432,7 +433,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                 // if kpi object loads content we dont want to get triggered.
                 HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
-                var kpiResults = _testManager.EvaluateKPIs(kpis, e);
+                var kpiResults = _testManager.EvaluateKPIs(kpis, sender, e);
                 HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
                 var conversionResults = kpiResults.OfType<KpiConversionResult>();
@@ -549,7 +550,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    EvaluateKpis(e);
+                    EvaluateKpis(sender, e);
                 }
                 catch (Exception err)
                 {
@@ -609,58 +610,16 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void AddProxyEventHandler(IKpi kpi)
         {
-            // Get eventspec of the KPI instance.
-            EventSpecificationAttribute att =
-                (EventSpecificationAttribute)Attribute.GetCustomAttribute(kpi.GetType(),
-                    typeof(EventSpecificationAttribute));
-            if (att != null)
+            // Add the proxyeventhandler only once, if its in our reference counter, just increment
+            // the reference.
+            if (!_ReferenceCounter.hasReference(kpi.GetType()))
             {
-                // Add the proxyeventhandler only once, if its in our reference counter, just increment
-                // the reference.
-                if (!_ReferenceCounter.hasReference(att.key))
-                {
-                    // try to load the service so we can add the proxy handler
-                    Object service;
-                    if (_serviceLocator.TryGetExistingInstance(att.service, out service))
-                    {
-                        try
-                        {
-                            // get the event method infor
-                            var serviceEventInfo = att.service.GetEvent(att.methodname);
-                            // get our proxyeventhandler method info
-                            var proxyEventHandlerMethod = this.GetType().GetMethod("ProxyEventHandler");
-                            // create our delegate that will be invoked when the event is fired
-                            var delegateToInvoke = Delegate.CreateDelegate(
-                                    serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
-
-                            // Call the addHandler method for this event
-                            MethodInfo addHandler = serviceEventInfo.GetAddMethod();
-                            Object[] addHandlerArgs = { delegateToInvoke };
-                            addHandler.Invoke(service, addHandlerArgs);
-
-                            _ReferenceCounter.AddReference(att.key);
-                        }
-                        catch (Exception e)
-                        {   // there is alot that can go wrong in the above code which is why we will
-                            // catch the exception and log the stack trace. Hopefully this is enough info
-                            // to figure out what is going on.
-                            _logger.Error("Unable to add AB Testing ProxyEventHandler.", e);
-                        }
-                    }
-                    else
-                    {
-                        _logger.Error("Unable to add AB Testing ProxyEventHandler.");
-                        _logger.Error("     Service not found : " + att.service.FullName);
-                    }
-                }
-                else
-                {
-                    _ReferenceCounter.AddReference(att.key);
-                }
+                kpi.EvaluateProxyEvent += ProxyEventHandler;
+                _ReferenceCounter.AddReference(kpi.GetType());
             }
             else
             {
-                _logger.Warning("kpi type " + kpi.GetType() + "doesnt support EventSpecificationAttribute and will not be evaluated.");
+                _ReferenceCounter.AddReference(kpi.GetType());
             }
         }
 
@@ -670,49 +629,12 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void RemoveProxyEventHandler(IKpi kpi)
         {
-            // Get eventspec of the KPI instance.
-            EventSpecificationAttribute att =
-                (EventSpecificationAttribute)Attribute.GetCustomAttribute(kpi.GetType(),
-                    typeof(EventSpecificationAttribute));
-            if (att != null)
+            _ReferenceCounter.RemoveReference(kpi.GetType());
+
+            // Remove the proxyeventhandler only once, when the last reference is removed.
+            if (!_ReferenceCounter.hasReference(kpi.GetType()))
             {
-                _ReferenceCounter.RemoveReference(att.key);
-
-                // Remove the proxyeventhandler only once, when the last reference is removed.
-                if (!_ReferenceCounter.hasReference(att.key))
-                {
-                    // try to load the service so we can add the proxy handler
-                    Object service;
-                    if (_serviceLocator.TryGetExistingInstance(att.service, out service))
-                    {
-                        try
-                        {
-                            // get the event method infor
-                            var serviceEventInfo = att.service.GetEvent(att.methodname);
-                            // get our proxyeventhandler method info
-                            var proxyEventHandlerMethod = this.GetType().GetMethod("ProxyEventHandler");
-                            // create our delegate that will be invoked when the event is fired
-                            var delegateToInvoke = Delegate.CreateDelegate(
-                                serviceEventInfo.EventHandlerType, this, proxyEventHandlerMethod);
-
-                            // Call the removeHandler method for this event
-                            MethodInfo removeHandler = serviceEventInfo.GetRemoveMethod();
-                            Object[] removeHandlerArgs = { delegateToInvoke };
-                            removeHandler.Invoke(service, removeHandlerArgs);
-                        }
-                        catch (Exception e)
-                        {   // there is alot that can go wrong in the above code which is why we will
-                            // catch the exception and log the stack trace. Hopefully this is enough info
-                            // to figure out what is going on.
-                            _logger.Error("Unable to add AB Testing ProxyEventHandler.", e);
-                        }
-                    }
-                    else
-                    {
-                        _logger.Error("Unable to add AB Testing ProxyEventHandler.");
-                        _logger.Error("     Service not found : " + att.service.FullName);
-                    }
-                }
+                kpi.EvaluateProxyEvent -= ProxyEventHandler;
             }
         }
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations.History;
 using System.Linq;
 using System.Transactions;
 using EPiServer.Marketing.KPI.Dal;
@@ -12,10 +13,16 @@ namespace EPiServer.Marketing.KPI.Test
     internal class KpiTestRepository : IRepository
     {
         public KpiTestContext TestContext { get; set; }
+        public HistoryContext HistoryContext { get; set; }
 
         public KpiTestRepository(KpiTestContext testContext)
         {
             TestContext = testContext;
+        }
+
+        public KpiTestRepository(HistoryContext testContext)
+        {
+            HistoryContext = testContext;
         }
 
         public void Dispose()
@@ -142,6 +149,11 @@ namespace EPiServer.Marketing.KPI.Test
         public void Delete<T>(T instance) where T : class
         {
             DatabaseContext.Set<T>().Remove(instance as T);
+        }
+
+        public string GetDatabaseVersion(string contextKey)
+        {
+            return HistoryContext.History.Where(r => r.ContextKey == contextKey).OrderByDescending(row => row.MigrationId).First().MigrationId;
         }
 
         /// <summary>

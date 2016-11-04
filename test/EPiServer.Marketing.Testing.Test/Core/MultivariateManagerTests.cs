@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.Manager.DataClass;
@@ -18,9 +20,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Core.Statistics;
 using System.Runtime.Caching;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
-using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
@@ -82,6 +82,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
             _dataAccessLayer.Setup(dal => dal.Start(It.IsAny<Guid>())).Returns(startTest);
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+            _dataAccessLayer.Setup(dal => dal.GetDatabaseVersion(It.IsAny<DbConnection>(), It.IsAny<string>(), It.IsAny<string>())).Returns(1);
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
@@ -487,7 +488,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Mock<IContent> content = new Mock<IContent>();
             IContent c = content.Object;
             c.ContentGuid = Guid.NewGuid();
-            var retList = testManager.EvaluateKPIs(kpis, new ContentEventArgs(new ContentReference()) { Content = c } );
+            var retList = testManager.EvaluateKPIs(kpis, this, new ContentEventArgs(new ContentReference()) { Content = c } );
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
             Assert.True(retList.Count() == 0, "EvaluateKPI method returned a list but it was not empty");
         }
@@ -505,7 +506,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Mock<IContent> content = new Mock<IContent>();
             IContent c = content.Object;
             c.ContentGuid = Guid.NewGuid();
-            var retList = testManager.EvaluateKPIs(kpis, new ContentEventArgs(new ContentReference()) { Content = c } );
+            var retList = testManager.EvaluateKPIs(kpis, this, new ContentEventArgs(new ContentReference()) { Content = c } );
             Assert.True(retList != null, "EvaluateKPI method returned a null list, shouldnt do that");
             Assert.True(retList.Count() == 1, "EvaluateKPI method returned a list that did not have one item in it");
         }
@@ -606,6 +607,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var pageData = testManager.GetVariantContent(testId);
 
             Assert.NotNull(pageData);
+        }
+
+        [Fact]
+        public void GetDatabaseVersion_Test()
+        {
+            var testManager = GetUnitUnderTest();
+
+            Assert.Equal(1, testManager.GetDatabaseVersion(new SqlConnection(), "", ""));
         }
     }
 

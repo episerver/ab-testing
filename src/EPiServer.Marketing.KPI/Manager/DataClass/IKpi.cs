@@ -48,8 +48,8 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
-        /// <returns></returns>
-        bool Validate(Dictionary<string,string> kpiData);
+        /// <param name="kpiData">dictionary of data used to validate and save an instance of a KPI</param>
+        void Validate(Dictionary<string,string> kpiData);
 
         /// <summary>
         /// Determines if a conversion has happened.
@@ -57,5 +57,11 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <param name="sender"></param>
         /// <param name="e">Event Argument</param>
         IKpiResult Evaluate(object sender, EventArgs e);
+
+        /// <summary>
+        /// The event to trigger the evaluate from. Return any event from the evironment that 
+        /// can be used to trigger the Evaluate method.
+        /// </summary>
+        event EventHandler EvaluateProxyEvent;
     }
 }

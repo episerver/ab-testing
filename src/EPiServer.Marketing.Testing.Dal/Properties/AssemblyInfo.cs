@@ -34,3 +34,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: InternalsVisibleTo("EPiServer.Marketing.Testing.Test")]
 [assembly: InternalsVisibleTo("EPiServer.Marketing.Testing.Core")]
+[assembly: InternalsVisibleTo("EPiServer.Marketing.Testing.Web")]

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<languages>
+  <language name="svenska" id="sv">
+    <commercekpi>
+      <addtocart>
+        <config_markup>
+          <conversion_label>Visitor adds product to cart</conversion_label>
+          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
+        </config_markup>
+        <readonly_markup>
+          <conversion_header>Add Product to Cart</conversion_header>
+          <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
+        </readonly_markup>
+      </addtocart>
+    </commercekpi>
+  </language>
+</languages>

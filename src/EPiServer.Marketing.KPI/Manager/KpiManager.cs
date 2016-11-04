@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.DataAccess;
+using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
@@ -16,12 +18,21 @@ namespace EPiServer.Marketing.KPI.Manager
     {
         private IKpiDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
+        public bool DatabaseNeedsConfiguring;
 
         [ExcludeFromCodeCoverage]
         public KpiManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _dataAccess = new KpiDataAccess();
+
+            try
+            {
+                _dataAccess = new KpiDataAccess();
+            }
+            catch (DatabaseDoesNotExistException)
+            {
+                DatabaseNeedsConfiguring = true;
+            }
         }
 
         internal KpiManager(IServiceLocator serviceLocator)
@@ -60,7 +71,23 @@ namespace EPiServer.Marketing.KPI.Manager
                     .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi) );
             return (types);
         }
-             
+
+        public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false)
+        {
+            if (DatabaseNeedsConfiguring)
+            {
+                DatabaseNeedsConfiguring = false;
+                return 0;
+            }
+
+            if (setupDataAccess)
+            {
+                _dataAccess = new KpiDataAccess();
+            }
+
+            return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
+        }
+
 
         /// <summary>
         /// Serialize the kpi to a Json string and save it in the properties field.

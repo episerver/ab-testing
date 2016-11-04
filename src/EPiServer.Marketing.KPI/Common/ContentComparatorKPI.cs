@@ -18,12 +18,13 @@ namespace EPiServer.Marketing.KPI.Common
     /// Common KPI class that can be used to compare IContent Guid values 
     /// 
     [DataContract]
-    [EventSpecification(service = typeof(IContentEvents), methodname = "LoadedContent")]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.html",
         text = "Landing Page", description = "Choose a page for conversion.")]
     public class ContentComparatorKPI : Kpi
     {
+        IServiceLocator _servicelocator;
+
         [DataMember]
         public Guid ContentGuid;
 
@@ -32,11 +33,17 @@ namespace EPiServer.Marketing.KPI.Common
 
         public ContentComparatorKPI()
         {
+            _servicelocator = ServiceLocator.Current;
         }
 
         public ContentComparatorKPI(Guid contentGuid)
         {
+            _servicelocator = ServiceLocator.Current;
             ContentGuid = contentGuid;
+        }
+        internal ContentComparatorKPI(IServiceLocator servicelocator)
+        {
+            _servicelocator = servicelocator;
         }
 
         [DataMember]
@@ -44,26 +51,9 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                string markup;
-
-                var conversionLabel =
-                    LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
-
-                if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
-                {
-                    var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
-                    string value;
-                    if (!TryGetResourceString(attr.configmarkup, out value))
-                    {
-                        markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
-                    }
-                    markup = string.Format(value, conversionLabel);
-                }
-                else
-                {
-                    markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
-                }
-                return markup;
+                var conversionLabel = LocalizationService.Current
+                    .GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
+                return string.Format(base.UiMarkup, conversionLabel);
             }
         }
 
@@ -72,43 +62,28 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                string markup = string.Empty;
+                string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                   .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
-                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
                 if (ContentGuid != Guid.Empty)
                 {
-                    if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
-                    {
-                        var attr =
-                            (UIMarkupAttribute)Attribute.GetCustomAttribute(GetType(), typeof(UIMarkupAttribute));
-                        string value;
-                        if (!TryGetResourceString(attr.readonlymarkup, out value))
-                        {
-                            markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") +
-                                     attr.readonlymarkup + ":" + value;
-                        }
+                    var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                        .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
+                    var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                        .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
 
-                        var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
-                        var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
-                        var conversionContent = contentRepository.Get<IContent>(ContentGuid);
-                        var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
-
-                        markup = string.Format(value, conversionHeaderText, conversionDescription, conversionLink,
-                            conversionContent.Name);
-                    }
-                    else
-                    {
-                        markup = LocalizationService.Current.GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
-                    }
+                    var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
+                    var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
+                    var conversionContent = contentRepository.Get<IContent>(ContentGuid);
+                    var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
+                    markup = string.Format(markup, conversionHeaderText, conversionDescription, conversionLink,
+                        conversionContent.Name);
                 }
+
                 return markup;
             }
         }
 
-        public override bool Validate(Dictionary<string, string> responseData)
+        public override void Validate(Dictionary<string, string> responseData)
         {
             var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
 
@@ -120,9 +95,9 @@ namespace EPiServer.Marketing.KPI.Common
             var conversionContent = contentRepo.Get<IContent>(new ContentReference(responseData["ConversionPage"]));
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
             if (IsContentPublished(conversionContent) && !IsCurrentContent(conversionContent, currentContent))
-            { ContentGuid = conversionContent.ContentGuid; }
-
-            return true;
+            {
+                ContentGuid = conversionContent.ContentGuid;
+            }
         }
 
         public override IKpiResult Evaluate(object sender, EventArgs e)
@@ -173,6 +148,20 @@ namespace EPiServer.Marketing.KPI.Common
                 throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
             }
             return false;
+        }
+
+        private EventHandler<ContentEventArgs> _eh;
+        public override event EventHandler EvaluateProxyEvent
+        {
+            add {
+                _eh = new EventHandler<ContentEventArgs>(value);
+                var service = _servicelocator.GetInstance<IContentEvents>();
+                service.LoadedContent += _eh;
+            }
+            remove {
+                var service = _servicelocator.GetInstance<IContentEvents>();
+                service.LoadedContent -= _eh;
+            }
         }
     }
 }
