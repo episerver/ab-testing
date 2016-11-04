@@ -11,7 +11,7 @@
         <copyright>Copyright EPiServer 2016</copyright>
         <releaseNotes>
         </releaseNotes>
-        <tags>EPiServerModulePackage EPiServer KPI</tags>
+        <tags>EPiServerModulePackage EPiServer KPI EPiServerBetaAddon</tags>
         <dependencies>
         </dependencies>
     </metadata>
