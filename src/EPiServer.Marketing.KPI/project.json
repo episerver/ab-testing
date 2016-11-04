@@ -5,9 +5,9 @@
     "SchemaUpdater/Kpi.zip"
   ],
   "buildOptions": {
-    "warningsAsErrors": true,
     "delaySign": true,
-    "keyFile": "../../build/EPiServerProduct_PublicKey.snk"
+    "keyFile": "../../build/EPiServerProduct_PublicKey.snk",
+    "warningsAsErrors": true
   },
   "version": "1.0.0-*",
   "description": "",
