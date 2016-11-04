@@ -227,10 +227,6 @@
     visibility: hidden;
 }
 
-.row {
-    display: flex;
-}
-
 .formsRow {
     margin-bottom: 24px;
 }
