@@ -3,8 +3,6 @@ param ([string]$configuration = "Release",
 	[string]$jsreporter = "",
     [string]$pack = "false",
 	[string]$packageVersion = "",
-	[string]$signAssemblies = "false",
-	[string]$signPath = ""
 	)
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
@@ -64,31 +62,7 @@ if([System.Convert]::ToBoolean($runTests) -eq $true) {
 }
 
 
-# Signs assemblies
-if([System.Convert]::ToBoolean($signAssemblies) -eq $true) {
-	$rootDir = Get-Location
-	$srcProjects = (Get-ChildItem -Directory -Path (Join-Path ($rootDir) ".\src") -Exclude Database)
-	$signError = $false
-	$assemblies = @()
 
-	foreach($item in $srcProjects)
-	{
-		$assemblies = $assemblies + (Get-ChildItem -Recurse -Path (Join-Path ($rootDir) ".\artifacts") -File -Filter ($item.Name + ".dll") -Exclude *Sources.dll)
-		$assemblies = $assemblies + (Get-ChildItem -Recurse -Path (Join-Path ($rootDir) ".\src\$($item.Name)") -File -Filter ($item.Name + ".dll") -Exclude *Sources.dll)
-		$assemblies = $assemblies + (Get-ChildItem -Recurse -Path (Join-Path ($rootDir) ".\test\$($item.Name)") -File -Filter ($item.Name + ".dll") -Exclude *Sources.dll)
-	}
-
-	foreach ($assembly in $assemblies)
-	{
-	   Write-Host ("Signing " + $assembly.FullName)
-	   $LASTEXITCODE = 0
-	   &"$signPath\bin\NETFX 4.0 Tools\sn.exe" -q -Rc  $assembly.FullName "EPiServerProduct"
-	   if ($LASTEXITCODE -ne 0)
-	   {
-		   exit $LASTEXITCODE
-	   }
-	}
-}
 
 # Create packages
 if([System.Convert]::ToBoolean($pack) -eq $true) {

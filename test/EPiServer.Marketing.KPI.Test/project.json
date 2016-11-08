@@ -1,6 +1,5 @@
 {
-  "buildOptions": {
-    "warningsAsErrors": true,
+  "compilationOptions": {
     "delaySign": true,
     "keyFile": "../../build/EPiServerProduct_PublicKey.snk"
   },

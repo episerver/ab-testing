@@ -4,10 +4,9 @@
     "EmbeddedLangFiles/**/*",
     "SchemaUpdater/Kpi.zip"
   ],
-  "buildOptions": {
+  "compilationOptions": {
     "delaySign": true,
-    "keyFile": "../../build/EPiServerProduct_PublicKey.snk",
-    "warningsAsErrors": true
+    "keyFile": "../../build/EPiServerProduct_PublicKey.snk"
   },
   "version": "1.0.0-*",
   "description": "",
@@ -25,7 +24,7 @@
   },
   "frameworks": {
     "net45": {
-      "dependencies": { },
+      "dependencies": {},
       "frameworkAssemblies": {
         "Microsoft.CSharp": "4.0.0.0",
         "System": "4.0.0.0",
