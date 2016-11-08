@@ -2,7 +2,7 @@ param ([string]$configuration = "Release",
     [string]$runTests = "false",
 	[string]$jsreporter = "",
     [string]$pack = "false",
-	[string]$packageVersion = "",
+	[string]$packageVersion = ""
 	)
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
