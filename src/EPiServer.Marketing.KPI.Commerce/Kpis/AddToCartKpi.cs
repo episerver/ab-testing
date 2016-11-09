@@ -48,7 +48,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
             //Get the correct product id as it's represented in EPiServer Commerce
             //In this example we arbitrarily use the integer 1
-            var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];
+            var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];            
 
             //We use the content link builder to get the contentlink to our product
             var productLink = referenceConverter.GetContentLink(Int32.Parse(productIdFromCommerce), 
@@ -56,7 +56,23 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
             //Get the product using CMS API
             var content = contentLoader.Get<CatalogContentBase>(productLink);
+            if (content.ContentType != CatalogContentType.CatalogEntry || !IsContentPublished(content))
+            {
+                throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/addtocart/config_markup/error_not_published_product"));
+            }
             ContentGuid = content.ContentGuid;
+        }
+
+        private bool IsContentPublished(IContent content)
+        {
+            bool isPublished = true;
+            IContentVersionRepository repo = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+            var publishedContent = repo.LoadPublished(content.ContentLink);
+            if (publishedContent == null)
+            {
+                isPublished = false;
+            }
+            return isPublished;
         }
 
         /// <summary>
