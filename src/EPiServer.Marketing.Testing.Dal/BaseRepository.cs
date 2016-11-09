@@ -57,7 +57,7 @@ namespace EPiServer.Marketing.Testing.Dal
         public int SaveChanges(int retryCount)
         {
             int records = 0;
-            bool retrySave = false;
+            //bool retrySave = false;
             // save off retry count to potentially retry if there is an exception
             _retryCount = retryCount;
 

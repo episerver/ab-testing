@@ -299,7 +299,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             {
                 tests = repo.GetAll().AsQueryable();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new DatabaseDoesNotExistException();
             }

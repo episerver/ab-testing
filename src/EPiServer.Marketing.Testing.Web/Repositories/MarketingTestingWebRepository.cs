@@ -202,8 +202,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <returns></returns>
         public string PublishWinningVariant(TestResultStoreModel testResult)
         {
-            string publishedVersionReference = null;
-
             if (!string.IsNullOrEmpty(testResult.WinningContentLink))
             {
                 ContentReference publishedReference = new ContentReference();
