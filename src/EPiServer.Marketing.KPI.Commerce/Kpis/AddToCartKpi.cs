@@ -133,7 +133,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                     var contentRepository = _servicelocator.GetInstance<IContentRepository>();
                     var content = contentRepository.Get<IContent>(ContentGuid);
                     markup = string.Format(markup, conversionHeaderText, conversionDescription, 
-                        content.Name, content.Name);
+                        content.ContentLink, content.Name);
                 }
 
                 return markup;
