@@ -1,4 +1,8 @@
 {
+  "compilationOptions": {
+    "delaySign": true,
+    "keyFile": "../../build/EPiServerProduct_PublicKey.snk"
+  },
   "dependencies": {
     "Effort.EF6": "1.1.4",
     "EntityFramework": "6.1.3",
