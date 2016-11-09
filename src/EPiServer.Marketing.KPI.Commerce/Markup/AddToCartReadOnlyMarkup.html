@@ -5,7 +5,6 @@
 </p>
 <script type="text/javascript">
         function switchToProduct() {{
-            debugger;
             var topic = require("dojo/topic");
             var contextParameters = {{ uri: "epi.cms.contentdata:///{2}" }};
             topic.publish("/epi/shell/context/request", contextParameters);
