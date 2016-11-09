@@ -16,12 +16,13 @@
  "dojo/dom-class",
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
-  "marketing-testing/scripts/rasterizeHTML",
+ "marketing-testing/scripts/rasterizeHTML",
+ "dojox/layout/ContentPane",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
  "dijit/form/Button",
-  "dijit/ProgressBar"
+ "dijit/ProgressBar"
 
 ], function (
     declare,
@@ -41,7 +42,8 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml
+    rasterizehtml,
+    ContentPane
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -106,20 +108,36 @@
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            this.renderKpiUi();
             this._renderSignificance();
 
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
-                me.renderStatusIndicatorStyles();
+                me._renderStatusIndicatorStyles();
+                me._renderKpiMarkup("pw_conversionMarkup");
             });
-            
         },
 
-        renderKpiUi: function () {
-            if (this.kpiMarkup) {
-                this.kpiMarkup.innerHTML = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+        _renderKpiMarkup: function (conversionMarkupId) {
+            var kpiuiElement = dom.byId(conversionMarkupId);
+            var x = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+            this._clearKpiMarkup(kpiuiElement);
+            new ContentPane({
+                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
+            }).placeAt(kpiuiElement);
+        },
+
+        _clearKpiMarkup: function (conversionMarkupElement) {
+            if (conversionMarkupElement) {
+                var contentPane = dojo.query('#pw_conversionMarkup > *');
+                if (contentPane[0]) {
+                    dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    var dijitContentPane = dijit.byId(contentPane[0].id);
+                    dijitContentPane.destroy();
+                    conversionMarkupElement.innerHTML = "";
+                }
             }
         },
 
@@ -175,7 +193,7 @@
             }
         },
 
-        renderStatusIndicatorStyles: function () {
+        _renderStatusIndicatorStyles: function () {
             var me = this;
             if (this.context.data.test.state < 2) {
                 me.statusIndicatorClass = "leadingContent";
