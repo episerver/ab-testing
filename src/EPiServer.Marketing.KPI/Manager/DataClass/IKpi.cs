@@ -48,8 +48,8 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
-        /// <returns></returns>
-        bool Validate(Dictionary<string,string> kpiData);
+        /// <param name="kpiData">dictionary of data used to validate and save an instance of a KPI</param>
+        void Validate(Dictionary<string,string> kpiData);
 
         /// <summary>
         /// Determines if a conversion has happened.

@@ -183,24 +183,24 @@
                 this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, me.statusIndicatorClass);
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlLeaderBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column epi-abtest-preview-left-side controlLeaderBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column epi-abtest-preview-right-side challengerDefaultBody");
             }
             else if (textHelper.publishedPercent < textHelper.draftPercent) {
                 this.controlStatusIcon.title = "";
                 this.challengerStatusIcon.title = resources.detailsview.content_winning_tooltip;
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, me.statusIndicatorClass);
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlTrailingBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerLeaderBody");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column epi-abtest-preview-left-side controlTrailingBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column epi-abtest-preview-right-side challengerLeaderBody");
             }
             else {
                 this.controlStatusIcon.title = "";
                 this.challengerStatusIcon.title = "";
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column controlDefaultBody");
-                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column challengerDefaultBody");
+                domClass.replace(this.controlWrapper, me.baseWrapper + " 2column epi-abtest-preview-left-side controlDefaultBody");
+                domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column epi-abtest-preview-right-side challengerDefaultBody");
             }
         },
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {

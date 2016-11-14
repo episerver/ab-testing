@@ -184,7 +184,7 @@ namespace EPiServer.Marketing.Testing.Web
                             var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
                                 content.ContentLink.WorkID;
 
-                            if (!hasData)
+                            if (!hasData && DbReadWrite() )
                             {
                                 // Make sure the cookie has data in it. There are cases where you can load
                                 // content directly from a url after opening a browser and if the cookie is not set
@@ -248,7 +248,7 @@ namespace EPiServer.Marketing.Testing.Web
                         _testManager.GetVariantContent(e.Content.ContentGuid);
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
-                        if (!hasData)
+                        if (!hasData && DbReadWrite() )
                         {
                             // Make sure the cookie has data in it.
                             SetTestData(e.Content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
@@ -323,7 +323,8 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId, 
+                        contentVersion,
                         CountType.View);
                     cookie.Viewed = true;
 

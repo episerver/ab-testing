@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AddToCartConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AddToCartReadOnlyMarkup.html",
-        text = "Product", description = "Choose a product for conversion.")]
+        text = "Add To Cart", description = "Choose a product for conversion.")]
     public class AddToCartKpi : Kpi
     {
         IServiceLocator _servicelocator;
@@ -35,7 +35,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             _servicelocator = servicelocator;
         }
 
-        public override bool Validate(Dictionary<string, string> responseData)
+        public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionProduct"] == "")
             {
@@ -57,8 +57,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             //Get the product using CMS API
             var content = contentLoader.Get<CatalogContentBase>(productLink);
             ContentGuid = content.ContentGuid;
-
-            return true;
         }
 
         /// <summary>

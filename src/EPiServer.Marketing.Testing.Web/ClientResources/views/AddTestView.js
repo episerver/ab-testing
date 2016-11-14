@@ -96,7 +96,6 @@
                         me._setKpiSelectList(value);
                     });
                 this._contextChangedHandler = dojo.subscribe('/epi/marketing/updatestate', this, this._onContextChange);
-
             },
 
             _onContextChange: function (context, caller) {
@@ -117,7 +116,7 @@
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
-
+                this._resetView();
             },
 
             // TEST DATA MODEL & FORM SETTERS
@@ -203,19 +202,10 @@
                 }
             },
 
-            _clearConversionErrors: function () {
-                var errorText = dom.byId("pickerErrorText");
-
-                if (!errorText) {
-                    return;
-                }
-            },
-
             // DATA GETTERS
             _getConfidenceLevel: function () {
                 var confidenceSelectWidget = dijit.byId("confidence");
                 return confidenceSelectWidget.value;
-
             },
 
             // Transforms custom KPI form data into json for processing
@@ -373,6 +363,17 @@
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
+                this._resetView();
+            },
+
+            //forces both add test view containers to return to the top
+            _resetView: function () {
+                var abTestBody = dom.byId("abTestBody");
+                var toolbarGroup = dom.byId("toolbarGroup");
+                if (abTestBody) {
+                    abTestBody.scrollIntoView(true);
+                    toolbarGroup.scrollIntoView(true);
+                }
             },
 
             //Clears the KPI Error text and icon
@@ -446,7 +447,7 @@
                     this.model.startDate = utcNow;
                 }
 
-                this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.confidencelevel = this._getConfidenceLevel();
                 this.model.testTitle = me.pageName.textContent;
 
                 this.kpiFormData = this._getKpiFormData();
