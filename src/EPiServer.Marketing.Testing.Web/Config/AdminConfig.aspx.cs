@@ -65,8 +65,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             {
                 TestDuration = duration,
                 ParticipationPercent = particiaption,
-                ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue),
-                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue)
+                ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue)
             };
 
             settings.Save();

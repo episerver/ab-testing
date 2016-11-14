@@ -25,8 +25,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
         public int ConfidenceLevel { get; set; }
 
-        public bool AutoPublishWinner { get; set; }
-
         internal static AdminConfigTestSettings _currentSettings;
 
        [ExcludeFromCodeCoverage]
@@ -52,7 +50,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
             TestDuration = 30;
             ParticipationPercent = 10;
             ConfidenceLevel = 95;
-            AutoPublishWinner = false;
         }
 
         [ExcludeFromCodeCoverage]
