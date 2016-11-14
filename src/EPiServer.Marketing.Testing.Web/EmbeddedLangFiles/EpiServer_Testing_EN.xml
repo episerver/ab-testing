@@ -8,6 +8,8 @@
       </addtestcommand>
       <addtestview>
         <advanced_options>Advanced Options</advanced_options>
+        <auto_publish_winner_description>This allows the winning variant to be published automatucally once the test is complete.  If there is a tie, the winner must be chosen adn published manually.</auto_publish_winner_description>
+        <auto_publish_winner_header>Publish the winner of a test?</auto_publish_winner_header>
         <cancel_default>Cancel</cancel_default>
         <challenger>B / Challenger</challenger>
         <confidence_90>90%</confidence_90>
