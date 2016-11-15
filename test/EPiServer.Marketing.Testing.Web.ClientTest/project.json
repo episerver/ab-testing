@@ -2,9 +2,7 @@
   "version": "1.0.0-*",
   "compilationOptions": {
     "emitEntryPoint": true,
-    "warningsAsErrors": true,
-    "delaySign": true,
-    "keyFile": "../../build/EPiServerProduct_PublicKey.snk"
+    "warningsAsErrors": true
   },
 
   "dependencies": {
