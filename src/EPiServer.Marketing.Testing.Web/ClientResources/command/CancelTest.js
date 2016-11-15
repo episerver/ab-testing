@@ -40,7 +40,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
             //disable the other publish options
             store.get(contentData.contentGuid).then(function (data) {
                 var isVisible = false, isClickable = false;
-                if (data.title != undefined && data.title != null && data.state != 2 && data.state != 3) {
+                if (data.title != undefined && data.title != null && data.state != 3) {
                     isVisible = true;
 
                     if (me._contentActionSupport.hasAccess(contentData.accessMask, me._contentActionSupport.accessLevel.Publish)) {
@@ -48,7 +48,7 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                     }
                 }
 
-                if (isClickable) {
+                if (isVisible) {
                     for (var i = 0; i < menu.providers.length; i++) {
                         for (var j = 0; j < menu.providers[i].commands.length; j++) {
                             menu.providers[i].commands[j].set("isAvailable", false);
