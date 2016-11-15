@@ -247,8 +247,6 @@ namespace EPiServer.Marketing.Testing.Web
                         // so set the skip flag so we dont try to process the test.
                         HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
                         _testManager.GetVariantContent(e.Content.ContentGuid);
-                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
-
                         if (!hasData && DbReadWrite() )
                         {
                             // Make sure the cookie has data in it.
@@ -257,6 +255,8 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, contentVersion, originalContent);
+
+                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
                 }
                 catch (Exception err)

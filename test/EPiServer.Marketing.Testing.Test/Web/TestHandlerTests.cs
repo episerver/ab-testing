@@ -186,7 +186,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _mockContextHelper.Setup(call => call.GetCurrentPage()).Returns(new BasicContent());
             _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
@@ -205,7 +205,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testHandler = GetUnitUnderTest();
 
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(true);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _mockContextHelper.Setup(call => call.GetCurrentPage()).Returns(new BasicContent());
             _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
 
@@ -271,7 +271,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(false);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _mockContextHelper.Setup(call => call.GetCurrentPage()).Returns(new BasicContent());
             _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>())).Returns(true);
 
             ContentEventArgs args = new ContentEventArgs(content);
@@ -320,7 +320,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.ReturnLandingPage(_activeTestGuid)).Returns(testVariant);
             _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new PageData(content.ContentLink as PageReference));
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockContextHelper.Setup(call => call.GetCurrentPageFromUrl()).Returns(new BasicContent());
+            _mockContextHelper.Setup(call => call.GetCurrentPage()).Returns(new BasicContent());
             _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = false, Viewed = false });
