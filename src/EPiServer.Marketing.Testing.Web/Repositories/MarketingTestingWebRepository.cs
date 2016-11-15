@@ -163,6 +163,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
                 State = testData.Start ? TestState.Active : TestState.Inactive,
+                AutoPublishWinner = testData.AutoPublishWinner,
                 Variants = new List<Variant>
                 {
                     new Variant()

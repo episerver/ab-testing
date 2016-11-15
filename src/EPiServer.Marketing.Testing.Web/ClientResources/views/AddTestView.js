@@ -477,6 +477,7 @@
                 }
 
                 this.model.confidencelevel = dom.byId("confidence").value;
+                this.model.autopublishwinner = dom.byId("autopublish").value;
                 this.model.testTitle = me.pageName.textContent;
 
                 this.kpiFormData = this._getKpiFormData();

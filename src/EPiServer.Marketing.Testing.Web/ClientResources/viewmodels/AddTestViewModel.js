@@ -117,7 +117,8 @@ define([
                 testTitle: this.testTitle,
                 startDate: this.startDate,
                 start: this.start,
-                confidencelevel: this.confidencelevel
+                confidencelevel: this.confidencelevel,
+                autopublishwinner: this.autoPublishWinner
             }).then(function () {
                 var contextParameters = { uri: "epi.cms.contentdata:///" + me.currentVersion.contentLink };
                 me.topic.publish("/epi/shell/context/request", contextParameters);

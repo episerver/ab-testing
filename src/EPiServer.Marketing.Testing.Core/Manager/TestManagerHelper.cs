@@ -50,6 +50,7 @@ namespace EPiServer.Marketing.Testing
                 ZScore = theDalTest.ZScore,
                 ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
+                AutoPublishWinner = theDalTest.AutoPublishWinner,
                 CreatedDate = theDalTest.CreatedDate.ToLocalTime(),
                 ModifiedDate = theDalTest.ModifiedDate.ToLocalTime(),
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
@@ -81,6 +82,7 @@ namespace EPiServer.Marketing.Testing
                 IsSignificant = theManagerTest.IsSignificant,
                 ZScore = theManagerTest.ZScore,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
+                AutoPublishWinner = theManagerTest.AutoPublishWinner,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
             };
