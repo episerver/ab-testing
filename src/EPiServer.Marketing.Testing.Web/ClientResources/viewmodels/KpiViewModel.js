@@ -10,23 +10,23 @@
     ) {
         return declare([stateful],
         {
-            availableKpi: null,
+            availableKpis: null,
 
-            constructor: function () {
+            constructor: function (kpiStore) {
                 var me = this;
-                this.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.get()
-                .then(function (markup) {
-                    me._changeAttrValue("availableKpi", markup);
+                .then(function (retKpis) {
+                    me._changeAttrValue("availableKpis",retKpis );
                 });
             },
 
             getAvailableKpis: function () {
-                return this.availableKpi;
+                return this.availableKpis;
             },
 
             getKpiByIndex(index) {
-                return this.availableKpi[index];
+                return this.availableKpis[index];
             },
 
             createKpi(caller) {
