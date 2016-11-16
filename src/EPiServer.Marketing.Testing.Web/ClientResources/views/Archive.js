@@ -17,6 +17,7 @@
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
+ "dojox/layout/ContentPane",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -39,7 +40,8 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml
+    rasterizehtml,
+    ContentPane
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -99,36 +101,51 @@
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            this.renderKpiUi();
-            this.renderStatusIndicatorStyles();
-            this.renderStatus();
-            this.renderTestDuration();
+            this._renderStatus();
+            this._renderTestDuration();
 
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
-                me.renderStatusIndicatorStyles();
+                me._renderStatusIndicatorStyles();
+                me._renderKpiMarkup("archive_conversionMarkup");
             });
 
         },
 
-        renderKpiUi: function () {
-            if (this.kpiMarkup) {
-                this.kpiMarkup.innerHTML = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+        _renderKpiMarkup: function (conversionMarkupId) {
+            var kpiuiElement = dom.byId(conversionMarkupId);
+            this._clearKpiMarkup(kpiuiElement);
+            new ContentPane({
+                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
+            }).placeAt(kpiuiElement);
+        },
+
+        _clearKpiMarkup: function (conversionMarkupElement) {
+            if (conversionMarkupElement) {
+                var contentPane = dojo.query('#archive_conversionMarkup > *');
+                if (contentPane[0]) {
+                    dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    var dijitContentPane = dijit.byId(contentPane[0].id);
+                    dijitContentPane.destroy();
+                    conversionMarkupElement.innerHTML = "";
+                }
             }
         },
 
-        renderStatus: function () {
+        _renderStatus: function () {
             this.testStatus.innerText = resources.archiveview.test_status_completed + " " + resources.archiveview.content_chosen;
         },
 
-        renderTestDuration: function () {
+        _renderTestDuration: function () {
             this.testDuration.innerText = this.context.data.daysElapsed;
             this.testStartDate.innerText = datetime.toUserFriendlyString(this.context.data.test.startDate);
             this.testEndDate.innerText = datetime.toUserFriendlyString(this.context.data.test.endDate);
         },
 
-        renderStatusIndicatorStyles: function () {
+        _renderStatusIndicatorStyles: function () {
             var draftVersion = this.context.data.draftVersionContentLink.split("_")[1];
             var winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner });
 
@@ -144,8 +161,8 @@
                 domClass.replace(this.controlVersionTestResult, "abLoserStatusText");
                 domClass.replace(this.controlStatusIcon, "noIndicator");
                 domClass.replace(this.challengerStatusIcon, "winningContent");
-                domClass.replace(this.controlWrapper, "cardWrapper 2column controlTrailingBody");
-                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerPublishedBody");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlTrailingBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerPublishedBody");
                 query("#publishThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
                 query("#draftThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
             } else {
@@ -157,8 +174,8 @@
                 domClass.replace(this.controlVersionTestResult, "abWinnerStatusText");
                 domClass.replace(this.controlStatusIcon, "winningContent");
                 domClass.replace(this.challengerStatusIcon, "noIndicator");
-                domClass.replace(this.controlWrapper, "cardWrapper 2column controlPublishedBody");
-                domClass.replace(this.challengerWrapper, "cardWrapper 2column challengerDefaultBody");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlPublishedBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerDefaultBody");
                 query("#publishThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
                 query("#draftThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
             }

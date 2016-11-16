@@ -31,7 +31,7 @@
             </div>
             <!-- Control/Published Version -->
             <div class="row">
-                <div class="cardWrapper 2column controlDefaultBody">
+                <div class="cardWrapper 2column epi-abtest-preview-left-side controlDefaultBody">
                     <div class="leadingContent" data-dojo-attach-point="controlStatusIcon"></div>
                     <h3>
                         ${resources.detailsview.content_control_header}
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <!-- Challenger/Draft Version-->
-                <div class="cardWrapper 2column challengerDefaultBody">
+                <div class="cardWrapper 2column epi-abtest-preview-right-side challengerDefaultBody">
                     <div class="winningContent" data-dojo-attach-point="challengerStatusIcon"></div>
                     <h3>
                         ${resources.detailsview.content_challenger_header}
@@ -117,7 +117,7 @@
                         <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
                     </div>
                     <div class="formsRow">
-                        <div data-dojo-attach-point="kpiMarkup">
+                        <div id="pw_conversionMarkup">
                             <!-- KPI Generated Markup -->
                         </div>
                     </div>
@@ -138,8 +138,8 @@
                              data-dojo-id="durationProgressBar"
                              style="width: 35%"></div>
                     </div>
-                    </div>
                 </div>
+            </div>
             <div class="cardWrapper" style="margin-bottom: 80px">
                 <h3>${resources.detailsview.advanced_options_header}</h3>
                 <hr class="epi-abtest-hr" />

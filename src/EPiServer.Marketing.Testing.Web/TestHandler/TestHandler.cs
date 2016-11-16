@@ -175,6 +175,7 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     try
                     {
+                        EvaluateCookies();
                         // get the test from the cache
                         var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
                         if (activeTest != null)
@@ -184,7 +185,7 @@ namespace EPiServer.Marketing.Testing.Web
                             var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
                                 content.ContentLink.WorkID;
 
-                            if (!hasData)
+                            if (!hasData && DbReadWrite() )
                             {
                                 // Make sure the cookie has data in it. There are cases where you can load
                                 // content directly from a url after opening a browser and if the cookie is not set
@@ -231,7 +232,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    EvaluateCookies(e);
+                    EvaluateCookies();
 
                     // get the test from the cache
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
@@ -248,7 +249,7 @@ namespace EPiServer.Marketing.Testing.Web
                         _testManager.GetVariantContent(e.Content.ContentGuid);
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
 
-                        if (!hasData)
+                        if (!hasData && DbReadWrite() )
                         {
                             // Make sure the cookie has data in it.
                             SetTestData(e.Content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
@@ -323,7 +324,8 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.IncrementCount(cookie.TestId, cookie.TestContentId, contentVersion,
+                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId, 
+                        contentVersion,
                         CountType.View);
                     cookie.Viewed = true;
 
@@ -336,7 +338,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Analyzes existing cookies and expires / updates any depending on what tests are in the cache.
         /// It is assumed that only tests in the cache are active.
         /// </summary>
-        private void EvaluateCookies(ContentEventArgs e)
+        private void EvaluateCookies()
         {
             if (!DbReadWrite())
             {
@@ -360,11 +362,6 @@ namespace EPiServer.Marketing.Testing.Web
                     // else we have a valid test but the cookie test id doesnt match because user created a new test 
                     // on the same content.
                     _testDataCookieHelper.ExpireTestDataCookie(testCookie);
-
-                    var originalContent = e.Content;
-                    var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-                    TestDataCookie tc = new TestDataCookie();
-                    SetTestData(e.Content, activeTest, tc, contentVersion, out tc, out contentVersion);
                 }
             }
         }

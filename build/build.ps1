@@ -36,7 +36,9 @@ if ($lastexitcode -eq 1) {
 
 "Building $configuration"
 # Build all xprojs
-dnu build ..\** --quiet --configuration $configuration --out ..\artifacts
+dnu build ..\src\** --quiet --configuration $configuration --out ..\artifacts
+dnu build ..\test\** --quiet --configuration $configuration --out ..\artifacts
+dnu build ..\samples\** --quiet --configuration $configuration --out ..\artifacts
 if ($lastexitcode -eq 1) {
     Write-Host "BUILD failed" -foreground "red"
     exit $lastexitcode

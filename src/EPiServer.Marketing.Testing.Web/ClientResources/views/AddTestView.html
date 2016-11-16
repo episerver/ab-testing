@@ -1,7 +1,7 @@
 ﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-add-bordercontainer" class="epi-form-container epi-grid-form dijitContainer">
     <!-- Button Bar, Breadcrumb/Start Button and Cancel Button-->
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false" class="epi-localToolbar">
-        <div class="epi-toolbarGroupContainer">
+        <div class="epi-toolbarGroupContainer" id="toolbarGroup">
             <!-- Breadcrumb Widget -->
             <div id="leadingToolBar" class="epi-toolbarLeading epi-toolbarGroup">
                 <div id="breadcrumb"
@@ -37,7 +37,7 @@
     </div>
     <!-- Main Content -->
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:false" class="epi-abtest-body-container">
-        <div class="epi-abtest-body">
+        <div class="epi-abtest-body" id="abTestBody">
             <!-- Header / Test Title & Description-->
             <div class="cardWrapper">
                 <div class="cardBody">
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <!-- Control/Published Version -->
-            <div class="cardWrapper 2column controlDefaultBody">
+            <div class="cardWrapper 2column epi-abtest-preview-left-side controlDefaultBody">
                 <h3>
                     ${resources.addtestview.control}
                 </h3>
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <!-- Challenger/Draft Version-->
-            <div class="cardWrapper 2column challengerDefaultBody">
+            <div class="cardWrapper 2column epi-abtest-preview-right-side challengerDefaultBody">
                 <h3>
                     ${resources.addtestview.challenger}
                 </h3>
@@ -97,9 +97,9 @@
                         </h4>
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
-                              class="errorIcon media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                              class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
                         </span>
-                        <span id="kpiErrorText" class="errorText">
+                        <span id="kpiErrorText" class="epi-ab-errorText">
                         </span>
                         <!-- KPI UI Element-->
                         <div>
@@ -146,7 +146,7 @@
                                  data-dojo-attach-event="onChange: _onDurationSpinnerChanged">
                             </div><label>${resources.addtestview.days_text}</label>
                             <span id="durationErrorIcon" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
-                            <span id="durationErrorText" class="errorText"></span>
+                            <span id="durationErrorText" class="epi-ab-errorText"></span>
                         </p>
                     </div>
                     <!-- Test Scheduling (radio and date selector) -->
