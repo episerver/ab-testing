@@ -34,6 +34,7 @@ namespace EPiServer.Marketing.Testing.Test
                     OriginalItemId = Guid.NewGuid(),
                     State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
+                    AutoPublishWinner = false,
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 });
@@ -64,6 +65,7 @@ namespace EPiServer.Marketing.Testing.Test
                     LastModifiedBy = "me",
                     OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,
+                    AutoPublishWinner = true,
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 };
