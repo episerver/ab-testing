@@ -29,9 +29,9 @@
                 return this.availableKpis[index];
             },
 
-            createKpi(caller) {
+            createKpi(caller, kpiStore) {
                 var me = this;
-                this.kpistore = dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");is 
                 this.kpistore.put({
                     id: "KpiFormData",
                     entity: caller.kpiFormData
