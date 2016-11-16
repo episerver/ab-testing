@@ -17,6 +17,7 @@
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
+ "dojox/layout/ContentPane",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -41,7 +42,8 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml
+    rasterizehtml,
+    ContentPane
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -139,17 +141,33 @@
                 this.challengerConversionPercent);
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
-            this.renderKpiUi();
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
+                me._renderKpiMarkup("details_conversionMarkup");
             });
             this.renderStatusIndicatorStyles();
         },
 
-        renderKpiUi: function () {
-            if (this.kpiMarkup) {
-                this.kpiMarkup.innerHTML = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+        _renderKpiMarkup: function (conversionMarkupId) {
+            var kpiuiElement = dom.byId(conversionMarkupId);
+            this._clearKpiMarkup(kpiuiElement);
+            new ContentPane({
+                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
+            }).placeAt(kpiuiElement);
+        },
+
+        _clearKpiMarkup: function (conversionMarkupElement) {
+            if (conversionMarkupElement) {
+                var contentPane = dojo.query('#details_conversionMarkup > *');
+                if (contentPane[0]) {
+                    dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    var dijitContentPane = dijit.byId(contentPane[0].id);
+                    dijitContentPane.destroy();
+                    conversionMarkupElement.innerHTML = "";
+                }
             }
         },
 
