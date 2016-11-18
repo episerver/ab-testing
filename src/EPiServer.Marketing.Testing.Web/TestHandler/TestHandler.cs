@@ -175,6 +175,7 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     try
                     {
+                        EvaluateCookies();
                         // get the test from the cache
                         var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
                         if (activeTest != null)
@@ -231,7 +232,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    EvaluateCookies(e);
+                    EvaluateCookies();
 
                     // get the test from the cache
                     var activeTest = _testManager.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
@@ -246,8 +247,6 @@ namespace EPiServer.Marketing.Testing.Web
                         // so set the skip flag so we dont try to process the test.
                         HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
                         _testManager.GetVariantContent(e.Content.ContentGuid);
-                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
-
                         if (!hasData && DbReadWrite() )
                         {
                             // Make sure the cookie has data in it.
@@ -256,6 +255,8 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, contentVersion, originalContent);
+
+                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
                 }
                 catch (Exception err)
@@ -337,7 +338,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Analyzes existing cookies and expires / updates any depending on what tests are in the cache.
         /// It is assumed that only tests in the cache are active.
         /// </summary>
-        private void EvaluateCookies(ContentEventArgs e)
+        private void EvaluateCookies()
         {
             if (!DbReadWrite())
             {
@@ -361,11 +362,6 @@ namespace EPiServer.Marketing.Testing.Web
                     // else we have a valid test but the cookie test id doesnt match because user created a new test 
                     // on the same content.
                     _testDataCookieHelper.ExpireTestDataCookie(testCookie);
-
-                    var originalContent = e.Content;
-                    var contentVersion = e.ContentLink.WorkID == 0 ? e.ContentLink.ID : e.ContentLink.WorkID;
-                    TestDataCookie tc = new TestDataCookie();
-                    SetTestData(e.Content, activeTest, tc, contentVersion, out tc, out contentVersion);
                 }
             }
         }

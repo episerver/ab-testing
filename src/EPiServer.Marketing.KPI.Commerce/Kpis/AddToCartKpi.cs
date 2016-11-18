@@ -11,7 +11,7 @@ using Mediachase.Commerce.Orders;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using EPiServer.Web.Mvc.Html;
+using System.Linq;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -25,6 +25,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
         [DataMember]
         public Guid ContentGuid;
+
+        [DataMember]
+        public bool isVariant;
 
         public AddToCartKpi()
         {
@@ -50,13 +53,33 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             //In this example we arbitrarily use the integer 1
             var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];
 
+            var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
+
             //We use the content link builder to get the contentlink to our product
             var productLink = referenceConverter.GetContentLink(Int32.Parse(productIdFromCommerce), 
                 CatalogContentType.CatalogEntry, 0);
 
             //Get the product using CMS API
             var content = contentLoader.Get<CatalogContentBase>(productLink);
+            if (content.ContentType != CatalogContentType.CatalogEntry || !IsContentPublished(content))
+            {
+                throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/addtocart/config_markup/error_not_published_product"));
+            }
             ContentGuid = content.ContentGuid;
+            isVariant = content is VariationContent;
+        }
+
+        private bool IsContentPublished(IContent content)
+        {
+            bool isPublished = true;
+            IContentVersionRepository repo = _servicelocator.GetInstance<IContentVersionRepository>();
+            var publishedContent = repo.LoadPublished(content.ContentLink);
+            if (publishedContent == null)
+            {
+                isPublished = false;
+            }
+            return isPublished;
         }
 
         /// <summary>
@@ -93,10 +116,32 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                         //The commerce content name represents the name of the product
                         var productName = productContent.Name;
 
-                        retval = ContentGuid.Equals(productContent.ContentGuid);
-                        if (retval)
+                        // if we are looking for an exact match at the entry level, 
+                        // we can just check the Guid
+                        if (isVariant)
                         {
-                            break;
+                            retval = ContentGuid.Equals(productContent.ContentGuid);
+                            if (retval)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            // else we can assume its a product variant
+                            var repository = _servicelocator.GetInstance<IContentRepository>();
+                            var variant = repository.Get<VariationContent>(productLink);
+                            var parentProductRef = variant.GetParentProducts().FirstOrDefault();
+                            if (parentProductRef != null)
+                            {
+                                //Get the parent product using CMS API
+                                var parentProduct = contentLoader.Get<CatalogContentBase>(parentProductRef);
+                                retval = ContentGuid.Equals(parentProduct.ContentGuid);
+                                if (retval)
+                                {
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -133,7 +178,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                     var contentRepository = _servicelocator.GetInstance<IContentRepository>();
                     var content = contentRepository.Get<IContent>(ContentGuid);
                     markup = string.Format(markup, conversionHeaderText, conversionDescription, 
-                        content.Name, content.Name);
+                        content.ContentLink, content.Name);
                 }
 
                 return markup;

@@ -1,8 +1,7 @@
 param ([string]$configuration = "Release",
     [string]$runTests = "false",
-	[string]$jsreporter = "",
-    [string]$pack = "false",
-	[string]$packageVersion = "")
+	[string]$jsreporter = ""
+	)
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
 $cwd = Split-Path -parent $PSCommandPath
@@ -37,7 +36,9 @@ if ($lastexitcode -eq 1) {
 
 "Building $configuration"
 # Build all xprojs
-dnu build ..\** --quiet --configuration $configuration --out ..\artifacts
+dnu build ..\src\** --quiet --configuration $configuration --out ..\artifacts
+dnu build ..\test\** --quiet --configuration $configuration --out ..\artifacts
+dnu build ..\samples\** --quiet --configuration $configuration --out ..\artifacts
 if ($lastexitcode -eq 1) {
     Write-Host "BUILD failed" -foreground "red"
     exit $lastexitcode
@@ -58,15 +59,4 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 # Run tests
 if([System.Convert]::ToBoolean($runTests) -eq $true) {
     &"$cwd\test.ps1" $configuration $jsreporter
-}
-
-# Create packages
-if([System.Convert]::ToBoolean($pack) -eq $true) {
-	# make sure that we have some package version
-	if (!$packageVersion) {
-		$match = (Select-String -Path $cwd\..\AssemblyVersionAuto.cs -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
-		$packageVersion = $match.Groups[1].Value
-	}
-	
-    &"$cwd\pack.ps1" $configuration $pack $packageVersion	
 }
