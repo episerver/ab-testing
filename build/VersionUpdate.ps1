@@ -22,7 +22,7 @@ foreach ($item in Get-ChildItem -Recurse -Filter 'AssemblyVersionAuto.cs')
     }
 
     switch -wildcard ($branchName) {
-        "master"   { $preReleaseInfo = "-beta" }
+        "master"   { $preReleaseInfo = "" }
         "master-*" { $preReleaseInfo = "" }
         "release*" { $preReleaseInfo = "-pre-{0:D6}"}
         "dev"  { $preReleaseInfo = "-ci-{0:D6}" }
