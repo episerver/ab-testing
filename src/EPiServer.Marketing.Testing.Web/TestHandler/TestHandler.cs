@@ -17,6 +17,7 @@ using System.Reflection;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -388,7 +389,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    var pageHelper = _serviceLocator.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+                    var pageHelper = _serviceLocator.GetInstance<IPageRouteHelper>();
                     if (pageHelper.PageLink.ID == cea.ContentLink.ID)
                     {
                         HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
