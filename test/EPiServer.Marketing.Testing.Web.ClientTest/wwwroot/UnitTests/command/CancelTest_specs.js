@@ -9,7 +9,7 @@
                     },
                     menu = {
                         providers: {
-                            length: function() {
+                            length: function () {
                                 return 0;
                             },
                         },
@@ -104,11 +104,11 @@
 
                     },
                     menu = {
-                           providers: {
-                               length: function () {
-                                   return 0;
-                               },
-                           },
+                        providers: {
+                            length: function () {
+                                return 0;
+                            },
+                        },
                     },
                     store = {
                         get: function (id) {
@@ -175,5 +175,53 @@
 
                 expect(contentGuid).to.equal(aCommand.model.contentData.contentGuid);
             });
+
+            it("is visible when the test is done, but a winner has not been picked yet", function () {
+                var me = this,
+                    aCommand = new CancelTestCommand(),
+                    mockResult = {
+                        title: "something clever",
+                        state: 2
+                    },
+                    menu = {
+                        providers: {
+                            length: function () {
+                                return 0;
+                            },
+                        },
+                    },
+                    store = {
+                        get: function (id) {
+                            return this;
+                        },
+                        then: function (successFunc) {
+                            successFunc(mockResult);
+                            return this;
+                        }
+                    };
+
+                aCommand.model = {
+                    contentData: {
+                        contentGuid: "",
+                        accessMask: ""
+                    }
+                }
+                aCommand.store = store;
+                aCommand.menu = menu;
+
+                aCommand._contentActionSupport = {
+                    hasAccess: function (accessMask, targetAccess) {
+                        return true;
+                    },
+                    accessLevel: {
+                        Publish: "publish"
+                    }
+                };
+                aCommand._onModelChange();
+
+                expect(aCommand.isAvailable).to.be.true;
+                expect(aCommand.canExecute).to.be.true;
+            });
+
         });
     });
