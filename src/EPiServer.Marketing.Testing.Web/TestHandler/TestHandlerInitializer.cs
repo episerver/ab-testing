@@ -3,8 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.ServiceLocation;
-using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -28,21 +26,15 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public void InitializeHttpEvents(HttpApplication application)
         {
-            application.BeginRequest += BeginRequest;
-            application.EndRequest += EndRequest;
+            // We are not actually doing in anything in begin and end request 
+            // anymore however leaving this here in case we do. 
+            //  application.BeginRequest += BeginRequest;
+            //  application.EndRequest += EndRequest;
         }
 
         [ExcludeFromCodeCoverage]
         private void BeginRequest(object sender, EventArgs e)
         {
-            // Get the page associate with this request once
-            // and store in the request so we can use it later
-            var pageHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
-            try
-            {
-                HttpContext.Current.Items["CurrentPage"] = pageHelper.Page;
-            }
-            catch { } // sometimes requests dont contain epi pages.
         }
 
         [ExcludeFromCodeCoverage]

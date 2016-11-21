@@ -10,13 +10,17 @@
                     days_remaining: "day(s) remaining.",
                     started: "started ",
                     test_status_completed: "Test completed, now go on and pick a winner...",
-                    test_status_not_started: "Test has not yet started, ",
+                    test_status_not_started: "Test has not yet started. ",
                     test_scheduled: "It is scheduled to begin ",
                     by: "by",
                     result_is_not_significant: "The results of this test are NOT significant.",
                     result_is_significant: "The results of this test are significant.",
                     early_pick_winner_message:
-                        "This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen."
+                        "This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.",
+                    test_duration_completed: "Completed after full duration",
+                    goal_not_specified: "A goal has not been specified."
+
+
                 };
                 var defaultTextContent = "Default Text",
                     context = {
@@ -91,7 +95,7 @@
                         abTestTextHelper.initializeHelper(context, mockStringResources);
                         abTestTextHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
-                        expect(mockStatusElement.textContent).to.equal("Test has not yet started, ");
+                        expect(mockStatusElement.textContent).to.equal("Test has not yet started. ");
                         expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
 
                     });
@@ -134,15 +138,47 @@
                         expect(mockDaysElapsedElement.textContent).to.equal(4);
                     });
 
-                it("Renders correct timeRemaining based on the context provided",
+                it("Renders correct timeRemaining for tests not started (state = 0)",
                     function () {
+                        context.data.test.state = 0;
+
                         var mockDaysRemainingElement = { textContent: defaultTextContent };
+                        var mockDaysRemainingText = { textContent: defaultTextContent };
 
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderTestRemaining(mockDaysRemainingElement);
+                        abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
+                        abTestTextHelper.renderTestRemaining(mockDaysRemainingElement,mockDaysRemainingText);
 
-                        expect(mockDaysRemainingElement.textContent).to.equal(26);
+                        expect(mockDaysRemainingElement.textContent).to.equal("Test has not yet started. ");
+                        expect(mockDaysRemainingText.textContent).to.equal("");
                     });
+
+                it("Renders correct timeRemaining for an active test (state = 1)",
+                   function () {
+                       context.data.test.state = 1;
+
+                       var mockDaysRemainingElement = { textContent: defaultTextContent };
+                       var mockDaysRemainingText = { textContent: defaultTextContent };
+
+                       abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
+                       abTestTextHelper.renderTestRemaining(mockDaysRemainingElement, mockDaysRemainingText);
+
+                       expect(mockDaysRemainingElement.textContent).to.equal(26);
+                       expect(mockDaysRemainingText.textContent).to.equal("day(s) remaining.");
+                   });
+
+                it("Renders correct timeRemaining for completed tests (state = 2)",
+                   function () {
+                       context.data.test.state = 2;
+
+                       var mockDaysRemainingElement = { textContent: defaultTextContent };
+                       var mockDaysRemainingText = { textContent: defaultTextContent };
+
+                       abTestTextHelper.initializeHelper(context);
+                       abTestTextHelper.renderTestRemaining(mockDaysRemainingElement, mockDaysRemainingText);
+
+                       expect(mockDaysRemainingElement.textContent).to.equal("");
+                       expect(mockDaysRemainingText.textContent).to.equal("Completed after full duration");
+                   });
 
                 it("Renders correct confidence based on the context provided",
                     function () {
@@ -229,8 +265,7 @@
                         abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
                         abTestTextHelper.renderDescription(mockDescriptionNode);
 
-                        expect(mockDescriptionNode.textContent).to.equal("");
-
+                        expect(mockDescriptionNode.textContent).to.equal("A goal has not been specified.");
                     });
 
                 it("Renders correct participation percent and total visitors based on the context provided", function () {

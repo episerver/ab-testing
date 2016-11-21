@@ -142,6 +142,7 @@
                 aViewModel.testDuration = aConfigResult.testDuration;
                 aViewModel.confidencelevel = aConfigResult.confidenceLevel;
                 aViewModel.startDate = "today";
+                aViewModel.kpiId = "kpiIdGuid";
 
                 aViewModel.createTest();
 
@@ -152,7 +153,7 @@
                 expect(me.retTest.testDuration).to.equal(aViewModel.testDuration);
                 expect(me.retTest.participationPercent).to.equal(aViewModel.participationPercent);
                 expect(me.retTest.confidencelevel).to.equal(aViewModel.confidencelevel);
-                expect(me.retTest.conversionPage).to.equal(aViewModel.conversionPage);
+                expect(me.retTest.kpiId).to.equal(aViewModel.kpiId);
                 expect(me.retTest.testTitle).to.equal(aViewModel.testTitle);
                 expect(me.retTest.startDate).to.equal(aViewModel.startDate);
             });
