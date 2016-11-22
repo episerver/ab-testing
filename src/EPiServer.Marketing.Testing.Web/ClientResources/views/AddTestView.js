@@ -91,7 +91,7 @@
                     this._setKpiSelectList(this.kpiModel.availableKpi);
                 };
 
-                this.kpiModel.watch("availableKpi",
+                this.kpiModel.watch("availableKpis",
                     function (name, oldvalue, value) {
                         me._setKpiSelectList(value);
                     });
