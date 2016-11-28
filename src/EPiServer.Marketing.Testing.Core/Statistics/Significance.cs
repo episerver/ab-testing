@@ -13,6 +13,8 @@ namespace EPiServer.Marketing.Testing.Core.Statistics
 
         public double ZScore { get; set; }
 
+        public Guid WinningVariantId { get; set; }
+       
     }
 
     public static class Significance
@@ -48,10 +50,21 @@ namespace EPiServer.Marketing.Testing.Core.Statistics
             var calculatedZScore = Math.Abs(variantConversionRate - originalConversionRate)/
                                     standardErrorOfDifference;
 
+            var winningVariantId = Guid.Empty;
+
+            if (originalConversionRate > variantConversionRate)
+            {
+                winningVariantId = test.Variants[0].Id;
+            }
+            else if (variantConversionRate > originalConversionRate)
+            {
+                winningVariantId = test.Variants[1].Id;
+            }
             return new SignificanceResults()
             {
                 IsSignificant = calculatedZScore > ZScores[test.ConfidenceLevel],
-                ZScore = calculatedZScore
+                ZScore = calculatedZScore,
+                WinningVariantId = winningVariantId
             };
 
         }

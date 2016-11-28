@@ -230,6 +230,12 @@ namespace EPiServer.Marketing.Testing
                 var sigResults = Significance.CalculateIsSignificant(test);
                 test.IsSignificant = sigResults.IsSignificant;
                 test.ZScore = sigResults.ZScore;
+
+                if (test.AutoPublishWinner)
+                {
+                    test.Variants.FirstOrDefault(v => v.Id == sigResults.WinningVariantId).IsWinner = true;
+                }
+
                 Save(test);
 
                 UpdateCache(test, CacheOperator.Remove);
