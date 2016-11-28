@@ -98,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         ///  matches requested page</returns>
         public bool IsRequestedContent(IContent loadedContent)
         {
-            var content = GetCurrentPageFromUrl();
+            var content = GetCurrentPage();
             var isMatchedPage = false;
             if (content != null)
             {
@@ -116,9 +116,18 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// Converts the current URL to an IContent object
         /// </summary>
         /// <returns></returns>
-        public IContent GetCurrentPageFromUrl()
+        public IContent GetCurrentPage()
         {
-            return HttpContext.Current.Items["CurrentPage"] as IContent;
+            // Get the page associate with this request once
+            // and store in the request so we can use it later
+            try
+            {
+                var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+                return pageHelper.Page;
+            }
+            catch { } // sometimes requests dont contain epi pages.
+
+            return null;
         }
 
         public MarketingTestingContextModel GenerateContextData(IMarketingTest testData)

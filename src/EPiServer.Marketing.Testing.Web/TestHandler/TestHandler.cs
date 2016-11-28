@@ -17,6 +17,7 @@ using System.Reflection;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
+using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -247,8 +248,6 @@ namespace EPiServer.Marketing.Testing.Web
                         // so set the skip flag so we dont try to process the test.
                         HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
                         _testManager.GetVariantContent(e.Content.ContentGuid);
-                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
-
                         if (!hasData && DbReadWrite() )
                         {
                             // Make sure the cookie has data in it.
@@ -257,6 +256,8 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, contentVersion, originalContent);
+
+                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
                 }
                 catch (Exception err)
@@ -388,7 +389,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
-                    var pageHelper = _serviceLocator.GetInstance<EPiServer.Web.Routing.PageRouteHelper>();
+                    var pageHelper = _serviceLocator.GetInstance<IPageRouteHelper>();
                     if (pageHelper.PageLink.ID == cea.ContentLink.ID)
                     {
                         HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;

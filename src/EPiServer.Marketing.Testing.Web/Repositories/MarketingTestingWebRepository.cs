@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void DeleteTestForContent(Guid aContentGuid)
         {
             var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var testList = testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Done && abtest.State != TestState.Archived);
+            var testList = testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived);
 
             foreach (var test in testList)
             {
