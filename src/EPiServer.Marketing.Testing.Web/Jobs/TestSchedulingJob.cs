@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         SortIndex = 0,              // Brings it to top of job list.
         DefaultEnabled = true,      // By default the task is enabled.
         InitialTime = "00:02:00",   // First time only, start after 2 min
-        IntervalLength = 3,        // Default configured interval is 30 minutes
+        IntervalLength = 30,        // Default configured interval is 30 minutes
         IntervalType = ScheduledIntervalType.Minutes,
         LanguagePath = "/abtesting/scheduler_plugin")
     ]
