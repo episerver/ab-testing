@@ -122,7 +122,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             // and store in the request so we can use it later
             try
             {
-                var pageHelper = ServiceLocator.Current.GetInstance<IPageRouteHelper>();
+                var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.IPageRouteHelper>();
                 return pageHelper.Page;
             }
             catch { } // sometimes requests dont contain epi pages.
