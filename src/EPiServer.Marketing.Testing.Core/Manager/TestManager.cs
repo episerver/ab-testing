@@ -233,7 +233,11 @@ namespace EPiServer.Marketing.Testing
 
                 if (test.AutoPublishWinner)
                 {
-                    test.Variants.FirstOrDefault(v => v.Id == sigResults.WinningVariantId).IsWinner = true;
+                    if (Guid.Empty != sigResults.WinningVariantId)
+                    {
+                        var winningVariant = test.Variants.First(v => v.Id == sigResults.WinningVariantId);
+                        winningVariant.IsWinner = true;
+                    }
                 }
 
                 Save(test);

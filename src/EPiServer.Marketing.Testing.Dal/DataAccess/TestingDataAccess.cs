@@ -407,17 +407,10 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                     test.OriginalItemId = testObject.OriginalItemId;
                     test.LastModifiedBy = testObject.LastModifiedBy;
                     test.StartDate = testObject.StartDate.ToUniversalTime();
-                    if(testObject.EndDate.HasValue)
-                    {
-                        test.EndDate = testObject.EndDate.Value.ToUniversalTime();
-                    }
-                    else
-                    {
-                    test.EndDate = testObject.EndDate;
-                    }
+                    test.EndDate = testObject.EndDate.ToUniversalTime();
 
                     test.ModifiedDate = DateTime.UtcNow;
-                        test.ParticipationPercentage = testObject.ParticipationPercentage;
+                    test.ParticipationPercentage = testObject.ParticipationPercentage;
 
                     // remove any existing kpis that are not part of the new test
                     foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
@@ -480,6 +473,36 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                         test.IsSignificant = testObject.IsSignificant;
                         test.ZScore = testObject.ZScore;
                         test.ModifiedDate = DateTime.UtcNow;
+
+                        // remove any existing variants that are not part of the new test
+                        foreach (var existingVariant in test.Variants.ToList())
+                        {
+                            if (testObject.Variants.All(k => k.Id != existingVariant.Id))
+                            {
+                                repo.Delete(existingVariant);
+                            }
+                        }
+
+                        // update existing variants that are still around and add any that are new
+                        foreach (var newVariant in testObject.Variants)
+                        {
+                            var existingVariant = test.Variants.SingleOrDefault(k => k.Id == newVariant.Id);
+
+                            if (existingVariant != null)
+                            {
+                                existingVariant.ItemId = newVariant.ItemId;
+                                existingVariant.ItemVersion = newVariant.ItemVersion;
+                                existingVariant.ModifiedDate = DateTime.UtcNow;
+                                existingVariant.Views = newVariant.Views;
+                                existingVariant.Conversions = newVariant.Conversions;
+                                existingVariant.IsWinner = newVariant.IsWinner;
+                                existingVariant.IsPublished = newVariant.IsPublished;
+                            }
+                            else
+                            {
+                                test.Variants.Add(newVariant);
+                            }
+                        }
                         break;
                     case DalTestState.Active:
                         test.State = testObject.State;

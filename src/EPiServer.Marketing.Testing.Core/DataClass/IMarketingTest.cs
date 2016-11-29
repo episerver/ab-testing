@@ -42,7 +42,7 @@ namespace EPiServer.Marketing.Testing.Data
         /// <summary>
         /// Date and time the test is scheduled to end.
         /// </summary>
-        DateTime? EndDate { get; set; }
+        DateTime EndDate { get; set; }
 
         /// <summary>
         /// Percentage of users to include in the test.

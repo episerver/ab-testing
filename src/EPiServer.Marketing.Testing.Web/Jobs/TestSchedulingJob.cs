@@ -8,7 +8,11 @@ using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using EPiServer.Core;
 using EPiServer.Marketing.Testing.Core.Statistics;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
@@ -23,7 +27,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         SortIndex = 0,              // Brings it to top of job list.
         DefaultEnabled = true,      // By default the task is enabled.
         InitialTime = "00:02:00",   // First time only, start after 2 min
-        IntervalLength = 30,        // Default configured interval is 30 minutes
+        IntervalLength = 3,        // Default configured interval is 30 minutes
         IntervalType = ScheduledIntervalType.Minutes,
         LanguagePath = "/abtesting/scheduler_plugin")
     ]
@@ -61,10 +65,30 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                 switch (test.State)
                 {
                     case TestState.Active:
-                        var utcEndDate = ((DateTime)test.EndDate).ToUniversalTime();
+                        var utcEndDate = test.EndDate;
                         if (DateTime.UtcNow > utcEndDate) // stop it now
                         {
                             tm.StopMarketingTest(test.Id);
+
+                            if (test.AutoPublishWinner)
+                            {
+                                // need to get updated test so that we know which variant won since we need to autopublish it
+                                var updatedTest = tm.GetTestById(test.Id);
+                                var contextHelper = new TestingContextHelper();
+                                var contextData = contextHelper.GenerateContextData(updatedTest);
+                                var winningLink = updatedTest.Variants.First(v => v.IsWinner).IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
+
+                                var storeModel = new TestResultStoreModel()
+                                {
+                                    DraftContentLink = contextData.DraftVersionContentLink,
+                                    PublishedContentLink = contextData.PublishedVersionContentLink,
+                                    TestId = updatedTest.Id.ToString(),
+                                    WinningContentLink = winningLink
+                                };
+
+                                tm.PublishWinningVariant(storeModel);
+                            }
+
                             stopped++;
                         }
                         else if(NextExecutionUTC > utcEndDate)
@@ -74,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         }
                         break;
                     case TestState.Inactive:
-                        var utcStartDate = test.StartDate.ToUniversalTime();
+                        var utcStartDate = test.StartDate;
                         if ( DateTime.UtcNow > utcStartDate) // start it now
                         {
                             tm.StartMarketingTest(test.Id);

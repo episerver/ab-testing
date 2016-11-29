@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// Date and time the test ends.
         /// </summary>
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         /// <summary>
         /// Percentage of visitors that will be part of the test.

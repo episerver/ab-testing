@@ -249,7 +249,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return PrincipalInfo.CurrentPrincipal.Identity.Name;
         }
 
-        private DateTime? CalculateEndDateFromDuration(string startDate, int testDuration)
+        private DateTime CalculateEndDateFromDuration(string startDate, int testDuration)
         {
             DateTime endDate = DateTime.Parse(startDate);
             return endDate.AddDays(testDuration);
