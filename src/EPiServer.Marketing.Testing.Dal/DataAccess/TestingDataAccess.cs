@@ -445,7 +445,11 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                         test.ZScore = testObject.ZScore;
                         test.ModifiedDate = DateTime.UtcNow;
 
-                        UpdateVariants(repo, test, testObject);
+                        // for now, we only need to update the variants if the test is set to autopublish the winner so we know which variant won
+                        if (test.AutoPublishWinner)
+                        {
+                            UpdateVariants(repo, test, testObject);
+                        }
                         break;
                     case DalTestState.Active:
                         test.State = testObject.State;
