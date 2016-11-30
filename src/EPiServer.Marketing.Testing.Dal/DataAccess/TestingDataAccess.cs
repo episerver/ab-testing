@@ -402,71 +402,42 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                 switch (test.State)
                 {
                     case DalTestState.Inactive:
-                    test.Title = testObject.Title;
-                    test.Description = testObject.Description;
-                    test.OriginalItemId = testObject.OriginalItemId;
-                    test.LastModifiedBy = testObject.LastModifiedBy;
-                    test.StartDate = testObject.StartDate.ToUniversalTime();
-                    test.EndDate = testObject.EndDate.ToUniversalTime();
+                        test.Title = testObject.Title;
+                        test.Description = testObject.Description;
+                        test.OriginalItemId = testObject.OriginalItemId;
+                        test.LastModifiedBy = testObject.LastModifiedBy;
+                        test.StartDate = testObject.StartDate.ToUniversalTime();
+                        test.EndDate = testObject.EndDate.ToUniversalTime();
 
-                    test.ModifiedDate = DateTime.UtcNow;
-                    test.ParticipationPercentage = testObject.ParticipationPercentage;
+                        test.ModifiedDate = DateTime.UtcNow;
+                        test.ParticipationPercentage = testObject.ParticipationPercentage;
 
-                    // remove any existing kpis that are not part of the new test
-                    foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
-                    {
-                        if (testObject.KeyPerformanceIndicators.All(k => k.Id != existingKpi.Id))
+                        // remove any existing kpis that are not part of the new test
+                        foreach (var existingKpi in test.KeyPerformanceIndicators.ToList())
                         {
-                            repo.Delete(existingKpi);
+                            if (testObject.KeyPerformanceIndicators.All(k => k.Id != existingKpi.Id))
+                            {
+                                repo.Delete(existingKpi);
+                            }
                         }
-                    }
 
-                    // update existing kpis that are still around and add any that are new
-                    foreach (var newKpi in testObject.KeyPerformanceIndicators)
-                    {
-                        var existingKpi = test.KeyPerformanceIndicators.SingleOrDefault(k => k.Id == newKpi.Id);
-
-                        if (existingKpi != null)
+                        // update existing kpis that are still around and add any that are new
+                        foreach (var newKpi in testObject.KeyPerformanceIndicators)
                         {
-                            existingKpi.KeyPerformanceIndicatorId = newKpi.KeyPerformanceIndicatorId;
-                            existingKpi.ModifiedDate = DateTime.UtcNow;
-                        }
-                        else
-                        {
-                            test.KeyPerformanceIndicators.Add(newKpi);
-                        }
-                    }
+                            var existingKpi = test.KeyPerformanceIndicators.SingleOrDefault(k => k.Id == newKpi.Id);
 
-                    // remove any existing variants that are not part of the new test
-                    foreach (var existingVariant in test.Variants.ToList())
-                    {
-                        if (testObject.Variants.All(k => k.Id != existingVariant.Id))
-                        {
-                            repo.Delete(existingVariant);
+                            if (existingKpi != null)
+                            {
+                                existingKpi.KeyPerformanceIndicatorId = newKpi.KeyPerformanceIndicatorId;
+                                existingKpi.ModifiedDate = DateTime.UtcNow;
+                            }
+                            else
+                            {
+                                test.KeyPerformanceIndicators.Add(newKpi);
+                            }
                         }
-                    }
 
-                    // update existing variants that are still around and add any that are new
-                    foreach (var newVariant in testObject.Variants)
-                    {
-                        var existingVariant = test.Variants.SingleOrDefault(k => k.Id == newVariant.Id);
-
-                        if (existingVariant != null)
-                        {
-                            existingVariant.ItemId = newVariant.ItemId;
-                            existingVariant.ItemVersion = newVariant.ItemVersion;
-                            existingVariant.ModifiedDate = DateTime.UtcNow;
-                            existingVariant.Views = newVariant.Views;
-                            existingVariant.Conversions = newVariant.Conversions;
-                                existingVariant.IsWinner = newVariant.IsWinner;
-                            existingVariant.IsPublished = newVariant.IsPublished;
-
-                        }
-                        else
-                        {
-                            test.Variants.Add(newVariant);
-                        }
-                    }
+                        UpdateVariants(repo, test, testObject);
                         break;
                     case DalTestState.Done:
                         test.State = testObject.State == DalTestState.Archived ? DalTestState.Archived : DalTestState.Done;
@@ -474,35 +445,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                         test.ZScore = testObject.ZScore;
                         test.ModifiedDate = DateTime.UtcNow;
 
-                        // remove any existing variants that are not part of the new test
-                        foreach (var existingVariant in test.Variants.ToList())
-                        {
-                            if (testObject.Variants.All(k => k.Id != existingVariant.Id))
-                            {
-                                repo.Delete(existingVariant);
-                            }
-                        }
-
-                        // update existing variants that are still around and add any that are new
-                        foreach (var newVariant in testObject.Variants)
-                        {
-                            var existingVariant = test.Variants.SingleOrDefault(k => k.Id == newVariant.Id);
-
-                            if (existingVariant != null)
-                            {
-                                existingVariant.ItemId = newVariant.ItemId;
-                                existingVariant.ItemVersion = newVariant.ItemVersion;
-                                existingVariant.ModifiedDate = DateTime.UtcNow;
-                                existingVariant.Views = newVariant.Views;
-                                existingVariant.Conversions = newVariant.Conversions;
-                                existingVariant.IsWinner = newVariant.IsWinner;
-                                existingVariant.IsPublished = newVariant.IsPublished;
-                            }
-                            else
-                            {
-                                test.Variants.Add(newVariant);
-                            }
-                        }
+                        UpdateVariants(repo, test, testObject);
                         break;
                     case DalTestState.Active:
                         test.State = testObject.State;
@@ -513,6 +456,39 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             repo.SaveChanges();
 
             return id;
+        }
+
+        private void UpdateVariants(IRepository repo, IABTest test, IABTest testObject)
+        {
+            // remove any existing variants that are not part of the new test
+            foreach (var existingVariant in test.Variants.ToList())
+            {
+                if (testObject.Variants.All(k => k.Id != existingVariant.Id))
+                {
+                    repo.Delete(existingVariant);
+                }
+            }
+
+            // update existing variants that are still around and add any that are new
+            foreach (var newVariant in testObject.Variants)
+            {
+                var existingVariant = test.Variants.SingleOrDefault(k => k.Id == newVariant.Id);
+
+                if (existingVariant != null)
+                {
+                    existingVariant.ItemId = newVariant.ItemId;
+                    existingVariant.ItemVersion = newVariant.ItemVersion;
+                    existingVariant.ModifiedDate = DateTime.UtcNow;
+                    existingVariant.Views = newVariant.Views;
+                    existingVariant.Conversions = newVariant.Conversions;
+                    existingVariant.IsWinner = newVariant.IsWinner;
+                    existingVariant.IsPublished = newVariant.IsPublished;
+                }
+                else
+                {
+                    test.Variants.Add(newVariant);
+                }
+            }
         }
 
         private bool IsTestActive(Guid testId)
