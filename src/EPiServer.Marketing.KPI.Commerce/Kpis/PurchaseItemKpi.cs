@@ -5,25 +5,25 @@ using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
-using System.Runtime.Serialization;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
-        text = "Add To Cart", description = "Choose a product for conversion.")]
-    public class AddToCartKpi : CommerceKpi
+        text = "Purchase Item", description = "Choose a product for conversion.")]
+    public class PurchaseItemKpi : CommerceKpi
     {
-        public AddToCartKpi()
+        public PurchaseItemKpi()
         {
-            LocalizationSection = "addtocart";
+            LocalizationSection = "purchaseitem";
             _servicelocator = ServiceLocator.Current;
         }
-        internal AddToCartKpi(IServiceLocator servicelocator)
+        internal PurchaseItemKpi(IServiceLocator servicelocator)
         {
-            LocalizationSection = "addtocart";
+            LocalizationSection = "purchaseitem";
             _servicelocator = servicelocator;
         }
 
@@ -36,18 +36,19 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;
-                
+
             var contentLoader = _servicelocator.GetInstance<IContentLoader>();
             var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
 
             var ea = e as OrderGroupEventArgs;
-            var ordergroup = sender as OrderGroup;
+            var ordergroup = sender as PurchaseOrder;
             if (ea != null && ordergroup != null)
             {
                 foreach (var o in ordergroup.OrderForms.ToArray())
                 {
-                    foreach( var lineitem in o.LineItems.ToArray())
+                    foreach (var lineitem in o.LineItems.ToArray())
                     {
+
                         //We use the content link builder to get the contentlink to our product
                         var productLink = referenceConverter.GetContentLink(lineitem.Code);
 
