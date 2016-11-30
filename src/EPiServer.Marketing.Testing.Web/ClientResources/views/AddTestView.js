@@ -237,6 +237,15 @@
                 return confidenceSelectWidget.value;
             },
 
+            _getAutoPublish: function () {
+                var autopublishWidget = dijit.byId("autopublish");
+                if (autopublishWidget.value === 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
             // Transforms custom KPI form data into json for processing
             _getKpiFormData: function () {
                 var me = this;
@@ -477,8 +486,8 @@
                     this.model.startDate = utcNow;
                 }
 
-                this.model.confidencelevel = dom.byId("confidence").value;
-                this.model.autopublishwinner = dom.byId("autopublish").value;
+                this.model.confidencelevel = this._getConfidenceLevel();
+                this.model.autoPublishWinner = this._getAutoPublish();
                 this.model.testTitle = me.pageName.textContent;
 
                 this.kpiFormData = this._getKpiFormData();
