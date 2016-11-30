@@ -44,9 +44,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             var ordergroup = sender as PurchaseOrder;
             if (ea != null && ordergroup != null)
             {
-                // todo, figure out how we convert based on what we have.
-                // note that the order group has actual info in it, not the eventargs.
-                //
                 foreach (var o in ordergroup.OrderForms.ToArray())
                 {
                     foreach (var lineitem in o.LineItems.ToArray())

@@ -44,14 +44,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             var ordergroup = sender as OrderGroup;
             if (ea != null && ordergroup != null)
             {
-                // todo, figure out how we convert based on what we have.
-                // note that the order group has actual info in it, not the eventargs.
-                //
                 foreach (var o in ordergroup.OrderForms.ToArray())
                 {
                     foreach( var lineitem in o.LineItems.ToArray())
                     {
-                        
                         //We use the content link builder to get the contentlink to our product
                         var productLink = referenceConverter.GetContentLink(lineitem.Code);
 
