@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -16,16 +18,41 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
+
+        Mock<ITestingContextHelper> _contextHelper = new Mock<ITestingContextHelper>();
+
         MyLS _ls = new MyLS();
         Mock<IScheduledJobRepository> _jobRepo = new Mock<IScheduledJobRepository>();
         private Guid TestToStart = Guid.NewGuid();
+        private Guid TestToAutoPublish = Guid.NewGuid();
         private Guid TestToStop = Guid.NewGuid();
         private Guid TestToChangeSchedule1 = Guid.NewGuid();
         private Guid TestToChangeSchedule2 = Guid.NewGuid();
 
         private TestSchedulingJob GetUnitUnderTest()
         {
+            _locator.Setup(sl => sl.GetInstance<ITestingContextHelper>()).Returns(_contextHelper.Object);
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
+            _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_ls);
+            _locator.Setup(sl => sl.GetInstance<IScheduledJobRepository>()).Returns(_jobRepo.Object);
+
+            var mtcm = new MarketingTestingContextModel() { DraftVersionContentLink = "draft", PublishedVersionContentLink = "published"};
+
+            _contextHelper.Setup(call => call.GenerateContextData(It.IsAny<IMarketingTest>())).Returns(mtcm);
+
+            var testToPublish = new ABTest()
+            {
+                Id = TestToAutoPublish,
+                StartDate = DateTime.Now.AddHours(-1),
+                State = Data.Enums.TestState.Active,
+                ZScore = 2.4,
+                ConfidenceLevel = 95,
+                AutoPublishWinner = true,
+                Variants = new List<Variant>() { new Variant() { Views = 100, Conversions = 50 }, new Variant() { Views = 70, Conversions = 60, IsWinner = true }}} ;
+
+            _webRepo.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(testToPublish);
+            _webRepo.Setup(call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns(TestToAutoPublish.ToString);
+
             _jobRepo.Setup(g => g.Get(It.IsAny<Guid>())).Returns( new ScheduledJob(
                 Guid.Empty, "TestSchedulingJob", true, 
                     DateTime.MinValue, DateTime.MaxValue, DateTime.MaxValue.ToUniversalTime(),
@@ -33,13 +60,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     false, "TestSchedulingJob", "EPiServer.Marketing.Testing.Web.Jobs",
                     null
                 ) );
-            _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_ls);
-
-            _locator.Setup(sl => sl.GetInstance<IScheduledJobRepository>()).Returns(_jobRepo.Object);
 
             var list = new List<IMarketingTest>()
             {
-                new ABTest() { Id = TestToStart,
+                testToPublish,
+                new ABTest()
+                {
+                    Id = TestToStart,
                     StartDate = DateTime.Now.AddHours(-1),
                     State = Data.Enums.TestState.Inactive,
                     ZScore = 2.4,

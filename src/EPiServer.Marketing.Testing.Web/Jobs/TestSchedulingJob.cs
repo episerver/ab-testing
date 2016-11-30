@@ -52,6 +52,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             var ls = _locator.GetInstance<LocalizationService>();
             var msg = ls.GetString("/abtesting/scheduler_plugin/message");
 
+            var testingContextHelper = _locator.GetInstance<ITestingContextHelper>();
             var tm = _locator.GetInstance<IMarketingTestingWebRepository>();
             var repo = _locator.GetInstance<IScheduledJobRepository>();
             ScheduledJob job = repo.Get(this.ScheduledJobId);
@@ -74,8 +75,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                             {
                                 // need to get updated test so that we know which variant won since we need to autopublish it
                                 var updatedTest = tm.GetTestById(test.Id);
-                                var contextHelper = new TestingContextHelper();
-                                var contextData = contextHelper.GenerateContextData(updatedTest);
+                                var contextData = testingContextHelper.GenerateContextData(updatedTest);
                                 var winningLink = updatedTest.Variants.First(v => v.IsWinner).IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
 
                                 var storeModel = new TestResultStoreModel()
