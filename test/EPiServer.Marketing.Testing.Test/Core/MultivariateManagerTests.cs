@@ -49,10 +49,12 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     OriginalItemId = testId,
                     ConfidenceLevel = 95,
                     State = DalTestState.Active,
+                    AutoPublishWinner = true,
                     Variants = new List<DalVariant>()
                     {
-                        new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant()
+                        new DalVariant() {Id=Guid.NewGuid(), ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant()
                         {
+                            Id=Guid.NewGuid(),
                             ItemVersion = 4, Views = 5000, Conversions = 130, IsPublished=true,
                             DalKeyValueResults = new List<DalKeyValueResult>()
                             {
