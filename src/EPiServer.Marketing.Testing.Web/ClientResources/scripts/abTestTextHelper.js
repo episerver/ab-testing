@@ -106,6 +106,11 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             confidenceNode.textContent = context.data.test.confidenceLevel + "%";
         },
 
+        //sets text content of provided node to the context autopublish setting
+        renderAutoPublish: function (autopublishNode) {
+            autopublishNode.textContent = context.data.test.autoPublishWinner;
+        },
+
         //sets text content of provided nodes to the published content publishedy by and date published values
         renderPublishedInfo: function (publishedByNode, datePublishedNode) {
             publishedByNode.textContent = username.toUserFriendlyString(context.data.publishedVersionPublishedBy);
