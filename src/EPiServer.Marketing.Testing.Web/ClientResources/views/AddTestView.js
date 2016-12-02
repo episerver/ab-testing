@@ -87,8 +87,8 @@
                 var me = this;
                 this.model = this.model || new AddTestViewModel({ contentData: this.contentData });
                 this.kpiModel = this.kpiModel || new KpiViewModel();
-                if (this.kpiModel.availableKpi) {
-                    this._setKpiSelectList(this.kpiModel.availableKpi);
+                if (this.kpiModel.availableKpis) {
+                    this._setKpiSelectList(this.kpiModel.availableKpis);
                 };
 
                 this.kpiModel.watch("availableKpis",
@@ -462,7 +462,7 @@
                 if (this._isValidFormData()) {
                     this.model.createTest();
                     this._clearConversionErrors();
-                    this._setKpiSelectList(this.kpiModel.availableKpi);
+                    this._setKpiSelectList(this.kpiModel.availableKpis);
                 } else {
                     this.startButtonClickCounter = 0;
                 }
@@ -476,7 +476,7 @@
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
-                this._setKpiSelectList(this.kpiModel.availableKpi);
+                this._setKpiSelectList(this.kpiModel.availableKpis);
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
