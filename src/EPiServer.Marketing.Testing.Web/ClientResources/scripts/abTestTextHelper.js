@@ -88,7 +88,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
         //sets text content of provided node to the context test time remaining
         renderTestRemaining: function (testRemainingNode, testRemainingTextNode) {
             if (Number(context.data.test.state) === 0) {
-                testRemainingNode.textContent = resources.test_not_started_text;
+                testRemainingNode.textContent = resources.test_status_not_started;
                 testRemainingTextNode.textContent = "";
             } else if (Number(context.data.test.state) > 1) {
                 testRemainingNode.textContent = "";
