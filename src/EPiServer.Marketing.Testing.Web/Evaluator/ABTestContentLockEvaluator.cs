@@ -8,16 +8,24 @@ namespace EPiServer.Marketing.Testing.Web.Evaluator
     public class ABTestLockEvaluator : IContentLockEvaluator
     {
         private IMarketingTestingWebRepository _webRepo;
+        private IContentRepository _contentRepo;
+        internal string _abLockId = "ActiveABTestLock";
 
         public ABTestLockEvaluator()
         {
             _webRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
+            _contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+        }
+
+        internal ABTestLockEvaluator(IMarketingTestingWebRepository theWebRepo, IContentRepository theContentRepo)
+        {
+            _webRepo = theWebRepo;
+            _contentRepo = theContentRepo;
         }
 
         public ContentLock IsLocked(ContentReference contentLink)
         {
-            var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
-            var content = contentRepo.Get<IContent>(contentLink);
+            var content = _contentRepo.Get<IContent>(contentLink);
 
             if (content == null)
                 return null;
@@ -27,7 +35,7 @@ namespace EPiServer.Marketing.Testing.Web.Evaluator
             if (test == null || test.Id == null || test.Id == Guid.Empty)
                 return null;
 
-            return new ContentLock(contentLink, test.Owner, "ActiveABTestLock", test.CreatedDate);
+            return new ContentLock(contentLink, test.Owner, _abLockId, test.CreatedDate);
         }
     }
 }
