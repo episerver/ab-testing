@@ -3,8 +3,8 @@
   <language name="français" id="fr">
     <abtesting>
       <addtestcommand>
-        <label_text>A/B Test changes</label_text>
-        <tooltip_text>A/B Test changes</tooltip_text>
+        <label_text>A/B Test Changes</label_text>
+        <tooltip_text>A/B Test Changes</tooltip_text>
       </addtestcommand>
       <addtestview>
         <advanced_options>Advanced Options</advanced_options>
