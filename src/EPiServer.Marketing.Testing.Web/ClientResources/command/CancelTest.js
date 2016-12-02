@@ -48,14 +48,6 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
                     }
                 }
 
-                if (isVisible) {
-                    for (var i = 0; i < menu.providers.length; i++) {
-                        for (var j = 0; j < menu.providers[i].commands.length; j++) {
-                            menu.providers[i].commands[j].set("isAvailable", false);
-                        }
-                    }
-                }
-
                 me.set("isAvailable", isVisible);
                 me.set("canExecute", isClickable);
             });

@@ -6,13 +6,16 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Marketing.Testing.Web.MetadataExtender;
 using EPiServer.Shell.ObjectEditing;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Web.Evaluator;
 
 namespace EPiServer.Marketing.Testing.Web.Initializers
 {
     [InitializableModule]
     public class MarketingTestingInitialization : IConfigurableModule
     {
-        public void ConfigureContainer(ServiceConfigurationContext context) { }
+        public void ConfigureContainer(ServiceConfigurationContext context) {
+            context.Services.AddTransient<IContentLockEvaluator, ABTestLockEvaluator>();
+        }
 
         public void Initialize(InitializationEngine context)
         {
