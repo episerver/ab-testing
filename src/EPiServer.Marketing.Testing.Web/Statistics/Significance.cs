@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Data;
 
-namespace EPiServer.Marketing.Testing.Core.Statistics
+namespace EPiServer.Marketing.Testing.Web.Statistics
 {
     public class SignificanceResults
     {

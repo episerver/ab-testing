@@ -52,8 +52,6 @@ define([
         //confidence level
         confidenceLevel: null,
 
-        autoPublishWinner: null,
-
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
@@ -87,11 +85,6 @@ define([
                             this.set("testDuration", config.testDuration);
                             this.set("participationPercent", config.participationPercent);
                             this.set("confidenceLevel", config.confidenceLevel);
-                            if (config.autoPublishWinner) {
-                                this.set("autoPublishWinner", 1);
-                            } else {
-                                this.set("autoPublishWinner", 2);
-                            }
                         }.bind(this));
 
                     console.log(result);
@@ -117,8 +110,7 @@ define([
                 testTitle: this.testTitle,
                 startDate: this.startDate,
                 start: this.start,
-                confidencelevel: this.confidencelevel,
-                autopublishwinner: this.autoPublishWinner
+                confidencelevel: this.confidencelevel
             }).then(function () {
                 var contextParameters = { uri: "epi.cms.contentdata:///" + me.currentVersion.contentLink };
                 me.topic.publish("/epi/shell/context/request", contextParameters);

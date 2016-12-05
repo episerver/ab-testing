@@ -54,9 +54,6 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.IsSignificant)
                 .IsRequired();
 
-            this.Property(m => m.AutoPublishWinner)
-                .IsRequired();
-
             this.Property(m => m.CreatedDate)
                 .IsRequired();
 

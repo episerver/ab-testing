@@ -10,7 +10,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
-using EPiServer.Marketing.Testing.Core.Statistics;
+using EPiServer.Marketing.Testing.Web.Statistics;
+using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
@@ -51,17 +52,17 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             int started = 0, stopped = 0, active = 0, inactive = 0, done = 0;
             var ls = _locator.GetInstance<LocalizationService>();
             var msg = ls.GetString("/abtesting/scheduler_plugin/message");
-
             var testingContextHelper = _locator.GetInstance<ITestingContextHelper>();
-            var tm = _locator.GetInstance<IMarketingTestingWebRepository>();
-            var repo = _locator.GetInstance<IScheduledJobRepository>();
-            ScheduledJob job = repo.Get(this.ScheduledJobId);
-            DateTime NextExecutionUTC = job.NextExecutionUTC;
-
+            var webRepo = _locator.GetInstance<IMarketingTestingWebRepository>();
+            var jobRepo = _locator.GetInstance<IScheduledJobRepository>();
+            var job = jobRepo.Get(this.ScheduledJobId);
+            var nextExecutionUTC = job.NextExecutionUTC;
+            var autoPublishTestResults = AdminConfigTestSettings.Current.AutoPublishWinner;
+            
             // Start / stop any tests that need to be.
             // If any tests are scheduled to start or stop prior to the next scheduled
             // exection date of this job, change the next execution date approprately. 
-            foreach (var test in tm.GetTestList(new TestCriteria()))
+            foreach (var test in webRepo.GetTestList(new TestCriteria()))
             {
                 switch (test.State)
                 {
@@ -69,63 +70,78 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         var utcEndDate = test.EndDate;
                         if (DateTime.UtcNow > utcEndDate) // stop it now
                         {
-                            tm.StopMarketingTest(test.Id);
+                            webRepo.StopMarketingTest(test.Id);
 
-                            if (test.AutoPublishWinner)
+                            //calculate significance results
+                            var sigResults = Significance.CalculateIsSignificant(test);
+                            test.IsSignificant = sigResults.IsSignificant;
+                            test.ZScore = sigResults.ZScore;
+
+                            if (autoPublishTestResults && sigResults.IsSignificant)
                             {
-                                // need to get updated test so that we know which variant won since we need to autopublish it
-                                var updatedTest = tm.GetTestById(test.Id);
-                                var contextData = testingContextHelper.GenerateContextData(updatedTest);
-                                var winningLink = updatedTest.Variants.First(v => v.IsWinner).IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
-
-                                var storeModel = new TestResultStoreModel()
+                                if (Guid.Empty != sigResults.WinningVariantId)
                                 {
-                                    DraftContentLink = contextData.DraftVersionContentLink,
-                                    PublishedContentLink = contextData.PublishedVersionContentLink,
-                                    TestId = updatedTest.Id.ToString(),
-                                    WinningContentLink = winningLink
-                                };
+                                    var winningVariant = test.Variants.First(v => v.Id == sigResults.WinningVariantId);
+                                    winningVariant.IsWinner = true;
 
-                                tm.PublishWinningVariant(storeModel);
+                                    webRepo.SaveMarketingTest(test);
+
+                                    var contextData = testingContextHelper.GenerateContextData(test);
+                                    var winningLink = winningVariant.IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
+
+                                    var storeModel = new TestResultStoreModel()
+                                    {
+                                        DraftContentLink = contextData.DraftVersionContentLink,
+                                        PublishedContentLink = contextData.PublishedVersionContentLink,
+                                        TestId = test.Id.ToString(),
+                                        WinningContentLink = winningLink
+                                    };
+
+                                    webRepo.PublishWinningVariant(storeModel);
+                                }
+                            }
+                            else
+                            {
+                                webRepo.SaveMarketingTest(test);
                             }
 
                             stopped++;
                         }
-                        else if(NextExecutionUTC > utcEndDate)
+                        else if (nextExecutionUTC > utcEndDate)
                         {
                             // set a newer date to run the job again
-                            NextExecutionUTC = utcEndDate;
+                            nextExecutionUTC = utcEndDate;
                         }
                         break;
                     case TestState.Inactive:
                         var utcStartDate = test.StartDate;
                         if ( DateTime.UtcNow > utcStartDate) // start it now
                         {
-                            tm.StartMarketingTest(test.Id);
+                            webRepo.StartMarketingTest(test.Id);
                             started++;
                         }
-                        else if (NextExecutionUTC > utcStartDate)
+                        else if (nextExecutionUTC > utcStartDate)
                         {
                             // set a newer date to run the job again
-                            NextExecutionUTC = utcStartDate;
+                            nextExecutionUTC = utcStartDate;
                         }
                         break;
                 }
             }
 
             // update the next run time if we need to
-            if( job.NextExecutionUTC != NextExecutionUTC )
+            if( job.NextExecutionUTC != nextExecutionUTC )
             {
                 if (job.IsEnabled)
                 {
                     // NextExecution requires local time
-                    job.NextExecution = NextExecutionUTC.ToLocalTime();
-                    repo.Save(job);
+                    job.NextExecution = nextExecutionUTC.ToLocalTime();
+                    jobRepo.Save(job);
                 }
             }
 
             // Calculate active, inactive and done for log message
-            foreach ( var test in tm.GetTestList(new TestCriteria()) )
+            foreach ( var test in webRepo.GetTestList(new TestCriteria()) )
             {
                 if( test.State == TestState.Active )
                 { active++; }

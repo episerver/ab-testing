@@ -64,7 +64,6 @@
         viewTestDuration: null;
         viewConfidenceLevel: null;
         startButtonClickCounter: 0;
-        viewAutoPublishWinner: null;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -80,8 +79,7 @@
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"],
-                autoPublishWinner: ["viewAutoPublishWinner"]
+                confidenceLevel: ["viewConfidenceLevel"]
             },
 
             //sets views starting data from view model
@@ -178,33 +176,6 @@
                 this.durationText.set("Value", viewTestDuration);
             },
 
-            _setViewAutoPublishWinnerAttr: function (viewAutoPublishWinner) {
-                var rbs = [
-                    { val: 1, label: "True" },
-                    { val: 2, label: "False" }
-                ];
-                var autopublishwinnerSelectWidget = registry.byId("autopublish"), selectOption, defaultOption;
-                dijit.byId('autopublish').removeOption(dijit.byId('autopublish').getOptions());
-                if (autopublishwinnerSelectWidget) {
-                    for (var i = 0; i < rbs.length; i++) {
-                        if (viewAutoPublishWinner) {
-                            if (rbs[i].val === viewAutoPublishWinner) {
-                                selectOption = { value: rbs[i].val, label: rbs[i].label + " (Default)" };
-                                autopublishwinnerSelectWidget.addOption(selectOption);
-                                defaultOption = rbs[i].val;
-                                autopublishwinnerSelectWidget.setValue(defaultOption);
-                            } else {
-                                selectOption = { value: rbs[i].val, label: rbs[i].label };
-                                autopublishwinnerSelectWidget.addOption(selectOption);
-                            }
-                        }
-                        if (defaultOption) {
-                            autopublishwinnerSelectWidget.setValue(defaultOption);
-                        }
-                    }
-                }
-            },
-
             _setViewConfidenceLevelAttr: function (viewConfidenceLevel) {
                 var rbs = [
                     { val: 99, label: "99%" },
@@ -235,15 +206,6 @@
             _getConfidenceLevel: function () {
                 var confidenceSelectWidget = dijit.byId("confidence");
                 return confidenceSelectWidget.value;
-            },
-
-            _getAutoPublish: function () {
-                var autopublishWidget = dijit.byId("autopublish");
-                if (autopublishWidget.value === 1) {
-                    return true;
-                } else {
-                    return false;
-                }
             },
 
             // Transforms custom KPI form data into json for processing
@@ -397,7 +359,6 @@
                 }
 
                 this._setViewConfidenceLevelAttr();
-                this._setViewAutoPublishWinnerAttr();
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
@@ -487,7 +448,6 @@
                 }
 
                 this.model.confidencelevel = this._getConfidenceLevel();
-                this.model.autoPublishWinner = this._getAutoPublish();
                 this.model.testTitle = me.pageName.textContent;
 
                 this.kpiFormData = this._getKpiFormData();

@@ -115,14 +115,6 @@
     <Compile Include="Migrations\201609291731241_AddKpiResults.Designer.cs">
       <DependentUpon>201609291731241_AddKpiResults.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201611161701225_Merge.cs" />
-    <Compile Include="Migrations\201611161701225_Merge.Designer.cs">
-      <DependentUpon>201611161701225_Merge.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201611161702210_AddAutoPublishToTest.cs" />
-    <Compile Include="Migrations\201611161702210_AddAutoPublishToTest.Designer.cs">
-      <DependentUpon>201611161702210_AddAutoPublishToTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -136,12 +128,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201609291731241_AddKpiResults.resx">
       <DependentUpon>201609291731241_AddKpiResults.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611161701225_Merge.resx">
-      <DependentUpon>201611161701225_Merge.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201611161702210_AddAutoPublishToTest.resx">
-      <DependentUpon>201611161702210_AddAutoPublishToTest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

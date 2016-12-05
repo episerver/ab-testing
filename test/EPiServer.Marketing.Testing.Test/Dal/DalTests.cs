@@ -64,8 +64,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ActualVisitorCount = 50,
                 IsSignificant = false,
                 ZScore = .5,
-                ConfidenceLevel = .95,
-                AutoPublishWinner = false
+                ConfidenceLevel = .95
             };
 
             _context.ABTests.Add(test);
