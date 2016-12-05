@@ -12,8 +12,8 @@
     <copyright>Copyright 2015</copyright>
     <tags></tags>
     <dependencies>
-      <dependency id="EPiServer.CMS.Core" version="[9.0.3,10)" />
-      <dependency id="EPiServer.CMS.UI" version="[9.2,10)" />
+      <dependency id="EPiServer.CMS.Core" version="[9.0.3,11)" />
+      <dependency id="EPiServer.CMS.UI" version="[9.2,11)" />
       <dependency id="EPiServer.Marketing.Testing" version="$version$" />
       <dependency id="EPiServer.Logging.Log4Net" version="[2,3)" />
     </dependencies>
