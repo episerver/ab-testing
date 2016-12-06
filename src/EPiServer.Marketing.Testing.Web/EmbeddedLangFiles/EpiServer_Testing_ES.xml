@@ -46,6 +46,7 @@
         <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
       </addtestview>
       <admin>
+        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
         <cancel>Cancel</cancel>
         <confidencelevel>Confidence Level:</confidencelevel>
         <description>These settings are the defaults values used for when creating AB tests.</description>
@@ -100,6 +101,7 @@
         <tooltip_text>Cancel A/B test and edit page</tooltip_text>
       </canceltestcommand>
       <detailsview>
+        <advanced_options_autopublish_winner>Autopublish Winning Variant</advanced_options_autopublish_winner>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>
         <button_abort_option>Abort A/B Test</button_abort_option>
