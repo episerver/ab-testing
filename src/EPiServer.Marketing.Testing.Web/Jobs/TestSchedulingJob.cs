@@ -79,38 +79,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         {
                             webRepo.StopMarketingTest(test.Id);
 
-                            //calculate significance results
-                            var sigResults = Significance.CalculateIsSignificant(test);
-                            test.IsSignificant = sigResults.IsSignificant;
-                            test.ZScore = sigResults.ZScore;
-
-                            if (autoPublishTestResults && sigResults.IsSignificant)
-                            {
-                                if (Guid.Empty != sigResults.WinningVariantId)
-                                {
-                                    var winningVariant = test.Variants.First(v => v.Id == sigResults.WinningVariantId);
-                                    winningVariant.IsWinner = true;
-
-                                    webRepo.SaveMarketingTest(test);
-
-                                    var contextData = testingContextHelper.GenerateContextData(test);
-                                    var winningLink = winningVariant.IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
-
-                                    var storeModel = new TestResultStoreModel()
-                                    {
-                                        DraftContentLink = contextData.DraftVersionContentLink,
-                                        PublishedContentLink = contextData.PublishedVersionContentLink,
-                                        TestId = test.Id.ToString(),
-                                        WinningContentLink = winningLink
-                                    };
-
-                                    webRepo.PublishWinningVariant(storeModel);
-                                }
-                            }
-                            else
-                            {
-                                webRepo.SaveMarketingTest(test);
-                            }
+                            UpdateTest(test, webRepo, testingContextHelper, autoPublishTestResults);
 
                             stopped++;
                         }
@@ -159,6 +128,49 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             }
 
             return string.Format(msg, started, stopped, active, inactive, done);
+        }
+
+        /// <summary>
+        /// Calculate test results to see if they are significant or not and updat the test.  Also, autopublish the winning variant if the results are significant and autopublish is enabled.
+        /// </summary>
+        /// <param name="test"></param>
+        /// <param name="webRepo"></param>
+        /// <param name="testingContextHelper"></param>
+        /// <param name="autoPublishTestResults"></param>
+        private void UpdateTest(IMarketingTest test, IMarketingTestingWebRepository webRepo, ITestingContextHelper testingContextHelper, bool autoPublishTestResults)
+        {
+            //calculate significance results
+            var sigResults = Significance.CalculateIsSignificant(test);
+            test.IsSignificant = sigResults.IsSignificant;
+            test.ZScore = sigResults.ZScore;
+
+            if (autoPublishTestResults && sigResults.IsSignificant)
+            {
+                if (Guid.Empty != sigResults.WinningVariantId)
+                {
+                    var winningVariant = test.Variants.First(v => v.Id == sigResults.WinningVariantId);
+                    winningVariant.IsWinner = true;
+
+                    webRepo.SaveMarketingTest(test);
+
+                    var contextData = testingContextHelper.GenerateContextData(test);
+                    var winningLink = winningVariant.IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
+
+                    var storeModel = new TestResultStoreModel()
+                    {
+                        DraftContentLink = contextData.DraftVersionContentLink,
+                        PublishedContentLink = contextData.PublishedVersionContentLink,
+                        TestId = test.Id.ToString(),
+                        WinningContentLink = winningLink
+                    };
+
+                    webRepo.PublishWinningVariant(storeModel);
+                }
+            }
+            else
+            {
+                webRepo.SaveMarketingTest(test);
+            }
         }
     }
 }

@@ -50,7 +50,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 State = Data.Enums.TestState.Active,
                 ZScore = 2.4,
                 ConfidenceLevel = 95,
-                AutoPublishWinner = true,
                 Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50 }, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60, IsWinner = true }}} ;
 
             _webRepo.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(testToPublish);

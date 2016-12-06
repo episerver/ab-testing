@@ -65,11 +65,6 @@ namespace EPiServer.Marketing.Testing.Data
         public bool IsSignificant { get; set; }
 
         /// <summary>
-        /// If true and there is a winner(not a tie) the winning variant will be published when the test completes(i.e. do not need to pick-a-winner).
-        /// </summary>
-        public bool AutoPublishWinner { get; set; }
-
-        /// <summary>
         /// Last person that modified the test.
         /// </summary>
         public string LastModifiedBy { get; set; }
