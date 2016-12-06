@@ -99,7 +99,6 @@
         <tooltip_text>Abort A/B Test and Edit Page</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <advanced_options_autopublish_winner>Autopublish Winning Variant</advanced_options_autopublish_winner>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>
         <button_abort_option>Abort A/B Test</button_abort_option>
