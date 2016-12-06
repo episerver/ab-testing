@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Globalization;
+using EPiServer.Data.Dynamic;
+using EPiServer.Data.Dynamic.Internal;
+using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
@@ -18,7 +21,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
-
         Mock<ITestingContextHelper> _contextHelper = new Mock<ITestingContextHelper>();
 
         MyLS _ls = new MyLS();
@@ -39,6 +41,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var mtcm = new MarketingTestingContextModel() { DraftVersionContentLink = "draft", PublishedVersionContentLink = "published"};
 
             _contextHelper.Setup(call => call.GenerateContextData(It.IsAny<IMarketingTest>())).Returns(mtcm);
+            
 
             var testToPublish = new ABTest()
             {
@@ -48,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ZScore = 2.4,
                 ConfidenceLevel = 95,
                 AutoPublishWinner = true,
-                Variants = new List<Variant>() { new Variant() { Views = 100, Conversions = 50 }, new Variant() { Views = 70, Conversions = 60, IsWinner = true }}} ;
+                Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50 }, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60, IsWinner = true }}} ;
 
             _webRepo.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(testToPublish);
             _webRepo.Setup(call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns(TestToAutoPublish.ToString);
@@ -71,14 +74,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     State = Data.Enums.TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
-                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                    Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToChangeSchedule1,
                     StartDate = DateTime.Now.AddHours(24), // causes a reschedule 24 hours from now
                     State = Data.Enums.TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
-                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                    Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToChangeSchedule2,
                     StartDate = DateTime.Now.AddHours(-24),
@@ -86,22 +89,25 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     State = Data.Enums.TestState.Active,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
-                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                    Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToStop,
                     EndDate = DateTime.Now.AddHours(-1),
                     State = Data.Enums.TestState.Active,
-                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                    ConfidenceLevel = 95,
+                    Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = Guid.NewGuid(),
                     EndDate = DateTime.Now.AddHours(-1),
                     State = Data.Enums.TestState.Done,
-                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                    ConfidenceLevel = 95,
+                    Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = Guid.NewGuid(),
                     EndDate = DateTime.Now.AddHours(-1),
                     State = Data.Enums.TestState.Archived,
-                    Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }
+                    ConfidenceLevel = 95,
+                    Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
             };
 

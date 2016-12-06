@@ -57,7 +57,14 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             var jobRepo = _locator.GetInstance<IScheduledJobRepository>();
             var job = jobRepo.Get(this.ScheduledJobId);
             var nextExecutionUTC = job.NextExecutionUTC;
-            var autoPublishTestResults = AdminConfigTestSettings.Current.AutoPublishWinner;
+            var autoPublishTestResults = true;
+
+            // throw this in a try in case we can't access the big table for some reason, that shouldn't be a reason to not be able to create a test - this really shouldn't happen though.
+            try
+            {
+                autoPublishTestResults = AdminConfigTestSettings.Current.AutoPublishWinner;
+            }
+            catch { }
             
             // Start / stop any tests that need to be.
             // If any tests are scheduled to start or stop prior to the next scheduled
