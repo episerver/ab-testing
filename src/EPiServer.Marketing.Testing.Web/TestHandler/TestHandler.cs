@@ -169,6 +169,8 @@ namespace EPiServer.Marketing.Testing.Web
                 Boolean modified = false;
                 IList<IContent> childList = new List<IContent>();
 
+                EvaluateCookies();
+
                 // its possible that something in the children changed, so we need to replace it with a variant 
                 // if its in test. This method gets called once after the main page is loaded. (i.e. this is how
                 // the links at the top of alloy get created)
@@ -176,7 +178,6 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     try
                     {
-                        EvaluateCookies();
                         // get the test from the cache
                         var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
                         if (activeTest != null)
