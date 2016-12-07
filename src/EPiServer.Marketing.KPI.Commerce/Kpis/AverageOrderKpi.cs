@@ -19,12 +19,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     {
         public AverageOrderKpi()
         {
-            LocalizationSection = "purchaseitem";
             _servicelocator = ServiceLocator.Current;
         }
         internal AverageOrderKpi(IServiceLocator servicelocator)
         {
-            LocalizationSection = "purchaseitem";
             _servicelocator = servicelocator;
         }
 
@@ -43,9 +41,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             decimal retval = 0;
-
-            var contentLoader = _servicelocator.GetInstance<IContentLoader>();
-            var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
 
             var ea = e as OrderGroupEventArgs;
             var ordergroup = sender as PurchaseOrder;
