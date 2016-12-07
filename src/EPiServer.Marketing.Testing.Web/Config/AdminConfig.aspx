@@ -34,6 +34,13 @@
                    
                 </div>
                 <div class="epi-size15">
+                    <asp:Label AssociatedControlID="AutoPublishWinner" runat="server"><%# Translate("/abtesting/admin/autopublishwinner") %></asp:Label>
+                    <asp:DropDownList ID="AutoPublishWinner" runat="server" MaxLength="255" Text="<%# TestSettings.AutoPublishWinner %>" >
+                        <asp:ListItem Value="True"> True </asp:ListItem>
+                        <asp:ListItem Value="False"> False </asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <div class="epi-size15">
                     <asp:Label AssociatedControlID="ConfidenceLevel" runat="server"><%# Translate("/abtesting/admin/confidencelevel") %></asp:Label>
                     <asp:DropDownList ID="ConfidenceLevel" runat="server" MaxLength="255" Text="<%# TestSettings.ConfidenceLevel %>" >
                         <asp:ListItem Value="99"> 99% </asp:ListItem>

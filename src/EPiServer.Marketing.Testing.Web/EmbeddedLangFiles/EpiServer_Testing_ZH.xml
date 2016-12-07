@@ -46,6 +46,7 @@
         <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
       </addtestview>
       <admin>
+        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
         <cancel>Cancel</cancel>
         <confidencelevel>Confidence Level:</confidencelevel>
         <description>These settings are the defaults values used for when creating AB tests.</description>

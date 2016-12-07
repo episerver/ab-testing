@@ -18,11 +18,11 @@ using EPiServer.Core;
 using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.Exceptions;
-using EPiServer.Marketing.Testing.Core.Statistics;
 using System.Runtime.Caching;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Web.Statistics;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -51,8 +51,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     State = DalTestState.Active,
                     Variants = new List<DalVariant>()
                     {
-                        new DalVariant() {ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant()
+                        new DalVariant() {Id=Guid.NewGuid(), ItemVersion = 1, Views = 5000, Conversions = 100}, new DalVariant()
                         {
+                            Id=Guid.NewGuid(),
                             ItemVersion = 4, Views = 5000, Conversions = 130, IsPublished=true,
                             DalKeyValueResults = new List<DalKeyValueResult>()
                             {

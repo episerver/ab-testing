@@ -64,7 +64,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 ["TestVariantId"] = testData.TestVariantId.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
-                Expires = _testManager.Get(testData.TestId).EndDate.GetValueOrDefault(),
+                Expires = _testManager.Get(testData.TestId).EndDate,
                 HttpOnly = true
 
             };
