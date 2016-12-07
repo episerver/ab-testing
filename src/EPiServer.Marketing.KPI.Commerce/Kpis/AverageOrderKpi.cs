@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
+using EPiServer.Framework.Localization;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -19,12 +20,39 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     {
         public AverageOrderKpi()
         {
+            LocalizationSection = "averageorder";
             _servicelocator = ServiceLocator.Current;
         }
         internal AverageOrderKpi(IServiceLocator servicelocator)
         {
+            LocalizationSection = "averageorder";
             _servicelocator = servicelocator;
         }
+
+        [DataMember]
+        public override string UiMarkup
+        {
+            get
+            {
+                var averageordertext = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/config_markup/averageordertext");
+                return string.Format(base.UiMarkup, averageordertext);
+
+            }
+        }
+
+        [DataMember]
+        public override string UiReadOnlyMarkup
+        {
+            get
+            {
+                var averageordertext = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/averageordertext");
+                return string.Format(base.UiReadOnlyMarkup, averageordertext);
+
+            }
+        }
+
 
         public override void Validate(Dictionary<string, string> responseData)
         {
