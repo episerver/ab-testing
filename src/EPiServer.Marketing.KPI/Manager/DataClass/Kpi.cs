@@ -27,6 +27,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public Guid Id { get; set; }
 
+        [DataMember]
         /// <summary>
         /// Indicates which result should be considered the "winner"
         /// Overide to specify a different result comparison
