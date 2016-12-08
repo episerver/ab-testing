@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -27,10 +28,22 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Indicates which result should be considered the "winner"
+        /// Overide to specify a different result comparison
+        /// </summary>
+        public virtual ResultComparison resultComparison
+        {
+            get
+            {
+                return ResultComparison.Greater;
+            }
+        }
+
+        /// <summary>
         /// Overide to specify the FriendlyName to be displayed in the UI.
         /// </summary>
         [DataMember]
-        public string FriendlyName { get {
+        public virtual string FriendlyName { get {
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
                 {
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
@@ -44,7 +57,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         }
 
         [DataMember]
-        public string Description {
+        public virtual string Description {
             get
             {
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
@@ -148,7 +161,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         [DataMember]
         public DateTime ModifiedDate { get; set; }
-
+        
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
