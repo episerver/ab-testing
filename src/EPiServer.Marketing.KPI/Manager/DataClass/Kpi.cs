@@ -160,8 +160,8 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// The last time the kpi was modified.
         /// </summary>
         [DataMember]
-        public DateTime ModifiedDate { get; set; }      
-
+        public DateTime ModifiedDate { get; set; }
+        
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
