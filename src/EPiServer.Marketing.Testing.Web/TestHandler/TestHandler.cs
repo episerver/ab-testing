@@ -325,7 +325,7 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId, 
+                    _testManager.EmitUpdateCount(cookie.TestId, 
                         contentVersion,
                         CountType.View);
                     cookie.Viewed = true;
@@ -482,7 +482,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
 
             var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
-            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
+            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemVersion, CountType.Conversion);
 
             _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent,
                 new KpiEventArgs(tdcookie.KpiConversionDictionary, test));

@@ -246,11 +246,11 @@ namespace EPiServer.Marketing.Testing
         }
 
         private Object thisLock = new Object();
-        public void IncrementCount(Guid testId, Guid itemId, int itemVersion, CountType resultType)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType)
         {
             lock (thisLock)
             {
-                _dataAccess.IncrementCount(testId, itemId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+                _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
             }
         }
 
@@ -307,13 +307,13 @@ namespace EPiServer.Marketing.Testing
             return retData ?? UpdateVariantContentCache(contentGuid);
         }
 
-        public void EmitUpdateCount(Guid testId, Guid testItemId, int itemVersion, CountType resultType)
+        public void EmitUpdateCount(Guid testId, int itemVersion, CountType resultType)
         {
             var messaging = _serviceLocator.GetInstance<IMessagingManager>();
             if (resultType == CountType.Conversion)
-                messaging.EmitUpdateConversion(testId, testItemId, itemVersion);
+                messaging.EmitUpdateConversion(testId, itemVersion);
             else if (resultType == CountType.View)
-                messaging.EmitUpdateViews(testId, testItemId, itemVersion);
+                messaging.EmitUpdateViews(testId, itemVersion);
         }
 
         /// <summary>

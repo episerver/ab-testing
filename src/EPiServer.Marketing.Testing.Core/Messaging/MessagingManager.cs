@@ -86,10 +86,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="TestId">the test id to work with</param>
         /// <param name="VariantId">the Guid of the cms item that was viewed</param>
-        public void EmitUpdateViews(Guid TestId, Guid VariantId, int itemVersion)
+        public void EmitUpdateViews(Guid TestId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, VariantId = VariantId, ItemVersion = itemVersion});
+            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, ItemVersion = itemVersion});
         }
 
         /// <summary>
@@ -97,10 +97,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="TestId"></param>
         /// <param name="VariantId">the Guid of the cms item that caused a converion</param>
-        public void EmitUpdateConversion(Guid TestId, Guid VariantId, int itemVersion)
+        public void EmitUpdateConversion(Guid TestId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, VariantId=VariantId, ItemVersion = itemVersion } );
+            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, ItemVersion = itemVersion } );
         }
 
         public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)

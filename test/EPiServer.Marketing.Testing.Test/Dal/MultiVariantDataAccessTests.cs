@@ -348,12 +348,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             // check that a variant exists
             Assert.Equal(test.Variants.Count(), 1);
 
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, DalCountType.View);
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, DalCountType.Conversion);
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.View);
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.Conversion);
 
             // check the variant is incremented correctly
-            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views);
-            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Conversions);
+            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemVersion == itemVersion).Views);
+            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemVersion == itemVersion).Conversions);
         }
 
         [Fact]

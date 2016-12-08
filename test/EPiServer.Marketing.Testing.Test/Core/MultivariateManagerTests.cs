@@ -279,21 +279,21 @@ namespace EPiServer.Marketing.Testing.Test.Core
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.IncrementCount(theGuid, theTestItemGuid, theItemVersion, type);
+            tm.IncrementCount(theGuid, theItemVersion, type);
 
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<int>(),
                         It.IsAny<DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.IsAny<DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
@@ -421,11 +421,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, 1, CountType.Conversion);
+            testManager.EmitUpdateCount(original, 1, CountType.Conversion);
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update conversion message not emmited");
         }
@@ -441,11 +440,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, 1, CountType.View);
+            testManager.EmitUpdateCount(original, 1, CountType.View);
 
             messageManager.Verify(mm => mm.EmitUpdateViews(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update View message not emmited");
         }

@@ -173,18 +173,18 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 {
                     for (var x = 0; x < _model.Views; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
+                        testManager.EmitUpdateCount(test.Id,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.View);
 
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
+                        testManager.EmitUpdateCount(test.Id,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.View);
                     }
                     for (var x = 0; x < _model.Conversions; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
+                        testManager.EmitUpdateCount(test.Id,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.Conversion);
 
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
+                        testManager.EmitUpdateCount(test.Id,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.Conversion);
                     }
 
@@ -331,7 +331,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateView(string id, string itemid)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.View);
+            mtm.EmitUpdateCount(Guid.Parse(id), 1, Data.Enums.CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
@@ -340,7 +340,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateConversion(string id, string itemid)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.Conversion);
+            mtm.EmitUpdateCount(Guid.Parse(id), 1, Data.Enums.CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);

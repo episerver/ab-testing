@@ -47,11 +47,10 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
         {
             var messageHandler = GetUnitUnderTest();
 
-            messageHandler.Handle( new UpdateConversionsMessage() { TestId = testGuid, VariantId = varient, ItemVersion = itemVersion} );
+            messageHandler.Handle( new UpdateConversionsMessage() { TestId = testGuid, ItemVersion = itemVersion} );
 
             // Verify that save is called and conversion value is correct
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>( gg =>  gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
                 It.Is<CountType>(ct => ct.Equals(CountType.Conversion))) ,
                 Times.Once, "Repository save was not called or conversion value is not as expected") ;
@@ -62,11 +61,10 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
         {
             var messageHandler = GetUnitUnderTest();
 
-            messageHandler.Handle(new UpdateViewsMessage() { TestId = testGuid, VariantId = varient, ItemVersion = itemVersion});
+            messageHandler.Handle(new UpdateViewsMessage() { TestId = testGuid, ItemVersion = itemVersion});
             // Verify that save is called and conversion value is correct
 
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>(gg => gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
                 It.Is<CountType>(ct => ct.Equals(CountType.View))),
                 Times.Once, "Repository save was not called or view value is not as expected");

@@ -141,19 +141,19 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return tests;
         }
 
-        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
+        public void IncrementCount(Guid testId, int itemVersion, DalCountType resultType)
         {
             if (_UseEntityFramework)
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
-                    IncrementCountHelper(repository, testId, testItemId, itemVersion, resultType);
+                    IncrementCountHelper(repository, testId, itemVersion, resultType);
                 }
             }
             else
             {
-                IncrementCountHelper(_repository, testId, testItemId, itemVersion, resultType);
+                IncrementCountHelper(_repository, testId, itemVersion, resultType);
             }
         }
 
@@ -334,10 +334,10 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return results.ToList<IABTest>();
         }
 
-        private void IncrementCountHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
+        private void IncrementCountHelper(IRepository repo, Guid testId, int itemVersion, DalCountType resultType)
         {
             var test = repo.GetById(testId);
-            var variant = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+            var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
 
             if (resultType == DalCountType.View)
             {
