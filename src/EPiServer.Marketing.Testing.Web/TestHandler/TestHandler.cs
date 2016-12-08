@@ -494,7 +494,7 @@ namespace EPiServer.Marketing.Testing.Web
 
             foreach (var kpiFinancialResult in results)
             {
-                if (kpiFinancialResult.Total > 0)
+                if (kpiFinancialResult.HasConverted)
                 {
                     var keyFinancialResult = new KeyFinancialResult()
                     {
