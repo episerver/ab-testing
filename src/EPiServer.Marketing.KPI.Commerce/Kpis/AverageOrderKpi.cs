@@ -70,15 +70,15 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             decimal retval = 0;
 
-            var ea = e as OrderGroupEventArgs;
             var ordergroup = sender as PurchaseOrder;
-            if (ea != null && ordergroup != null)
+            if (ordergroup != null)
             {
                 retval = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
+                return new KpiFinancialResult() { KpiId = Id, Total = retval, HasConverted = true };
 
             }
 
-            return new KpiFinancialResult() { KpiId = Id, Total = retval };
+            return new KpiFinancialResult() { KpiId = Id, Total = retval, HasConverted = false };
         }
     }
 }
