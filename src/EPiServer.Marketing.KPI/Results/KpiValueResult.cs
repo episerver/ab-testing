@@ -6,6 +6,8 @@ namespace EPiServer.Marketing.KPI.Results
     {
         public Guid KpiId { get; set; }
 
+        public bool HasConverted { get; set; }
+
         public double Value { get; set; }
 
     }
