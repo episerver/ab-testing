@@ -13,6 +13,17 @@
           <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
         </readonly_markup>
       </addtocart>
+      <purchaseitem>
+        <config_markup>
+          <conversion_label>Visitor purchases product</conversion_label>
+          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
+          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+        </config_markup>
+        <readonly_markup>
+          <conversion_header>Purchase Product</conversion_header>
+          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+        </readonly_markup>
+      </purchaseitem>
     </commercekpi>
   </language>
 </languages>

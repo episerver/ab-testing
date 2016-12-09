@@ -14,9 +14,9 @@
   "projectUrl": "",
   "licenseUrl": "",
   "dependencies": {
-    "EPiServer.CMS.Core": "9.12.3",
+    "EPiServer.CMS.Core": "10.1.0",
     "EPiServer.Commerce": "9.24.1",
-    "EPiServer.Framework": "9.12.3",
+    "EPiServer.Framework": "10.1.0",
     "EPiServer.Marketing.KPI": "1.0.0-*",
     "Newtonsoft.Json": "6.0.8",
     "structuremap.web-signed": "3.1.6.186",
