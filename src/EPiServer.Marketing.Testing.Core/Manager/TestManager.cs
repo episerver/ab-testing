@@ -299,7 +299,7 @@ namespace EPiServer.Marketing.Testing
         }
 
         private Object thisLock = new Object();
-        public void EmitUpdateCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true)
         {
             if (asynch)
             {

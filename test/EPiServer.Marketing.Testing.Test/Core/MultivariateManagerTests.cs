@@ -279,7 +279,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.EmitUpdateCount(theGuid, theItemVersion, type, false);
+            tm.IncrementCount(theGuid, theItemVersion, type, false);
 
             _dataAccessLayer.Verify(
                 da =>
@@ -421,7 +421,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, 1, CountType.Conversion);
+            testManager.IncrementCount(original, 1, CountType.Conversion);
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
@@ -440,7 +440,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, 1, CountType.View);
+            testManager.IncrementCount(original, 1, CountType.View);
 
             messageManager.Verify(mm => mm.EmitUpdateViews(
                 It.Is<Guid>(arg => arg.Equals(original)),
