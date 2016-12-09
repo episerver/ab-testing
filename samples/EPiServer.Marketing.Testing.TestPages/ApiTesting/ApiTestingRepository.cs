@@ -142,9 +142,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
                 Variant variant = _mtm.ReturnLandingPage(testId);
 
                 var version = test.Variants.First(v => v.Id == variant.Id);
-                _mtm.IncrementCount(testId, version.ItemVersion, Data.Enums.CountType.View);
+                _mtm.EmitUpdateCount(testId, version.ItemVersion, Data.Enums.CountType.View, false);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, version.ItemVersion, Data.Enums.CountType.Conversion);
+                    _mtm.EmitUpdateCount(testId, version.ItemVersion, Data.Enums.CountType.Conversion, false);
             }
 
             _mtm.Stop(testId);

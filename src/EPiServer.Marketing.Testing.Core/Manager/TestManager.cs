@@ -245,15 +245,6 @@ namespace EPiServer.Marketing.Testing
 
         }
 
-        private Object thisLock = new Object();
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType)
-        {
-            lock (thisLock)
-            {
-                _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
-            }
-        }
-
         public void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             if (type == KeyResultType.Financial)
@@ -307,13 +298,24 @@ namespace EPiServer.Marketing.Testing
             return retData ?? UpdateVariantContentCache(contentGuid);
         }
 
-        public void EmitUpdateCount(Guid testId, int itemVersion, CountType resultType)
+        private Object thisLock = new Object();
+        public void EmitUpdateCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true)
         {
-            var messaging = _serviceLocator.GetInstance<IMessagingManager>();
-            if (resultType == CountType.Conversion)
-                messaging.EmitUpdateConversion(testId, itemVersion);
-            else if (resultType == CountType.View)
-                messaging.EmitUpdateViews(testId, itemVersion);
+            if (asynch)
+            {
+                var messaging = _serviceLocator.GetInstance<IMessagingManager>();
+                if (resultType == CountType.Conversion)
+                    messaging.EmitUpdateConversion(testId, itemVersion);
+                else if (resultType == CountType.View)
+                    messaging.EmitUpdateViews(testId, itemVersion);
+            }
+            else
+            {
+                lock (thisLock)
+                {
+                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+                }
+            }
         }
 
         /// <summary>

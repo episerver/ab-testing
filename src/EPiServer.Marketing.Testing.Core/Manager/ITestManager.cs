@@ -31,13 +31,11 @@ namespace EPiServer.Marketing.Testing
 
         void Archive(Guid testObjectId, Guid winningVariantId);
 
-        void IncrementCount(Guid testId, int itemVersion, CountType resultType);
-
         void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
         void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
-        void EmitUpdateCount(Guid testId, int itemVersion, CountType resultType);
+        void EmitUpdateCount(Guid testId, int itemVersion, CountType resultType, bool asynch=true);
 
         Variant ReturnLandingPage(Guid testId);
 
