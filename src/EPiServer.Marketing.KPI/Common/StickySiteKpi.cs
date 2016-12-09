@@ -53,35 +53,33 @@ namespace EPiServer.Marketing.KPI.Common
             var httpContext = HttpContext.Current;
             if (httpContext != null)
             {
+                var sessionid = httpContext.Request.Params["ASP.NET_SessionId"];
+                if (sessionid != null )
                 {
-                    var sessionid = httpContext.Request.Params["ASP.NET_SessionId"];
-                    if (sessionid != null )
+                    if (_sessionCache.Contains(sessionid))
                     {
-                        if (_sessionCache.Contains(sessionid))
+                        bool converted = (bool)_sessionCache.Get(sessionid);
+                        if (!converted)
                         {
-                            bool converted = (bool)_sessionCache.Get(sessionid);
-                            if (!converted)
+                            var currentpage = GetCurrentPage();
+                            if (currentpage != null)
                             {
-                                var currentpage = GetCurrentPage();
-                                if (currentpage != null)
+                                if (httpContext.Request.Path == UrlResolver.Current.GetUrl(currentpage.ContentLink))
                                 {
-                                    if (httpContext.Request.Path == UrlResolver.Current.GetUrl(currentpage.ContentLink))
-                                    {
-                                        _sessionCache.Remove(sessionid);
-                                        CacheItemPolicy policy = new CacheItemPolicy();
-                                        policy.SlidingExpiration = new TimeSpan(0, 10, 0);
-                                        _sessionCache.Add(sessionid, true, policy);
-                                        retval = true;
-                                    }
+                                    _sessionCache.Remove(sessionid);
+                                    CacheItemPolicy policy = new CacheItemPolicy();
+                                    policy.SlidingExpiration = new TimeSpan(0, 10, 0);
+                                    _sessionCache.Add(sessionid, true, policy);
+                                    retval = true;
                                 }
                             }
                         }
-                        else
-                        {
-                            CacheItemPolicy policy = new CacheItemPolicy();
-                            policy.SlidingExpiration = new TimeSpan(0, 10, 0);
-                            _sessionCache.Add(sessionid, false, policy);
-                        }
+                    }
+                    else
+                    {
+                        CacheItemPolicy policy = new CacheItemPolicy();
+                        policy.SlidingExpiration = new TimeSpan(0, 10, 0);
+                        _sessionCache.Add(sessionid, false, policy);
                     }
                 }
             }
@@ -117,8 +115,7 @@ namespace EPiServer.Marketing.KPI.Common
                 var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
                     .GetString("/kpi/stickysite_kpi/description");
 
-                markup = string.Format(markup, conversionHeaderText, conversionDescription, "",
-                        "");
+                markup = string.Format(markup, conversionHeaderText, conversionDescription);
                 return markup;
             }
         }
