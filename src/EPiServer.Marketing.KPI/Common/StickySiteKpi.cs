@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             try
             {
-                var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.IPageRouteHelper>();
+                var pageHelper = _servicelocator.GetInstance<EPiServer.Web.Routing.IPageRouteHelper>();
                 return pageHelper.Page;
             }
             catch { } // sometimes requests dont contain epi pages.
