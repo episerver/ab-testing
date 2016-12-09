@@ -68,20 +68,6 @@ function (
             var testLinkTooltip = resources.notificationbar.details_link_tooltip;
             var page = "details";
 
-            // change message if this content is part of a test, but not this particular version.
-            var thisContentVersion = this.value.contentData.contentLink.split("_")[1];
-            var contentInTest = false;
-            for (var i = 0; i < test.variants.length; i++) { // loop through each variant and check version field.
-                if (test.variants[i].itemVersion == thisContentVersion) {
-                    contentInTest = true;
-                }
-            }
-            if (contentInTest == false) {
-                message = resources.notificationbar.version_in_test;
-                testLinkText = resources.notificationbar.details_link_text;
-                testLinkTooltip = resources.notificationbar.details_link_tooltip;
-            }
-
              // Inactive (scheduled)
             if (test.state == 0) {
                 message = resources.notificationbar.scheduled_test + 
