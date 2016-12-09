@@ -169,6 +169,8 @@ namespace EPiServer.Marketing.Testing.Web
                 Boolean modified = false;
                 IList<IContent> childList = new List<IContent>();
 
+                EvaluateCookies();
+
                 // its possible that something in the children changed, so we need to replace it with a variant 
                 // if its in test. This method gets called once after the main page is loaded. (i.e. this is how
                 // the links at the top of alloy get created)
@@ -176,22 +178,19 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     try
                     {
-                        EvaluateCookies();
                         // get the test from the cache
                         var activeTest = _testManager.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
                         if (activeTest != null)
                         {
                             var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-                            var contentVersion = content.ContentLink.WorkID == 0 ? content.ContentLink.ID :
-                                content.ContentLink.WorkID;
-
-                            if (!hasData && DbReadWrite() )
+                          
+                            if (!hasData && DbReadWrite())
                             {
                                 // Make sure the cookie has data in it. There are cases where you can load
                                 // content directly from a url after opening a browser and if the cookie is not set
                                 // the first pass through you end up seeing original content not content under test.
-                                SetTestData(content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                                SetTestData(content, activeTest, testCookieData, out testCookieData);
                             }
 
                             if (testCookieData.ShowVariant && _testDataCookieHelper.IsTestParticipant(testCookieData))
@@ -242,20 +241,19 @@ namespace EPiServer.Marketing.Testing.Web
                         var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
-                        var contentVersion = e.ContentLink.WorkID == 0 ? activeTest.Variants.First(variant => variant.IsPublished).ItemVersion : e.ContentLink.WorkID;
 
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
                         HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
                         _testManager.GetVariantContent(e.Content.ContentGuid);
-                        if (!hasData && DbReadWrite() )
+                        if (!hasData && DbReadWrite())
                         {
                             // Make sure the cookie has data in it.
-                            SetTestData(e.Content, activeTest, testCookieData, contentVersion, out testCookieData, out contentVersion);
+                            SetTestData(e.Content, activeTest, testCookieData, out testCookieData);
                         }
 
                         Swap(testCookieData, activeTest, e);
-                        EvaluateViews(testCookieData, contentVersion, originalContent);
+                        EvaluateViews(testCookieData, originalContent);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
@@ -267,7 +265,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        private void SetTestData(IContent e, IMarketingTest activeTest, TestDataCookie testCookieData, int contentVersion, out TestDataCookie retCookieData, out int retContentVersion)
+        private void SetTestData(IContent e, IMarketingTest activeTest, TestDataCookie testCookieData, out TestDataCookie retCookieData)
         {
             var newVariant = _testManager.ReturnLandingPage(activeTest.Id);
             testCookieData.TestId = activeTest.Id;
@@ -283,13 +281,11 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 if (!newVariant.IsPublished)
                 {
-                    contentVersion = newVariant.ItemVersion;
                     testCookieData.ShowVariant = true;
                 }
             }
             _testDataCookieHelper.UpdateTestDataCookie(testCookieData);
             retCookieData = testCookieData;
-            retContentVersion = contentVersion;
         }
         //Handles the swapping of content data
         private void Swap(TestDataCookie cookie, IMarketingTest activeTest, ContentEventArgs activeContent)
@@ -318,15 +314,18 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //Handles the incrementing of view counts on a version
-        private void EvaluateViews(TestDataCookie cookie, int contentVersion, IContent originalContent)
+        private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
         {
+            var currentTest = _serviceLocator.GetInstance<ITestManager>().Get(cookie.TestId);
+            var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
+
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId, 
-                        contentVersion,
+                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId,
+                        variantVersion,
                         CountType.View);
                     cookie.Viewed = true;
 
@@ -384,8 +383,8 @@ namespace EPiServer.Marketing.Testing.Web
             // content event args. This allows us to evaluate all pages, blocks, and sub pages
             // one time per request when we get to the content being evaluated
             // MAR -565 (not converting on sub pages)
-            var cea = e as ContentEventArgs; 
-            if (cea != null) 
+            var cea = e as ContentEventArgs;
+            if (cea != null)
             {
                 try
                 {

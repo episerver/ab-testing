@@ -104,7 +104,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Variants = new List<Variant>()
                 { new Variant()
                     { ItemVersion = 101,Id=Guid.Parse("f4091a7d-db88-4517-a648-a0aaedb6c213")},
-                    new Variant() {ItemVersion = 10,Id=Guid.Parse("2ecb7bd5-33dd-44a5-aa05-8f82077b4896")}
+                    new Variant() {ItemVersion = 100,Id=Guid.Parse("2ecb7bd5-33dd-44a5-aa05-8f82077b4896")}
                 }
 
             };
