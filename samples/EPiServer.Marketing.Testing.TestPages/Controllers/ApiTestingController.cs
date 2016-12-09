@@ -328,19 +328,19 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
-        public ActionResult UpdateView(string id, string itemid)
+        public ActionResult UpdateView(string id, string itemid, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.IncrementCount(Guid.Parse(id), 1, Data.Enums.CountType.View);
+            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateConversion(string id, string itemid)
+        public ActionResult UpdateConversion(string id, string itemid, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.IncrementCount(Guid.Parse(id), 1, Data.Enums.CountType.Conversion);
+            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
