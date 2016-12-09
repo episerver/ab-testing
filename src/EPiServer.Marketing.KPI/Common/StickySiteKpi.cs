@@ -35,8 +35,6 @@ namespace EPiServer.Marketing.KPI.Common
 
         private IContent GetCurrentPage()
         {
-            // Get the page associate with this request once
-            // and store in the request so we can use it later
             try
             {
                 var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.IPageRouteHelper>();
