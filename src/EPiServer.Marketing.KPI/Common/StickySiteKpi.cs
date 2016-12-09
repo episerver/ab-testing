@@ -16,8 +16,8 @@ namespace EPiServer.Marketing.KPI.Common
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.StickySiteConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.StickySiteReadOnlyMarkup.html",
-        text = "Sticky Site", 
-        description = "Converts if the user visits one page, then another in the same session")]
+        text = "Site Stickiness", 
+        description = "Converts when a user visits the content under test and then visits any other page within the same browser session.")]
     public class StickySiteKpi : Kpi
     {
         private IServiceLocator _servicelocator;
