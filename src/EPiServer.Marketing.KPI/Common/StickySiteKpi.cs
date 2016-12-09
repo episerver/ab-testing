@@ -97,6 +97,17 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         [DataMember]
+        public override string UiMarkup
+        {
+            get
+            {
+                var conversionLabel = LocalizationService.Current
+                    .GetString("/kpi/stickysite_kpi/description");
+                return string.Format(base.UiMarkup, conversionLabel);
+            }
+        }
+
+        [DataMember]
         public override string UiReadOnlyMarkup
         {
             get
@@ -104,9 +115,9 @@ namespace EPiServer.Marketing.KPI.Common
                 string markup = base.UiReadOnlyMarkup;
 
                 var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
+                    .GetString("/kpi/stickysite_kpi/name");
                 var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
+                    .GetString("/kpi/stickysite_kpi/description");
 
                 markup = string.Format(markup, conversionHeaderText, conversionDescription, "",
                         "");
