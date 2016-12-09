@@ -61,7 +61,7 @@
                     });
 
                 aRetNotification = aTestNotification.get("notification");
-                expect(aRetNotification.content.innerText).to.have.string(labels.notificationbar.ongoing_test);
+                expect(aRetNotification.content.innerText).to.have.string(labels.notificationbar.version_in_test);
             });
 
             it("sets a notification when a test is done, but a winner is not picked on the content", function () {

@@ -141,8 +141,9 @@
         <completed_test>An A/B test was completed on a version of this content. </completed_test>
         <details_link_text>View test</details_link_text>
         <details_link_tooltip>View test details</details_link_tooltip>
-        <ongoing_test>A version of this content is part of an on-going A/B test. </ongoing_test>
+        <ongoing_test>A version of this content is part of a running A/B test. </ongoing_test>
         <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
+        <version_in_test>A version of this content is part of an ongoing A/B test. </version_in_test>
         <winner_link_text>Pick winner</winner_link_text>
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
       </notificationbar>
