@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.KPI.Results
         Guid KpiId { get; set; }
 
         /// <summary>
-        /// Indicates test conditions have been met
+        /// Indicates conditions for a conversion have been met.
         /// </summary>
         bool HasConverted { get; set; }
     }
