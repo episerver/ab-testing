@@ -10,6 +10,7 @@ using System.Web;
 using System.Runtime.Caching;
 using EPiServer.Framework.Localization;
 using EPiServer.Web.Routing;
+using EPiServer.Marketing.KPI.Exceptions;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -23,6 +24,11 @@ namespace EPiServer.Marketing.KPI.Common
         private IServiceLocator _servicelocator;
         private ObjectCache _sessionCache = MemoryCache.Default;
 
+        [DataMember]
+        public Guid TestContentGuid; 
+        [DataMember]
+        int Timeout;
+        
         public StickySiteKpi()
         {
             _servicelocator = ServiceLocator.Current;
@@ -56,20 +62,17 @@ namespace EPiServer.Marketing.KPI.Common
                 var sessionid = httpContext.Request.Params["ASP.NET_SessionId"];
                 if (sessionid != null )
                 {
+                    var currentpage = GetCurrentPage();
                     if (_sessionCache.Contains(sessionid))
                     {
                         bool converted = (bool)_sessionCache.Get(sessionid);
                         if (!converted)
                         {
-                            var currentpage = GetCurrentPage();
                             if (currentpage != null)
                             {
                                 if (httpContext.Request.Path == UrlResolver.Current.GetUrl(currentpage.ContentLink))
                                 {
                                     _sessionCache.Remove(sessionid);
-                                    CacheItemPolicy policy = new CacheItemPolicy();
-                                    policy.SlidingExpiration = new TimeSpan(0, 10, 0);
-                                    _sessionCache.Add(sessionid, true, policy);
                                     retval = true;
                                 }
                             }
@@ -77,9 +80,12 @@ namespace EPiServer.Marketing.KPI.Common
                     }
                     else
                     {
-                        CacheItemPolicy policy = new CacheItemPolicy();
-                        policy.SlidingExpiration = new TimeSpan(0, 10, 0);
-                        _sessionCache.Add(sessionid, false, policy);
+                        if (currentpage != null && currentpage.ContentGuid == TestContentGuid)
+                        {
+                            CacheItemPolicy policy = new CacheItemPolicy();
+                            policy.SlidingExpiration = new TimeSpan(0, Timeout, 0);
+                            _sessionCache.Add(sessionid, false, policy);
+                        }
                     }
                 }
             }
@@ -89,7 +95,18 @@ namespace EPiServer.Marketing.KPI.Common
 
         public override void Validate(Dictionary<string, string> responseData)
         {
+            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
+
+            if ( responseData["Timeout"] == "" )
+            {
+                throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("Internal error, Param missing"));
+            }
+
             // do nothing, we are converting on anypage or another request.
+            var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
+            TestContentGuid = currentContent.ContentGuid;
+
+            Timeout = int.Parse(responseData["Timeout"]);
         }
 
         [DataMember]
@@ -97,9 +114,11 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                var conversionLabel = LocalizationService.Current
-                    .GetString("/kpi/stickysite_kpi/description");
-                return string.Format(base.UiMarkup, conversionLabel);
+                string markup = base.UiMarkup;
+
+                var conversionLabel = _servicelocator.GetInstance<LocalizationService>()
+                    .GetString("/kpi/stickysite_kpi/conversion_label");
+                return string.Format(markup, conversionLabel);
             }
         }
 
@@ -110,9 +129,9 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
+                var conversionHeaderText = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/stickysite_kpi/name");
-                var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                var conversionDescription = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/stickysite_kpi/description");
 
                 markup = string.Format(markup, conversionHeaderText, conversionDescription);

@@ -19,6 +19,7 @@
         <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
       </kpi_messaging>
       <stickysite_kpi>
+        <conversion_label>Number of minutes until another page is visited</conversion_label>
         <description>Converts when a user visits the content under test and then visits any other page within the same browser session.</description>
         <name>Site Stickiness</name>
       </stickysite_kpi>
