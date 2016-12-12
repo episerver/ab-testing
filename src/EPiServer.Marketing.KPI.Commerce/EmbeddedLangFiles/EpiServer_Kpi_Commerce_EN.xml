@@ -15,10 +15,10 @@
       </addtocart>
       <averageorder>
         <config_markup>
-          <averageordertext>Tracks oder totals for users included in the test.</averageordertext>
+          <averageordertext>Tracks order totals.</averageordertext>
         </config_markup>
         <readonly_markup>
-          <averageordertext>Tracks oder totals for users included in the test.</averageordertext>
+          <averageordertext>Tracks order totals.</averageordertext>
         </readonly_markup>
       </averageorder>
       <purchaseitem>

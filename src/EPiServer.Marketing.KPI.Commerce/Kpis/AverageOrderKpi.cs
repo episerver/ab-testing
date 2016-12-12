@@ -68,17 +68,14 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         /// <returns></returns>
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
-            decimal retval = 0;
+            var retval = new KpiFinancialResult() { KpiId = Id, Total = 0, HasConverted = false };
 
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
-            {
-                retval = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
-                return new KpiFinancialResult() { KpiId = Id, Total = retval, HasConverted = true };
-
+            {               
+                retval.Total = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
             }
-
-            return new KpiFinancialResult() { KpiId = Id, Total = retval, HasConverted = false };
+            return retval;
         }
     }
 }
