@@ -81,7 +81,6 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             // Verify that save is called and conversion value is correct
 
             _testManager.Verify(tm => tm.AddKpiResultData(It.Is<Guid>(gg => gg.Equals(testGuid)),
-                It.Is<Guid>(gg => gg.Equals(varient)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
                 It.Is<IKeyResult>(ct => ct.Equals(result)), 0),
                 Times.Once, "Repository save was not called or view value is not as expected");

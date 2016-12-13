@@ -245,15 +245,15 @@ namespace EPiServer.Marketing.Testing
 
         }
 
-        public void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        public void AddKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             if (type == KeyResultType.Financial)
             {
-                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
+                _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
             }
             else
             {
-                _dataAccess.AddKpiResultData(testId, itemId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
+                _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
             }
         }
 

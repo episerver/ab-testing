@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Testing
 
         void Archive(Guid testObjectId, Guid winningVariantId);
 
-        void AddKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
+        void AddKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
         void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 

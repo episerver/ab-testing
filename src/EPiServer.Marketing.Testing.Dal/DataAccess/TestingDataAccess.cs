@@ -157,19 +157,19 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             }
         }
 
-        public void AddKpiResultData(Guid testId, Guid testItemId, int itemVersion, IDalKeyResult keyResult, int keyType)
+        public void AddKpiResultData(Guid testId, int itemVersion, IDalKeyResult keyResult, int keyType)
         {
             if (_UseEntityFramework)
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
-                    AddKpiResultDataHelper(repository, testId, testItemId, itemVersion, keyResult, keyType);
+                    AddKpiResultDataHelper(repository, testId, itemVersion, keyResult, keyType);
                 }
             }
             else
             {
-                AddKpiResultDataHelper(_repository, testId, testItemId, itemVersion, keyResult, keyType);
+                AddKpiResultDataHelper(_repository, testId, itemVersion, keyResult, keyType);
             }
         }
 
@@ -353,10 +353,10 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             repo.SaveChanges();
         }
 
-        private void AddKpiResultDataHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, IDalKeyResult keyResult, int type)
+        private void AddKpiResultDataHelper(IRepository repo, Guid testId, int itemVersion, IDalKeyResult keyResult, int type)
         {
             var test = repo.GetById(testId);
-            var variant = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+            var variant = test.Variants.FirstOrDefault(v => v.ItemVersion == itemVersion);
 
             if (type == 0)
             {

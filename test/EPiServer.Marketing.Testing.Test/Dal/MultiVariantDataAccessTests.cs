@@ -495,7 +495,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var variantId = Guid.NewGuid();
             var variantItemId2 = Guid.NewGuid();
-            var variant2 = new DalVariant() { Id = variantId, ItemId = variantItemId2, ItemVersion = 1 };
+            var variant2 = new DalVariant() { Id = variantId, ItemId = variantItemId2, ItemVersion = 2 };
             tests[0].Variants.Add(variant2);
 
             _dataAccess.Save(tests[0]);
@@ -517,8 +517,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ModifiedDate = DateTime.UtcNow
             };
 
-            _dataAccess.AddKpiResultData(tests[0].Id, variantItemId2, 1, result, 0);
-            _dataAccess.AddKpiResultData(tests[0].Id, variantItemId2, 1, result1, 1);
+            _dataAccess.AddKpiResultData(tests[0].Id, 1, result, 0);
+            _dataAccess.AddKpiResultData(tests[0].Id, 2, result1, 1);
 
             Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyFinancialResults.Count);
             Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyValueResults.Count);
