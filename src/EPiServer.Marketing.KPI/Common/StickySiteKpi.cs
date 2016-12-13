@@ -95,17 +95,19 @@ namespace EPiServer.Marketing.KPI.Common
 
         public override void Validate(Dictionary<string, string> responseData)
         {
-            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
-
-            if ( responseData["Timeout"] == "" )
+            if ( responseData["Timeout"] == "" || responseData["CurrentContent"] =="")
             {
-                throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("Internal error, Param missing"));
+                // should never happen if the markup is correct
+                var errormessage = _servicelocator.GetInstance<LocalizationService>()
+                    .GetString("/kpi/stickysite_kpi/config_markup/error_internal");
+                throw new KpiValidationException( 
+                    string.Format(errormessage, "timeout=" + responseData["Timeout"] + " currentcontent=" + responseData["CurrentContent"]) );
             }
 
-            // do nothing, we are converting on anypage or another request.
+            // save the kpi arguments
+            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
             TestContentGuid = currentContent.ContentGuid;
-
             Timeout = int.Parse(responseData["Timeout"]);
         }
 
@@ -117,7 +119,7 @@ namespace EPiServer.Marketing.KPI.Common
                 string markup = base.UiMarkup;
 
                 var conversionLabel = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/stickysite_kpi/conversion_label");
+                    .GetString("/kpi/stickysite_kpi/config_markup/conversion_label");
                 return string.Format(markup, conversionLabel);
             }
         }
@@ -130,10 +132,10 @@ namespace EPiServer.Marketing.KPI.Common
                 string markup = base.UiReadOnlyMarkup;
 
                 var conversionHeaderText = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/stickysite_kpi/name");
+                    .GetString("/kpi/stickysite_kpi/readonly_markup/conversion_header");
                 var conversionDescription = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/stickysite_kpi/description");
-
+                    .GetString("/kpi/stickysite_kpi/readonly_markup/conversion_selector_description");
+                conversionDescription = string.Format(conversionDescription, Timeout);
                 markup = string.Format(markup, conversionHeaderText, conversionDescription);
                 return markup;
             }
