@@ -104,7 +104,43 @@
 			setTimeout(function(){ window.location.reload(); }, 2000);
 		    });
 		}
-        };
+		};
+
+		var saveKpiResult = function (testId, itemVersion, kpiResultType) {
+		    var count = document.getElementById("kpiresults").value;
+		    if (kpiResultType === 0) // financial result
+            {
+		     //   for (var i = 0; i < value; i++) {
+		            $.ajax({
+		                type: 'POST',
+		                url: '/api/episerver/testing/savekpiresults/',
+		                cache: false,
+		                contentType: 'application/x-www-form-urlencoded',
+		                data: { testId: testId, itemVersion: itemVersion, kpiResultType: kpiResultType, count: count }
+		            }).done(function (data) {
+		            }).fail(function () {
+		            }).always(function () {
+		                setTimeout(function () { window.location.reload(); }, 2000);
+		            });
+		    //    }
+		    }
+		    else  // value result
+		    {
+		       // for (var ii = 0; ii < value; ii++) {
+		            $.ajax({
+		                type: 'POST',
+		                url: '/api/episerver/testing/savekpiresults/',
+		                cache: false,
+		                contentType: 'application/x-www-form-urlencoded',
+		                data: { testId: testId, itemVersion: itemVersion, kpiResultType: kpiResultType, count: count }
+		            }).done(function (data) {
+		            }).fail(function () {
+		            }).always(function () {
+		                setTimeout(function () { window.location.reload(); }, 2000);
+		            });
+		      //  }
+		    }
+		};
     </script>
 </head>
 <body>
@@ -173,6 +209,13 @@
                         <td>&nbsp;</td>
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversionsCustom" id="btnUpdateConversionsCustom" value="REST Update Conversion (Custom)" title="UpdateConversionCustom" onclick="updateConversionCustom('@Model.Id', '@variant.ItemId','@variant.ItemVersion');" /></td>
                     </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnSaveKpiFinancialResults" id="btnSaveKpiFinancialResults" value="REST Save KPI Result (Financial)" title="SaveKpiResult" onclick="saveKpiResult('@Model.Id', '@variant.ItemVersion', 0);"/></td>
+                        <td>&nbsp;</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnSaveKpiValueResults" id="btnSaveKpiValueResults" value="REST Save KPI Result (Value)" title="SaveKpiResult" onclick="saveKpiResult('@Model.Id', '@variant.ItemVersion', 1);"/></td>
+                    </tr>
                     <tr><td>&nbsp;</td></tr> }
             </table>
         }
@@ -207,6 +250,10 @@
                 <div>
                     Custom increment  <input id="viewconversion" type="text" /> &nbsp;&nbsp;<em>Enter the number you would like to increment a view or conversion total by, then click the 'Rest Update...(Custom)' button beside the Variant view or conversion to be incremented.</em>
                 </div>
+                <div>
+                    Custom increment (kpi) <input id="kpiresults" type="text" /> &nbsp;&nbsp;<em>Enter the number of kpi results to save, then click the 'Rest Update KPI Results' button beside the Variant you want to save them to.</em>
+                </div>
+
             </fieldset>
 
         </div>
