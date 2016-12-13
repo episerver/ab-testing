@@ -108,6 +108,15 @@ namespace EPiServer.Marketing.KPI.Common
             var contentRepo = _servicelocator.GetInstance<IContentRepository>();
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
             TestContentGuid = currentContent.ContentGuid;
+
+            bool isInt = int.TryParse(responseData["Timeout"], out Timeout);
+            if( !isInt || Timeout < 1 || Timeout > 60 )
+            {
+                throw new KpiValidationException(
+                    _servicelocator.GetInstance<LocalizationService>()
+                    .GetString("/kpi/stickysite_kpi/config_markup/error_invalid_timeoutvalue"));
+            }
+
             Timeout = int.Parse(responseData["Timeout"]);
         }
 
