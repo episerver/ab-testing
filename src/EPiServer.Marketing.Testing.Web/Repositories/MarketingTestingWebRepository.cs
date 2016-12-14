@@ -204,21 +204,20 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             if (!string.IsNullOrEmpty(testResult.WinningContentLink))
             {
-                ContentReference publishedReference = new ContentReference();
+
                 //setup versions as ints for repository
                 int winningVersion;
-
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
-                //get current test data and content data for published and variant content
                 IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
-                var draftContent =
-                    _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.DraftContentLink));
-                var publishedContent =
-                    _testResultHelper.GetClonedContentFromReference(
-                        ContentReference.Parse(testResult.PublishedContentLink));
                 try
                 {
+                    //get the appropriate variant and set IsWinner to True. Archive test to remove the lock on the content
+                    var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
+ 
+                    var draftContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.DraftContentLink));
+
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
                     //had been on the site as published.
@@ -227,16 +226,15 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     if (testResult.WinningContentLink == testResult.PublishedContentLink)
                     {
                         //republish original published version as winner.
+                        var publishedContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.PublishedContentLink));
                         _testResultHelper.PublishContent(publishedContent);
                     }
-                    //get the appropriate variant and set IsWinner to True. Archive test to show completion.
-                    var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
-
-                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
                 }
                 catch (Exception ex)
                 {
                     _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results", ex);
+                    // restore the previous test data in the event of an error in case we archive the test but fail to publish the winning variant
+                    try { SaveMarketingTest(currentTest); } catch { }
                 }
             }
             return testResult.TestId;
@@ -248,7 +246,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return PrincipalInfo.CurrentPrincipal.Identity.Name;
         }
 
-        private DateTime? CalculateEndDateFromDuration(string startDate, int testDuration)
+        private DateTime CalculateEndDateFromDuration(string startDate, int testDuration)
         {
             DateTime endDate = DateTime.Parse(startDate);
             return endDate.AddDays(testDuration);

@@ -18,6 +18,17 @@
         <failed_to_load>Failed to load</failed_to_load>
         <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
       </kpi_messaging>
+      <stickysite_kpi>
+        <config_markup>
+          <conversion_label>Number of minutes until another page is visited</conversion_label>
+          <error_internal>Internal error : {0}</error_internal>
+          <error_invalid_timeoutvalue>Number of minutes must be a value between 1 and 60</error_invalid_timeoutvalue>
+        </config_markup>
+        <readonly_markup>
+          <conversion_header>Conversion goal</conversion_header>
+          <conversion_selector_description>Visitor navigates to any other page within {0} minutes.</conversion_selector_description>
+        </readonly_markup>
+      </stickysite_kpi>
     </kpi>
   </language>
 </languages>
