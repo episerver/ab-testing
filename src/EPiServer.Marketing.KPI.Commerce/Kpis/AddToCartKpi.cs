@@ -13,18 +13,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
-        text = "Add To Cart", description = "Choose a product for conversion.")]
+        text_id = "/commercekpi/addtocart/name", 
+        description_id = "/commercekpi/addtocart/description")]
     public class AddToCartKpi : CommerceKpi
     {
         public AddToCartKpi()
         {
             LocalizationSection = "addtocart";
-            _servicelocator = ServiceLocator.Current;
-        }
-        internal AddToCartKpi(IServiceLocator servicelocator)
-        {
-            LocalizationSection = "addtocart";
-            _servicelocator = servicelocator;
         }
 
         /// <summary>
