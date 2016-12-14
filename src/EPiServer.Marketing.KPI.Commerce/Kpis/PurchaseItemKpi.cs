@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
-        text = "Purchase Item", description = "Choose a product for conversion.")]
+        text = "Purchase Product", description = "Choose a product for conversion.")]
     public class PurchaseItemKpi : CommerceKpi
     {
         public PurchaseItemKpi()
