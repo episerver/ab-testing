@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.KPI.Test
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IKpiDataAccess> _kpiDataAccess;
-        private LocalizationService _localizationservice;
+        LocalizationService _localizationservice = LocalizationService.Current;
 
         private DalKpi GetDalKpi()
         {
@@ -33,11 +33,7 @@ namespace EPiServer.Marketing.KPI.Test
             _serviceLocator = new Mock<IServiceLocator>();
             _kpiDataAccess = new Mock<IKpiDataAccess>();
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
-
-            // simply creates a new one, and stuffs it in the service locator were
-            // some of the code under test is looking for it. 
-            LocalizationService ls = LocalizationService.Current;
-            _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(ls);
+            _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationservice);
 
             // Set our mocked service locator so calls like ServiceLocator.Current work properly. 
             ServiceLocator.SetLocator(_serviceLocator.Object);
