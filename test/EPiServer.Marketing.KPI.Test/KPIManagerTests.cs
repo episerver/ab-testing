@@ -34,9 +34,12 @@ namespace EPiServer.Marketing.KPI.Test
             _kpiDataAccess = new Mock<IKpiDataAccess>();
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
 
+            // simply creates a new one, and stuffs it in the service locator were
+            // some of the code under test is looking for it. 
             LocalizationService ls = LocalizationService.Current;
             _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(ls);
 
+            // Set our mocked service locator so calls like ServiceLocator.Current work properly. 
             ServiceLocator.SetLocator(_serviceLocator.Object);
             return new KpiManager(_serviceLocator.Object);
         }
