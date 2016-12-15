@@ -38,10 +38,6 @@ namespace EPiServer.Marketing.KPI.Common
         {
             ContentGuid = contentGuid;
         }
-        internal ContentComparatorKPI(IServiceLocator servicelocator)
-        {
-            _servicelocator = servicelocator;
-        }
 
         [DataMember]
         public override string UiMarkup
