@@ -56,8 +56,42 @@
 		}
         };
 
+		var updateViewCustom = function (testId, variantId, itemVersion) {
+		var value = document.getElementById("viewconversion").value;
+		for (i = 0; i < value; i++) {
+		    $.ajax({
+			type: 'POST',
+			url: '/api/episerver/testing/updateview',
+			cache: false,
+			contentType: 'application/x-www-form-urlencoded',
+			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+		    }).done(function (data) {
+		    }).fail(function () {
+		    }).always(function () {
+			setTimeout(function(){ window.location.reload(); }, 2000);
+		    });
+		}
+        };
+
         var updateConversion = function (testId, variantId, itemVersion) {
 		for (i = 0; i < 100; i++) {
+		    $.ajax({
+			type: 'POST',
+			url: '/api/episerver/testing/updateconversion/',
+			cache: false,
+			contentType: 'application/x-www-form-urlencoded',
+			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+		    }).done(function (data) {
+		    }).fail(function () {
+		    }).always(function () {
+			setTimeout(function(){ window.location.reload(); }, 2000);
+		    });
+		}
+        };
+
+		var updateConversionCustom = function (testId, variantId, itemVersion) {
+		var value = document.getElementById("viewconversion").value;
+		for (i = 0; i < value; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateconversion/',
@@ -127,6 +161,8 @@
                         <td>@Html.DisplayNameFor(resultItem => variant.Views)</td>
                         <td>@Html.DisplayFor(resultItem => variant.Views)</td>
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@variant.ItemId','@variant.ItemVersion');" /></td>
+                        <td>&nbsp;</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViewsCustom" id="btnUpdateViewsCustom" value="REST Update View (Custom)" title="UpdateViewCustom" onclick="updateViewCustom('@Model.Id','@variant.ItemId','@variant.ItemVersion');" /></td>
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => variant.Conversions)</td>
@@ -134,6 +170,8 @@
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@variant.ItemId','@variant.ItemVersion');" /></td>
                         <td>&nbsp;</td>
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@variant.ItemId','@variant.ItemVersion' );" /></td>
+                        <td>&nbsp;</td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversionsCustom" id="btnUpdateConversionsCustom" value="REST Update Conversion (Custom)" title="UpdateConversionCustom" onclick="updateConversionCustom('@Model.Id', '@variant.ItemId','@variant.ItemVersion');" /></td>
                     </tr>
                     <tr><td>&nbsp;</td></tr> }
             </table>
@@ -166,7 +204,9 @@
                 <div>
                     @Html.ActionLink("Edit", "UpdateAbTest", new { id = Model.Id }) &nbsp;&nbsp;<em>Brings up the edit form for the current state</em>
                 </div>
-                <div></div>
+                <div>
+                    Custom increment  <input id="viewconversion" type="text" /> &nbsp;&nbsp;<em>Enter the number you would like to increment a view or conversion total by, then click the 'Rest Update...(Custom)' button beside the Variant view or conversion to be incremented.</em>
+                </div>
             </fieldset>
 
         </div>

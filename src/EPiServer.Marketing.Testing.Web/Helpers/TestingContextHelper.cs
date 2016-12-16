@@ -30,6 +30,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     }
     #endregion UnitTestWorkaround
 
+    [ServiceConfiguration(ServiceType = typeof(ITestingContextHelper))]
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;

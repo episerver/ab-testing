@@ -79,7 +79,7 @@
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"],
+                confidenceLevel: ["viewConfidenceLevel"]
             },
 
             //sets views starting data from view model
