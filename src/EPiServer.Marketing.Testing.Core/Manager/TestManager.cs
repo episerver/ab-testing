@@ -245,7 +245,7 @@ namespace EPiServer.Marketing.Testing
 
         }
 
-        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool aSynch = true)
+        public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool aSynch = true)
         {
             if (aSynch)
             {

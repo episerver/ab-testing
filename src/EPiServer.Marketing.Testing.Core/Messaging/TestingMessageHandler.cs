@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void Handle(AddKeyResultMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.EmitKpiResultData(message.TestId, message.ItemVersion, message.Result, message.Type, false);
+            tm.SaveKpiResultData(message.TestId, message.ItemVersion, message.Result, message.Type, false);
         }
     }
 }

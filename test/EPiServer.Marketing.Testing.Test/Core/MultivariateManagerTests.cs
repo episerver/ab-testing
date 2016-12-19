@@ -324,7 +324,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             };
 
             var tm = GetUnitUnderTest();
-            tm.EmitKpiResultData(theGuid, theItemVersion, result, resultsType, false);
+            tm.SaveKpiResultData(theGuid, theItemVersion, result, resultsType, false);
 
             _dataAccessLayer.Verify(
                 da =>
@@ -342,7 +342,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                         It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
                 "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
 
-            tm.EmitKpiResultData(theGuid, theItemVersion, result2, 0, false);
+            tm.SaveKpiResultData(theGuid, theItemVersion, result2, 0, false);
 
             _dataAccessLayer.Verify(
                 da =>
@@ -468,7 +468,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 Id = Guid.NewGuid()
             };
 
-            testManager.EmitKpiResultData(original, 1, result, 0);
+            testManager.SaveKpiResultData(original, 1, result, 0);
 
             messageManager.Verify(mm => mm.EmitKpiResultData(
                 It.Is<Guid>(arg => arg.Equals(original)),

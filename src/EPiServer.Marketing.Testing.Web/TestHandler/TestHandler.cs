@@ -503,7 +503,7 @@ namespace EPiServer.Marketing.Testing.Web
                     ModifiedDate = DateTime.UtcNow
                 };
 
-                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
+                _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
             }
         }
 
@@ -523,7 +523,7 @@ namespace EPiServer.Marketing.Testing.Web
                     ModifiedDate = DateTime.UtcNow
                 };
 
-                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
+                _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
             }
         }
 

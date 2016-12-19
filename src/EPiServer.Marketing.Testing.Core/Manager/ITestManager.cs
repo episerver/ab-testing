@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Testing
 
         void Archive(Guid testObjectId, Guid winningVariantId);
 
-        void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool aSynch = true);
+        void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool aSynch = true);
 
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch=true);
 
