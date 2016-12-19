@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
         public void EmitKpiResultDataEmitsMessageAndCallsMessageHandler()
         {
             var messageManager = GetUnitUnderTest();
-            messageManager.EmitKpiResultData(Guid.Empty, Guid.NewGuid(), 1, new KeyFinancialResult(), 0);
+            messageManager.EmitKpiResultData(Guid.Empty, 1, new KeyFinancialResult(), 0);
             Thread.Sleep(1000);
             _messageHandler.Verify(mh => mh.Handle(It.IsAny<AddKeyResultMessage>()),
                 Times.AtLeastOnce, "MessageManager did not emit message or did not call handle for EmitKpiResultData");

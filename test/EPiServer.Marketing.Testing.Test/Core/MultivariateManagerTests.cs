@@ -468,11 +468,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 Id = Guid.NewGuid()
             };
 
-            testManager.EmitKpiResultData(original, testItemId, 1, result, 0);
+            testManager.EmitKpiResultData(original, 1, result, 0);
 
             messageManager.Verify(mm => mm.EmitKpiResultData(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1)),
                 It.Is<IKeyResult>(arg => arg.Equals(result)),
                 It.Is<KeyResultType>(arg => arg.Equals(KeyResultType.Financial))),

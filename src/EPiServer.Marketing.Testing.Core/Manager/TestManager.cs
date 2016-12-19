@@ -258,10 +258,10 @@ namespace EPiServer.Marketing.Testing
         }
 
 
-        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             var messaging = _serviceLocator.GetInstance<IMessagingManager>();
-            messaging.EmitKpiResultData(testId, itemId, itemVersion, keyResult, type);
+            messaging.EmitKpiResultData(testId, itemVersion, keyResult, type);
         }
 
         public Variant ReturnLandingPage(Guid testId)

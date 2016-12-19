@@ -103,13 +103,12 @@ namespace EPiServer.Marketing.Testing.Messaging
             emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, ItemVersion = itemVersion } );
         }
 
-        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
             emitterFactory.Emit(new AddKeyResultMessage()
             {
                 TestId = testId,
-                VariantId = itemId,
                 ItemVersion = itemVersion,
                 Result = keyResult,
                 Type = type

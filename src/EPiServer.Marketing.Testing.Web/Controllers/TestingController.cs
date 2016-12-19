@@ -164,7 +164,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitKpiResultData(Guid.Parse(testId), Guid.NewGuid(),  Convert.ToInt16(itemVersion), keyResult, resultType);
+                mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }

@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.Testing
 
         void AddKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
-        void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type);
+        void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type);
 
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch=true);
 

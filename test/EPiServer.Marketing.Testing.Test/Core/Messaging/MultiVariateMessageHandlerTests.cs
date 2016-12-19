@@ -77,7 +77,7 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             var messageHandler = GetUnitUnderTest();
             var result = new KeyFinancialResult() {Total = 22};
 
-            messageHandler.Handle(new AddKeyResultMessage() { TestId = testGuid, VariantId = varient, ItemVersion = itemVersion, Result = result, Type = 0 });
+            messageHandler.Handle(new AddKeyResultMessage() { TestId = testGuid, ItemVersion = itemVersion, Result = result, Type = 0 });
             // Verify that save is called and conversion value is correct
 
             _testManager.Verify(tm => tm.AddKpiResultData(It.Is<Guid>(gg => gg.Equals(testGuid)),
