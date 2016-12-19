@@ -245,23 +245,24 @@ namespace EPiServer.Marketing.Testing
 
         }
 
-        public void AddKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool aSynch = true)
         {
-            if (type == KeyResultType.Financial)
+            if (aSynch)
             {
-                _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
+                var messaging = _serviceLocator.GetInstance<IMessagingManager>();
+                messaging.EmitKpiResultData(testId, itemVersion, keyResult, type);
             }
             else
             {
-                _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
+                if (type == KeyResultType.Financial)
+                {
+                    _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
+                }
+                else
+                {
+                    _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
+                }
             }
-        }
-
-
-        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
-        {
-            var messaging = _serviceLocator.GetInstance<IMessagingManager>();
-            messaging.EmitKpiResultData(testId, itemVersion, keyResult, type);
         }
 
         public Variant ReturnLandingPage(Guid testId)

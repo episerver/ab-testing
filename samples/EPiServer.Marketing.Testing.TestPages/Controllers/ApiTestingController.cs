@@ -369,7 +369,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                         KpiId = Guid.NewGuid(),
                         Total = (1 / rand.Next(1, 100)) * x + numOfResults 
                     };
-                    mtm.AddKpiResultData(testId, version, result, KeyResultType.Financial);
+                    mtm.EmitKpiResultData(testId, version, result, KeyResultType.Financial);
                 }
                 else
                 {
@@ -379,7 +379,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                         KpiId = Guid.NewGuid(),
                         Value = rand.NextDouble()
                     };
-                    mtm.AddKpiResultData(testId, version, result, KeyResultType.Value);
+                    mtm.EmitKpiResultData(testId, version, result, KeyResultType.Value);
                 }
             }
             var multivariateTest = mtm.Get(testId);

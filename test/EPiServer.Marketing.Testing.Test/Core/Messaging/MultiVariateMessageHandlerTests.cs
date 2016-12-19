@@ -80,9 +80,9 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             messageHandler.Handle(new AddKeyResultMessage() { TestId = testGuid, ItemVersion = itemVersion, Result = result, Type = 0 });
             // Verify that save is called and conversion value is correct
 
-            _testManager.Verify(tm => tm.AddKpiResultData(It.Is<Guid>(gg => gg.Equals(testGuid)),
+            _testManager.Verify(tm => tm.EmitKpiResultData(It.Is<Guid>(gg => gg.Equals(testGuid)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
-                It.Is<IKeyResult>(ct => ct.Equals(result)), 0),
+                It.Is<IKeyResult>(ct => ct.Equals(result)), 0, false),
                 Times.Once, "Repository save was not called or view value is not as expected");
 
         }
