@@ -520,8 +520,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _dataAccess.AddKpiResultData(tests[0].Id, 1, result, 0);
             _dataAccess.AddKpiResultData(tests[0].Id, 2, result1, 1);
 
-            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyFinancialResults.Count);
-            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyValueResults.Count);
+            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.First(v => v.ItemVersion == 1).DalKeyFinancialResults.Count);
+            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.First(v => v.ItemVersion == 2).DalKeyValueResults.Count);
         }
 
         //[Fact]
