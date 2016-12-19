@@ -126,6 +126,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(sl => sl.GetInstance<IDatabaseMode>())
                 .Returns(_mockDatabaseMode.Object);
 
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
             return new TestHandler(_mockServiceLocator.Object);
         }
 
@@ -589,7 +590,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 OriginalItemId = _originalItemId,
                 State = TestState.Active,
                 Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object) { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
             }));
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveReference should be called once");

@@ -17,11 +17,10 @@ namespace EPiServer.Marketing.KPI.Common
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.StickySiteConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.StickySiteReadOnlyMarkup.html",
-        text = "Site Stickiness", 
-        description = "Converts when a user visits the content under test and then visits any other page within the same browser session.")]
+        text_id = "/kpi/stickysite_kpi/name", 
+        description_id = "/kpi/stickysite_kpi/description")]
     public class StickySiteKpi : Kpi
     {
-        private IServiceLocator _servicelocator;
         private ObjectCache _sessionCache = MemoryCache.Default;
 
         [DataMember]
@@ -31,14 +30,8 @@ namespace EPiServer.Marketing.KPI.Common
         
         public StickySiteKpi()
         {
-            _servicelocator = ServiceLocator.Current;
         }
-
-        public StickySiteKpi(Guid contentGuid)
-        {
-            _servicelocator = ServiceLocator.Current;
-        }
-
+        
         private IContent GetCurrentPage()
         {
             try
