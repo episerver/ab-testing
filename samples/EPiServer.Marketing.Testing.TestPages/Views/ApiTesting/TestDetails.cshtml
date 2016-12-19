@@ -106,39 +106,39 @@
 		}
 		};
 
-		var saveKpiResult = function (testId, itemVersion, kpiResultType) {
+		var saveKpiResult = function (testId, itemVersion, keyResultType) {
 		    var count = document.getElementById("kpiresults").value;
-		    if (kpiResultType === 0) // financial result
+		    if (keyResultType === 0) // financial result
             {
-		     //   for (var i = 0; i < value; i++) {
+		        for (var i = 0; i < count; i++) {
 		            $.ajax({
 		                type: 'POST',
-		                url: '/api/episerver/testing/savekpiresults/',
+		                url: '/api/episerver/testing/savekpiresult/',
 		                cache: false,
 		                contentType: 'application/x-www-form-urlencoded',
-		                data: { testId: testId, itemVersion: itemVersion, kpiResultType: kpiResultType, count: count }
+		                data: { testId: testId, itemVersion: itemVersion, keyResultType: keyResultType, total: 5 + i, kpiId: '5E9123E8-1A41-4CF7-8237-1D5B16E56F75' }
 		            }).done(function (data) {
 		            }).fail(function () {
 		            }).always(function () {
 		                setTimeout(function () { window.location.reload(); }, 2000);
 		            });
-		    //    }
+		        }
 		    }
 		    else  // value result
 		    {
-		       // for (var ii = 0; ii < value; ii++) {
+		        for (var ii = 0; ii < count; ii++) {
 		            $.ajax({
 		                type: 'POST',
-		                url: '/api/episerver/testing/savekpiresults/',
+		                url: '/api/episerver/testing/savekpiresult/',
 		                cache: false,
 		                contentType: 'application/x-www-form-urlencoded',
-		                data: { testId: testId, itemVersion: itemVersion, kpiResultType: kpiResultType, count: count }
+		                data: { testId: testId, itemVersion: itemVersion, keyResultType: keyResultType, total: 3 + ii, kpiId: '5E9123E8-1A41-4CF7-8237-1D5B16E56F75' }
 		            }).done(function (data) {
 		            }).fail(function () {
 		            }).always(function () {
 		                setTimeout(function () { window.location.reload(); }, 2000);
 		            });
-		      //  }
+		        }
 		    }
 		};
     </script>

@@ -324,7 +324,7 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId,
+                    _testManager.IncrementCount(cookie.TestId,
                         variantVersion,
                         CountType.View);
                     cookie.Viewed = true;
