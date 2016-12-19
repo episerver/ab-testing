@@ -11,14 +11,14 @@
     <title>TestDetails</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript">
-        var updateBoth = function (testId, variantId, itemVersion) {
+        var updateBoth = function (testId, itemVersion) {
 		for (i = 0; i < 100; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateview',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+			data: { testId: testId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -30,7 +30,7 @@
 			url: '/api/episerver/testing/updateconversion/',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+			data: { testId: testId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -40,14 +40,14 @@
 		}
         };
 
-        var updateView = function (testId, variantId, itemVersion) {
+        var updateView = function (testId, itemVersion) {
 		for (i = 0; i < 100; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateview',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+			data: { testId: testId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -56,7 +56,7 @@
 		}
         };
 
-		var updateViewCustom = function (testId, variantId, itemVersion) {
+		var updateViewCustom = function (testId, itemVersion) {
 		var value = document.getElementById("viewconversion").value;
 		for (i = 0; i < value; i++) {
 		    $.ajax({
@@ -64,7 +64,7 @@
 			url: '/api/episerver/testing/updateview',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+			data: { testId: testId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -73,14 +73,14 @@
 		}
         };
 
-        var updateConversion = function (testId, variantId, itemVersion) {
+        var updateConversion = function (testId, itemVersion) {
 		for (i = 0; i < 100; i++) {
 		    $.ajax({
 			type: 'POST',
 			url: '/api/episerver/testing/updateconversion/',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+			data: { testId: testId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -89,7 +89,7 @@
 		}
         };
 
-		var updateConversionCustom = function (testId, variantId, itemVersion) {
+		var updateConversionCustom = function (testId, itemVersion) {
 		var value = document.getElementById("viewconversion").value;
 		for (i = 0; i < value; i++) {
 		    $.ajax({
@@ -97,7 +97,7 @@
 			url: '/api/episerver/testing/updateconversion/',
 			cache: false,
 			contentType: 'application/x-www-form-urlencoded',
-			data: { testId: testId, variantId: variantId, itemVersion: itemVersion }
+			data: { testId: testId, itemVersion: itemVersion }
 		    }).done(function (data) {
 		    }).fail(function () {
 		    }).always(function () {
@@ -196,18 +196,18 @@
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => variant.Views)</td>
                         <td>@Html.DisplayFor(resultItem => variant.Views)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id','@variant.ItemId','@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id', '@variant.ItemVersion');" /></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViewsCustom" id="btnUpdateViewsCustom" value="REST Update View (Custom)" title="UpdateViewCustom" onclick="updateViewCustom('@Model.Id','@variant.ItemId','@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViewsCustom" id="btnUpdateViewsCustom" value="REST Update View (Custom)" title="UpdateViewCustom" onclick="updateViewCustom('@Model.Id', '@variant.ItemVersion');" /></td>
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => variant.Conversions)</td>
                         <td>@Html.DisplayFor(resultItem => variant.Conversions)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@variant.ItemId','@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@variant.ItemVersion');" /></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@variant.ItemId','@variant.ItemVersion' );" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@variant.ItemVersion' );" /></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversionsCustom" id="btnUpdateConversionsCustom" value="REST Update Conversion (Custom)" title="UpdateConversionCustom" onclick="updateConversionCustom('@Model.Id', '@variant.ItemId','@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversionsCustom" id="btnUpdateConversionsCustom" value="REST Update Conversion (Custom)" title="UpdateConversionCustom" onclick="updateConversionCustom('@Model.Id', '@variant.ItemVersion');" /></td>
                     </tr>
                     <tr>
                         <td></td>

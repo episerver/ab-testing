@@ -95,14 +95,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
         }
 
-        // Post url: api/episerver/testing/updateview, data: { testId: testId, variantId: variantId },  contentType: 'application/x-www-form-urlencoded'
+        // Post url: api/episerver/testing/updateview, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage UpdateView(FormDataCollection data)
         {
             var testId = data.Get("testId");
-            var variantId = data.Get("variantId");
             var itemVersion = data.Get("itemVersion");
-            if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
+            if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
@@ -113,14 +112,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
-        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, variantId: variantId },  contentType: 'application/x-www-form-urlencoded'
+        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
             var testId = data.Get("testId");
-           // var variantId = data.Get("variantId");
             var itemVersion = data.Get("itemVersion");
-            if (!string.IsNullOrWhiteSpace(testId))// && !string.IsNullOrWhiteSpace(variantId))
+            if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion));
@@ -131,6 +129,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
+        // Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage SaveKpiResult(FormDataCollection data)
         {
