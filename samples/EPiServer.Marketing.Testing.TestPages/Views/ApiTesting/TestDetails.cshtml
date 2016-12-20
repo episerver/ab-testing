@@ -1,3 +1,4 @@
+@using Microsoft.Ajax.Utilities
 @model EPiServer.Marketing.Testing.Data.ABTest
 @{
     Layout = null;
@@ -182,7 +183,7 @@
         <hr />
         @if (Model.Variants != null)
         {
-            <table style="width:50%">
+            <table style="width: 70%">
                 @foreach (var variant in Model.Variants)
                 {
                     <tr>
@@ -196,27 +197,31 @@
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => variant.Views)</td>
                         <td>@Html.DisplayFor(resultItem => variant.Views)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id', '@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViews" id="btnUpdateViews" value="REST Update View (+100)" title="UpdateView" onclick="updateView('@Model.Id', '@variant.ItemVersion');"/></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViewsCustom" id="btnUpdateViewsCustom" value="REST Update View (Custom)" title="UpdateViewCustom" onclick="updateViewCustom('@Model.Id', '@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateViewsCustom" id="btnUpdateViewsCustom" value="REST Update View (Custom)" title="UpdateViewCustom" onclick="updateViewCustom('@Model.Id', '@variant.ItemVersion');"/></td>
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(resultItem => variant.Conversions)</td>
                         <td>@Html.DisplayFor(resultItem => variant.Conversions)</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversions" id="btnUpdateConversions" value="REST Update Conversion (+100)" title="UpdateConversion" onclick="updateConversion('@Model.Id', '@variant.ItemVersion');"/></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@variant.ItemVersion' );" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateBoth" id="btnUpdateBoth" value="REST Update Views And Conversion (+100)" title="UpdateBoth" onclick="updateBoth('@Model.Id', '@variant.ItemVersion');"/></td>
                         <td>&nbsp;</td>
-                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversionsCustom" id="btnUpdateConversionsCustom" value="REST Update Conversion (Custom)" title="UpdateConversionCustom" onclick="updateConversionCustom('@Model.Id', '@variant.ItemVersion');" /></td>
+                        <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnUpdateConversionsCustom" id="btnUpdateConversionsCustom" value="REST Update Conversion (Custom)" title="UpdateConversionCustom" onclick="updateConversionCustom('@Model.Id', '@variant.ItemVersion');"/></td>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td></td>
+                        <td>Financial Result Count:</td>
+                        <td>@{ int a = variant.KeyFinancialResults != null ? variant.KeyFinancialResults.Count : 0; } @Html.DisplayFor(resultItem => a)</td>
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnSaveKpiFinancialResults" id="btnSaveKpiFinancialResults" value="REST Save KPI Result (Financial)" title="SaveKpiResult" onclick="saveKpiResult('@Model.Id', '@variant.ItemVersion', 0);"/></td>
-                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>Value Result Count:</td>
+                        <td>@{ int b = variant.KeyValueResults != null ? variant.KeyValueResults.Count : 0; } @Html.DisplayFor(resultItem => b)</td>
                         <td><input class="epi-cmsButton-text epi-cmsButton-tools epi-cmsButton-Cancel" type="button" name="btnSaveKpiValueResults" id="btnSaveKpiValueResults" value="REST Save KPI Result (Value)" title="SaveKpiResult" onclick="saveKpiResult('@Model.Id', '@variant.ItemVersion', 1);"/></td>
                     </tr>
-                    <tr><td>&nbsp;</td></tr> }
+                    <tr><td>&nbsp;</td></tr>
+                }
             </table>
         }
     </fieldset>
