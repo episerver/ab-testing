@@ -2,13 +2,13 @@
 using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.ServiceLocation;
-using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using EPiServer.Framework.Localization;
+using Mediachase.Commerce.Markets;
+using Mediachase.Commerce;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -30,6 +30,15 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         }
 
         [DataMember]
+        public override string kpiResultType
+        {
+            get
+            {
+                return typeof(KpiFinancialResult).Name.ToString();
+            }
+        }  
+
+        [DataMember]
         public override string UiMarkup
         {
             get
@@ -49,7 +58,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 var averageordertext = LocalizationService.Current
                    .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/averageordertext");
                 return string.Format(base.UiReadOnlyMarkup, averageordertext);
-
             }
         }
 
@@ -69,11 +77,25 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = new KpiFinancialResult() { KpiId = Id, Total = 0, HasConverted = false };
-
+            
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
-            {               
-                retval.Total = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
+            {
+                var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
+                var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
+                var orderCurrency = orderMarket.DefaultCurrency;
+                var mynumber = string.Format(orderTotal.ToString(), orderCurrency.Format);
+
+                if (orderCurrency != defaultCurrency)
+                {
+                    var convertedTotal = new Money(orderTotal, defaultCurrency);
+                    retval.Total = convertedTotal.Amount;
+                }
+                else
+                {
+                    retval.Total = orderTotal;
+                }
+                retval.HasConverted = true;
             }
             return retval;
         }

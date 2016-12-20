@@ -44,7 +44,10 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Overide to specify the FriendlyName to be displayed in the UI.
         /// </summary>
         [DataMember]
-        public virtual string FriendlyName { get {
+        public virtual string FriendlyName
+        {
+            get
+            {
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
                 {
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
@@ -57,8 +60,23 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
+        /// <summary>
+        /// Indicates the result type used by the kpi.
+        /// Override to properly display values in the UI.
+        /// </summary>
         [DataMember]
-        public virtual string Description {
+        public virtual string kpiResultType
+        {
+            get
+            {
+                return typeof(KpiConversionResult).Name.ToString();
+            }
+        }
+
+
+        [DataMember]
+        public virtual string Description
+        {
             get
             {
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
@@ -114,7 +132,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
                 {
                     var attr = (UIMarkupAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(UIMarkupAttribute));
-                    if( !TryGetResourceString(attr.readonlymarkup, out value) )
+                    if (!TryGetResourceString(attr.readonlymarkup, out value))
                     {
                         value = LocalizationService.Current.GetString("/kpi/kpi_messaging/failed_to_load") + attr.readonlymarkup + ":" + value;
                     }
@@ -127,7 +145,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-         /// <summary>
+        /// <summary>
         /// Given the specified Namespace.filename key we will load the string from the file found in this assembly. If this fails 
         /// its probably because the key is wrong or the resources is not in the assembly. See 
         /// </summary>
@@ -140,11 +158,11 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             try
             {
                 var assembly = this.GetType().Assembly;
-                var text = new StreamReader( assembly.GetManifestResourceStream(key) );
+                var text = new StreamReader(assembly.GetManifestResourceStream(key));
                 value = text.ReadToEnd();
                 retval = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 value = e.Message;
             }
@@ -161,7 +179,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// The last time the kpi was modified.
         /// </summary>
         [DataMember]
-        public DateTime ModifiedDate { get; set; }      
+        public DateTime ModifiedDate { get; set; }
 
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI

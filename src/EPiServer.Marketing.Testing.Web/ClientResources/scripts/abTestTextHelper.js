@@ -120,16 +120,32 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided nodes to the published variant conversions, views and conversion percent
         renderPublishedViewsAndConversions: function (publishedConversionsNode, publishedViewsNode, publishedConversionPercentNode) {
-            publishedConversionsNode.textContent = this.publishedVariant.conversions;
-            publishedViewsNode.textContent = this.publishedVariant.views;
-            publishedConversionPercentNode.textContent = this.publishedPercent + "%";
+            var x = context.data.test.kpiInstances[0].kpiResultType;
+            if (x = "kpiFinancialResult") {
+                publishedConversionsNode.textContent = this.publishedVariant.keyFinancialResults.length;
+                publishedViewsNode.textContent = this.publishedVariant.views;
+                publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage + "$";
+            }
+            else {
+                publishedConversionsNode.textContent = this.publishedVariant.conversions;
+                publishedViewsNode.textContent = this.publishedVariant.views;
+                publishedConversionPercentNode.textContent = this.publishedPercent + "%";
+            }
         },
 
         //sets text content of provided nodes to the draft variant conversions, views and conversion percent
         renderDraftViewsAndConversions: function (challengerConversionsNode, challengerViewsNode, challengerConversionPercentNode) {
-            challengerConversionsNode.textContent = this.draftVariant.conversions;
-            challengerViewsNode.textContent = this.draftVariant.views;
-            challengerConversionPercentNode.textContent = this.draftPercent + "%";
+            var x = context.data.test.kpiInstances[0].kpiResultType;
+            if (x = "kpiFinancialResult") {
+                challengerConversionsNode.textContent = this.draftVariant.keyFinancialResults.length;
+                challengerViewsNode.textContent = this.draftVariant.views;
+                challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage + "$";
+            }
+            else {
+                challengerConversionsNode.textContent = this.draftVariant.conversions;
+                challengerViewsNode.textContent = this.draftVariant.views;
+                challengerConversionPercentNode.textContent = this.draftPercent + "%";
+            }
         },
 
         //sets text content of provided node to a formatted version of the context test description
