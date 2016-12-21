@@ -356,7 +356,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         private void AddKpiResultDataHelper(IRepository repo, Guid testId, int itemVersion, IDalKeyResult keyResult, int type)
         {
             var test = repo.GetById(testId);
-            var variant = test.Variants.FirstOrDefault(v => v.ItemVersion == itemVersion);
+            var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
 
             if (type == 0)
             {
@@ -375,7 +375,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         private void ArchiveHelper(IRepository repo, Guid testid, Guid variantId)
         {
             var test = repo.GetById(testid);
-            var variant = test.Variants.FirstOrDefault(v => v.Id == variantId);
+            var variant = test.Variants.First(v => v.Id == variantId);
 
             variant.IsWinner = true;
 

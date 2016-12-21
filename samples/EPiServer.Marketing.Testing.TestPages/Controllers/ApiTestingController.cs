@@ -330,7 +330,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
-        public ActionResult UpdateView(string id, string itemid, string itemVersion)
+        public ActionResult UpdateView(string id, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.View);
@@ -339,7 +339,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateConversion(string id, string itemid, string itemVersion)
+        public ActionResult UpdateConversion(string id, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
             mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.Conversion);

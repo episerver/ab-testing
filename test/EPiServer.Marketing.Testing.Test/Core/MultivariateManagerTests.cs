@@ -288,9 +288,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.IncrementCount(It.IsAny<Guid>(), It.Is<int>(arg => arg.Equals(theItemVersion)),
                         It.IsAny<DalCountType>()),
-                "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
+                "DataAcessLayer IncrementCount was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
@@ -333,9 +333,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 "DataAcessLayer AddKpiResultData was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.Is<int>(arg => arg.Equals(theItemVersion)),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
-                "DataAcessLayer AddKpiResultData was never called or test item Guid did not match.");
+                "DataAcessLayer AddKpiResultData was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
@@ -346,14 +346,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<int>(),
+                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.Is<int>(arg => arg.Equals(theItemVersion)),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
                 "DataAcessLayer AddKpiResultData was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
-                "DataAcessLayer AddKpiResultData was never called or test item Guid did not match.");
+                "DataAcessLayer AddKpiResultData was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
