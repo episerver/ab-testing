@@ -168,7 +168,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             else
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
         }
     }
 }
