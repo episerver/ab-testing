@@ -324,7 +324,7 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testManager.EmitUpdateCount(cookie.TestId, cookie.TestContentId,
+                    _testManager.IncrementCount(cookie.TestId,
                         variantVersion,
                         CountType.View);
                     cookie.Viewed = true;
@@ -481,7 +481,7 @@ namespace EPiServer.Marketing.Testing.Web
             }
 
             var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
-            _testManager.EmitUpdateCount(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, CountType.Conversion);
+            _testManager.IncrementCount(test.Id, varUserSees.ItemVersion, CountType.Conversion);
 
             _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent,
                 new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
@@ -503,7 +503,7 @@ namespace EPiServer.Marketing.Testing.Web
                     ModifiedDate = DateTime.UtcNow
                 };
 
-                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
+                _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
             }
         }
 
@@ -523,7 +523,7 @@ namespace EPiServer.Marketing.Testing.Web
                     ModifiedDate = DateTime.UtcNow
                 };
 
-                _testManager.EmitKpiResultData(test.Id, varUserSees.ItemId, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
+                _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyValueResult, KeyResultType.Value);
             }
         }
 
