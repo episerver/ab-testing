@@ -124,7 +124,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             if (x = "kpiFinancialResult") {
                 publishedConversionsNode.textContent = this.publishedVariant.keyFinancialResults.length;
                 publishedViewsNode.textContent = this.publishedVariant.views;
-                publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage + "$";
+                publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage;
             }
             else {
                 publishedConversionsNode.textContent = this.publishedVariant.conversions;
@@ -139,7 +139,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             if (x = "kpiFinancialResult") {
                 challengerConversionsNode.textContent = this.draftVariant.keyFinancialResults.length;
                 challengerViewsNode.textContent = this.draftVariant.views;
-                challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage + "$";
+                challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage;
             }
             else {
                 challengerConversionsNode.textContent = this.draftVariant.conversions;

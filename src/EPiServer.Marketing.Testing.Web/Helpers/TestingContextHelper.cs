@@ -162,8 +162,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
 
-            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total) : 0;
-            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total) : 0;
+            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",testData.KpiInstances[0].numberFormat) : "0";
+            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",testData.KpiInstances[0].numberFormat) : "0";
             
             
             // Map the version data
@@ -183,6 +183,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
                 model.DaysRemaining = "0";
             }
+
 
            // Calculate total participation count
             foreach (var variant in testData.Variants)

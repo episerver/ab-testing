@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -197,6 +198,14 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         public virtual IKpiResult Evaluate(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual NumberFormatInfo numberFormat
+        {
+            get
+            {
+                return CultureInfo.GetCultureInfo("en-US").NumberFormat;
+            }
         }
 
         public virtual event EventHandler EvaluateProxyEvent;

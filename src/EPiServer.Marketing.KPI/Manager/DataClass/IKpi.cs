@@ -2,6 +2,7 @@
 using EPiServer.Marketing.KPI.Results;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -49,6 +50,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// The last time the kpi was modified.
         /// </summary>
         DateTime ModifiedDate { get; set; }
+
+        NumberFormatInfo numberFormat { get; }
+
 
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using EPiServer.Framework.Localization;
 using Mediachase.Commerce.Markets;
 using Mediachase.Commerce;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -50,6 +51,15 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
+        public override NumberFormatInfo numberFormat
+        {
+            get
+            {
+                return CultureInfo.CurrentCulture.NumberFormat;
+            }
+        }
+
+
         [DataMember]
         public override string UiReadOnlyMarkup
         {
@@ -84,11 +94,11 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
                 var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
                 var orderCurrency = orderMarket.DefaultCurrency;
-                var mynumber = string.Format(orderTotal.ToString(), orderCurrency.Format);
+                var mynumber = orderTotal.ToString(orderCurrency.Format);
 
                 if (orderCurrency != defaultCurrency)
                 {
-                    var convertedTotal = new Money(orderTotal, defaultCurrency);
+                    var convertedTotal = Money.CreateMoneyWithDefaultCurrencyFallback(orderTotal,null);
                     retval.Total = convertedTotal.Amount;
                 }
                 else
