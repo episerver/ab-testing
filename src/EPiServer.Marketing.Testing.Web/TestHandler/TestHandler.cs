@@ -505,7 +505,8 @@ namespace EPiServer.Marketing.Testing.Web
                         ModifiedDate = DateTime.UtcNow
                     };
 
-                _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
+                    _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
+                }
             }
         }
 
