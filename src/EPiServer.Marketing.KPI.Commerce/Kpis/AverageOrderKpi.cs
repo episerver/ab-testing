@@ -8,7 +8,6 @@ using System.Runtime.Serialization;
 using System.Collections.Generic;
 using EPiServer.Framework.Localization;
 using Mediachase.Commerce.Markets;
-using Mediachase.Commerce;
 using System.Globalization;
 using Mediachase.Commerce.Shared;
 

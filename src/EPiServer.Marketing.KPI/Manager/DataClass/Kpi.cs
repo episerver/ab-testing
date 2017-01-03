@@ -7,7 +7,6 @@ using EPiServer.ServiceLocation;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
-using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {

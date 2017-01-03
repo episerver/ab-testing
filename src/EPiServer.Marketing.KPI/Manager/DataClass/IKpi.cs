@@ -2,7 +2,6 @@
 using EPiServer.Marketing.KPI.Results;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
-using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
