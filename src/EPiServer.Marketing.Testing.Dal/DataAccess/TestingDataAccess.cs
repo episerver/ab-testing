@@ -141,35 +141,35 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return tests;
         }
 
-        public void IncrementCount(Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
+        public void IncrementCount(Guid testId, int itemVersion, DalCountType resultType)
         {
             if (_UseEntityFramework)
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
-                    IncrementCountHelper(repository, testId, testItemId, itemVersion, resultType);
+                    IncrementCountHelper(repository, testId, itemVersion, resultType);
                 }
             }
             else
             {
-                IncrementCountHelper(_repository, testId, testItemId, itemVersion, resultType);
+                IncrementCountHelper(_repository, testId, itemVersion, resultType);
             }
         }
 
-        public void AddKpiResultData(Guid testId, Guid testItemId, int itemVersion, IDalKeyResult keyResult, int keyType)
+        public void AddKpiResultData(Guid testId, int itemVersion, IDalKeyResult keyResult, int keyType)
         {
             if (_UseEntityFramework)
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
-                    AddKpiResultDataHelper(repository, testId, testItemId, itemVersion, keyResult, keyType);
+                    AddKpiResultDataHelper(repository, testId, itemVersion, keyResult, keyType);
                 }
             }
             else
             {
-                AddKpiResultDataHelper(_repository, testId, testItemId, itemVersion, keyResult, keyType);
+                AddKpiResultDataHelper(_repository, testId, itemVersion, keyResult, keyType);
             }
         }
 
@@ -334,10 +334,10 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return results.ToList<IABTest>();
         }
 
-        private void IncrementCountHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, DalCountType resultType)
+        private void IncrementCountHelper(IRepository repo, Guid testId, int itemVersion, DalCountType resultType)
         {
             var test = repo.GetById(testId);
-            var variant = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+            var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
 
             if (resultType == DalCountType.View)
             {
@@ -353,10 +353,10 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             repo.SaveChanges();
         }
 
-        private void AddKpiResultDataHelper(IRepository repo, Guid testId, Guid testItemId, int itemVersion, IDalKeyResult keyResult, int type)
+        private void AddKpiResultDataHelper(IRepository repo, Guid testId, int itemVersion, IDalKeyResult keyResult, int type)
         {
             var test = repo.GetById(testId);
-            var variant = test.Variants.FirstOrDefault(v => v.ItemId == testItemId && v.ItemVersion == itemVersion);
+            var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
 
             if (type == 0)
             {
@@ -375,7 +375,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
         private void ArchiveHelper(IRepository repo, Guid testid, Guid variantId)
         {
             var test = repo.GetById(testid);
-            var variant = test.Variants.FirstOrDefault(v => v.Id == variantId);
+            var variant = test.Variants.First(v => v.Id == variantId);
 
             variant.IsWinner = true;
 

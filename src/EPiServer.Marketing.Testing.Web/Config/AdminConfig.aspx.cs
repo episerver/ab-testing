@@ -103,6 +103,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             TestDuration.Text = TestSettings.TestDuration.ToString();
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
+            AutoPublishWinner.SelectedValue = TestSettings.AutoPublishWinner.ToString();
         }
 
         private void ShowMessage(string msg, bool isWarning)

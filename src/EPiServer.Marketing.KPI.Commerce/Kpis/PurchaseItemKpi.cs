@@ -13,18 +13,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
-        text = "Purchase Item", description = "Choose a product for conversion.")]
+        text_id = "/commercekpi/purchaseitem/name", 
+        description_id = "/commercekpi/purchaseitem/description")]
     public class PurchaseItemKpi : CommerceKpi
     {
         public PurchaseItemKpi()
         {
             LocalizationSection = "purchaseitem";
-            _servicelocator = ServiceLocator.Current;
-        }
-        internal PurchaseItemKpi(IServiceLocator servicelocator)
-        {
-            LocalizationSection = "purchaseitem";
-            _servicelocator = servicelocator;
         }
 
         /// <summary>

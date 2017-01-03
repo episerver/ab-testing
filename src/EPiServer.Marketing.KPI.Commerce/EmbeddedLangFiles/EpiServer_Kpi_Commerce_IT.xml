@@ -8,6 +8,8 @@
           <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
           <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
         </config_markup>
+        <description>Choose a product for conversion.</description>
+        <name>Add To Cart</name>
         <readonly_markup>
           <conversion_header>Add Product to Cart</conversion_header>
           <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
@@ -27,6 +29,8 @@
           <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
           <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
         </config_markup>
+        <description>Choose a product for conversion.</description>
+        <name>Purchase Product</name>
         <readonly_markup>
           <conversion_header>Purchase Product</conversion_header>
           <conversion_selector_description>Visitor purchases the product</conversion_selector_description>

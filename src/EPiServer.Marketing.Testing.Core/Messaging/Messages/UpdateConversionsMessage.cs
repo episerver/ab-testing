@@ -6,8 +6,6 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
     {
         public Guid TestId { get; set; }
 
-        public Guid VariantId { get; set; }
-
         public int ItemVersion { get; set; }
     }
 }

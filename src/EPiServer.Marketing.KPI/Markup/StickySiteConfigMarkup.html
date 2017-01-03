@@ -1,0 +1,24 @@
+﻿<script>
+    var dependency = require("epi/dependency")
+    var contextService = dependency.resolve("epi.shell.ContextService");
+    var context = contextService.currentContext;
+    var currentContentInput = dojo.byId("CurrentContent");
+    currentContentInput.value = context.id;
+</script>
+<p>
+    <label>{0}</label>
+    <span name="SessionTimeout"
+          id="SessionTimeout"
+          data-dojo-type="dijit/form/NumberSpinner"
+          data-dojo-props="constraints:{{min:1,max:60}},value:10">
+        <script type="dojo/on" data-dojo-event="change">
+            var self=this;
+            var timeout = dojo.byId("Timeout");
+            timeout.value = self.getValue(); 
+        </script>
+    </span>
+    <div>
+        <input id="CurrentContent" type="hidden" name="CurrentContent"/>
+        <input id="Timeout" type="hidden" name="Timeout" value="10" />
+    </div>
+</p>

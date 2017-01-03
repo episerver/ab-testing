@@ -11,7 +11,6 @@ Write-Host $teamcity
 $ENV:Path = "$cwd\;" + $ENV:Path
 
 # Install runtime dependencies
-dnvm update-self
 dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
 dnvm use default
 
