@@ -44,9 +44,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             get
             {
-                var averageordertext = LocalizationService.Current
-                   .GetString("/commercekpi/" + LocalizationSection + "/config_markup/averageordertext");
-                return string.Format(base.UiMarkup, averageordertext);
+                var conversionText = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/config_markup/conversion_label");
+                return string.Format(base.UiMarkup, conversionText);
 
             }
         }
@@ -65,9 +65,12 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             get
             {
-                var averageordertext = LocalizationService.Current
-                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/averageordertext");
-                return string.Format(base.UiReadOnlyMarkup, averageordertext);
+                var conversionHeader = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_header");
+
+                var conversionText = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_description");
+                return string.Format(base.UiReadOnlyMarkup, conversionHeader, conversionText);
             }
         }
 

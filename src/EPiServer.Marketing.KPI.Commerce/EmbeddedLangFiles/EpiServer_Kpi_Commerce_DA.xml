@@ -18,9 +18,12 @@
       <averageorder>
         <config_markup>
           <averageordertext>Tracks oder totals.</averageordertext>
+          <conversion_label>Tracks order totals.</conversion_label>
         </config_markup>
         <readonly_markup>
           <averageordertext>Tracks oder totals.</averageordertext>
+          <conversion_description>Customer purchases items.</conversion_description>
+          <conversion_header>Conversion Goal</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>

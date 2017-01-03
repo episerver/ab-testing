@@ -46,18 +46,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         }
 
         /// <summary>
-        /// Indicates which result should be considered the "winner"
-        /// Overide to specify a different result comparison
-        /// </summary>
-        public virtual ResultComparison resultComparison
-        {
-            get
-            {
-                return ResultComparison.Greater;
-            }
-        }
-
-        /// <summary>
         /// Overide to specify the FriendlyName to be displayed in the UI.
         /// </summary>
         [DataMember]
@@ -226,7 +214,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         {
             get
             {
-                return CultureInfo.GetCultureInfo("en-US").NumberFormat;
+                return CultureInfo.CurrentCulture.NumberFormat;
             }
         }
 
