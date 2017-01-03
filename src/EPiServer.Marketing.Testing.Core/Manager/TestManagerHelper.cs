@@ -279,6 +279,12 @@ namespace EPiServer.Marketing.Testing
         internal static DalKeyFinancialResult ConvertToDalKeyFinancialResult(
             KeyFinancialResult managerConversionResult)
         {
+            if (Guid.Empty == managerConversionResult.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerConversionResult.Id = Guid.NewGuid();
+            }
+
             var retVariant = new DalKeyFinancialResult
             {
                 Id = managerConversionResult.Id,
@@ -307,6 +313,12 @@ namespace EPiServer.Marketing.Testing
         internal static DalKeyValueResult ConvertToDalKeyValueResult(
             KeyValueResult managerConversionResult)
         {
+            if (Guid.Empty == managerConversionResult.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerConversionResult.Id = Guid.NewGuid();
+            }
+
             var retVariant = new DalKeyValueResult
             {
                 Id = managerConversionResult.Id,

@@ -11,6 +11,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -93,17 +95,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
         }
 
-        // Post url: api/episerver/testing/updateview, data: { testId: testId, variantId: variantId },  contentType: 'application/x-www-form-urlencoded'
+        // Post url: api/episerver/testing/updateview, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage UpdateView(FormDataCollection data)
         {
             var testId = data.Get("testId");
-            var variantId = data.Get("variantId");
             var itemVersion = data.Get("itemVersion");
-            if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
+            if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateViews(Guid.Parse(testId), Guid.Parse(variantId), Convert.ToInt16(itemVersion));
+                mm.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -111,22 +112,63 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
-        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, variantId: variantId },  contentType: 'application/x-www-form-urlencoded'
+        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
             var testId = data.Get("testId");
-            var variantId = data.Get("variantId");
             var itemVersion = data.Get("itemVersion");
-            if (!string.IsNullOrWhiteSpace(testId) && !string.IsNullOrWhiteSpace(variantId))
+            if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateConversion(Guid.Parse(testId), Guid.Parse(variantId), Convert.ToInt16(itemVersion));
+                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
+        }
+
+        // Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
+        [HttpPost]
+        public HttpResponseMessage SaveKpiResult(FormDataCollection data)
+        {
+            var testId = data.Get("testId");
+            var itemVersion = data.Get("itemVersion");
+            var keyResultType = data.Get("keyResultType");
+            var kpiId = data.Get("kpiId");
+            var total = data.Get("total");
+
+            var resultType = (KeyResultType) Convert.ToInt32(keyResultType);
+
+            IKeyResult keyResult;
+
+            if (resultType == KeyResultType.Financial)
+            {
+                keyResult = new KeyFinancialResult()
+                {
+                    KpiId = Guid.Parse(kpiId),
+                    Total = Convert.ToDecimal(total)
+                };
+            }
+            else
+            {
+                keyResult = new KeyValueResult()
+                {
+                    KpiId = Guid.Parse(kpiId),
+                    Value = Convert.ToDouble(total)
+                };
+            }
+
+            if (!string.IsNullOrWhiteSpace(testId))
+            {
+                var mm = _serviceLocator.GetInstance<IMessagingManager>();
+                mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            else
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
         }
     }
 }

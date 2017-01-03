@@ -101,7 +101,6 @@
         <tooltip_text>Cancel A/B test and edit page</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <advanced_options_autopublish_winner>Autopublish Winning Variant</advanced_options_autopublish_winner>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>
         <button_abort_option>Abort A/B Test</button_abort_option>
@@ -142,9 +141,8 @@
         <completed_test>An A/B test was completed on a version of this content. </completed_test>
         <details_link_text>View test</details_link_text>
         <details_link_tooltip>View test details</details_link_tooltip>
-        <ongoing_test>A version of this content is part of a running A/B test. </ongoing_test>
+        <ongoing_test>A version of this content is part of an on-going A/B test. </ongoing_test>
         <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
-        <version_in_test>A version of this content is part of an ongoing A/B test. </version_in_test>
         <winner_link_text>Pick winner</winner_link_text>
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
       </notificationbar>

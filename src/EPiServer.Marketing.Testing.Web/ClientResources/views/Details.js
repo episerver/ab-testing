@@ -131,7 +131,6 @@
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
             textHelper.renderDurationProgress(durationProgressBar);
             textHelper.renderConfidence(this.confidence);
-            textHelper.renderAutoPublish(this.autopublish);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
             textHelper.renderPublishedViewsAndConversions(this.publishedConversions,

@@ -12,6 +12,8 @@ using System.Diagnostics;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
@@ -173,18 +175,18 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                 {
                     for (var x = 0; x < _model.Views; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
+                        testManager.IncrementCount(test.Id,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.View);
 
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
+                        testManager.IncrementCount(test.Id,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.View);
                     }
                     for (var x = 0; x < _model.Conversions; x++)
                     {
-                        testManager.EmitUpdateCount(test.Id, test.Variants[0].ItemId,
+                        testManager.IncrementCount(test.Id,
                             test.Variants[0].ItemVersion, Data.Enums.CountType.Conversion);
 
-                        testManager.EmitUpdateCount(test.Id, test.Variants[1].ItemId,
+                        testManager.IncrementCount(test.Id,
                             test.Variants[1].ItemVersion, Data.Enums.CountType.Conversion);
                     }
 
@@ -328,20 +330,59 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
             return View("TestDetails", multiVariateTest);
         }
 
-        public ActionResult UpdateView(string id, string itemid)
+        public ActionResult UpdateView(string id, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.View);
+            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
         }
 
-        public ActionResult UpdateConversion(string id, string itemid)
+        public ActionResult UpdateConversion(string id, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.EmitUpdateCount(Guid.Parse(id), Guid.Parse(itemid), 1, Data.Enums.CountType.Conversion);
+            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
+
+            return View("TestDetails", multivariateTest);
+        }
+
+        public ActionResult SaveKpiResults(string id, string itemVersion, string kpiResultType, string count)
+        {
+            var rand = new Random();
+
+            var mtm = ServiceLocator.Current.GetInstance<ITestManager>();
+            var testId = Guid.Parse(id);
+            var version = Convert.ToInt32(itemVersion);
+            var numOfResults = Convert.ToInt32(count);
+            var resultType = (KeyResultType) Convert.ToInt32(kpiResultType);
+            for (var x = 1; x <= numOfResults; x++)
+            {
+                IKeyResult result;
+
+                if (resultType == KeyResultType.Financial)
+                {
+                    result = new KeyFinancialResult()
+                    {
+                        Id = Guid.NewGuid(),
+                        KpiId = Guid.NewGuid(),
+                        Total = (1 / rand.Next(1, 100)) * x + numOfResults 
+                    };
+                    mtm.SaveKpiResultData(testId, version, result, KeyResultType.Financial);
+                }
+                else
+                {
+                    result = new KeyValueResult()
+                    {
+                        Id = Guid.NewGuid(),
+                        KpiId = Guid.NewGuid(),
+                        Value = rand.NextDouble()
+                    };
+                    mtm.SaveKpiResultData(testId, version, result, KeyResultType.Value);
+                }
+            }
+            var multivariateTest = mtm.Get(testId);
 
             return View("TestDetails", multivariateTest);
         }
