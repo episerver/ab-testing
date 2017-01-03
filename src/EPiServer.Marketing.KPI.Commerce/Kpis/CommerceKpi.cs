@@ -4,7 +4,9 @@ using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
+using Mediachase.Commerce;
 using Mediachase.Commerce.Catalog;
+using Mediachase.Commerce.Markets;
 using Mediachase.Commerce.Orders;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,16 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         [DataMember]
         public bool isVariant;
 
+        [DataMember]
+        public Currency defaultCurrency
+        {
+            get
+            {
+                var marketService = _servicelocator.GetInstance<IMarketService>();
+                var market = marketService.GetMarket(MarketId.Default);
+                return market.DefaultCurrency;                
+            }
+        }
         public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionProduct"] == "")

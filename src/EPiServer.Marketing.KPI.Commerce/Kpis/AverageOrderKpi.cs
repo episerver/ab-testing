@@ -2,13 +2,14 @@
 using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.ServiceLocation;
-using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using EPiServer.Framework.Localization;
+using Mediachase.Commerce.Markets;
+using Mediachase.Commerce;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -30,26 +31,46 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         }
 
         [DataMember]
+        public override string kpiResultType
+        {
+            get
+            {
+                return typeof(KpiFinancialResult).Name.ToString();
+            }
+        }  
+
+        [DataMember]
         public override string UiMarkup
         {
             get
             {
-                var averageordertext = LocalizationService.Current
-                   .GetString("/commercekpi/" + LocalizationSection + "/config_markup/averageordertext");
-                return string.Format(base.UiMarkup, averageordertext);
+                var conversionText = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/config_markup/conversion_label");
+                return string.Format(base.UiMarkup, conversionText);
 
             }
         }
+
+        public override NumberFormatInfo numberFormat
+        {
+            get
+            {
+                return CultureInfo.CurrentCulture.NumberFormat;
+            }
+        }
+
 
         [DataMember]
         public override string UiReadOnlyMarkup
         {
             get
             {
-                var averageordertext = LocalizationService.Current
-                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/averageordertext");
-                return string.Format(base.UiReadOnlyMarkup, averageordertext);
+                var conversionHeader = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_header");
 
+                var conversionText = LocalizationService.Current
+                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_description");
+                return string.Format(base.UiReadOnlyMarkup, conversionHeader, conversionText);
             }
         }
 
@@ -68,14 +89,28 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         /// <returns></returns>
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
-            var retVal = new KpiFinancialResult() { KpiId = Id, Total = 0, HasConverted = false };
-
+            var retval = new KpiFinancialResult() { KpiId = Id, Total = 0, HasConverted = false };
+            
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
             {
-                retVal.Total = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;               
+                var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
+                var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
+                var orderCurrency = orderMarket.DefaultCurrency;
+                var mynumber = orderTotal.ToString(orderCurrency.Format);
+
+                if (orderCurrency != defaultCurrency)
+                {
+                    var convertedTotal = Money.CreateMoneyWithDefaultCurrencyFallback(orderTotal,null);
+                    retval.Total = convertedTotal.Amount;
+                }
+                else
+                {
+                    retval.Total = orderTotal;
+                }
+                retval.HasConverted = true;
             }
-            return retVal;
+            return retval;
         }
     }
 }

@@ -64,8 +64,10 @@
         },
 
         startup: function () {
-            textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            if (this.context.data.test.kpiInstances[0].kpikpiResultType === "kpiConversionResult") {
+                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            }
         },
 
         _contextChanged: function (newContext) {
@@ -77,8 +79,10 @@
             textHelper.initializeHelper(this.context, resources.pickwinnerview);
 
             me._renderData();
-            textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
+            if (this.context.data.test.kpiInstances[0].kpikpiResultType === "kpiConversionResult") {
+                textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
+            }
         },
 
         _onCancelClick: function () {
