@@ -10,6 +10,7 @@ using EPiServer.Framework.Localization;
 using Mediachase.Commerce.Markets;
 using Mediachase.Commerce;
 using System.Globalization;
+using Mediachase.Commerce.Shared;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -51,15 +52,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
-        public override NumberFormatInfo numberFormat
-        {
-            get
-            {
-                return CultureInfo.CurrentCulture.NumberFormat;
-            }
-        }
-
-
         [DataMember]
         public override string UiReadOnlyMarkup
         {
@@ -73,7 +65,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 return string.Format(base.UiReadOnlyMarkup, conversionHeader, conversionText);
             }
         }
-
 
         public override void Validate(Dictionary<string, string> responseData)
         {
@@ -94,19 +85,19 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
             {
-                var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal.Amount;
+                var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
                 var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
-                var orderCurrency = orderMarket.DefaultCurrency;
-                var mynumber = orderTotal.ToString(orderCurrency.Format);
-
+                string orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
+                string systemCulturalCurrency = CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;               
+                
                 if (orderCurrency != defaultCurrency)
                 {
-                    var convertedTotal = Money.CreateMoneyWithDefaultCurrencyFallback(orderTotal,null);
+                    var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, systemCulturalCurrency);
                     retval.Total = convertedTotal.Amount;
                 }
                 else
                 {
-                    retval.Total = orderTotal;
+                    retval.Total = orderTotal.Amount;
                 }
                 retval.HasConverted = true;
             }

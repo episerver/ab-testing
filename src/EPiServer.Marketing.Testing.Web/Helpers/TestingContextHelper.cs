@@ -162,8 +162,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
 
-            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",testData.KpiInstances[0].numberFormat) : string.Format("{0:c}",0,testData.KpiInstances[0].numberFormat);
-            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",testData.KpiInstances[0].numberFormat) : string.Format("{0:c}", 0, testData.KpiInstances[0].numberFormat);
+            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}",0, CultureInfo.CurrentCulture.NumberFormat);
+            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}", 0, CultureInfo.CurrentCulture.NumberFormat);
 
 
             // Map the version data
