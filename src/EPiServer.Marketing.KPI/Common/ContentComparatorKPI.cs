@@ -20,11 +20,10 @@ namespace EPiServer.Marketing.KPI.Common
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.html",
-        text = "Landing Page", description = "Choose a page for conversion.")]
+        text_id = "/kpi/content_comparator_kpi/name", 
+        description_id = "/kpi/content_comparator_kpi/description")]
     public class ContentComparatorKPI : Kpi
     {
-        IServiceLocator _servicelocator;
-
         [DataMember]
         public Guid ContentGuid;
 
@@ -33,17 +32,11 @@ namespace EPiServer.Marketing.KPI.Common
 
         public ContentComparatorKPI()
         {
-            _servicelocator = ServiceLocator.Current;
         }
 
         public ContentComparatorKPI(Guid contentGuid)
         {
-            _servicelocator = ServiceLocator.Current;
             ContentGuid = contentGuid;
-        }
-        internal ContentComparatorKPI(IServiceLocator servicelocator)
-        {
-            _servicelocator = servicelocator;
         }
 
         [DataMember]
@@ -51,7 +44,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                var conversionLabel = LocalizationService.Current
+                var conversionLabel = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
                 return string.Format(base.UiMarkup, conversionLabel);
             }
@@ -89,7 +82,7 @@ namespace EPiServer.Marketing.KPI.Common
 
             if (responseData["ConversionPage"] == "")
             {
-                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
+                throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
             }
 
             var conversionContent = contentRepo.Get<IContent>(new ContentReference(responseData["ConversionPage"]));
@@ -136,7 +129,7 @@ namespace EPiServer.Marketing.KPI.Common
             var publishedContent = repo.LoadPublished(content.ContentLink);
             if (publishedContent == null)
             {
-                throw new KpiValidationException(ServiceLocator.Current.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/config_markup/error_selected_notpublished"));
+                throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/config_markup/error_selected_notpublished"));
             }
             return true;
         }
@@ -145,7 +138,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             if (conversionContent.ContentLink.ID == currentContent.ContentLink.ID)
             {
-                throw new KpiValidationException(LocalizationService.Current.GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
+                throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/config_markup/error_selected_samepage"));
             }
             return false;
         }

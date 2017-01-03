@@ -279,21 +279,21 @@ namespace EPiServer.Marketing.Testing.Test.Core
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.IncrementCount(theGuid, theTestItemGuid, theItemVersion, type);
+            tm.IncrementCount(theGuid, theItemVersion, type, false);
 
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<int>(),
                         It.IsAny<DalCountType>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                    da.IncrementCount(It.IsAny<Guid>(), It.Is<int>(arg => arg.Equals(theItemVersion)),
                         It.IsAny<DalCountType>()),
-                "DataAcessLayer IncrementCount was never called or test item Guid did not match.");
+                "DataAcessLayer IncrementCount was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
@@ -324,39 +324,39 @@ namespace EPiServer.Marketing.Testing.Test.Core
             };
 
             var tm = GetUnitUnderTest();
-            tm.AddKpiResultData(theGuid, theTestItemGuid, theItemVersion, result, resultsType);
+            tm.SaveKpiResultData(theGuid, theItemVersion, result, resultsType, false);
 
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<int>(),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
                 "DataAcessLayer AddKpiResultData was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.Is<int>(arg => arg.Equals(theItemVersion)),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
-                "DataAcessLayer AddKpiResultData was never called or test item Guid did not match.");
+                "DataAcessLayer AddKpiResultData was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
                 "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
 
-            tm.AddKpiResultData(theGuid, theTestItemGuid, theItemVersion, result2, 0);
+            tm.SaveKpiResultData(theGuid, theItemVersion, result2, 0, false);
 
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.AddKpiResultData(It.Is<Guid>(arg => arg.Equals(theGuid)), It.Is<int>(arg => arg.Equals(theItemVersion)),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
                 "DataAcessLayer AddKpiResultData was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.IsAny<Guid>(), It.Is<Guid>(arg => arg.Equals(theTestItemGuid)), It.IsAny<int>(),
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.IsAny<IDalKeyResult>(), It.IsAny<int>()),
-                "DataAcessLayer AddKpiResultData was never called or test item Guid did not match.");
+                "DataAcessLayer AddKpiResultData was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
-                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<int>(),
+                    da.AddKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(),
                         It.IsAny<IDalKeyResult>(), It.Is<int>(arg => arg.Equals((int)resultsType))),
                 "DataAcessLayer AddKpiResultData was never called or CountType did not match.");
         }
@@ -421,11 +421,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, 1, CountType.Conversion);
+            testManager.IncrementCount(original, 1, CountType.Conversion);
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update conversion message not emmited");
         }
@@ -441,11 +440,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Guid original = Guid.NewGuid();
             Guid testItemId = Guid.NewGuid();
-            testManager.EmitUpdateCount(original, testItemId, 1, CountType.View);
+            testManager.IncrementCount(original, 1, CountType.View);
 
             messageManager.Verify(mm => mm.EmitUpdateViews(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update View message not emmited");
         }
@@ -470,11 +468,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 Id = Guid.NewGuid()
             };
 
-            testManager.EmitKpiResultData(original, testItemId, 1, result, 0);
+            testManager.SaveKpiResultData(original, 1, result, 0);
 
             messageManager.Verify(mm => mm.EmitKpiResultData(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<Guid>(arg => arg.Equals(testItemId)),
                 It.Is<int>(arg => arg.Equals(1)),
                 It.Is<IKeyResult>(arg => arg.Equals(result)),
                 It.Is<KeyResultType>(arg => arg.Equals(KeyResultType.Financial))),

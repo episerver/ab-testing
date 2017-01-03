@@ -9,6 +9,7 @@ using Xunit;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Core;
+using EPiServer.Framework.Localization;
 
 namespace EPiServer.Marketing.KPI.Test
 {
@@ -16,6 +17,7 @@ namespace EPiServer.Marketing.KPI.Test
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IKpiDataAccess> _kpiDataAccess;
+        LocalizationService _localizationservice = LocalizationService.Current;
 
         private DalKpi GetDalKpi()
         {
@@ -30,8 +32,11 @@ namespace EPiServer.Marketing.KPI.Test
         {
             _serviceLocator = new Mock<IServiceLocator>();
             _kpiDataAccess = new Mock<IKpiDataAccess>();
-
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
+            _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationservice);
+
+            // Set our mocked service locator so calls like ServiceLocator.Current work properly. 
+            ServiceLocator.SetLocator(_serviceLocator.Object);
             return new KpiManager(_serviceLocator.Object);
         }
 
