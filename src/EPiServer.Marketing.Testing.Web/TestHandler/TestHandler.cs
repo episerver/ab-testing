@@ -493,17 +493,20 @@ namespace EPiServer.Marketing.Testing.Web
 
             foreach (var kpiFinancialResult in results)
             {
-                var keyFinancialResult = new KeyFinancialResult()
+                if (kpiFinancialResult.HasConverted)
                 {
-                    Id = Guid.NewGuid(),
-                    KpiId = kpiFinancialResult.KpiId,
-                    Total = kpiFinancialResult.Total,
-                    VariantId = varUserSees.ItemId,
-                    CreatedDate = DateTime.UtcNow,
-                    ModifiedDate = DateTime.UtcNow
-                };
+                    var keyFinancialResult = new KeyFinancialResult()
+                    {
+                        Id = Guid.NewGuid(),
+                        KpiId = kpiFinancialResult.KpiId,
+                        Total = kpiFinancialResult.Total,
+                        VariantId = varUserSees.ItemId,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow
+                    };
 
-                _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
+                    _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
+                }
             }
         }
 
