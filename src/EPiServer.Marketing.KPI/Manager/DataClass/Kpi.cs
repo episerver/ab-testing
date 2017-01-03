@@ -210,14 +210,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             throw new NotImplementedException();
         }
 
-        public virtual NumberFormatInfo numberFormat
-        {
-            get
-            {
-                return CultureInfo.CurrentCulture.NumberFormat;
-            }
-        }
-
         public virtual event EventHandler EvaluateProxyEvent;
     }
 }

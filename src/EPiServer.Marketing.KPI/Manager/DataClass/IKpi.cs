@@ -51,9 +51,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         DateTime ModifiedDate { get; set; }
 
-        NumberFormatInfo numberFormat { get; }
-
-
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
