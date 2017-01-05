@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         }
 
         [DataMember]
-        public override string kpiResultType
+        public override string KpiResultType
         {
             get
             {

@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Indicates which result should be considered the "winner"
         /// Overide to specify a different result comparison
         /// </summary>
-        public virtual ResultComparison resultComparison
+        public virtual ResultComparison ResultComparison
         {
             get
             {
@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Override to properly display values in the UI.
         /// </summary>
         [DataMember]
-        public virtual string kpiResultType
+        public virtual string KpiResultType
         {
             get
             {
