@@ -64,7 +64,7 @@
         },
 
         startup: function () {
-            if (this.context.data.test.kpiInstances[0].kpikpiResultType === "kpiConversionResult") {
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
                 textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
             }

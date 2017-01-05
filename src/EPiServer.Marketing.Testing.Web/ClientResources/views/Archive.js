@@ -61,7 +61,7 @@
         },
 
         startup: function () {
-            if (this.context.data.test.kpiInstances[0].kpikpiResultType === "kpiConversionResult") {
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
             }
