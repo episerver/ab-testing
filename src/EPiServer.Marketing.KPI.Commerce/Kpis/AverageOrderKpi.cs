@@ -89,7 +89,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 string orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
                 string systemCulturalCurrency = CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;               
                 
-                if (orderCurrency != defaultCurrency)
+                if (orderCurrency != systemCulturalCurrency)
                 {
                     var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, systemCulturalCurrency);
                     retval.Total = convertedTotal.Amount;
