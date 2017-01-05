@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
         [DataMember]
         public bool isVariant;
-
+          
         public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionProduct"] == "")

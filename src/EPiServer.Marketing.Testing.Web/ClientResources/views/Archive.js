@@ -61,8 +61,10 @@
         },
 
         startup: function () {
-            textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
+                textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+            }
         },
 
         _contextChanged: function (newContext) {
@@ -74,8 +76,10 @@
             textHelper.initializeHelper(this.context, resources.archiveview);
 
             me._renderData();
-            textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
+                textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+            }
         },
 
         _onCloseClick: function () {

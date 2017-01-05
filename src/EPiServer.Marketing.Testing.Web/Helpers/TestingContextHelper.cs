@@ -135,19 +135,21 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
+            var publishedVariant = testData.Variants.First(v => v.IsPublished);
+            var draftVariant = testData.Variants.First(v => !v.IsPublished);
 
             //get published version
             var Content = repo.Get<IContent>(testData.OriginalItemId);
 
             //get content which was published at time of test
             var tempPublishedContentClone = Content.ContentLink.CreateWritableClone();
-            int publishedVersion = testData.Variants.First(x => x.IsPublished).ItemVersion;
+            int publishedVersion = publishedVariant.ItemVersion;
             tempPublishedContentClone.WorkID = publishedVersion;
             var publishedContent = repo.Get<IContent>(tempPublishedContentClone);
 
             //get variant (draft) version
             var tempVariantContentClone = Content.ContentLink.CreateWritableClone();
-            int variantVersion = testData.Variants.First(x => !x.IsPublished).ItemVersion;
+            int variantVersion = draftVariant.ItemVersion;
             tempVariantContentClone.WorkID = variantVersion;
             var draftContent = repo.Get<IContent>(tempVariantContentClone);
 
@@ -159,6 +161,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
+
+            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}",0, CultureInfo.CurrentCulture.NumberFormat);
+            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}", 0, CultureInfo.CurrentCulture.NumberFormat);
+
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
@@ -177,6 +183,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
                 model.DaysRemaining = "0";
             }
+
 
            // Calculate total participation count
             foreach (var variant in testData.Variants)

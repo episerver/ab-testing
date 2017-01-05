@@ -49,9 +49,6 @@
     {
         templateString: template,
         resources: resources,
-        contextHistory: null,
-        controlPercentage: null,
-        challengerPercentage: null,
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -68,8 +65,10 @@
             this._displayOptionsButton(this.context.data.userHasPublishRights);
             //make the charts at start up as the dom is not ready for it prior to this on 
             //the first load.
-            textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
+                textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
+            }
         },
 
         _contextChanged: function (newContext) {
@@ -82,8 +81,10 @@
             textHelper.initializeHelper(me.context, resources.detailsview);
             me._renderData();
             //redraw the charts when the context changes to update the stored dom.
-            textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
+                textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
+            }
         },
 
         _onPickWinnerOptionClicked: function () {

@@ -15,6 +15,15 @@
           <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
         </readonly_markup>
       </addtocart>
+      <averageorder>
+        <config_markup>
+          <conversion_label>Tracks completed carts and calculates the average purchase amount.</conversion_label>
+        </config_markup>
+        <readonly_markup>
+          <conversion_description>Increase the average customer purchase amount.</conversion_description>
+          <conversion_header>Conversion Goal</conversion_header>
+        </readonly_markup>
+      </averageorder>
       <purchaseitem>
         <config_markup>
           <conversion_label>Visitor purchases product</conversion_label>

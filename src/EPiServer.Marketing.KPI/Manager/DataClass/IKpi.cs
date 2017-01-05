@@ -1,7 +1,7 @@
 ﻿using System;
-using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Results;
 using System.Collections.Generic;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -14,6 +14,16 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// Id of Kpi.
         /// </summary>
         Guid Id { get; set; }
+
+        /// <summary>
+        /// Indicates which result should be considered the winning result.
+        /// </summary>
+        ResultComparison ResultComparison { get; }
+
+        /// <summary>
+        /// Indicates the expected result type used by the KPI instance
+        /// </summary>
+        string KpiResultType { get; }
 
         /// <summary>
         /// Name displayed in the UI, default displays class type name
