@@ -81,7 +81,7 @@
             textHelper.initializeHelper(me.context, resources.detailsview);
             me._renderData();
             //redraw the charts when the context changes to update the stored dom.
-            if (this.context.data.test.kpiInstances[0].kpikpiResultType === "kpiConversionResult") {
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
                 textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
             }

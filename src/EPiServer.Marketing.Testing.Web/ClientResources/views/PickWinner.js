@@ -79,7 +79,7 @@
             textHelper.initializeHelper(this.context, resources.pickwinnerview);
 
             me._renderData();
-            if (this.context.data.test.kpiInstances[0].kpikpiResultType === "kpiConversionResult") {
+            if (this.context.data.test.kpiInstances[0].kpiResultType === "kpiConversionResult") {
                 textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
             }
