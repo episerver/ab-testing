@@ -1,7 +1,7 @@
 $PackageDir = $args[0] 
 $SolutionDir = $args[1]
 
-$assemblyInfoPath = Join-Path $SolutionDir "AssemblyVersionAuto.cs"
+$assemblyInfoPath = Join-Path $PackageDir "AssemblyVersionAuto.cs"
 $nugetPath = Join-Path $SolutionDir "build\resources\nuget\nuget.exe"
 $nuspecPath = Join-Path $PackageDir "Package.nuspec"
 
