@@ -164,7 +164,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}",0, CultureInfo.CurrentCulture.NumberFormat);
             model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}", 0, CultureInfo.CurrentCulture.NumberFormat);
-
+            model.KpiResultType = testData.KpiInstances[0].KpiResultType;
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
