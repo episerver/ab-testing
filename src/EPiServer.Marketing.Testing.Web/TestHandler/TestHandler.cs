@@ -254,6 +254,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
+                        ActivateClientKpis(activeTest.KpiInstances);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
@@ -309,6 +310,19 @@ namespace EPiServer.Marketing.Testing.Web
                             new TestEventArgs(activeTest, activeContent.Content));
                         HttpContext.Current.Items[activeContent + SkipRaiseContentSwitchEvent] = true;
                     }
+                }
+            }
+        }
+
+        private void ActivateClientKpis(List<IKpi> kpiInstances)
+        {
+            foreach (var kpi in kpiInstances)
+            {
+                if (kpi is IClientKpi && !HttpContext.Current.Items.Contains(kpi.Id.ToString()))
+                {
+                    var clientKpi = kpi as ClientKpi;
+                    HttpContext.Current.Response.Write(clientKpi.ClientEvaluatorMarkup);
+                    HttpContext.Current.Items[kpi.Id.ToString()]=true;
                 }
             }
         }
@@ -378,6 +392,8 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 return;
             }
+
+            HttpContext.Current.Response.Write("<script>alert('my stuff');</script>");
 
             // Set the flag to stop evaluating ONLY if the current page link is the same link in the
             // content event args. This allows us to evaluate all pages, blocks, and sub pages

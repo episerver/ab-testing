@@ -111,6 +111,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         {
             get
             {
+                var x = GetType();
                 string value;
                 if (Attribute.IsDefined(GetType(), typeof(UIMarkupAttribute)))
                 {

@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using EPiServer.Marketing.KPI.Results;
+using EPiServer.ServiceLocation;
+using EPiServer.Marketing.KPI.Common.Attributes;
+using EPiServer.Framework.Localization;
+using System.Runtime.Serialization;
+
+namespace EPiServer.Marketing.KPI.Manager.DataClass
+{
+    public abstract class ClientKpi : Kpi, IClientKpi
+    {
+        public virtual string ClientEvaluatorMarkup
+        {
+            get
+            {
+                string value;
+                if (Attribute.IsDefined(GetType(), typeof(ClientScriptAttribute)))
+                {
+                    var attr = (ClientScriptAttribute)Attribute.GetCustomAttribute(this.GetType(), typeof(ClientScriptAttribute));
+                    if (!TryGetResourceString(attr.ClientSideEvaluationScript, out value))
+                    {
+                        value = _servicelocator.GetInstance<LocalizationService>().GetString("/kpi/kpi_messaging/failed_to_load") + attr.ClientSideEvaluationScript + ":" + value;
+                    }
+                }
+                else
+                {
+                    value = _servicelocator.GetInstance<LocalizationService>().GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
+                }
+                return value;
+            }
+        }
+    }
+}
