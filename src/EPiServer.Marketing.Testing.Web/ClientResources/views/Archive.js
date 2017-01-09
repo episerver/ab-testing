@@ -61,7 +61,7 @@
         },
 
         startup: function () {
-            if (this.context.data.kpiResultType === "kpiConversionResult") {
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
             }
@@ -76,7 +76,7 @@
             textHelper.initializeHelper(this.context, resources.archiveview);
 
             me._renderData();
-            if (this.context.data.kpiResultType === "kpiConversionResult") {
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
             }
