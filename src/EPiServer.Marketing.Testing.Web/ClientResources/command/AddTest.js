@@ -16,7 +16,7 @@ function (declare, topic, resources, _ContentCommandBase, ContentActionSupport, 
         name: "AddTest",
         label: resources.addtestcommand.label_text,
         tooltip: resources.addtestcommand.tooltip_text,
-        iconClass: "epi-iconClock",
+        iconClass: "epi-iconGraph",
 
         _contentActionSupport: ContentActionSupport,
         _topic: topic,
