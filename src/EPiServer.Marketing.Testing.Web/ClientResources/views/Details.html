@@ -12,12 +12,12 @@
                 <div id="optionsDropdown" class="dijit dijitReset dijitInline epi-mediumButton epi-button--bold dijitDropDownButton" data-dojo-type="dijit/form/DropDownButton">
                     <span>${resources.detailsview.button_options}</span>
                     <div class="dijitReset epi-tooltipDialogMenu epi-menuInverted" data-dojo-type="dijit/DropDownMenu" role="menu">
-                        <div id="pickWinnerMenuItem" class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onPickWinnerOptionClicked">${resources.detailsview.button_pick_winner_option}</div>
+                        <div id="pickWinnerMenuItem" class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:'epi-iconTrophy'" data-dojo-attach-event="onClick: _onPickWinnerOptionClicked">${resources.detailsview.button_pick_winner_option}</div>
                         <div class="dijitReset dijitMenuItem" data-dojo-type="dijit/MenuItem" data-dojo-attach-event="onClick: _onAbortOptionClicked">${resources.detailsview.button_abort_option}</div>
                     </div>
                 </div>
                 <!--Close Button-->
-                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.button_close}</button>
+                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'epi-iconClose'" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.button_close}</button>
                 &nbsp;
             </div>
         </div>
