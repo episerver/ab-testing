@@ -254,7 +254,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
-                        ActivateClientKpis(activeTest.KpiInstances);
+                        ActivateClientKpis(activeTest.KpiInstances,testCookieData);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
@@ -314,14 +314,16 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        private void ActivateClientKpis(List<IKpi> kpiInstances)
+        private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
         {
             foreach (var kpi in kpiInstances)
             {
                 if (kpi is IClientKpi && !HttpContext.Current.Items.Contains(kpi.Id.ToString()))
                 {
                     var clientKpi = kpi as ClientKpi;
-                    HttpContext.Current.Response.Write(clientKpi.ClientEvaluatorMarkup);
+                    var test = _testManager.Get(cookieData.TestId);
+                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id == cookieData.TestVariantId).ItemVersion;
+                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientEvaluatorMarkup,cookieData.TestId,itemVersion));
                     HttpContext.Current.Items[kpi.Id.ToString()]=true;
                 }
             }
@@ -392,8 +394,6 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 return;
             }
-
-            HttpContext.Current.Response.Write("<script>alert('my stuff');</script>");
 
             // Set the flag to stop evaluating ONLY if the current page link is the same link in the
             // content event args. This allows us to evaluate all pages, blocks, and sub pages
