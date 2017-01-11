@@ -53,7 +53,7 @@ namespace EPiServer.Marketing.KPI.Common
             if (httpContext != null)
             {
                 var sessionid = httpContext.Request.Params["ASP.NET_SessionId"];
-                if (sessionid != null )
+                if (sessionid != null && !HttpContext.Current.Items.Contains(Id.ToString()))
                 {
                     var currentpage = GetCurrentPage();
                     if (_sessionCache.Contains(sessionid))
@@ -78,6 +78,10 @@ namespace EPiServer.Marketing.KPI.Common
                             CacheItemPolicy policy = new CacheItemPolicy();
                             policy.SlidingExpiration = new TimeSpan(0, Timeout, 0);
                             _sessionCache.Add(sessionid, false, policy);
+
+                            // sometimes we get called multiple time for the same request,
+                            // this prevents us from evalluating true during the same request
+                            httpContext.Items[Id.ToString()] = true;
                         }
                     }
                 }
