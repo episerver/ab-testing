@@ -55,25 +55,22 @@ namespace EPiServer.Marketing.KPI.Common
                 var sessionid = httpContext.Request.Params["ASP.NET_SessionId"];
                 if (sessionid != null && !HttpContext.Current.Items.Contains(Id.ToString()))
                 {
-                    var currentpage = GetCurrentPage();
                     if (_sessionCache.Contains(sessionid))
                     {
+                        var requestedPage = GetCurrentPage();
                         bool converted = (bool)_sessionCache.Get(sessionid);
-                        if (!converted)
+                        if (!converted && requestedPage != null && requestedPage.ContentGuid != TestContentGuid 
+                            && httpContext.Request.Path == UrlResolver.Current.GetUrl(requestedPage.ContentLink))
                         {
-                            if (currentpage != null)
-                            {
-                                if (httpContext.Request.Path == UrlResolver.Current.GetUrl(currentpage.ContentLink))
-                                {
-                                    _sessionCache.Remove(sessionid);
-                                    retval = true;
-                                }
-                            }
+                            _sessionCache.Remove(sessionid);
+                            retval = true;
                         }
                     }
                     else
                     {
-                        if (currentpage != null && currentpage.ContentGuid == TestContentGuid)
+                        var loadedContentEventArgs = e as ContentEventArgs;
+                        var currentGuid = loadedContentEventArgs.Content.ContentGuid;
+                        if (currentGuid != null && currentGuid == TestContentGuid)
                         {
                             CacheItemPolicy policy = new CacheItemPolicy();
                             policy.SlidingExpiration = new TimeSpan(0, Timeout, 0);

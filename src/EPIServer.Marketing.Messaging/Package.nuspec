@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>EPiServer.Marketing.Messaging</id>
-        <version>1.0.0</version>
+        <version>$version$</version>
         <title>EPiServer Messaging</title>
         <authors>EPiServer</authors>
         <owners>EPiServer</owners>
