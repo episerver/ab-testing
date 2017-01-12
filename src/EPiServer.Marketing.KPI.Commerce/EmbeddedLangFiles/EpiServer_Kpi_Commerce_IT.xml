@@ -17,7 +17,7 @@
       </addtocart>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed carts and calculates the average purchase amount.</conversion_label>
+          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
         </config_markup>
         <readonly_markup>
           <conversion_description>Increase the average customer purchase amount.</conversion_description>
