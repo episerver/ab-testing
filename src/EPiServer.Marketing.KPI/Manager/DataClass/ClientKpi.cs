@@ -8,11 +8,31 @@ using EPiServer.ServiceLocation;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Framework.Localization;
 using System.Runtime.Serialization;
+using System.Reflection;
+using System.IO;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
     public abstract class ClientKpi : Kpi, IClientKpi
     {
+        private string ClientScriptWrapper
+        {
+            get
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var scriptResource = "EPiServer.Marketing.KPI.EmbeddedScriptFiles.MockClientScript.html";
+                string script = "Client Script Wrapper resource could not be found";
+                var resourceNames = assembly.GetManifestResourceNames();
+                using (Stream resourceStream = assembly.GetManifestResourceStream(scriptResource))
+                using (StreamReader reader = new StreamReader(resourceStream))
+                {
+                    script = reader.ReadToEnd();
+                }
+
+                return script;
+            }
+        }
+
         public virtual string ClientEvaluatorMarkup
         {
             get
@@ -30,7 +50,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
                 {
                     value = _servicelocator.GetInstance<LocalizationService>().GetString("/kpi/kpi_messaging/UIMarkup_not_defined");
                 }
-                return value;
+                return ClientScriptWrapper;
             }
         }
     }

@@ -120,8 +120,8 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided nodes to the published variant conversions, views and conversion percent
         renderPublishedViewsAndConversions: function (publishedConversionsNode, publishedViewsNode, publishedConversionPercentNode) {
-            var x = context.data.test.kpiInstances[0].kpiResultType;
-            if (x = "kpiFinancialResult") {
+            var kpiResultType = context.data.kpiResultType;
+            if (kpiResultType === "KpiFinancialResult") {
                 publishedConversionsNode.textContent = this.publishedVariant.keyFinancialResults.length;
                 publishedViewsNode.textContent = this.publishedVariant.views;
                 publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage;
@@ -135,8 +135,8 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided nodes to the draft variant conversions, views and conversion percent
         renderDraftViewsAndConversions: function (challengerConversionsNode, challengerViewsNode, challengerConversionPercentNode) {
-            var x = context.data.test.kpiInstances[0].kpiResultType;
-            if (x = "kpiFinancialResult") {
+            var kpiResultType = context.data.kpiResultType;
+            if (kpiResultType === "KpiFinancialResult") {
                 challengerConversionsNode.textContent = this.draftVariant.keyFinancialResults.length;
                 challengerViewsNode.textContent = this.draftVariant.views;
                 challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage;

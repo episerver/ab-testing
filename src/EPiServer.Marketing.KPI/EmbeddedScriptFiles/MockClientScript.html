@@ -1,0 +1,40 @@
+﻿﻿
+<script>
+    debugger;
+    var testId = "{0}";
+    var itemVersion = "{1}";
+    var kpiId = "{2}";
+    var converted = new Event('Convert');
+    converted.uniqueConversion = true;
+    window.addEventListener('Convert', function (e) {{
+        alert("Event Triggered: TestId = " + testId + " Item Id = " + itemVersion);
+        convert(e.uniqueConversion);
+    }});
+
+    function convert(isUniqueConversion) {{
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "api/episerver/testing/updateconversion", false);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
+            alert(xhttp.responseText);
+
+            if (isUniqueConversion) {{
+                    updateTestCookie();
+                }}
+
+        }}
+
+    function updateTestCookie() {{
+        var cookieName = "EPI-MAR-" + testId;
+        alert(cookieName);
+        alert(document.cookie);
+
+        var regex = new RegExp(cookieName + "=([^;]+)");
+        var value = regex.exec(document.cookie);
+        alert(value);
+        }}
+
+
+        window.dispatchEvent(converted);
+
+        </script>
