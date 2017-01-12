@@ -59,7 +59,8 @@ namespace EPiServer.Marketing.KPI.Common
                     {
                         var requestedPage = GetCurrentPage();
                         bool converted = (bool)_sessionCache.Get(sessionid);
-                        if (!converted && requestedPage != null && httpContext.Request.Path == UrlResolver.Current.GetUrl(requestedPage.ContentLink))
+                        if (!converted && requestedPage != null && requestedPage.ContentGuid != TestContentGuid 
+                            && httpContext.Request.Path == UrlResolver.Current.GetUrl(requestedPage.ContentLink))
                         {
                             _sessionCache.Remove(sessionid);
                             retval = true;
