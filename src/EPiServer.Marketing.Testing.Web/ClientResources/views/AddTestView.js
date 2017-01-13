@@ -514,13 +514,10 @@
                 var kpidescriptionElement = dom.byId("kpidescription");
                 if (evt !== "default") {
                     var kpiDescriptionObject = this.kpiModel.getKpiByIndex(evt);
-                   // kpidescriptionElement.value = kpiDescriptionObject.description;
                     new ContentPane({
                         content: kpiDescriptionObject.kpi.description
                     }).placeAt(kpidescriptionElement);
-                }// else {
-                   // kpiTextField.value = "";
-                //}
+                }
             },
 
             // Form Field Events

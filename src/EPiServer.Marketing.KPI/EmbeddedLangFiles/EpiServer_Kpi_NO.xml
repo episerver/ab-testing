@@ -9,7 +9,7 @@
           <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
           <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         </config_markup>
-        <description>Choose a page, this is the page that a user must click on in order to count as a conversion.  Results: Views are the number of visitors that visit the page under test.  Conversions are the number of visitors that clicked through to the landing page at any point in the future while the test was running.</description>
+        <description>The chosen page is the one that a user must click on in order to count as a conversion.  Results: Views are the number of visitors that visit the page under test.  Conversions are the number of visitors that clicked through to the landing page at any point in the future while the test was running.</description>
         <name>Landing Page</name>
         <readonly_markup>
           <conversion_header>Conversion goal</conversion_header>

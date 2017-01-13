@@ -147,17 +147,24 @@
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
-                me._renderKpiMarkup("details_conversionMarkup");
+                me._renderKpiMarkup("details_conversionMarkup", "kpidescription");
             });
             this.renderStatusIndicatorStyles();
         },
 
-        _renderKpiMarkup: function (conversionMarkupId) {
+        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
             new ContentPane({
                 content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
             }).placeAt(kpiuiElement);
+
+            var kpidescriptionElement = dom.byId(kpidescriptionId);
+            this._clearKpiMarkup(kpidescriptionElement);
+            new ContentPane({
+                content: this.context.data.test.kpiInstances[0].description
+            }).placeAt(kpidescriptionElement);
+            
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
