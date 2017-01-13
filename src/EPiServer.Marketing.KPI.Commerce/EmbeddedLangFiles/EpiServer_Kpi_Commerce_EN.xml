@@ -19,7 +19,8 @@
         <config_markup>
           <conversion_label>Tracks completed carts and calculates the average purchase amount.</conversion_label>
         </config_markup>
-        <description>Results: The total represents the average cart total across all visitors that checked out as part of the test.</description>
+        <description>Tests the potential effects of content on the average cart total of participating users.  Results: The total represents the average cart total across all visitors that checked out as part of the test.</description>
+        <name>Average Order</name>
         <readonly_markup>
           <conversion_description>Increase the average customer purchase amount.</conversion_description>
           <conversion_header>Conversion Goal</conversion_header>

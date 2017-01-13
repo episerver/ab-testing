@@ -15,8 +15,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiConfigMarkup.html",
-      readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiReadOnlyMarkup.html",
-      text = "Average Order", description = "Tests the potential effects of content on the average cart total of participating users.")]
+        readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiReadOnlyMarkup.html",
+        text_id = "/commercekpi/averageorder/name",
+        description_id = "/commercekpi/averageorder/description")]
     public class AverageOrderKpi : CommerceKpi
     {
         public AverageOrderKpi()

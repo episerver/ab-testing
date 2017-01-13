@@ -44,26 +44,10 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                var markup = base.UiMarkup;
-
                 var conversionLabel = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
 
-                var descriptionHeader = _servicelocator.GetInstance<LocalizationService>()
-                   .GetString("/kpi/description_header");
-
-                var description = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/description");
-
-                var resultsHeader = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/results_header");
-
-                var results = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/content_comparator_kpi/results");
-
-                markup = string.Format(markup, conversionLabel, descriptionHeader, description, resultsHeader, results);
-
-                return markup;
+                return string.Format(base.UiMarkup, conversionLabel);
             }
         }
 

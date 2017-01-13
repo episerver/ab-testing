@@ -403,6 +403,20 @@
                         kpiuiElement.innerHTML = "";
                     }
                 }
+
+                // clears kpi description
+                var kpidescriptionElement = dom.byId("kpidescription");
+                if (kpidescriptionElement) {
+                    var contentPane2 = dojo.query('#kpidescription > *');
+                    if (contentPane2[0]) {
+                        dojo.forEach(dijit.findWidgets(contentPane2)), function (w) {
+                            w.destroyRecursive();
+                        };
+                        var dijitContentPane2 = dijit.byId(contentPane2[0].id);
+                        dijitContentPane2.destroy();
+                        kpidescriptionElement.innerHTML = "";
+                    }
+                }
             },
 
             // UI UTILITIES
@@ -496,6 +510,17 @@
                 } else {
                     kpiTextField.value = "";
                 }
+
+                var kpidescriptionElement = dom.byId("kpidescription");
+                if (evt !== "default") {
+                    var kpiDescriptionObject = this.kpiModel.getKpiByIndex(evt);
+                   // kpidescriptionElement.value = kpiDescriptionObject.description;
+                    new ContentPane({
+                        content: kpiDescriptionObject.kpi.description
+                    }).placeAt(kpidescriptionElement);
+                }// else {
+                   // kpiTextField.value = "";
+                //}
             },
 
             // Form Field Events
