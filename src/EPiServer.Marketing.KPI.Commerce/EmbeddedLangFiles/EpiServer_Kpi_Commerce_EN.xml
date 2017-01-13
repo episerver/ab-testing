@@ -8,7 +8,7 @@
           <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
           <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. </description>
+        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
         <name>Add To Cart</name>
         <readonly_markup>
           <conversion_header>Add Product to Cart</conversion_header>
@@ -32,7 +32,7 @@
           <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
           <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion.</description>
+        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
         <name>Purchase Product</name>
         <readonly_markup>
           <conversion_header>Purchase Product</conversion_header>
