@@ -211,6 +211,32 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 pieChart.addSeries("", chartData, { stroke: { width: 0 } });
                 pieChart.render();
             }
-        }
+        },
+
+        clearPieCharts: function (controlChartId, challengerChartId) {
+            var controlChartNode = dom.byId(controlChartId);
+            var challengerChartNode = dom.byId(challengerChartId);
+
+            if (controlChartNode) {
+                var controlChart = dojo.query("#" + controlChartId + " > *");
+                if (controlChart[0]) {
+                    dojo.forEach(dijit.findWidgets(controlChart)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    controlChartNode.innerHTML = "";
+                }
+            }
+
+            if (challengerChartNode) {
+                var challengerChart = dojo.query("#" + challengerChartId + " > *");
+                if (challengerChart[0]) {
+                    dojo.forEach(dijit.findWidgets(challengerChart)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    challengerChartNode.innerHTML = "";
+                }
+            }
+        },
+
     };
 });

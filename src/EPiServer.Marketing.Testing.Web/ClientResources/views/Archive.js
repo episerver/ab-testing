@@ -61,6 +61,7 @@
         },
 
         startup: function () {
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivPieChart");
             if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
@@ -76,6 +77,7 @@
             textHelper.initializeHelper(this.context, resources.archiveview);
 
             me._renderData();
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivPieChart");
             if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
@@ -84,6 +86,7 @@
 
         _onCloseClick: function () {
             var me = this;
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivPieChart");
             me.contextParameters = { uri: "epi.cms.contentdata:///" + me.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
