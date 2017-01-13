@@ -117,7 +117,7 @@
 
         },
 
-        _renderKpiMarkup: function (conversionMarkupId) {
+        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
             new ContentPane({
