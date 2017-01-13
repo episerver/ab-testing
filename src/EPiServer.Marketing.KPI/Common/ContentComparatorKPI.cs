@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.KPI.Common
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorReadOnlyMarkup.html",
-        text_id = "/kpi/content_comparator_kpi/name", 
+        text_id = "/kpi/content_comparator_kpi/name",
         description_id = "/kpi/content_comparator_kpi/description")]
     public class ContentComparatorKPI : Kpi
     {
@@ -46,6 +46,7 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 var conversionLabel = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/content_comparator_kpi/config_markup/conversion_label");
+
                 return string.Format(base.UiMarkup, conversionLabel);
             }
         }
