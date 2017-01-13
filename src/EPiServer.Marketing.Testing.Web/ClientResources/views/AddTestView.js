@@ -403,8 +403,10 @@
                         kpiuiElement.innerHTML = "";
                     }
                 }
+            },
 
-                // clears kpi description
+            // clears kpi description
+            _clearCustomKpiDescription: function (){
                 var kpidescriptionElement = dom.byId("kpidescription");
                 if (kpidescriptionElement) {
                     var contentPane2 = dojo.query('#kpidescription > *');
@@ -511,6 +513,7 @@
                     kpiTextField.value = "";
                 }
 
+                this._clearCustomKpiDescription();
                 var kpidescriptionElement = dom.byId("kpidescription");
                 if (evt !== "default") {
                     var kpiDescriptionObject = this.kpiModel.getKpiByIndex(evt);

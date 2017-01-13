@@ -112,7 +112,7 @@
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
                 me._renderStatusIndicatorStyles();
-                me._renderKpiMarkup("archive_conversionMarkup");
+                me._renderKpiMarkup("archive_conversionMarkup", "archive_kpidescription");
             });
 
         },
@@ -123,11 +123,31 @@
             new ContentPane({
                 content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
             }).placeAt(kpiuiElement);
+
+            var kpidescriptionElement = dom.byId(kpidescriptionId);
+            this._clearKpiDescription(kpidescriptionElement);
+            new ContentPane({
+                content: this.context.data.test.kpiInstances[0].description
+            }).placeAt(kpidescriptionElement);
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
             if (conversionMarkupElement) {
                 var contentPane = dojo.query('#archive_conversionMarkup > *');
+                if (contentPane[0]) {
+                    dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    var dijitContentPane = dijit.byId(contentPane[0].id);
+                    dijitContentPane.destroy();
+                    conversionMarkupElement.innerHTML = "";
+                }
+            }
+        },
+
+        _clearKpiDescription: function (conversionMarkupElement) {
+            if (conversionMarkupElement) {
+                var contentPane = dojo.query('#archive_kpidescription > *');
                 if (contentPane[0]) {
                     dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
                         w.destroyRecursive();
