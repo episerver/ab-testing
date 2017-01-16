@@ -6,6 +6,7 @@ using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.PlugIn;
 using EPiServer.Shell.WebForms;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {
@@ -25,6 +26,12 @@ namespace EPiServer.Marketing.Testing.Web.Config
             if (!EPiServer.Security.PrincipalInfo.HasAdminAccess)
             {
                 throw new AccessDeniedException();
+            }
+
+            var availableCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+            foreach (var culture in availableCultures)
+            {
+                PreferredCulture.Items.Add(new ListItem(culture.Name, culture.Name));
             }
 
             DataBind();

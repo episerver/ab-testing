@@ -6,6 +6,7 @@
         protected global::System.Web.UI.WebControls.TextBox ParticipationPercent;
         protected global::System.Web.UI.WebControls.DropDownList ConfidenceLevel;
         protected global::System.Web.UI.WebControls.DropDownList AutoPublishWinner;
+        protected global::System.Web.UI.WebControls.DropDownList PreferredCulture;
         protected global::System.Web.UI.WebControls.RangeValidator DurationValidator;
         protected global::System.Web.UI.WebControls.RangeValidator ParticipationValidator;
 

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 using System.Linq;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {
@@ -26,6 +27,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
         public int ConfidenceLevel { get; set; }
 
         public bool AutoPublishWinner { get; set; }
+
+        public CultureInfo PreferredFinancialCulture { get; set; }
 
         internal static AdminConfigTestSettings _currentSettings;
 

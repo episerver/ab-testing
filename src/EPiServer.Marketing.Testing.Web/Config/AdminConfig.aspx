@@ -49,6 +49,12 @@
                         <asp:ListItem Value="90"> 90% </asp:ListItem>
                     </asp:DropDownList>
                 </div>
+                <div class="epi-size15">
+                    <asp:Label AssociatedControlID="PreferredCulture" runat="server">Select which culture to use when saving and viewing financial results</asp:Label>
+                    <asp:DropDownList ID="PreferredCulture" runat="server" MaxLength="255" >
+
+                    </asp:DropDownList>
+                </div>
                 <div align="right">
                     <EPiServerUI:ToolButton runat="server" SkinID="Save" Text="<%$ Resources: EPiServer, abtesting.admin.save %>" OnClick="Save_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
                     <EPiServerUI:ToolButton runat="server" SkinID="Cancel" Text="<%$ Resources: EPiServer, abtesting.admin.cancel %>" OnClick="Cancel_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>

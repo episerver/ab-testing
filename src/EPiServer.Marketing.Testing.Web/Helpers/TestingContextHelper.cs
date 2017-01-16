@@ -12,6 +12,7 @@ using EPiServer.Globalization;
 using EPiServer.Security;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
+using System.Threading;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -155,6 +156,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
+            decimal publishedVersionAverage = 0;
+            decimal draftVersionAverage = 0;
+
             model.Test = testData;
             model.PublishedVersionName = publishedContent.Name;
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
@@ -162,8 +166,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
 
-            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}",0, CultureInfo.CurrentCulture.NumberFormat);
-            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}", 0, CultureInfo.CurrentCulture.NumberFormat);
+            var preferredLanguage = HttpContext.Current.Request.UserLanguages.FirstOrDefault();
+            var preferredCulture = new CultureInfo(preferredLanguage);
+
+            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", preferredCulture) : publishedVersionAverage.ToString("C",preferredCulture);
+            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",preferredCulture) : draftVersionAverage.ToString("C",preferredCulture);
             model.KpiResultType = testData.KpiInstances[0].KpiResultType;
 
             // Map the version data
@@ -175,12 +182,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             // Map elapsed and remaining days.
             if (testData.State == TestState.Active)
             {
-                model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture); ;
-                model.DaysRemaining = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysElapsed = Math.Round(DateTime.Now.Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(preferredCulture); ;
+                model.DaysRemaining = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Now).TotalDays).ToString(preferredCulture);
             }
             else
             {
-                model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
+                model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(preferredCulture);
                 model.DaysRemaining = "0";
             }
 
