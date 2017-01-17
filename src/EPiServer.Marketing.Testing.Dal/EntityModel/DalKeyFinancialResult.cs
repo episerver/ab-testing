@@ -12,6 +12,8 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
 
         public Guid? VariantId { get; set; }
 
+        public string Culture { get; set; }
+
         public virtual DalVariant DalVariant { get; set; }
     }
 }

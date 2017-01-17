@@ -9,5 +9,7 @@ namespace EPiServer.Marketing.KPI.Results
         public bool HasConverted { get; set; }
 
         public decimal Total { get; set; }
+
+        public string Culture { get; set; }
     }
 }
