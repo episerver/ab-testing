@@ -7,13 +7,13 @@ namespace Testing.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class FinancialResultsCulture : IMigrationMetadata
+    public sealed partial class KpiFinancialResultCultures : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(FinancialResultsCulture));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(KpiFinancialResultCultures));
         
         string IMigrationMetadata.Id
         {
-            get { return "201701172038001_FinancialResultsCulture"; }
+            get { return "201701191449592_KpiFinancialResultCultures"; }
         }
         
         string IMigrationMetadata.Source
