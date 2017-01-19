@@ -10,6 +10,12 @@ namespace EPiServer.Marketing.KPI.Results
 
         public decimal Total { get; set; }
 
-        public string Culture { get; set; }
+        public string TotalMarketCulture { get; set; }
+
+        public decimal ConvertedTotal { get; set; }
+
+        public string ConvertedTotalCulture { get; set; }
+
+        
     }
 }

@@ -10,10 +10,14 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
 
         public decimal Total { get; set; }
 
+        public string TotalMarketCulture { get; set; }
+
+        public decimal ConvertedTotal { get; set; }
+
+        public string ConvertedTotalCulture { get; set; }
+
         public Guid? VariantId { get; set; }
-
-        public string Culture { get; set; }
-
+        
         public virtual DalVariant DalVariant { get; set; }
     }
 }
