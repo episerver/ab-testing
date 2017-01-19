@@ -290,6 +290,9 @@ namespace EPiServer.Marketing.Testing
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Total = managerConversionResult.Total,
+                TotalMarketCulture = managerConversionResult.TotalMarketCulture,
+                ConvertedTotal = managerConversionResult.ConvertedTotal,
+                ConvertedTotalCulture = managerConversionResult.ConvertedTotalCulture,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate

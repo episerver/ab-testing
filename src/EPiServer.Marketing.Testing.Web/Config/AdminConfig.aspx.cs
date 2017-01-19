@@ -31,8 +31,9 @@ namespace EPiServer.Marketing.Testing.Web.Config
             var availableCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
             foreach (var culture in availableCultures)
             {
-                PreferredCulture.Items.Add(new ListItem(culture.Name, culture.Name));
+                PreferredCulture.Items.Add(new ListItem(culture.EnglishName, culture.Name));
             }
+            PreferredCulture.SelectedValue = TestSettings.PreferredFinancialCulture.Name;
 
             DataBind();
             base.OnInit(e);
@@ -73,7 +74,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 TestDuration = duration,
                 ParticipationPercent = particiaption,
                 ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue),
-                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue)
+                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
+                PreferredFinancialCulture = new CultureInfo(PreferredCulture.SelectedValue)
             };
 
             settings.Save();
@@ -111,6 +113,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
             AutoPublishWinner.SelectedValue = TestSettings.AutoPublishWinner.ToString();
+            PreferredCulture.SelectedValue = TestSettings.PreferredFinancialCulture.Name;
         }
 
         private void ShowMessage(string msg, bool isWarning)

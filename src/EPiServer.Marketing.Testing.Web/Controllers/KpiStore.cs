@@ -11,6 +11,7 @@ using EPiServer.Framework.Localization;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -58,6 +59,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 {
                     kpiInstance.Validate(values);
                     KpiManager kpiManager = new KpiManager();
+                    kpiInstance.PreferredCulture = AdminConfigTestSettings.Current.PreferredFinancialCulture.Name;
                     var kpiId = kpiManager.Save(kpiInstance);
                     result = Rest(kpiId);
                 }

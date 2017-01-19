@@ -56,6 +56,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent = 10;
             ConfidenceLevel = 95;
             AutoPublishWinner = false;
+            PreferredFinancialCulture = new CultureInfo("en-US");
         }
 
         [ExcludeFromCodeCoverage]
