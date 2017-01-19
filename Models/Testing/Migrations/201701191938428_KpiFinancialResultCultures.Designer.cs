@@ -13,7 +13,7 @@ namespace Testing.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201701191618065_KpiFinancialResultCultures"; }
+            get { return "201701191938428_KpiFinancialResultCultures"; }
         }
         
         string IMigrationMetadata.Source

@@ -191,6 +191,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
+        [DataMember]
         public string PreferredCulture {get; set;}
 
         /// <summary>
