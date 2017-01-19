@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         [DataMember]
         public Guid Id { get; set; }
-
+        
         [DataMember]
         /// <summary>
         /// Indicates which result should be considered the "winner"
@@ -190,7 +190,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         [DataMember]
         public DateTime ModifiedDate { get; set; }
-        
+
+        public string PreferredCulture {get; set;}
+
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
