@@ -16,8 +16,6 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// </summary>
         public Guid KeyPerformanceIndicatorId { get; set; }
 
-        public string PreferredCulture { get; set; }
-
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>

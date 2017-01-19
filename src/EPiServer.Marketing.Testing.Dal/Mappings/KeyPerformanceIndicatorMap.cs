@@ -15,8 +15,6 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.KeyPerformanceIndicatorId)
                 .IsOptional();
 
-            this.Property(m => m.PreferredCulture).IsRequired();
-
             this.HasRequired(m => m.DalABTest)
                 .WithMany(m => m.KeyPerformanceIndicators)
                 .HasForeignKey(m => m.TestId)
