@@ -10,6 +10,7 @@ using EPiServer.Framework.Localization;
 using Mediachase.Commerce.Markets;
 using System.Globalization;
 using Mediachase.Commerce.Shared;
+using Mediachase.Commerce;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -79,26 +80,36 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         /// <returns></returns>
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
-            var retval = new KpiFinancialResult() { KpiId = Id, Total = 0, HasConverted = false };
-            
+            var retval = new KpiFinancialResult() {
+                KpiId = Id,
+                Total = 0,
+                HasConverted = false
+            };
+
+            var TestConfigPreferredCulture = new CultureInfo(PreferredCulture);
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
             {
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
                 var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
-                string orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
-                string systemCulturalCurrency = CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;               
-                
-                if (orderCurrency != systemCulturalCurrency)
+                var orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
+
+                var preferredRegion = new RegionInfo(new CultureInfo(PreferredCulture).LCID);
+
+                if (orderCurrency != preferredRegion.ISOCurrencySymbol)
                 {
-                    var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, systemCulturalCurrency);
-                    retval.Total = convertedTotal.Amount;
+                    var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, preferredRegion.ISOCurrencySymbol);
+                    retval.ConvertedTotal = convertedTotal.Amount;
                 }
                 else
                 {
-                    retval.Total = orderTotal.Amount;
+                    retval.ConvertedTotal = orderTotal.Amount;
                 }
                 retval.HasConverted = true;
+                retval.Total = orderTotal.Amount;
+                retval.TotalMarketCulture = orderCurrency;
+                retval.ConvertedTotalCulture = PreferredCulture;
+                
             }
             return retval;
         }
