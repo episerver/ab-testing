@@ -127,7 +127,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -190,7 +191,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -253,7 +255,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -314,7 +317,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };

@@ -101,7 +101,15 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             tests[1].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId,
                 DalKeyFinancialResults = new List<DalKeyFinancialResult>()
                 {
-                    new DalKeyFinancialResult() { KpiId = Guid.NewGuid(), Total = 12, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()}
+                    new DalKeyFinancialResult() { KpiId = Guid.NewGuid(),
+                        Total = 12,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        Id = Guid.NewGuid(),
+                     ConvertedTotal = 400,
+                     ConvertedTotalCulture = "SEK",
+                     TotalMarketCulture = "en-US"
+                    }
                 }
             });
             _context.SaveChanges();
@@ -505,7 +513,16 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var result = new DalKeyFinancialResult()
             {
-                Id = Guid.NewGuid(), Total = 12, KpiId = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow
+                Id = Guid.NewGuid(),
+                Total = 12,
+                KpiId = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                TotalMarketCulture = "en-US",
+                ConvertedTotal = 400,
+                ConvertedTotalCulture = "SEK"
+
+
             };
 
             var result1 = new DalKeyValueResult()
