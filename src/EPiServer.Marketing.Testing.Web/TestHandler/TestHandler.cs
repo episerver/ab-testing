@@ -275,6 +275,7 @@ namespace EPiServer.Marketing.Testing.Web
             foreach (var kpi in activeTest.KpiInstances)
             {
                 testCookieData.KpiConversionDictionary.Add(kpi.Id, false);
+                testCookieData.AlwaysEval = Attribute.IsDefined(kpi.GetType(), typeof(AlwaysEvaluateAttribute));
             }
 
             if (newVariant.Id != Guid.Empty)
@@ -405,7 +406,7 @@ namespace EPiServer.Marketing.Testing.Web
             foreach (var tdcookie in cookielist)
             {
                 // for every test cookie we have, check for the converted and the viewed flag
-                if (tdcookie.Converted || !tdcookie.Viewed)
+                if ((tdcookie.Converted && !tdcookie.AlwaysEval) || !tdcookie.Viewed)
                 {
                     continue;
                 }
@@ -421,7 +422,7 @@ namespace EPiServer.Marketing.Testing.Web
                 foreach (var kpi in test.KpiInstances)
                 {
                     var converted = tdcookie.KpiConversionDictionary.First(x => x.Key == kpi.Id).Value;
-                    if (!converted)
+                    if (!converted || tdcookie.AlwaysEval)
                     {
                         kpis.Add(kpi);
                     }
@@ -436,7 +437,7 @@ namespace EPiServer.Marketing.Testing.Web
                 ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);
 
                 var financialResults = kpiResults.OfType<KpiFinancialResult>();
-                ProcessKeyFinancialResults(tdcookie, test, financialResults);
+                ProcessKeyFinancialResults(tdcookie, test, kpis, financialResults);
 
                 var valueResults = kpiResults.OfType<KpiValueResult>();
                 ProcessKeyValueResults(tdcookie, test, valueResults);
@@ -467,7 +468,7 @@ namespace EPiServer.Marketing.Testing.Web
                     new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == result.KpiId), test));
             }
 
-            // now check to see if all kpi objects have evalated
+            // now check to see if all kpi objects have evaluated
             tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
 
             // now save the testdata to the cookie
@@ -487,8 +488,35 @@ namespace EPiServer.Marketing.Testing.Web
                 new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
         }
 
-        private void ProcessKeyFinancialResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiFinancialResult> results)
+        private void ProcessKeyFinancialResults(TestDataCookie tdcookie, IMarketingTest test, List<IKpi> kpis, IEnumerable<KpiFinancialResult> results)
         {
+            // add each kpi to testdata cookie data
+            foreach (var result in results)
+            {
+                if (!result.HasConverted)
+                {
+                    continue;
+                }
+
+                tdcookie.KpiConversionDictionary.Remove(result.KpiId);
+                tdcookie.KpiConversionDictionary.Add(result.KpiId, true);
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.KpiConvertedEvent,
+                    new KpiEventArgs(kpis.FirstOrDefault(k => k.Id == result.KpiId), test));
+            }
+
+            // now check to see if all kpi objects have evaluated
+            tdcookie.Converted = tdcookie.KpiConversionDictionary.All(x => x.Value);
+
+            // now save the testdata to the cookie
+            _testDataCookieHelper.UpdateTestDataCookie(tdcookie);
+
+            // now if we have converted, fire the converted message 
+            // note : we wouldnt be here if we already converted on a previous loop
+            if (!tdcookie.Converted)
+            {
+                return;
+            }
+
             var varUserSees = test.Variants.First(x => x.Id == tdcookie.TestVariantId);
 
             foreach (var kpiFinancialResult in results)
@@ -508,6 +536,9 @@ namespace EPiServer.Marketing.Testing.Web
                     _testManager.SaveKpiResultData(test.Id, varUserSees.ItemVersion, keyFinancialResult, KeyResultType.Financial);
                 }
             }
+
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.AllKpisConvertedEvent,
+                new KpiEventArgs(tdcookie.KpiConversionDictionary, test));
         }
 
         private void ProcessKeyValueResults(TestDataCookie tdcookie, IMarketingTest test, IEnumerable<KpiValueResult> results)

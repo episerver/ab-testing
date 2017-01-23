@@ -15,6 +15,7 @@ using Xunit;
 using System.Globalization;
 using EPiServer.Globalization;
 using EPiServer.Framework.Localization;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Web.Routing;
 
@@ -109,7 +110,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 5,
                 Views = 25,
                 TestId = test.Id,
-                IsPublished = true
+                IsPublished = true,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             Variant draftVariant = new Variant()
@@ -120,7 +123,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
                 ItemVersion = 190,
                 Views = 50,
-                TestId = test.Id
+                TestId = test.Id,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
@@ -171,7 +176,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 5,
                 Views = 25,
                 TestId = test.Id,
-                IsPublished = true
+                IsPublished = true,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             Variant draftVariant = new Variant()
@@ -183,7 +190,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 190,
                 Views = 50,
                 TestId = test.Id,
-                IsPublished = false
+                IsPublished = false,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
@@ -234,7 +243,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 5,
                 Views = 25,
                 TestId = test.Id,
-                IsPublished = true
+                IsPublished = true,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             Variant draftVariant = new Variant()
@@ -246,7 +257,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 190,
                 Views = 50,
                 TestId = test.Id,
-                IsPublished = false
+                IsPublished = false,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
@@ -295,7 +308,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 5,
                 Views = 25,
                 TestId = test.Id,
-                IsPublished = true
+                IsPublished = true,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             Variant draftVariant = new Variant()
@@ -307,7 +322,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ItemVersion = 190,
                 Views = 50,
                 TestId = test.Id,
-                IsPublished = false
+                IsPublished = false,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
             };
 
             var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
