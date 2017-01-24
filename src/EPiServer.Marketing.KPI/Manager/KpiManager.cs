@@ -10,6 +10,8 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using StructureMap.TypeRules;
+using EPiServer.Data.Dynamic;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -68,7 +70,7 @@ namespace EPiServer.Marketing.KPI.Manager
             var types =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi) );
+                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi));
             return (types);
         }
 
@@ -88,6 +90,23 @@ namespace EPiServer.Marketing.KPI.Manager
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
+        public void SavePreferredMarket(CommerceSettings commerceSettings)
+        {            
+            var store = GetDataStore(typeof(CommerceSettings));
+            store.Save(commerceSettings);
+        }
+
+        public CommerceSettings GetPreferredMarket()
+        {
+            var store = GetDataStore(typeof(CommerceSettings));
+            var settings = store.LoadAll<CommerceSettings>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceSettings { PreferredMarketValue = string.Empty };
+            return settings;
+        }
+
+        private DynamicDataStore GetDataStore(Type t)
+        {
+            return DynamicDataStoreFactory.Instance.GetStore(t) ?? DynamicDataStoreFactory.Instance.CreateStore(t);
+        }
 
         /// <summary>
         /// Serialize the kpi to a Json string and save it in the properties field.

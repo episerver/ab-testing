@@ -14,6 +14,7 @@ using EPiServer.Web;
 using EPiServer.Web.Routing;
 using System.Threading;
 using EPiServer.Marketing.Testing.Web.Config;
+using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -139,7 +140,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var repo = _serviceLocator.GetInstance<IContentRepository>();
             var publishedVariant = testData.Variants.First(v => v.IsPublished);
             var draftVariant = testData.Variants.First(v => !v.IsPublished);
-            var displayCulture = new CultureInfo(testData.KpiInstances[0].PreferredCulture);
+
+            var commerceSettings = ServiceLocator.Current.GetInstance<IKpiManager>().GetPreferredMarket();
 
             //get published version
             var Content = repo.Get<IContent>(testData.OriginalItemId);
@@ -170,8 +172,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             if (publishedVariant.KeyFinancialResults != null)
             {
-                model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", displayCulture) : publishedVersionAverage.ToString("C", displayCulture);
-                model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", displayCulture) : draftVersionAverage.ToString("C", displayCulture);
+                model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : publishedVersionAverage.ToString("C", commerceSettings.preferredFormat);
+                model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : draftVersionAverage.ToString("C", commerceSettings.preferredFormat);
             }
             
             model.KpiResultType = testData.KpiInstances[0].KpiResultType;

@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                PreferredCulture = "en-GB"
+                PreferredMarket = new KPI.Manager.CommerceSettings { PreferredMarketValue = "nor", preferredFormat = new NumberFormatInfo()}
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -192,7 +192,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                PreferredCulture = "en-GB"
+                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -256,7 +256,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                PreferredCulture = "en-GB"
+                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -318,7 +318,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                PreferredCulture = "en-GB"
+                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };

@@ -183,7 +183,10 @@ namespace EPiServer.Marketing.Testing
                 Total = dalConversionResult.Total,
                 VariantId = dalConversionResult.VariantId,
                 CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate
+                ModifiedDate = dalConversionResult.ModifiedDate,
+                TotalMarketCulture = dalConversionResult.TotalMarketCulture,
+                ConvertedTotal = dalConversionResult.ConvertedTotal,
+                ConvertedTotalCulture = dalConversionResult.ConvertedTotalCulture
             };
 
             return retVariant;

@@ -52,6 +52,7 @@
         <description>These settings are the defaults values used for when creating AB tests.</description>
         <displayname>AB Testing Configuration</displayname>
         <durationerror>Must be between 1 and 365.</durationerror>
+        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
         <invalid>One or more values are not of the correct format.</invalid>
         <participationerror>Must be between 1 and 100.</participationerror>
         <participationpercent>Participation Percent:</participationpercent>

@@ -86,19 +86,17 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 HasConverted = false
             };
 
-            var TestConfigPreferredCulture = new CultureInfo(PreferredCulture);
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
             {
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
                 var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
                 var orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
+                var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredMarket.PreferredMarketValue);
 
-                var preferredRegion = new RegionInfo(new CultureInfo(PreferredCulture).LCID);
-
-                if (orderCurrency != preferredRegion.ISOCurrencySymbol)
+                if (orderCurrency != preferredMarket.DefaultCurrency.CurrencyCode)
                 {
-                    var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, preferredRegion.ISOCurrencySymbol);
+                    var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, preferredMarket.DefaultCurrency.CurrencyCode);
                     retval.ConvertedTotal = convertedTotal.Amount;
                 }
                 else
@@ -108,7 +106,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 retval.HasConverted = true;
                 retval.Total = orderTotal.Amount;
                 retval.TotalMarketCulture = orderCurrency;
-                retval.ConvertedTotalCulture = PreferredCulture;
+                retval.ConvertedTotalCulture = preferredMarket.MarketId.Value;
                 
             }
             return retval;

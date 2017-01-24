@@ -28,7 +28,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
         public bool AutoPublishWinner { get; set; }
 
-        public CultureInfo PreferredFinancialCulture { get; set; }
 
         internal static AdminConfigTestSettings _currentSettings;
 
@@ -56,7 +55,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent = 10;
             ConfidenceLevel = 95;
             AutoPublishWinner = false;
-            PreferredFinancialCulture = new CultureInfo("en-US");
         }
 
         [ExcludeFromCodeCoverage]

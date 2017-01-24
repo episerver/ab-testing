@@ -59,7 +59,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 {
                     kpiInstance.Validate(values);
                     KpiManager kpiManager = new KpiManager();
-                    kpiInstance.PreferredCulture = AdminConfigTestSettings.Current.PreferredFinancialCulture.Name;
+                    kpiInstance.PreferredMarket = kpiManager.GetPreferredMarket();
                     var kpiId = kpiManager.Save(kpiInstance);
                     result = Rest(kpiId);
                 }
