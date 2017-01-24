@@ -350,10 +350,7 @@
     overflow-x: hidden;
 }
 
-#controlPieChart,
-#challengerPieChart,
-#controlPickWinnerPieChart,
-#challengerPickWinnerPieChart {
+.epi-ab-converstion-pie-chart {
     margin-right: auto;
     height: 100px;
     width: 100px;
