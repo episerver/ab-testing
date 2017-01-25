@@ -11,8 +11,6 @@ xcopy "..\artifacts\%Configuration%\net45\EPiServer.Marketing.KPI.Commerce.dll" 
 
 xcopy "%ProjectPath%\Package.nuspec" "%PackagePath%\"  /I /F /R /Y
 
-xcopy "%ProjectPath%\EmbeddedLangFiles\EPiServer_Kpi_Commerce_EN.xml" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.KPI.Commerce\EmbeddedLangFiles\"  /I /F /R /Y
-
 xcopy "%ProjectPath%\Config\CommerceKpiConfig.aspx" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.KPI.Commerce\Admin\"  /I /F /R /Y
 
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.KPI.Commerce"  /I /F /R /Y
