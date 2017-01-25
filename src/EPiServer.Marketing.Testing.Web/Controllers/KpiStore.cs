@@ -9,9 +9,7 @@ using System.Collections.Generic;
 using System.Net;
 using EPiServer.Framework.Localization;
 using EPiServer.Logging;
-using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {

@@ -6,7 +6,6 @@ using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.PlugIn;
 using EPiServer.Shell.WebForms;
-using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {
@@ -68,7 +67,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 ParticipationPercent = particiaption,
                 ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue),
                 AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
-                //PreferredFinancialCulture = new CultureInfo(PreferredCulture.SelectedValue)
             };
 
             settings.Save();
@@ -99,14 +97,12 @@ namespace EPiServer.Marketing.Testing.Web.Config
             return true;
         }
 
-
         protected void Cancel_OnClick(object sender, EventArgs e)
         {
             TestDuration.Text = TestSettings.TestDuration.ToString();
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
             AutoPublishWinner.SelectedValue = TestSettings.AutoPublishWinner.ToString();
-            //PreferredCulture.SelectedValue = TestSettings.PreferredFinancialCulture.Name;
         }
 
         private void ShowMessage(string msg, bool isWarning)

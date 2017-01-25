@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
 using System.Linq;
-using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {
@@ -27,7 +25,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
         public int ConfidenceLevel { get; set; }
 
         public bool AutoPublishWinner { get; set; }
-
 
         internal static AdminConfigTestSettings _currentSettings;
 
@@ -73,6 +70,5 @@ namespace EPiServer.Marketing.Testing.Web.Config
         {
             _currentSettings = null;
         }
-
     }
 }
