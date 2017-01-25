@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
                 var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
                 var orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
-                var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredCommerceFormat.PreferredMarketValue);
+                var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredCommerceFormat.CommerceCulture);
 
                 if (orderCurrency != preferredMarket.DefaultCurrency.CurrencyCode)
                 {

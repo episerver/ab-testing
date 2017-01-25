@@ -9,8 +9,15 @@ namespace EPiServer.Marketing.KPI.Manager
     {
         public Identity Id { get; set; }
        
-        public string PreferredMarketValue { get; set; }
+        /// <summary>
+        /// String representing the commerce "market" to be used for financial conversions
+        /// "Default" represents the default market as defined in the system.
+        /// </summary>
+        public string CommerceCulture { get; set; }
 
+        /// <summary>
+        /// Details about the preferred format to display numbers, specifically currencies.        /// 
+        /// </summary>
         public NumberFormatInfo preferredFormat { get; set; }
     }
 }

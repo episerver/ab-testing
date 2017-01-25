@@ -98,7 +98,7 @@ namespace EPiServer.Marketing.KPI.Manager
         public CommerceData GetCommerceSettings()
         {
             var store = GetDataStore(typeof(CommerceData));
-            var settings = store.LoadAll<CommerceData>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceData { PreferredMarketValue = "DEFAULT" };
+            var settings = store.LoadAll<CommerceData>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceData { CommerceCulture = "DEFAULT" };
             return settings;
         }
 

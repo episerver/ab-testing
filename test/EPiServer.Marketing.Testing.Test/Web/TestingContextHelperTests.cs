@@ -98,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             commerceData = new CommerceData()
             {
                 preferredFormat = new NumberFormatInfo(),
-                PreferredMarketValue = "USD"
+                CommerceCulture = "USD"
             };
             
             test = new ABTest()
@@ -146,7 +146,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                PreferredCommerceFormat = new KPI.Manager.CommerceData { PreferredMarketValue = "nor", preferredFormat = new NumberFormatInfo()}
+                PreferredCommerceFormat = new KPI.Manager.CommerceData { CommerceCulture = "nor", preferredFormat = new NumberFormatInfo()}
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -169,7 +169,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             commerceData = new CommerceData()
             {
                 preferredFormat = new NumberFormatInfo(),
-                PreferredMarketValue = "USD"
+                CommerceCulture = "USD"
             };
 
             test = new ABTest()
@@ -244,7 +244,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             commerceData = new CommerceData()
             {
                 preferredFormat = new NumberFormatInfo(),
-                PreferredMarketValue = "USD"
+                CommerceCulture = "USD"
             };
 
             test = new ABTest()
@@ -318,7 +318,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             commerceData = new CommerceData()
             {
                 preferredFormat = new NumberFormatInfo(),
-                PreferredMarketValue = "USD"
+                CommerceCulture = "USD"
             };
 
             test = new ABTest()
