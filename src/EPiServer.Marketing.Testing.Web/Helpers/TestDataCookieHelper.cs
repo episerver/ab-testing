@@ -64,6 +64,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 ["TestVariantId"] = testData.TestVariantId.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
+                ["AlwaysEval"] = testData.AlwaysEval.ToString(),
                 Expires = _testManager.Get(testData.TestId).EndDate,
                 HttpOnly = true
 
@@ -114,6 +115,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.TestVariantId = Guid.Parse(cookie["TestVariantId"]);
                 retCookie.Viewed = bool.Parse(cookie["Viewed"]);
                 retCookie.Converted = bool.Parse(cookie["Converted"]);
+                retCookie.AlwaysEval = bool.Parse(cookie["AlwaysEval"]);
 
                 var t = _testManager.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
                 if (t != null)

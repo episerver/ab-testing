@@ -70,8 +70,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             ContentEventArgs ea = e as ContentEventArgs;
             return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
-                    HttpContext.Current == null ||
-                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    SkipRequest() ||
                     IsInSystemFolder());
         }
 
@@ -87,9 +86,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             return (e.ContentLink == null ||
                     e.ChildrenItems == null ||
-                    HttpContext.Current == null ||
-                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    SkipRequest() || 
                     IsInSystemFolder());
+        }
+
+        /// <summary>
+        /// Returns true if the http request is null or should be skipped for various reasons.
+        /// </summary>
+        /// <returns></returns>
+        private bool SkipRequest()
+        {
+            return HttpContext.Current == null ||
+                HttpContext.Current.Request.UserAgent == null || // MAR 797 - Ignore requests with no user agent specified
+                HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag);
         }
 
         /// <summary>
