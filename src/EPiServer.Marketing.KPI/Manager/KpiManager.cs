@@ -11,7 +11,6 @@ using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using StructureMap.TypeRules;
 using EPiServer.Data.Dynamic;
-using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -90,16 +89,16 @@ namespace EPiServer.Marketing.KPI.Manager
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
-        public void SavePreferredMarket(CommerceSettings commerceSettings)
+        public void SaveCommerceSettings(CommerceData commerceSettings)
         {            
-            var store = GetDataStore(typeof(CommerceSettings));
+            var store = GetDataStore(typeof(CommerceData));
             store.Save(commerceSettings);
         }
 
-        public CommerceSettings GetPreferredMarket()
+        public CommerceData GetCommerceSettings()
         {
-            var store = GetDataStore(typeof(CommerceSettings));
-            var settings = store.LoadAll<CommerceSettings>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceSettings { PreferredMarketValue = string.Empty };
+            var store = GetDataStore(typeof(CommerceData));
+            var settings = store.LoadAll<CommerceData>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceData { PreferredMarketValue = string.Empty };
             return settings;
         }
 

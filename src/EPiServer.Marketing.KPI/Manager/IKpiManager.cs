@@ -44,9 +44,9 @@ namespace EPiServer.Marketing.KPI.Manager
 
         long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false );
 
-        void SavePreferredMarket(CommerceSettings commerceSettings);
+        void SaveCommerceSettings(CommerceData commerceSettings);
 
-        CommerceSettings GetPreferredMarket();
+        CommerceData GetCommerceSettings();
 
     }
 }

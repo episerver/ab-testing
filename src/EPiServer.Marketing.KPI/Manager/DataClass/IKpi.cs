@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         DateTime ModifiedDate { get; set; }
 
 
-        CommerceSettings PreferredMarket { get; set; }
+        CommerceData PreferredCommerceFormat { get; set; }
 
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI

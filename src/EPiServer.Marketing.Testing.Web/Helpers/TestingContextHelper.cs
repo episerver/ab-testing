@@ -141,7 +141,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var publishedVariant = testData.Variants.First(v => v.IsPublished);
             var draftVariant = testData.Variants.First(v => !v.IsPublished);
 
-            var commerceSettings = ServiceLocator.Current.GetInstance<IKpiManager>().GetPreferredMarket();
+            var commerceSettings = ServiceLocator.Current.GetInstance<IKpiManager>().GetCommerceSettings();
 
             //get published version
             var Content = repo.Get<IContent>(testData.OriginalItemId);

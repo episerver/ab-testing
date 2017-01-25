@@ -28,13 +28,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 throw new AccessDeniedException();
             }
 
-            //var availableCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            //foreach (var culture in availableCultures)
-            //{
-            //    PreferredCulture.Items.Add(new ListItem(culture.EnglishName, culture.Name));
-            //}
-            //PreferredCulture.SelectedValue = TestSettings.PreferredFinancialCulture.Name;
-
             DataBind();
             base.OnInit(e);
         }

@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
-    public class CommerceSettings : IDynamicData
+    public class CommerceData : IDynamicData
     {
         public Identity Id { get; set; }
        

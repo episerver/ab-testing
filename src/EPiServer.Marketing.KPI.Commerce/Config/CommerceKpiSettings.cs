@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Config
                     var kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
                     var marketService = ServiceLocator.Current.GetInstance<IMarketService>();
 
-                    var preferredMarket = kpiManager.GetPreferredMarket();
+                    var preferredMarket = kpiManager.GetCommerceSettings();
 
                     _currentSettings.PreferredMarket = !string.IsNullOrEmpty(preferredMarket.PreferredMarketValue) ? 
                         _currentSettings.PreferredMarket = marketService.GetMarket(preferredMarket.PreferredMarketValue)
@@ -55,10 +55,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Config
         public void Save()
         {
             var kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
-            var settingsToSave = new CommerceSettings();
+            var settingsToSave = new CommerceData();
             settingsToSave.PreferredMarketValue = PreferredMarket.MarketId.Value;
             settingsToSave.preferredFormat = PreferredMarket.DefaultCurrency.Format;
-            kpiManager.SavePreferredMarket(settingsToSave);
+            kpiManager.SaveCommerceSettings(settingsToSave);
             
             _currentSettings = this;
         }
