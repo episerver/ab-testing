@@ -26,7 +26,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     {
         private ILogger _logger;
 
-
         public AverageOrderKpi()
         {
             LocalizationSection = "averageorder";
