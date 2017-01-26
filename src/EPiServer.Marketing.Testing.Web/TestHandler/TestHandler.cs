@@ -323,7 +323,7 @@ namespace EPiServer.Marketing.Testing.Web
                     var clientKpi = kpi as ClientKpi;
                     var test = _testManager.Get(cookieData.TestId);
                     var itemVersion = test.Variants.FirstOrDefault(v => v.Id == cookieData.TestVariantId).ItemVersion;
-                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientEvaluatorMarkup,cookieData.TestId,itemVersion,clientKpi.Id));
+                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientEvaluationScript,cookieData.TestId,itemVersion,clientKpi.Id));
                     HttpContext.Current.Items[kpi.Id.ToString()]=true;
                 }
             }

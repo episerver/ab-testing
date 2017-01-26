@@ -7,6 +7,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
     public interface IClientKpi
     {
-        string ClientEvaluatorMarkup { get; }
+        /// <summary>
+        /// Scripts used to evaluate kpi conversion conditions
+        /// </summary>
+        string ClientEvaluationScript { get; }
     }
 }

@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-        public virtual string ClientEvaluatorMarkup
+        public virtual string ClientEvaluationScript
         {
             get
             {
