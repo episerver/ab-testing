@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
 
     [ServiceConfiguration(typeof(IContentQuery))]
-    public class InactiveTestsQuery : QueryHelper, IContentQuery
+    public class InactiveTestsQuery : QueryHelper, IContentQuery<TasksTestingQueryCategory>
     {
         private LocalizationService _localizationService;
         private IServiceLocator _serviceLocator;
@@ -44,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public IEnumerable<string> PlugInAreas => new string[] { KnownContentQueryPlugInArea.EditorTasks };
 
         /// <inheritdoc />
-        public int SortOrder => 20;
+        public int SortOrder => 10;
 
         public bool VersionSpecific { get; }
 

@@ -197,6 +197,7 @@
       <tasks>
         <activetests>Active A/B Tests</activetests>
         <archivedtests>Archived A/B Tests</archivedtests>
+        <category>A/B Tests</category>
         <completedtests>Completed A/B Tests</completedtests>
         <inactivetests>Scheduled A/B Tests</inactivetests>
       </tasks>

@@ -14,7 +14,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
 
     [ServiceConfiguration(typeof(IContentQuery))]
-    public class ActiveTestsQuery : QueryHelper, IContentQuery
+    public class ActiveTestsQuery : QueryHelper, IContentQuery<TasksTestingQueryCategory>
     {
         private LocalizationService _localizationService;
         private IServiceLocator _serviceLocator;
