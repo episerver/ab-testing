@@ -12,6 +12,9 @@ using EPiServer.Globalization;
 using EPiServer.Security;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
+using System.Threading;
+using EPiServer.Marketing.Testing.Web.Config;
+using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -164,6 +167,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
+            decimal publishedVersionAverage = 0;
+            decimal draftVersionAverage = 0;
+
             model.Test = testData;
             model.PublishedVersionName = publishedContent.Name;
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
@@ -171,8 +177,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
 
-            model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.Total).ToString("C", CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}",0, CultureInfo.CurrentCulture.NumberFormat);
-            model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.Total).ToString("C",CultureInfo.CurrentCulture.NumberFormat) : string.Format("{0:c}", 0, CultureInfo.CurrentCulture.NumberFormat);
+            
+            if (publishedVariant.KeyFinancialResults != null)
+            {
+                var commerceSettings = _serviceLocator.GetInstance<IKpiManager>().GetCommerceSettings();
+
+                model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : publishedVersionAverage.ToString("C", commerceSettings.preferredFormat);
+                model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : draftVersionAverage.ToString("C", commerceSettings.preferredFormat);
+            }
+            
             model.KpiResultType = testData.KpiInstances[0].KpiResultType;
 
             // Map the version data

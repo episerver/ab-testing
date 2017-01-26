@@ -517,6 +517,9 @@ namespace EPiServer.Marketing.Testing.Web
                         Id = Guid.NewGuid(),
                         KpiId = kpiFinancialResult.KpiId,
                         Total = kpiFinancialResult.Total,
+                        TotalMarketCulture = kpiFinancialResult.TotalMarketCulture,
+                        ConvertedTotal = kpiFinancialResult.ConvertedTotal,
+                        ConvertedTotalCulture = kpiFinancialResult.ConvertedTotalCulture,
                         VariantId = varUserSees.ItemId,
                         CreatedDate = DateTime.UtcNow,
                         ModifiedDate = DateTime.UtcNow

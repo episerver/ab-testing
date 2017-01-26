@@ -18,6 +18,7 @@ using EPiServer.Framework.Localization;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Web.Routing;
+using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -29,12 +30,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IContentVersionRepository> _mockContentVersionRepository;
         private Mock<IUIHelper> _mockUIHelper;
         private Mock<IPreviewUrlBuilder> _mockPreviewUrlBuilder;
+        private Mock<IKpiManager> _mockKpiManager;
 
 
         LocalizationService _localizationService = new FakeLocalizationService("test");
 
         private IMarketingTest test;
         private Guid testId = Guid.Parse("98cbde0e-4431-4712-9f04-8094e7be826b");
+        private CommerceData commerceData;
 
         private TestingContextHelper GetUnitUnderTest(HttpContext context)
         {
@@ -48,6 +51,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _mockServiceLocator = new Mock<IServiceLocator>();
             _mockContentRepository = new Mock<IContentRepository>();
+            _mockKpiManager = new Mock<IKpiManager>();
             _mockContentRepository.Setup(call => call.Get<IContent>(It.Is<Guid>(g => g == Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664")))).Returns(testPublishedData.Object);
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testPublishedData.Object);
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
@@ -61,12 +65,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockUIHelper = new Mock<IUIHelper>();
             _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
 
+            _mockKpiManager.Setup(call => call.GetCommerceSettings()).Returns(commerceData);
+
             _mockServiceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationService);
             _mockServiceLocator.Setup(call => call.GetInstance<IContentRepository>())
                .Returns(_mockContentRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IContentVersionRepository>())
                 .Returns(_mockContentVersionRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IUIHelper>()).Returns(_mockUIHelper.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en");
             ContentLanguage.PreferredCulture = new CultureInfo("en");
@@ -88,6 +95,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void GenerateContextData_returns_valid_contextdatamodel()
         {
+            commerceData = new CommerceData()
+            {
+                preferredFormat = new NumberFormatInfo(),
+                CommerceCulture = "USD"
+            };
+            
             test = new ABTest()
             {
                 CreatedDate = DateTime.Parse("5/5/2016"),
@@ -132,7 +145,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                PreferredCommerceFormat = new KPI.Manager.CommerceData { CommerceCulture = "nor", preferredFormat = new NumberFormatInfo()}
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -152,6 +166,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Test_Marked_Done_Returns_Correct_Elapsed_and_Remaining_values()
         {
+            commerceData = new CommerceData()
+            {
+                preferredFormat = new NumberFormatInfo(),
+                CommerceCulture = "USD"
+            };
+
             test = new ABTest()
             {
                 CreatedDate = DateTime.Parse("5/5/2016"),
@@ -199,7 +219,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -219,6 +240,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Test_Marked_Archived_Returns_Correct_Elapsed_and_Remaining_values()
         {
+
+            commerceData = new CommerceData()
+            {
+                preferredFormat = new NumberFormatInfo(),
+                CommerceCulture = "USD"
+            };
+
             test = new ABTest()
             {
                 CreatedDate = DateTime.Parse("5/5/2016"),
@@ -266,7 +294,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -286,6 +315,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Model_Contains_Published_And_Draft_Preview_Urls()
         {
+            commerceData = new CommerceData()
+            {
+                preferredFormat = new NumberFormatInfo(),
+                CommerceCulture = "USD"
+            };
+
             test = new ABTest()
             {
                 CreatedDate = DateTime.Parse("5/5/2016"),
@@ -331,7 +366,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                ModifiedDate = DateTime.UtcNow
+                ModifiedDate = DateTime.UtcNow,
+                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
