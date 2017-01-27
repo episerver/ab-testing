@@ -65,7 +65,8 @@
             this._displayOptionsButton(this.context.data.userHasPublishRights);
             //make the charts at start up as the dom is not ready for it prior to this on 
             //the first load.
-            if (this.context.data.kpiResultType === "kpiConversionResult") {
+            textHelper.clearPieCharts("controlPieChart", "challengerPieChart");
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
             }
@@ -80,8 +81,9 @@
             this._displayOptionsButton(this.context.data.userHasPublishRights);
             textHelper.initializeHelper(me.context, resources.detailsview);
             me._renderData();
+            textHelper.clearPieCharts("controlPieChart", "challengerPieChart");
             //redraw the charts when the context changes to update the stored dom.
-            if (this.context.data.kpiResultType === "kpiConversionResult") {
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
                 textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
             }
@@ -108,6 +110,7 @@
 
         _onCancelClick: function () {
             var me = this;
+            textHelper.clearPieCharts("controlPieChart", "challengerPieChart");
             me.contextParameters = {
                 uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink
             };

@@ -17,6 +17,15 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.Total)
                 .IsRequired();
 
+            this.Property(m => m.TotalMarketCulture)
+                .IsRequired();
+
+            this.Property(m => m.ConvertedTotal)
+                .IsRequired();
+
+            this.Property(m => m.ConvertedTotalCulture)
+                .IsRequired();
+
             this.HasRequired(m => m.DalVariant)
                 .WithMany(m => m.DalKeyFinancialResults)
                 .HasForeignKey(m => m.VariantId)

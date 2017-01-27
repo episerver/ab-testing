@@ -15,9 +15,18 @@
           <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
         </readonly_markup>
       </addtocart>
+      <admin>
+        <cancel>Cancel</cancel>
+        <description>These settings are the defaults values used for Commerce KPIs when added to a test.</description>
+        <displayname>Commerce Kpi Configuration</displayname>
+        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
+        <save>Save</save>
+      </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed carts and calculates the average purchase amount.</conversion_label>
+          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
+          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
+          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
         </config_markup>
         <description>Tests the potential effects of content on the average cart total of participating users.  Results: The total represents the average cart total across all visitors that checked out as part of the test.</description>
         <name>Average Order</name>
