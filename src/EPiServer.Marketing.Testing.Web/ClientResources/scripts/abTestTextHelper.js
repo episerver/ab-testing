@@ -120,8 +120,8 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided nodes to the published variant conversions, views and conversion percent
         renderPublishedViewsAndConversions: function (publishedConversionsNode, publishedViewsNode, publishedConversionPercentNode) {
-            var x = context.data.test.kpiInstances[0].kpiResultType;
-            if (x = "kpiFinancialResult") {
+            var kpiResultType = context.data.kpiResultType;
+            if (kpiResultType === "KpiFinancialResult") {
                 publishedConversionsNode.textContent = this.publishedVariant.keyFinancialResults.length;
                 publishedViewsNode.textContent = this.publishedVariant.views;
                 publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage;
@@ -135,8 +135,8 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided nodes to the draft variant conversions, views and conversion percent
         renderDraftViewsAndConversions: function (challengerConversionsNode, challengerViewsNode, challengerConversionPercentNode) {
-            var x = context.data.test.kpiInstances[0].kpiResultType;
-            if (x = "kpiFinancialResult") {
+            var kpiResultType = context.data.kpiResultType;
+            if (kpiResultType === "KpiFinancialResult") {
                 challengerConversionsNode.textContent = this.draftVariant.keyFinancialResults.length;
                 challengerViewsNode.textContent = this.draftVariant.views;
                 challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage;
@@ -211,6 +211,32 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 pieChart.addSeries("", chartData, { stroke: { width: 0 } });
                 pieChart.render();
             }
-        }
+        },
+
+        clearPieCharts: function (controlChartId, challengerChartId) {
+            var controlChartNode = dom.byId(controlChartId);
+            var challengerChartNode = dom.byId(challengerChartId);
+
+            if (controlChartNode) {
+                var controlChart = dojo.query("#" + controlChartId + " > *");
+                if (controlChart[0]) {
+                    dojo.forEach(dijit.findWidgets(controlChart)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    controlChartNode.innerHTML = "";
+                }
+            }
+
+            if (challengerChartNode) {
+                var challengerChart = dojo.query("#" + challengerChartId + " > *");
+                if (challengerChart[0]) {
+                    dojo.forEach(dijit.findWidgets(challengerChart)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    challengerChartNode.innerHTML = "";
+                }
+            }
+        },
+
     };
 });

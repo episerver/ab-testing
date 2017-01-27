@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Net;
 using EPiServer.Framework.Localization;
 using EPiServer.Logging;
-using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
@@ -58,6 +57,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 {
                     kpiInstance.Validate(values);
                     KpiManager kpiManager = new KpiManager();
+                    kpiInstance.PreferredCommerceFormat = kpiManager.GetCommerceSettings();
                     var kpiId = kpiManager.Save(kpiInstance);
                     result = Rest(kpiId);
                 }
