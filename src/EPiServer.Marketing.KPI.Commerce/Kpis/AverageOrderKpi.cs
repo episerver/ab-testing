@@ -10,6 +10,10 @@ using EPiServer.Framework.Localization;
 using Mediachase.Commerce.Markets;
 using System.Globalization;
 using Mediachase.Commerce.Shared;
+using Mediachase.Commerce;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Exceptions;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -18,12 +22,17 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiReadOnlyMarkup.html",
         text_id = "/commercekpi/averageorder/name",
         description_id = "/commercekpi/averageorder/description")]
+    [AlwaysEvaluate]
     public class AverageOrderKpi : CommerceKpi
     {
+        private ILogger _logger;
+
         public AverageOrderKpi()
         {
             LocalizationSection = "averageorder";
             _servicelocator = ServiceLocator.Current;
+            _logger = LogManager.GetLogger();
+
         }
         internal AverageOrderKpi(IServiceLocator servicelocator)
         {
@@ -68,8 +77,28 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
         public override void Validate(Dictionary<string, string> responseData)
         {
-            //Average order KPI's do not have a form UI so no data is present to validate.
-            ContentGuid = Guid.Empty;
+            var marketService = ServiceLocator.Current.GetInstance<IMarketService>();
+            var kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
+
+            var commerceData = kpiManager.GetCommerceSettings();
+            var marketList = marketService.GetAllMarkets();
+
+            if(commerceData == null)
+            {
+                var defaultMarket = marketService.GetMarket("DEFAULT");
+                if(defaultMarket == null)
+                {
+                    throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/commercekpi/averageorder/config_markup/error_defaultmarketundefined"));
+;                }
+            }
+            else
+            {
+                var preferredMarket = marketService.GetMarket(commerceData.CommerceCulture);
+                if(preferredMarket == null)
+                {
+                    throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/commercekpi/averageorder/config_markup/error_undefinedmarket"));
+                }
+            }
         }
 
         /// <summary>
@@ -80,26 +109,41 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         /// <returns></returns>
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
-            var retval = new KpiFinancialResult() { KpiId = Id, Total = 0, HasConverted = false };
-            
+            var retval = new KpiFinancialResult() {
+                KpiId = Id,
+                Total = 0,
+                HasConverted = false
+            };
+
             var ordergroup = sender as PurchaseOrder;
             if (ordergroup != null)
             {
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
                 var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
-                string orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
-                string systemCulturalCurrency = CultureInfo.CurrentCulture.ThreeLetterISOLanguageName;               
-                
-                if (orderCurrency != systemCulturalCurrency)
+                var orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
+                var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredCommerceFormat.CommerceCulture);
+
+                if (preferredMarket != null)
                 {
-                    var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, systemCulturalCurrency);
-                    retval.Total = convertedTotal.Amount;
+                    if (orderCurrency != preferredMarket.DefaultCurrency.CurrencyCode)
+                    {
+                        var convertedTotal = CurrencyFormatter.ConvertCurrency(orderTotal, preferredMarket.DefaultCurrency.CurrencyCode);
+                        retval.ConvertedTotal = convertedTotal.Amount;
+                    }
+                    else
+                    {
+                        retval.ConvertedTotal = orderTotal.Amount;
+                    }
+                    retval.HasConverted = true;
+                    retval.Total = orderTotal.Amount;
+                    retval.TotalMarketCulture = orderCurrency;
+                    retval.ConvertedTotalCulture = preferredMarket.MarketId.Value;
                 }
                 else
                 {
-                    retval.Total = orderTotal.Amount;
+                    _logger.Error(_servicelocator.GetInstance<LocalizationService>().GetString("/commercekpi/averageorder/config_markup/error_undefinedmarket"));
                 }
-                retval.HasConverted = true;
+                
             }
             return retval;
         }
