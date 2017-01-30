@@ -17,6 +17,8 @@ namespace EPiServer.Marketing.KPI.Common
     [ClientScript(ClientSideEvaluationScript = "EPiServer.Marketing.KPI.Markup.MockClientScript.html")]
     public class MockClientKpi : ClientKpi
     {
+        string message { get; set; }
+
         public override void Validate(Dictionary<string, string> kpiData)
         {
           
