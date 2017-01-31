@@ -48,7 +48,7 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Kpi", "Documentation\KPI\Kp
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Testing", "Documentation\Testing\Testing.shfbproj", "{7065CEEB-AB19-4CB7-BF20-1FF4DFFDBAF0}"
 EndProject
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "KpiCommerce", "Documentation\KPI.Commerce\KpiCommerce\KpiCommerce.shfbproj", "{AA5E43C8-077B-4785-89F5-7B359DAD70AB}"
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "KpiCommerce", "Documentation\KPI.Commerce\KpiCommerce.shfbproj", "{AA5E43C8-077B-4785-89F5-7B359DAD70AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

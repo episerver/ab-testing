@@ -97,23 +97,19 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>..\..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\References\EntityFramework\6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\..\packages\EPiServer.CMS.Core.10.1.0\lib\net45\EPiServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Configuration, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\..\packages\EPiServer.CMS.Core.10.1.0\lib\net45\EPiServer.Configuration.dll</HintPath>
+      <HintPath>..\References\EPiServer.CMS.Core\10.1.0\lib\net45\EPiServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Data, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\..\packages\EPiServer.Framework.10.1.0\lib\net45\EPiServer.Data.dll</HintPath>
+      <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Framework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\..\packages\EPiServer.Framework.10.1.0\lib\net45\EPiServer.Framework.dll</HintPath>
+      <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
