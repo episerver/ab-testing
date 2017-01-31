@@ -4,6 +4,7 @@
     var testId = "{0}";
     var itemVersion = "{1}";
     var kpiId = "{2}";
+
     var converted = new Event('Convert');
     converted.uniqueConversion = true;
     window.addEventListener('Convert', function (e) {{
@@ -21,20 +22,9 @@
             if (isUniqueConversion) {{
                     updateTestCookie();
                 }}
+    }}
 
-        }}
-
-    function updateTestCookie() {{
-        var cookieName = "EPI-MAR-" + testId;
-        alert(cookieName);
-        alert(document.cookie);
-
-        var regex = new RegExp(cookieName + "=([^;]+)");
-        var value = regex.exec(document.cookie);
-        alert(value);
-        }}
+    {3}
 
 
-        window.dispatchEvent(converted);
-
-        </script>
+ </script>
