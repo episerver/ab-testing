@@ -15,7 +15,7 @@
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>..\..\artifacts\Documentation\KPI.Commerce\</OutputPath>
-    <HtmlHelpName>KpiCommerce</HtmlHelpName>
+    <HtmlHelpName>EPiServer.Marketing.Kpi.Commerce</HtmlHelpName>
     <Language>en-US</Language>
     <TransformComponentArguments>
       <Argument Key="logoFile" Value="Help.png" xmlns="" />
@@ -46,16 +46,16 @@
     <PlugInConfigurations>
       <PlugInConfig id="Wildcard Assembly References" enabled="True">
         <configuration>
-  <references>
-    <reference path="..\References\" wildcard="*.dll" recurse="true" />
-  </references>
-</configuration>
+          <references>
+            <reference path="..\References\" wildcard="*.dll" recurse="true" />
+          </references>
+        </configuration>
       </PlugInConfig>
     </PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Shell.WebForms" isExposed="True" xmlns="">
-  <Filter entryType="Class" fullName="EPiServer.Shell.WebForms.WebFormsBase" filterName="WebFormsBase" isExposed="False" />
-</Filter>
+        <Filter entryType="Class" fullName="EPiServer.Shell.WebForms.WebFormsBase" filterName="WebFormsBase" isExposed="False" />
+      </Filter>
     </ApiFilter>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform

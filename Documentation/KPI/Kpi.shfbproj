@@ -15,7 +15,7 @@
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>..\..\artifacts\Documentation\KPI\</OutputPath>
-    <HtmlHelpName>Kpi</HtmlHelpName>
+    <HtmlHelpName>EPiServer.Marketing.Kpi</HtmlHelpName>
     <Language>en-US</Language>
     <TransformComponentArguments>
       <Argument Key="logoFile" Value="Help.png" xmlns="" />
