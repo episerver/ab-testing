@@ -15,7 +15,7 @@
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>..\..\artifacts\Documentation\Messaging\</OutputPath>
-    <HtmlHelpName>Messaging</HtmlHelpName>
+    <HtmlHelpName>EPiServer.Marketing.Messaging</HtmlHelpName>
     <Language>en-US</Language>
     <TransformComponentArguments>
       <Argument Key="logoFile" Value="Help.png" xmlns="" />
@@ -43,6 +43,13 @@
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPIServer.Marketing.Messaging\Debug\net45\EPIServer.Marketing.Messaging.dll" xmlns="" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPIServer.Marketing.Messaging\Debug\net45\EPIServer.Marketing.Messaging.xml" xmlns="" />
     </DocumentationSources>
+    <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <IndentHtml>False</IndentHtml>
+    <KeepLogFile>False</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CleanIntermediates>True</CleanIntermediates>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
