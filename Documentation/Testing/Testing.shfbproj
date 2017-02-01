@@ -27,24 +27,25 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Core.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Core.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Dal.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Dal.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Web.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Web.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net45\EPiServer.Marketing.Testing.Web.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net45\EPiServer.Marketing.Testing.Web.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPIServer.Marketing.Messaging\Debug\net45\EPIServer.Marketing.Messaging.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPIServer.Marketing.Messaging\Debug\net45\EPIServer.Marketing.Messaging.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Core\Debug\net45\EPiServer.Marketing.Testing.Core.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Core\Debug\net45\EPiServer.Marketing.Testing.Core.xml" />
     </DocumentationSources>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <VisibleItems>Protected, ProtectedInternalAsProtected</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.DataAccess" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.EntityModel" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.EntityModel.Enums" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.Exceptions" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.Mappings" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.SchemaUpdater" isExposed="False" xmlns="" />
-<Filter entryType="Namespace" fullName="Testing.Migrations" isExposed="False" xmlns="" /></ApiFilter>
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.DataAccess" isExposed="False" xmlns="" />
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.EntityModel" isExposed="False" xmlns="" />
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.EntityModel.Enums" isExposed="False" xmlns="" />
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.Exceptions" isExposed="False" xmlns="" />
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.Mappings" isExposed="False" xmlns="" />
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.SchemaUpdater" isExposed="False" xmlns="" />
+      <Filter entryType="Namespace" fullName="Testing.Migrations" isExposed="False" xmlns="" />
+    </ApiFilter>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
@@ -114,6 +115,14 @@
     </Reference>
     <Reference Include="EPiServer.Framework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
       <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Marketing.KPI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
+      <HintPath>..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPiServer.Marketing.Testing.Dal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
+      <HintPath>..\..\artifacts\bin\EPiServer.Marketing.Testing.Dal\Debug\net45\EPiServer.Marketing.Testing.Dal.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Shell, Version=10.1.1.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
