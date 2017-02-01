@@ -50,6 +50,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Testing", "Documentation\Te
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "KpiCommerce", "Documentation\KPI.Commerce\KpiCommerce.shfbproj", "{AA5E43C8-077B-4785-89F5-7B359DAD70AB}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Messaging", "Documentation\Messaging\Messaging.shfbproj", "{C2476336-E6E0-4A8B-AA13-2CF485964E63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{AA5E43C8-077B-4785-89F5-7B359DAD70AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA5E43C8-077B-4785-89F5-7B359DAD70AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA5E43C8-077B-4785-89F5-7B359DAD70AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2476336-E6E0-4A8B-AA13-2CF485964E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2476336-E6E0-4A8B-AA13-2CF485964E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2476336-E6E0-4A8B-AA13-2CF485964E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2476336-E6E0-4A8B-AA13-2CF485964E63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,5 +137,6 @@ Global
 		{33088987-87DC-4F89-A94F-37218839A757} = {37A150D0-2DED-4E04-B413-A8456D9DB7D6}
 		{7065CEEB-AB19-4CB7-BF20-1FF4DFFDBAF0} = {37A150D0-2DED-4E04-B413-A8456D9DB7D6}
 		{AA5E43C8-077B-4785-89F5-7B359DAD70AB} = {37A150D0-2DED-4E04-B413-A8456D9DB7D6}
+		{C2476336-E6E0-4A8B-AA13-2CF485964E63} = {37A150D0-2DED-4E04-B413-A8456D9DB7D6}
 	EndGlobalSection
 EndGlobal
