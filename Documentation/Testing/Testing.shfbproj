@@ -35,15 +35,18 @@
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <VisibleItems>Protected, ProtectedInternalAsProtected</VisibleItems>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.DataAccess" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.EntityModel" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.EntityModel.Enums" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.Exceptions" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Dal.Mappings" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.SchemaUpdater" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="Testing.Migrations" isExposed="False" xmlns="" />
-    </ApiFilter>
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Exceptions" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Messaging.Messages" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Config" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Context" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Evaluator" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Helpers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Initializers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Jobs" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.MetadataExtender" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Queries" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.SchemaUpdater" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Statistics" isExposed="False" /></ApiFilter>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>

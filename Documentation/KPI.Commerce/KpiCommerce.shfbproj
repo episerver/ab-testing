@@ -53,9 +53,9 @@
       </PlugInConfig>
     </PlugInConfigurations>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="EPiServer.Shell.WebForms" isExposed="True" xmlns="">
-        <Filter entryType="Class" fullName="EPiServer.Shell.WebForms.WebFormsBase" filterName="WebFormsBase" isExposed="False" />
-      </Filter>
+      <Filter entryType="Namespace" fullName="EPiServer.Shell.WebForms" isExposed="True">
+  <Filter entryType="Class" fullName="EPiServer.Shell.WebForms.WebFormsBase" filterName="WebFormsBase" isExposed="False" />
+</Filter>
     </ApiFilter>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform

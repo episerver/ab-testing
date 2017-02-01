@@ -49,14 +49,13 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CleanIntermediates>True</CleanIntermediates>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" xmlns="" />
-      <Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" xmlns="" />
-    </ApiFilter>
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
+<Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" /></ApiFilter>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected</VisibleItems>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <PlugInConfigurations>
