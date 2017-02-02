@@ -5,8 +5,14 @@ using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
+    /// <summary>
+    /// Kpi implentation for using the DynamicDataStore that is part of EPiServer for storing commerce related settings.
+    /// </summary>
     public class CommerceData : IDynamicData
     {
+        /// <summary>
+        /// The EPiServer.Data.Identity of the item.
+        /// </summary>
         public Identity Id { get; set; }
        
         /// <summary>
