@@ -14,6 +14,9 @@ using EPiServer.Data.Dynamic;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
+    /// <summary>
+    /// This manages the CRUD operations for kpi types.  It also handles finding all available kpi types as well as retrieving some database info around upgrades.
+    /// </summary>
     [ServiceConfiguration(ServiceType = typeof(IKpiManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiManager : IKpiManager
     {
@@ -21,6 +24,9 @@ namespace EPiServer.Marketing.KPI.Manager
         private IServiceLocator _serviceLocator;
         public bool DatabaseNeedsConfiguring;
 
+        /// <summary>
+        /// Figures out if the database needs to be configured before setting up the data access layer.
+        /// </summary>
         [ExcludeFromCodeCoverage]
         public KpiManager()
         {
@@ -36,32 +42,58 @@ namespace EPiServer.Marketing.KPI.Manager
             }
         }
 
+        /// <summary>
+        /// Constructor used for unit testing with a mocked service locator.
+        /// </summary>
+        /// <param name="serviceLocator"></param>
         internal KpiManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<IKpiDataAccess>();
         }
 
+        /// <summary>
+        /// Retrieves a kpi from the database based on the id provided.
+        /// </summary>
+        /// <param name="kpiId">Id of a kpi.</param>
+        /// <returns></returns>
         public IKpi Get(Guid kpiId)
         {
             return ConvertToManagerKpi(_dataAccess.Get(kpiId));
         }
 
+        /// <summary>
+        /// Given an A/B test, this retrieves all the list of kpi's associated with said test.
+        /// </summary>
+        /// <returns></returns>
         public List<IKpi> GetKpiList()
         {
             return _dataAccess.GetKpiList().Select(dalTest => ConvertToManagerKpi(dalTest)).ToList();
         }
 
+        /// <summary>
+        /// Saves a kpi to the database.
+        /// </summary>
+        /// <param name="kpi">The kpi to save.</param>
+        /// <returns></returns>
         public Guid Save(IKpi kpi)
         {
             return _dataAccess.Save(ConvertToDalTest(kpi));
         }
 
+        /// <summary>
+        /// Deletes a kpi from the database.
+        /// </summary>
+        /// <param name="kpiId">The kpi to delete.</param>
         public void Delete(Guid kpiId)
         {
             _dataAccess.Delete(kpiId);
         }
 
+        /// <summary>
+        /// Retrieves all kpi types from assemblies in the current domain.  These types are displayed to the user when creating a test as a choice of what the test will measure
+        /// </summary>
+        /// <returns>All kpi types that implement IKpi in the known assemblies.</returns>
         public IEnumerable<Type> GetKpiTypes()
         {
             var type = typeof(IKpi);
@@ -73,6 +105,14 @@ namespace EPiServer.Marketing.KPI.Manager
             return (types);
         }
 
+        /// <summary>
+        /// If the database needs to be configured, then we return so that it can be set up.  If it has already been configured, we get the version of the current kpi schema and upgrade it if it is an older version.
+        /// </summary>
+        /// <param name="dbConnection">Connection properties for the desired database to connect to.</param>
+        /// <param name="schema">Schema that should be applied to the database (upgrade or downgrade) if the database is outdated.</param>
+        /// <param name="contextKey">The string used to identify the schema we are requesting the version of.</param>
+        /// <param name="setupDataAccess">If this is run before the database is setup, we need to initialize the database access layer.  By default, this is false.</param>
+        /// <returns>Database version of the kpi schema.</returns>
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false)
         {
             if (DatabaseNeedsConfiguring)
@@ -89,12 +129,20 @@ namespace EPiServer.Marketing.KPI.Manager
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
+        /// <summary>
+        /// Save commerce settings to the database.
+        /// </summary>
+        /// <param name="commerceSettings">Commerce settings to be saved.</param>
         public void SaveCommerceSettings(CommerceData commerceSettings)
         {            
             var store = GetDataStore(typeof(CommerceData));
             store.Save(commerceSettings);
         }
 
+        /// <summary>
+        /// Retrieves commerce setttings to be used with kpi's.
+        /// </summary>
+        /// <returns>Settings that have to do with commerce.  If no settings are found, then a default set is returned.</returns>
         public CommerceData GetCommerceSettings()
         {
             var store = GetDataStore(typeof(CommerceData));
