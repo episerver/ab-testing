@@ -6,7 +6,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
     /// <summary>
-    /// Interface for KPI objects.
+    /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
     /// </summary>
     public interface IKpi
     {
@@ -36,12 +36,16 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         string Description { get; }
 
         /// <summary>
-        /// Markup used for configuration UI
+        /// Call by the UI to get the markup for the configuration UI for the control. There are two ways you can use this, 
+        /// 1) decorate your class with the UIMarkupAttribute and specify the config markup resource found in your assembly or
+        /// 2) overide and return your markup string directly
         /// </summary>
         string UiMarkup { get; }
 
         /// <summary>
-        /// Markup to use for read only ui
+        /// Call by the UI to get the markup for the configuration UI for the control. There are two ways you can use this, 
+        /// 1) decorate your class with the UIMarkupAttribute and specify the config markup resource found in your assembly or
+        /// 2) overide and return your markup string directly
         /// </summary>
         string UiReadOnlyMarkup { get; }
 
@@ -55,7 +59,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// </summary>
         DateTime ModifiedDate { get; set; }
 
-
+        /// <summary>
+        /// Contains details for financial conversions around currencies.
+        /// </summary>
         CommerceData PreferredCommerceFormat { get; set; }
 
         /// <summary>
