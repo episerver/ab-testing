@@ -281,17 +281,17 @@
                 var errorTextNode = dom.byId("datePickerErrorText");
                 var errorIconNode = dom.byId("datePickerErrorIcon");
                 var scheduleText = dom.byId("ScheduleText");
-                var dateValue = dom.byId("StartDateTimeSelector").value;
+                var start = this.startDatePicker.get("value");
                 var now = new Date();
 
-                if (dateValue !== "") {
-                    if (isNaN(new Date(dateValue))) {
+                if (start !== "") {
+                    if (isNaN(new Date(start))) {
                         this._setError(resources.addtestview.error_invalid_date_time_value,
                             errorTextNode,
                             errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
-                    } else if (new Date(dateValue) < now) {
+                    } else if (new Date(start).toLocaleString < now.toLocaleString) {
                         this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
@@ -532,10 +532,10 @@
 
                 if (this._isValidStartDate(event)) {
                     if (event !== "") {
-                        var localDate = new Date(event).toLocaleDateString();
-                        var localTime = new Date(event).toLocaleTimeString();
+                        var dojoLocale = dojo.locale;
+                        var localDate = new Date(event).toLocaleString(dojoLocale);
                         startButton.set("label", resources.addtestview.schedule_test);
-                        scheduleText.innerText = resources.addtestview.schedule_tobegin_on + localDate + "," + localTime;
+                        scheduleText.innerText = resources.addtestview.schedule_tobegin_on + localDate;
                         this.model.startDate = new Date(event).toUTCString();
                         this.model.start = false;
                     } else {
