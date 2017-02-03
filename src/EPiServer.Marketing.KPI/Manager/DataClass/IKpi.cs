@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         void Validate(Dictionary<string,string> kpiData);
 
         /// <summary>
-        /// Determines if a conversion has happened.
+        /// Determines if a conversion has happened.  Each kpi will decide this differently based on the sender, event args, and the purpose of the kpi.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e">Event Argument</param>

@@ -10,6 +10,9 @@ using System.Linq;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
+    /// <summary>
+    /// Used to determine when a customer adds a specific item to their shopping cart.  This compares the number of customers that only view an item to those that add it to their cart.
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
