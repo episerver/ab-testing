@@ -2,6 +2,9 @@
 
 namespace EPiServer.Marketing.Testing
 {
+    /// <summary>
+    /// Defines all the events that the testing service can produce.
+    /// </summary>
     public interface IMarketingTestingEvents
     {
         /// <summary>

@@ -6,6 +6,9 @@ using System.ComponentModel;
 
 namespace EPiServer.Marketing.Testing
 {
+    /// <summary>
+    /// Contains all the events related to testing that can be listened for.
+    /// </summary>
     [ServiceConfiguration(typeof(IMarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]
     [ServiceConfiguration(typeof(DefaultMarketingTestingEvents), Lifecycle = ServiceInstanceScope.Singleton, FactoryMember = "Instance")]
     public class DefaultMarketingTestingEvents : IMarketingTestingEvents, IDisposable
@@ -80,67 +83,77 @@ namespace EPiServer.Marketing.Testing
         }
 
         #region IMarketingTestingEvents
-
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestSaved
         {
             add { Events.AddHandler(GetEventKey(TestSavedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestSavedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestDeleted
         {
             add { Events.AddHandler(GetEventKey(TestDeletedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestDeletedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestStarted
         {
             add { Events.AddHandler(GetEventKey(TestStartedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestStartedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestStopped
         {
             add { Events.AddHandler(GetEventKey(TestStoppedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestStoppedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestArchived
         {
             add { Events.AddHandler(GetEventKey(TestArchivedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestArchivedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestAddedToCache
         {
             add { Events.AddHandler(GetEventKey(TestAddedToCacheEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestAddedToCacheEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> TestRemovedFromCache
         {
             add { Events.AddHandler(GetEventKey(TestRemovedFromCacheEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(TestRemovedFromCacheEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> ContentSwitched
         {
             add { Events.AddHandler(GetEventKey(ContentSwitchedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(ContentSwitchedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<TestEventArgs> UserIncludedInTest
         {
             add { Events.AddHandler(GetEventKey(UserIncludedInTestEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(UserIncludedInTestEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<KpiEventArgs> KpiConverted
         {
             add { Events.AddHandler(GetEventKey(KpiConvertedEvent), value); }
             remove { Events.RemoveHandler(GetEventKey(KpiConvertedEvent), value); }
         }
 
+        /// <inheritdoc />
         public event EventHandler<KpiEventArgs> AllKpisConverted
         {
             add { Events.AddHandler(GetEventKey(AllKpisConvertedEvent), value); }
@@ -149,11 +162,13 @@ namespace EPiServer.Marketing.Testing
         #endregion
 
         #region Event Raisers
+        /// <inheritdoc />
         public virtual void RaiseMarketingTestingEvent(string key, TestEventArgs eventArgs)
         {
             Task.Factory.StartNew(() => (Events[GetEventKey(key)] as EventHandler<TestEventArgs>)?.Invoke(this, eventArgs));
         }
 
+        /// <inheritdoc />
         public virtual void RaiseMarketingTestingEvent(string key, KpiEventArgs eventArgs)
         {
             Task.Factory.StartNew(() => (Events[GetEventKey(key)] as EventHandler<KpiEventArgs>)?.Invoke(this, eventArgs));

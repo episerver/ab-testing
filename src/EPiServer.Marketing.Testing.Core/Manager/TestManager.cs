@@ -100,11 +100,7 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        /// <summary>
-        /// Gets a test based on the supplied id from the database.
-        /// </summary>
-        /// <param name="testObjectId"></param>
-        /// <returns>IMarketing Test</returns>
+        /// <inheritdoc />
         public IMarketingTest Get(Guid testObjectId)
         {
             var dbTest = _dataAccess.Get(testObjectId);
@@ -116,18 +112,14 @@ namespace EPiServer.Marketing.Testing
             return TestManagerHelper.ConvertToManagerTest(_kpiManager, dbTest);
         }
 
-        /// <summary>
-        /// Retrieves all active tests that have the supplied OriginalItemId from the cache.  The associated data for each 
-        /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
-        /// </summary>
-        /// <param name="originalItemId"></param>
-        /// <returns>List of IMarketingTest</returns>
+        /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             var cachedTests = ActiveCachedTests;
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
+        /// <inheritdoc />
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
             var testList = new List<IMarketingTest>();
@@ -139,12 +131,7 @@ namespace EPiServer.Marketing.Testing
             return testList;
         }
 
-        /// <summary>
-        /// Don't want to use refernce the cache here.  The criteria could be anything, not just active tests which
-        /// is what the cache is intended to have in it.
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
             var testList = new List<IMarketingTest>();
@@ -156,6 +143,7 @@ namespace EPiServer.Marketing.Testing
             return testList;
         }
 
+        /// <inheritdoc />
         public Guid Save(IMarketingTest multivariateTest)
         {
             // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
@@ -181,6 +169,7 @@ namespace EPiServer.Marketing.Testing
             return testId;
         }
 
+        /// <inheritdoc />
         public void Delete(Guid testObjectId)
         {
             RemoveCachedVariant(Get(testObjectId).OriginalItemId);
@@ -200,6 +189,7 @@ namespace EPiServer.Marketing.Testing
 
         }
 
+        /// <inheritdoc />
         public void Start(Guid testObjectId)
         {
             var dalTest = _dataAccess.Start(testObjectId);
@@ -213,6 +203,7 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
+        /// <inheritdoc />
         public void Stop(Guid testObjectId)
         {
             _dataAccess.Stop(testObjectId);
@@ -231,6 +222,7 @@ namespace EPiServer.Marketing.Testing
 
         }
 
+        /// <inheritdoc />
         public void Archive(Guid testObjectId, Guid winningVariantId)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
@@ -245,6 +237,7 @@ namespace EPiServer.Marketing.Testing
 
         }
 
+        /// <inheritdoc />
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool aSynch = true)
         {
             if (aSynch)
@@ -265,6 +258,7 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
+        /// <inheritdoc />
         public Variant ReturnLandingPage(Guid testId)
         {
             var currentTest = _dataAccess.Get(testId);
@@ -292,6 +286,7 @@ namespace EPiServer.Marketing.Testing
             return activePage;
         }
 
+        /// <inheritdoc />
         public IContent GetVariantContent(Guid contentGuid)
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid);
@@ -300,6 +295,8 @@ namespace EPiServer.Marketing.Testing
         }
 
         private Object thisLock = new Object();
+
+        /// <inheritdoc />
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true)
         {
             if (asynch)
@@ -319,17 +316,13 @@ namespace EPiServer.Marketing.Testing
             }
         }
 
-        /// <summary>
-        /// This should only evaluate the kpis that are passed in.  It should do anything based on the results the kpis return.
-        /// </summary>
-        /// <param name="kpis"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
         {
             return kpis.Select(kpi => kpi.Evaluate(sender, e)).ToList();
         }
 
+        /// <inheritdoc />
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false)
         {
             if (DatabaseNeedsConfiguring)
@@ -347,6 +340,7 @@ namespace EPiServer.Marketing.Testing
 
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
+
 
         internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {

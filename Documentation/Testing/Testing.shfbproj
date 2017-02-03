@@ -35,7 +35,13 @@
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <VisibleItems>Protected, ProtectedInternalAsProtected</VisibleItems>
     <ApiFilter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Exceptions" isExposed="False" />
+      <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing" isExposed="True">
+  <Filter entryType="Class" fullName="EPiServer.Marketing.Testing.TestManager" filterName="TestManager" isExposed="True">
+    <Filter entryType="Property" fullName="EPiServer.Marketing.Testing.TestManager.ActiveCachedTests" filterName="ActiveCachedTests" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.Testing.TestManager.DatabaseNeedsConfiguring" filterName="DatabaseNeedsConfiguring" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Exceptions" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Messaging.Messages" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Config" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Context" isExposed="False" />
