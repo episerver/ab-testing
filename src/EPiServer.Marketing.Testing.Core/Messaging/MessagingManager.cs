@@ -81,28 +81,21 @@ namespace EPiServer.Marketing.Testing.Messaging
             }
         }
 
-        /// <summary>
-        /// Emits the asynchronous message to update the view result for the specified VariantId
-        /// </summary>
-        /// <param name="TestId">the test id to work with</param>
-        /// <param name="itemVersion">the Guid of the cms item that was viewed</param>
-        public void EmitUpdateViews(Guid TestId, int itemVersion)
+        /// <inheritdoc />
+        public void EmitUpdateViews(Guid testId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, ItemVersion = itemVersion});
+            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = testId, ItemVersion = itemVersion});
         }
 
-        /// <summary>
-        /// Emits the asynchronous message to update a conversion result for the specified VariantId
-        /// </summary>
-        /// <param name="TestId"></param>
-        /// <param name="itemVersion">the Guid of the cms item that caused a converion</param>
-        public void EmitUpdateConversion(Guid TestId, int itemVersion)
+        /// <inheritdoc />
+        public void EmitUpdateConversion(Guid testId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, ItemVersion = itemVersion } );
+            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = testId, ItemVersion = itemVersion } );
         }
 
+        /// <inheritdoc />
         public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));

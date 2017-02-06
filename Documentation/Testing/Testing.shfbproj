@@ -42,7 +42,12 @@
   </Filter>
 </Filter>
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Exceptions" isExposed="False" />
-<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Core.Messaging.Messages" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Messaging" isExposed="True">
+  <Filter entryType="Interface" fullName="EPiServer.Marketing.Testing.Messaging.ITestingMessageHandler" filterName="ITestingMessageHandler" isExposed="False" />
+  <Filter entryType="Class" fullName="EPiServer.Marketing.Testing.Messaging.MessagingManager" filterName="MessagingManager" isExposed="True">
+    <Filter entryType="Property" fullName="EPiServer.Marketing.Testing.Messaging.MessagingManager.Count" filterName="Count" isExposed="False" />
+  </Filter>
+</Filter>
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Config" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Context" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Evaluator" isExposed="False" />
