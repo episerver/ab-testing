@@ -4,17 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using EPiServer.Core;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
 using EPiServer.Globalization;
 using EPiServer.Security;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
-using System.Threading;
-using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {

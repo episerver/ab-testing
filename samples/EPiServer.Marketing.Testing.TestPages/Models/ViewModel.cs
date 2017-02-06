@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using EPiServer.Core;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.PlugIn;
+using EPiServer.Marketing.Testing.Core.DataClass;
 
 namespace EPiServer.Marketing.Testing.TestPages.Models
 {

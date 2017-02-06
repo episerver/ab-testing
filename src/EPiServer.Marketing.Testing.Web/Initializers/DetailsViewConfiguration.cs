@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell;
 

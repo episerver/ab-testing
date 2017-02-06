@@ -5,8 +5,8 @@ using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
 
@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
 
             if (viewModel == null)
             {
-                discoveredTests = mtm.GetTestList(new Data.TestCriteria());
+                discoveredTests = mtm.GetTestList(new TestCriteria());
             }
             else
             {
@@ -142,9 +142,9 @@ namespace EPiServer.Marketing.Testing.TestPages.ApiTesting
                 Variant variant = _mtm.ReturnLandingPage(testId);
 
                 var version = test.Variants.First(v => v.Id == variant.Id);
-                _mtm.IncrementCount(testId, version.ItemVersion, Data.Enums.CountType.View, false);
+                _mtm.IncrementCount(testId, version.ItemVersion, CountType.View, false);
                 if (x % 5 == 0)
-                    _mtm.IncrementCount(testId, version.ItemVersion, Data.Enums.CountType.Conversion, false);
+                    _mtm.IncrementCount(testId, version.ItemVersion, CountType.Conversion, false);
             }
 
             _mtm.Stop(testId);

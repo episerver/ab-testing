@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Core.DataClass;
 
 namespace EPiServer.Marketing.Testing.Web.Statistics
 {

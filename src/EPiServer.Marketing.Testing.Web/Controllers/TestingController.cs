@@ -1,6 +1,5 @@
 ﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;

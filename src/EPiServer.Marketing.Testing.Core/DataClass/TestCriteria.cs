@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Testing.Data
+namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     public class TestCriteria
     {

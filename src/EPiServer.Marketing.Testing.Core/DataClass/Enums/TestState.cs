@@ -1,4 +1,4 @@
-﻿namespace EPiServer.Marketing.Testing.Data.Enums
+﻿namespace EPiServer.Marketing.Testing.Core.DataClass.Enums
 {
     public enum TestState
     {

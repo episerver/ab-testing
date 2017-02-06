@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Data;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing

@@ -1,9 +1,7 @@
-﻿using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
-using EPiServer.Marketing.Testing.Dal.DataAccess;
-using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {

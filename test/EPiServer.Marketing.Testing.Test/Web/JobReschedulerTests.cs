@@ -1,13 +1,11 @@
 ﻿using EPiServer.DataAbstraction;
-using EPiServer.Framework.Initialization;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Jobs;
 using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -41,7 +39,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 new ABTest() { Id = Guid.NewGuid(),
                     StartDate = DateTime.Now.AddHours(-1),
-                    State = Data.Enums.TestState.Inactive,
+                    State = TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() {Views = 100, Conversions = 50}, new Variant() {Views = 70, Conversions = 60} }

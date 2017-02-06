@@ -1,5 +1,4 @@
 ﻿using System;
-using EPiServer.Marketing.Testing.Data;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {

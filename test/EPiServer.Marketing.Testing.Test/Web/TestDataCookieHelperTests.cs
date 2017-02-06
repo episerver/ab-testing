@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using Moq;
 using Xunit;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {

@@ -6,9 +6,8 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing
 {
@@ -444,7 +443,7 @@ namespace EPiServer.Marketing.Testing
             return aValue;
         }
 
-        internal static DalFilterOperator AdaptToDalOperator(Data.FilterOperator theOperator)
+        internal static DalFilterOperator AdaptToDalOperator(FilterOperator theOperator)
         {
             var aOperator = DalFilterOperator.And;
 

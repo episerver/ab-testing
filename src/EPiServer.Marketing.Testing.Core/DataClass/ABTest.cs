@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
-namespace EPiServer.Marketing.Testing.Data
+namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     public class ABTest : CoreEntityBase, IMarketingTest
     {

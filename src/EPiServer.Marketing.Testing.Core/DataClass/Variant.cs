@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Core.DataClass;
 
-namespace EPiServer.Marketing.Testing.Data
+namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     public class Variant : CoreEntityBase
     {

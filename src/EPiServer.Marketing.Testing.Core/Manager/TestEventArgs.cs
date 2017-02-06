@@ -1,7 +1,7 @@
-﻿using EPiServer.Marketing.Testing.Data;
-using System;
+﻿using System;
 using System.Security.Principal;
 using EPiServer.Core;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing
