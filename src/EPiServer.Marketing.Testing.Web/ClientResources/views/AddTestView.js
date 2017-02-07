@@ -456,7 +456,7 @@
 
             },
 
-            createTest(kpiId) {
+            createTest: function(kpiId) {
                 this._clearConversionErrors();
                 this.model.kpiId = kpiId;
                 if (this._isValidFormData()) {
@@ -468,7 +468,7 @@
                 }
             },
 
-            setKpiError(ret) {
+            setKpiError: function(ret) {
                 this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
                 this.startButtonClickCounter = 0;
             },
