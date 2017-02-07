@@ -57,8 +57,10 @@ namespace EPiServer.Marketing.KPI.Common
                     if (_sessionCache.Contains(sessionid))
                     {
                         var requestedPage = GetCurrentPage();
+                        string originalPath = (string)_sessionCache.Get(sessionid);
                         if ( requestedPage != null &&                           // we are requesting a page (not something else) And
-                            requestedPage.ContentGuid != TestContentGuid  &&    // we are not requesting the page under test (this means blocks will still convert if same link clicked)
+                            httpContext.Request.Path != originalPath &&         // the page path is not the same as the page path that added the session And
+                            requestedPage.ContentGuid != TestContentGuid  &&    // we are not requesting the content under test And
                             !IsSupportingContent() )                            // request is not for supporting content like css, jpeg, global or site assets
                         {
                             _sessionCache.Remove(sessionid);
@@ -163,7 +165,7 @@ namespace EPiServer.Marketing.KPI.Common
                     {
                         CacheItemPolicy policy = new CacheItemPolicy();
                         policy.SlidingExpiration = new TimeSpan(0, Timeout, 0);
-                        _sessionCache.Add(sessionid, false, policy);
+                        _sessionCache.Add(sessionid, httpContext.Request.Path, policy);
 
                         httpContext.Items[Id.ToString()] = true;
                     }
