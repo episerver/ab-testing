@@ -3,7 +3,7 @@
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     /// <summary>
-    /// 
+    /// This interface defines the minimal required fields for a kpi result to contain in order to be tied to a kpi that is part of a test.
     /// </summary>
     public interface IKeyResult
     {
