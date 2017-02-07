@@ -96,7 +96,6 @@
             this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
             me._renderStatusIndicatorStyles();
-
             textHelper.renderTitle(this.title);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
@@ -111,7 +110,6 @@
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderStatus();
             this._renderTestDuration();
-
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
