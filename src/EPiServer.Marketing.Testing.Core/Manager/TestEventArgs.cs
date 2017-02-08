@@ -24,8 +24,19 @@ namespace EPiServer.Marketing.Testing
             this.CurrentContent = currentContent;
         }
 
+        /// <summary>
+        /// Test the event pertains to.
+        /// </summary>
         public IMarketingTest Test { get; private set; }
+
+        /// <summary>
+        /// Content that caused the event to fire.
+        /// </summary>
         public IContent CurrentContent { get; set; }
+
+        /// <summary>
+        /// User that caused the event to fire.
+        /// </summary>
         public IIdentity CurrentUser { get; set; }
     }
 }

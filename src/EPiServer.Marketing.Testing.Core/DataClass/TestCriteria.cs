@@ -2,6 +2,9 @@
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Used to filter testing data from the database.  Multiple filters can be combined to create a criteria.
+    /// </summary>
     public class TestCriteria
     {
         public TestCriteria()
@@ -12,10 +15,10 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         private List<ABTestFilter> _filters;
 
         /// <summary>
-        /// Adds the given filter to the collection of criteria filters if the property on the filter doesn't exist
-        /// If the filter exists the filter will not be added
+        /// Adds the given filter to the collection of criteria filters if the property on the filter doesn't exist.
+        /// If the filter exists the filter will not be added.
         /// </summary>
-        /// <param name="filter">the filter to add</param>
+        /// <param name="filter">The filter to add.</param>
         public void AddFilter(ABTestFilter filter)
         {
             if(!_filters.Exists(f => f.Property == filter.Property))
@@ -30,6 +33,9 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ABTestFilter
     {
         public ABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
