@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers

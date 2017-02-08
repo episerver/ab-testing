@@ -7,6 +7,7 @@ using Xunit;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {

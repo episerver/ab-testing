@@ -4,7 +4,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Security;
 
-namespace EPiServer.Marketing.Testing
+namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
     /// Used with testmanager Kpi related events

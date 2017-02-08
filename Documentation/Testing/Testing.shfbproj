@@ -36,6 +36,14 @@
     <VisibleItems>Protected, ProtectedInternalAsProtected</VisibleItems>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing" isExposed="True">
+  <Filter entryType="Enumeration" fullName="EPiServer.Marketing.Testing.CacheOperator" filterName="CacheOperator" isExposed="False" />
+  <Filter entryType="Class" fullName="EPiServer.Marketing.Testing.DefaultMarketingTestingEvents" filterName="DefaultMarketingTestingEvents" isExposed="True">
+    <Filter entryType="Method" fullName="EPiServer.Marketing.Testing.DefaultMarketingTestingEvents.Dispose" filterName="Dispose" isExposed="False" />
+    <Filter entryType="Property" fullName="EPiServer.Marketing.Testing.DefaultMarketingTestingEvents.Instance" filterName="Instance" isExposed="False" />
+  </Filter>
+  <Filter entryType="Interface" fullName="EPiServer.Marketing.Testing.ITestManager" filterName="ITestManager" isExposed="True">
+    <Filter entryType="Property" fullName="EPiServer.Marketing.Testing.ITestManager.ActiveCachedTests" filterName="ActiveCachedTests" isExposed="False" />
+  </Filter>
   <Filter entryType="Class" fullName="EPiServer.Marketing.Testing.TestManager" filterName="TestManager" isExposed="True">
     <Filter entryType="Property" fullName="EPiServer.Marketing.Testing.TestManager.ActiveCachedTests" filterName="ActiveCachedTests" isExposed="False" />
     <Filter entryType="Field" fullName="EPiServer.Marketing.Testing.TestManager.DatabaseNeedsConfiguring" filterName="DatabaseNeedsConfiguring" isExposed="False" />
@@ -48,8 +56,10 @@
     <Filter entryType="Property" fullName="EPiServer.Marketing.Testing.Messaging.MessagingManager.Count" filterName="Count" isExposed="False" />
   </Filter>
 </Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Config" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Context" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Controllers" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Evaluator" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Helpers" isExposed="False" />
 <Filter entryType="Namespace" fullName="EPiServer.Marketing.Testing.Web.Initializers" isExposed="False" />

@@ -14,6 +14,7 @@ using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web

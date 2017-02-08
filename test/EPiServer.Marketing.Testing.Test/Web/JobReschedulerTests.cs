@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web

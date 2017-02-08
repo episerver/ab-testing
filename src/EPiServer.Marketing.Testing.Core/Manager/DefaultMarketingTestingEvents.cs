@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using EPiServer.ServiceLocation;
-using System.ComponentModel;
 
-namespace EPiServer.Marketing.Testing
+namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
     /// Contains all the events related to testing that can be listened for.
@@ -21,16 +21,59 @@ namespace EPiServer.Marketing.Testing
 
         #region Event Keys
 
+        /// <summary>
+        /// TestSavedEvent
+        /// </summary>
         public const string TestSavedEvent = "TestSavedEvent";
+
+        /// <summary>
+        /// TestDeletedEvent
+        /// </summary>
         public const string TestDeletedEvent = "TestDeletedEvent";
+
+        /// <summary>
+        /// TestStartedEvent
+        /// </summary>
         public const string TestStartedEvent = "TestStartedEvent";
+
+        /// <summary>
+        /// TestStoppedEvent
+        /// </summary>
         public const string TestStoppedEvent = "TestStoppedEvent";
+
+        /// <summary>
+        /// TestArchivedEvent
+        /// </summary>
         public const string TestArchivedEvent = "TestArchivedEvent";
+
+        /// <summary>
+        /// TestAddedToCacheEvent
+        /// </summary>
         public const string TestAddedToCacheEvent = "TestAddedToCacheEvent";
+
+        /// <summary>
+        /// TestRemovedFromCacheEvent
+        /// </summary>
         public const string TestRemovedFromCacheEvent = "TestRemovedFromCacheEvent";
+
+        /// <summary>
+        /// ContentSwitchedEvent
+        /// </summary>
         public const string ContentSwitchedEvent = "ContentSwitchedEvent";
+
+        /// <summary>
+        /// UserIncludedInTestEvent
+        /// </summary>
         public const string UserIncludedInTestEvent = "UserIncludedInTestEvent";
+
+        /// <summary>
+        /// KpiConvertedEvent
+        /// </summary>
         public const string KpiConvertedEvent = "KpiConvertedEvent";
+
+        /// <summary>
+        /// AllKpisConvertedEvent
+        /// </summary>
         public const string AllKpisConvertedEvent = "AllKpisConvertedEvent";
 
         #endregion

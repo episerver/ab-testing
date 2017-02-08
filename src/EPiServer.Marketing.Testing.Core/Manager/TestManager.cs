@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
-using EPiServer.Marketing.KPI.Manager;
-using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Core;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Exceptions;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
+using EPiServer.Marketing.Testing.Dal.Exceptions;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Testing.Core.Exceptions;
-using EPiServer.Marketing.Testing.Dal.Exceptions;
 
-namespace EPiServer.Marketing.Testing
+namespace EPiServer.Marketing.Testing.Core.Manager
 {
     public enum CacheOperator
     {

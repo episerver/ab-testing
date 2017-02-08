@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Marketing.Testing
+namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
     /// Defines all the events that the testing service can produce.

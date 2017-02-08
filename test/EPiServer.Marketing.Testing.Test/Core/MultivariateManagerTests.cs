@@ -20,6 +20,7 @@ using System.Runtime.Caching;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Statistics;
 
 namespace EPiServer.Marketing.Testing.Test.Core
