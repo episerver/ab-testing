@@ -7,8 +7,10 @@ namespace EPiServer.Marketing.KPI.Results
     /// </summary>
     public class KpiConversionResult : IKpiResult
     {
+        /// <inheritdoc />
         public Guid KpiId { get; set; }
 
+        /// <inheritdoc />
         public bool HasConverted { get; set; }
 
     }
