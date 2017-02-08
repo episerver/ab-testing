@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     }
 
     /// <summary>
-    /// 
+    /// Filters are added to a Test Criteria to build up a query to limit what data is returned.
     /// </summary>
     public class ABTestFilter
     {
@@ -48,21 +48,24 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public ABTestFilter() { }
         
         /// <summary>
-        /// The ABTestProperty property that will be filtered on
+        /// The ab test property that the filter will be based on.
         /// </summary>
         public ABTestProperty Property { get; set; }
 
         /// <summary>
-        /// The operation that will be performed to filter the results set
+        /// The operation that will be performed to filter the result set.
         /// </summary>
         public FilterOperator Operator { get; set; }
 
         /// <summary>
-        /// The limiter value that will be used to filter the result set
+        /// The limiter value that will be used to filter the result set.
         /// </summary>
         public object Value { get; set; }
     }
 
+    /// <summary>
+    /// Available test properties that can be used as filters.
+    /// </summary>
     public enum ABTestProperty
     {
         State = 0,
@@ -70,6 +73,9 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         VariantId = 2
     }
 
+    /// <summary>
+    /// Available operators used for combining multiple filters.
+    /// </summary>
     public enum FilterOperator
     {
         And = 0,
