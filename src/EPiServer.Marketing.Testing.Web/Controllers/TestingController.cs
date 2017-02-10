@@ -130,14 +130,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
+        // Used for updating client side KPIs.  Leverages UpdateConversion and modifies the cookie accordingly.
+        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
             try { 
             UpdateConversion(data);
-            var _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
-            IMarketingTest activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
-            TestDataCookieHelper tdh = new TestDataCookieHelper();
+            var _testManager = _serviceLocator.GetInstance<ITestManager>();
+            var activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
+            var tdh = _serviceLocator.GetInstance<ITestDataCookieHelper>();
             TestDataCookie testCookie = tdh.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
             testCookie.Converted = true;
             tdh.UpdateTestDataCookie(testCookie);
@@ -147,9 +149,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception(ex.Message));
             }
-
         }
-
 
         // Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
