@@ -198,7 +198,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
         /// </summary>
         /// <returns></returns>
-        internal bool IsInSystemFolder()
+        public bool IsInSystemFolder()
         {
             var inSystemFolder = true;
 
