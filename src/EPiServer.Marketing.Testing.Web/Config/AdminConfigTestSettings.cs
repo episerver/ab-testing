@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.Dynamic;
@@ -71,6 +70,5 @@ namespace EPiServer.Marketing.Testing.Web.Config
         {
             _currentSettings = null;
         }
-
     }
 }

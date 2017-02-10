@@ -61,9 +61,10 @@
         },
 
         startup: function () {
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
             if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+                textHelper.displayPieChart("challengerArchivePieChart", textHelper.draftPercent);
             }
         },
 
@@ -76,14 +77,16 @@
             textHelper.initializeHelper(this.context, resources.archiveview);
 
             me._renderData();
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
             if (this.context.data.kpiResultType === "KpiConversionResult") {
                 textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+                textHelper.displayPieChart("challengerArchivePieChart", textHelper.draftPercent);
             }
         },
 
         _onCloseClick: function () {
             var me = this;
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
             me.contextParameters = { uri: "epi.cms.contentdata:///" + me.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -112,22 +115,42 @@
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
                 me._renderStatusIndicatorStyles();
-                me._renderKpiMarkup("archive_conversionMarkup");
+                me._renderKpiMarkup("archive_conversionMarkup", "archive_kpidescription");
             });
 
         },
 
-        _renderKpiMarkup: function (conversionMarkupId) {
+        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
             new ContentPane({
                 content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
             }).placeAt(kpiuiElement);
+
+            var kpidescriptionElement = dom.byId(kpidescriptionId);
+            this._clearKpiDescription(kpidescriptionElement);
+            new ContentPane({
+                content: this.context.data.test.kpiInstances[0].description
+            }).placeAt(kpidescriptionElement);
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
             if (conversionMarkupElement) {
                 var contentPane = dojo.query('#archive_conversionMarkup > *');
+                if (contentPane[0]) {
+                    dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    var dijitContentPane = dijit.byId(contentPane[0].id);
+                    dijitContentPane.destroy();
+                    conversionMarkupElement.innerHTML = "";
+                }
+            }
+        },
+
+        _clearKpiDescription: function (conversionMarkupElement) {
+            if (conversionMarkupElement) {
+                var contentPane = dojo.query('#archive_kpidescription > *');
                 if (contentPane[0]) {
                     dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
                         w.destroyRecursive();

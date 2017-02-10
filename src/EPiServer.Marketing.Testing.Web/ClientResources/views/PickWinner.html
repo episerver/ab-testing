@@ -56,7 +56,7 @@
                                     <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
                                 </td>
                                 <td style="text-align:center;">
-                                    <div id="controlPickWinnerPieChart"></div>
+                                    <div id="controlPickWinnerPieChart" class="epi-ab-converstion-pie-chart"></div>
                                 </td>
                                 <td style="text-align:center;">
                                     <p>
@@ -93,7 +93,7 @@
                                     <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
                                 </td>
                                 <td style="text-align: center;">
-                                    <div id="challengerPickWinnerPieChart"></div>
+                                    <div id="challengerPickWinnerPieChart" class="epi-ab-converstion-pie-chart"></div>
                                 </td>
                                 <td style="text-align: center;">
                                     <p>
@@ -120,7 +120,9 @@
                         <div id="pw_conversionMarkup">
                             <!-- KPI Generated Markup -->
                         </div>
-                    </div>
+                        <div id="pw_kpidescription">
+                            <!-- KPI Description -->
+                        </div>
                     <hr class="epi-abtest-hr">
                     <div class="formsRow">
                         <h4>${resources.detailsview.percent_participation_header}</h4>
