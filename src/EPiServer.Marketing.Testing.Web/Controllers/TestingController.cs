@@ -13,6 +13,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -129,6 +130,27 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
+        [HttpPost]
+        public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
+        {
+            try { 
+            UpdateConversion(data);
+            var _testManager = ServiceLocator.Current.GetInstance<ITestManager>();
+            IMarketingTest activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
+            TestDataCookieHelper tdh = new TestDataCookieHelper();
+            TestDataCookie testCookie = tdh.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+            testCookie.Converted = true;
+            tdh.UpdateTestDataCookie(testCookie);
+            return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception(ex.Message));
+            }
+
+        }
+
+
         // Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
         [HttpPost]
         public HttpResponseMessage SaveKpiResult(FormDataCollection data)
@@ -165,7 +187,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK,"KpiResult Saved");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));

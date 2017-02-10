@@ -322,9 +322,11 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="cookieData"></param>
         private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
         {
-            foreach (var kpi in kpiInstances)
+            foreach (var kpi in kpiInstances.Where(x=>x is IClientKpi))
             {
-                if (kpi is IClientKpi && !HttpContext.Current.Items.Contains(kpi.Id.ToString()) && !_contextHelper.IsInSystemFolder())
+                if (!HttpContext.Current.Items.Contains(kpi.Id.ToString()) 
+                    && !_contextHelper.IsInSystemFolder()
+                    && (!cookieData.Converted || cookieData.AlwaysEval))
                 {
                     var clientKpi = kpi as ClientKpi;
                     var test = _testManager.Get(cookieData.TestId);
