@@ -1,31 +1,28 @@
 ﻿﻿
 <script>
-    debugger;
     var testId = "{0}";
     var itemVersion = "{1}";
     var kpiId = "{2}";
 
     var converted = new Event('Convert');
-    converted.uniqueConversion = true;
     window.addEventListener('Convert', function (e) {{
-        alert("Event Triggered: TestId = " + testId + " Item Id = " + itemVersion);
-        convert(e.uniqueConversion);
+        convert();
     }});
 
-    function convert(isUniqueConversion) {{
+    function convert() {{
             var xhttp = new XMLHttpRequest();
             xhttp.open("POST", "api/episerver/testing/UpdateClientConversion", false);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
-            alert(xhttp.responseText);
-
-           
-            //if (isUniqueConversion) {{
-            //        updateTestCookie();
-            //    }}
+            if (xhttp.status != "200")
+            {
+                console.error(xhttp.status + ":" + xhttp.responseText);
+            }
+            else {
+                console.info(xhttp.status + ":" + xhttp.responseText);
+            }            
     }}
 
     {3}
-
 
  </script>
