@@ -7,6 +7,7 @@ using Mediachase.Commerce.Orders;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using EPiServer.Commerce.Order;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -36,12 +37,12 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
 
             var ea = e as OrderGroupEventArgs;
-            var ordergroup = sender as PurchaseOrder;
+            var ordergroup = sender as IPurchaseOrder;
             if (ea != null && ordergroup != null)
             {
-                foreach (var o in ordergroup.OrderForms.ToArray())
+                foreach (var o in ordergroup.Forms.ToArray())
                 {
-                    foreach (var lineitem in o.LineItems.ToArray())
+                    foreach (var lineitem in o.GetAllLineItems().ToArray())
                     {
 
                         //We use the content link builder to get the contentlink to our product
