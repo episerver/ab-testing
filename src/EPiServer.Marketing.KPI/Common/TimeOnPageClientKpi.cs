@@ -12,9 +12,9 @@ namespace EPiServer.Marketing.KPI.Common
 {
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.TimeOnPageConfiguration.html",
-   readonlymarkup = "EPiServer.Marketing.KPI.Markup.TimeOnPageReadOnly.html",
-   text_id = "Time On Page",
-   description_id = "Monitors how long a visitor spends on a page and converts after a specified amount of time ")]
+        readonlymarkup = "EPiServer.Marketing.KPI.Markup.TimeOnPageReadOnly.html",
+        text_id = "/kpi/timeonpage_kpi/name",
+        description_id = "/kpi/timeonpage_kpi/description")]
     [ClientScript(ClientSideEvaluationScript = "EPiServer.Marketing.KPI.Markup.TimeOnPageEvaluationScript.html")]
     public class TimeOnPageClientKpi : ClientKpi
     {
@@ -35,7 +35,8 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 TargetDuration = parsedInt;
             }
-            else{
+            else
+            {
                 throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/kpi/timeonpage_kpi/config_markup/notpositiveinteger"));
             }
 
@@ -97,7 +98,7 @@ namespace EPiServer.Marketing.KPI.Common
                     var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
                         .GetString("/kpi/timeonpage_kpi/readonly_markup/conversion_selector_description");
 
-                   
+
                     markup = string.Format(markup, conversionHeaderText, conversionDescription, TargetDuration);
                 }
 

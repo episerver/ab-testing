@@ -43,7 +43,7 @@
           <conversion_header>Conversion goal</conversion_header>
           <conversion_selector_description>Number of minutes visitor remains on the page:</conversion_selector_description>
         </readonly_markup>
-      </timeonpage_kpi>      
+      </timeonpage_kpi>
     </kpi>
   </language>
 </languages>
