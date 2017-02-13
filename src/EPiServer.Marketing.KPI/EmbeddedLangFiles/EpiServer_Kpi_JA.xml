@@ -18,6 +18,7 @@
       </content_comparator_kpi>
       <kpi_messaging>
         <failed_to_load>Failed to load</failed_to_load>
+        <missing_client>Client Script Wrapper resource could not be found</missing_client>
         <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
       </kpi_messaging>
       <stickysite_kpi>
