@@ -114,11 +114,11 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 HasConverted = false
             };
 
-            var ordergroup = sender as PurchaseOrder;
+            var ordergroup = sender as IPurchaseOrder;
             if (ordergroup != null)
             {
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
-                var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
+                var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.Market.MarketId);
                 var orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
                 var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredCommerceFormat.CommerceCulture);
 
