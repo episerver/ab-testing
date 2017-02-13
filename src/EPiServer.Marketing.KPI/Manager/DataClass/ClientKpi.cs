@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             {
                 var assembly = Assembly.GetExecutingAssembly();
                 var scriptResource = "EPiServer.Marketing.KPI.EmbeddedScriptFiles.ClientKpiWrapper.html";
-                string script = "Client Script Wrapper resource could not be found";
+                string script = _servicelocator.GetInstance<LocalizationService>().GetString("/kpi/kpi_messaging/missing_client");
                 var resourceNames = assembly.GetManifestResourceNames();
                 using (Stream resourceStream = assembly.GetManifestResourceStream(scriptResource))
                 using (StreamReader reader = new StreamReader(resourceStream))
