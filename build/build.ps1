@@ -51,6 +51,11 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 # Build msbuild projects
 &"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
+# Generate Sandcastle Documentation
+&"$msbuild" /p:Configuration=Release ..\Documentation\KPI\Kpi.shfbproj
+&"$msbuild" /p:Configuration=Release ..\Documentation\\KPI.Commerce\Kpicommerce.shfbproj
+&"$msbuild" /p:Configuration=Release ..\Documentation\Messaging\Messaging.shfbproj
+&"$msbuild" /p:Configuration=Release ..\Documentation\Testing\Testing.shfbproj
 
 # TODO: 
 # Build the Client Resources
