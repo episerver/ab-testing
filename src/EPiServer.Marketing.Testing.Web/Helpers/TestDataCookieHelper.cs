@@ -11,6 +11,7 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    [ServiceConfiguration(ServiceType = typeof(ITestDataCookieHelper), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestDataCookieHelper : ITestDataCookieHelper
     {
         private ITestManager _testManager;

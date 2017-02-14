@@ -139,10 +139,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             UpdateConversion(data);
             var _testManager = _serviceLocator.GetInstance<ITestManager>();
             var activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
-            ITestDataCookieHelper tdh = new TestDataCookieHelper();
-            TestDataCookie testCookie = tdh.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+            var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
+            TestDataCookie testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
             testCookie.Converted = true;
-            tdh.UpdateTestDataCookie(testCookie);
+            cookieHelper.UpdateTestDataCookie(testCookie);
             return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
             }
             catch(Exception ex)
