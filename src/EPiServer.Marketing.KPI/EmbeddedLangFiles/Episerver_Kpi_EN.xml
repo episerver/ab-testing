@@ -34,6 +34,19 @@
           <conversion_selector_description>Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
         </readonly_markup>
       </stickysite_kpi>
+      <timeonpage_kpi>
+        <config_markup>
+          <conversionlabel>Number of minutes visitor remains on the page.</conversionlabel>
+          <emptyfield>Field may not be empty.</emptyfield>
+          <notpositiveinteger>Value must enter a valid whole number and greater than 0.</notpositiveinteger>
+        </config_markup>
+        <description>Monitors how long a visitor spends on a page and converts after a specified amount of time</description>
+        <name>Time on Page</name>
+        <readonly_markup>
+          <conversion_header>Conversion goal</conversion_header>
+          <conversion_selector_description>Number of minutes visitor remains on the page:</conversion_selector_description>
+        </readonly_markup>
+      </timeonpage_kpi>
     </kpi>
   </language>
 </languages>
