@@ -88,7 +88,7 @@
     <Content Include="icons\Help.png" />
   </ItemGroup>
   <!-- Import the SHFB build targets -->
-  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+  <Import Project="..\Sandcastle\SandcastleHelpFileBuilder.targets" />
   <!-- The pre-build and post-build event properties must appear *after* the targets file import in order to be
 			 evaluated correctly. -->
   <PropertyGroup>
