@@ -17,12 +17,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class KpiStore : RestControllerBase
     {
         private LocalizationService _localizationService;
+        private IServiceLocator _serviceLocator = ServiceLocator.Current;
         private ILogger _logger;
 
         public KpiStore()
         {
             _logger = LogManager.GetLogger();
-            _localizationService = ServiceLocator.Current.GetInstance<LocalizationService>();
+            
+            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult put(string id, string entity)
         {
             IKpi kpiInstance;
-            KpiManager kpiManager = new KpiManager();
+            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             ActionResult result;
             var javascriptSerializer = new JavaScriptSerializer();
             Dictionary<string, string> values =
