@@ -26,14 +26,14 @@
       <Argument Key="logoAlignment" Value="left" xmlns="" />
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
-	<DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-	  <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI.Commerce\Debug\net45\EPiServer.Marketing.KPI.Commerce.dll" />
+    <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI.Commerce\Debug\net45\EPiServer.Marketing.KPI.Commerce.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI.Commerce\Debug\net45\EPiServer.Marketing.KPI.Commerce.xml" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
-	<DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
-	  <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.Commerce.dll" />
+    <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.Commerce.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.Commerce.xml" />
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.xml" />
@@ -158,7 +158,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.UI, Version=9.9.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\..\..\Users\brpe\.dnx\packages\EPiServer.CMS.UI.Core\9.9.2\lib\net45\EPiServer.UI.dll</HintPath>
+      <HintPath>..\References\EPiServer.CMS.UI.Core\9.9.2\lib\net45\EPiServer.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Mediachase.Commerce, Version=9.24.1.0, Culture=neutral, PublicKeyToken=6e58b501b34abce3">
