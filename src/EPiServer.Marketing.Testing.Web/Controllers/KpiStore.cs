@@ -43,34 +43,43 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public ActionResult put(string id,string entity)
+        public ActionResult put(string id, string entity)
         {
+            IKpi kpiInstance;
+            KpiManager kpiManager = new KpiManager();
             ActionResult result;
             var javascriptSerializer = new JavaScriptSerializer();
             Dictionary<string, string> values =
                 javascriptSerializer.Deserialize<Dictionary<string, string>>(entity);
             if (!string.IsNullOrEmpty(entity) && values["kpiType"] != "")
-            {              
-                IKpi kpiInstance = Activator.CreateInstance(Type.GetType(values["kpiType"])) as IKpi;
-                
+            {
+                var kpi = Activator.CreateInstance(Type.GetType(values["kpiType"]));
+
+                if (kpi is IFinancialKpi)
+                {
+                    var financialKpi = kpi as IFinancialKpi;
+                    financialKpi.PreferredFinancialFormat = kpiManager.GetCommerceSettings();
+                    kpiInstance = financialKpi as IKpi;
+                }
+                else
+                {
+                    kpiInstance = kpi as IKpi;
+                }
+
                 try
                 {
                     kpiInstance.Validate(values);
-                    KpiManager kpiManager = new KpiManager();
-                    kpiInstance.PreferredCommerceFormat = kpiManager.GetCommerceSettings();
                     var kpiId = kpiManager.Save(kpiInstance);
                     result = Rest(kpiId);
                 }
                 catch (Exception e)
                 {
                     _logger.Error("Error creating Kpi" + e);
-                    result = new RestStatusCodeResult((int) HttpStatusCode.InternalServerError, e.Message);
+                    result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, e.Message);
                 }
-            }
-            else
+            }else
             {
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError,_localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
-
+                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
             }
             return result;
         }

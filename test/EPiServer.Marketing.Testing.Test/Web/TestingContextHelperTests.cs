@@ -146,7 +146,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                PreferredCommerceFormat = new KPI.Manager.CommerceData { CommerceCulture = "nor", preferredFormat = new NumberFormatInfo()}
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
