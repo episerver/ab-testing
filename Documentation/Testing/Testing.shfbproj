@@ -26,11 +26,17 @@
       <Argument Key="logoAlignment" Value="left" xmlns="" />
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
-    <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net45\EPiServer.Marketing.Testing.Web.dll" />
+	<DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
+	 <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net45\EPiServer.Marketing.Testing.Web.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\Debug\net45\EPiServer.Marketing.Testing.Web.xml" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Core\Debug\net45\EPiServer.Marketing.Testing.Core.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.Testing.Core\Debug\net45\EPiServer.Marketing.Testing.Core.xml" />
+    </DocumentationSources>
+	<DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
+	 <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Web.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Web.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Core.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.Testing.Core.xml" />
     </DocumentationSources>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <VisibleItems>Protected, ProtectedInternalAsProtected</VisibleItems>
