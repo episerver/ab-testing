@@ -15,28 +15,25 @@ namespace EPiServer.Marketing.Testing.Web.Queries
     [ServiceConfiguration(typeof(IContentQuery))]
     public class CompletedTestsQuery : QueryHelper, IContentQuery<TasksTestingQueryCategory>
     {
-        private LocalizationService _localizationService;
         private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
         public CompletedTestsQuery()
         {
             _serviceLocator = ServiceLocator.Current;
-            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
         public CompletedTestsQuery(
             IServiceLocator mockServiceLocatorserviceLocator)
         {
             _serviceLocator = mockServiceLocatorserviceLocator;
-            _localizationService = mockServiceLocatorserviceLocator.GetInstance<LocalizationService>();
         }
 
         /// <inheritdoc />
         public string Name => "completedtests";
 
         /// <inheritdoc />
-        public string DisplayName => _localizationService.GetString("/abtesting/tasks/completedtests");
+        public string DisplayName => "/abtesting/tasks/completedtests";
 
         public int Rank { get; }
 
