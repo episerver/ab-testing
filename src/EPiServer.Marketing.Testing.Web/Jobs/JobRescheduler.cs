@@ -4,6 +4,7 @@ using EPiServer.Framework.Initialization;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.ServiceLocation;
 using EPiServer.DataAbstraction;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Initializers;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs

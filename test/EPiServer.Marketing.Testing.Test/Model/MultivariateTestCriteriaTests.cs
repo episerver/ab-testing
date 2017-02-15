@@ -1,6 +1,6 @@
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using System.Linq;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Model

@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Base class used for A/B test model objects.
+    /// </summary>
     public class CoreEntityBase
     {
         public CoreEntityBase()
@@ -14,7 +14,11 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
             ModifiedDate = DateTime.UtcNow;
         }
 
+        /// <summary>
+        /// Id of an AB Test object.
+        /// </summary>
         public Guid Id { get; set; }
+        
         /// <summary>
         /// Date this object was created
         /// </summary>

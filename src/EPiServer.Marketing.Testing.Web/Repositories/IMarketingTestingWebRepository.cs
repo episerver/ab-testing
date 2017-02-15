@@ -1,7 +1,7 @@
 ﻿using System;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Models;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Core.DataClass;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace EPiServer.Marketing.Testing.Web
+namespace EPiServer.Marketing.Testing.Web.Models
  {
     //Required by TestingStore.
     //Gets data from UI and transforms it to IMarketingTest data

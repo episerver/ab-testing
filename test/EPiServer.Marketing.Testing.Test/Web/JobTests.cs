@@ -1,6 +1,5 @@
 ﻿using EPiServer.DataAbstraction;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web.Jobs;
 using EPiServer.ServiceLocation;
 using Moq;
@@ -8,9 +7,8 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Globalization;
-using EPiServer.Data.Dynamic;
-using EPiServer.Data.Dynamic.Internal;
-using EPiServer.Marketing.Testing.Web.Config;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
@@ -47,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 Id = TestToAutoPublish,
                 StartDate = DateTime.Now.AddHours(-1),
-                State = Data.Enums.TestState.Active,
+                State = TestState.Active,
                 ZScore = 2.4,
                 ConfidenceLevel = 95,
                 Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50 }, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60, IsWinner = true }}} ;
@@ -70,14 +68,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 {
                     Id = TestToStart,
                     StartDate = DateTime.Now.AddHours(-1),
-                    State = Data.Enums.TestState.Inactive,
+                    State = TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToChangeSchedule1,
                     StartDate = DateTime.Now.AddHours(24), // causes a reschedule 24 hours from now
-                    State = Data.Enums.TestState.Inactive,
+                    State = TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
@@ -85,26 +83,26 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new ABTest() { Id = TestToChangeSchedule2,
                     StartDate = DateTime.Now.AddHours(-24),
                     EndDate = DateTime.Now.AddHours(23),  // causes a reschedule 23 hour from now
-                    State = Data.Enums.TestState.Active,
+                    State = TestState.Active,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToStop,
                     EndDate = DateTime.Now.AddHours(-1),
-                    State = Data.Enums.TestState.Active,
+                    State = TestState.Active,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = Guid.NewGuid(),
                     EndDate = DateTime.Now.AddHours(-1),
-                    State = Data.Enums.TestState.Done,
+                    State = TestState.Done,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = Guid.NewGuid(),
                     EndDate = DateTime.Now.AddHours(-1),
-                    State = Data.Enums.TestState.Archived,
+                    State = TestState.Archived,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
@@ -121,7 +119,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var unit = GetUnitUnderTest();
             unit.Execute();
 
-            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), 
+            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), 
                 "Get did not call getTestList");
             _webRepo.Verify(tm => tm.StartMarketingTest(It.Is<Guid>(g => g == TestToStart)), Times.Once,
                 "Failed to start test with proper Guid");
@@ -139,7 +137,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var unit = GetUnitUnderTest();
             unit.Execute();
 
-            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<Testing.Data.TestCriteria>()), 
+            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), 
                 "Get did not call getTestList");
             _webRepo.Verify(tm => tm.StopMarketingTest(It.Is<Guid>(g => g == TestToStop)), Times.Once, 
                 "Failed to stop test with proper Guid");

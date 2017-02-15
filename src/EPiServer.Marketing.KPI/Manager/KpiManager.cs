@@ -14,6 +14,7 @@ using EPiServer.Data.Dynamic;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
+    /// <inheritdoc />
     [ServiceConfiguration(ServiceType = typeof(IKpiManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiManager : IKpiManager
     {
@@ -21,6 +22,9 @@ namespace EPiServer.Marketing.KPI.Manager
         private IServiceLocator _serviceLocator;
         public bool DatabaseNeedsConfiguring;
 
+        /// <summary>
+        /// Figures out if the database needs to be configured before setting up the data access layer.
+        /// </summary>
         [ExcludeFromCodeCoverage]
         public KpiManager()
         {
@@ -36,32 +40,41 @@ namespace EPiServer.Marketing.KPI.Manager
             }
         }
 
+        /// <summary>
+        /// Constructor used for unit testing with a mocked service locator.
+        /// </summary>
+        /// <param name="serviceLocator"></param>
         internal KpiManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
             _dataAccess = _serviceLocator.GetInstance<IKpiDataAccess>();
         }
 
+        /// <inheritdoc />
         public IKpi Get(Guid kpiId)
         {
             return ConvertToManagerKpi(_dataAccess.Get(kpiId));
         }
 
+        /// <inheritdoc />
         public List<IKpi> GetKpiList()
         {
             return _dataAccess.GetKpiList().Select(dalTest => ConvertToManagerKpi(dalTest)).ToList();
         }
 
+        /// <inheritdoc />
         public Guid Save(IKpi kpi)
         {
             return _dataAccess.Save(ConvertToDalTest(kpi));
         }
 
+        /// <inheritdoc />
         public void Delete(Guid kpiId)
         {
             _dataAccess.Delete(kpiId);
         }
 
+        /// <inheritdoc />
         public IEnumerable<Type> GetKpiTypes()
         {
             var type = typeof(IKpi);
@@ -73,6 +86,7 @@ namespace EPiServer.Marketing.KPI.Manager
             return (types);
         }
 
+        /// <inheritdoc />
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool setupDataAccess = false)
         {
             if (DatabaseNeedsConfiguring)
@@ -89,12 +103,14 @@ namespace EPiServer.Marketing.KPI.Manager
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
+        /// <inheritdoc />
         public void SaveCommerceSettings(CommerceData commerceSettings)
         {            
             var store = GetDataStore(typeof(CommerceData));
             store.Save(commerceSettings);
         }
 
+        /// <inheritdoc />
         public CommerceData GetCommerceSettings()
         {
             var store = GetDataStore(typeof(CommerceData));

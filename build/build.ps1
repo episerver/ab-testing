@@ -1,6 +1,7 @@
 param ([string]$configuration = "Release",
     [string]$runTests = "false",
-	[string]$jsreporter = ""
+	[string]$jsreporter = "",
+	[string]$generateDoc = "false"
 	)
 
 # Make sure the script runs in the right context, might be wrong if started from e.g. .cmd file
@@ -51,7 +52,13 @@ Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
 # Build msbuild projects
 &"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
-
+# Generate Sandcastle Documentation, By default only happens on build machine.
+if([System.Convert]::ToBoolean($generateDoc) -eq $true) {
+	&"$msbuild" /p:Configuration=Release ..\Documentation\KPI\Kpi.shfbproj
+	&"$msbuild" /p:Configuration=Release ..\Documentation\\KPI.Commerce\Kpicommerce.shfbproj
+	&"$msbuild" /p:Configuration=Release ..\Documentation\Messaging\Messaging.shfbproj
+	&"$msbuild" /p:Configuration=Release ..\Documentation\Testing\Testing.shfbproj
+}
 # TODO: 
 # Build the Client Resources
 

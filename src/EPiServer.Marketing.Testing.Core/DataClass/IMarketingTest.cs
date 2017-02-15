@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
-namespace EPiServer.Marketing.Testing.Data
+namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IMarketingTest
     {
         Guid Id { get; set; }
@@ -15,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Data
         string Title { get; set; }
 
         /// <summary>
-        /// Test name.
+        /// Test Description.
         /// </summary>
         string Description { get; set; }
 
@@ -25,7 +28,7 @@ namespace EPiServer.Marketing.Testing.Data
         string Owner { get; set; }
 
         /// <summary>
-        /// Item used to test against.
+        /// Item being tested against.  This is the current published version of content.
         /// </summary>
         Guid OriginalItemId { get; set; }
 
@@ -45,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Data
         DateTime EndDate { get; set; }
 
         /// <summary>
-        /// Percentage of users to include in the test.
+        /// Percentage of users that visit the site to include in the test.
         /// </summary>
         int ParticipationPercentage { get; set; }
 
@@ -61,7 +64,7 @@ namespace EPiServer.Marketing.Testing.Data
         double ZScore { get; set; }
 
         /// <summary>
-        /// 
+        /// Once the test is completed, this is filled in based on the statistical calculations around significance.
         /// </summary>
         bool IsSignificant { get; set; }
 
@@ -81,7 +84,7 @@ namespace EPiServer.Marketing.Testing.Data
         DateTime ModifiedDate { get; set; }
 
         /// <summary>
-        /// List of possible variant items.  These replace the OriginalItem during the test.
+        /// List of variant items.  These replace the OriginalItem during the test.
         /// </summary>
         List<Variant> Variants { get; set; }
 

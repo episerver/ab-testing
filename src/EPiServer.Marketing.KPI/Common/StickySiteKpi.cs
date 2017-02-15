@@ -14,6 +14,9 @@ using EPiServer.Marketing.KPI.Exceptions;
 
 namespace EPiServer.Marketing.KPI.Common
 {
+    /// <summary>
+    /// This kpi determines if a user remains on a site for a specified minumum amount of time.
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.StickySiteConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.StickySiteReadOnlyMarkup.html",
