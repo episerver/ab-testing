@@ -195,10 +195,11 @@
         <message>Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]</message>
       </scheduler_plugin>
       <tasks>
-        <activetests>Active A/B Tests</activetests>
-        <archivedtests>Archived A/B Tests</archivedtests>
-        <completedtests>Completed A/B Tests</completedtests>
-        <inactivetests>Scheduled A/B Tests</inactivetests>
+        <activetests>Active Tests</activetests>
+        <archivedtests>Archived Tests</archivedtests>
+        <category>A/B Tests</category>
+        <completedtests>Completed Tests</completedtests>
+        <inactivetests>Scheduled Tests</inactivetests>
       </tasks>
     </abtesting>
     <kpi>
