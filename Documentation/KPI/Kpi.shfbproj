@@ -32,7 +32,7 @@
     </DocumentationSources>
 	<DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\net45\EPiServer.Marketing.KPI.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <MaximumGroupParts>2</MaximumGroupParts>
