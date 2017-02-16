@@ -73,5 +73,15 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// can be used to trigger the Evaluate method.
         /// </summary>
         event EventHandler EvaluateProxyEvent;
+
+        /// <summary>
+        /// Override to initalize any internal data
+        /// </summary>
+        void Initialize();
+
+        /// <summary>
+        /// Overided for any internal kpi instance cleanup
+        /// </summary>
+        void Uninitialize();
     }
 }

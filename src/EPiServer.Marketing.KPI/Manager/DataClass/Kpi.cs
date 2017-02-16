@@ -209,6 +209,20 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Override to initalize any internal data
+        /// </summary>
+        public virtual void Initialize()
+        {
+        }
+
+        /// <summary>
+        /// Overided for any internal kpi instance cleanup
+        /// </summary>
+        public virtual void Uninitialize()
+        {
+        }
+
         public virtual event EventHandler EvaluateProxyEvent;
     }
 }

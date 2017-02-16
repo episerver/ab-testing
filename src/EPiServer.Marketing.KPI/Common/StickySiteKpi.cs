@@ -10,15 +10,21 @@ using System.Runtime.Caching;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Editor;
+using System.ComponentModel;
 
 namespace EPiServer.Marketing.KPI.Common
 {
+    /// <summary>
+    /// Do not use.
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.StickySiteConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.StickySiteReadOnlyMarkup.html",
         text_id = "/kpi/stickysite_kpi/name", 
         description_id = "/kpi/stickysite_kpi/description")]
-    public class StickySiteKpi : Kpi
+    [Browsable(false)] 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    abstract class StickySiteKpi : Kpi
     {
         private ObjectCache _sessionCache = MemoryCache.Default;
 
@@ -29,8 +35,11 @@ namespace EPiServer.Marketing.KPI.Common
         
         public StickySiteKpi()
         {
+            /// KPI does not work correctly in some cases because there is not always a session as part of the http context. 
+            /// In particular when going to a page under test
+            /// for the first time. This causes the kpi to appear to act erratically.
         }
-        
+
         private IContent GetCurrentPage()
         {
             try
