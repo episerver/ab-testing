@@ -598,6 +598,7 @@ namespace EPiServer.Marketing.Testing.Web
                 foreach (var kpi in test.KpiInstances)
                 {
                     AddProxyEventHandler(kpi);
+                    kpi.Initialize();
                 }
             }
 
@@ -617,6 +618,7 @@ namespace EPiServer.Marketing.Testing.Web
             foreach (var kpi in e.Test.KpiInstances)
             {
                 AddProxyEventHandler(kpi);
+                kpi.Uninitialize();
             }
         }
 
