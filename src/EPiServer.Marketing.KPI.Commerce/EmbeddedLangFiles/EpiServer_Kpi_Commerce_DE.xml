@@ -8,17 +8,39 @@
           <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
           <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
         </config_markup>
+        <description>Choose a product for conversion.</description>
+        <name>Add To Cart</name>
         <readonly_markup>
           <conversion_header>Add Product to Cart</conversion_header>
           <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
         </readonly_markup>
       </addtocart>
+      <admin>
+        <cancel>Cancel</cancel>
+        <description>These settings are the defaults values used for Commerce KPIs when added to a test.</description>
+        <displayname>Commerce Kpi Configuration</displayname>
+        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
+        <save>Save</save>
+      </admin>
+      <averageorder>
+        <config_markup>
+          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
+          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
+          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+        </config_markup>
+        <readonly_markup>
+          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
+          <conversion_header>Conversion Goal</conversion_header>
+        </readonly_markup>
+      </averageorder>
       <purchaseitem>
         <config_markup>
           <conversion_label>Visitor purchases product</conversion_label>
           <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
           <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
         </config_markup>
+        <description>Choose a product for conversion.</description>
+        <name>Purchase Product</name>
         <readonly_markup>
           <conversion_header>Purchase Product</conversion_header>
           <conversion_selector_description>Visitor purchases the product</conversion_selector_description>

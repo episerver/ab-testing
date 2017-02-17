@@ -183,7 +183,10 @@ namespace EPiServer.Marketing.Testing
                 Total = dalConversionResult.Total,
                 VariantId = dalConversionResult.VariantId,
                 CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate
+                ModifiedDate = dalConversionResult.ModifiedDate,
+                TotalMarketCulture = dalConversionResult.TotalMarketCulture,
+                ConvertedTotal = dalConversionResult.ConvertedTotal,
+                ConvertedTotalCulture = dalConversionResult.ConvertedTotalCulture
             };
 
             return retVariant;
@@ -279,11 +282,20 @@ namespace EPiServer.Marketing.Testing
         internal static DalKeyFinancialResult ConvertToDalKeyFinancialResult(
             KeyFinancialResult managerConversionResult)
         {
+            if (Guid.Empty == managerConversionResult.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerConversionResult.Id = Guid.NewGuid();
+            }
+
             var retVariant = new DalKeyFinancialResult
             {
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Total = managerConversionResult.Total,
+                TotalMarketCulture = managerConversionResult.TotalMarketCulture,
+                ConvertedTotal = managerConversionResult.ConvertedTotal,
+                ConvertedTotalCulture = managerConversionResult.ConvertedTotalCulture,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate
@@ -307,6 +319,12 @@ namespace EPiServer.Marketing.Testing
         internal static DalKeyValueResult ConvertToDalKeyValueResult(
             KeyValueResult managerConversionResult)
         {
+            if (Guid.Empty == managerConversionResult.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerConversionResult.Id = Guid.NewGuid();
+            }
+
             var retVariant = new DalKeyValueResult
             {
                 Id = managerConversionResult.Id,

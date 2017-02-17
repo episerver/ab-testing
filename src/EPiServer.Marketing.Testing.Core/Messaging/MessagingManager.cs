@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.Testing.Messaging
     /// locator methods found in Epi
     /// </summary>
     [ServiceConfiguration(ServiceType = typeof(IMessagingManager), Lifecycle = ServiceInstanceScope.Singleton)]
-    class MessagingManager : IMessagingManager
+    public class MessagingManager : IMessagingManager
     {
         private string QueName = "TestingQueue";
         private IServiceLocator _serviceLocator;
@@ -85,31 +85,30 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// Emits the asynchronous message to update the view result for the specified VariantId
         /// </summary>
         /// <param name="TestId">the test id to work with</param>
-        /// <param name="VariantId">the Guid of the cms item that was viewed</param>
-        public void EmitUpdateViews(Guid TestId, Guid VariantId, int itemVersion)
+        /// <param name="itemVersion">the Guid of the cms item that was viewed</param>
+        public void EmitUpdateViews(Guid TestId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, VariantId = VariantId, ItemVersion = itemVersion});
+            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = TestId, ItemVersion = itemVersion});
         }
 
         /// <summary>
         /// Emits the asynchronous message to update a conversion result for the specified VariantId
         /// </summary>
         /// <param name="TestId"></param>
-        /// <param name="VariantId">the Guid of the cms item that caused a converion</param>
-        public void EmitUpdateConversion(Guid TestId, Guid VariantId, int itemVersion)
+        /// <param name="itemVersion">the Guid of the cms item that caused a converion</param>
+        public void EmitUpdateConversion(Guid TestId, int itemVersion)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, VariantId=VariantId, ItemVersion = itemVersion } );
+            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = TestId, ItemVersion = itemVersion } );
         }
 
-        public void EmitKpiResultData(Guid testId, Guid itemId, int itemVersion, IKeyResult keyResult, KeyResultType type)
+        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
             emitterFactory.Emit(new AddKeyResultMessage()
             {
                 TestId = testId,
-                VariantId = itemId,
                 ItemVersion = itemVersion,
                 Result = keyResult,
                 Type = type

@@ -9,6 +9,12 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
 
         public decimal Total { get; set; }
 
+        public string TotalMarketCulture { get; set; }
+
+        public decimal ConvertedTotal { get; set; }
+
+        public string ConvertedTotalCulture { get; set; }
+
         public Guid? VariantId { get; set; }
 
         public virtual Variant Variant { get; set; }

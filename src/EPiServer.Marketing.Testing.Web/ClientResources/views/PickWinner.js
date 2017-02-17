@@ -64,8 +64,11 @@
         },
 
         startup: function () {
-            textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
+                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            }
         },
 
         _contextChanged: function (newContext) {
@@ -77,12 +80,16 @@
             textHelper.initializeHelper(this.context, resources.pickwinnerview);
 
             me._renderData();
-            textHelper.displayPieChart("controlPickWinnerPie", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerPickWinnerPie", textHelper.draftPercent);
+            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
+                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            }
         },
 
         _onCancelClick: function () {
             var me = this;
+            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },

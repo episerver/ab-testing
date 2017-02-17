@@ -2,6 +2,8 @@
 using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
+using EPiServer.Marketing.Testing.Dal.DataAccess;
+using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
@@ -31,19 +33,19 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void Handle(UpdateViewsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.View);
+            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, false);
         }
 
         public void Handle(UpdateConversionsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.VariantId, message.ItemVersion, CountType.Conversion);
+            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.Conversion, false);
         }
 
         public void Handle(AddKeyResultMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.AddKpiResultData(message.TestId, message.VariantId, message.ItemVersion, message.Result, message.Type);
+            tm.SaveKpiResultData(message.TestId, message.ItemVersion, message.Result, message.Type, false);
         }
     }
 }

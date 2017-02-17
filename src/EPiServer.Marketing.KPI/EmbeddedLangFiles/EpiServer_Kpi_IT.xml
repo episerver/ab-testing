@@ -9,6 +9,8 @@
           <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
           <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
         </config_markup>
+        <description>Choose a page for conversion.</description>
+        <name>Landing Page</name>
         <readonly_markup>
           <conversion_header>Conversion goal</conversion_header>
           <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
@@ -18,6 +20,19 @@
         <failed_to_load>Failed to load</failed_to_load>
         <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
       </kpi_messaging>
+      <stickysite_kpi>
+        <config_markup>
+          <conversion_label>Number of minutes until another page is visited</conversion_label>
+          <error_internal>Internal error : {0}</error_internal>
+          <error_invalid_timeoutvalue>Number of minutes must be a value between 1 and 60</error_invalid_timeoutvalue>
+        </config_markup>
+        <description>Converts when a user visits the content under test and then visits any other page within the same browser session.</description>
+        <name>Site Stickiness</name>
+        <readonly_markup>
+          <conversion_header>Conversion goal</conversion_header>
+          <conversion_selector_description>Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
+        </readonly_markup>
+      </stickysite_kpi>
     </kpi>
   </language>
 </languages>

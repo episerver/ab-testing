@@ -61,8 +61,11 @@
         },
 
         startup: function () {
-            textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
+                textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerArchivePieChart", textHelper.draftPercent);
+            }
         },
 
         _contextChanged: function (newContext) {
@@ -74,12 +77,16 @@
             textHelper.initializeHelper(this.context, resources.archiveview);
 
             me._renderData();
-            textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-            textHelper.displayPieChart("challengerArchivPieChart", textHelper.draftPercent);
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
+            if (this.context.data.kpiResultType === "KpiConversionResult") {
+                textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
+                textHelper.displayPieChart("challengerArchivePieChart", textHelper.draftPercent);
+            }
         },
 
         _onCloseClick: function () {
             var me = this;
+            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
             me.contextParameters = { uri: "epi.cms.contentdata:///" + me.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -88,7 +95,7 @@
             var me = this;
             this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
-
+            me._renderStatusIndicatorStyles();
             textHelper.renderTitle(this.title);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
@@ -103,11 +110,9 @@
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderStatus();
             this._renderTestDuration();
-
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
-                me._renderStatusIndicatorStyles();
                 me._renderKpiMarkup("archive_conversionMarkup");
             });
 

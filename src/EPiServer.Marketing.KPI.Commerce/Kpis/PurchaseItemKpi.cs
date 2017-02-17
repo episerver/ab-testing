@@ -7,24 +7,20 @@ using Mediachase.Commerce.Orders;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using EPiServer.Commerce.Order;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
-        text = "Purchase Product", description = "Choose a product for conversion.")]
+        text_id = "/commercekpi/purchaseitem/name", 
+        description_id = "/commercekpi/purchaseitem/description")]
     public class PurchaseItemKpi : CommerceKpi
     {
         public PurchaseItemKpi()
         {
             LocalizationSection = "purchaseitem";
-            _servicelocator = ServiceLocator.Current;
-        }
-        internal PurchaseItemKpi(IServiceLocator servicelocator)
-        {
-            LocalizationSection = "purchaseitem";
-            _servicelocator = servicelocator;
         }
 
         /// <summary>
@@ -41,12 +37,12 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
 
             var ea = e as OrderGroupEventArgs;
-            var ordergroup = sender as PurchaseOrder;
+            var ordergroup = sender as IPurchaseOrder;
             if (ea != null && ordergroup != null)
             {
-                foreach (var o in ordergroup.OrderForms.ToArray())
+                foreach (var o in ordergroup.Forms.ToArray())
                 {
-                    foreach (var lineitem in o.LineItems.ToArray())
+                    foreach (var lineitem in o.GetAllLineItems().ToArray())
                     {
 
                         //We use the content link builder to get the contentlink to our product

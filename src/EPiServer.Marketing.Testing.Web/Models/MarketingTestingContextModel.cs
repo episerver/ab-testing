@@ -16,10 +16,12 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public string PublishedVersionPublishedBy { get; set; }
         public string PublishedVersionPublishedDate { get; set; }
         public string PublishedVersionContentLink { get; set; }
+        public string PublishedVersionFinancialsAverage { get; set; }
         public string DraftVersionContentLink { get; set; }
         public string DraftVersionName { get; set; }
         public string DraftVersionChangedBy { get; set; }
         public string DraftVersionChangedDate { get; set; }
+        public string DraftVersionFinancialsAverage { get; set; }
         public string VisitorPercentage { get; set; }
         public int TotalParticipantCount { get; set; }
         public string PublishedUrl { get; set; }
@@ -27,6 +29,6 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public string DraftPreviewUrl { get; set; }
         public bool UserHasPublishRights { get; set; }
         public string LatestVersionContentLink { get; set; }
-        
+        public string KpiResultType { get; set; }        
     }
 }

@@ -120,16 +120,32 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
 
         //sets text content of provided nodes to the published variant conversions, views and conversion percent
         renderPublishedViewsAndConversions: function (publishedConversionsNode, publishedViewsNode, publishedConversionPercentNode) {
-            publishedConversionsNode.textContent = this.publishedVariant.conversions;
-            publishedViewsNode.textContent = this.publishedVariant.views;
-            publishedConversionPercentNode.textContent = this.publishedPercent + "%";
+            var kpiResultType = context.data.kpiResultType;
+            if (kpiResultType === "KpiFinancialResult") {
+                publishedConversionsNode.textContent = this.publishedVariant.keyFinancialResults.length;
+                publishedViewsNode.textContent = this.publishedVariant.views;
+                publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage;
+            }
+            else {
+                publishedConversionsNode.textContent = this.publishedVariant.conversions;
+                publishedViewsNode.textContent = this.publishedVariant.views;
+                publishedConversionPercentNode.textContent = this.publishedPercent + "%";
+            }
         },
 
         //sets text content of provided nodes to the draft variant conversions, views and conversion percent
         renderDraftViewsAndConversions: function (challengerConversionsNode, challengerViewsNode, challengerConversionPercentNode) {
-            challengerConversionsNode.textContent = this.draftVariant.conversions;
-            challengerViewsNode.textContent = this.draftVariant.views;
-            challengerConversionPercentNode.textContent = this.draftPercent + "%";
+            var kpiResultType = context.data.kpiResultType;
+            if (kpiResultType === "KpiFinancialResult") {
+                challengerConversionsNode.textContent = this.draftVariant.keyFinancialResults.length;
+                challengerViewsNode.textContent = this.draftVariant.views;
+                challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage;
+            }
+            else {
+                challengerConversionsNode.textContent = this.draftVariant.conversions;
+                challengerViewsNode.textContent = this.draftVariant.views;
+                challengerConversionPercentNode.textContent = this.draftPercent + "%";
+            }
         },
 
         //sets text content of provided node to a formatted version of the context test description
@@ -195,6 +211,32 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 pieChart.addSeries("", chartData, { stroke: { width: 0 } });
                 pieChart.render();
             }
-        }
+        },
+
+        clearPieCharts: function (controlChartId, challengerChartId) {
+            var controlChartNode = dom.byId(controlChartId);
+            var challengerChartNode = dom.byId(challengerChartId);
+
+            if (controlChartNode) {
+                var controlChart = dojo.query("#" + controlChartId + " > *");
+                if (controlChart[0]) {
+                    dojo.forEach(dijit.findWidgets(controlChart)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    controlChartNode.innerHTML = "";
+                }
+            }
+
+            if (challengerChartNode) {
+                var challengerChart = dojo.query("#" + challengerChartId + " > *");
+                if (challengerChart[0]) {
+                    dojo.forEach(dijit.findWidgets(challengerChart)), function (w) {
+                        w.destroyRecursive();
+                    };
+                    challengerChartNode.innerHTML = "";
+                }
+            }
+        },
+
     };
 });

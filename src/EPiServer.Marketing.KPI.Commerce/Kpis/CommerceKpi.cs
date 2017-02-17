@@ -19,7 +19,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     public abstract class CommerceKpi : Kpi
     {
-        protected IServiceLocator _servicelocator;
         protected string LocalizationSection { get; set; }
 
         [DataMember]
@@ -27,7 +26,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
         [DataMember]
         public bool isVariant;
-
+          
         public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionProduct"] == "")

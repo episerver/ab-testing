@@ -12,6 +12,9 @@ using EPiServer.Globalization;
 using EPiServer.Security;
 using EPiServer.Web;
 using EPiServer.Web.Routing;
+using System.Threading;
+using EPiServer.Marketing.Testing.Web.Config;
+using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -67,8 +70,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             ContentEventArgs ea = e as ContentEventArgs;
             return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
-                    HttpContext.Current == null ||
-                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    SkipRequest() ||
                     IsInSystemFolder());
         }
 
@@ -84,9 +86,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             return (e.ContentLink == null ||
                     e.ChildrenItems == null ||
-                    HttpContext.Current == null ||
-                    HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag) ||
+                    SkipRequest() || 
                     IsInSystemFolder());
+        }
+
+        /// <summary>
+        /// Returns true if the http request is null or should be skipped for various reasons.
+        /// </summary>
+        /// <returns></returns>
+        private bool SkipRequest()
+        {
+            return HttpContext.Current == null ||
+                HttpContext.Current.Request.UserAgent == null || // MAR 797 - Ignore requests with no user agent specified
+                HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag);
         }
 
         /// <summary>
@@ -135,30 +147,46 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var uiHelper = _serviceLocator.GetInstance<IUIHelper>();
             var repo = _serviceLocator.GetInstance<IContentRepository>();
+            var publishedVariant = testData.Variants.First(v => v.IsPublished);
+            var draftVariant = testData.Variants.First(v => !v.IsPublished);
 
             //get published version
             var Content = repo.Get<IContent>(testData.OriginalItemId);
 
             //get content which was published at time of test
             var tempPublishedContentClone = Content.ContentLink.CreateWritableClone();
-            int publishedVersion = testData.Variants.First(x => x.IsPublished).ItemVersion;
+            int publishedVersion = publishedVariant.ItemVersion;
             tempPublishedContentClone.WorkID = publishedVersion;
             var publishedContent = repo.Get<IContent>(tempPublishedContentClone);
 
             //get variant (draft) version
             var tempVariantContentClone = Content.ContentLink.CreateWritableClone();
-            int variantVersion = testData.Variants.First(x => !x.IsPublished).ItemVersion;
+            int variantVersion = draftVariant.ItemVersion;
             tempVariantContentClone.WorkID = variantVersion;
             var draftContent = repo.Get<IContent>(tempVariantContentClone);
 
             // map the test data into the model using epi icontent and test object 
             var model = new MarketingTestingContextModel();
+            decimal publishedVersionAverage = 0;
+            decimal draftVersionAverage = 0;
+
             model.Test = testData;
             model.PublishedVersionName = publishedContent.Name;
             model.DraftVersionContentLink = draftContent.ContentLink.ToString();
             model.DraftVersionName = draftContent.Name;
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
+
+            
+            if (publishedVariant.KeyFinancialResults != null)
+            {
+                var commerceSettings = _serviceLocator.GetInstance<IKpiManager>().GetCommerceSettings();
+
+                model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : publishedVersionAverage.ToString("C", commerceSettings.preferredFormat);
+                model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : draftVersionAverage.ToString("C", commerceSettings.preferredFormat);
+            }
+            
+            model.KpiResultType = testData.KpiInstances[0].KpiResultType;
 
             // Map the version data
             MapVersionData(publishedContent, draftContent, model);
@@ -177,6 +205,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 model.DaysElapsed = Math.Round(DateTime.Parse(model.Test.EndDate.ToString()).Subtract(DateTime.Parse(model.Test.StartDate.ToString())).TotalDays).ToString(CultureInfo.CurrentCulture);
                 model.DaysRemaining = "0";
             }
+
 
            // Calculate total participation count
             foreach (var variant in testData.Variants)

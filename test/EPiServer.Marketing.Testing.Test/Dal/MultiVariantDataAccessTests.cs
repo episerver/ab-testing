@@ -101,7 +101,15 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             tests[1].Variants.Add(new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId,
                 DalKeyFinancialResults = new List<DalKeyFinancialResult>()
                 {
-                    new DalKeyFinancialResult() { KpiId = Guid.NewGuid(), Total = 12, CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow, Id = Guid.NewGuid()}
+                    new DalKeyFinancialResult() { KpiId = Guid.NewGuid(),
+                        Total = 12,
+                        CreatedDate = DateTime.UtcNow,
+                        ModifiedDate = DateTime.UtcNow,
+                        Id = Guid.NewGuid(),
+                     ConvertedTotal = 400,
+                     ConvertedTotalCulture = "SEK",
+                     TotalMarketCulture = "en-US"
+                    }
                 }
             });
             _context.SaveChanges();
@@ -348,12 +356,12 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             // check that a variant exists
             Assert.Equal(test.Variants.Count(), 1);
 
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, DalCountType.View);
-            _dataAccess.IncrementCount(testId, itemId, itemVersion, DalCountType.Conversion);
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.View);
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.Conversion);
 
             // check the variant is incremented correctly
-            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Views);
-            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemId == itemId && r.ItemVersion == itemVersion).Conversions);
+            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemVersion == itemVersion).Views);
+            Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemVersion == itemVersion).Conversions);
         }
 
         [Fact]
@@ -495,7 +503,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var variantId = Guid.NewGuid();
             var variantItemId2 = Guid.NewGuid();
-            var variant2 = new DalVariant() { Id = variantId, ItemId = variantItemId2, ItemVersion = 1 };
+            var variant2 = new DalVariant() { Id = variantId, ItemId = variantItemId2, ItemVersion = 2 };
             tests[0].Variants.Add(variant2);
 
             _dataAccess.Save(tests[0]);
@@ -505,7 +513,16 @@ namespace EPiServer.Marketing.Testing.Test.Dal
 
             var result = new DalKeyFinancialResult()
             {
-                Id = Guid.NewGuid(), Total = 12, KpiId = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, ModifiedDate = DateTime.UtcNow
+                Id = Guid.NewGuid(),
+                Total = 12,
+                KpiId = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                TotalMarketCulture = "en-US",
+                ConvertedTotal = 400,
+                ConvertedTotalCulture = "SEK"
+
+
             };
 
             var result1 = new DalKeyValueResult()
@@ -517,11 +534,11 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 ModifiedDate = DateTime.UtcNow
             };
 
-            _dataAccess.AddKpiResultData(tests[0].Id, variantItemId2, 1, result, 0);
-            _dataAccess.AddKpiResultData(tests[0].Id, variantItemId2, 1, result1, 1);
+            _dataAccess.AddKpiResultData(tests[0].Id, 1, result, 0);
+            _dataAccess.AddKpiResultData(tests[0].Id, 2, result1, 1);
 
-            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyFinancialResults.Count);
-            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.FirstOrDefault(v => v.Id == variantId).DalKeyValueResults.Count);
+            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.First(v => v.ItemVersion == 1).DalKeyFinancialResults.Count);
+            Assert.Equal(1, _dataAccess.Get(tests[0].Id).Variants.First(v => v.ItemVersion == 2).DalKeyValueResults.Count);
         }
 
         //[Fact]

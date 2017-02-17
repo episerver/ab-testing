@@ -7,24 +7,20 @@ using Mediachase.Commerce.Orders;
 using System;
 using System.Runtime.Serialization;
 using System.Linq;
+using EPiServer.Commerce.Order;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
-        text = "Add To Cart", description = "Choose a product for conversion.")]
+        text_id = "/commercekpi/addtocart/name", 
+        description_id = "/commercekpi/addtocart/description")]
     public class AddToCartKpi : CommerceKpi
     {
         public AddToCartKpi()
         {
             LocalizationSection = "addtocart";
-            _servicelocator = ServiceLocator.Current;
-        }
-        internal AddToCartKpi(IServiceLocator servicelocator)
-        {
-            LocalizationSection = "addtocart";
-            _servicelocator = servicelocator;
         }
 
         /// <summary>
@@ -41,12 +37,12 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             var referenceConverter = _servicelocator.GetInstance<ReferenceConverter>();
 
             var ea = e as OrderGroupEventArgs;
-            var ordergroup = sender as OrderGroup;
+            var ordergroup = sender as IOrderGroup;
             if (ea != null && ordergroup != null)
             {
-                foreach (var o in ordergroup.OrderForms.ToArray())
+                foreach (var o in ordergroup.Forms.ToArray())
                 {
-                    foreach( var lineitem in o.LineItems.ToArray())
+                    foreach( var lineitem in o.GetAllLineItems().ToArray())
                     {
                         //We use the content link builder to get the contentlink to our product
                         var productLink = referenceConverter.GetContentLink(lineitem.Code);
