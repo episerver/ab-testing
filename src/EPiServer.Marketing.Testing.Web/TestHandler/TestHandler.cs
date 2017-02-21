@@ -621,7 +621,6 @@ namespace EPiServer.Marketing.Testing.Web
                 foreach (var kpi in test.KpiInstances)
                 {
                     AddProxyEventHandler(kpi);
-                    kpi.Initialize();
                 }
             }
 
@@ -641,7 +640,6 @@ namespace EPiServer.Marketing.Testing.Web
             foreach (var kpi in e.Test.KpiInstances)
             {
                 AddProxyEventHandler(kpi);
-                kpi.Uninitialize();
             }
         }
 
@@ -664,6 +662,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void AddProxyEventHandler(IKpi kpi)
         {
+            kpi.Initialize();
+
             // Add the proxyeventhandler only once, if its in our reference counter, just increment
             // the reference.
             if (!_ReferenceCounter.hasReference(kpi.GetType()))
@@ -683,6 +683,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void RemoveProxyEventHandler(IKpi kpi)
         {
+            kpi.Uninitialize();
+
             _ReferenceCounter.RemoveReference(kpi.GetType());
 
             // Remove the proxyeventhandler only once, when the last reference is removed.
