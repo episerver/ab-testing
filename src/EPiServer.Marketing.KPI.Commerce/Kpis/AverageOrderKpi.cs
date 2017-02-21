@@ -14,6 +14,7 @@ using Mediachase.Commerce;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -26,7 +27,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         text_id = "/commercekpi/averageorder/name",
         description_id = "/commercekpi/averageorder/description")]
     [AlwaysEvaluate]
-    public class AverageOrderKpi : CommerceKpi
+    public class AverageOrderKpi : CommerceKpi, IFinancialKpi
     {
         private ILogger _logger;
 
@@ -82,6 +83,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
+        [DataMember]
+        public CommerceData PreferredFinancialFormat { get; set; }       
+
         /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
@@ -118,13 +122,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 HasConverted = false
             };
 
-            var ordergroup = sender as PurchaseOrder;
+            var ordergroup = sender as IPurchaseOrder;
             if (ordergroup != null)
             {
                 var orderTotal = _servicelocator.GetInstance<IOrderGroupTotalsCalculator>().GetTotals(ordergroup).SubTotal;
-                var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.MarketId);
+                var orderMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(ordergroup.Market.MarketId);
                 var orderCurrency = orderMarket.DefaultCurrency.CurrencyCode;
-                var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredCommerceFormat.CommerceCulture);
+                var preferredMarket = _servicelocator.GetInstance<IMarketService>().GetMarket(PreferredFinancialFormat.CommerceCulture);
 
                 if (preferredMarket != null)
                 {

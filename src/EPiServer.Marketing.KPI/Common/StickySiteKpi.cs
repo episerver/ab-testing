@@ -2,15 +2,15 @@
 using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
-using EPiServer.ServiceLocation;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Web;
 using System.Runtime.Caching;
 using EPiServer.Framework.Localization;
-using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Exceptions;
+using EPiServer.Editor;
+using System.ComponentModel;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -22,7 +22,9 @@ namespace EPiServer.Marketing.KPI.Common
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.StickySiteReadOnlyMarkup.html",
         text_id = "/kpi/stickysite_kpi/name", 
         description_id = "/kpi/stickysite_kpi/description")]
-    public class StickySiteKpi : Kpi
+    [Browsable(false)] 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    abstract class StickySiteKpi : Kpi
     {
         private ObjectCache _sessionCache = MemoryCache.Default;
 
@@ -33,8 +35,11 @@ namespace EPiServer.Marketing.KPI.Common
         
         public StickySiteKpi()
         {
+            /// KPI does not work correctly in some cases because there is not always a session as part of the http context. 
+            /// In particular when going to a page under test
+            /// for the first time. This causes the kpi to appear to act erratically.
         }
-        
+
         private IContent GetCurrentPage()
         {
             try
@@ -61,27 +66,14 @@ namespace EPiServer.Marketing.KPI.Common
                     if (_sessionCache.Contains(sessionid))
                     {
                         var requestedPage = GetCurrentPage();
-                        bool converted = (bool)_sessionCache.Get(sessionid);
-                        if (!converted && requestedPage != null && requestedPage.ContentGuid != TestContentGuid 
-                            && httpContext.Request.Path == UrlResolver.Current.GetUrl(requestedPage.ContentLink))
+                        string originalPath = (string)_sessionCache.Get(sessionid);
+                        if ( requestedPage != null &&                           // we are requesting a page (not something else) And
+                            httpContext.Request.Path != originalPath &&         // the page path is not the same as the page path that added the session And
+                            requestedPage.ContentGuid != TestContentGuid  &&    // we are not requesting the content under test And
+                            !IsSupportingContent() )                            // request is not for supporting content like css, jpeg, global or site assets
                         {
                             _sessionCache.Remove(sessionid);
                             retval = true;
-                        }
-                    }
-                    else
-                    {
-                        var loadedContentEventArgs = e as ContentEventArgs;
-                        var currentGuid = loadedContentEventArgs.Content.ContentGuid;
-                        if (currentGuid != null && currentGuid == TestContentGuid)
-                        {
-                            CacheItemPolicy policy = new CacheItemPolicy();
-                            policy.SlidingExpiration = new TimeSpan(0, Timeout, 0);
-                            _sessionCache.Add(sessionid, false, policy);
-
-                            // sometimes we get called multiple time for the same request,
-                            // this prevents us from evalluating true during the same request
-                            httpContext.Items[Id.ToString()] = true;
                         }
                     }
                 }
@@ -155,12 +147,59 @@ namespace EPiServer.Marketing.KPI.Common
                 _eh = new EventHandler<ContentEventArgs>(value);
                 var service = _servicelocator.GetInstance<IContentEvents>();
                 service.LoadedContent += _eh;
+                service.LoadedContent += AddSessionOnLoadedContent;
             }
             remove
             {
                 var service = _servicelocator.GetInstance<IContentEvents>();
                 service.LoadedContent -= _eh;
+                service.LoadedContent -= AddSessionOnLoadedContent;
             }
         }
+
+        public void AddSessionOnLoadedContent(object sender, ContentEventArgs e)
+        {
+            // we only want to evaluate once per request and add the user browser sesssion of the 
+            // request to the cache, if its not there. Related to MAR-782 Kpi does not work with 
+            // block testing
+            var httpContext = HttpContext.Current;
+            if (httpContext != null)
+            {
+                var sessionid = httpContext.Request.Params["ASP.NET_SessionId"];
+                if (sessionid != null && !_sessionCache.Contains(sessionid) && // we have a session and its not already in the cache
+                    !httpContext.Items.Contains(Id.ToString()) && !PageEditing.PageIsInEditMode ) // this instance is not in the context and we are not in edit mode
+                {
+                    var currentGuid = e.Content.ContentGuid;
+                    if (currentGuid != null && currentGuid == TestContentGuid)
+                    {
+                        CacheItemPolicy policy = new CacheItemPolicy();
+                        policy.SlidingExpiration = new TimeSpan(0, Timeout, 0);
+                        _sessionCache.Add(sessionid, httpContext.Request.Path, policy);
+
+                        httpContext.Items[Id.ToString()] = true;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns true if the request is for an asset (such as image, css file)
+        /// </summary>
+        /// <returns></returns>
+        private bool IsSupportingContent()
+        {
+            bool retval = false;
+            
+            if (HttpContext.Current.Request.CurrentExecutionFilePathExtension == ".png" ||
+                HttpContext.Current.Request.CurrentExecutionFilePathExtension == ".css" ||
+                HttpContext.Current.Request.Path.Contains(SystemContentRootNames.GlobalAssets.ToLower()) ||
+                HttpContext.Current.Request.Path.Contains(SystemContentRootNames.ContentAssets.ToLower()) )
+            {
+                retval = true;
+            }
+
+            return retval;
+        }
+
     }
 }
