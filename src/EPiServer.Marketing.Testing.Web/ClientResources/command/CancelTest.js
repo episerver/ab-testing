@@ -22,11 +22,13 @@ function (declare, topic, dependency, resources, _ContentCommandBase, ContentAct
         _execute: function () {
             var me = this,
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
-
-            store.remove(me.model.contentData.contentGuid).then(function () {
-                var contextParameters = { uri: "epi.cms.contentdata:///" + me.model.contentData.contentLink };
-                topic.publish("/epi/shell/context/request", contextParameters);
-            });
+            if (confirm(resources.canceltestcommand.abort_confirmation_message)) {
+                store.remove(me.model.contentData.contentGuid)
+                    .then(function () {
+                        var contextParameters = { uri: "epi.cms.contentdata:///" + me.model.contentData.contentLink };
+                        topic.publish("/epi/shell/context/request", contextParameters);
+                    });
+            }
         },
 
         _onModelChange: function () {
