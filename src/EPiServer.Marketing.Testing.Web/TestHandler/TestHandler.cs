@@ -395,13 +395,6 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         private void EvaluateKpis(object sender, EventArgs e)
         {
-            // We only want to evaluate Kpis one time per request. 
-            // If the flag is set we already evaluated, bail out
-            if (HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
-            {
-                return;
-            }
-
             // Set the flag to stop evaluating ONLY if the current page link is the same link in the
             // content event args. This allows us to evaluate all pages, blocks, and sub pages
             // one time per request when we get to the content being evaluated
@@ -409,6 +402,13 @@ namespace EPiServer.Marketing.Testing.Web
             var cea = e as ContentEventArgs;
             if (cea != null)
             {
+                // We only want to evaluate for the LoadedContent event's Kpis one time per request. 
+                // If the flag is set we already evaluated, bail out
+                if (HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
+                {
+                    return;
+                }
+
                 try
                 {
                     var pageHelper = _serviceLocator.GetInstance<IPageRouteHelper>();
@@ -662,6 +662,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void AddProxyEventHandler(IKpi kpi)
         {
+            kpi.Initialize();
+
             // Add the proxyeventhandler only once, if its in our reference counter, just increment
             // the reference.
             if (!_ReferenceCounter.hasReference(kpi.GetType()))
@@ -681,6 +683,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void RemoveProxyEventHandler(IKpi kpi)
         {
+            kpi.Uninitialize();
+
             _ReferenceCounter.RemoveReference(kpi.GetType());
 
             // Remove the proxyeventhandler only once, when the last reference is removed.

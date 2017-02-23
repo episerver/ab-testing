@@ -31,7 +31,7 @@
         <description>Tests the potential effects of content on the average cart total of participating users.  Results: The total represents the average cart total across all visitors that checked out as part of the test.</description>
         <name>Average Order</name>
         <readonly_markup>
-          <conversion_description>Increase the average customer purchase amount.</conversion_description>
+          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
           <conversion_header>Conversion Goal</conversion_header>
         </readonly_markup>
       </averageorder>
