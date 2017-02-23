@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace EPiServer.Marketing.Testing.Data
+namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Used to filter testing data from the database.  Multiple filters can be combined to create a criteria.
+    /// </summary>
     public class TestCriteria
     {
         public TestCriteria()
@@ -12,10 +15,10 @@ namespace EPiServer.Marketing.Testing.Data
         private List<ABTestFilter> _filters;
 
         /// <summary>
-        /// Adds the given filter to the collection of criteria filters if the property on the filter doesn't exist
-        /// If the filter exists the filter will not be added
+        /// Adds the given filter to the collection of criteria filters if the property on the filter doesn't exist.
+        /// If the filter exists the filter will not be added.
         /// </summary>
-        /// <param name="filter">the filter to add</param>
+        /// <param name="filter">The filter to add.</param>
         public void AddFilter(ABTestFilter filter)
         {
             if(!_filters.Exists(f => f.Property == filter.Property))
@@ -30,6 +33,9 @@ namespace EPiServer.Marketing.Testing.Data
         }
     }
 
+    /// <summary>
+    /// Filters are added to a Test Criteria to build up a query to limit what data is returned.
+    /// </summary>
     public class ABTestFilter
     {
         public ABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
@@ -42,21 +48,24 @@ namespace EPiServer.Marketing.Testing.Data
         public ABTestFilter() { }
         
         /// <summary>
-        /// The ABTestProperty property that will be filtered on
+        /// The ab test property that the filter will be based on.
         /// </summary>
         public ABTestProperty Property { get; set; }
 
         /// <summary>
-        /// The operation that will be performed to filter the results set
+        /// The operation that will be performed to filter the result set.
         /// </summary>
         public FilterOperator Operator { get; set; }
 
         /// <summary>
-        /// The limiter value that will be used to filter the result set
+        /// The limiter value that will be used to filter the result set.
         /// </summary>
         public object Value { get; set; }
     }
 
+    /// <summary>
+    /// Available test properties that can be used as filters.
+    /// </summary>
     public enum ABTestProperty
     {
         State = 0,
@@ -64,6 +73,9 @@ namespace EPiServer.Marketing.Testing.Data
         VariantId = 2
     }
 
+    /// <summary>
+    /// Available operators used for combining multiple filters.
+    /// </summary>
     public enum FilterOperator
     {
         And = 0,

@@ -1,6 +1,5 @@
 ﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -13,6 +12,8 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -123,10 +124,31 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion));
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
+        }
+
+        // Used for updating client side KPIs.  Leverages UpdateConversion and modifies the cookie accordingly.
+        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
+        [HttpPost]
+        public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
+        {
+            try { 
+            UpdateConversion(data);
+            var _testManager = _serviceLocator.GetInstance<ITestManager>();
+            var activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
+            var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
+            TestDataCookie testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+            testCookie.Converted = true;
+            cookieHelper.UpdateTestDataCookie(testCookie);
+            return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception(ex.Message));
+            }
         }
 
         // Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
@@ -165,7 +187,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK,"KpiResult Saved");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));

@@ -14,19 +14,26 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
     /// <summary>
     /// Base class that contains some common functionality between commerce kpi instances.
-    /// note that it is abstract specifically so that it doesn't show up in the picker.
+    /// Note that it is abstract specifically so that it doesn't show up in the picker.
     /// </summary>
     [DataContract]
     public abstract class CommerceKpi : Kpi
     {
         protected string LocalizationSection { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [DataMember]
         public Guid ContentGuid;
 
+        /// <summary>
+        /// 
+        /// </summary>
         [DataMember]
         public bool isVariant;
-          
+
+        /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["ConversionProduct"] == "")
@@ -71,6 +78,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             return isPublished;
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiMarkup
         {
@@ -82,6 +90,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiReadOnlyMarkup
         {

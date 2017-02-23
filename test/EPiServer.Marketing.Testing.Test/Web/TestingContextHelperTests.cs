@@ -5,8 +5,6 @@ using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Common;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.ServiceLocation;
@@ -19,6 +17,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {

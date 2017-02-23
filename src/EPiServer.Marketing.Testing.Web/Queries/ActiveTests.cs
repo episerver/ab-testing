@@ -3,8 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
 using EPiServer.Shell.Rest;
@@ -14,30 +13,27 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
 
     [ServiceConfiguration(typeof(IContentQuery))]
-    public class ActiveTestsQuery : QueryHelper, IContentQuery
+    public class ActiveTestsQuery : QueryHelper, IContentQuery<TasksTestingQueryCategory>
     {
-        private LocalizationService _localizationService;
         private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
         public ActiveTestsQuery()
         {
             _serviceLocator = ServiceLocator.Current;
-            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
         public ActiveTestsQuery(
             IServiceLocator mockServiceLocatorserviceLocator)
         {
             _serviceLocator = mockServiceLocatorserviceLocator;
-            _localizationService = mockServiceLocatorserviceLocator.GetInstance<LocalizationService>();
         }
 
         /// <inheritdoc />
         public string Name => "activetests";
 
         /// <inheritdoc />
-        public string DisplayName => _localizationService.GetString("/abtesting/tasks/activetests");
+        public string DisplayName => "/abtesting/tasks/activetests";
 
         public int Rank { get; }
 

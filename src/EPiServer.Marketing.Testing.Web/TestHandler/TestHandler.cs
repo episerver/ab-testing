@@ -6,9 +6,7 @@ using EPiServer.ServiceLocation;
 using System.Linq;
 using Castle.Core.Internal;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Data.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
 using System.Web;
@@ -16,6 +14,7 @@ using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
 
 namespace EPiServer.Marketing.Testing.Web
@@ -253,6 +252,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
+                        ActivateClientKpis(activeTest.KpiInstances,testCookieData);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
@@ -309,6 +309,29 @@ namespace EPiServer.Marketing.Testing.Web
                             new TestEventArgs(activeTest, activeContent.Content));
                         HttpContext.Current.Items[activeContent + SkipRaiseContentSwitchEvent] = true;
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks for any client kpis which may be assigned to the test and injects the provided
+        /// markup via the current response.
+        /// </summary>
+        /// <param name="kpiInstances"></param>
+        /// <param name="cookieData"></param>
+        private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
+        {
+            foreach (var kpi in kpiInstances.Where(x=>x is IClientKpi))
+            {
+                if (!HttpContext.Current.Items.Contains(kpi.Id.ToString()) 
+                    && !_contextHelper.IsInSystemFolder()
+                    && (!cookieData.Converted || cookieData.AlwaysEval))
+                {
+                    var clientKpi = kpi as ClientKpi;
+                    var test = _testManager.Get(cookieData.TestId);
+                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id == cookieData.TestVariantId).ItemVersion;
+                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientKpiScript,cookieData.TestId,itemVersion,clientKpi.Id,clientKpi.ClientEvaluationScript));
+                    HttpContext.Current.Items[kpi.Id.ToString()]=true;
                 }
             }
         }
@@ -598,7 +621,6 @@ namespace EPiServer.Marketing.Testing.Web
                 foreach (var kpi in test.KpiInstances)
                 {
                     AddProxyEventHandler(kpi);
-                    kpi.Initialize();
                 }
             }
 
@@ -618,7 +640,6 @@ namespace EPiServer.Marketing.Testing.Web
             foreach (var kpi in e.Test.KpiInstances)
             {
                 AddProxyEventHandler(kpi);
-                kpi.Uninitialize();
             }
         }
 
@@ -641,6 +662,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void AddProxyEventHandler(IKpi kpi)
         {
+            kpi.Initialize();
+
             // Add the proxyeventhandler only once, if its in our reference counter, just increment
             // the reference.
             if (!_ReferenceCounter.hasReference(kpi.GetType()))
@@ -660,6 +683,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="kpi"></param>
         internal void RemoveProxyEventHandler(IKpi kpi)
         {
+            kpi.Uninitialize();
+
             _ReferenceCounter.RemoveReference(kpi.GetType());
 
             // Remove the proxyeventhandler only once, when the last reference is removed.

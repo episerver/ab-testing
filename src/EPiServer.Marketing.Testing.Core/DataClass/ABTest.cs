@@ -1,82 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
-namespace EPiServer.Marketing.Testing.Data
+namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     public class ABTest : CoreEntityBase, IMarketingTest
     {
-        /// <summary>
-        /// Test Title
-        /// </summary>
+        /// <inheritdoc />
         public string Title { get; set; }
 
-        /// <summary>
-        /// Test Description
-        /// </summary>
+        /// <inheritdoc />
         public string Description { get; set; }
 
-        /// <summary>
-        /// Person that created the test
-        /// </summary>
+        /// <inheritdoc />
         public string Owner { get; set; }
 
-        /// <summary>
-        /// The item to be tested against.  This is the original item that will be changed out to the variant items.
-        /// </summary>
+        /// <inheritdoc />
         public Guid OriginalItemId { get; set; }
 
-        /// <summary>
-        /// Current state of the test.
-        /// </summary>
+        /// <inheritdoc />
         public TestState State { get; set; }
 
-        /// <summary>
-        /// Date and time the test starts.
-        /// </summary>
+        /// <inheritdoc />
         public DateTime StartDate { get; set; }
 
-        /// <summary>
-        /// Date and time the test ends.
-        /// </summary>
+        /// <inheritdoc />
         public DateTime EndDate { get; set; }
 
-        /// <summary>
-        /// Percentage of visitors that will be part of the test.
-        /// </summary>
+        /// <inheritdoc />
         public int ParticipationPercentage { get; set; }
 
-        /// <summary>
-        /// Percentage of accuracy required.
-        /// Default: 95 %
-        /// </summary>
+        /// <inheritdoc />
         public double ConfidenceLevel { get; set; }
 
-        /// <summary>
-        /// Calculated z-score to determine statistical significance.
-        /// </summary>
+        /// <inheritdoc />
         public double ZScore { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc />
         public bool IsSignificant { get; set; }
 
-        /// <summary>
-        /// Last person that modified the test.
-        /// </summary>
+        /// <inheritdoc />
         public string LastModifiedBy { get; set; }
 
-        /// <summary>
-        /// List of variant items for the test.  These replace the OriginalItem during the test.
-        /// </summary>
+        /// <inheritdoc />
         public List<Variant> Variants { get; set; }
 
-        /// <summary>
-        /// List of KeyPerformanceIndicators.  These can be time on a page, form submission, etc.
-        /// </summary>
+        /// <inheritdoc />
         public List<IKpi> KpiInstances { get; set; }
 
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -11,6 +9,9 @@ using EPiServer.Security;
 using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 

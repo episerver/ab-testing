@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Core.Exceptions;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    [ServiceConfiguration(ServiceType = typeof(ITestDataCookieHelper), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestDataCookieHelper : ITestDataCookieHelper
     {
         private ITestManager _testManager;

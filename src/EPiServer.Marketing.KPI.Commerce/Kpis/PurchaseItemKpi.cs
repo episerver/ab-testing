@@ -11,6 +11,9 @@ using EPiServer.Commerce.Order;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
+    /// <summary>
+    /// Measures how many users purchase a specific item. Results: Views correlate to visitors that viewed the item, while conversions represent purchasing of said item.
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.ProductPickerReadOnlyMarkup.html",
@@ -23,12 +26,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             LocalizationSection = "purchaseitem";
         }
 
-        /// <summary>
-        /// Called when we are expected to evaluate. 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;

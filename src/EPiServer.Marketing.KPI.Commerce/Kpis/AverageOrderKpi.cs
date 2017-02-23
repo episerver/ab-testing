@@ -18,10 +18,14 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
+    /// <summary>
+    /// Tests the potential effects of content on the average cart total of participating users.  Results: The total represents the average cart total across all visitors that checked out as part of the test
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiConfigMarkup.html",
-      readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiReadOnlyMarkup.html",
-      text = "Average Order", description = "Tests the potential effects of content on the average cart total of participating users.")]
+        readonlymarkup = "EPiServer.Marketing.KPI.Commerce.Markup.AverageOrderKpiReadOnlyMarkup.html",
+        text_id = "/commercekpi/averageorder/name",
+        description_id = "/commercekpi/averageorder/description")]
     [AlwaysEvaluate]
     public class AverageOrderKpi : CommerceKpi, IFinancialKpi
     {
@@ -34,12 +38,14 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             _logger = LogManager.GetLogger();
 
         }
+
         internal AverageOrderKpi(IServiceLocator servicelocator)
         {
             LocalizationSection = "averageorder";
             _servicelocator = servicelocator;
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string KpiResultType
         {
@@ -47,8 +53,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             {
                 return typeof(KpiFinancialResult).Name.ToString();
             }
-        }  
+        }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiMarkup
         {
@@ -61,6 +68,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiReadOnlyMarkup
         {
@@ -78,6 +86,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         [DataMember]
         public CommerceData PreferredFinancialFormat { get; set; }       
 
+        /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
             var marketService = ServiceLocator.Current.GetInstance<IMarketService>();
@@ -104,12 +113,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
-        /// <summary>
-        /// Called when we are expected to evaluate. 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = new KpiFinancialResult() {

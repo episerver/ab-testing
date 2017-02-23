@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Testing.Data.Enums;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
 using EPiServer.Shell.Rest;
@@ -13,30 +13,27 @@ namespace EPiServer.Marketing.Testing.Web.Queries
 {
 
     [ServiceConfiguration(typeof(IContentQuery))]
-    public class ArchivedTestsQuery : QueryHelper, IContentQuery
+    public class ArchivedTestsQuery : QueryHelper, IContentQuery<TasksTestingQueryCategory>
     {
-        private LocalizationService _localizationService;
         private IServiceLocator _serviceLocator;
 
         [ExcludeFromCodeCoverage]
         public ArchivedTestsQuery()
         {
             _serviceLocator = ServiceLocator.Current;
-            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
         public ArchivedTestsQuery(
             IServiceLocator mockServiceLocatorserviceLocator)
         {
             _serviceLocator = mockServiceLocatorserviceLocator;
-            _localizationService = mockServiceLocatorserviceLocator.GetInstance<LocalizationService>();
         }
 
         /// <inheritdoc />
         public string Name => "archivedtests";
 
         /// <inheritdoc />
-        public string DisplayName => _localizationService.GetString("/abtesting/tasks/archivedtests");
+        public string DisplayName => "/abtesting/tasks/archivedtests";
 
         public int Rank { get; }
 
@@ -44,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         public IEnumerable<string> PlugInAreas => new string[] { KnownContentQueryPlugInArea.EditorTasks };
 
         /// <inheritdoc />
-        public int SortOrder => 20;
+        public int SortOrder => 40;
 
         public bool VersionSpecific { get; }
 

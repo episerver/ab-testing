@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.TestPages.ApiTesting;
 using EPiServer.Marketing.Testing.TestPages.Models;
 using EPiServer.ServiceLocation;
@@ -14,6 +13,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.TestPages.Controllers
@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     OriginalItemId = startpage.ContentGuid,
                     Owner = "Automation",
                     StartDate = DateTime.Now.AddDays(1),
-                    State = Data.Enums.TestState.Inactive,
+                    State = TestState.Inactive,
                     Title = "Automation_" + TestID,
                     Description = "Description_" + TestID++,
                     Variants = new List<Variant>() {
@@ -176,18 +176,18 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
                     for (var x = 0; x < _model.Views; x++)
                     {
                         testManager.IncrementCount(test.Id,
-                            test.Variants[0].ItemVersion, Data.Enums.CountType.View);
+                            test.Variants[0].ItemVersion, CountType.View);
 
                         testManager.IncrementCount(test.Id,
-                            test.Variants[1].ItemVersion, Data.Enums.CountType.View);
+                            test.Variants[1].ItemVersion, CountType.View);
                     }
                     for (var x = 0; x < _model.Conversions; x++)
                     {
                         testManager.IncrementCount(test.Id,
-                            test.Variants[0].ItemVersion, Data.Enums.CountType.Conversion);
+                            test.Variants[0].ItemVersion, CountType.Conversion);
 
                         testManager.IncrementCount(test.Id,
-                            test.Variants[1].ItemVersion, Data.Enums.CountType.Conversion);
+                            test.Variants[1].ItemVersion, CountType.Conversion);
                     }
 
                     IMessagingManager mm = ServiceLocator.Current.GetInstance<IMessagingManager>();
@@ -333,7 +333,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateView(string id, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.View);
+            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), CountType.View);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);
@@ -342,7 +342,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         public ActionResult UpdateConversion(string id, string itemVersion)
         {
             ITestManager mtm = ServiceLocator.Current.GetInstance<ITestManager>();
-            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), Data.Enums.CountType.Conversion);
+            mtm.IncrementCount(Guid.Parse(id), Convert.ToInt32(itemVersion), CountType.Conversion);
             var multivariateTest = mtm.Get(Guid.Parse(id));
 
             return View("TestDetails", multivariateTest);

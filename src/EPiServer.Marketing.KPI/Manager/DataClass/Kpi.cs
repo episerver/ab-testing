@@ -10,9 +10,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
-    /// <summary>
-    /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
-    /// </summary>
+    /// <inheritdoc />
     [DataContract]
     public class Kpi : IKpi
     {
@@ -25,17 +23,12 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             _servicelocator = ServiceLocator.Current;
         }
 
-        /// <summary>
-        /// Id of Kpi.
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public Guid Id { get; set; }
         
         [DataMember]
-        /// <summary>
-        /// Indicates which result should be considered the "winner"
-        /// Overide to specify a different result comparison
-        /// </summary>
+        /// <inheritdoc />
         public virtual ResultComparison ResultComparison
         {
             get
@@ -79,7 +72,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-
+        /// <inheritdoc />
         [DataMember]
         public virtual string Description
         {
@@ -101,11 +94,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-        /// <summary>
-        /// Call by the UI to get the markup for the configuration UI for the control. There are two ways you can use this, 
-        /// 1) decorate your class with the UIMarkupAttribute and specify the config markup resource found in your assembly or
-        /// 2) overide and return your markup string directly
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public virtual string UiMarkup
         {
@@ -128,11 +117,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             }
         }
 
-        /// <summary>
-        /// Call by the UI to get the markup for the configuration UI for the control. There are two ways you can use this, 
-        /// 1) decorate your class with the UIMarkupAttribute and specify the config markup resource found in your assembly or
-        /// 2) overide and return your markup string directly
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public virtual string UiReadOnlyMarkup
         {
@@ -179,31 +164,25 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             return retval;
         }
 
-        /// <summary>
-        /// Date the kpi was created.
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public DateTime CreatedDate { get; set; }
 
-        /// <summary>
-        /// The last time the kpi was modified.
-        /// </summary>
+        /// <inheritdoc />
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
-        /// <summary>
-        /// Provides specific validation of data prior to creating the KPI
-        /// </summary>
-        /// <param name="kpiData"></param>
+        /// <inheritdoc />
+        [DataMember]
+        public CommerceData PreferredCommerceFormat {get; set;}
+
+        /// <inheritdoc />
         public virtual void Validate(Dictionary<string, string> kpiData)
         {
             throw new NotImplementedException();
         }
-        /// <summary>
-        /// Determines if a conversion has happened.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e">Event Argument</param>
+
+        /// <inheritdoc />
         public virtual IKpiResult Evaluate(object sender, EventArgs e)
         {
             throw new NotImplementedException();
@@ -223,6 +202,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         {
         }
 
+        /// <inheritdoc />
         public virtual event EventHandler EvaluateProxyEvent;
     }
 }

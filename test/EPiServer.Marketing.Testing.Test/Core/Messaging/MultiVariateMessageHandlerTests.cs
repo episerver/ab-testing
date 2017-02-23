@@ -2,13 +2,11 @@
 using EPiServer.ServiceLocation;
 using Moq;
 using EPiServer.Marketing.Testing.Messaging;
-using EPiServer.Marketing.Testing.Data;
 using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.Marketing.Testing;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
-using Microsoft.Dnx.Testing.Abstractions;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Core.Messaging

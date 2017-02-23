@@ -1,6 +1,5 @@
 ﻿using EPiServer.Core;
 using EPiServer.Framework.Localization;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Initializers;
 using EPiServer.Marketing.Testing.Web.Repositories;
@@ -8,6 +7,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web

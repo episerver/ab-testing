@@ -9,7 +9,7 @@
             <!-- Options and Cancel Buttons -->
             <div class="epi-toolbarGroup epi-toolbarTrailing">
                 <!--Close Button-->
-                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.button_close}</button>
+                <button class="epi-button--bold" data-dojo-type="dijit/form/Button" data-dojo-props="iconClass:'epi-iconClose'" data-dojo-attach-event="onClick: _onCancelClick">${resources.detailsview.button_close}</button>
                 &nbsp;
             </div>
         </div>
@@ -120,7 +120,9 @@
                         <div id="pw_conversionMarkup">
                             <!-- KPI Generated Markup -->
                         </div>
-                    </div>
+                        <div id="pw_kpidescription">
+                            <!-- KPI Description -->
+                        </div>
                     <hr class="epi-abtest-hr">
                     <div class="formsRow">
                         <h4>${resources.detailsview.percent_participation_header}</h4>

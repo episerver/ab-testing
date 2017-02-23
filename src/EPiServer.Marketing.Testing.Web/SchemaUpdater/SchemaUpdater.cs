@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Dal.Migrations;
 using EPiServer.ServiceLocation;
 

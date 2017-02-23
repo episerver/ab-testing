@@ -1,16 +1,12 @@
-﻿using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.ServiceLocation;
+﻿using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Core.Messaging.Messages;
-using EPiServer.Marketing.Testing.Dal.DataAccess;
-using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 
 namespace EPiServer.Marketing.Testing.Messaging
 {
-    /// <summary>
-    /// The message handler simply handles the messages and passes them on the registered
-    /// ITestingMessageHandler which in turn handles the cache and database layer.
-    /// </summary>
+    /// <inheritdoc />
     class TestingMessageHandler : ITestingMessageHandler
     {
         private IServiceLocator _serviceLocator;
@@ -30,18 +26,30 @@ namespace EPiServer.Marketing.Testing.Messaging
             _serviceLocator = locator;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public void Handle(UpdateViewsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
             tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public void Handle(UpdateConversionsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
             tm.IncrementCount(message.TestId, message.ItemVersion, CountType.Conversion, false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
         public void Handle(AddKeyResultMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();

@@ -1,5 +1,4 @@
 ﻿using EPiServer.Logging;
-using EPiServer.Marketing.Testing.Data;
 using EPiServer.Marketing.Testing.Web;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -9,7 +8,7 @@ using EPiServer.Shell.Services.Rest;
 using Moq;
 using System;
 using System.Net;
-using System.Web.Mvc;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web

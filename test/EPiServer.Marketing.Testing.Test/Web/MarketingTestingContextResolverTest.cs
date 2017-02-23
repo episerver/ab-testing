@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using EPiServer.Core;
-using EPiServer.DataAbstraction;
-using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Data.Enums;
-using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Context;
-using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;

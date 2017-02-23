@@ -1,5 +1,4 @@
-﻿using EPiServer.Marketing.Testing.Data;
-using EPiServer.Marketing.Testing.Web.Repositories;
+﻿using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Moq;
 using System;
@@ -9,7 +8,9 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using Xunit;
 using EPiServer.Logging;
-using StructureMap.Diagnostics;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -46,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
-            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = Data.Enums.TestState.Active } });
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active } });
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
             Assert.True(aReturnValue != null);
         }
