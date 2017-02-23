@@ -25,6 +25,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             LocalizationSection = "addtocart";
         }
 
+        internal AddToCartKpi(IServiceLocator mockServiceLocator)
+        {
+            _servicelocator = mockServiceLocator;
+        }
         /// <summary>
         /// Called when we are expected to evaluate. 
         /// </summary>
