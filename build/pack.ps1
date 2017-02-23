@@ -22,7 +22,7 @@ if (!(Test-Path $artifactsPath))
 #TODO: refactor to Powershell scripts
 & "$cwd\generatepackages"
 & "$cwd\generatepackagesformessaging"
-#& "$cwd\generatepackagesfortestpages"
+& "$cwd\generatepackagesfortestpages"
 & "$cwd\generatepackagesforkpi"
 & "$cwd\generatepackagesforkpicommerce"
 
