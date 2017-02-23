@@ -16,11 +16,7 @@
   "dependencies": {
     "EPiServer.CMS.Core": "10.1.0",
     "EPiServer.Commerce": "9.24.1",
-    "EPiServer.Framework": "10.1.0",
-    "EPiServer.Marketing.KPI": "1.0.0-*",
-    "Newtonsoft.Json": "6.0.8",
-    "structuremap.web-signed": "3.1.6.186",
-    "structuremap-signed": "3.1.6.186"
+    "EPiServer.Marketing.KPI": "2.0.0"
   },
   "frameworks": {
     "net45": {

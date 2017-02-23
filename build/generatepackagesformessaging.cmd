@@ -11,7 +11,9 @@ xcopy "..\artifacts\%Configuration%\net45\EPiServer.Marketing.Messaging.dll" "%P
 
 xcopy "%ProjectPath%\Package.nuspec" "%PackagePath%\"  /I /F /R /Y
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" ".." "%ProjectPath%"
+xcopy "%ProjectPath%\EPiServer.Marketing.Messaging.xproj" "%PackagePath%\"  /I /F /R /Y
+
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%"
 
 xcopy "%PackagePath%"\*nupkg "..\artifacts"  /I /F /R /Y
 
