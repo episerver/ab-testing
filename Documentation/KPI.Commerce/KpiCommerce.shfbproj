@@ -54,10 +54,11 @@
     <PlugInConfigurations>
       <PlugInConfig id="Wildcard Assembly References" enabled="True">
         <configuration>
-          <references>
-            <reference path="..\References\" wildcard="*.dll" recurse="true" />
-          </references>
-        </configuration>
+  <references>
+    <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
+    <reference path="..\References\" wildcard="*.dll" recurse="true" />
+  </references>
+</configuration>
       </PlugInConfig>
     </PlugInConfigurations>
     <ApiFilter>
