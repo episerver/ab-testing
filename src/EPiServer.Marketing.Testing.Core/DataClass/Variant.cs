@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
@@ -41,6 +42,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// </summary>
         public bool IsPublished { get; set; }
 
+        [ExcludeFromCodeCoverage]
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>

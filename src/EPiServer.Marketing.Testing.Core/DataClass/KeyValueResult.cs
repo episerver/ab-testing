@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
@@ -20,6 +21,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// </summary>
         public Guid? VariantId { get; set; }
 
+        [ExcludeFromCodeCoverage]
         /// <summary>
         /// The variant the result pertains to.
         /// </summary>

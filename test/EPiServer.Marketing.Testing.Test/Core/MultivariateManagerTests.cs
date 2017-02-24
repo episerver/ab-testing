@@ -596,6 +596,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Assert.IsType<SaveTestException>(new SaveTestException());
             Assert.Equal("test", e.Message);
         }
+
+        [Fact]
+        public void TestNotFoundExceptions()
+        {
+            var e = new TestNotFoundException("test", new Exception());
+
+            Assert.IsType<TestNotFoundException>(new TestNotFoundException());
+            Assert.Equal("test", e.Message);
+
+            var e2 = new TestNotFoundException("test2");
+
+            Assert.Equal("test2", e2.Message);
+        }
+
         [Fact]
         public void GetVariantPageData_Test()
         {
