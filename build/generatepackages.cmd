@@ -2,6 +2,7 @@ IF "%1"=="Debug" (set Configuration=Debug) ELSE (set Configuration=Release)
 
 set PackagePath="..\artifacts\%Configuration%\Deployment"
 set ProjectPath="..\src\EPiServer.Marketing.Testing.Web"
+set Dependencies="EPiServer.CMS.UI.Core*EPiServer.Marketing.KPI*EPiServer.Marketing.Messaging"
 
 IF exist "%PackagePath%\" ( rd "%PackagePath%\" /s /q )
 
@@ -13,6 +14,8 @@ xcopy "..\artifacts\%Configuration%\net45\EPiServer.Marketing.Testing.Core.dll" 
 rem xcopy "..\artifacts\Release\net45\EPiServer.Marketing.Testing.Model.dll" "%PackagePath%\lib\"  /I /F /R /Y
 
 xcopy "%ProjectPath%\*.nuspec" "%PackagePath%\"  /I /F /R /Y
+
+xcopy "%ProjectPath%\*.xproj" "%PackagePath%\"  /I /F /R /Y
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources"
 xcopy "%ProjectPath%\ClientResources"\* "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\"  /S /I /F /R /Y
@@ -26,8 +29,8 @@ xcopy "..\src\Database"\Testing\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles"
 xcopy "%ProjectPath%\EmbeddedLangFiles\EPiServer_Testing_EN.xml" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\EmbeddedLangFiles\"  /I /F /R /Y
 
-md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Scripts"
-xcopy "%ProjectPath%\Scripts" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Scripts"  /I /F /R /Y /S
+rem md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Scripts"
+rem xcopy "%ProjectPath%\Scripts" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Scripts"  /I /F /R /Y /S
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"
 xcopy "%ProjectPath%\Images" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\Images"  /I /F /R /Y /S
@@ -46,7 +49,7 @@ del /q "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\*.*
 xcopy "%PackagePath%\temp\*.zip" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\"  /I /F /R /Y
 rd "%PackagePath%\temp" /s /q
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" ".." "%ProjectPath%"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%" "%Dependencies%"
 
 xcopy "%PackagePath%\*.nupkg" "..\artifacts" /I /F /R /Y
 
