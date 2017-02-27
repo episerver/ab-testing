@@ -164,6 +164,29 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void TestManager_CallsGetTestByItemId()
+        {
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            var dalList = new List<IABTest>();
+
+            var test = new DalABTest
+            {
+                OriginalItemId = theGuid,
+                Variants = new List<DalVariant>(),
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
+            };
+
+            dalList.Add(test);
+            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(It.IsAny<Guid>())).Returns(dalList);
+            _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
+            var returnList = tm.GetTestByItemId(theGuid);
+
+            Assert.True(returnList.All(t => t.OriginalItemId == theGuid),
+                "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
+        }
+
+        [Fact]
         public void TestManager_CallsGetTestListWithCritera()
         {
             var critera = new TestCriteria();
@@ -626,6 +649,16 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var testManager = GetUnitUnderTest();
 
             Assert.Equal(1, testManager.GetDatabaseVersion(new SqlConnection(), "", ""));
+
+            testManager.DatabaseNeedsConfiguring = true;
+            Assert.Equal(0, testManager.GetDatabaseVersion(new SqlConnection(), "", ""));
+
+        }
+
+        [Fact]
+        public void Check_DefaultMarketingTestingEvents_Instance_Isnt_Null()
+        {
+           Assert.NotNull(DefaultMarketingTestingEvents.Instance);
         }
     }
 
