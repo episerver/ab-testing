@@ -7,6 +7,7 @@ using Mediachase.Commerce.Orders;
 using System;
 using System.Runtime.Serialization;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -20,14 +21,17 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         description_id = "/commercekpi/addtocart/description")]
     public class AddToCartKpi : CommerceKpi
     {
+        [ExcludeFromCodeCoverage]
         public AddToCartKpi()
         {
             LocalizationSection = "addtocart";
         }
 
-        internal AddToCartKpi(IServiceLocator mockServiceLocator)
+        [ExcludeFromCodeCoverage]
+        internal AddToCartKpi(IServiceLocator serviceLocator)
         {
-            _servicelocator = mockServiceLocator;
+            LocalizationSection = "addtocart";
+            _servicelocator = serviceLocator;
         }
         /// <summary>
         /// Called when we are expected to evaluate. 
