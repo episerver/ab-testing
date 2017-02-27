@@ -101,6 +101,7 @@
         <configuration>
   <references>
     <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
+    <reference path="..\References\" wildcard="*.dll" recurse="true" />
   </references>
 </configuration>
       </PlugInConfig>

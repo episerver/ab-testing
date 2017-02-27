@@ -30,7 +30,7 @@
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
-	<DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
@@ -85,6 +85,14 @@
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, ProtectedInternalAsProtected</VisibleItems>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <PlugInConfigurations>
+      <PlugInConfig id="Wildcard Assembly References" enabled="True">
+        <configuration>
+  <references>
+    <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
+    <reference path="..\References\" wildcard="*.dll" recurse="true" />
+  </references>
+</configuration>
+      </PlugInConfig>
     </PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Manager" isDocumented="True" />
