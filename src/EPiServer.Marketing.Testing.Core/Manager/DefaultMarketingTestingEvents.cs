@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using EPiServer.ServiceLocation;
 
@@ -127,6 +128,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         #region IMarketingTestingEvents
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestSaved
         {
             add { Events.AddHandler(GetEventKey(TestSavedEvent), value); }
@@ -134,6 +136,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestDeleted
         {
             add { Events.AddHandler(GetEventKey(TestDeletedEvent), value); }
@@ -141,6 +144,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestStarted
         {
             add { Events.AddHandler(GetEventKey(TestStartedEvent), value); }
@@ -148,6 +152,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestStopped
         {
             add { Events.AddHandler(GetEventKey(TestStoppedEvent), value); }
@@ -155,6 +160,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestArchived
         {
             add { Events.AddHandler(GetEventKey(TestArchivedEvent), value); }
@@ -162,6 +168,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestAddedToCache
         {
             add { Events.AddHandler(GetEventKey(TestAddedToCacheEvent), value); }
@@ -169,6 +176,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> TestRemovedFromCache
         {
             add { Events.AddHandler(GetEventKey(TestRemovedFromCacheEvent), value); }
@@ -176,6 +184,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> ContentSwitched
         {
             add { Events.AddHandler(GetEventKey(ContentSwitchedEvent), value); }
@@ -183,6 +192,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<TestEventArgs> UserIncludedInTest
         {
             add { Events.AddHandler(GetEventKey(UserIncludedInTestEvent), value); }
@@ -190,6 +200,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<KpiEventArgs> KpiConverted
         {
             add { Events.AddHandler(GetEventKey(KpiConvertedEvent), value); }
@@ -197,6 +208,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public event EventHandler<KpiEventArgs> AllKpisConverted
         {
             add { Events.AddHandler(GetEventKey(AllKpisConvertedEvent), value); }
