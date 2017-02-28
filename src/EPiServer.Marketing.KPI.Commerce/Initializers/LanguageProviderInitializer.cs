@@ -5,9 +5,11 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Framework.Localization;
 using EPiServer.Framework.Localization.XmlResources;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.KPI.Commerce.Initializers
 {
+    [ExcludeFromCodeCoverage]
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class LanguageProviderInitializer : IInitializableModule

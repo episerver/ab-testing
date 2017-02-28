@@ -8,12 +8,14 @@ using Mediachase.Commerce.Orders;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace EPiServer.Marketing.KPI.Commerce.Test
 {
+    [ExcludeFromCodeCoverage]
     public class AddToCartCommerceKpiTests
     {
         private Mock<IPurchaseOrder> _mockPO = new Mock<IPurchaseOrder>();
@@ -104,16 +106,16 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             Mock<CatalogContentBase> catBase = new Mock<CatalogContentBase>();
             catBase.SetupGet(x => x.Name).Returns("Mock Catalog Content");
-            catBase.SetupGet(x=> x.ContentGuid).Returns(contentGuid);
-            
-            
+            catBase.SetupGet(x => x.ContentGuid).Returns(contentGuid);
+
+
             Core.ContentReference refer = new Core.ContentReference() { ID = 1, WorkID = 111 };
             OrderGroupEventArgs orderArgs = new OrderGroupEventArgs(1, OrderGroupEventType.Cart);
             PurchaseOrder po = new PurchaseOrder(Guid.Parse("0fa0ac0c-25a0-4641-8929-f61b71f15ad2"));
             OrderForm of = new OrderForm();
             of.LineItems.Add(new LineItem() { ListPrice = 5.95M, Code = "linecode" });
             po.OrderForms.Add(of);
-         
+
             AddToCartKpi addToCartKpi = GetUnitUnderTest();
 
             _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<string>())).Returns(refer);
@@ -127,40 +129,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
             Assert.True(returnVal.KpiId == addToCartKpi.Id);
             Assert.True(returnVal.HasConverted);
         }
-
-        //[Fact]
-        //public void AddToCart_HasConverted_IsTrue_WhenIsVariant_AndContentGuidIsSubVariant()
-        //{
-        //    Guid contentGuid = Guid.Parse("a94daef6-aaad-4d41-a4d9-711f2b441124");
-
-        //    Mock<CatalogContentBase> catBase = new Mock<CatalogContentBase>();
-        //    catBase.SetupGet(x => x.Name).Returns("Mock Catalog Content");
-        //    catBase.SetupGet(x => x.ContentGuid).Returns(contentGuid);
-
-        //    Mock<VariationContent> varContent = new Mock<VariationContent>();
-
-        //    Core.ContentReference refer = new Core.ContentReference() { ID = 1, WorkID = 111 };
-        //    OrderGroupEventArgs orderArgs = new OrderGroupEventArgs(1, OrderGroupEventType.Cart);
-        //    PurchaseOrder po = new PurchaseOrder(Guid.Parse("0fa0ac0c-25a0-4641-8929-f61b71f15ad2"));
-        //    OrderForm of = new OrderForm();
-        //    of.LineItems.Add(new LineItem() { ListPrice = 5.95M, Code = "linecode" });
-        //    po.OrderForms.Add(of);
-
-        //    AddToCartKpi addToCartKpi = GetUnitUnderTest();
-
-        //    _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<string>())).Returns(refer);
-        //    _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<Core.ContentReference>())).Returns(catBase.Object);
-        //    _mockContentRepository.Setup(call => call.Get<VariationContent>(It.IsAny<Core.ContentReference>())).Returns(varContent.Object);
-        //    varContent.Setup(call => call.GetParentProducts().FirstOrDefault()).Returns(refer);
-
-        //    addToCartKpi.Id = _kpiId;
-        //    addToCartKpi.ContentGuid = contentGuid;
-        //    addToCartKpi.isVariant = false;
-
-        //    var returnVal = addToCartKpi.Evaluate(po, orderArgs);
-        //    Assert.True(returnVal.KpiId == addToCartKpi.Id);
-        //    Assert.True(returnVal.HasConverted);
-        //}
-
+        
     }
 }
