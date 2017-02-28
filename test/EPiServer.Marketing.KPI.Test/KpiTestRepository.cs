@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.KPI.Test
         {
             var records = 0;
 
-            if (DatabaseContext != null)
+            if (TestContext != null)
             {
                 using (var scope = new TransactionScope(
                     TransactionScopeOption.Required,
@@ -77,7 +77,7 @@ namespace EPiServer.Marketing.KPI.Test
                         IsolationLevel = IsolationLevel.ReadCommitted
                     }))
                 {
-                    records = DatabaseContext.SaveChanges();
+                    records = TestContext.SaveChanges();
                     scope.Complete();
                 }
             }
@@ -87,18 +87,18 @@ namespace EPiServer.Marketing.KPI.Test
 
         public IDalKpi GetById(object id)
         {
-            return DatabaseContext.Set<DalKpi>().Find(id);
+            return TestContext.Set<DalKpi>().Find(id);
         }
 
         public IQueryable<IDalKpi> GetAll()
         {
-            return DatabaseContext.Set<DalKpi>().AsQueryable();
+            return TestContext.Set<DalKpi>().AsQueryable();
         }
 
         public void DeleteKpi(object id)
         {
-            var test = DatabaseContext.Set<DalKpi>().Find(id);
-            DatabaseContext.Set<DalKpi>().Remove(test);
+            var test = TestContext.Set<DalKpi>().Find(id);
+            TestContext.Set<DalKpi>().Remove(test);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace EPiServer.Marketing.KPI.Test
         /// in the repository.</returns>
         public T GetById<T>(object id) where T : class
         {
-            return DatabaseContext.Set<T>().Find(id);
+            return TestContext.Set<T>().Find(id);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace EPiServer.Marketing.KPI.Test
         /// <param name="instance">Instance of the objec to save</param>
         public void Save(object instance)
         {
-            DatabaseContext.Entry(instance).State = EntityState.Modified;
+            TestContext.Entry(instance).State = EntityState.Modified;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace EPiServer.Marketing.KPI.Test
         /// <returns>IQueryable of all objects matching the given type from the ORM.</returns>
         public IQueryable<T> GetAll<T>() where T : class
         {
-            return DatabaseContext.Set<T>().AsQueryable<T>();
+            return TestContext.Set<T>().AsQueryable<T>();
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace EPiServer.Marketing.KPI.Test
         /// <param name="instance">Instance of the object to remove</param>
         public void Delete<T>(T instance) where T : class
         {
-            DatabaseContext.Set<T>().Remove(instance as T);
+            TestContext.Set<T>().Remove(instance as T);
         }
 
         public string GetDatabaseVersion(string contextKey)
@@ -164,7 +164,7 @@ namespace EPiServer.Marketing.KPI.Test
         {
             if (instance != null)
             {
-                DatabaseContext.Set(instance.GetType()).Add(instance);
+                TestContext.Set(instance.GetType()).Add(instance);
             }
         }
 
@@ -176,8 +176,8 @@ namespace EPiServer.Marketing.KPI.Test
         {
             if (instance != null)
             {
-                DatabaseContext.Set(instance.GetType()).Attach(instance);
-                DatabaseContext.Entry(instance).State = EntityState.Added;
+                TestContext.Set(instance.GetType()).Attach(instance);
+                TestContext.Entry(instance).State = EntityState.Added;
             }
         }
 
@@ -189,13 +189,13 @@ namespace EPiServer.Marketing.KPI.Test
         {
             if (instance != null)
             {
-                DatabaseContext.Set(instance.GetType()).Attach(instance);
-                DatabaseContext.Entry(instance).State = EntityState.Modified;
+                TestContext.Set(instance.GetType()).Attach(instance);
+                TestContext.Entry(instance).State = EntityState.Modified;
             }
         }
 
 
         private bool _disposed;
-        public DatabaseContext DatabaseContext { get; private set; }
+
     }
 }

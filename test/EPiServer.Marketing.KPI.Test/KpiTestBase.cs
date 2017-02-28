@@ -6,7 +6,7 @@ using EPiServer.Marketing.KPI.DataAccess;
 
 namespace EPiServer.Marketing.KPI.Test
 {
-    internal class KpiTestBase
+    public class KpiTestBase
     {
         public void AddObjectsToContext<T>(KpiTestContext context, IList<T> data) where T : class
         {
@@ -33,7 +33,7 @@ namespace EPiServer.Marketing.KPI.Test
             return kpis;
         }
 
-        public IList<DalKpi> AddKpis(KpiDataAccess mtmManager, int numberOfTests)
+        internal IList<DalKpi> AddKpis(KpiDataAccess mtmManager, int numberOfTests)
         {
             var kpis = new List<DalKpi>();
 

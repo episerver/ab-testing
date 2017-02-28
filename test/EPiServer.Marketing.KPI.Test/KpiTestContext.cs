@@ -5,7 +5,7 @@ using EPiServer.Marketing.KPI.Dal.Model;
 
 namespace EPiServer.Marketing.KPI.Test
 {
-    internal class KpiTestContext : DatabaseContext
+    public class KpiTestContext : DatabaseContext
     {
         public KpiTestContext(DbConnection dbConnection) : base(dbConnection)
         {

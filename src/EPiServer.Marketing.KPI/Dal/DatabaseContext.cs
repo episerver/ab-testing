@@ -10,7 +10,7 @@ namespace EPiServer.Marketing.KPI.Dal
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    internal class DatabaseContext : DbContext
+    public class DatabaseContext : DbContext
     {
         [ExcludeFromCodeCoverage]
         public DatabaseContext()
