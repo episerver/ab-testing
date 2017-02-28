@@ -65,7 +65,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <inheritdoc />
         public Guid Save(IKpi kpi)
         {
-            return _dataAccess.Save(ConvertToDalTest(kpi));
+            return _dataAccess.Save(ConvertToDalKpi(kpi));
         }
 
         /// <inheritdoc />
@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// </summary>
         /// <param name="kpi">Kpi to save to the db (i.e. contentcomparatorkpi, timeonpagekpi, etc.</param>
         /// <returns>EF Kpi object to save in the db.</returns>
-        private IDalKpi ConvertToDalTest(IKpi kpi)
+        private IDalKpi ConvertToDalKpi(IKpi kpi)
         {
             if (Guid.Empty == kpi.Id)
             {   // if the kpi.id is null, its because we are creating a new one.

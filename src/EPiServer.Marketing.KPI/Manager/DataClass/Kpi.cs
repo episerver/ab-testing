@@ -1,6 +1,7 @@
 ﻿using EPiServer.Marketing.KPI.Common.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.Serialization;
 using EPiServer.ServiceLocation;
@@ -191,6 +192,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Override to initalize any internal data
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual void Initialize()
         {
         }
@@ -198,11 +200,13 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <summary>
         /// Overided for any internal kpi instance cleanup
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual void Uninitialize()
         {
         }
 
         /// <inheritdoc />
+        [ExcludeFromCodeCoverage]
         public virtual event EventHandler EvaluateProxyEvent;
     }
 }
