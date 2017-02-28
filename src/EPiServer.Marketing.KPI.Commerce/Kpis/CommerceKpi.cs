@@ -8,6 +8,7 @@ using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
@@ -19,6 +20,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     public abstract class CommerceKpi : Kpi
     {
+        [ExcludeFromCodeCoverage]
         protected string LocalizationSection { get; set; }
 
         /// <summary>

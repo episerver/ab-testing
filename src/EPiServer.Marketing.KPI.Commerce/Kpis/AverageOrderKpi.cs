@@ -14,6 +14,7 @@ using Mediachase.Commerce;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -30,14 +31,15 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     {
         private ILogger _logger;
 
+        [ExcludeFromCodeCoverage]
         public AverageOrderKpi()
         {
             LocalizationSection = "averageorder";
             _servicelocator = ServiceLocator.Current;
             _logger = LogManager.GetLogger();
-
         }
 
+        [ExcludeFromCodeCoverage]
         internal AverageOrderKpi(IServiceLocator servicelocator)
         {
             LocalizationSection = "averageorder";
@@ -85,18 +87,17 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
-            var marketService = ServiceLocator.Current.GetInstance<IMarketService>();
-            var kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
+            var marketService = _servicelocator.GetInstance<IMarketService>();
+            var kpiManager = _servicelocator.GetInstance<IKpiManager>();
 
             var commerceData = kpiManager.GetCommerceSettings();
-            var marketList = marketService.GetAllMarkets();
 
             if(commerceData == null)
             {
                 var defaultMarket = marketService.GetMarket("DEFAULT");
                 if(defaultMarket == null)
                 {
-                    throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/commercekpi/averageorder/config_markup/error_defaultmarketundefined"));
+                    throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/averageorder/config_markup/error_defaultmarketundefined"));
 ;                }
             }
             else
@@ -104,7 +105,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 var preferredMarket = marketService.GetMarket(commerceData.CommerceCulture);
                 if(preferredMarket == null)
                 {
-                    throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/commercekpi/averageorder/config_markup/error_undefinedmarket"));
+                    throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/averageorder/config_markup/error_undefinedmarket"));
                 }
             }
         }
@@ -144,7 +145,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 }
                 else
                 {
-                    _logger.Error(_servicelocator.GetInstance<LocalizationService>().GetString("/commercekpi/averageorder/config_markup/error_undefinedmarket"));
+                    _logger.Error(LocalizationService.Current.GetString("/commercekpi/averageorder/config_markup/error_undefinedmarket"));
                 }
                 
             }

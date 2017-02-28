@@ -5,6 +5,7 @@ using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -20,9 +21,17 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         description_id = "/commercekpi/purchaseitem/description")]
     public class PurchaseItemKpi : CommerceKpi
     {
+        [ExcludeFromCodeCoverage]
         public PurchaseItemKpi()
         {
             LocalizationSection = "purchaseitem";
+        }
+
+        [ExcludeFromCodeCoverage]
+        internal PurchaseItemKpi(IServiceLocator serivceLocator)
+        {
+            LocalizationSection = "purchaseitem";
+            _servicelocator = serivceLocator;
         }
 
         /// <inheritdoc />
