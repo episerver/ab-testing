@@ -5,10 +5,7 @@ using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace EPiServer.Marketing.KPI.Commerce.Test
@@ -17,7 +14,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
     public class PurchaseItemCommerceKpiTests : CommerceKpiTestsBase
     {
         private Guid _kpiId = Guid.Parse("c1327f8f-4063-48b0-a35a-61b9a37d3901");
-
 
         private PurchaseItemKpi GetUnitUnderTest()
         {
@@ -37,6 +33,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         public void PurchaseItemCommerceKpiResultType_Is_KpiFinancialresult()
         {
             var PurchaseItemKpi = GetUnitUnderTest();
+
             Assert.True(PurchaseItemKpi.KpiResultType == "KpiConversionResult");
         }
 
@@ -44,6 +41,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         public void PurchaseItem_UIMarkup_IsRetreived_Correctly()
         {
             var purchaseItemKpi = GetUnitUnderTest();
+
             Assert.NotNull(purchaseItemKpi.UiMarkup);
         }
 
@@ -51,6 +49,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         public void PurchaseItem_UIReadOnlyMarkup_IsRetrieved_Correctly()
         {
             var purchaseItemKpi = GetUnitUnderTest();
+
             Assert.NotNull(purchaseItemKpi.UiReadOnlyMarkup);
         }
 
@@ -59,7 +58,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         {
             PurchaseItemKpi purchaseItemKpi = GetUnitUnderTest();
             purchaseItemKpi.Id = _kpiId;
+
             var returnVal = purchaseItemKpi.Evaluate(new object(), new EventArgs());
+
             Assert.True(returnVal.KpiId == purchaseItemKpi.Id);
             Assert.True(!returnVal.HasConverted);
         }
@@ -71,7 +72,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
             PurchaseOrder po = new PurchaseOrder(Guid.Parse("0fa0ac0c-25a0-4641-8929-f61b71f15ad2"));
             PurchaseItemKpi purchaseItemKpi = GetUnitUnderTest();
             purchaseItemKpi.Id = _kpiId;
+
             var returnVal = purchaseItemKpi.Evaluate(po, orderArgs);
+
             Assert.True(returnVal.KpiId == purchaseItemKpi.Id);
             Assert.True(!returnVal.HasConverted);
         }
@@ -85,9 +88,12 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
             OrderForm of2 = new OrderForm();
             po.OrderForms.Add(of);
             po.OrderForms.Add(of2);
+
             PurchaseItemKpi purchaseItemKpi = GetUnitUnderTest();
             purchaseItemKpi.Id = _kpiId;
+
             var returnVal = purchaseItemKpi.Evaluate(po, orderArgs);
+
             Assert.True(returnVal.KpiId == purchaseItemKpi.Id);
             Assert.True(!returnVal.HasConverted);
         }
@@ -100,7 +106,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
             Mock<CatalogContentBase> catBase = new Mock<CatalogContentBase>();
             catBase.SetupGet(x => x.Name).Returns("Mock Catalog Content");
             catBase.SetupGet(x => x.ContentGuid).Returns(contentGuid);
-
 
             Core.ContentReference refer = new Core.ContentReference() { ID = 1, WorkID = 111 };
             OrderGroupEventArgs orderArgs = new OrderGroupEventArgs(1, OrderGroupEventType.Cart);
@@ -119,6 +124,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
             purchaseItemKpi.isVariant = true;
 
             var returnVal = purchaseItemKpi.Evaluate(po, orderArgs);
+
             Assert.True(returnVal.KpiId == purchaseItemKpi.Id);
             Assert.True(returnVal.HasConverted);
         }

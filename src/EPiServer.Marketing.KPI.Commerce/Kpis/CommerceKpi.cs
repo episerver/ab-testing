@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             //In this example we arbitrarily use the integer 1
             var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];
 
-            var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
 
             //We use the content link builder to get the contentlink to our product
