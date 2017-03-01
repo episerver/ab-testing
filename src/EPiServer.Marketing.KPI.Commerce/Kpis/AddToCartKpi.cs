@@ -8,6 +8,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Linq;
 using EPiServer.Commerce.Order;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
@@ -21,11 +22,18 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         description_id = "/commercekpi/addtocart/description")]
     public class AddToCartKpi : CommerceKpi
     {
+        [ExcludeFromCodeCoverage]
         public AddToCartKpi()
         {
             LocalizationSection = "addtocart";
         }
 
+        [ExcludeFromCodeCoverage]
+        internal AddToCartKpi(IServiceLocator serviceLocator)
+        {
+            LocalizationSection = "addtocart";
+            _servicelocator = serviceLocator;
+        }
         /// <summary>
         /// Called when we are expected to evaluate. 
         /// </summary>

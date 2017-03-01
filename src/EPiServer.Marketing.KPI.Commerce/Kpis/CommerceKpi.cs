@@ -8,6 +8,7 @@ using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
@@ -19,6 +20,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
     [DataContract]
     public abstract class CommerceKpi : Kpi
     {
+        [ExcludeFromCodeCoverage]
         protected string LocalizationSection { get; set; }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             //In this example we arbitrarily use the integer 1
             var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];
 
-            var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
 
             //We use the content link builder to get the contentlink to our product
