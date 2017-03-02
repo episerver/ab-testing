@@ -8,12 +8,12 @@ namespace EPiServer.Marketing.KPI.Test
 {
     public class KpiTestBase
     {
-        public void AddObjectsToContext<T>(KpiTestContext context, IList<T> data) where T : class
+        internal void AddObjectsToContext<T>(KpiTestContext context, IList<T> data) where T : class
         {
             context.Set<T>().AddRange(data);
         }
 
-        public IList<DalKpi> AddKpis(KpiTestContext context, int numberOfTests)
+        internal IList<DalKpi> AddKpis(KpiTestContext context, int numberOfTests)
         {
             var kpis = new List<DalKpi>();
 
