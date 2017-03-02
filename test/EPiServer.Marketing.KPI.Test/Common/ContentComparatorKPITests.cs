@@ -131,7 +131,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         public void VerifyGet()
         {
             var kpi = GetUnitUnderTest();
-            Assert.True( kpi.ContentGuid.Equals(LandingPageGuid));
+            Assert.True( kpi.ContentGuid.Equals(LandingPageGuid), "Evaluate should have returned true");
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
                 ContentGuid = LandingPageGuid
             };
 
-            Assert.True(kpi.ContentGuid.Equals(LandingPageGuid));
+            Assert.True(kpi.ContentGuid.Equals(LandingPageGuid), "Evaluate should have returned true");
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var data = new Dictionary<string, string>();
             data.Add("ConversionPage", _content2.ContentLink.ToString());
             data.Add("CurrentContent", _content2.ContentLink.ToString());
-           // kpi.Validate(data);
+
             Assert.Throws<KpiValidationException>(() => kpi.Validate(data));
         }
 
@@ -196,7 +196,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
 
             var retVal = kpi.Evaluate(new object(), arg);
 
-            Assert.False(retVal.HasConverted);
+            Assert.False(retVal.HasConverted, "Evaluate should have returned false");
         }
 
         [Fact]

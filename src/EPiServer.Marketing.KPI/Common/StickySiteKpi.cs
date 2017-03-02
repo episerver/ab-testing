@@ -4,6 +4,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Web;
 using System.Runtime.Caching;
@@ -24,14 +25,23 @@ namespace EPiServer.Marketing.KPI.Common
     public class StickySiteKpi : Kpi
     {
         private ObjectCache _sessionCache = MemoryCache.Default;
+        private IKpiHelper _stickyHelper;
 
         [DataMember]
         public Guid TestContentGuid;
         [DataMember]
-        int Timeout;
+        public int Timeout;
 
+        [ExcludeFromCodeCoverage]
         public StickySiteKpi()
         {
+            _stickyHelper = new KpiHelper();
+        }
+
+        [ExcludeFromCodeCoverage]
+        internal StickySiteKpi(IKpiHelper helper)
+        {
+            _stickyHelper = helper;
         }
 
         public override IKpiResult Evaluate(object sender, EventArgs e)
@@ -41,7 +51,7 @@ namespace EPiServer.Marketing.KPI.Common
             // we only want to evaluate once per request
             var httpContext = HttpContext.Current;
             var eventArgs = e as ContentEventArgs;
-            if (httpContext != null && eventArgs != null && eventArgs.Content != null && !IsInSystemFolder())
+            if (httpContext != null && eventArgs != null && eventArgs.Content != null && !_stickyHelper.IsInSystemFolder())
             {
                 if (httpContext.Request.Cookies[getCookieKey()] != null)
                 {
@@ -144,8 +154,10 @@ namespace EPiServer.Marketing.KPI.Common
 
         public void AddSessionOnLoadedContent(object sender, ContentEventArgs e)
         {
+            var isInSystemFolder = _stickyHelper.IsInSystemFolder();
+
             var httpContext = HttpContext.Current;
-            if (httpContext != null && !IsInSystemFolder() && e.Content != null)
+            if (httpContext != null && !isInSystemFolder && e.Content != null)
             {
                 if (!httpContext.Items.Contains("SSKSkip") && e.Content.ContentGuid == TestContentGuid &&
                     httpContext.Request.Cookies[getCookieKey()] == null)
@@ -273,19 +285,6 @@ namespace EPiServer.Marketing.KPI.Common
             return "SSK_" + TestContentGuid.ToString();
         }
 
-        /// <summary>
-        /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
-        /// </summary>
-        /// <returns></returns>
-        internal bool IsInSystemFolder()
-        {
-            var inSystemFolder = true;
-
-            inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
-                .Contains(Shell.Paths.ProtectedRootPath.ToLower());
-
-            return inSystemFolder;
-        }
 
         /// <summary>
         /// Returns true if the request is for an asset (such as image, css file)
@@ -304,6 +303,33 @@ namespace EPiServer.Marketing.KPI.Common
             }
 
             return retval;
+        }
+    }
+    public interface IKpiHelper
+    {
+        bool IsInSystemFolder();
+    }
+    /// <summary>
+    /// This exists to allow us to mock the request for unit testing purposes.
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    internal class KpiHelper : IKpiHelper
+    {
+        /// <summary>
+        /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsInSystemFolder()
+        {
+            var inSystemFolder = true;
+
+            if (HttpContext.Current != null)
+            {
+                inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
+                    .Contains(Shell.Paths.ProtectedRootPath.ToLower());
+            }
+
+            return inSystemFolder;
         }
     }
 }
