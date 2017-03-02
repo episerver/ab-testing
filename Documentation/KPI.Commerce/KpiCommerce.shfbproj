@@ -56,11 +56,10 @@
         <configuration>
   <references>
     <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
-    <reference path="..\References\" wildcard="*.dll" recurse="true" />
   </references>
 </configuration>
       </PlugInConfig>
-<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding><dependentAssembly><assemblyIdentity name="EPiServer.UI" /><bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.1.0.0" /></dependentAssembly></assemblyBinding><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer.UI" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
+<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding><dependentAssembly><assemblyIdentity name="EPiServer.UI" /><bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.1.0.0" /></dependentAssembly></assemblyBinding><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer.UI" /><assemblyIdentity name="Mediachase.Commerce" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Config" isExposed="False" />
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Initializers" isExposed="False" />
@@ -130,40 +129,16 @@
     <Content Include="icons\Help.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EPiServer, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.CMS.Core\10.1.0\lib\net45\EPiServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EPiServer, Version=9.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
       <HintPath>..\References\EPiServer.CMS.Core\9.12.0\lib\net45\EPiServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Data, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EPiServer.Data, Version=9.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
       <HintPath>..\References\EPiServer.Framework\9.12.0\lib\net45\EPiServer.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Framework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EPiServer.Framework, Version=9.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
       <HintPath>..\References\EPiServer.Framework\9.12.0\lib\net45\EPiServer.Framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Marketing.KPI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.UI, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.CMS.UI.Core\10.1.0\lib\net45\EPiServer.UI.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Mediachase.Commerce, Version=9.24.1.0, Culture=neutral, PublicKeyToken=6e58b501b34abce3">
-      <HintPath>..\References\EPiServer.Commerce.Core\9.24.1\lib\net45\Mediachase.Commerce.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
