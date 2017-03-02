@@ -30,7 +30,7 @@
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
-	<DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
@@ -85,7 +85,14 @@
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, ProtectedInternalAsProtected</VisibleItems>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <PlugInConfigurations>
-    </PlugInConfigurations>
+      <PlugInConfig id="Wildcard Assembly References" enabled="True">
+        <configuration>
+          <references>
+            <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
+          </references>
+        </configuration>
+      </PlugInConfig>
+<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding /><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer" /><assemblyIdentity name="EPiServer.Data" /><assemblyIdentity name="EPiServer.Framework" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Manager" isDocumented="True" />
     </NamespaceSummaries>
@@ -125,24 +132,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\Help.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-      <HintPath>..\References\EntityFramework\6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.CMS.Core\10.1.0\lib\net45\EPiServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Data, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EPiServer.Framework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.Framework\10.1.0\lib\net45\EPiServer.Framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="..\Sandcastle\SandcastleHelpFileBuilder.targets" />
