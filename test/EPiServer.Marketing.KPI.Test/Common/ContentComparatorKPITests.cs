@@ -4,6 +4,7 @@ using EPiServer.Marketing.KPI.Results;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using EPiServer.DataAbstraction;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
@@ -19,7 +20,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
     {
         private Guid LandingPageGuid = new Guid("A051E0AC-571A-4490-8909-854BA43B8E1E");
 
-        private Mock<IServiceLocator> _serviceLocator;
+        private Mock<IServiceLocator> _serviceLocator = new Mock<IServiceLocator>();
         private Mock<IContentRepository> _contentRepo;
         private Mock<IContentVersionRepository> _contentVersionRepo;
         private Mock<IContentEvents> _contentEvents;
@@ -27,6 +28,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
 
         private IContent _content;
         private IContent _content2;
+        private IContent _content3;
         private IContent _nullContent;
         //private IContent _nullContentResult;
 
@@ -34,24 +36,19 @@ namespace EPiServer.Marketing.KPI.Test.Common
         {
             _content = new BasicContent {ContentLink = new ContentReference(1, 2)};
             _content2 = new BasicContent {ContentLink = new ContentReference(11, 12)};
-            _nullContent = new BasicContent { ContentLink = new ContentReference(111, 112) };
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 5 };
             var contentData = new PageData(pageRef2);
-           // var refer = new PageData();// { ContentLink = new ContentReference() { ID = 2, WorkID = 43,}, PageLink = new PageReference()};
             ContentVersion ver = null;
-            _serviceLocator = new Mock<IServiceLocator>();
 
             _contentRepo = new Mock<IContentRepository>();
             _contentRepo.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(contentData);
             _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content.ContentLink))).Returns(_content);
             _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content2.ContentLink))).Returns(_content2);
-            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _nullContent.ContentLink))).Returns(_nullContent);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_contentRepo.Object);
 
             _contentVersionRepo = new Mock<IContentVersionRepository>();
             _contentVersionRepo.Setup(call => call.LoadPublished(It.Is<ContentReference>(cf => cf != _content))).Returns(new ContentVersion(ContentReference.EmptyReference, "", VersionStatus.Published, DateTime.Now, "", "", 1, "", true, false));
-           // _contentVersionRepo.Setup(call => call.LoadPublished(It.Is<ContentReference>(cf => cf == _nullContent))).Returns(ver);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentVersionRepository>()).Returns(_contentVersionRepo.Object);
 
             _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(new FakeLocalizationService("whatever"));
@@ -70,25 +67,21 @@ namespace EPiServer.Marketing.KPI.Test.Common
 
         private ContentComparatorKPI GetUnitUnderTest2()
         {
-            _content = new BasicContent { ContentLink = new ContentReference(1, 2) };
-            _content2 = new BasicContent { ContentLink = new ContentReference(11, 12) };
+            _content3 = new BasicContent { ContentLink = new ContentReference(11, 12) };
             _nullContent = new BasicContent { ContentLink = new ContentReference(111, 112) };
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 5 };
             var contentData = new PageData(pageRef2);
-            // var refer = new PageData();// { ContentLink = new ContentReference() { ID = 2, WorkID = 43,}, PageLink = new PageReference()};
             ContentVersion ver = null;
             _serviceLocator = new Mock<IServiceLocator>();
 
             _contentRepo = new Mock<IContentRepository>();
             _contentRepo.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(contentData);
-            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content.ContentLink))).Returns(_content);
-            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content2.ContentLink))).Returns(_content2);
+            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content3.ContentLink))).Returns(_content3);
             _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _nullContent.ContentLink))).Returns(_nullContent);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_contentRepo.Object);
 
             _contentVersionRepo = new Mock<IContentVersionRepository>();
-            // _contentVersionRepo.Setup(call => call.LoadPublished(It.Is<ContentReference>(cf => cf != _content))).Returns(new ContentVersion(ContentReference.EmptyReference, "", VersionStatus.Published, DateTime.Now, "", "", 1, "", true, false));
             _contentVersionRepo.Setup(call => call.LoadPublished(It.Is<ContentReference>(cf => cf == _nullContent))).Returns(ver);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentVersionRepository>()).Returns(_contentVersionRepo.Object);
 
@@ -135,7 +128,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         }
 
         [Fact]
-        public void VerifyGetUIMarkups()
+        public void VerifyGetUiMarkups()
         {
             var kpi = GetUnitUnderTest();
             
@@ -156,10 +149,13 @@ namespace EPiServer.Marketing.KPI.Test.Common
         [Fact]
         public void Kpi_Validate_Coverage()
         {
+            Thread.Sleep(1000);
             var kpi = GetUnitUnderTest();
-            var data = new Dictionary<string, string>();
-            data.Add("ConversionPage", _content.ContentLink.ToString());
-            data.Add("CurrentContent", _content2.ContentLink.ToString());
+            var data = new Dictionary<string, string>
+            {
+                {"ConversionPage", _content.ContentLink.ToString()},
+                {"CurrentContent", _content2.ContentLink.ToString()}
+            };
 
             kpi.Validate(data);
         }
@@ -168,9 +164,11 @@ namespace EPiServer.Marketing.KPI.Test.Common
         public void Kpi_Validate_IsContentPublished_Throws_Exception()
         {
             var kpi = GetUnitUnderTest2();
-            var data = new Dictionary<string, string>();
-            data.Add("ConversionPage", _nullContent.ContentLink.ToString());
-            data.Add("CurrentContent", _content2.ContentLink.ToString());
+            var data = new Dictionary<string, string>
+            {
+                {"ConversionPage", _nullContent.ContentLink.ToString()},
+                {"CurrentContent", _content3.ContentLink.ToString()}
+            };
 
             Assert.Throws<KpiValidationException>(() => kpi.Validate(data));
         }
@@ -179,9 +177,11 @@ namespace EPiServer.Marketing.KPI.Test.Common
         public void Kpi_Validate_IsCurrentContent_Throws_Exception()
         {
             var kpi = GetUnitUnderTest();
-            var data = new Dictionary<string, string>();
-            data.Add("ConversionPage", _content2.ContentLink.ToString());
-            data.Add("CurrentContent", _content2.ContentLink.ToString());
+            var data = new Dictionary<string, string>
+            {
+                {"ConversionPage", _content2.ContentLink.ToString()},
+                {"CurrentContent", _content2.ContentLink.ToString()}
+            };
 
             Assert.Throws<KpiValidationException>(() => kpi.Validate(data));
         }

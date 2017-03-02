@@ -19,12 +19,12 @@ namespace EPiServer.Marketing.KPI.Test.Common
 {
     public class TimeOnPageClientKpiTests
     {
-        private Mock<IServiceLocator> _serviceLocator;
+        private Mock<IServiceLocator> _serviceLocator = new Mock<IServiceLocator>();
         private Mock<IContentEvents> _contentEvents;
 
         private TimeOnPageClientKpi GetUnitUnderTest()
         {
-            _serviceLocator = new Mock<IServiceLocator>();
+            //_serviceLocator = new Mock<IServiceLocator>();
             _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>())
                 .Returns(new FakeLocalizationService("whatever"));
             _contentEvents = new Mock<IContentEvents>();

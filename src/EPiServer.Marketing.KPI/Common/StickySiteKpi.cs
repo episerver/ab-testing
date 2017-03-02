@@ -140,12 +140,14 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override void Initialize()
         {
             var service = _servicelocator.GetInstance<IContentEvents>();
             service.LoadedContent += AddSessionOnLoadedContent;
         }
 
+        [ExcludeFromCodeCoverage]
         public override void Uninitialize()
         {
             var service = _servicelocator.GetInstance<IContentEvents>();

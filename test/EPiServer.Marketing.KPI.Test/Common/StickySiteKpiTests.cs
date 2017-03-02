@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Web;
 using System.Web.SessionState;
 using EPiServer.Core;
@@ -19,38 +20,37 @@ namespace EPiServer.Marketing.KPI.Test.Common
 {
     public class StickySiteKpiTests
     {
-        private Mock<IServiceLocator> _serviceLocator;
+        private Mock<IServiceLocator> _serviceLocator = new Mock<IServiceLocator>();
         private Mock<IContentRepository> _contentRepo;
         private Mock<IContentVersionRepository> _contentVersionRepo;
         private Mock<IContentEvents> _contentEvents;
         private Mock<UrlResolver> _urlResolver;
         internal Mock<KpiHelper> _stickyHelperMock;
-        private IContent _content;
-        private IContent _content2;
-        private IContent _nullContent;
+        private IContent _content100;
+        private IContent _content200;
+        private IContent _nullContent100;
         
         private StickySiteKpi GetUnitUnderTest()
         {
-            _content = new BasicContent { ContentLink = new ContentReference(1, 2) };
-            _content2 = new BasicContent { ContentLink = new ContentReference(11, 12) };
-            _nullContent = new BasicContent { ContentLink = new ContentReference(111, 112) };
+            _content100 = new BasicContent { ContentLink = new ContentReference(1, 2) };
+            _content200 = new BasicContent { ContentLink = new ContentReference(11, 12) };
+            _nullContent100 = new BasicContent { ContentLink = new ContentReference(111, 112) };
             _stickyHelperMock = new Mock<KpiHelper>();
             _stickyHelperMock.Setup(call => call.IsInSystemFolder()).Returns(false);
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 5 };
             var contentData = new PageData(pageRef2);
             ContentVersion ver = null;
-            _serviceLocator = new Mock<IServiceLocator>();
 
             _contentRepo = new Mock<IContentRepository>();
             _contentRepo.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(contentData);
-            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content.ContentLink))).Returns(_content);
-            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content2.ContentLink))).Returns(_content2);
-            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _nullContent.ContentLink))).Returns(_nullContent);
+            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content100.ContentLink))).Returns(_content100);
+            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _content200.ContentLink))).Returns(_content200);
+            _contentRepo.Setup(call => call.Get<IContent>(It.Is<ContentReference>(cf => cf == _nullContent100.ContentLink))).Returns(_nullContent100);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentRepository>()).Returns(_contentRepo.Object);
 
             _contentVersionRepo = new Mock<IContentVersionRepository>();
-            _contentVersionRepo.Setup(call => call.LoadPublished(It.Is<ContentReference>(cf => cf != _content))).Returns(new ContentVersion(ContentReference.EmptyReference, "", VersionStatus.Published, DateTime.Now, "", "", 1, "", true, false));
+            _contentVersionRepo.Setup(call => call.LoadPublished(It.Is<ContentReference>(cf => cf != _content100))).Returns(new ContentVersion(ContentReference.EmptyReference, "", VersionStatus.Published, DateTime.Now, "", "", 1, "", true, false));
             _serviceLocator.Setup(sl => sl.GetInstance<IContentVersionRepository>()).Returns(_contentVersionRepo.Object);
 
             _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(new FakeLocalizationService("whatever"));
@@ -74,7 +74,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var data = new Dictionary<string, string>
             {
                 {"Timeout", ""},
-                {"CurrentContent", _content2.ContentLink.ToString()}
+                {"CurrentContent", _content200.ContentLink.ToString()}
             };
 
             Assert.Throws<KpiValidationException>(() => kpi.Validate(data));
@@ -87,7 +87,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var data = new Dictionary<string, string>
             {
                 {"Timeout", null},
-                {"CurrentContent", _content2.ContentLink.ToString()}
+                {"CurrentContent", _content200.ContentLink.ToString()}
             };
 
             Assert.Throws<KpiValidationException>(() => kpi.Validate(data));
@@ -100,7 +100,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var data = new Dictionary<string, string>
             {
                 {"Timeout", "5"},
-                {"CurrentContent", _content2.ContentLink.ToString()}
+                {"CurrentContent", _content200.ContentLink.ToString()}
             };
 
             kpi.Validate(data);
@@ -120,6 +120,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         [Fact]
         public void StickySiteKpi_AddSessionOnLoadedContent()
         {
+            Thread.Sleep(1000);
             HttpContext.Current = FakeHttpContext.FakeContext("http://localhost:48594/alloy-plan/");
 
             var kpi = GetUnitUnderTest();
