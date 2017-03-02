@@ -92,7 +92,7 @@
           </references>
         </configuration>
       </PlugInConfig>
-    </PlugInConfigurations>
+<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding /><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer.Data" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Manager" isDocumented="True" />
     </NamespaceSummaries>
