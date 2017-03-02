@@ -16,7 +16,6 @@
   "dependencies": {
     "EPiServer.CMS.Core": "10.1.0",
     "EPiServer.Commerce": "9.24.1",
-    "EPiServer.Commerce.Core": "9.24.1",
     "EPiServer.Marketing.KPI": "2.0.0"
   },
   "frameworks": {
