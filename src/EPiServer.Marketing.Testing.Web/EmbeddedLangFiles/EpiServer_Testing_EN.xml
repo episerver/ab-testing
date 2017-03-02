@@ -95,6 +95,7 @@
         <winning_version_label>Winner (published)</winning_version_label>
       </archiveview>
       <canceltestcommand>
+        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
         <label_text>Abort A/B Test and Edit Page</label_text>
         <tooltip_text>Abort A/B Test and Edit Page</tooltip_text>
       </canceltestcommand>

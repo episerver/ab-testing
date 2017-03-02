@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.KPI.Common
         text_id = "/kpi/timeonpage_kpi/name",
         description_id = "/kpi/timeonpage_kpi/description")]
     [ClientScript(ClientSideEvaluationScript = "EPiServer.Marketing.KPI.Markup.TimeOnPageEvaluationScript.html")]
-    public class TimeOnPageClientKpi : ClientKpi
+    abstract class TimeOnPageClientKpi : ClientKpi
     {
         [DataMember]
         int TargetDuration { get; set; }
