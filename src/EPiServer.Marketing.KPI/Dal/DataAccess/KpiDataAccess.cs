@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity.Migrations.History;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EPiServer.Marketing.KPI.Dal;
 using EPiServer.Marketing.KPI.Dal.Model;
@@ -14,6 +15,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
         internal IRepository _repository;
         internal bool _UseEntityFramework;
 
+        [ExcludeFromCodeCoverage]
         public KpiDataAccess()
         {
             _UseEntityFramework = true;
@@ -30,6 +32,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
             }
             // TODO : Load repository from service locator.
         }
+
         internal KpiDataAccess(IRepository repository)
         {
             _repository = repository;
@@ -199,6 +202,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
             return Convert.ToInt64(version);
         }
 
+        [ExcludeFromCodeCoverage]
         private static bool HasTableNamed(BaseRepository repository, string table, string schema = "dbo")
         {
             string sql = @"SELECT CASE WHEN EXISTS
