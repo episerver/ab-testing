@@ -14,6 +14,7 @@ using EPiServer.Web.Routing;
 using EPiServer.ServiceLocation;
 using EPiServer.DataAbstraction;
 using System.Linq;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -305,33 +306,6 @@ namespace EPiServer.Marketing.KPI.Common
             }
 
             return retval;
-        }
-    }
-    public interface IKpiHelper
-    {
-        bool IsInSystemFolder();
-    }
-    /// <summary>
-    /// This exists to allow us to mock the request for unit testing purposes.
-    /// </summary>
-    [ExcludeFromCodeCoverage]
-    internal class KpiHelper : IKpiHelper
-    {
-        /// <summary>
-        /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool IsInSystemFolder()
-        {
-            var inSystemFolder = true;
-
-            if (HttpContext.Current != null)
-            {
-                inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
-                    .Contains(Shell.Paths.ProtectedRootPath.ToLower());
-            }
-
-            return inSystemFolder;
         }
     }
 }

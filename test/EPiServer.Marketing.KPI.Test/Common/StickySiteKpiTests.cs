@@ -8,6 +8,7 @@ using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Common.Helpers;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Test.Fakes;
 using EPiServer.ServiceLocation;
