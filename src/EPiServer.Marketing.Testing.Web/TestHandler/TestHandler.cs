@@ -252,7 +252,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
-                        ActivateClientKpis(activeTest.KpiInstances,testCookieData);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
@@ -351,6 +350,8 @@ namespace EPiServer.Marketing.Testing.Web
                         variantVersion,
                         CountType.View);
                     cookie.Viewed = true;
+
+                    ActivateClientKpis(currentTest.KpiInstances, cookie);
 
                     _testDataCookieHelper.UpdateTestDataCookie(cookie);
                 }

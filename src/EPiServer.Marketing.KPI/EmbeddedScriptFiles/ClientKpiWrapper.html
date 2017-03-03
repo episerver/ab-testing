@@ -10,18 +10,19 @@
     }});
 
     function convert() {{
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "http://"+window.location.host+"/api/episerver/testing/UpdateClientConversion", false);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
-            if (xhttp.status != "200")
-            {{
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://"+window.location.host+"/api/episerver/testing/UpdateClientConversion", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.onreadystatechange = function () {{
+            if (xhttp.readyState == 4 && xhttp.status == 200) {{
+                    console.info(xhttp.status + ":" + xhttp.responseText);
+                }} else {{
                 console.error(xhttp.status + ":" + xhttp.responseText);
             }}
-            else {{
-                console.info(xhttp.status + ":" + xhttp.responseText);
-            }}
-    }}
+        }}
+        xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
+
+    }};
 
     {3}
 
