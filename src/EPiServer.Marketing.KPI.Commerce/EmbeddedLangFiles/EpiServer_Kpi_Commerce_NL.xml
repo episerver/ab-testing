@@ -4,15 +4,15 @@
     <commercekpi>
       <addtocart>
         <config_markup>
-          <conversion_label>Visitor adds product to cart</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>Bezoeker voegt product toe aan winkelwagen</conversion_label>
+          <error_conversionproduct>U moet een product selecteren voordat u de A / B-test kunt opslaan.</error_conversionproduct>
+          <error_not_published_product>U moet een gepubliceerd product of productvariatie selecteren voordat u de A / B-test. kunt opslaan.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion.</description>
+        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
         <name>Add To Cart</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
+          <conversion_header>Product aan winkelwagen toevoegen</conversion_header>
+          <conversion_selector_description>Bezoeker voegt het product toe aan de winkelwagen</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
