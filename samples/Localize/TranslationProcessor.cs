@@ -31,7 +31,7 @@ namespace MergeTranslations
             if (!File.Exists(dest))
                 throw new Exception("dest file does not exist : " + dest);
 
-            if (!File.Exists(diff_folder))
+            if (!Directory.Exists(diff_folder))
             {
                 Console.WriteLine("Warning : no diff folder specified to store added keys.");
             }
