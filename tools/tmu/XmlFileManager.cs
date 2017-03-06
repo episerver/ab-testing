@@ -176,6 +176,7 @@ namespace MergeTranslations
         /// <param name="newPath"></param>
         public void Save(string newPath = null)
         {
+            Sort(doc);
             if (newPath != null)
             {
                 doc.Save(newPath);

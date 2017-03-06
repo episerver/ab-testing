@@ -57,15 +57,15 @@ namespace MergeTranslations
             // Store the diff files if folder specified.
             if (diff_folder != null && elementsToAdd.Count != 0 )
             {
-                XmlFileManager difFiler = new XmlFileManager(dest);
+                var filename = diff_folder + Path.GetFileNameWithoutExtension(dest) + ".DIFF";
+                XmlFileManager difFiler = new XmlFileManager(filename);
                 foreach (var e in elementsToAdd)
                 {
                     XAttribute attribute = new XAttribute("path", e.p);
                     e.e.Add(attribute);
                     difFiler.Add(e);
                 }
-                var filename = diff_folder + Path.GetFileNameWithoutExtension(dest) + ".DIFF";
-                difFiler.Save(filename);
+                difFiler.Save();
             }
         }
 
