@@ -646,5 +646,36 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveReference should be called once");
         }
+
+        [Fact]
+        public void TestHandler_LoadedChildren()
+        {
+            var th = GetUnitUnderTest();
+
+            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new BasicContent());
+
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
+            _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
+            _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
+
+            var t = new ContentReference(1, 3);
+            var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent()});
+            th.LoadedChildren(new object(), args);
+
+
+        }
+
+        [Fact]
+        public void TestHandler_TestAddedToCaches_Adds_EventHandler_For_Kpis()
+        {
+            var th = GetUnitUnderTest();
+
+            var contentEvents = new Mock<IContentEvents>();
+            _mockServiceLocator.Setup(s1 => s1.GetInstance<IContentEvents>()).Returns(contentEvents.Object);
+
+            th.TestAddedToCache(new object(), new TestEventArgs(new ABTest() {KpiInstances = new List<IKpi>() {new ContentComparatorKPI(Guid.NewGuid())} }));
+        }
+
     }
 }
