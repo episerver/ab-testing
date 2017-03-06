@@ -38,7 +38,7 @@
         <config_markup>
           <conversionlabel>Number of minutes visitor remains on the page.</conversionlabel>
           <emptyfield>Field may not be empty.</emptyfield>
-          <notpositiveinteger>Value must enter a valid whole number and greater than 0.</notpositiveinteger>
+          v
         </config_markup>
         <description>Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
         <readonly_markup>
