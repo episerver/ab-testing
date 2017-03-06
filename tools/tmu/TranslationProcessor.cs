@@ -58,7 +58,6 @@ namespace MergeTranslations
             if (diff_folder != null && elementsToAdd.Count != 0 )
             {
                 XmlFileManager difFiler = new XmlFileManager(dest);
-                difFiler.Clean();
                 foreach (var e in elementsToAdd)
                 {
                     XAttribute attribute = new XAttribute("path", e.p);
