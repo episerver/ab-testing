@@ -151,7 +151,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
 
-            var kpiManager = new KpiManager();
+            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             var kpi = kpiManager.Get(testData.KpiId);
 
             var test = new ABTest
