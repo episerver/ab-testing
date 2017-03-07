@@ -1,19 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
-  <language name="français" id="fr">
-    <abtesting>
-      <admin>
-        <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>
-      </admin>
-      <canceltestcommand>
-        <abort_confirmation_message path="/abtesting/canceltestcommand/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
-      </canceltestcommand>
-      <detailsview>
-        <abort_confirmation_message path="/abtesting/detailsview/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
-      </detailsview>
-      <tasks>
-        <category path="/abtesting/tasks/category/">A/B Tests</category>
-      </tasks>
-    </abtesting>
-  </language>
+  <language name="français" id="fr" />
 </languages>

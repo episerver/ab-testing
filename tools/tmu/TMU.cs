@@ -170,24 +170,27 @@ namespace MergeTranslations
             List<MyElement> ListToRemove = new List<MyElement>();
             foreach (var LanguageFile in LanguageFiles)
             {
-                ListToRemove.Clear();
-                XmlFileManager f = new XmlFileManager(LanguageFile);
-                foreach( var element in f.ElementList)
+                if (args[1] != LanguageFile)
                 {
-                    if(!element.e.HasElements)
+                    ListToRemove.Clear();
+                    XmlFileManager f = new XmlFileManager(LanguageFile);
+                    foreach (var element in f.ElementList)
                     {
-                        var sourceElement = source.ElementList.FirstOrDefault(l => l.p == element.p);
-                        if(sourceElement != null && sourceElement.e.Value == element.e.Value )
+                        if (!element.e.HasElements)
                         {
-                            ListToRemove.Add(element);
+                            var sourceElement = source.ElementList.FirstOrDefault(l => l.p == element.p);
+                            if (sourceElement != null && sourceElement.e.Value == element.e.Value)
+                            {
+                                ListToRemove.Add(element);
+                            }
                         }
                     }
+                    foreach (var element in ListToRemove)
+                    {
+                        f.Remove(element);
+                    }
+                    f.Save();
                 }
-                foreach(var element in ListToRemove)
-                {
-                    f.Remove(element);
-                }
-                f.Save();
             }
 
             // Clean all the diff files.
