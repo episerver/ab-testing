@@ -39,19 +39,6 @@ namespace EPiServer.Marketing.Testing.Web
         {
             ITestHandler testHandler = ServiceLocator.Current.GetInstance<ITestHandler>();
             testHandler.AppendClientKpiScript();
-
-        }
-
-        [ExcludeFromCodeCoverage]
-        private void BeginRequest(object sender, EventArgs e)
-        {
-   
-
-        }
-
-        [ExcludeFromCodeCoverage]
-        private void EndRequest(object sender, EventArgs e)
-        {
         }
 
         //Interface Requirement but not used.
