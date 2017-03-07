@@ -69,10 +69,10 @@
         <content_chosen> A winner was selected.</content_chosen>
         <content_control_header>A / Control</content_control_header>
         <content_selected>This version was picked as the winner</content_selected>
-        <conversions>conversions</conversions>
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <conversions>conversions</conversions>
         <days_divider> day(s), </days_divider>
         <description_heading>Test goal</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
@@ -89,9 +89,9 @@
         <test_status_completed>Test complete.</test_status_completed>
         <to>to</to>
         <total_participants_details>Current number of test participants:</total_participants_details>
-        <views>views</views>
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
+        <views>views</views>
         <winning_version_label>Winner (published)</winning_version_label>
       </archiveview>
       <canceltestcommand>
@@ -111,8 +111,8 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Control</content_control_header>
         <content_winning_tooltip>This version is performing better</content_winning_tooltip>
-        <conversions>conversions</conversions>
         <conversion_rate>conversion rate</conversion_rate>
+        <conversions>conversions</conversions>
         <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Test goal</description_heading>
@@ -131,9 +131,9 @@
         <test_status_not_started>Test has not yet started. </test_status_not_started>
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Current number of test participants:</total_participants_details>
-        <views>views</views>
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
+        <views>views</views>
       </detailsview>
       <notificationbar>
         <completed_test>An A/B test was completed on a version of this content. </completed_test>
@@ -152,10 +152,10 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Control</content_control_header>
         <content_winning_tooltip>This version is performing better</content_winning_tooltip>
-        <conversions>conversions</conversions>
         <conversion_header>Conversion goal</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+        <conversions>conversions</conversions>
         <days_divider> day(s) / </days_divider>
         <days_remaining>day(s) remaining.</days_remaining>
         <description_heading>Test goal</description_heading>
