@@ -17,6 +17,7 @@ namespace MergeTranslations
             Console.WriteLine("Most common");
             Console.WriteLine("TMU [-all][srcFile][srcFolder][diff_folder]  : Save as -a && -r giving a src file and a src folder" );
             Console.WriteLine("TMU [-mall][diff_folder][srcFolder]          : Merges all language files with available translations");
+            Console.WriteLine("TMU [-clean][srcFile][langFolder][diff_folder] : Emptys the diff files, removes any non localized keys from the localized files.");
             Console.WriteLine("");
             Console.WriteLine("Advanced single file manipulation (good for debugging tool)");
             Console.WriteLine("TMU [-n][srcFile]                        : Normalizes the file (tolower all keys and alphabeticalize all elements)");
@@ -24,9 +25,6 @@ namespace MergeTranslations
             Console.WriteLine("TMU [-r][srcFile][destFile]              : Normalizes and removes keys from the destFile that are not in the srcFile");
             Console.WriteLine("TMU [-ar][srcFile][destFile][diff_folder]: Same as -a && -r");
             Console.WriteLine("TMU [-m][srcFile][destFile]              : Normalizes and merges srcFile key values to destFile");
-            Console.WriteLine("");
-            Console.WriteLine("TMU [-clean][srcFile][langFolder][diff_folder] : Emptys our diff files and removes any non localized keys from the localized files.");
-            Console.WriteLine("Notes:");
             Console.WriteLine("");
 
             Console.WriteLine("Hit any key...");
