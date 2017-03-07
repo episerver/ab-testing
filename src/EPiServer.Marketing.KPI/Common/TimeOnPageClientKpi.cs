@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
             var isInt = int.TryParse(responseData["TargetDuration"], out parsedInt);
 
-            if (isInt && parsedInt > 0)
+            if (isInt && (parsedInt > 0 && parsedInt < 1801))
             {
                 TargetDuration = parsedInt;
             }
