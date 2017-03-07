@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -29,12 +31,22 @@ namespace EPiServer.Marketing.Testing.Web
             // We are not actually doing in anything in begin and end request 
             // anymore however leaving this here in case we do. 
             //  application.BeginRequest += BeginRequest;
-            //  application.EndRequest += EndRequest;
+            //application.EndRequest += EndRequest;
+            application.PostReleaseRequestState += onPostReleaseRequestState;
+        }
+
+        private void onPostReleaseRequestState(object sender, EventArgs e)
+        {
+            ITestHandler testHandler = ServiceLocator.Current.GetInstance<ITestHandler>();
+            testHandler.AppendClientKpiScript();
+
         }
 
         [ExcludeFromCodeCoverage]
         private void BeginRequest(object sender, EventArgs e)
         {
+   
+
         }
 
         [ExcludeFromCodeCoverage]
