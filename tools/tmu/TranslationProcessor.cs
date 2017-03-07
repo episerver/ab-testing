@@ -61,9 +61,14 @@ namespace MergeTranslations
                 XmlFileManager difFiler = new XmlFileManager(filename);
                 foreach (var e in elementsToAdd)
                 {
-                    XAttribute attribute = new XAttribute("path", e.p);
-                    e.e.Add(attribute);
-                    difFiler.Add(e);
+                    // dont save the parent element, if its needed fileadder will add it properly. 
+                    //
+                    if ( !e.e.HasElements ) 
+                    {
+                        XAttribute attribute = new XAttribute("path", e.p);
+                        e.e.Add(attribute);
+                        difFiler.Add(e);
+                    }
                 }
                 difFiler.Save();
             }
