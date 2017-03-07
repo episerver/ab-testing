@@ -8,6 +8,8 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using Xunit;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
@@ -21,6 +23,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IServiceLocator> _mockServiceLocator;
         private Mock<ITestResultHelper> _mockTestResultHelper;
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
+        private Mock<IKpiManager> _mockKpiManager;
 
         private MarketingTestingWebRepository GetUnitUnderTest()
         {
@@ -28,7 +31,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator = new Mock<IServiceLocator>();
             
             _mockTestManager = new Mock<ITestManager>();
+            _mockTestManager.Setup(call => call.Save(It.IsAny<IMarketingTest>())).Returns(new Guid());
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
+
+            var kpi = new ContentComparatorKPI() {ContentGuid = Guid.NewGuid()};
+
+            _mockKpiManager = new Mock<IKpiManager>();
+            _mockKpiManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(kpi);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
+
 
             _mockTestResultHelper = new Mock<ITestResultHelper>();
             _mockServiceLocator.Setup(call => call.GetInstance<ITestResultHelper>())
@@ -240,6 +251,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
             string aResult = webRepo.PublishWinningVariant(testResultModel);
             Assert.True(aResult == testResultModel.TestId);
+        }
+
+        [Fact]
+        public void ConvertToMarketingTest_Converts_Test_And_Calculates_EndDate()
+        {
+            var webRepo = GetUnitUnderTest();
+            var startDate = DateTime.Now;
+
+            var testResultModel = new TestingStoreModel()
+            {
+                TestContentId = Guid.NewGuid(),
+                TestDescription = "Description",
+                PublishedVersion = 1,
+                VariantVersion = 2,
+                StartDate = startDate.ToString(),
+                TestDuration = 30,
+                ParticipationPercent = 100,
+                KpiId = Guid.NewGuid(),
+                TestTitle = "Test Title",
+                Start = false,
+                ConfidenceLevel = 95,
+                AutoPublishWinner = false
+            };
+
+            var test = webRepo.ConvertToMarketingTest(testResultModel);
+
+            Assert.Equal(startDate.AddDays(30).Day, test.EndDate.Day);
         }
     }
 }

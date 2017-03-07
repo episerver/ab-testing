@@ -37,6 +37,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private readonly IServiceLocator _serviceLocator;
         private IPreviewUrlBuilder _previewUrlBuilder;
 
+        [ExcludeFromCodeCoverage]
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
