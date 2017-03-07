@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -11,6 +12,7 @@ namespace EPiServer.Marketing.Testing.Web.Evaluator
         private IContentRepository _contentRepo;
         internal string _abLockId = "ActiveABTestLock";
 
+        [ExcludeFromCodeCoverage]
         public ABTestLockEvaluator()
         {
             _webRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
