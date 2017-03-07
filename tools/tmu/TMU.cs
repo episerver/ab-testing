@@ -25,6 +25,7 @@ namespace MergeTranslations
             Console.WriteLine("TMU [-ar][srcFile][destFile][diff_folder]: Same as -a && -r");
             Console.WriteLine("TMU [-m][srcFile][destFile]              : Normalizes and merges srcFile key values to destFile");
             Console.WriteLine("");
+            Console.WriteLine("TMU [-clean][srcFile][langFolder][diff_folder] : Emptys our diff files and removes any non localized keys from the localized files.");
             Console.WriteLine("Notes:");
             Console.WriteLine("");
 
@@ -52,6 +53,10 @@ namespace MergeTranslations
                 else if (args[0] == "-mall")
                 {
                     TMU.MergeAllFiles(args);
+                }
+                else if (args[0] == "-clean")
+                {
+                    TMU.CleanAllFiles(args);
                 }
                 else if (args[0] == "-n") // normalize only
                 {
@@ -148,9 +153,55 @@ namespace MergeTranslations
             }
         }
 
+        static void CleanAllFiles(string[] args)
+        {
+            Console.WriteLine("Adding / Removing / Creating diffs for  :");
+            if (args.Length == 4)
+            {
+                Console.WriteLine(" Src         : " + args[1]);
+                Console.WriteLine(" LangFolder  : " + args[2]);
+                Console.WriteLine(" DiffFolder  : " + args[3]);
+            }
+
+            // for every file in the source folder, remove any keys that have the same values
+            // in the src language file.
+            XmlFileManager source = new XmlFileManager(args[1]);
+            var LanguageFiles = Directory.GetFiles(args[2], "*.xml");
+            List<MyElement> ListToRemove = new List<MyElement>();
+            foreach (var LanguageFile in LanguageFiles)
+            {
+                ListToRemove.Clear();
+                XmlFileManager f = new XmlFileManager(LanguageFile);
+                foreach( var element in f.ElementList)
+                {
+                    if(!element.e.HasElements)
+                    {
+                        var sourceElement = source.ElementList.FirstOrDefault(l => l.p == element.p);
+                        if(sourceElement != null && sourceElement.e.Value == element.e.Value )
+                        {
+                            ListToRemove.Add(element);
+                        }
+                    }
+                }
+                foreach(var element in ListToRemove)
+                {
+                    f.Remove(element);
+                }
+                f.Save();
+            }
+
+            // Clean all the diff files.
+            var DiffFiles = Directory.GetFiles(args[3], "*.DIFF");
+            foreach (var DiffFile in DiffFiles)
+            {
+                XmlFileManager f = new XmlFileManager(DiffFile);
+                f.Clean();
+                f.Save();
+            }
+        }
+
         static void MergeAllFiles(string[] args)
         {
-
             // Reuse the same logic in main, just do it with a file list. 
             Console.WriteLine("Merging All");
             Console.WriteLine(" Src Folder  : " + args[1]);

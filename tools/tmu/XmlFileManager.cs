@@ -111,8 +111,19 @@ namespace MergeTranslations
                 }
             }
 
+            var parent = element.e.Parent;
+            var parentPath = getParentPath(element);
+
             element.e.Remove();            
             ElementList.Remove(element);
+            if(parent != null && !parent.HasElements)
+            {
+                var parentElement = ElementList.FirstOrDefault(l => l.p == parentPath);
+                if (parentElement != null)
+                {
+                    Remove(parentElement);
+                }
+            }
         }
 
         /// <summary>
