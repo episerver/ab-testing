@@ -120,8 +120,11 @@ namespace MergeTranslations
                     MyElement destElement = destFiler.ElementList.FirstOrDefault(el => el.p == path.Value);
                     if (destElement != null && destElement.e.Parent != null)
                     {
-                        destElement.e.Parent.SetElementValue(e.e.Name, e.e.Value);
-                        elementsToRemove.Add(e);
+                        if (e.e.Value.ToString() != destElement.e.Value.ToString())
+                        {
+                            destElement.e.Parent.SetElementValue(e.e.Name, e.e.Value);
+                            elementsToRemove.Add(e);
+                        }
                     }
                 }
             }
