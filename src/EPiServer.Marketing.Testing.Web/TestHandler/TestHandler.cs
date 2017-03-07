@@ -16,9 +16,12 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
+using System.IO;
+using System.Text;
 
 namespace EPiServer.Marketing.Testing.Web
 {
+    [ServiceConfiguration(ServiceType = typeof(ITestHandler), Lifecycle = ServiceInstanceScope.Singleton)]
     internal class TestHandler : ITestHandler
     {
         private readonly IServiceLocator _serviceLocator;
@@ -29,6 +32,8 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly DefaultMarketingTestingEvents _marketingTestingEvents;
         /// Used to keep track of how many times for the same service/event we add the proxy event handler
         private readonly IReferenceCounter _ReferenceCounter = new ReferenceCounter();
+
+        private static Dictionary<ClientKpi, TestDataCookie> clientKpis = new Dictionary<ClientKpi, TestDataCookie>();
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -182,7 +187,7 @@ namespace EPiServer.Marketing.Testing.Web
                         {
                             var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-                          
+
                             if (!hasData && DbReadWrite())
                             {
                                 // Make sure the cookie has data in it. There are cases where you can load
@@ -252,7 +257,6 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
-                        ActivateClientKpis(activeTest.KpiInstances,testCookieData);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
@@ -321,18 +325,54 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="cookieData"></param>
         private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
         {
-            foreach (var kpi in kpiInstances.Where(x=>x is IClientKpi))
+            foreach (var kpi in kpiInstances.Where(x => x is IClientKpi))
             {
-                if (!HttpContext.Current.Items.Contains(kpi.Id.ToString()) 
+                if (!HttpContext.Current.Items.Contains(kpi.Id.ToString())
                     && !_contextHelper.IsInSystemFolder()
                     && (!cookieData.Converted || cookieData.AlwaysEval))
                 {
-                    var clientKpi = kpi as ClientKpi;
-                    var test = _testManager.Get(cookieData.TestId);
-                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id == cookieData.TestVariantId).ItemVersion;
-                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientKpiScript,cookieData.TestId,itemVersion,clientKpi.Id,clientKpi.ClientEvaluationScript));
-                    HttpContext.Current.Items[kpi.Id.ToString()]=true;
+                    clientKpis.Add(kpi as ClientKpi, cookieData);
+                    HttpContext.Current.Items[kpi.Id.ToString()] = true;
                 }
+            }
+        }
+
+        public void AppendClientKpiScript()
+        {
+            if (clientKpis.Count >= 1)
+            {
+                List<Guid> activeTestKpis = new List<Guid>();
+
+                //Marker to identify our injected code
+                string script = "<!-- ABT Script -->";
+
+                //Add client kpi wrapper which processes conversions
+                script += clientKpis.First().Key.ClientKpiScript;
+
+                //Add clients custom evaluation scripts
+                foreach (KeyValuePair<ClientKpi, TestDataCookie> data in clientKpis)
+                {
+                    //get required test information for current client kpi
+                    var test = _testManager.Get(data.Value.TestId);
+                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id == data.Value.TestVariantId).ItemVersion;
+
+                    //inject necessary code into client provided script to properly process client conversion
+                    var modifiedClientScript = data.Key.ClientEvaluationScript.Replace("window.dispatchEvent(ClientKpiConverted);",
+                        "ClientKpiConverted.id = '" + data.Key.Id + "';" + Environment.NewLine +
+                        "addKpiData('" + data.Key.Id + "','" + test.Id + "','" + itemVersion + "');" + Environment.NewLine +
+                        "window.dispatchEvent(ClientKpiConverted);");
+
+                    script += modifiedClientScript;
+                    activeTestKpis.Add(data.Key.Id);
+                }
+
+                HttpContext context = HttpContext.Current;
+                if (HttpContext.Current.Items.Contains(activeTestKpis[0].ToString()))
+                {
+                    context.Response.Filter = new ABResponseFilter(context.Response.Filter, script);
+                }
+
+                clientKpis.Clear();
             }
         }
 
@@ -344,6 +384,8 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
+                ActivateClientKpis(currentTest.KpiInstances, cookie);
+
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
@@ -351,6 +393,8 @@ namespace EPiServer.Marketing.Testing.Web
                         variantVersion,
                         CountType.View);
                     cookie.Viewed = true;
+
+
 
                     _testDataCookieHelper.UpdateTestDataCookie(cookie);
                 }
