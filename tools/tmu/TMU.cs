@@ -170,7 +170,7 @@ namespace MergeTranslations
             List<MyElement> ListToRemove = new List<MyElement>();
             foreach (var LanguageFile in LanguageFiles)
             {
-                if (args[1] != LanguageFile)
+                if (args[1].ToLower() != LanguageFile.ToLower())
                 {
                     ListToRemove.Clear();
                     XmlFileManager f = new XmlFileManager(LanguageFile);
