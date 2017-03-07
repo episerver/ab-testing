@@ -3,199 +3,199 @@
   <language name="svenska" id="sv">
     <abtesting>
       <addtestcommand>
-        <label_text>A/B Test Changes</label_text>
-        <tooltip_text>A/B Test Changes</tooltip_text>
+        <label_text>A/B-test-ändringar</label_text>
+        <tooltip_text>A/B-test-ändringar</tooltip_text>
       </addtestcommand>
       <addtestview>
-        <advanced_options>Advanced Options</advanced_options>
-        <cancel_default>Cancel</cancel_default>
-        <challenger>B / Challenger</challenger>
-        <confidence_90>90%</confidence_90>
-        <confidence_95>95%</confidence_95>
-        <confidence_98>98%</confidence_98>
-        <confidence_99>99%</confidence_99>
-        <confidence_level_description>The confidence level dictates the amount of errors allowed. A higher percentage directly correlates to the accuracy of the test results. This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidence_level_description>
-        <confidence_level_header>Confidence level</confidence_level_header>
-        <control>A / Control</control>
-        <conversion_header>Conversion goal</conversion_header>
-        <conversion_label>Visitor navigates to page</conversion_label>
-        <days_text> day(s).</days_text>
-        <default> (default)</default>
-        <draft_prefix>Draft - Edited by</draft_prefix>
-        <duration_header>Test duration</duration_header>
-        <error_conversiongoal>You must select a conversion goal page before you can start the A/B test.</error_conversiongoal>
-        <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
-        <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
-        <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
-        <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
-        <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
-        <goals_default_text>Example: Get more click-throughs to download the ebook by changing the advertisement image.</goals_default_text>
-        <goals_header>Test goal</goals_header>
+        <advanced_options>Avancerade inställningar</advanced_options>
+        <cancel_default>Avbryt</cancel_default>
+        <challenger>B / Utmanare</challenger>
+        <confidence_90>90 %</confidence_90>
+        <confidence_95>95 %</confidence_95>
+        <confidence_98>98 %</confidence_98>
+        <confidence_99>99 %</confidence_99>
+        <confidence_level_description>Konfidensnivån anger mängden tillåtna fel. Ju högre konfidensnivå, desto större blir testresultatens noggrannhet. Detta anger om skillnaden mätt mellan kontrollsidan och variantsidan inte är en slump (dvs om skillnaden är signifikant eller inte).</confidence_level_description>
+        <confidence_level_header>Konfidensnivå</confidence_level_header>
+        <control>A / Original</control>
+        <conversion_header>Vad är konverteringsmålet?</conversion_header>
+        <conversion_label>Besökare går till sida</conversion_label>
+        <days_text> dag(ar).</days_text>
+        <default> (standardvärde)</default>
+        <draft_prefix>Utkast - Redigerat av</draft_prefix>
+        <duration_header>Hur länge vill du köra A/B-testet?</duration_header>
+        <error_conversiongoal>Du måste välja ett konverteringsmål innan du kan spara A/B-testet.</error_conversiongoal>
+        <error_date_in_the_past>Testets startdag/starttid måste vara i framtiden.</error_date_in_the_past>
+        <error_duration>Testtiden måste vara ett heltal mellan 1 och 365</error_duration>
+        <error_invalid_date_time_value>Den angivna informationen är inte ett godkänt värde för dag/tid</error_invalid_date_time_value>
+        <error_participation_percentage>Deltagandet (i procent) måste vara mellan 1 och 100</error_participation_percentage>
+        <error_test_not_schedulded_or_started>inte schemalagt, korrigera felet på startdag/startdag för att schemalägga ett test</error_test_not_schedulded_or_started>
+        <goals_default_text>Exempel: Få fler nedladdningar av e-boken genom att byta reklambilden.</goals_default_text>
+        <goals_header>Vad är målet med testet?</goals_header>
         <goals_selectlist_default>Välj mål</goals_selectlist_default>
-        <notscheduled_text>not scheduled, and will start now</notscheduled_text>
-        <participant_percentage_tip>More participation reduces time to gather statistics and pick a winner.</participant_percentage_tip>
-        <participation_header>Participation percentage</participation_header>
-        <published_prefix>Published by</published_prefix>
-        <schedule_header>Start test</schedule_header>
-        <schedule_selector_delay>Schedule for later</schedule_selector_delay>
-        <schedule_selector_start>Start immediately</schedule_selector_start>
-        <schedule_test>Schedule Test</schedule_test>
-        <schedule_text_prefix>A/B test is currently </schedule_text_prefix>
-        <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
-        <start_default>Start Test</start_default>
-        <test_description>Determine whether new or changed content improves the conversion rate.</test_description>
+        <notscheduled_text>inte schemalagt, kommer att starta nu</notscheduled_text>
+        <participant_percentage_tip>Ett högre deltagandeantal minskar tiden som krävs för att samla tillräckligt med data för att kunna peka ut en vinnare.</participant_percentage_tip>
+        <participation_header>Hur stor del av besökarantalet, i procent, ska delta i testet?</participation_header>
+        <published_prefix>Publicerat av</published_prefix>
+        <schedule_header>När ska A/B-testet starta?</schedule_header>
+        <schedule_selector_delay>Schemalägg för senare publicering</schedule_selector_delay>
+        <schedule_selector_start>Starta omedelbart</schedule_selector_start>
+        <schedule_test>Schemalägg test</schedule_test>
+        <schedule_text_prefix>A/B-testet är just nu </schedule_text_prefix>
+        <schedule_tobegin_on>schemalagt att starta </schedule_tobegin_on>
+        <start_default>Starta testet</start_default>
+        <test_description>Validera om nya tillägg eller innehållsändringar faktiskt påverkar antalet konverteringar.</test_description>
       </addtestview>
       <admin>
         <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
-        <cancel>Cancel</cancel>
-        <confidencelevel>Confidence Level:</confidencelevel>
-        <description>These settings are the defaults values used for when creating AB tests.</description>
-        <displayname>AB Testing Configuration</displayname>
-        <durationerror>Test duration must be between 1 and 365.</durationerror>
-        <invalid>One or more values are not of the correct format.</invalid>
-        <participationerror>Participation percentage must be between 1 and 100.</participationerror>
-        <participationpercent>Participation Percentage:</participationpercent>
-        <save>Save</save>
-        <success>Configuration settings saved successfully.</success>
-        <testduration>Test Duration:</testduration>
+        <cancel>Avbryt</cancel>
+        <confidencelevel>Konfidensnivå:</confidencelevel>
+        <description>Dessa inställningar är standardvärden som används vid skapandet av A/B-test.</description>
+        <displayname>A/B-test-konfiguration</displayname>
+        <durationerror>Måste vara mellan 1 och 365.</durationerror>
+        <invalid>Ett eller flera värden är inte i korrekt format.</invalid>
+        <participationerror>Måste vara mellan 1 och 100.</participationerror>
+        <participationpercent>Deltagande i procent:</participationpercent>
+        <save>Spara</save>
+        <success>Konfigurationsinställningarna sparades.</success>
+        <testduration>Testtid:</testduration>
       </admin>
       <archiveview>
-        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
-        <advanced_options_header>Advanced Options</advanced_options_header>
-        <button_close>Close</button_close>
-        <by> by </by>
-        <content_challenger_header>B / Challenger</content_challenger_header>
-        <content_chosen> A winner was selected.</content_chosen>
-        <content_control_header>A / Control</content_control_header>
-        <content_selected>This version was picked as the winner</content_selected>
-        <conversion_header>Conversion goal</conversion_header>
-        <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <conversions>conversions</conversions>
-        <days_divider> day(s), </days_divider>
-        <description_heading>Test goal</description_heading>
-        <draft_prefix>Draft - Edited by</draft_prefix>
-        <from>from</from>
-        <goal_not_specified>A goal has not been specified.</goal_not_specified>
-        <losing_version_label>Saved in Versions</losing_version_label>
-        <percent_participation_header>Participation percentage</percent_participation_header>
-        <published_prefix>Published by</published_prefix>
-        <remaining_increment>Days</remaining_increment>
-        <started> Started </started>
-        <test_duration_header>Test duration</test_duration_header>
-        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
-        <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test complete.</test_status_completed>
-        <to>to</to>
-        <total_participants_details>Current number of test participants:</total_participants_details>
-        <view_challenger_content>View challenger content</view_challenger_content>
-        <view_control_content>View control content</view_control_content>
-        <views>views</views>
-        <winning_version_label>Winner (published)</winning_version_label>
+        <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
+        <advanced_options_header>Avancerade inställningar</advanced_options_header>
+        <button_close>Stäng</button_close>
+        <by> av </by>
+        <content_challenger_header>B / Utmanare</content_challenger_header>
+        <content_chosen>, och innehållet har blivit valt för publicering</content_chosen>
+        <content_control_header>A / Original</content_control_header>
+        <content_selected>Den här versionen är vald som vinnare</content_selected>
+        <conversion_header>Konverteringsmål</conversion_header>
+        <conversion_rate>konverteringsgrad</conversion_rate>
+        <conversion_selector_description>Besökare går till sida</conversion_selector_description>
+        <conversions>konverteringar</conversions>
+        <days_divider> dag(ar), </days_divider>
+        <description_heading>Målet med testet</description_heading>
+        <draft_prefix>Utkast - redigerat av</draft_prefix>
+        <from>från</from>
+        <goal_not_specified>Ett mål har inte angivits för testet.</goal_not_specified>
+        <losing_version_label>Sparat i Versioner</losing_version_label>
+        <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
+        <published_prefix>Publicerat av</published_prefix>
+        <remaining_increment>Dagar</remaining_increment>
+        <started> Startat </started>
+        <test_duration_header>Testets längd</test_duration_header>
+        <test_percent_to_participations_divider> / Antalet testdeltagare just nu </test_percent_to_participations_divider>
+        <test_scheduled>Det är schemalagt att börja </test_scheduled>
+        <test_status_completed>Det här testet avslutades</test_status_completed>
+        <to>till</to>
+        <total_participants_details>Antalet testdeltagare just nu:</total_participants_details>
+        <view_challenger_content>Visa utmanaren</view_challenger_content>
+        <view_control_content>Visa originalet</view_control_content>
+        <views>sidvisningar</views>
+        <winning_version_label>Vinnare (publicerad)</winning_version_label>
       </archiveview>
       <canceltestcommand>
         <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
-        <label_text>Abort A/B Test and Edit Page</label_text>
-        <tooltip_text>Abort A/B Test and Edit Page</tooltip_text>
+        <label_text>Avbryt A/B-testet och redigera</label_text>
+        <tooltip_text>Avbryt A/B-testet och redigera sida</tooltip_text>
       </canceltestcommand>
       <detailsview>
         <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
-        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
-        <advanced_options_header>Advanced Options</advanced_options_header>
-        <button_abort_option>Abort A/B Test</button_abort_option>
-        <button_close>Close</button_close>
-        <button_options>Options</button_options>
-        <button_pick_winner_option>Pick The Winner</button_pick_winner_option>
-        <by> by </by>
-        <content_challenger_header>B / Challenger</content_challenger_header>
-        <content_control_header>A / Control</content_control_header>
-        <content_winning_tooltip>This version is performing better</content_winning_tooltip>
-        <conversion_rate>conversion rate</conversion_rate>
-        <conversions>conversions</conversions>
-        <days_divider> day(s) / </days_divider>
-        <days_remaining>day(s) remaining.</days_remaining>
-        <description_heading>Test goal</description_heading>
-        <draft_prefix>Draft - Edited by</draft_prefix>
-        <goal_not_specified>A goal has not been specified.</goal_not_specified>
-        <percent_participation_header>Participation percentage</percent_participation_header>
-        <published_prefix>Published by</published_prefix>
-        <remaining_increment>Days</remaining_increment>
-        <started> Started </started>
-        <test_duration_completed>Completed after full duration</test_duration_completed>
-        <test_duration_header>Test duration</test_duration_header>
-        <test_not_started_text>This test has not yet started.</test_not_started_text>
-        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
-        <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
-        <test_status_not_started>Test has not yet started. </test_status_not_started>
-        <test_status_running>Test is running, </test_status_running>
-        <total_participants_details>Current number of test participants:</total_participants_details>
-        <view_challenger_content>View challenger content</view_challenger_content>
-        <view_control_content>View control content</view_control_content>
-        <views>views</views>
+        <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
+        <advanced_options_header>Avancerade Inställningar</advanced_options_header>
+        <button_abort_option>Avbryt A/B-test</button_abort_option>
+        <button_close>Stäng</button_close>
+        <button_options>Alternativ</button_options>
+        <button_pick_winner_option>Välj som Vinnare</button_pick_winner_option>
+        <by> av </by>
+        <content_challenger_header>B / Utmanare</content_challenger_header>
+        <content_control_header>A / Original</content_control_header>
+        <content_winning_tooltip>Den här versionen fungerar bättre</content_winning_tooltip>
+        <conversion_rate>konverteringsgrad</conversion_rate>
+        <conversions>konverteringar</conversions>
+        <days_divider> dag(ar) / </days_divider>
+        <days_remaining>dag(ar) kvar.</days_remaining>
+        <description_heading>Mål med testet</description_heading>
+        <draft_prefix>Utkast - Redigerat av</draft_prefix>
+        <goal_not_specified>Ett mål har inte angivits för testet.</goal_not_specified>
+        <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
+        <published_prefix>Publicerat av</published_prefix>
+        <remaining_increment>Dagar</remaining_increment>
+        <started> Startat </started>
+        <test_duration_completed>Avslutat efter fulltid</test_duration_completed>
+        <test_duration_header>Testets längd</test_duration_header>
+        <test_not_started_text>Det här testet har inte startat än.</test_not_started_text>
+        <test_percent_to_participations_divider> / Antalet testdeltagare just nu </test_percent_to_participations_divider>
+        <test_scheduled>Det är schemalagt att starta </test_scheduled>
+        <test_status_completed>Testet är avslutat, välj nu en vinnare...</test_status_completed>
+        <test_status_not_started>Det här testet har inte startat än. </test_status_not_started>
+        <test_status_running>Testet pågår, </test_status_running>
+        <total_participants_details>Antalet testdeltagare just nu:</total_participants_details>
+        <view_challenger_content>Visa utmanaren</view_challenger_content>
+        <view_control_content>Visa originalet</view_control_content>
+        <views>sidvisningar</views>
       </detailsview>
       <notificationbar>
-        <completed_test>An A/B test was completed on a version of this content. </completed_test>
-        <details_link_text>View test</details_link_text>
-        <details_link_tooltip>View test details</details_link_tooltip>
-        <ongoing_test>A version of this content is part of an on-going A/B test. </ongoing_test>
-        <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
-        <winner_link_text>Pick winner</winner_link_text>
-        <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
+        <completed_test>Ett A/B-test utfördes på en version av det här innehållet. </completed_test>
+        <details_link_text>Visa testet</details_link_text>
+        <details_link_tooltip>Visa testdetaljer</details_link_tooltip>
+        <ongoing_test>En version av det här innehållet är del av ett pågående A/B-test. </ongoing_test>
+        <scheduled_test>Ett A/B-test är schemalagt på en av versionerna av det här innehållet </scheduled_test>
+        <winner_link_text>Välj vinnare</winner_link_text>
+        <winner_link_tooltip>Visa testdetaljer och välj vinnare </winner_link_tooltip>
       </notificationbar>
       <pickwinnerview>
-        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
-        <advanced_options_header>Advanced Options</advanced_options_header>
-        <button_close>Close</button_close>
-        <by> by </by>
-        <content_challenger_header>B / Challenger</content_challenger_header>
-        <content_control_header>A / Control</content_control_header>
-        <content_winning_tooltip>This version is performing better</content_winning_tooltip>
-        <conversion_header>Conversion goal</conversion_header>
-        <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <conversions>conversions</conversions>
-        <days_divider> day(s) / </days_divider>
-        <days_remaining>day(s) remaining.</days_remaining>
-        <description_heading>Test goal</description_heading>
-        <draft_prefix>Draft - Edited by</draft_prefix>
+        <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
+        <advanced_options_header>Avancerade inställningar</advanced_options_header>
+        <button_close>Stäng</button_close>
+        <by> av </by>
+        <content_challenger_header>B / Utmanare</content_challenger_header>
+        <content_control_header>A / Original</content_control_header>
+        <content_winning_tooltip>Den här versionen fungerar bättre</content_winning_tooltip>
+        <conversion_header>Konverteringsmål</conversion_header>
+        <conversion_rate>konverteringsgrad</conversion_rate>
+        <conversion_selector_description>Besökare går till sida</conversion_selector_description>
+        <conversions>konverteringar</conversions>
+        <days_divider> dag(ar) / </days_divider>
+        <days_remaining>dag(ar) kvar.</days_remaining>
+        <description_heading>Mål med testet</description_heading>
+        <draft_prefix>Utkast - Redigerat av</draft_prefix>
         <early_pick_winner_message>
-          This test has not been completed yet, but you may pick a winner. Picking a winner now will end the test and publish the chosen content.
+          Det här testet är inte avslutat men du kan välja en vinnare. Om du väljer en vinnare nu avslutas testet och det valda innehållet publiceras.
         </early_pick_winner_message>
-        <goal_not_specified>A goal has not been specified</goal_not_specified>
-        <percent_participation_header>Participation percentage</percent_participation_header>
-        <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
-        <pick_winner_option_text>Pick a winner</pick_winner_option_text>
-        <published_prefix>Published by</published_prefix>
-        <remaining_increment>Days</remaining_increment>
-        <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
-        <started> Started </started>
-        <test_duration_completed>Completed after full duration</test_duration_completed>
-        <test_duration_header>Test duration</test_duration_header>
-        <test_not_started_text>This test has not yet started.</test_not_started_text>
-        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
-        <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test complete. Pick a winner.</test_status_completed>
-        <test_status_not_started>Test has not yet started. </test_status_not_started>
-        <test_status_running>Test is running, </test_status_running>
-        <total_participants_details>Number of participants</total_participants_details>
-        <views>views</views>
+        <goal_not_specified>Ett mål har inte angivits.</goal_not_specified>
+        <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
+        <pick_a_winner_text>Välj en vinnare!</pick_a_winner_text>
+        <pick_winner_option_text>Välj en vinnare</pick_winner_option_text>
+        <published_prefix>Publicerat av</published_prefix>
+        <remaining_increment>Dagar</remaining_increment>
+        <result_is_not_significant>Testresultaten är INTE signifikanta.</result_is_not_significant>
+        <started> Startat </started>
+        <test_duration_completed>Avslutat efter fulltid</test_duration_completed>
+        <test_duration_header>Testets längd</test_duration_header>
+        <test_not_started_text>Testet har inte startat än.</test_not_started_text>
+        <test_percent_to_participations_divider> / Antalet testdeltagare just nu </test_percent_to_participations_divider>
+        <test_scheduled>Det är schemalagt att börja </test_scheduled>
+        <test_status_completed>Testet är avslutat. Välj en vinnare.</test_status_completed>
+        <test_status_not_started>Testet har inte startat än. </test_status_not_started>
+        <test_status_running>Testet pågår, </test_status_running>
+        <total_participants_details>Antalet deltagare</total_participants_details>
+        <views>sidvisningar</views>
       </pickwinnerview>
       <publishing>
-        <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
-        <error_cannot_schedule_publish>You cannot schedule content to be published while it is being tested. To schedule your content to be published, choose a winner or cancel the current test.</error_cannot_schedule_publish>
+        <error_cannot_publish>Du kan inte publicera innehåll samtidigt som det håller på att testas. För att publicera ditt innehåll, välj en vinnare eller avbryt testet.</error_cannot_publish>
+        <error_cannot_schedule_publish>Du kan inte schemalägga innehåll för publicering samtidigt som det håller på att testas. För att schemalägga innehållet för publicering, välj en vinnare eller avbryt testet.</error_cannot_schedule_publish>
       </publishing>
       <scheduler_plugin>
-        <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
-        <displayname>Marketing Test Monitor</displayname>
-        <message>Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]</message>
+        <description>Skannar listan med schemalagda eller pågående Marknadstest och ändrar teststatus baserat på testens Start- och Slutdatum.</description>
+        <displayname>Marknadstestövervakare</displayname>
+        <message>Startat [{0}] Stoppat [{1}] Aktivt [{2}] Inaktivt [{3}] Avslutat [{4}]</message>
       </scheduler_plugin>
       <tasks>
-        <activetests>Active Tests</activetests>
-        <archivedtests>Archived Tests</archivedtests>
+        <activetests>Aktiva A/B-test</activetests>
+        <archivedtests>Arkiverade A/B-test</archivedtests>
         <category>A/B Tests</category>
-        <completedtests>Completed Tests</completedtests>
-        <inactivetests>Scheduled Tests</inactivetests>
+        <completedtests>Avslutade A/B-test</completedtests>
+        <inactivetests>Schemalagda A/B-test</inactivetests>
       </tasks>
     </abtesting>
   </language>
