@@ -354,6 +354,32 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(cookieValue != null && cookieValue.Expires <= DateTime.Now.AddDays(-1d));
         }
 
+        [Fact]
+        public void GetTestDataFromCookie_MAR_896_NoExceptionForMissingEntries()
+        {
+            var mockTesteDataCookiehelper = GetUnitUnderTest();
+            var testContentId = Guid.NewGuid();
+            var expireDate = DateTime.Now.AddDays(2);
+
+            var testVariantId = Guid.NewGuid();
+
+            var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
+            { // purposely empty properties...
+                Expires = expireDate,
+                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+            };
+
+            HttpContext.Current.Response.Cookies.Add(testCookie);
+
+            var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
+            Assert.True(returnCookieData.TestId == Guid.Empty);
+            Assert.True(returnCookieData.TestContentId == Guid.Empty);
+            Assert.False(returnCookieData.ShowVariant);
+            Assert.True(returnCookieData.TestVariantId == Guid.Empty);
+            Assert.False(returnCookieData.Viewed);
+            Assert.False(returnCookieData.Converted);
+            Assert.False(returnCookieData.AlwaysEval);
+        }
         public void Dispose()
         {
             HttpContext.Current = null;
