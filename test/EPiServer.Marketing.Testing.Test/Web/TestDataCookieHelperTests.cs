@@ -372,10 +372,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             HttpContext.Current.Response.Cookies.Add(testCookie);
 
             var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
+
             Assert.True(returnCookieData.TestId == Guid.Empty);
             Assert.True(returnCookieData.TestContentId == Guid.Empty);
-            Assert.False(returnCookieData.ShowVariant);
             Assert.True(returnCookieData.TestVariantId == Guid.Empty);
+            Assert.False(returnCookieData.ShowVariant);
             Assert.False(returnCookieData.Viewed);
             Assert.False(returnCookieData.Converted);
             Assert.False(returnCookieData.AlwaysEval);
