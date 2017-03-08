@@ -18,6 +18,8 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
 using System.IO;
 using System.Text;
+using EPiServer.Marketing.KPI.Manager;
+using Newtonsoft.Json;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -32,8 +34,6 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly DefaultMarketingTestingEvents _marketingTestingEvents;
         /// Used to keep track of how many times for the same service/event we add the proxy event handler
         private readonly IReferenceCounter _ReferenceCounter = new ReferenceCounter();
-
-        private static Dictionary<ClientKpi, TestDataCookie> clientKpis = new Dictionary<ClientKpi, TestDataCookie>();
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -325,13 +325,23 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="cookieData"></param>
         private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
         {
+            Dictionary<Guid, TestDataCookie> ClientKpiList = new Dictionary<Guid, TestDataCookie>();
             foreach (var kpi in kpiInstances.Where(x => x is IClientKpi))
             {
                 if (!HttpContext.Current.Items.Contains(kpi.Id.ToString())
                     && !_contextHelper.IsInSystemFolder()
                     && (!cookieData.Converted || cookieData.AlwaysEval))
                 {
-                    clientKpis.Add(kpi as ClientKpi, cookieData);
+
+                    if (HttpContext.Current.Response.Cookies.AllKeys.Contains("ClientKpiList"))
+                    {
+                        ClientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(HttpContext.Current.Response.Cookies["ClientKpiList"].Value);
+                        HttpContext.Current.Response.Cookies.Remove("ClientKpiList");
+                    }
+
+                    ClientKpiList.Add(kpi.Id, cookieData);
+                    var tempKpiList = JsonConvert.SerializeObject(ClientKpiList);
+                    HttpContext.Current.Response.Cookies.Add(new HttpCookie("ClientKpiList") { Value = tempKpiList });
                     HttpContext.Current.Items[kpi.Id.ToString()] = true;
                 }
             }
@@ -339,40 +349,51 @@ namespace EPiServer.Marketing.Testing.Web
 
         public void AppendClientKpiScript()
         {
-            if (clientKpis.Count >= 1)
+            //Check if the current response has client kpis.  This lets us know we are in the correct response
+            //so we don't inject scripts into an unrelated response stream.
+            if (HttpContext.Current.Response.Cookies.AllKeys.Contains("ClientKpiList"))
             {
-                List<Guid> activeTestKpis = new List<Guid>();
+                //Get the current client kpis we are concered with.
+                Dictionary<Guid, TestDataCookie> clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(HttpContext.Current.Response.Cookies["ClientKpiList"].Value);
 
                 //Marker to identify our injected code
                 string script = "<!-- ABT Script -->";
 
-                //Add client kpi wrapper which processes conversions
-                script += clientKpis.First().Key.ClientKpiScript;
+                //We need the wrapper which we can get from any client kpi
+                KpiManager kpiManager = new KpiManager();
+                ClientKpi firstClient = kpiManager.Get(clientKpiList.First().Key) as ClientKpi;
+                script += firstClient.ClientKpiScript;
 
                 //Add clients custom evaluation scripts
-                foreach (KeyValuePair<ClientKpi, TestDataCookie> data in clientKpis)
+                foreach (KeyValuePair<Guid, TestDataCookie> data in clientKpiList)
                 {
-                    //get required test information for current client kpi
+                    //Get required test information for current client kpi
+
+                    IKpiManager _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
+                    ClientKpi tempKpi = _kpiManager.Get(data.Key) as ClientKpi;
                     var test = _testManager.Get(data.Value.TestId);
                     var itemVersion = test.Variants.FirstOrDefault(v => v.Id == data.Value.TestVariantId).ItemVersion;
 
-                    //inject necessary code into client provided script to properly process client conversion
-                    var modifiedClientScript = data.Key.ClientEvaluationScript.Replace("window.dispatchEvent(ClientKpiConverted);",
-                        "ClientKpiConverted.id = '" + data.Key.Id + "';" + Environment.NewLine +
-                        "addKpiData('" + data.Key.Id + "','" + test.Id + "','" + itemVersion + "');" + Environment.NewLine +
+                    //Inject necessary code into client provided script to properly process client conversion
+                    var modifiedClientScript = tempKpi.ClientEvaluationScript.Replace("window.dispatchEvent(ClientKpiConverted);",
+                        "ClientKpiConverted.id = '" + tempKpi.Id + "';" + Environment.NewLine +
+                        "addKpiData('" + tempKpi.Id + "','" + test.Id + "','" + itemVersion + "');" + Environment.NewLine +
                         "window.dispatchEvent(ClientKpiConverted);");
 
                     script += modifiedClientScript;
-                    activeTestKpis.Add(data.Key.Id);
+                    HttpContext.Current.Items[tempKpi.Id.ToString()] = true;
                 }
 
+                //Check to make sure we client kpis we are supposed to inject
                 HttpContext context = HttpContext.Current;
-                if (HttpContext.Current.Items.Contains(activeTestKpis[0].ToString()))
+                if (HttpContext.Current.Items.Contains(clientKpiList.Keys.First().ToString()))
                 {
+                    //Remove the temporary cookie.
+                    context.Response.Cookies.Remove("ClientKpiList");
+
+                    //Inject our script into the stream.
                     context.Response.Filter = new ABResponseFilter(context.Response.Filter, script);
                 }
-
-                clientKpis.Clear();
             }
         }
 
