@@ -375,8 +375,8 @@ namespace EPiServer.Marketing.Testing.Web
                     var itemVersion = test.Variants.FirstOrDefault(v => v.Id == data.Value.TestVariantId).ItemVersion;
 
                     //Inject necessary code into client provided script to properly process client conversion
-                    var modifiedClientScript = tempKpi.ClientEvaluationScript.Replace("window.dispatchEvent(ClientKpiConverted);",
-                        "ClientKpiConverted.id = '" + tempKpi.Id + "';" + Environment.NewLine +
+                    var modifiedClientScript = tempKpi.ClientEvaluationScript.Replace("window.dispatchEvent(this.ClientKpiConverted);",
+                        "this.ClientKpiConverted.id = '" + tempKpi.Id + "';" + Environment.NewLine +
                         "addKpiData('" + tempKpi.Id + "','" + test.Id + "','" + itemVersion + "');" + Environment.NewLine +
                         "window.dispatchEvent(ClientKpiConverted);");
 

@@ -3,41 +3,63 @@
 
     var ActiveKpis = new Array();
     var testId;
-    var itemVersion; 
+    var itemVersion;
 
-    var ClientKpiConverted = new Event('ConvertClientKpi');
-    window.addEventListener('ConvertClientKpi', function (e) {
+    var ClientKpiConverted = document.createEvent("Event");
+    ClientKpiConverted.initEvent("ConvertClientKpi", true, false);
+        window.addEventListener('ConvertClientKpi', function (e) {
         setTestData(e.id);
         convert();
     });
 
-    function addKpiData(kId,tId,itemVersion)
-    {
-        var data = { kpiId: kId, testId: tId, itemVersion, itemVersion }
+    function addKpiData(kId, tId, itemVersion) {
+        var data = { kpiId: kId, testId: tId, itemVersion: itemVersion }
         ActiveKpis.push(data);
     }
 
-    function setTestData(id)
-    {
-        var result = ActiveKpis.find(function (obj) {
-            return obj.kpiId === id;
-        });
+    function setTestData(id) {
+        var result;
         
+        if (navigator.appName === "Microsoft Internet Explorer") {
+            result = search(id, ActiveKpis);
+        }
+        else {
+            result = ActiveKpis.find(function (obj) {
+                return obj.kpiId === id;
+            });
+        };
+
         testId = result.testId;
         itemVersion = result.itemVersion;
     }
 
-    function convert() {{
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://"+window.location.host+"/api/episerver/testing/UpdateClientConversion", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.onreadystatechange = function () {{
-            if (xhttp.status == 200) {{
-                    console.info(xhttp.status + ":" + xhttp.responseText);
-                }} else {{
-                console.error(xhttp.status + ":" + xhttp.responseText);
-            }}
-        }}
-        xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
-    }};
- </script>
+    function search(id, arrayObj) {
+        for (var i = 0; i < arrayObj.length; i++) {
+            if (arrayObj[i].kpiId === id) {
+                return arrayObj[i];
+            }
+        }
+    }
+
+    function convert() {
+        {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "http://" + window.location.host + "/api/episerver/testing/UpdateClientConversion", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.onreadystatechange = function () {
+                {
+                    if (xhttp.status == 200) {
+                        {
+                            console.info(xhttp.status + ":" + xhttp.responseText);
+                        }
+                    } else {
+                        {
+                            console.error(xhttp.status + ":" + xhttp.responseText);
+                        }
+                    }
+                }
+            }
+            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
+        }
+    };
+</script>
