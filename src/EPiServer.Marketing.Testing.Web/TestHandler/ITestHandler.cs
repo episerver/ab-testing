@@ -6,6 +6,5 @@ namespace EPiServer.Marketing.Testing.Web
     {
         void LoadedContent(object sender, ContentEventArgs e);
         void ProxyEventHandler(object sender, EventArgs e);
-        void AppendClientKpiScript();
     }
 }
