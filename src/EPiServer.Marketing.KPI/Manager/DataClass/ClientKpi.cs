@@ -13,33 +13,6 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
     public abstract class ClientKpi : Kpi, IClientKpi
     {
-
-        public string ClientKpiScript
-        {
-            get
-            {
-                return ClientScriptWrapper;
-            }
-        }
-
-        private string ClientScriptWrapper
-        {
-            get
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var scriptResource = "EPiServer.Marketing.KPI.EmbeddedScriptFiles.ClientKpiWrapper.html";
-                string script = _servicelocator.GetInstance<LocalizationService>().GetString("/kpi/kpi_messaging/missing_client");
-                var resourceNames = assembly.GetManifestResourceNames();
-                using (Stream resourceStream = assembly.GetManifestResourceStream(scriptResource))
-                using (StreamReader reader = new StreamReader(resourceStream))
-                {
-                    script = reader.ReadToEnd();
-                }
-
-                return script;
-            }
-        }
-
         public virtual string ClientEvaluationScript
         {
             get

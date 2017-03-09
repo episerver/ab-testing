@@ -1,6 +1,7 @@
 {
   "resource": [
     "EmbeddedLangFiles/**/*",
+    "EmbeddedScriptFiles/**/*",
     "SchemaUpdater/Testing.zip"
   ],
   "compilationOptions": {

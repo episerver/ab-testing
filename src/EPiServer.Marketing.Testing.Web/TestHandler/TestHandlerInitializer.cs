@@ -5,6 +5,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Web.ClientKPI;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -37,8 +38,8 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void onPostReleaseRequestState(object sender, EventArgs e)
         {
-            ITestHandler testHandler = ServiceLocator.Current.GetInstance<ITestHandler>();
-            testHandler.AppendClientKpiScript();
+            var clientKpiInjector = new ClientKpiInjector();
+            clientKpiInjector.AppendClientKpiScript();
         }
 
         //Interface Requirement but not used.

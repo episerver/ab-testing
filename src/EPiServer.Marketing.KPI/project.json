@@ -2,7 +2,6 @@
   "resource": [
     "Markup/**/*",
     "EmbeddedLangFiles/**/*",
-    "EmbeddedScriptFiles/**/*",
     "SchemaUpdater/Kpi.zip"
   ],
   "compilationOptions": {
