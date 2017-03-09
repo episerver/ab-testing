@@ -1,6 +1,4 @@
-﻿<script>
-    (function(){{
-        var milliseconds = {0}*1000;
-        window.setTimeout(function(){{window.dispatchEvent(ClientKpiConverted);}},milliseconds);
-    }})();
-</script>
+﻿function(success){
+    var milliseconds = {0}*1000;
+    window.setTimeout(success(), milliseconds);
+}
