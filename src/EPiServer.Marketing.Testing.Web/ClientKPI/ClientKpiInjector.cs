@@ -91,7 +91,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     HttpContext.Current.Items[tempKpi.Id.ToString()] = true;
                 }
 
-                //Check to make sure we client kpis we are supposed to inject
+                //Check to make sure we have client kpis to inject
                 HttpContext context = HttpContext.Current;
                 if (HttpContext.Current.Items.Contains(clientKpiList.Keys.First().ToString()))
                 {
