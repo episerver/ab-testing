@@ -24,7 +24,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public ABResponseFilter(Stream stm, string script)
         {
             stream = stm;
-            streamWriter = new StreamWriter(stream, System.Text.Encoding.UTF8);
             _clientScript = script;
         }
 
@@ -34,8 +33,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             string html = System.Text.Encoding.UTF8.GetString(buffer);
             html = html.Replace("</body>", _clientScript+"</body>");
-            streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
-            streamWriter.Flush();
+
+            using (StreamWriter streamWriter = new StreamWriter(stream, System.Text.Encoding.UTF8))
+            {
+                streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
+                streamWriter.Flush();
+            }           
+        }
+
+        public override void Flush()
+        {
+            stream.Flush();
         }
 
         #region abstract required methods - not implemented
@@ -82,11 +90,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 throw new NotImplementedException();
             }
-        }
-
-        public override void Flush()
-        {
-        }
+        }      
 
         public override int Read(byte[] buffer, int offset, int count)
         {
