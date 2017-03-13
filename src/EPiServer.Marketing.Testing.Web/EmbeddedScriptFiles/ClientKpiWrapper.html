@@ -20,14 +20,7 @@
     function setTestData(id) {
         var result;
         
-        if (navigator.appName === "Microsoft Internet Explorer") {
-            result = search(id, ActiveKpis);
-        }
-        else {
-            result = ActiveKpis.find(function (obj) {
-                return obj.kpiId === id;
-            });
-        };
+        result = search(id, ActiveKpis);
 
         testId = result.testId;
         itemVersion = result.itemVersion;
