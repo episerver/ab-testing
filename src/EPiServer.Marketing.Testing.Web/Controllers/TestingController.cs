@@ -147,7 +147,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     // fixme : this code needs to be update to handly multiple kpis (see testhandler.evaluatekpis) properly
                     // 1) we are not setting the flag in the kpi dictionary in the cookie
                     // 2) we should only be setting the test converted flag if all kpis are converted.
-                     UpdateConversion(data);
+                    UpdateConversion(data);
                     testCookie.Converted = true;
                     cookieHelper.UpdateTestDataCookie(testCookie);
                 }
