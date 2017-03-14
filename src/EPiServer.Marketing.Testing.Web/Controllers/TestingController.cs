@@ -135,15 +135,23 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
-            try { 
-            UpdateConversion(data);
-            var _testManager = _serviceLocator.GetInstance<ITestManager>();
-            var activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
-            var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
-            TestDataCookie testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
-            testCookie.Converted = true;
-            cookieHelper.UpdateTestDataCookie(testCookie);
-            return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
+            try
+            { 
+                var _testManager = _serviceLocator.GetInstance<ITestManager>();
+                var activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
+                var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
+
+                TestDataCookie testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+                if (testCookie.Converted == false) // MAR-903 - if we already converted dont convert again.
+                {
+                    // fixme : this code needs to be update to handly multiple kpis (see testhandler.evaluatekpis) properly
+                    // 1) we are not setting the flag in the kpi dictionary in the cookie
+                    // 2) we should only be setting the test converted flag if all kpis are converted.
+                     UpdateConversion(data);
+                    testCookie.Converted = true;
+                    cookieHelper.UpdateTestDataCookie(testCookie);
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
             }
             catch(Exception ex)
             {
