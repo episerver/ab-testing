@@ -142,7 +142,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
 
                 TestDataCookie testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
-                if (testCookie.Converted == false) // MAR-903 - if we already converted dont convert again.
+                if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
                     // fixme : this code needs to be update to handly multiple kpis (see testhandler.evaluatekpis) properly
                     // 1) we are not setting the flag in the kpi dictionary in the cookie
