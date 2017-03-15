@@ -4,15 +4,15 @@
     <commercekpi>
       <addtocart>
         <config_markup>
-          <conversion_label>Visitor adds product to cart</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>El visitante agrega productos al carro</conversion_label>
+          <error_conversionproduct>Debe seleccionar un producto antes de guardar la prueba A/B.</error_conversionproduct>
+          <error_not_published_product>Debe seleccionar un producto publicado o una variación del producto antes de guardar la prueba A/B.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion.</description>
+        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
         <name>Add To Cart</name>
         <readonly_markup>
-          <conversion_header>Add Product to Cart</conversion_header>
-          <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
+          <conversion_header>Agregar producto al carro</conversion_header>
+          <conversion_selector_description>El visitante agrega el producto al carro</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
@@ -28,7 +28,7 @@
           <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
           <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
         </config_markup>
-        <description>Tests the potential effects of content on the average cart total of participating users.  Results: The total represents the average cart total across all visitors that checked out as part of the test.</description>
+        <description>Views: The number of visitors that viewed the item under test.  Conversions: The total represents the average cart total across all visitors that checked out as part of the test.</description>
         <name>Average Order</name>
         <readonly_markup>
           <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
@@ -44,7 +44,7 @@
         <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
         <name>Purchase Product</name>
         <readonly_markup>
-          <conversion_header>Purchase Product</conversion_header>
+          <conversion_header>Conversion Goal</conversion_header>
           <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>

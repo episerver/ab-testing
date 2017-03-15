@@ -4,22 +4,22 @@
     <kpi>
       <content_comparator_kpi>
         <config_markup>
-          <conversion_label>Visitor navigates to page</conversion_label>
-          <error_conversionpage>You must select a conversion page before you can save the A/B test.</error_conversionpage>
-          <error_selected_notpublished>You cannot select an unpublished page as your conversion goal page.</error_selected_notpublished>
-          <error_selected_samepage>You cannot select the page you are testing as the conversion goal page.</error_selected_samepage>
+          <conversion_label>Vierailija siirtyy sivulle</conversion_label>
+          <error_conversionpage>Muuntosivu on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversionpage>
+          <error_selected_notpublished>Julkaisematonta sivua ei voi valita muuntotavoitesivuksi.</error_selected_notpublished>
+          <error_selected_samepage>Testattavaa sivua ei voi valita muuntotavoitesivuksi.</error_selected_samepage>
         </config_markup>
         <description>The chosen page is the one that a user must click on in order to count as a conversion.  Results: Views are the number of visitors that visit the page under test.  Conversions are the number of visitors that clicked through to the landing page at any point in the future while the test was running.</description>
         <name>Landing Page</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
+          <conversion_header>Muuntotavoite</conversion_header>
+          <conversion_selector_description>Vierailija siirtyy sivulle</conversion_selector_description>
         </readonly_markup>
       </content_comparator_kpi>
       <kpi_messaging>
-        <failed_to_load>Failed to load</failed_to_load>
+        <failed_to_load>Lataus epäonnistui</failed_to_load>
         <missing_client>Client Script Wrapper resource could not be found</missing_client>
-        <uimarkup_not_defined>UIMarkupAttribute class attribute not defined.</uimarkup_not_defined>
+        <uimarkup_not_defined>UIMarkupAttribute-luokan attribuuttia ei ole määritetty.</uimarkup_not_defined>
       </kpi_messaging>
       <stickysite_kpi>
         <config_markup>
@@ -40,6 +40,8 @@
           <emptyfield>Field may not be empty.</emptyfield>
           <notpositiveinteger>Value must enter a valid whole number and greater than 0.</notpositiveinteger>
         </config_markup>
+        <description>Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
+        <name>Time on Page</name>
         <readonly_markup>
           <conversion_header>Conversion goal</conversion_header>
           <conversion_selector_description>Number of minutes visitor remains on the page:</conversion_selector_description>
