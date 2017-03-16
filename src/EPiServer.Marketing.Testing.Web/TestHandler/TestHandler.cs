@@ -214,7 +214,7 @@ namespace EPiServer.Marketing.Testing.Web
                     }
                     catch (Exception err)
                     {
-                        _logger.Error("TestHandler.LoadChildren", err);
+                        _logger.Debug("TestHandler.LoadChildren", err);
                     }
                 }
 
@@ -264,7 +264,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
                 catch (Exception err)
                 {
-                    _logger.Error("TestHandler.LoadedContent", err);
+                    _logger.Debug("TestHandler.LoadedContent", err);
                 }
             }
         }
@@ -595,7 +595,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
                 catch (Exception err)
                 {
-                    _logger.Error("TestHandler.ProxyEventHandler", err);
+                    _logger.Debug("TestHandler.ProxyEventHandler", err);
                 }
             }
         }
