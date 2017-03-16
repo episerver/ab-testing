@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.KPI.Dal
         public int SaveChanges()
         {
             //call save changes with no retries
-            return SaveChanges(0);
+            return DatabaseContext.SaveChanges();
         }
 
         /// <summary>
@@ -56,23 +56,7 @@ namespace EPiServer.Marketing.KPI.Dal
         /// <returns>Number of rows affected</returns>
         public int SaveChanges(int retryCount)
         {
-            var records = 0;
-      
-            if (DatabaseContext != null)
-            {
-                using (var scope = new TransactionScope(
-                    TransactionScopeOption.Required,
-                    new TransactionOptions()
-                    {
-                        IsolationLevel = IsolationLevel.ReadCommitted
-                    }))
-                {
-                    records = DatabaseContext.SaveChanges();
-                    scope.Complete();
-                }
-            }
-            
-            return records;
+            return DatabaseContext.SaveChanges();
         }
 
         public IDalKpi GetById(object id)

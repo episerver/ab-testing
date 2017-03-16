@@ -17,7 +17,7 @@
     "EntityFramework": "6.1.3",
     "EPiServer.CMS.UI.Core": "10.5.1",
     "EPiServer.Framework":  "10.3.0",
-    "EPiServer.Marketing.KPI": "2.0.0",
+    "EPiServer.Marketing.KPI": "2.1.0",
     "EPiServer.Marketing.Messaging": "1.2.1",
     "EPiServer.Marketing.Testing.Core": "1.0.0-*",
     "EPiServer.Marketing.Testing.Dal": "1.0.0-*",

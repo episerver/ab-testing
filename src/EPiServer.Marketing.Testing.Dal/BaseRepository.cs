@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Dal
         public int SaveChanges()
         {
             //call save changes with no retries
-            return SaveChanges(0);
+            return DatabaseContext.SaveChanges();
         }
 
         /// <summary>
@@ -56,26 +56,7 @@ namespace EPiServer.Marketing.Testing.Dal
         /// <returns>Number of rows affected</returns>
         public int SaveChanges(int retryCount)
         {
-            int records = 0;
-            //bool retrySave = false;
-            // save off retry count to potentially retry if there is an exception
-            _retryCount = retryCount;
-
-            if (DatabaseContext != null)
-            {
-                using (var scope = new TransactionScope(
-                    TransactionScopeOption.Required,
-                    new TransactionOptions()
-                    {
-                        IsolationLevel = IsolationLevel.ReadCommitted
-                    }))
-                {
-                    records = DatabaseContext.SaveChanges();
-                    scope.Complete();
-                }
-            }
-
-            return records;
+            return DatabaseContext.SaveChanges();
         }
 
         public IABTest GetById(object id)
