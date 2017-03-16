@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void AsynchronousIncrementCount_Calls_TestManager_IncrementCount_WithDefault_AsynchFlag()
         {
             var aRepo = GetUnitUnderTest();
-            aRepo.AsynchronousIncrementCount(_testGuid, 1, CountType.View);
+            aRepo.IncrementCount(_testGuid, 1, CountType.View);
             _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once);
         }
 
@@ -83,16 +83,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void IncrementCount_Calls_TestManager_IncrementCount_WithAsynchFlag_EqualsFalse()
         {
             var aRepo = GetUnitUnderTest();
-            aRepo.IncrementCount(_testGuid, 1, CountType.View);
+            aRepo.IncrementCount(_testGuid, 1, CountType.View,false);
             _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == false)), Times.Once);
         }
 
         [Fact]
-        public void AsynchronousSaveKpiResult_Calls_TestManager_SaveKpiResult_WithDefault_AsynchFlag()
+        public void SaveKpiResult_Calls_TestManager_SaveKpiResult_WithDefault_AsynchFlag()
         {
             var aRepo = GetUnitUnderTest();
             KeyFinancialResult result = new KeyFinancialResult();
-            aRepo.AsynchronousSaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial);
+            aRepo.SaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial);
             _mockTestManager.Verify(called => called.SaveKpiResultData(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.IsAny<IKeyResult>(), It.Is<KeyResultType>(value => value == KeyResultType.Financial), It.Is<bool>(value => value == true)), Times.Once);
         }
 
@@ -101,7 +101,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             KeyFinancialResult result = new KeyFinancialResult();
-            aRepo.SaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial);
+            aRepo.SaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial,false);
             _mockTestManager.Verify(called => called.SaveKpiResultData(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.IsAny<IKeyResult>(), It.Is<KeyResultType>(value => value == KeyResultType.Financial), It.Is<bool>(value => value == false)), Times.Once);
         }
 

@@ -25,10 +25,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         string PublishWinningVariant(TestResultStoreModel testResult);
         Variant ReturnLandingPage(Guid testId);
         IContent GetVariantContent(Guid contentGuid);
-        void AsynchronousIncrementCount(Guid testId, int itemVersion, CountType resultType);
-        void IncrementCount(Guid testId, int itemVersion, CountType resultType);
-        void AsynchronousSaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type);
-        void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type);
+        void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true);
+        void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true);
         List<IMarketingTest> GetActiveCachedTests();
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
     }

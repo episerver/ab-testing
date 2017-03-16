@@ -245,24 +245,15 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             return _testManager.GetVariantContent(contentGuid);
         }
-
-        public void AsynchronousIncrementCount(Guid testId, int itemVersion, CountType resultType)
+        
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType);
+            _testManager.IncrementCount(testId, itemVersion, resultType, async);
         }
-
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType)
+        
+        public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, false);
-        }
-
-        public void AsynchronousSaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
-        {
-            _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type);
-        }
-        public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type)
-        {
-            _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type, false);
+            _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type, async);
         }
 
         public List<IMarketingTest> GetActiveCachedTests()
