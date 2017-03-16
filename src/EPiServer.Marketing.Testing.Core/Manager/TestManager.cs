@@ -41,7 +41,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public List<IMarketingTest> ActiveCachedTests
         {
-            get { return _testCache.Get(TestingCacheName) as List<IMarketingTest>; }
+            get
+            {
+                initCache(); // MAR-904 - make sure that there is always a cache
+                return _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+            }
         }
 
         [ExcludeFromCodeCoverage]
@@ -66,7 +70,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
 
             _kpiManager = new KpiManager();
-            initCache();
         }
 
         internal TestManager(IServiceLocator serviceLocator)
@@ -75,8 +78,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
-
-            initCache();
         }
 
         private void initCache()
