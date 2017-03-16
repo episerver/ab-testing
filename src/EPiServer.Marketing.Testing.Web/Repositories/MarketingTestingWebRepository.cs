@@ -236,18 +236,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return testResult.TestId;
         }
 
-        private
-            string GetCurrentUser()
-        {
-            return PrincipalInfo.CurrentPrincipal.Identity.Name;
-        }
-
-        private DateTime CalculateEndDateFromDuration(string startDate, int testDuration)
-        {
-            DateTime endDate = DateTime.Parse(startDate);
-            return endDate.AddDays(testDuration);
-        }
-
         public Variant ReturnLandingPage(Guid testId)
         {
             return _testManager.ReturnLandingPage(testId);
@@ -287,5 +275,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.EvaluateKPIs(kpis, sender, e);
         }
 
+        private
+            string GetCurrentUser()
+        {
+            return PrincipalInfo.CurrentPrincipal.Identity.Name;
+        }
+
+        private DateTime CalculateEndDateFromDuration(string startDate, int testDuration)
+        {
+            DateTime endDate = DateTime.Parse(startDate);
+            return endDate.AddDays(testDuration);
+        }
     }
 }

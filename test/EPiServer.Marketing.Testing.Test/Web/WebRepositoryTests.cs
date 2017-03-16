@@ -27,7 +27,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
-
         private MarketingTestingWebRepository GetUnitUnderTest()
         {
             _mockLogger = new Mock<ILogger>();
@@ -44,7 +43,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_mockMarketingTestingWebRepository.Object);
 
-
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
         }
@@ -56,7 +54,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             aRepo.GetVariantContent(_testGuid);
             _mockTestManager.Verify(called => called.GetVariantContent(It.Is<Guid>(value => value == _testGuid)), Times.Once);
         }
-
 
         [Fact]
         public void ReturnLandingPage_Calls_TestManager_ReturnLandingPage()
