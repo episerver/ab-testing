@@ -14,6 +14,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -34,14 +35,19 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             _serviceLocator = ServiceLocator.Current;
         }
 
+        [ExcludeFromCodeCoverage]
         internal TestingController(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
         }
 
+        [ExcludeFromCodeCoverage]
         public void ConfigureContainer(ServiceConfigurationContext context) { }
+
+        [ExcludeFromCodeCoverage]
         public void Uninitialize(InitializationEngine context) { }
 
+        [ExcludeFromCodeCoverage]
         public void Initialize(InitializationEngine context)
         {
             // configure out route

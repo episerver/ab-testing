@@ -22,8 +22,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
         public KpiStore()
         {
-            _logger = LogManager.GetLogger();
-            
+            _logger = _serviceLocator.GetInstance<ILogger>();
+
             _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 
@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public RestResult Get()
         {
-            IKpiWebRepository kpiRepo = new KpiWebRepository();
+            var kpiRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
             return Rest(kpiRepo.GetKpiTypes());
         }
 
@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public ActionResult put(string id, string entity)
+        public ActionResult Put(string id, string entity)
         {
             IKpi kpiInstance;
             var kpiManager = _serviceLocator.GetInstance<IKpiManager>();

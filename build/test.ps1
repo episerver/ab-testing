@@ -21,23 +21,30 @@ if ($lastexitcode -eq 1) {
     Write-Host "Node dependencies install failed" -foreground "red"
     exit $lastexitcode
 }
+pushd $cwd
+
+# Run xUnit tests for all test projects
+$failBuild = $false
+Get-ChildItem "$cwd\..\test" -Filter "*Test" -Exclude "*ClientTest" | ForEach-Object {
+	pushd "$_"
+    dnx --configuration $configuration test
+    if ($lastexitcode -eq 1) {
+		$failBuild = $true
+        popd
+        Write-Host "TEST failed" -foreground "red"   
+    }
+    popd
+}
+
+# Fail the build if any of the tests failed.
+if ($failBuild -eq $true){
+	Write-Host "One or more Unit Tests failed." -foreground "red"
+	exit $lastexitcode
+}
 
 # Run JS tests
 &"$cwd\npm.cmd" run test  -- --reporter=$jsreporter
 if ($lastexitcode -eq 1) {
     Write-Host "Running JS tests failed" -foreground "red"
     exit $lastexitcode
-}
-pushd $cwd
-
-# Run xUnit tests for all test projects
-Get-ChildItem "$cwd\..\test" -Filter "*Test" -Exclude "*ClientTest" | ForEach-Object {
-	pushd "$_"
-    dnx --configuration $configuration test
-    if ($lastexitcode -eq 1) {
-        popd
-        Write-Host "TEST failed" -foreground "red"
-        exit $lastexitcode
-    }
-    popd
 }

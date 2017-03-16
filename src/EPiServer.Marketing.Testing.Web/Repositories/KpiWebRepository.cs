@@ -7,6 +7,7 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
+    [ServiceConfiguration(ServiceType = typeof(IKpiWebRepository), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiWebRepository : IKpiWebRepository
     {
         /// <summary>
