@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private ITestResultHelper _testResultHelper;
         private ITestManager _testManager;
         private ILogger _logger;
-
+        private IKpiManager _kpiManager;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -35,6 +35,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _serviceLocator = ServiceLocator.Current;
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
             _testManager = _serviceLocator.GetInstance<ITestManager>();
+            _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _logger = LogManager.GetLogger();
         }
         /// <summary>
@@ -45,6 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testResultHelper = locator.GetInstance<ITestResultHelper>();
             _testManager = locator.GetInstance<ITestManager>();
+            _kpiManager = locator.GetInstance<IKpiManager>();
             _logger = logger;
         }
 
@@ -145,9 +147,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
-
-            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            var kpi = kpiManager.Get(testData.KpiId);
+            
+            var kpi = _kpiManager.Get(testData.KpiId);
 
             var test = new ABTest
             {
