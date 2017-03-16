@@ -648,7 +648,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var th = GetUnitUnderTest();
 
-            _mockTestManager.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new BasicContent());
+            _mockMarketingTestingWebRepository.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new BasicContent());
 
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
