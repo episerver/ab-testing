@@ -11,6 +11,9 @@ using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -22,11 +25,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestResultHelper> _mockTestResultHelper;
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
 
+        private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
+
+
         private MarketingTestingWebRepository GetUnitUnderTest()
         {
             _mockLogger = new Mock<ILogger>();
             _mockServiceLocator = new Mock<IServiceLocator>();
-            
+
             _mockTestManager = new Mock<ITestManager>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
 
@@ -37,10 +43,97 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_mockMarketingTestingWebRepository.Object);
-         
 
-            var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object,_mockLogger.Object);
+
+            var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
+        }
+
+        [Fact]
+        public void GetVariantContent_Calls_TestManager_GetVariantContent()
+        {
+            var aRepo = GetUnitUnderTest();
+            aRepo.GetVariantContent(_testGuid);
+            _mockTestManager.Verify(called => called.GetVariantContent(It.Is<Guid>(value => value == _testGuid)), Times.Once);
+        }
+
+
+        [Fact]
+        public void ReturnLandingPage_Calls_TestManager_ReturnLandingPage()
+        {
+            var aRepo = GetUnitUnderTest();
+            aRepo.ReturnLandingPage(_testGuid);
+            _mockTestManager.Verify(called => called.ReturnLandingPage(It.Is<Guid>(value => value == _testGuid)), Times.Once);
+        }
+
+        [Fact]
+        public void GetActiveTestsByOriginalItemId_Calls_TestManager_GetActiveTestsByOriginalItemId()
+        {
+            var aRepo = GetUnitUnderTest();
+            aRepo.GetActiveTestsByOriginalItemId(_testGuid);
+            _mockTestManager.Verify(called => called.GetActiveTestsByOriginalItemId(It.Is<Guid>(value => value == _testGuid)), Times.Once);
+        }
+
+        [Fact]
+        public void AsynchronousIncrementCount_Calls_TestManager_IncrementCount_WithDefault_AsynchFlag()
+        {
+            var aRepo = GetUnitUnderTest();
+            aRepo.AsynchronousIncrementCount(_testGuid, 1, CountType.View);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once);
+        }
+
+        [Fact]
+        public void IncrementCount_Calls_TestManager_IncrementCount_WithAsynchFlag_EqualsFalse()
+        {
+            var aRepo = GetUnitUnderTest();
+            aRepo.IncrementCount(_testGuid, 1, CountType.View);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == false)), Times.Once);
+        }
+
+        [Fact]
+        public void AsynchronousSaveKpiResult_Calls_TestManager_SaveKpiResult_WithDefault_AsynchFlag()
+        {
+            var aRepo = GetUnitUnderTest();
+            KeyFinancialResult result = new KeyFinancialResult();
+            aRepo.AsynchronousSaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial);
+            _mockTestManager.Verify(called => called.SaveKpiResultData(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.IsAny<IKeyResult>(), It.Is<KeyResultType>(value => value == KeyResultType.Financial), It.Is<bool>(value => value == true)), Times.Once);
+        }
+
+        [Fact]
+        public void SaveKpiResult_Calls_TestManager_SaveKpiResult_With_AsynchFlag_EqualsFalse()
+        {
+            var aRepo = GetUnitUnderTest();
+            KeyFinancialResult result = new KeyFinancialResult();
+            aRepo.SaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial);
+            _mockTestManager.Verify(called => called.SaveKpiResultData(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.IsAny<IKeyResult>(), It.Is<KeyResultType>(value => value == KeyResultType.Financial), It.Is<bool>(value => value == false)), Times.Once);
+        }
+
+        [Fact]
+        public void GetActiveCachedTest_Retrieves_TestManager_ActiveCachedTests()
+        {
+            List<IMarketingTest> testList = new List<IMarketingTest>();
+            testList.Add(new ABTest() { Title = "Test 1" });
+            testList.Add(new ABTest() { Title = "Test 2" });
+            
+            var aRepo = GetUnitUnderTest();
+            _mockTestManager.SetupGet(prop => prop.ActiveCachedTests).Returns(testList);
+            var activeTests = aRepo.GetActiveCachedTests();
+            Assert.True(activeTests.Count == 2);
+            Assert.True(activeTests[0].Title == "Test 1");
+            Assert.True(activeTests[1].Title == "Test 2");
+        }
+
+        [Fact]
+        public void EvaluateKpis_Calls_TestManager_EvaluateKpis()
+        {
+            IList<IKpi> kpis = new List<IKpi>();
+            string name = "Sender";
+            CommerceData cData = new CommerceData() { CommerceCulture = "en" };
+            kpis.Add(new Kpi() { Id = _testGuid, PreferredCommerceFormat = cData });
+
+            var aRepo = GetUnitUnderTest();
+            aRepo.EvaluateKPIs(kpis, name, new EventArgs());
+            _mockTestManager.Verify(called => called.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<object>(), It.IsAny<EventArgs>()), Times.Once);
         }
 
         [Fact]
