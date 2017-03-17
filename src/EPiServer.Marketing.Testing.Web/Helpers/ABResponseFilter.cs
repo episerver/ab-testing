@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     {
         private Stream stream;
         private StreamWriter streamWriter;
-
+        string bufferedHtml;
         private string _clientScript;
 
         public ABResponseFilter(Stream stm, string script)
@@ -31,19 +31,21 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         // just before the </body> tag.
         public override void Write(byte[] buffer, int offset, int count)
         {
-            string html = System.Text.Encoding.UTF8.GetString(buffer);
-            html = html.Replace("</body>", _clientScript+"</body>");
+            //intercept the write and build the content for cases where data is chunked
+            bufferedHtml += System.Text.Encoding.UTF8.GetString(buffer);
+        }
+
+        public override void Flush()
+        {
+            //transform the html and put it back into the stream
+            string html = bufferedHtml;
+            html = html.Replace("</body>", _clientScript + "</body>");
 
             using (StreamWriter streamWriter = new StreamWriter(stream, System.Text.Encoding.UTF8))
             {
                 streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
                 streamWriter.Flush();
-            }           
-        }
-
-        public override void Flush()
-        {
-            stream.Flush();
+            }
         }
 
         #region abstract required methods - not implemented
