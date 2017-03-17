@@ -1,4 +1,5 @@
 ﻿using EPiServer.Framework.Localization;
+using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass;
@@ -21,12 +22,14 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         private readonly ITestingContextHelper _contextHelper;
         private readonly IMarketingTestingWebRepository _testRepo;
         private readonly IServiceLocator _serviceLocator;
+        private ILogger _logger;
 
         public ClientKpiInjector()
         {
             _contextHelper = new TestingContextHelper();
             _testRepo = new MarketingTestingWebRepository();
             _serviceLocator = ServiceLocator.Current;
+            _logger = LogManager.GetLogger();
         }
 
         /// <summary>
@@ -99,7 +102,13 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     context.Response.Cookies.Remove("ClientKpiList");
 
                     //Inject our script into the stream.
-                    context.Response.Filter = new ABResponseFilter(context.Response.Filter, script);
+                    if (context.Response.Filter.CanWrite)
+                    {
+                        context.Response.Filter = new ABResponseFilter(context.Response.Filter, script);
+                    }else
+                    {
+                        _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
+                    };
                 }
             }
         }
