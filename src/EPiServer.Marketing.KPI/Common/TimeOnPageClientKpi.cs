@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.KPI.Common
         text_id = "/kpi/timeonpage_kpi/name",
         description_id = "/kpi/timeonpage_kpi/description")]
     [ClientScript(ClientSideEvaluationScript = "EPiServer.Marketing.KPI.Markup.TimeOnPageEvaluationScript.html")]
-    abstract class TimeOnPageClientKpi : ClientKpi
+    public class TimeOnPageClientKpi : ClientKpi
     {
         [DataMember]
         int TargetDuration { get; set; }
@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
             var isInt = int.TryParse(responseData["TargetDuration"], out parsedInt);
 
-            if (isInt && parsedInt > 0)
+            if (isInt && (parsedInt > 0 && parsedInt < 1801))
             {
                 TargetDuration = parsedInt;
             }

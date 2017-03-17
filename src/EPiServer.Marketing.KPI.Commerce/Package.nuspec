@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>EPiServer.Marketing.KPI.Commerce</id>
-        <version>1.0.0</version>
+        <version>$version$</version>
         <title>EPiServer KPI for Commerce</title>
         <authors>EPiServer</authors>
         <owners>EPiServer</owners>
@@ -13,9 +13,9 @@
         </releaseNotes>
         <tags>EPiServerModulePackage EPiServer KPI EPiServerBetaAddon</tags>
         <dependencies>
-          <dependency id="EPiServer.Marketing.KPI" version="(1.9,3)" />
-          <dependency id="EPiServer.CMS.Core" version="[10.1.0,11)" />
-          <dependency id="EPiServer.Commerce" version="[9.24.1,11)" />
+          <dependency id="EPiServer.Marketing.KPI" version="[$EPiServerMarketingKPIMinVersion$, $EPiServerMarketingKPIMaxLimit$)" />
+          <dependency id="EPiServer.CMS.Core" version="[$EPiServerCMSCoreMinVersion$, $EPiServerCMSCoreMaxLimit$)" />
+          <dependency id="EPiServer.Commerce" version="[$EPiServerCommerceMinVersion$, $EPiServerCommerceMaxLimit$)" />
         </dependencies>
     </metadata>
 </package>

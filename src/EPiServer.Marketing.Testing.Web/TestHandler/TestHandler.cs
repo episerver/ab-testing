@@ -16,9 +16,15 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
+using System.IO;
+using System.Text;
+using EPiServer.Marketing.KPI.Manager;
+using Newtonsoft.Json;
+using EPiServer.Marketing.Testing.Web.ClientKPI;
 
 namespace EPiServer.Marketing.Testing.Web
 {
+    [ServiceConfiguration(ServiceType = typeof(ITestHandler), Lifecycle = ServiceInstanceScope.Singleton)]
     internal class TestHandler : ITestHandler
     {
         private readonly IServiceLocator _serviceLocator;
@@ -182,7 +188,7 @@ namespace EPiServer.Marketing.Testing.Web
                         {
                             var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
-                          
+
                             if (!hasData && DbReadWrite())
                             {
                                 // Make sure the cookie has data in it. There are cases where you can load
@@ -208,7 +214,7 @@ namespace EPiServer.Marketing.Testing.Web
                     }
                     catch (Exception err)
                     {
-                        _logger.Error("TestHandler.LoadChildren", err);
+                        _logger.Debug("TestHandler.LoadChildren", err);
                     }
                 }
 
@@ -252,14 +258,13 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
-                        ActivateClientKpis(activeTest.KpiInstances,testCookieData);
 
                         HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
                     }
                 }
                 catch (Exception err)
                 {
-                    _logger.Error("TestHandler.LoadedContent", err);
+                    _logger.Debug("TestHandler.LoadedContent", err);
                 }
             }
         }
@@ -313,28 +318,9 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        /// <summary>
-        /// Checks for any client kpis which may be assigned to the test and injects the provided
-        /// markup via the current response.
-        /// </summary>
-        /// <param name="kpiInstances"></param>
-        /// <param name="cookieData"></param>
-        private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
-        {
-            foreach (var kpi in kpiInstances.Where(x=>x is IClientKpi))
-            {
-                if (!HttpContext.Current.Items.Contains(kpi.Id.ToString()) 
-                    && !_contextHelper.IsInSystemFolder()
-                    && (!cookieData.Converted || cookieData.AlwaysEval))
-                {
-                    var clientKpi = kpi as ClientKpi;
-                    var test = _testManager.Get(cookieData.TestId);
-                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id == cookieData.TestVariantId).ItemVersion;
-                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientKpiScript,cookieData.TestId,itemVersion,clientKpi.Id,clientKpi.ClientEvaluationScript));
-                    HttpContext.Current.Items[kpi.Id.ToString()]=true;
-                }
-            }
-        }
+
+
+
 
         //Handles the incrementing of view counts on a version
         private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
@@ -344,6 +330,9 @@ namespace EPiServer.Marketing.Testing.Web
 
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
+                var clientInjector = _serviceLocator.GetInstance<IClientKpiInjector>();
+                clientInjector.ActivateClientKpis(currentTest.KpiInstances, cookie);
+
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
@@ -606,7 +595,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
                 catch (Exception err)
                 {
-                    _logger.Error("TestHandler.ProxyEventHandler", err);
+                    _logger.Debug("TestHandler.ProxyEventHandler", err);
                 }
             }
         }
