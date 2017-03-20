@@ -108,13 +108,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
            
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
-                retCookie.TestId = Guid.Parse(cookie["TestId"]);
-                retCookie.ShowVariant = bool.Parse(cookie["ShowVariant"]);
-                retCookie.TestContentId = Guid.Parse(cookie["TestContentId"]);
-                retCookie.TestVariantId = Guid.Parse(cookie["TestVariantId"]);
-                retCookie.Viewed = bool.Parse(cookie["Viewed"]);
-                retCookie.Converted = bool.Parse(cookie["Converted"]);
-                retCookie.AlwaysEval = bool.Parse(cookie["AlwaysEval"]);
+                Guid outguid;
+                retCookie.TestId = Guid.TryParse(cookie["TestId"], out outguid) ? outguid : Guid.Empty;
+                retCookie.TestContentId = Guid.TryParse(cookie["TestContentId"], out outguid) ? outguid : Guid.Empty;
+                retCookie.TestVariantId = Guid.TryParse(cookie["TestVariantId"], out outguid) ? outguid : Guid.Empty;
+
+                bool outval;
+                retCookie.ShowVariant = bool.TryParse(cookie["ShowVariant"], out outval) ? outval : false;
+                retCookie.Viewed = bool.TryParse(cookie["Viewed"], out outval) ? outval : false;
+                retCookie.Converted = bool.TryParse(cookie["Converted"], out outval) ? outval : false;
+                retCookie.AlwaysEval = bool.TryParse(cookie["AlwaysEval"], out outval) ? outval : false;
 
                 var t = _testManager.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
                 if (t != null)
