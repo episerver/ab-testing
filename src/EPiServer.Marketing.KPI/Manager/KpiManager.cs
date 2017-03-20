@@ -63,9 +63,9 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
         /// <inheritdoc />
-        public Guid Save(IKpi kpi)
+        public IList<Guid> Save(IList<IKpi> kpis)
         {
-            return _dataAccess.Save(ConvertToDalKpi(kpi));
+            return _dataAccess.Save(ConvertToDalKpis(kpis));
         }
 
         /// <inheritdoc />
@@ -126,29 +126,37 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <summary>
         /// Serialize the kpi to a Json string and save it in the properties field.
         /// </summary>
-        /// <param name="kpi">Kpi to save to the db (i.e. contentcomparatorkpi, timeonpagekpi, etc.</param>
+        /// <param name="kpis">List of Kpi's to save to the db (i.e. contentcomparatorkpi, timeonpagekpi, etc.</param>
         /// <returns>EF Kpi object to save in the db.</returns>
-        private IDalKpi ConvertToDalKpi(IKpi kpi)
+        private List<IDalKpi> ConvertToDalKpis(IList<IKpi> kpis)
         {
-            if (Guid.Empty == kpi.Id)
-            {   // if the kpi.id is null, its because we are creating a new one.
-                kpi.Id = Guid.NewGuid();
-                kpi.CreatedDate = DateTime.UtcNow;
-                kpi.ModifiedDate = DateTime.UtcNow;
+            var dalKpis = new List<IDalKpi>();
+
+            foreach (var kpi in kpis)
+            {
+                if (Guid.Empty == kpi.Id)
+                {
+                    // if the kpi.id is null, its because we are creating a new one.
+                    kpi.Id = Guid.NewGuid();
+                    kpi.CreatedDate = DateTime.UtcNow;
+                    kpi.ModifiedDate = DateTime.UtcNow;
+                }
+
+                var serializedKpi = JsonConvert.SerializeObject(kpi);
+
+                var dalKpi = new DalKpi()
+                {
+                    Id = kpi.Id,
+                    ClassName = kpi.GetType().AssemblyQualifiedName,
+                    Properties = serializedKpi,
+                    CreatedDate = kpi.CreatedDate,
+                    ModifiedDate = kpi.ModifiedDate
+                };
+
+                dalKpis.Add(dalKpi);
             }
 
-            var serializedKpi = JsonConvert.SerializeObject(kpi);
-
-            var dalKpi = new DalKpi()
-            {
-                Id = kpi.Id,
-                ClassName = kpi.GetType().AssemblyQualifiedName,
-                Properties = serializedKpi,
-                CreatedDate = kpi.CreatedDate,
-                ModifiedDate = kpi.ModifiedDate
-            };
-
-            return dalKpi;
+            return dalKpis;
         }
 
         /// <summary>

@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.KPI.Test
                     Properties = "{ \"Id\":\"fa76a408-1fb4-44a9-9231-954961f0676b\", \"CreatedDate\":\"2016-04-08T18:24:30.3161712Z\", \"ModifiedDate\":\"2016-04-08T18:24:30.3161712Z\" }"
                 };
 
-                mtmManager.Save(test);
+                mtmManager.Save(new List<IDalKpi>() {test});
                 kpis.Add(test);
             }
 

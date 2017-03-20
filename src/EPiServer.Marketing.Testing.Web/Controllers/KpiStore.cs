@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 try
                 {
                     kpiInstance.Validate(values);
-                    var kpiId = kpiManager.Save(kpiInstance);
+                    var kpiId = kpiManager.Save(new List<IKpi>() {kpiInstance});
                     result = Rest(kpiId);
                 }
                 catch (Exception e)

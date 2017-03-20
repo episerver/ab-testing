@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.KPI.DataAccess
 
         List<IDalKpi> GetKpiList();
 
-        Guid Save(IDalKpi kpiObject);
+        IList<Guid> Save(IList<IDalKpi> kpiObject);
 
         void Delete(Guid kpiObjectId);
 

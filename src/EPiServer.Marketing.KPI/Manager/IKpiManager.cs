@@ -26,9 +26,9 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <summary>
         /// Adds or updates a KPI object.
         /// </summary>
-        /// <param name="kpi">Id of the KPI to add/update.</param>
+        /// <param name="kpis">List of the KPI's to add/update.</param>
         /// <returns>The Id of the KPI object that was added/updated.</returns>
-        Guid Save(IKpi kpi);
+        IList<Guid> Save(IList<IKpi> kpis);
 
         /// <summary>
         /// Deletes KPI object from the db.

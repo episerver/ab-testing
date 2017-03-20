@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using EPiServer.Marketing.KPI.Dal.Model;
@@ -33,7 +34,7 @@ namespace EPiServer.Marketing.KPI.Test
                 ModifiedDate = DateTime.Now
             };
 
-            _mtm.Save(kpi);
+            _mtm.Save(new List<IDalKpi>() {kpi});
 
             Assert.Equal(_mtm.Get(id), kpi);
 
@@ -55,7 +56,7 @@ namespace EPiServer.Marketing.KPI.Test
                 ModifiedDate = DateTime.Now
             };
 
-            _mtm.Save(kpi);
+            _mtm.Save(new List<IDalKpi>() {kpi});
 
             Assert.Equal(1, _mtm.GetKpiList().Count);
 

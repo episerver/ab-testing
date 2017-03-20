@@ -126,50 +126,58 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <summary>
         /// Adds or updates a KPI object.
         /// </summary>
-        /// <param name="kpiObject">Id of the KPI to add/update.</param>
+        /// <param name="kpiObjects">Id of the KPI to add/update.</param>
         /// <returns>The Id of the KPI object that was added/updated.</returns>
-        public Guid Save(IDalKpi kpiObject)
+        public IList<Guid> Save(IList<IDalKpi> kpiObjects)
         {
-            Guid id;
+                IList<Guid> ids;
 
-            if (_UseEntityFramework)
-            {
-                using (var dbContext = new DatabaseContext())
+                if (_UseEntityFramework)
                 {
-                    var repository = new BaseRepository(dbContext);
-                    id = SaveHelper(repository, kpiObject);
+                    using (var dbContext = new DatabaseContext())
+                    {
+                        var repository = new BaseRepository(dbContext);
+                        ids = SaveHelper(repository, kpiObjects);
+                    }
                 }
-            }
-            else
-            {
-                id = SaveHelper(_repository, kpiObject);
-            }
+                else
+                {
+                    ids = SaveHelper(_repository, kpiObjects);
+                }
 
-            return id;
+
+            return ids;
         }
 
 
-        public Guid SaveHelper(IRepository repo, IDalKpi kpiObject)
+        public IList<Guid> SaveHelper(IRepository repo, IList<IDalKpi> kpiObjects)
         {
-            var kpi = repo.GetById(kpiObject.Id) as DalKpi;
-            Guid id;
+            var ids = new List<Guid>();
 
-            // if a test doesn't exist, add it to the db
-            if (kpi == null)
+            foreach (var kpiObject in kpiObjects)
             {
-                repo.Add(kpiObject);
-                id = kpiObject.Id;
-            }
-            else
-            {
-                kpi.ClassName = kpiObject.ClassName;
-                kpi.Properties = kpiObject.Properties;
-                id = kpi.Id;
+                var kpi = repo.GetById(kpiObject.Id) as DalKpi;
+                Guid id;
+
+                // if a test doesn't exist, add it to the db
+                if (kpi == null)
+                {
+                    repo.Add(kpiObject);
+                    id = kpiObject.Id;
+                }
+                else
+                {
+                    kpi.ClassName = kpiObject.ClassName;
+                    kpi.Properties = kpiObject.Properties;
+                    id = kpi.Id;
+                }
+
+                ids.Add(id);
             }
 
             repo.SaveChanges();
-
-            return id;
+            
+            return ids;
         }
 
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)
