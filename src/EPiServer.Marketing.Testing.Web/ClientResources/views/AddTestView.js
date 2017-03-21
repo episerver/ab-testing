@@ -472,9 +472,9 @@
 
             },
 
-            createTest: function(kpiId) {
+            createTest: function(kpiIds) {
                 this._clearConversionErrors();
-                this.model.kpiId = kpiId;
+                this.model.kpiId = kpiIds;
                 if (this._isValidFormData()) {
                     this.model.createTest();
                     this._clearConversionErrors();
