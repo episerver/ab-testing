@@ -649,7 +649,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 OriginalItemId = _originalItemId,
                 State = TestState.Active,
                 Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { (new Mock<IKpi>()).Object }
             }));
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveReference should be called once");
