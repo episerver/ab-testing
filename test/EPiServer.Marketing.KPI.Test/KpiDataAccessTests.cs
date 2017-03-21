@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using EPiServer.Marketing.KPI.Dal.Model;
