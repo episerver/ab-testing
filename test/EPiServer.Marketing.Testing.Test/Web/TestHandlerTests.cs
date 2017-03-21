@@ -87,7 +87,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _referenceCounter = new Mock<IReferenceCounter>();
             _mockTestDataCookieHelper = new Mock<ITestDataCookieHelper>();
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
-            _mockClientKpiInjector = new Mock<IClientKpiInjector>();
 
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
                 .Returns(new List<IMarketingTest>()
@@ -131,7 +130,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(_mockContextHelper.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<ILogger>())
                 .Returns(_logger);
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IClientKpiInjector>()).Returns(_mockClientKpiInjector.Object);
 
             _mockDatabaseMode = new Mock<IDatabaseMode>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IDatabaseMode>())
