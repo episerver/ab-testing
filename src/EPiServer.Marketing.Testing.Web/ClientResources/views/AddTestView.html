@@ -79,8 +79,6 @@
             <!-- Test Settings Section -->
             <div class="cardWrapper" style="clear: both">
                 <div class="cardBody">
-                    <div data-dojo-type="KpiWidget"></div>
-
                     <!-- Test Goals -->
                     <div class="formsRow">
                         <h4>
@@ -100,10 +98,9 @@
                         <div>
                             <form id="kpiForm">
                                 <div id="KpiWidget"></div>
-
+                                <!-- Kpis added here-->
                             </form>
                         </div>
-
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
                               class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
@@ -114,12 +111,6 @@
                         <div id="kpiSelectorCombo">
                             <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onGoalSelectChange"></select>
                         </div>
-                        <!-- KPI Description -->
-                        <div>
-                            <p id="kpidescription"></p>
-                        </div>
-
-
                     </div>
                     <hr class="epi-abtest-hr" />
                     <!-- Participation Percentage -->
