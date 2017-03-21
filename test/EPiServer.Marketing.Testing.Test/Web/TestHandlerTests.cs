@@ -71,6 +71,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IDatabaseMode> _mockDatabaseMode;
         private MyLogger _logger = new MyLogger();
         private Mock<IClientKpiInjector> _clientKpiInjector;
+        private Mock<IContentEvents> _contentEvents;
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -136,6 +137,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _clientKpiInjector = new Mock<IClientKpiInjector>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IClientKpiInjector>())
                 .Returns(_clientKpiInjector.Object);
+
+            _contentEvents = new Mock<IContentEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
             return new TestHandler(_mockServiceLocator.Object);
@@ -639,9 +643,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
 
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(false);
-
-            Mock<IContentEvents> ce = new Mock<IContentEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(ce.Object);
 
             testHandler.TestRemovedFromCache(this, new TestEventArgs(new ABTest()
             {
