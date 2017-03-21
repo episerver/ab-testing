@@ -141,7 +141,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _contentEvents = new Mock<IContentEvents>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
 
-//            ServiceLocator.SetLocator(_mockServiceLocator.Object);
             return new TestHandler(_mockServiceLocator.Object);
         }
 
