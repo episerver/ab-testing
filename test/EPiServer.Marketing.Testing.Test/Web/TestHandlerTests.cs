@@ -17,6 +17,7 @@ using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.ClientKPI;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -24,6 +25,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         public bool ErrorCalled;
         public bool WarningCalled;
+        public bool DebugCalled;
         public bool IsEnabled(Level level)
         {
             return true;
@@ -38,8 +40,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             else if (level == Level.Warning)
             {
                 WarningCalled = true;
+            }
+            else if (level == Level.Debug)
+            {
+                DebugCalled = true;
+            }
         }
-    }
     }
 
     public class TestHandlerTests : IDisposable
@@ -64,6 +70,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<DefaultMarketingTestingEvents> _mockMarketingTestingEvents;
         private Mock<IDatabaseMode> _mockDatabaseMode;
         private MyLogger _logger = new MyLogger();
+        private Mock<IClientKpiInjector> _clientKpiInjector;
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -126,6 +133,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockDatabaseMode = new Mock<IDatabaseMode>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IDatabaseMode>())
                 .Returns(_mockDatabaseMode.Object);
+            _clientKpiInjector = new Mock<IClientKpiInjector>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IClientKpiInjector>())
+                .Returns(_clientKpiInjector.Object);
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
             return new TestHandler(_mockServiceLocator.Object);
@@ -144,9 +154,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             // For this test we dont actually care what the exception is just that it is catching and
             // logging one.
-            Assert.True(_logger.ErrorCalled, "Exception was not logged.");
+            Assert.True(_logger.DebugCalled, "Exception was not logged.");
             _logger.ErrorCalled = false; 
             _logger.WarningCalled = false;
+            _logger.DebugCalled = false;
         }
 
         [Fact]
