@@ -141,7 +141,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _contentEvents = new Mock<IContentEvents>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
 
-            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+//            ServiceLocator.SetLocator(_mockServiceLocator.Object);
             return new TestHandler(_mockServiceLocator.Object);
         }
 
@@ -670,20 +670,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var t = new ContentReference(1, 3);
             var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent()});
             th.LoadedChildren(new object(), args);
-
-
         }
-
-        [Fact]
-        public void TestHandler_TestAddedToCaches_Adds_EventHandler_For_Kpis()
-        {
-            var th = GetUnitUnderTest();
-
-            var contentEvents = new Mock<IContentEvents>();
-            _mockServiceLocator.Setup(s1 => s1.GetInstance<IContentEvents>()).Returns(contentEvents.Object);
-
-            th.TestAddedToCache(new object(), new TestEventArgs(new ABTest() {KpiInstances = new List<IKpi>() {new ContentComparatorKPI(Guid.NewGuid())} }));
-        }
-
     }
 }
