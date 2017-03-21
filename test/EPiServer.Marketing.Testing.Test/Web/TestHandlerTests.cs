@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 WarningCalled = true;
             }
-            else if(level == Level.Debug)
+            else if (level == Level.Debug)
             {
                 DebugCalled = true;
             }
@@ -70,7 +70,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<DefaultMarketingTestingEvents> _mockMarketingTestingEvents;
         private Mock<IDatabaseMode> _mockDatabaseMode;
         private MyLogger _logger = new MyLogger();
-        private Mock<IClientKpiInjector> _mockClientKpiInjector;
+        private Mock<IClientKpiInjector> _clientKpiInjector;
+        private Mock<IContentEvents> _contentEvents;
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -135,8 +136,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockDatabaseMode = new Mock<IDatabaseMode>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IDatabaseMode>())
                 .Returns(_mockDatabaseMode.Object);
+            _clientKpiInjector = new Mock<IClientKpiInjector>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IClientKpiInjector>())
+                .Returns(_clientKpiInjector.Object);
 
-            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+            _contentEvents = new Mock<IContentEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
+
             return new TestHandler(_mockServiceLocator.Object);
         }
 
@@ -154,8 +160,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             // For this test we dont actually care what the exception is just that it is catching and
             // logging one.
             Assert.True(_logger.DebugCalled, "Exception was not logged.");
-            _logger.ErrorCalled = false;
+            _logger.ErrorCalled = false; 
             _logger.WarningCalled = false;
+            _logger.DebugCalled = false;
         }
 
         [Fact]
@@ -638,15 +645,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(false);
 
-            Mock<IContentEvents> ce = new Mock<IContentEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(ce.Object);
-
             testHandler.TestRemovedFromCache(this, new TestEventArgs(new ABTest()
             {
                 OriginalItemId = _originalItemId,
                 State = TestState.Active,
                 Variants = new List<Variant>() { new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid() } }
+                KpiInstances = new List<IKpi>() { (new Mock<IKpi>()).Object }
             }));
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveReference should be called once");
@@ -667,20 +671,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var t = new ContentReference(1, 3);
             var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent() });
             th.LoadedChildren(new object(), args);
-
-
         }
-
-        [Fact]
-        public void TestHandler_TestAddedToCaches_Adds_EventHandler_For_Kpis()
-        {
-            var th = GetUnitUnderTest();
-
-            var contentEvents = new Mock<IContentEvents>();
-            _mockServiceLocator.Setup(s1 => s1.GetInstance<IContentEvents>()).Returns(contentEvents.Object);
-
-            th.TestAddedToCache(new object(), new TestEventArgs(new ABTest() { KpiInstances = new List<IKpi>() { new ContentComparatorKPI(Guid.NewGuid()) } }));
-        }
-
     }
 }
