@@ -63,6 +63,12 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
         /// <inheritdoc />
+        public Guid Save(IKpi kpi)
+        {
+            return Save(new List<IKpi>() { kpi }).First();
+        }
+
+        /// <inheritdoc />
         public IList<Guid> Save(IList<IKpi> kpis)
         {
             return _dataAccess.Save(ConvertToDalKpis(kpis));

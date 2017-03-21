@@ -126,8 +126,18 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <summary>
         /// Adds or updates a KPI object.
         /// </summary>
-        /// <param name="kpiObjects">Id of the KPI to add/update.</param>
+        /// <param name="kpiObject">Id of the KPI to add/update.</param>
         /// <returns>The Id of the KPI object that was added/updated.</returns>
+        public Guid Save(IDalKpi kpiObject)
+        {
+            return Save(new List<IDalKpi>() { kpiObject }).First();
+        }
+
+        /// <summary>
+        /// Adds or updates multiple KPI objects.
+        /// </summary>
+        /// <param name="kpiObjects">List of KPIs to add/update.</param>
+        /// <returns>The Ids of the KPI objects that were added/updated.</returns>
         public IList<Guid> Save(IList<IDalKpi> kpiObjects)
         {
                 IList<Guid> ids;
@@ -145,12 +155,10 @@ namespace EPiServer.Marketing.KPI.DataAccess
                     ids = SaveHelper(_repository, kpiObjects);
                 }
 
-
             return ids;
         }
 
-
-        public IList<Guid> SaveHelper(IRepository repo, IList<IDalKpi> kpiObjects)
+        private IList<Guid> SaveHelper(IRepository repo, IList<IDalKpi> kpiObjects)
         {
             var ids = new List<Guid>();
 

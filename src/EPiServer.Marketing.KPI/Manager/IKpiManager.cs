@@ -23,6 +23,14 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <returns>List of KPI objects.</returns>
         List<IKpi> GetKpiList();
 
+
+        /// <summary>
+        /// Adds or updates a KPI object.
+        /// </summary>
+        /// <param name="kpi">List of the KPI's to add/update.</param>
+        /// <returns>The Id of the KPI object that was added/updated.</returns>
+        Guid Save(IKpi kpi);
+
         /// <summary>
         /// Adds or updates a KPI object.
         /// </summary>

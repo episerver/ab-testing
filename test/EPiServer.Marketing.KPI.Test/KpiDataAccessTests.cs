@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.KPI.Test
                 ModifiedDate = DateTime.Now
             };
 
-            _mtm.Save(new List<IDalKpi>() {kpi});
+            _mtm.Save(kpi);
 
             Assert.Equal(_mtm.Get(id), kpi);
 
@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.KPI.Test
                 ModifiedDate = DateTime.Now
             };
 
-            _mtm.Save(new List<IDalKpi>() {kpi});
+            _mtm.Save(kpi);
 
             Assert.Equal(1, _mtm.GetKpiList().Count);
 
