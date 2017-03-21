@@ -17,6 +17,7 @@ using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.ClientKPI;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -24,6 +25,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         public bool ErrorCalled;
         public bool WarningCalled;
+        public bool DebugCalled;
         public bool IsEnabled(Level level)
         {
             return true;
@@ -38,8 +40,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             else if (level == Level.Warning)
             {
                 WarningCalled = true;
+            }
+            else if(level == Level.Debug)
+            {
+                DebugCalled = true;
+            }
         }
-    }
     }
 
     public class TestHandlerTests : IDisposable
@@ -64,6 +70,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<DefaultMarketingTestingEvents> _mockMarketingTestingEvents;
         private Mock<IDatabaseMode> _mockDatabaseMode;
         private MyLogger _logger = new MyLogger();
+        private Mock<IClientKpiInjector> _mockClientKpiInjector;
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -79,6 +86,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _referenceCounter = new Mock<IReferenceCounter>();
             _mockTestDataCookieHelper = new Mock<ITestDataCookieHelper>();
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
+            _mockClientKpiInjector = new Mock<IClientKpiInjector>();
 
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
                 .Returns(new List<IMarketingTest>()
@@ -122,6 +130,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(_mockContextHelper.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<ILogger>())
                 .Returns(_logger);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IClientKpiInjector>()).Returns(_mockClientKpiInjector.Object);
 
             _mockDatabaseMode = new Mock<IDatabaseMode>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IDatabaseMode>())
@@ -144,8 +153,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             // For this test we dont actually care what the exception is just that it is catching and
             // logging one.
-            Assert.True(_logger.ErrorCalled, "Exception was not logged.");
-            _logger.ErrorCalled = false; 
+            Assert.True(_logger.DebugCalled, "Exception was not logged.");
+            _logger.ErrorCalled = false;
             _logger.WarningCalled = false;
         }
 
@@ -283,7 +292,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should have triggered call to save cookie data");
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View),It.Is<bool>(value=>value == true)), Times.Once, "Content should have triggered IncrementCount View call");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once, "Content should have triggered IncrementCount View call");
             Assert.Equal(variantPage, args.Content);
             Assert.Equal(variantPage.ContentLink, args.ContentLink);
         }
@@ -337,7 +346,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             testHandler.LoadedContent(new object(), args);
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View),It.Is<bool>(value=>value == true)), Times.Once, "Content should have triggered IncrementCount View call");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once, "Content should have triggered IncrementCount View call");
             _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
 
@@ -345,7 +354,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
- 
+
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
@@ -393,7 +402,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(),It.IsAny<bool>()), Times.Never, "Content should not have triggered IncrementCount View call");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<bool>()), Times.Never, "Content should not have triggered IncrementCount View call");
 
             _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
 
@@ -505,7 +514,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<IMarketingTest> { test });
             _mockMarketingTestingWebRepository.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(test);
             _mockMarketingTestingWebRepository.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<object>(), It.IsAny<EventArgs>()))
-                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid() } });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -516,7 +525,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             testHandler.LoadedContent(new object(), args);
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(),It.IsAny<bool>()), Times.Never, "Test should not have attempted to increment count");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<bool>()), Times.Never, "Test should not have attempted to increment count");
         }
 
         [Fact]
@@ -552,7 +561,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<IMarketingTest>() { test });
             _mockMarketingTestingWebRepository.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(test);
             _mockMarketingTestingWebRepository.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<object>(), It.IsAny<EventArgs>()))
-                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid() } });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -564,10 +573,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.ProxyEventHandler(new object(), args);
 
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(testCookieOne), Times.AtLeast(1), "Test should have called save test data to cookie");
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(),It.IsAny<bool>()), Times.Once, "Test should have attempted to increment count");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<bool>()), Times.Once, "Test should have attempted to increment count");
         }
 
-         [Fact]
+        [Fact]
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest();
@@ -591,7 +600,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(0, testHandler.CheckForActiveTests(Guid.NewGuid(), 1));
         }
 
- 
+
         [Fact]
         public void TestHandler_initProxyEventHandler_checks_ref_and_adds_one()
         {
@@ -656,7 +665,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
 
             var t = new ContentReference(1, 3);
-            var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent()});
+            var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent() });
             th.LoadedChildren(new object(), args);
 
 
@@ -670,7 +679,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var contentEvents = new Mock<IContentEvents>();
             _mockServiceLocator.Setup(s1 => s1.GetInstance<IContentEvents>()).Returns(contentEvents.Object);
 
-            th.TestAddedToCache(new object(), new TestEventArgs(new ABTest() {KpiInstances = new List<IKpi>() {new ContentComparatorKPI(Guid.NewGuid())} }));
+            th.TestAddedToCache(new object(), new TestEventArgs(new ABTest() { KpiInstances = new List<IKpi>() { new ContentComparatorKPI(Guid.NewGuid()) } }));
         }
 
     }
