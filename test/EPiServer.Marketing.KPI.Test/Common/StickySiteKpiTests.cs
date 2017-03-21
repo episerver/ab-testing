@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Web;
-using System.Web.SessionState;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Framework.Localization;
@@ -12,7 +10,6 @@ using EPiServer.Marketing.KPI.Common.Helpers;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Test.Fakes;
 using EPiServer.ServiceLocation;
-using EPiServer.Shell;
 using EPiServer.Web.Routing;
 using Moq;
 using Xunit;
@@ -26,17 +23,17 @@ namespace EPiServer.Marketing.KPI.Test.Common
         private Mock<IContentVersionRepository> _contentVersionRepo;
         private Mock<IContentEvents> _contentEvents;
         private Mock<UrlResolver> _urlResolver;
-        internal Mock<KpiHelper> _stickyHelperMock;
+        internal Mock<IKpiHelper> _stickyHelperMock;
         private IContent _content100;
         private IContent _content200;
         private IContent _nullContent100;
-        
+
         private StickySiteKpi GetUnitUnderTest()
         {
-            _content100 = new BasicContent { ContentLink = new ContentReference(1, 2) };
+            _content100 = new BasicContent { ContentLink = new ContentReference(1, 2), ContentGuid = Guid.NewGuid() };
             _content200 = new BasicContent { ContentLink = new ContentReference(11, 12) };
             _nullContent100 = new BasicContent { ContentLink = new ContentReference(111, 112) };
-            _stickyHelperMock = new Mock<KpiHelper>();
+            _stickyHelperMock = new Mock<IKpiHelper>();
             _stickyHelperMock.Setup(call => call.IsInSystemFolder()).Returns(false);
 
             var pageRef2 = new PageReference() { ID = 2, WorkID = 5 };
@@ -60,7 +57,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _serviceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
 
             _urlResolver = new Mock<UrlResolver>();
-            _urlResolver.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
+            _urlResolver.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/alloy-plan/");
             _serviceLocator.Setup(s1 => s1.GetInstance<UrlResolver>()).Returns(_urlResolver.Object);
 
             ServiceLocator.SetLocator(_serviceLocator.Object);
@@ -145,7 +142,20 @@ namespace EPiServer.Marketing.KPI.Test.Common
 
             Assert.False(retVal.HasConverted, "Evaluate should have returned false");
         }
+
+        [Fact]
+        public void MAR_914_KPI_VerifyKpiUsesUniqueContextSkipAttribute()
+        {
+            var t = FakeHttpContext.FakeContext("http://localhost:48594/alloy-plan/");
+            HttpContext.Current = t;
+
+            var kpi = GetUnitUnderTest();
+            kpi.TestContentGuid = _content100.ContentGuid;
+            var arg = new ContentEventArgs(new ContentReference()) { Content = _content100 };
+
+            kpi.AddSessionOnLoadedContent(new object(), arg);
+
+            Assert.True(t.Items.Contains("SSK_" + kpi.TestContentGuid.ToString()), "Skip Attribute not unique");
+        }
     }
-
-
 }
