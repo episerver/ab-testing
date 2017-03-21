@@ -162,7 +162,7 @@ namespace EPiServer.Marketing.KPI.Common
             var httpContext = HttpContext.Current;
             if (httpContext != null && !isInSystemFolder && e.Content != null)
             {
-                if (!httpContext.Items.Contains("SSKSkip") && e.Content.ContentGuid == TestContentGuid &&
+                if (!httpContext.Items.Contains(getCookieKey()) && e.Content.ContentGuid == TestContentGuid &&
                     httpContext.Request.Cookies[getCookieKey()] == null)
                 {
                     string path;
@@ -186,7 +186,7 @@ namespace EPiServer.Marketing.KPI.Common
                     if (!CookieExists(cookie) && IsContentBeingLoaded(path))
                     {
                         httpContext.Response.Cookies.Add(cookie);
-                        HttpContext.Current.Items["SSKSkip"] = true; // we are done for this request. 
+                        HttpContext.Current.Items[getCookieKey()] = true; // we are done for this request. 
                     }
                 }
             }
@@ -212,7 +212,7 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 testcontentPaths = new List<string>();
 
-                HttpContext.Current.Items["SSKSkip"] = true;    // we use this flag to keep us from processing more LoadedContent calls. 
+                HttpContext.Current.Items[getCookieKey()] = true;    // we use this flag to keep us from processing more LoadedContent calls. 
                 var contentRepo = _servicelocator.GetInstance<IContentRepository>();
                 var content = contentRepo.Get<IContent>(TestContentGuid);
                 var contentUrl = UrlResolver.Current.GetUrl(content.ContentLink);
@@ -240,7 +240,7 @@ namespace EPiServer.Marketing.KPI.Common
                 policy.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(Timeout);
                 _sessionCache.Add(cacheKey, testcontentPaths, policy);
 
-                HttpContext.Current.Items.Remove("SSKSkip");
+                HttpContext.Current.Items.Remove(getCookieKey());
             }
 
             retval = testcontentPaths.Contains(path);
