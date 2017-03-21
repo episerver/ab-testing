@@ -79,6 +79,8 @@
             <!-- Test Settings Section -->
             <div class="cardWrapper" style="clear: both">
                 <div class="cardBody">
+                    <div data-dojo-type="KpiWidget"></div>
+
                     <!-- Test Goals -->
                     <div class="formsRow">
                         <h4>
@@ -95,6 +97,13 @@
                         <h4>
                             ${resources.addtestview.conversion_header}
                         </h4>
+                        <div>
+                            <form id="kpiForm">
+                                <div id="KpiWidget"></div>
+
+                            </form>
+                        </div>
+
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
                               class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
@@ -102,21 +111,15 @@
                         <span id="kpiErrorText" class="epi-ab-errorText">
                         </span>
                         <!-- KPI UI Element-->
-                        <div>
+                        <div id="kpiSelectorCombo">
                             <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onGoalSelectChange"></select>
                         </div>
                         <!-- KPI Description -->
                         <div>
                             <p id="kpidescription"></p>
                         </div>
-                        <div>
-                            <form id="kpiForm">
-                                <input type="text" id="kpiType" name="kpiType" hidden />
-                                <div id="kpiui">
-                                    <!-- KPI Supplied UI will be injected here -->
-                                </div>
-                            </form>
-                        </div>
+
+
                     </div>
                     <hr class="epi-abtest-hr" />
                     <!-- Participation Percentage -->
