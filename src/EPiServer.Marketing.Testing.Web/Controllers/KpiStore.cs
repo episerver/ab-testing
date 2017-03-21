@@ -17,13 +17,20 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class KpiStore : RestControllerBase
     {
         private LocalizationService _localizationService;
-        private IServiceLocator _serviceLocator = ServiceLocator.Current;
+        private IServiceLocator _serviceLocator;
         private ILogger _logger;
 
         public KpiStore()
         {
+            _serviceLocator = ServiceLocator.Current;
             _logger = _serviceLocator.GetInstance<ILogger>();
+            _localizationService = _serviceLocator.GetInstance<LocalizationService>();
+        }
 
+        internal KpiStore( IServiceLocator sl )
+        {
+            _serviceLocator = sl;
+            _logger = _serviceLocator.GetInstance<ILogger>();
             _localizationService = _serviceLocator.GetInstance<LocalizationService>();
         }
 

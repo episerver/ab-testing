@@ -27,9 +27,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockKpiManager.Setup(call => call.GetKpiTypes()).Returns(_kpiTypes);
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
 
-            ServiceLocator.SetLocator(_mockServiceLocator.Object);
-
-            var aRepo = new KpiWebRepository();
+            var aRepo = new KpiWebRepository(_mockServiceLocator.Object);
             return aRepo;
         }
 

@@ -39,9 +39,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _kpiManagerMock = new Mock<IKpiManager>();
             _kpiManagerMock.Setup(call => call.Save(It.IsAny<List<IKpi>>())).Returns(new List<Guid>() { Guid.NewGuid()});
 
-            ServiceLocator.SetLocator(_locator.Object);
-
-            var testStore = new KpiStore();
+            var testStore = new KpiStore(_locator.Object);
             return testStore;
         }
 
