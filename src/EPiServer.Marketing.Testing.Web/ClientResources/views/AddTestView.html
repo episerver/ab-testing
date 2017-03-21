@@ -97,9 +97,12 @@
                         <h4>
                             ${resources.addtestview.conversion_header}
                         </h4>
+                        <div>
+                            <form id="kpiForm">
+                                <div id="KpiWidget"></div>
 
-                        <div id="KpiWidget"></div>
-
+                            </form>
+                        </div>
 
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
@@ -115,14 +118,8 @@
                         <div>
                             <p id="kpidescription"></p>
                         </div>
-                        <div>
-                            <form id="kpiForm">
-                                <input type="text" id="kpiType" name="kpiType" hidden />
-                                <div id="kpiui">
-                                    <!-- KPI Supplied UI will be injected here -->
-                                </div>
-                            </form>
-                        </div>
+
+
                     </div>
                     <hr class="epi-abtest-hr" />
                     <!-- Participation Percentage -->

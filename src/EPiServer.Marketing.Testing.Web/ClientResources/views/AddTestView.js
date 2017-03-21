@@ -434,22 +434,6 @@ define([
                 }
             },
 
-            // clears kpi description
-            _clearCustomKpiDescription: function () {
-                var kpidescriptionElement = dom.byId("kpidescription");
-                if (kpidescriptionElement) {
-                    var contentPane2 = dojo.query('#kpidescription > *');
-                    if (contentPane2[0]) {
-                        dojo.forEach(dijit.findWidgets(contentPane2)), function (w) {
-                            w.destroyRecursive();
-                        };
-                        var dijitContentPane2 = dijit.byId(contentPane2[0].id);
-                        dijitContentPane2.destroy();
-                        kpidescriptionElement.innerHTML = "";
-                    }
-                }
-            },
-
             // UI UTILITIES
             _toggleTimeSelector: function () {
                 var dateSelector = dom.byId("dateSelector");
@@ -530,20 +514,22 @@ define([
 
             _onGoalSelectChange: function (evt) {
                 this._clearCustomKpiMarkup();
-                var kpiTextField = dom.byId("kpiType");
                 var kpiuiElement = dom.byId("kpiui");
                 var kpiWidget = dom.byId("KpiWidget");
+                var kpiSelector = dom.byId("kpiSelectorCombo");
 
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
                     new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
-                        description: kpiObject.kpi.description
+                        description: kpiObject.kpi.description,
+                        kpiType: kpiObject.kpiType
                     }).placeAt(kpiWidget);
+                    kpiSelector.scrollIntoView(true);
                     this.kpiEntries += 1;
                     if (this.kpiEntries == 5) {
-                        dom.byId("kpiSelectorCombo").style.display = "none";
+                        kpiSelector.style.display = "none";
                     }
                 } else {
                     kpiTextField.value = "";

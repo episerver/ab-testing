@@ -8,7 +8,9 @@
     "dojo/text!./templates/KpiWidget.html",
     'dojo/dom',
     "dojox/layout/ContentPane",
-    "dijit/form/Button"
+    "dijit/form/Button",
+    'xstyle/css!marketing-testing/css/KpiWidget.css',
+
 
 ], function (declare, Evented, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin, _WidgetsInTemplateMixin, template, dom, ContentPane) {
 
@@ -16,13 +18,13 @@
 
         templateString: template,
 
-
-
         label: "",
 
         description: "",
 
         markup: "",
+
+        kpiType: "",
 
         postCreate: function () {
             new ContentPane({
@@ -35,11 +37,7 @@
             var widget = dijit.byId(this.id);
             widget.destroy();
             document.dispatchEvent(destroyedEvent);
-
         }
-
-
-
     });
 
 });
