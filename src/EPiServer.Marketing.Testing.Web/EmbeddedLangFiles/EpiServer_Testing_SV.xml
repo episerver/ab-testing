@@ -17,8 +17,7 @@
         <confidence_level_description>Konfidensnivån anger mängden tillåtna fel. Ju högre konfidensnivå, desto större blir testresultatens noggrannhet. Detta anger om skillnaden mätt mellan kontrollsidan och variantsidan inte är en slump (dvs om skillnaden är signifikant eller inte).</confidence_level_description>
         <confidence_level_header>Konfidensnivå</confidence_level_header>
         <control>A / Original</control>
-        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
-        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Vad är konverteringsmålet?</conversion_header>
         <conversion_label>Besökare går till sida</conversion_label>
         <days_text> dag(ar).</days_text>

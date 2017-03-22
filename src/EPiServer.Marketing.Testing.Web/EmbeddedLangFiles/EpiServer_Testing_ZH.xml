@@ -17,8 +17,7 @@
         <confidence_level_description>可信度决定了允许的错误数量。 较高的比例与测试结果的准确性直接相关。 这可说明在对照页面和变型页面之间测得的差异是否不是意外（即，显著）。</confidence_level_description>
         <confidence_level_header>可信度</confidence_level_header>
         <control>A/对照</control>
-        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
-        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>什么是转换目标？</conversion_header>
         <conversion_label>访客导航至页面</conversion_label>
         <days_text> 天。</days_text>

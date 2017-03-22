@@ -17,8 +17,7 @@
         <confidence_level_description>Het betrouwbaarheidsniveau bepaalt het aantal toegestane fouten. Een hoger percentage houdt direct verband met de nauwkeurigheid van de testresultaten. Dit geeft aan of het verschil gemeten tussen de controlepagina en variantpagina geen toeval is (d.w.z. significant).</confidence_level_description>
         <confidence_level_header>Betrouwbaarheidsniveau</confidence_level_header>
         <control>A / Controle</control>
-        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
-        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Wat is het conversiedoel?</conversion_header>
         <conversion_label>Bezoeker navigeert naar pagina</conversion_label>
         <days_text> dag(en).</days_text>

@@ -4,8 +4,7 @@
     <abtesting>
       <addtestview>
         <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
-        <conversion_description_post path="/abtesting/addtestview/conversion_description_post/"> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
-        <conversion_description_pre path="/abtesting/addtestview/conversion_description_pre/">Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
+        <conversion_description path="/abtesting/addtestview/conversion_description/">By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
       </addtestview>
       <admin>
         <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>

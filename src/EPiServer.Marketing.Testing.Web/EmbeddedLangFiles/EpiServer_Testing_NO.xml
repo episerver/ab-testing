@@ -17,8 +17,7 @@
         <confidence_level_description>Konfidenskoeffisienten bestemmer hvor mange feil som tillates. Høyere prosent gir mer nøyaktige testresultater. Dette angir om forskjellen som måles mellom kontrollsiden og variantsiden ikke er tilfeldig (altså signifikant).</confidence_level_description>
         <confidence_level_header>Konfidensnivå</confidence_level_header>
         <control>A/kontroll</control>
-        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
-        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Hva er konverteringsmålet?</conversion_header>
         <conversion_label>Gjest navigerer til side</conversion_label>
         <days_text> dag(er).</days_text>
