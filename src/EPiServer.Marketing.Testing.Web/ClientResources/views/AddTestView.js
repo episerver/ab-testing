@@ -8,7 +8,6 @@ function hideTooltip(element) {
     dijit.hideTooltip(element);
 };
 
-
 define([
      'dojo/_base/declare',
      'dojo/Evented',
@@ -27,7 +26,6 @@ define([
         'dojo/dom',
         "dojo/dom-class",
         "dojo/dom-style",
-        "dojo/dom-attr",
         "dojo/query",
         "dijit/registry",
         'epi/dependency',
@@ -66,7 +64,6 @@ define([
     dom,
     domStyle,
     domClass,
-    domAttr,
     query,
     registry,
     dependency,
@@ -91,7 +88,6 @@ define([
             resources: resources,
 
             isBooleanTest: true,
-
 
             // DOJO WIDGET METHODS
 
@@ -133,15 +129,12 @@ define([
                 document.addEventListener('destroyed', function () {
                     me.decrementKpiEntries();
                 });
-
-
             },
 
             decrementKpiEntries: function () {
                 this.kpiEntries--;
                 this._adjustKpiSelectorCombo();
             },
-
 
             startup: function () {
                 if (this.breadcrumbWidget) {
@@ -270,8 +263,6 @@ define([
                 }
             },
 
-
-
             //DATA VALIDATION
             // Master validations for all form fields. Used when hitting the start button and will pickup
             // errors not triggered by onChangeEvents.
@@ -346,13 +337,11 @@ define([
                 return true;
             },
 
-
             // FORM DATA CLEANUP
             reset: function () {
                 // reset the start button click counter
                 this.startButtonClickCounter = 0;
                 this.kpiEntries = 0;
-
 
                 //set view model properties to default form values.
                 if (this.descriptionText) {
@@ -613,6 +602,5 @@ define([
                     }
                 }
             }
-
         });
     });
