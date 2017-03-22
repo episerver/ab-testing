@@ -1,5 +1,12 @@
 ﻿var destroyedEvent = new Event('destroyed');
 
+function showTooltip(tip, element) {
+    dijit.showTooltip(tip, element);
+};
+
+function hideTooltip(element) {
+    dijit.hideTooltip(element);
+};
 
 
 define([
@@ -257,11 +264,13 @@ define([
                     var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < kpiList.length; x++) {
-                        var option = { value: x.toString(), label: kpiList[x].kpi.friendlyName };
+                        var option = { value: x.toString(), label: '<div style="max-width:100px; word-wrap:break-word" onmouseover="showTooltip(\'' + kpiList[x].kpi.description + '\',this)" onmouseout="hideTooltip(this)">' + kpiList[x].kpi.friendlyName + '</div>' };
                         kpiuiElement.addOption(option);
                     }
                 }
             },
+
+
 
             //DATA VALIDATION
             // Master validations for all form fields. Used when hitting the start button and will pickup
@@ -485,7 +494,7 @@ define([
 
             },
 
-            createTest: function(kpiIds) {
+            createTest: function (kpiIds) {
                 this._clearConversionErrors();
                 this.model.kpiId = kpiIds;
                 if (this._isValidFormData()) {
@@ -584,4 +593,6 @@ define([
                 }
             }
         });
+
+
     });
