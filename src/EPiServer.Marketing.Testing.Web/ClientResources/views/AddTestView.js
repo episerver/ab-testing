@@ -1,13 +1,5 @@
 ﻿var destroyedEvent = new Event('destroyed');
 
-function showTooltip(tip, element) {
-    dijit.showTooltip(tip, element);
-};
-
-function hideTooltip(element) {
-    dijit.hideTooltip(element);
-};
-
 define([
      'dojo/_base/declare',
      'dojo/Evented',
@@ -79,7 +71,6 @@ define([
         viewTestDuration: null;
         viewConfidenceLevel: null;
         startButtonClickCounter: 0;
-        kpiEntries: 0;
 
         return declare([Evented, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
@@ -87,7 +78,10 @@ define([
 
             resources: resources,
 
-            isBooleanTest: true,
+            isMultiKpiTest: true,
+
+            kpiEntries: 0,
+
 
             // DOJO WIDGET METHODS
 
@@ -133,6 +127,9 @@ define([
 
             decrementKpiEntries: function () {
                 this.kpiEntries--;
+                if (this.kpiEntries == 0) {
+                    this.isMultiKpiTest = true;
+                }
                 this._adjustKpiSelectorCombo();
             },
 
@@ -257,7 +254,7 @@ define([
                     var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < kpiList.length; x++) {
-                        var option = { value: x.toString(), label: '<div style="max-width:100px; word-wrap:break-word" onmouseover="showTooltip(\'' + kpiList[x].kpi.description + '\',this)" onmouseout="hideTooltip(this)">' + kpiList[x].kpi.friendlyName + '</div>' };
+                        var option = { value: x.toString(), label: '<div onmouseover="dijit.showTooltip(\'' + kpiList[x].kpi.description + '\',this)" onmouseout="dijit.hideTooltip(this)">' + kpiList[x].kpi.friendlyName + '</div>' };
                         kpiuiElement.addOption(option);
                     }
                 }
@@ -525,7 +522,7 @@ define([
                     }).placeAt(kpiWidget);
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
-                        this.isBooleanTeset = false;
+                        this.isMultiKpiTest = false;
                     }
                     this.kpiEntries++;
 
@@ -593,12 +590,26 @@ define([
                 var dijitSelector = dijit.byId("kpiSelector");
                 dijitSelector.set("value", "default");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
-                if (this.kpiEntries == 5 || this.isBooleanTest != true) {
+                if (this.kpiEntries == 5 || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
                     kpiSelector.style.display = "block";
                     if (!this._isScrolledIntoView(kpiSelector)) {
                         kpiSelector.scrollIntoView(true);
+                    }
+
+                    if (this.kpiEntries == 0) {
+                        this._setKpiSelectList(this.kpiModel.getKpis());
+                    }
+                    if (this.kpiEntries == 1 && this.isMultiKpiTest == true) {
+                        var allowableKpis = new Array();
+                        this.kpiModel.availableKpis.forEach(function (entry) {
+                            if (entry.kpi.kpiResultType == "KpiConversionResult") {
+                                allowableKpis.push(entry);
+                            }
+                        });
+                        this.kpiModel.availableKpis = allowableKpis;
+                        this._setKpiSelectList(this.kpiModel.availableKpis);
                     }
                 }
             }

@@ -17,8 +17,18 @@
                 this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.get()
                 .then(function (retKpis) {
-                    me._changeAttrValue("availableKpis",retKpis );
+                    me._changeAttrValue("availableKpis", retKpis);
                 });
+            },
+
+            getKpis: function (kpiStore) {
+                var me = this;
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore.get()
+                .then(function (retKpis) {
+                    me._changeAttrValue("availableKpis", retKpis);
+                });
+
             },
 
             getAvailableKpis: function () {
@@ -31,7 +41,7 @@
 
             createKpi(caller, kpiStore) {
                 var me = this;
-                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore"); 
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.put({
                     id: "KpiFormData",
                     entity: caller.kpiFormData
