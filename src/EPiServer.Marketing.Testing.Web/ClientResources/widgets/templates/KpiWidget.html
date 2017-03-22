@@ -1,9 +1,11 @@
-﻿<div style="width:60%">
+﻿<div style="width:60%" class="formsRow">
     <div>
-        <div style="float:right"><button class="epi-kpiWidget-remove-button epi-chromeless" data-dojo-type="dijit/form/Button" data-dojo-attach-point="kpiId" data-dojo-attach-event="onClick: removeWidget">X</button></div>
+        <div style="float:right"><button class="epi-chromeless epi-kpiWidget-remove-button" data-dojo-type="dijit/form/Button" data-dojo-attach-point="kpiId" data-dojo-attach-event="onClick: removeWidget">X</button></div>
         <div style="vertical-align:middle"><label class="epi-kpiWidget-label" data-dojo-attach-point="kpiLabel">${label}</label></div>
     </div>
-    <div data-dojo-attach-point="kpiDescription">${description}</div>
-    <div data-dojo-attach-point="kpiMarkup"></div>
-    <input type="hidden" data-dojo-type="dijit/form/TextBox" value="${kpiType}" />
+    <div style="width:95%">
+        <p data-dojo-attach-point="kpiDescription">${description}</p>
+        <p data-dojo-attach-point="kpiMarkup"></p>
+        <input type="hidden" data-dojo-type="dijit/form/TextBox" value="${kpiType}" />
+    </div>
 </div>
