@@ -11,7 +11,7 @@
         <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
         <name>Add To Cart</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_header>Conversion Goal(s)</conversion_header>
           <conversion_selector_description>Visitor adds the product to the cart</conversion_selector_description>
         </readonly_markup>
       </addtocart>
@@ -32,7 +32,7 @@
         <name>Average Order</name>
         <readonly_markup>
           <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_header>Conversion Goal(s)</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
@@ -44,7 +44,7 @@
         <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
         <name>Purchase Product</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_header>Conversion Goal(s)</conversion_header>
           <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>

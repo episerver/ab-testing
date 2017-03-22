@@ -12,7 +12,7 @@
         <description>The chosen page is the one that a user must click on in order to count as a conversion.  Results: Views are the number of visitors that visit the page under test.  Conversions are the number of visitors that clicked through to the landing page at any point in the future while the test was running.</description>
         <name>Landing Page</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
+          <conversion_header>Conversion goal(s)</conversion_header>
           <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         </readonly_markup>
       </content_comparator_kpi>
@@ -30,7 +30,7 @@
         <description>Converts when a user visits the content under test and then visits any other page within the same browser session.  Results: Views are the number of visitors that visited the web page.  Conversions are the number of visitors that clicked through to any other page within the specified time.</description>
         <name>Site Stickiness</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
+          <conversion_header>Conversion goal(s)</conversion_header>
           <conversion_selector_description>Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
         </readonly_markup>
       </stickysite_kpi>
@@ -43,7 +43,7 @@
         <description>Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
         <name>Time on Page</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
+          <conversion_header>Conversion goal(s)</conversion_header>
           <conversion_selector_description>Number of seconds visitor remains on the page:</conversion_selector_description>
         </readonly_markup>
       </timeonpage_kpi>

@@ -17,6 +17,8 @@
         <confidence_level_description>Tillidsniveauet angiver det antal fejl, der er tilladt. En højere procentværdi har en direkte sammenhæng med nøjagtigheden af testresultaterne. Den angiver, om den målte forskel mellem kontrolsiden og variantsiden ikke er tilfældig (dvs. væsentlig).</confidence_level_description>
         <confidence_level_header>Tillidsniveau</confidence_level_header>
         <control>A/Kontrol</control>
+        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
+        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
         <conversion_header>Hvad er konverteringsmålet?</conversion_header>
         <conversion_label>Den besøgende navigerer til siden</conversion_label>
         <days_text> dag(e).</days_text>

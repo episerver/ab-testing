@@ -17,6 +17,8 @@
         <confidence_level_description>Luottamustaso määrittää virheiden sallitun määrän. Korkeampi prosentti korreloi suoraan testitulosten tarkkuuteen. Tällä ilmaistaan, onko kontrollisivun ja varianttisivun välinen mitattu ero ei-sattumanvarainen (eli merkittävä).</confidence_level_description>
         <confidence_level_header>Luottamustaso</confidence_level_header>
         <control>A / Kontrolli</control>
+        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
+        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
         <conversion_header>Mikä on muuntotavoite?</conversion_header>
         <conversion_label>Vierailija siirtyy sivulle</conversion_label>
         <days_text> päivä(ä).</days_text>

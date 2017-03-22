@@ -4,6 +4,8 @@
     <abtesting>
       <addtestview>
         <control path="/abtesting/addtestview/control/">A / Control</control>
+        <conversion_description_post path="/abtesting/addtestview/conversion_description_post/"> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
+        <conversion_description_pre path="/abtesting/addtestview/conversion_description_pre/">Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
       </addtestview>
       <admin>
         <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>

@@ -17,6 +17,8 @@
         <confidence_level_description>El nivel de confianza determina la cantidad de errores permitidos. Un porcentaje más alto está relacionado directamente con la precisión de los resultados de la prueba. Esto indica si la diferencia medida entre la página de control y la página de la variante no es por casualidad, es decir, es significativa.</confidence_level_description>
         <confidence_level_header>Nivel de confianza</confidence_level_header>
         <control>A / Control</control>
+        <conversion_description_post> section at the bottom of this page.  By default, all goals are given equal weight.</conversion_description_post>
+        <conversion_description_pre>Choosing more than 1 goal will allow them to be weighted individually.  Weights can be set in the </conversion_description_pre>
         <conversion_header>¿Cuál es el objetivo de conversión?</conversion_header>
         <conversion_label>El visitante entra en la página</conversion_label>
         <days_text> día(s).</days_text>
