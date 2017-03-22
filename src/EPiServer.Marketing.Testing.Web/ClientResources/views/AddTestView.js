@@ -1,13 +1,5 @@
 ﻿var destroyedEvent = new Event('destroyed');
 
-function showTooltip(tip, element) {
-    dijit.showTooltip(tip, element);
-};
-
-function hideTooltip(element) {
-    dijit.hideTooltip(element);
-};
-
 define([
      'dojo/_base/declare',
      'dojo/Evented',
