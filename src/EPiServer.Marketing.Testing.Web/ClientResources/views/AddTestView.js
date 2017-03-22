@@ -257,7 +257,7 @@ define([
                     var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < kpiList.length; x++) {
-                        var option = { value: x.toString(), label: '<div style="max-width:100px; word-wrap:break-word" onmouseover="showTooltip(\'' + kpiList[x].kpi.description + '\',this)" onmouseout="hideTooltip(this)">' + kpiList[x].kpi.friendlyName + '</div>' };
+                        var option = { value: x.toString(), label: '<div onmouseover="dijit.showTooltip(\'' + kpiList[x].kpi.description + '\',this)" onmouseout="dijit.hideTooltip(this)">' + kpiList[x].kpi.friendlyName + '</div>' };
                         kpiuiElement.addOption(option);
                     }
                 }
