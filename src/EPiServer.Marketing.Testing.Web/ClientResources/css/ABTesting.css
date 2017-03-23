@@ -416,16 +416,3 @@
        width:auto;
    }
 }
-
-a.advanced-options
-{
-    color: blue;
-    background-color: transparent;
-    text-decoration: underline;
-}
-a.advanced-options:hover
-{
-    color: red;
-    background-color: transparent;
-    text-decoration: underline;
-}
