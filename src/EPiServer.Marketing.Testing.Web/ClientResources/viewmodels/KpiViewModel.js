@@ -28,7 +28,6 @@
                 .then(function (retKpis) {
                     me._changeAttrValue("availableKpis", retKpis);
                 });
-
             },
 
             getAvailableKpis: function () {

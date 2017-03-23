@@ -82,7 +82,6 @@ define([
 
             kpiEntries: 0,
 
-
             // DOJO WIDGET METHODS
 
             //set bindings to view model properties
