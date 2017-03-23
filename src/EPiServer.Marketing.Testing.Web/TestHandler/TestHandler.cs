@@ -320,10 +320,6 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-
-
-
-
         //Handles the incrementing of view counts on a version
         private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
         {
