@@ -17,7 +17,8 @@
         <confidence_level_description>The confidence level dictates the amount of errors allowed. A higher percentage directly correlates to the accuracy of the test results. This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidence_level_description>
         <confidence_level_header>Confidence level</confidence_level_header>
         <control>A / Control</control>
-        <conversion_header>Conversion goal</conversion_header>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_label>Visitor navigates to page</conversion_label>
         <days_text> day(s).</days_text>
         <default> (default)</default>
