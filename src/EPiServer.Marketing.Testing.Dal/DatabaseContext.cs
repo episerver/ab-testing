@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 
@@ -36,6 +37,8 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<DalKeyValueResult> DalKeyValueResults { get; set; }
 
+        public DbSet<DalKeyConversionResult> DalKeyConversionResults { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             if (modelBuilder != null)
@@ -47,6 +50,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyFinancialResultMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyValueResultMap());
+                _modelBuilder.Configurations.Add(new Mappings.KeyConversionResultMap());
             }
         }
 
