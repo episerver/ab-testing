@@ -79,18 +79,25 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 {
                     kpiInstance.Validate(values);
                     var kpiId = kpiManager.Save(kpiInstance);
-                    result = Rest(kpiId);
+                    result = Rest(new Response() { status = true, obj = kpiId });
                 }
                 catch (Exception e)
                 {
-                    _logger.Error("Error creating Kpi" + e);
-                    result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, e.Message);
+                    _logger.Debug("Failed to validate kpi. Type = " + Type.GetType(values["kpiType"]));
+                    result = Rest(new Response() { status = false, obj = e, message = e.Message });
                 }
-            }else
+            }
+            else
             {
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
+                result = Rest(new Response() { status = false, message = _localizationService.GetString("/abtesting/addtestview/error_conversiongoal") });
             }
             return result;
         }
+    }
+    public class Response
+    {
+        public bool status { get; set; }
+        public object obj { get; set; }
+        public object message { get; set; }
     }
 }

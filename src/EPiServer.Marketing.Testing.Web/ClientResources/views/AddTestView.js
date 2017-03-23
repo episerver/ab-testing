@@ -485,7 +485,7 @@
             },
 
             setKpiError: function(ret) {
-                this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                this._setError(ret, this.kpiErrorTextNode, this.kpiErrorIconNode);
                 this.startButtonClickCounter = 0;
             },
 
