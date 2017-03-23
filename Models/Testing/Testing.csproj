@@ -59,6 +59,9 @@
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalABTest.cs">
       <Link>EntityModel\DalABTest.cs</Link>
     </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyConversionResult.cs">
+      <Link>EntityModel\DalKeyConversionResult.cs</Link>
+    </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\EntityModel\DalKeyFinancialResult.cs">
       <Link>EntityModel\DalKeyFinancialResult.cs</Link>
     </Compile>
@@ -94,6 +97,9 @@
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\ABTestMap.cs">
       <Link>Mappings\ABTestMap.cs</Link>
+    </Compile>
+    <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyConversionResultMap.cs">
+      <Link>Mappings\KeyConversionResultMap.cs</Link>
     </Compile>
     <Compile Include="..\..\src\EPiServer.Marketing.Testing.Dal\Mappings\KeyFinancialResultMap.cs">
       <Link>Mappings\KeyFinancialResultMap.cs</Link>
