@@ -238,10 +238,16 @@ define([
             // Transforms custom KPI form data into json for processing
             _getKpiFormData: function () {
                 var me = this;
-                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
-                var formData = dojo.toJson(kpiFormObject, true);
-                var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
-                return formattedFormData;
+                var formDataArray = new Array();
+
+                for (var x = 0; x < document.forms.length; x++) {
+                    var kpiFormObject = dojo.formToObject(document.forms[x]);
+                    var formData = dojo.toJson(kpiFormObject, true);
+                    var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
+                    formDataArray.push(formattedFormData);
+                }
+
+                return formDataArray;
             },
 
             // FORM ELEMENT CONTROL METHODS

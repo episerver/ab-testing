@@ -9,6 +9,7 @@
     'dojo/dom',
     "dojox/layout/ContentPane",
     "dijit/form/Button",
+    "dijit/form/Form",
     'xstyle/css!marketing-testing/css/KpiWidget.css',
 
 
