@@ -26,6 +26,12 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
         public bool AutoPublishWinner { get; set; }
 
+        /// <summary>
+        /// Hardcoded limit is set to 5.  This is not part of the UI, but can be added if users request it.
+        /// </summary>
+        [Range(1, 20, ErrorMessage = "Must be a positive number between 1 and 20")]
+        public int KpiLimit { get; set; }
+
         internal static AdminConfigTestSettings _currentSettings;
 
        [ExcludeFromCodeCoverage]
@@ -52,6 +58,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent = 10;
             ConfidenceLevel = 95;
             AutoPublishWinner = false;
+            KpiLimit = 5;
         }
 
         [ExcludeFromCodeCoverage]

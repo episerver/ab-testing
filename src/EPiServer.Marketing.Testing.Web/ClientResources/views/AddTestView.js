@@ -63,6 +63,7 @@
         viewParticipationPercent: null;
         viewTestDuration: null;
         viewConfidenceLevel: null;
+        viewKpiLimit: null;
         startButtonClickCounter: 0;
 
         return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
@@ -79,7 +80,8 @@
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"]
+                confidenceLevel: ["viewConfidenceLevel"],
+                kpiLimit: ["viewKpiLimit"]
             },
 
             //sets views starting data from view model

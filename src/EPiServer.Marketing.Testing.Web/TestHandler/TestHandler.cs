@@ -320,28 +320,6 @@ namespace EPiServer.Marketing.Testing.Web
             }
         }
 
-        /// <summary>
-        /// Checks for any client kpis which may be assigned to the test and injects the provided
-        /// markup via the current response.
-        /// </summary>
-        /// <param name="kpiInstances"></param>
-        /// <param name="cookieData"></param>
-        private void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
-        {
-            foreach (var kpi in kpiInstances.Where(x=>x is IClientKpi))
-            {
-                if (!HttpContext.Current.Items.Contains(kpi.Id.ToString()) 
-                    && !_contextHelper.IsInSystemFolder()
-                    && (!cookieData.Converted || cookieData.AlwaysEval))
-                {
-                    var clientKpi = kpi as ClientKpi;
-                    var test = _testRepo.GetTestById(cookieData.TestId);
-                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id == cookieData.TestVariantId).ItemVersion;
-                    HttpContext.Current.Response.Write(string.Format(clientKpi.ClientKpiScript,cookieData.TestId,itemVersion,clientKpi.Id,clientKpi.ClientEvaluationScript));
-                    HttpContext.Current.Items[kpi.Id.ToString()]=true;
-                }
-            }
-        }
 
 
 
