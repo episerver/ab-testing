@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// 
         /// </summary>
-        public int Conversions { get; set; }
+        public double Conversions { get; set; }
 
         /// <summary>
         /// 

@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
     {
         public KeyConversionResultMap()
         {
-            this.ToTable("tblABKeyFinancialResult");
+            this.ToTable("tblABKeyConversionResult");
 
             this.HasKey(m => m.Id);
 

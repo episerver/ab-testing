@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// <summary>
         /// A running count of how many users have converted after viewing the item under test.
         /// </summary>
-        public int Conversions { get; set; }
+        public double Conversions { get; set; }
 
         /// <summary>
         /// A running count of how many users have viewed the item under test.
