@@ -247,7 +247,7 @@ define([
             _setKpiSelectList: function (kpiList) {
                 var me = this;
                 var kpiuiElement = registry.byId("kpiSelector");
-                if (kpiuiElement) {
+                if (kpiuiElement && kpiList) {
 
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
@@ -382,6 +382,12 @@ define([
                     this.scheduleDiv.style.visibility = "hidden";
                 }
 
+
+                var kpiSelector = dom.byId("kpiSelectorCombo");
+                if (kpiSelector) {
+                    kpiSelector.style.display = "block";
+                }
+
                 this._setViewConfidenceLevelAttr();
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
@@ -414,10 +420,11 @@ define([
 
             //Removes the custom KPI markup from the view & widget registry
             _clearCustomKpiMarkup: function () {
-                this._clearConversionErrors();
-                var kpiuiElement = dom.byId("kpiui");
+                this.kpiEntries = 0;
+                this.isMultiKpiTest = true;
+                var kpiuiElement = dom.byId("kpiWidgets");
                 if (kpiuiElement) {
-                    var contentPane = dojo.query('#kpiui > *');
+                    var contentPane = dojo.query('#kpiWidgets > *');
                     if (contentPane[0]) {
                         dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
                             w.destroyRecursive();
@@ -499,7 +506,7 @@ define([
             _onCancelButtonClick: function () {
                 var me = this;
                 this._clearCustomKpiMarkup();
-                this._setKpiSelectList(this.kpiModel.availableKpis);
+                this.kpiModel.refreshKpis();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
@@ -507,9 +514,8 @@ define([
             },
 
             _onGoalSelectChange: function (evt) {
-                this._clearCustomKpiMarkup();
                 var kpiuiElement = dom.byId("kpiui");
-                var kpiWidget = dom.byId("KpiWidget");
+                var kpiWidget = dom.byId("kpiWidgets");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
 
                 if (evt !== "default") {
@@ -599,7 +605,7 @@ define([
                     }
 
                     if (this.kpiEntries == 0) {
-                        this._setKpiSelectList(this.kpiModel.getKpis());
+                        this._setKpiSelectList(this.kpiModel.refreshKpis());
                     }
                     if (this.kpiEntries == 1 && this.isMultiKpiTest == true) {
                         var allowableKpis = new Array();

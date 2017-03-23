@@ -21,7 +21,7 @@
                 });
             },
 
-            getKpis: function (kpiStore) {
+            refreshKpis: function (kpiStore) {
                 var me = this;
                 this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.get()
