@@ -7,7 +7,7 @@ namespace EPiServer.Marketing.Testing.Dal.Migrations
 {
     internal static class DatabaseVersion
     {
-        internal const long RequiredDbVersion = 201701191938428;
+        internal const long RequiredDbVersion = 201703231704110;
         internal const string TableToCheckFor = "tblABTest";
         internal const string Schema = "dbo";
         internal const string ContextKey = "Testing.Migrations.Configuration";

@@ -6,10 +6,7 @@ using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 namespace EPiServer.Marketing.Testing.Dal
 {
-    using System;
     using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
 
     public class DatabaseContext : DbContext
     {
@@ -36,6 +33,8 @@ namespace EPiServer.Marketing.Testing.Dal
 
         public DbSet<DalKeyValueResult> DalKeyValueResults { get; set; }
 
+        public DbSet<DalKeyConversionResult> DalKeyConversionResults { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             if (modelBuilder != null)
@@ -47,6 +46,7 @@ namespace EPiServer.Marketing.Testing.Dal
                 _modelBuilder.Configurations.Add(new Mappings.KeyPerformanceIndicatorMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyFinancialResultMap());
                 _modelBuilder.Configurations.Add(new Mappings.KeyValueResultMap());
+                _modelBuilder.Configurations.Add(new Mappings.KeyConversionResultMap());
             }
         }
 
