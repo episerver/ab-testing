@@ -362,9 +362,13 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             {
                 variant.DalKeyFinancialResults.Add((DalKeyFinancialResult)keyResult);
             }
-            else
+            else if (type == 1)
             {
                 variant.DalKeyValueResults.Add((DalKeyValueResult)keyResult);
+            }
+            else if (type == 2)
+            {
+                variant.DalKeyConversionResults.Add((DalKeyConversionResult)keyResult);
             }
 
             variant.ModifiedDate = DateTime.UtcNow;
