@@ -1,16 +1,12 @@
 using System.Data.Common;
 using System.Data.Entity.Infrastructure;
-using System.Data.Entity.ModelConfiguration;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 
 
 namespace EPiServer.Marketing.Testing.Dal
 {
-    using System;
     using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
 
     public class DatabaseContext : DbContext
     {
