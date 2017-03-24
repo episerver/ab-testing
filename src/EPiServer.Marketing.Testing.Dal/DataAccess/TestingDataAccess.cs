@@ -358,13 +358,17 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             var test = repo.GetById(testId);
             var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
 
-            if (type == 0)
+            if (type == (int)DalKeyResultType.Financial)
             {
                 variant.DalKeyFinancialResults.Add((DalKeyFinancialResult)keyResult);
             }
-            else
+            else if (type == (int)DalKeyResultType.Value)
             {
                 variant.DalKeyValueResults.Add((DalKeyValueResult)keyResult);
+            }
+            else if (type == (int)DalKeyResultType.Conversion)
+            {
+                variant.DalKeyConversionResults.Add((DalKeyConversionResult)keyResult);
             }
 
             variant.ModifiedDate = DateTime.UtcNow;

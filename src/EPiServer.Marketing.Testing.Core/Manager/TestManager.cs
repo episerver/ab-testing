@@ -246,13 +246,20 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
             else
             {
-                if (type == KeyResultType.Financial)
+                switch (type)
                 {
-                    _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
-                }
-                else
-                {
-                    _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
+                    case KeyResultType.Financial:
+                        _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
+                        break;
+                    case KeyResultType.Value:
+                        _dataAccess.AddKpiResultData(testId, itemVersion,
+                            TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult) keyResult), (int) type);
+                        break;
+                    case KeyResultType.Conversion:
+                    default:
+                        _dataAccess.AddKpiResultData(testId, itemVersion,
+                            TestManagerHelper.ConvertToDalKeyConversionResult((KeyConversionResult)keyResult), (int)type);
+                        break;
                 }
             }
         }

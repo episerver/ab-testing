@@ -57,5 +57,10 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// A list of any value results(i.e. any numerical value that is not fiancial in nature) that are the result of a kpi associated with the test this variant is part of.
         /// </summary>
         public IList<KeyValueResult> KeyValueResults { get; set; }
+
+        /// <summary>
+        /// A list of conversion results that are related to a kpi.
+        /// </summary>
+        public IList<KeyConversionResult> KeyConversionResults { get; set; }
     }
 }

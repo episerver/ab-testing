@@ -1,9 +1,9 @@
-﻿namespace EPiServer.Marketing.Testing.Core.DataClass.Enums
+﻿namespace EPiServer.Marketing.Testing.Dal.EntityModel.Enums
 {
     /// <summary>
     /// Type of kpi data to save.
     /// </summary>
-    public enum KeyResultType
+    public enum DalKeyResultType
     {
         /// <summary>
         /// A monetary value.
