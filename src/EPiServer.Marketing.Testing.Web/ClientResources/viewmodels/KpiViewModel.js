@@ -49,7 +49,7 @@
                         caller.createTest(ret);
                     })
                     .otherwise(function (ret) {
-                        caller.setKpiError(ret);
+                        caller.setKpiError(ret.xhr.statusText);
                     });
             },
         });

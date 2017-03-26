@@ -5,9 +5,16 @@
             <label class="epi-kpiWidget-lbl" data-dojo-attach-point="kpiLabel">${label}</label>
         </div>
         <div class="epi-kpiWidget-content">
+            <span id="${id}_kpiErrorIcon"
+                  class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+            </span>
+            <span id="${id}_kpiErrorText" class="epi-ab-errorText">
+            </span>
             <p data-dojo-attach-point="kpiDescription">${description}</p>
             <p data-dojo-attach-point="kpiMarkup"></p>
-            <input type="hidden" data-dojo-type="dijit/form/TextBox" value="${kpiType}" />
+            <input type="hidden" data-dojo-type="dijit/form/TextBox" name="kpiType" value="${kpiType}" />
+            <input type="hidden" data-dojo-type="dijit/form/TextBox" name="widgetID" value="${id}" />
+            <input id="CurrentContent" type="hidden" name="CurrentContent" data-dojo-attach-point="CurrentContent" />
         </div>
     </div>
 </div>

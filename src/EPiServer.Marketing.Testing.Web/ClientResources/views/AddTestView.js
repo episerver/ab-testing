@@ -82,6 +82,10 @@ define([
 
             kpiEntries: 0,
 
+            kpiList: new Array(),
+
+            kpiFormData: null,
+
             // DOJO WIDGET METHODS
 
             //set bindings to view model properties
@@ -236,14 +240,14 @@ define([
                 var me = this;
                 var formDataArray = new Array();
 
-                for (var x = 0; x < document.forms.length; x++) {
+                for (var x = 1; x < document.forms.length; x++) {
                     var kpiFormObject = dojo.formToObject(document.forms[x]);
                     var formData = dojo.toJson(kpiFormObject, true);
                     var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
                     formDataArray.push(formattedFormData);
                 }
-
-                return formDataArray;
+                var formDataJSon = dojo.toJson(formDataArray, true);
+                return formDataJSon;
             },
 
             // FORM ELEMENT CONTROL METHODS
@@ -489,6 +493,9 @@ define([
                 this.kpiFormData = this._getKpiFormData();
 
                 this.kpiModel.createKpi(this);
+
+
+                //this.createTest(this.kpiList);
             },
 
             createTest: function (kpiIds) {
@@ -504,8 +511,34 @@ define([
             },
 
             setKpiError: function (ret) {
-                this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
-                this.startButtonClickCounter = 0;
+                var errors = this._isObject(ret);
+                this.kpiFormData = null;
+                if (errors) {
+                    var keys = Object.keys(errors);
+                    for (var x = 0; x < keys.length; x++) {
+                        var errorIconNode = dom.byId(keys[x] + "_kpiErrorIcon");
+                        var errorTextNode = dom.byId(keys[x] + "_kpiErrorText");
+                        errorText = errors[keys[x]];
+                        this._setError(errorText, errorTextNode, errorIconNode);
+                        this.startButtonClickCounter = 0;
+                    };
+                }
+                else {
+                    this._setError(ret, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                    this.startButtonClickCounter = 0;
+                }
+            },
+
+
+
+            _isObject: function (jsonString) {
+                try {
+                    var obj = JSON.parse(jsonString);
+                    if (obj && typeof obj === "object") {
+                        return obj;
+                    }
+                } catch (e) { }
+                return false;
             },
 
             _onCancelButtonClick: function () {
