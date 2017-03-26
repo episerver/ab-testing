@@ -17,6 +17,7 @@
         <confidence_level_description>Das Konfidenzniveau bestimmt die Anzahl der zulässigen Fehler. Ein höherer Prozentsatz korreliert direkt mit der Genauigkeit der Testergebnisse. Dies bestimmt, ob die gemessene Differenz zwischen Referenz- und Alternativseite nicht zufällig ist (also signifikant).</confidence_level_description>
         <confidence_level_header>Konfidenzniveau</confidence_level_header>
         <control>A/Referenz</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Was ist das Konversionsziel?</conversion_header>
         <conversion_label>Besucher ruft die Seite auf</conversion_label>
         <days_text> Tag(e).</days_text>
