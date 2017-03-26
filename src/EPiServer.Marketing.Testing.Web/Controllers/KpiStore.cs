@@ -64,10 +64,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             List<IKpi> kpiInstances = new List<IKpi>();
             Dictionary<string, string> kpiErrors = new Dictionary<string, string>();
             List<Dictionary<string, string>> kpiFormData = new List<Dictionary<string, string>>();
-            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
             List<string> jsonResults = new List<string>();
 
+            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             var javascriptSerializer = new JavaScriptSerializer();
 
             try
@@ -101,14 +101,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         {
                             kpiInstance.Validate(data);
                             kpiInstances.Add(kpiInstance);
-                            // var kpiIds = kpiManager.Save(new List<IKpi>() { kpiInstance });
-                            // result = Rest(kpiIds);
                         }
                         catch (Exception e)
                         {
                             _logger.Error("Error creating Kpi" + e);
                             kpiErrors.Add(data["widgetID"], e.Message);
-                            //result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, e.Message);
                         }
                     }
 
@@ -121,8 +118,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         var kpiIds = kpiManager.Save(kpiInstances);
                         result = Rest(kpiIds);
                     }
-
-
                 }
                 else
                 {
