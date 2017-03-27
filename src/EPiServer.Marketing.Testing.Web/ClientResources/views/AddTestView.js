@@ -550,7 +550,7 @@ define([
                 var me = this;
                 this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
-                this._adjustKpiSelectorCombo(kpiList)
+                this._adjustKpiSelectorCombo()
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };

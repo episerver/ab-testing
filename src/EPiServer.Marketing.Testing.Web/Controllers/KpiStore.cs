@@ -75,9 +75,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     if (value.Contains("kpiType"))
                         kpiFormData.Add(javascriptSerializer.Deserialize<Dictionary<string, string>>(value));
                 });
-
-                var x = kpiFormData;
-
                 
                 if (kpiFormData.Count > 0)
                 {
