@@ -276,7 +276,16 @@ namespace EPiServer.Marketing.Testing.Test.Core
                             Views = 0,
                             Conversions = 0,
                             KeyFinancialResults = new List<KeyFinancialResult>(),
-                            KeyValueResults = new List<KeyValueResult>()
+                            KeyValueResults = new List<KeyValueResult>(),
+                            KeyConversionResults = new List<KeyConversionResult>() { new KeyConversionResult()
+                            {
+                                Id = Guid.NewGuid(),
+                                KpiId = Guid.NewGuid(),
+                                Weight = .5,
+                                Conversions = 1,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
+                            }  }
                         }
                     },
                 KpiInstances =

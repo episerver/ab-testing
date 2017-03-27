@@ -431,7 +431,25 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _dataAccess.Save(tests[0]);
 
             var variantItemId2 = Guid.NewGuid();
-            var variant2 = new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            var variant2 = new DalVariant()
+            {
+                Id = Guid.NewGuid(),
+                ItemId = variantItemId2,
+                ItemVersion = 1,
+                DalKeyConversionResults =
+                    new List<DalKeyConversionResult>()
+                    {
+                        new DalKeyConversionResult()
+                        {
+                            Conversions = 1,
+                            KpiId = Guid.NewGuid(),
+                            Weight = .5,
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now,
+                            Id = Guid.NewGuid()
+                        }
+                    }
+            };
             tests[0].Variants.Add(variant2);
 
             _dataAccess.Save(tests[0]);
@@ -456,9 +474,9 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                     new List<Variant>()
                     {
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 130, KeyFinancialResults = new List<KeyFinancialResult>(),
-                            KeyValueResults = new List<KeyValueResult>() },
+                            KeyValueResults = new List<KeyValueResult>(), KeyConversionResults = new List<KeyConversionResult>() },
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100, KeyFinancialResults = new List<KeyFinancialResult>(),
-                            KeyValueResults = new List<KeyValueResult>() }
+                            KeyValueResults = new List<KeyValueResult>(), KeyConversionResults = new List<KeyConversionResult>()}
                     },
                 KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
                 Title = "test",
