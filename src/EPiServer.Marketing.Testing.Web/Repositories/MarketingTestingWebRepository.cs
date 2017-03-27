@@ -247,9 +247,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetVariantContent(contentGuid);
         }
         
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, default(Guid), async);
+            _testManager.IncrementCount(testId, itemVersion, resultType, kpiId, async);
         }
         
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)

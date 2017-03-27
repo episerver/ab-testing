@@ -347,7 +347,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             else
             {
                 // multiple kpi's - increase count for the specific kpi that converted and increase conversion count for test by the kpi's weight
-                if (!kpiId.Equals(default(Guid)))
+                if (variant.DalKeyConversionResults.Count > 0)
                 {
                     var result = variant.DalKeyConversionResults.First(r => r.KpiId == kpiId);
                     result.Conversions++;
