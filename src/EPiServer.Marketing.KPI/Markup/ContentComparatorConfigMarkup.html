@@ -1,17 +1,7 @@
 ﻿<script>dojo.require("epi-cms/widget/ContentSelector")</script>
 <p>
     <label>{0}</label>
-    <span data-dojo-type="epi-cms/widget/ContentSelector"
+    <span name="ConversionPage" data-dojo-type="epi-cms/widget/ContentSelector"
           data-dojo-props="repositoryKey:'pages',required: true, allowedTypes: ['episerver.core.pagedata'], allowedDndTypes: [], value: null">
-        <script type="dojo/on" data-dojo-event="change">
-            var dependency = require("epi/dependency")
-            var contextService = dependency.resolve("epi.shell.ContextService");
-            var context = contextService.currentContext;
-            var currentContentInput = dojo.byId("CurrentContent");
-            currentContentInput.value = context.id;
-        </script>
-    </span>
-    <div>
-        <input id="CurrentContent" type="hidden" name="CurrentContent" />
-    </div>
+    </span>  
 </p>

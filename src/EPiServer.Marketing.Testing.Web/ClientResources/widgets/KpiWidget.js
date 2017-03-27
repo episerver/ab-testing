@@ -9,6 +9,7 @@
     'dojo/dom',
     "dojox/layout/ContentPane",
     "dijit/form/Button",
+    "dijit/form/Form",
     'xstyle/css!marketing-testing/css/KpiWidget.css',
 
 
@@ -26,18 +27,26 @@
 
         kpiType: "",
 
+        id: this.id,
+
         postCreate: function () {
             new ContentPane({
                 content: this.markup
             }).placeAt(this.kpiMarkup);
+            this._getCurrentContent();
         },
 
         removeWidget: function () {
-
             var widget = dijit.byId(this.id);
             widget.destroy();
             document.dispatchEvent(destroyedEvent);
+        },
+
+        _getCurrentContent: function () {
+            var dependency = require("epi/dependency")
+            var contextService = dependency.resolve("epi.shell.ContextService");
+            var context = contextService.currentContext;
+            this.CurrentContent.value = context.id;
         }
     });
-
 });

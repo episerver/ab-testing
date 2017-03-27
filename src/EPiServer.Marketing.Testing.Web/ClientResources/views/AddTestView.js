@@ -82,6 +82,10 @@ define([
 
             kpiEntries: 0,
 
+            kpiList: new Array(),
+
+            kpiFormData: null,
+
             // DOJO WIDGET METHODS
 
             //set bindings to view model properties
@@ -111,6 +115,8 @@ define([
 
             _onContextChange: function (context, caller) {
                 this.contentData = caller.contentData;
+                this.kpiEntries = 0;
+                this._adjustKpiSelectorCombo();
                 this.reset();
             },
 
@@ -234,10 +240,16 @@ define([
             // Transforms custom KPI form data into json for processing
             _getKpiFormData: function () {
                 var me = this;
-                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
-                var formData = dojo.toJson(kpiFormObject, true);
-                var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
-                return formattedFormData;
+                var formDataArray = new Array();
+
+                for (var x = 1; x < document.forms.length; x++) {
+                    var kpiFormObject = dojo.formToObject(document.forms[x]);
+                    var formData = dojo.toJson(kpiFormObject, true);
+                    var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
+                    formDataArray.push(formattedFormData);
+                }
+                var formDataJSon = dojo.toJson(formDataArray, true);
+                return formDataJSon;
             },
 
             // FORM ELEMENT CONTROL METHODS
@@ -247,7 +259,6 @@ define([
                 var me = this;
                 var kpiuiElement = registry.byId("kpiSelector");
                 if (kpiuiElement && kpiList) {
-
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
                     var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
@@ -280,6 +291,7 @@ define([
                     this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                     return false;
                 }
+
                 this._setError("", errorTextNode, errorIconNode);
                 return true;
             },
@@ -407,14 +419,21 @@ define([
 
             //Clears the KPI Error text and icon
             _clearConversionErrors: function () {
-                var errorText = dom.byId("kpiErrorText");
-                if (!errorText) {
-                    return;
+                var errorTextElements = query("span[id*='kpiErrorText']");
+                var errorIconElements = query("span[id*='kpiErrorIcon']");
+
+                if (errorTextElements) {
+                    errorTextElements.forEach(function (element) {
+                        element.innerText = "";
+                        element.style.visibility = "hidden";
+                    });
                 }
-                errorText.innerText = "";
-                errorText.style.visibility = "hidden";
-                var et2 = dom.byId("kpiErrorIcon");
-                et2.style.visibility = "hidden";
+
+                if (errorIconElements) {
+                    errorIconElements.forEach(function (element) {
+                        element.style.visibility = "hidden";
+                    })
+                }
             },
 
             //Removes the custom KPI markup from the view & widget registry
@@ -463,6 +482,7 @@ define([
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
+                this._clearConversionErrors();
                 if (this.startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 this.startButtonClickCounter++; // Increment click count
                 var me = this;
@@ -498,14 +518,39 @@ define([
             },
 
             setKpiError: function (ret) {
-                this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
-                this.startButtonClickCounter = 0;
+                var errors = this._isObject(ret);
+                this.kpiFormData = null;
+                if (errors) {
+                    var keys = Object.keys(errors);
+                    for (var x = 0; x < keys.length; x++) {
+                        var errorIconNode = dom.byId(keys[x] + "_kpiErrorIcon");
+                        var errorTextNode = dom.byId(keys[x] + "_kpiErrorText");
+                        errorText = errors[keys[x]];
+                        this._setError(errorText, errorTextNode, errorIconNode);
+                        this.startButtonClickCounter = 0;
+                    };
+                }
+                else {
+                    this._setError(ret, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                    this.startButtonClickCounter = 0;
+                }
+            },
+
+            _isObject: function (jsonString) {
+                try {
+                    var obj = JSON.parse(jsonString);
+                    if (obj && typeof obj === "object") {
+                        return obj;
+                    }
+                } catch (e) { }
+                return false;
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
+                this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
-                this.kpiModel.refreshKpis();
+                this._adjustKpiSelectorCombo()
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
