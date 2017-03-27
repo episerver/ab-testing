@@ -355,8 +355,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             // check that a variant exists
             Assert.Equal(test.Variants.Count(), 1);
 
-            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.View);
-            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.Conversion);
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.View, new Guid());
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.Conversion, new Guid());
 
             // check the variant is incremented correctly
             Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemVersion == itemVersion).Views);

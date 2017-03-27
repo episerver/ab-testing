@@ -303,13 +303,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private Object thisLock = new Object();
 
         /// <inheritdoc />
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true, Guid kpiId = default(Guid))
         {
             if (asynch)
             {
                 var messaging = _serviceLocator.GetInstance<IMessagingManager>();
                 if (resultType == CountType.Conversion)
-                    messaging.EmitUpdateConversion(testId, itemVersion);
+                    messaging.EmitUpdateConversion(testId, itemVersion, kpiId);
                 else if (resultType == CountType.View)
                     messaging.EmitUpdateViews(testId, itemVersion);
             }
@@ -317,7 +317,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 lock (thisLock)
                 {
-                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType), kpiId);
                 }
             }
         }

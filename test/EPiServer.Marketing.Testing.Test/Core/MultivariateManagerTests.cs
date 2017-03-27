@@ -302,21 +302,21 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var tm = GetUnitUnderTest();
             tm.IncrementCount(theGuid, theItemVersion, type, false);
-
+                
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<int>(),
-                        It.IsAny<DalCountType>()),
+                        It.IsAny<DalCountType>(), It.IsAny<Guid>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.IsAny<Guid>(), It.Is<int>(arg => arg.Equals(theItemVersion)),
-                        It.IsAny<DalCountType>()),
+                        It.IsAny<DalCountType>(), It.IsAny<Guid>()),
                 "DataAcessLayer IncrementCount was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
-                        It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
+                        It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion)), It.IsAny<Guid>()),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
@@ -447,7 +447,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<int>(arg => arg.Equals(1))),
+                It.Is<int>(arg => arg.Equals(1)), It.IsAny<Guid>()),
                 "Guids are not correct or update conversion message not emmited");
         }
 

@@ -87,7 +87,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true), It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View,false);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == false)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == false), It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
