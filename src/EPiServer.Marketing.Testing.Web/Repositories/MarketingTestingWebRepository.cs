@@ -249,7 +249,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, async);
+            _testManager.IncrementCount(testId, itemVersion, resultType, default(Guid), async);
         }
         
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)

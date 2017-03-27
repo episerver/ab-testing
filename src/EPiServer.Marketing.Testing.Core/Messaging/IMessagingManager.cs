@@ -21,7 +21,8 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="testId">Id of a test.</param>
         /// <param name="itemVersion">Version of the cms item that caused a conversion.</param>
-        void EmitUpdateConversion(Guid testId, int itemVersion);
+        /// <param name="kpiId">Id of the kpi that caused a conversion.</param>
+        void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId = default(Guid));
 
         /// <summary>
         /// Emits the asynchronous message to add a kpi result to the specified Variant version.
