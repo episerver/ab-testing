@@ -1,14 +1,11 @@
 ﻿<p>
     <label>{0}</label>
     <span data-dojo-type="dijit/form/NumberSpinner"
-          data-dojo-props="constraints:{{min:1,max:60}},value:10">
-        <script type="dojo/on" data-dojo-event="change">
-            var self=this;
-            var timeout = dojo.byId("Timeout");
-            timeout.value = self.getValue(); 
+          data-dojo-props="constraints:{{min:1,max:60}}"
+          name="Timeout">
+        <script type="dojo/method">
+            this._setValueAttr(10);
         </script>
     </span>
-    <div>
-        <input id="Timeout" type="hidden" name="Timeout" value="10" />
-    </div>
+   
 </p>
