@@ -57,9 +57,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPut]
         public ActionResult Put(string id, string entity)
         {
-
-
-
             IKpi kpiInstance;
             List<IKpi> kpiInstances = new List<IKpi>();
             Dictionary<string, string> kpiErrors = new Dictionary<string, string>();
@@ -81,10 +78,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 var x = kpiFormData;
 
+                
                 if (kpiFormData.Count > 0)
                 {
                     foreach (var data in kpiFormData)
                     {
+                        //Create a kpi instance based on the incomming type
                         var kpi = Activator.CreateInstance(Type.GetType(data["kpiType"]));
                         if (kpi is IFinancialKpi)
                         {
@@ -97,6 +96,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                             kpiInstance = kpi as IKpi;
                         }
 
+                        //Validate incomming kpi and add to instances or errors based on result
                         try
                         {
                             kpiInstance.Validate(data);
@@ -109,6 +109,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         }
                     }
 
+                    //Send back only errors or successful results for proper handling
                     if (kpiErrors.Count > 0)
                     {
                         result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, JsonConvert.SerializeObject(kpiErrors));
@@ -130,7 +131,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
 
             var errors = kpiErrors;
-
             return result;
         }
     }
