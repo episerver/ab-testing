@@ -1,4 +1,5 @@
-﻿using EPiServer.ServiceLocation;
+﻿using System;
+using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
@@ -33,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void Handle(UpdateViewsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, false);
+            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, default(Guid), false);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         public void Handle(UpdateConversionsMessage message)
         {
             var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.Conversion, false, message.KpiId);
+            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.Conversion, message.KpiId, false);
         }
 
         /// <summary>

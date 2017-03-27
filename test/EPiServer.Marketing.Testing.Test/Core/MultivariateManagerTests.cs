@@ -301,7 +301,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.IncrementCount(theGuid, theItemVersion, type, false);
+            tm.IncrementCount(theGuid, theItemVersion, type, default(Guid), false);
                 
             _dataAccessLayer.Verify(
                 da =>

@@ -303,7 +303,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private Object thisLock = new Object();
 
         /// <inheritdoc />
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true, Guid kpiId = default(Guid))
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch = true)
         {
             if (asynch)
             {

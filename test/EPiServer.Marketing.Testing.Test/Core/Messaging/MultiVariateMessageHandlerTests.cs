@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             // Verify that save is called and conversion value is correct
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>( gg =>  gg.Equals(testGuid)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
-                It.Is<CountType>(ct => ct.Equals(CountType.Conversion)), false, It.IsAny<Guid>()) ,
+                It.Is<CountType>(ct => ct.Equals(CountType.Conversion)), It.IsAny<Guid>(), false) ,
                 Times.Once, "Repository save was not called or conversion value is not as expected") ;
         }
 
@@ -64,7 +64,7 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
 
             _testManager.Verify(tm => tm.IncrementCount(It.Is<Guid>(gg => gg.Equals(testGuid)),
                 It.Is<int>(gg => gg.Equals(itemVersion)), 
-                It.Is<CountType>(ct => ct.Equals(CountType.View)), false, It.IsAny<Guid>()),
+                It.Is<CountType>(ct => ct.Equals(CountType.View)), It.IsAny<Guid>(), false),
                 Times.Once, "Repository save was not called or view value is not as expected");
 
         }

@@ -90,7 +90,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="kpiId">Id of the kpi count to increment.</param>
         /// /// <param name="resultType">Type of count to increment.</param>
         /// <param name="asynch">Boolean stating whether the result should be saved asynchronously or not.</param>
-        void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch=true, Guid kpiId = default(Guid));
+        void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch=true);
 
         /// <summary>
         /// Randomly decides if a new user is to be part of the ongoing test.  If so, chooses 1 of the 2 variants that are part of the test to display to the user.
