@@ -44,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testToPublish = new ABTest()
             {
                 Id = TestToAutoPublish,
-                StartDate = DateTime.Now.AddHours(-1),
+                StartDate = DateTime.UtcNow.AddHours(-1),
                 State = TestState.Active,
                 ZScore = 2.4,
                 ConfidenceLevel = 95,
@@ -67,41 +67,41 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new ABTest()
                 {
                     Id = TestToStart,
-                    StartDate = DateTime.Now.AddHours(-1),
+                    StartDate = DateTime.UtcNow.AddHours(-1),
                     State = TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToChangeSchedule1,
-                    StartDate = DateTime.Now.AddHours(24), // causes a reschedule 24 hours from now
+                    StartDate = DateTime.UtcNow.AddHours(24), // causes a reschedule 24 hours from now
                     State = TestState.Inactive,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToChangeSchedule2,
-                    StartDate = DateTime.Now.AddHours(-24),
-                    EndDate = DateTime.Now.AddHours(23),  // causes a reschedule 23 hour from now
+                    StartDate = DateTime.UtcNow.AddHours(-24),
+                    EndDate = DateTime.UtcNow.AddHours(23),  // causes a reschedule 23 hour from now
                     State = TestState.Active,
                     ZScore = 2.4,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = TestToStop,
-                    EndDate = DateTime.Now.AddHours(-1),
+                    EndDate = DateTime.UtcNow.AddHours(-1),
                     State = TestState.Active,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = Guid.NewGuid(),
-                    EndDate = DateTime.Now.AddHours(-1),
+                    EndDate = DateTime.UtcNow.AddHours(-1),
                     State = TestState.Done,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
                 },
                 new ABTest() { Id = Guid.NewGuid(),
-                    EndDate = DateTime.Now.AddHours(-1),
+                    EndDate = DateTime.UtcNow.AddHours(-1),
                     State = TestState.Archived,
                     ConfidenceLevel = 95,
                     Variants = new List<Variant>() {new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50}, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60} }
