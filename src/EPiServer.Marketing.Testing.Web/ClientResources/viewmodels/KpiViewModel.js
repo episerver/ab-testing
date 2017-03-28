@@ -17,7 +17,16 @@
                 this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.get()
                 .then(function (retKpis) {
-                    me._changeAttrValue("availableKpis",retKpis );
+                    me._changeAttrValue("availableKpis", retKpis);
+                });
+            },
+
+            refreshKpis: function (kpiStore) {
+                var me = this;
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore.get()
+                .then(function (retKpis) {
+                    me._changeAttrValue("availableKpis", retKpis);
                 });
             },
 
@@ -31,7 +40,7 @@
 
             createKpi(caller, kpiStore) {
                 var me = this;
-                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore"); 
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.put({
                     id: "KpiFormData",
                     entity: caller.kpiFormData
@@ -40,7 +49,7 @@
                         caller.createTest(ret);
                     })
                     .otherwise(function (ret) {
-                        caller.setKpiError(ret);
+                        caller.setKpiError(ret.xhr.statusText);
                     });
             },
         });

@@ -359,7 +359,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
- 
+
         [Fact]
         public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
@@ -519,7 +519,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<IMarketingTest> { test });
             _mockMarketingTestingWebRepository.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(test);
             _mockMarketingTestingWebRepository.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<object>(), It.IsAny<EventArgs>()))
-                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid()} });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid() } });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -581,7 +581,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<Guid>(), It.IsAny<bool>()), Times.Once, "Test should have attempted to increment count");
         }
 
-         [Fact]
+        [Fact]
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest();
@@ -605,7 +605,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(0, testHandler.CheckForActiveTests(Guid.NewGuid(), 1));
         }
 
- 
+
         [Fact]
         public void TestHandler_initProxyEventHandler_checks_ref_and_adds_one()
         {
@@ -667,7 +667,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
 
             var t = new ContentReference(1, 3);
-            var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent()});
+            var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent() });
             th.LoadedChildren(new object(), args);
         }
     }
