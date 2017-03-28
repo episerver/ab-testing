@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Web.Mvc;
-using EPiServer.Core;
 using EPiServer.Framework.Localization;
 using EPiServer.Logging;
-using EPiServer.Marketing.KPI.Common;
-using EPiServer.Marketing.KPI.Manager;
-using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -25,7 +18,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<ILogger> _logger = new Mock<ILogger>();
         private Mock<IKpiWebRepository> _kpiWebRepoMock;
-        private Mock<IKpiManager> _kpiManagerMock;
 
         private KpiStore GetUnitUnderTest()
         {
@@ -35,10 +27,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _kpiWebRepoMock = new Mock<IKpiWebRepository>();
             _kpiWebRepoMock.Setup(call => call.GetKpiTypes()).Returns(new List<KpiTypeModel>() { new KpiTypeModel()});
             _locator.Setup(s1 => s1.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
-
-            _kpiManagerMock = new Mock<IKpiManager>();
-            _kpiManagerMock.Setup(call => call.Save(It.IsAny<List<IKpi>>())).Returns(new List<Guid>() { Guid.NewGuid()});
-
+            
             var testStore = new KpiStore(_locator.Object);
             return testStore;
         }
