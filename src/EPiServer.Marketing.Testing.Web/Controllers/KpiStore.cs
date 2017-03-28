@@ -81,7 +81,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         }
                         catch (KpiValidationException ex)
                         {
-                            _logger.Debug("Error validating Kpi" + ex.Message);
+                            _logger.Debug("Error validating Kpi" + ex);
                             kpiErrors.Add(data["widgetID"], ex.Message);
                         }
                     }
@@ -103,7 +103,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Debug("Error creating Kpi" + ex.Message);
+                _logger.Debug("Error creating Kpi" + ex);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);
             }           
             return result;
