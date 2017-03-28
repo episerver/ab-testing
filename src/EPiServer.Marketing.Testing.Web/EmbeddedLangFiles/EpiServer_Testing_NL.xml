@@ -33,6 +33,10 @@
         <goals_default_text>Bijv. Door de kopie in het eerste aandachtspunt zo aan te passen dat het ‘tijdprobleem’ direct wordt aangepakt, kan ik meer bezoekers motiveren om het e-book te downloaden.</goals_default_text>
         <goals_header>Wat is het algemene doel van deze test?</goals_header>
         <goals_selectlist_default>Selecteer doel</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>niet gepland en begint nu</notscheduled_text>
         <participant_percentage_tip>Een hoger deelnamepercentage vermindert de tijd die nodig is voor het verzamelen van voldoende statistische gegevens om een winnaar te kunnen kiezen.</participant_percentage_tip>
         <participation_header>Welk percentage bezoekers moet deelnemen aan deze A / B-test?</participation_header>
