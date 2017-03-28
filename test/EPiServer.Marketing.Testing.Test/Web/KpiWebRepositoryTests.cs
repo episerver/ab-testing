@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var jsonString = "[]";
             var webRepo = GetUnitUnderTest();
-            var result = webRepo.deserializeJsonKpiFormCollection(jsonString);
+            var result = webRepo.DeserializeJsonKpiFormCollection(jsonString);
             Assert.True(result.Count == 0);
         }
 
@@ -78,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var jsonString = "[\n\t\"{\\\"ConversionProduct\\\": \\\"419__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\\\",\\\"widgetID\\\": \\\"KpiWidget_5\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\","+
                 "\n\t\"{\\\"ConversionProduct\\\": \\\"49__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\\\",\\\"widgetID\\\": \\\"KpiWidget_6\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\"\n]";
             var webRepo = GetUnitUnderTest();
-            var result = webRepo.deserializeJsonKpiFormCollection(jsonString);
+            var result = webRepo.DeserializeJsonKpiFormCollection(jsonString);
             Assert.True(result.Count == 2);
             Assert.True(result[0]["kpiType"] == "EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
             Assert.True(result[1]["kpiType"] == "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");          

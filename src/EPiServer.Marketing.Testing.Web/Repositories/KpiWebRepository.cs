@@ -13,7 +13,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         private IServiceLocator _locator;
         private JavaScriptSerializer javascriptSerializer;
-        private IKpiManager kpiManager;        
+        private IKpiManager kpiManager;
+        private readonly string kpiTypeKey = "kpiType";      
 
         public KpiWebRepository()
         {
@@ -56,13 +57,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return kpiManager.Save(kpiInstances);
         }      
 
-        public List<Dictionary<string,string>> deserializeJsonKpiFormCollection(string jsonFormDataCollection)
+        public List<Dictionary<string,string>> DeserializeJsonKpiFormCollection(string jsonFormDataCollection)
         {
             List<Dictionary<string, string>> kpiFormData = new List<Dictionary<string, string>>();
             List<string> values = javascriptSerializer.Deserialize<List<string>>(jsonFormDataCollection);
             values.ForEach(value =>
             {
-                if (value.Contains("kpiType"))
+                if (value.Contains(kpiTypeKey))
                     kpiFormData.Add(javascriptSerializer.Deserialize<Dictionary<string, string>>(value));
             });
             return kpiFormData;
@@ -72,7 +73,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             //Create a kpi instance based on the incomming type
             IKpi kpiInstance;
-            var kpi = Activator.CreateInstance(Type.GetType(kpiFormData["kpiType"]));
+            var kpi = Activator.CreateInstance(Type.GetType(kpiFormData[kpiTypeKey));
             if (kpi is IFinancialKpi)
             {
                 var financialKpi = kpi as IFinancialKpi;

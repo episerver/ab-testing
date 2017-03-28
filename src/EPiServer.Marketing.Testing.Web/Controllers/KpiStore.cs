@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
             try
             {
-                var kpiData = _kpiRepo.deserializeJsonKpiFormCollection(entity);
+                var kpiData = _kpiRepo.DeserializeJsonKpiFormCollection(entity);
 
                 if (kpiData.Count > 0)
                 {
@@ -81,7 +81,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         }
                         catch (KpiValidationException ex)
                         {
-                            _logger.Error("Error validating Kpi" + ex.Message);
+                            _logger.Debug("Error validating Kpi" + ex.Message);
                             kpiErrors.Add(data["widgetID"], ex.Message);
                         }
                     }
@@ -103,7 +103,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error("Error creating Kpi" + ex.Message);
+                _logger.Debug("Error creating Kpi" + ex.Message);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);
             }           
             return result;
