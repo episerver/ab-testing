@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         private ILogger _logger;
         private IHttpContextHelper _httpContextHelper;
 
-        private readonly string _clientCookieName = "ClientKpiList";
+        internal readonly string _clientCookieName = "ClientKpiList";
 
         public ClientKpiInjector()
         {
@@ -34,6 +34,15 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             _serviceLocator = ServiceLocator.Current;
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();
+        }
+
+        internal ClientKpiInjector(ITestingContextHelper theTestingContextHelper, IMarketingTestingWebRepository theWebRepo, IServiceLocator theServiceLocator, ILogger theLogger, IHttpContextHelper theHttpcontextHelper)
+        {
+            _contextHelper = theTestingContextHelper;
+            _testRepo = theWebRepo;
+            _serviceLocator = theServiceLocator;
+            _logger = theLogger;
+            _httpContextHelper = theHttpcontextHelper;
         }
 
         /// <summary>
@@ -89,10 +98,11 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     //TODO remove kpi manager reference and move the functionality to the KPI repo
                     //Get required test information for current client kpi
                     var _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-                    var tempKpi = _kpiManager.Get(data.Key) as ClientKpi; 
+                    var tempKpi = _kpiManager.Get(data.Key) as IKpi;
+                    var aClientKpi = tempKpi as IClientKpi;
                     var test = _testRepo.GetTestById(data.Value.TestId);
                     var itemVersion = test.Variants.FirstOrDefault(v => v.Id.ToString() == data.Value.TestVariantId.ToString()).ItemVersion;
-                    var clientScript = BuildClientScript(tempKpi.Id, test.Id, itemVersion, tempKpi.ClientEvaluationScript);
+                    var clientScript = BuildClientScript(tempKpi.Id, test.Id, itemVersion, aClientKpi.ClientEvaluationScript);
                     script += clientScript;
 
                     _httpContextHelper.SetItemValue(tempKpi.Id.ToString(), true);
