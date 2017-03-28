@@ -17,6 +17,7 @@
         <confidence_level_description>信頼水準は、許容されるエラーの量を決定します。 高い割合は、テスト結果の精度に直接関係します。 これは、コントロールページおよびバリアントページ間の測定差が偶然 によるものでない (すなわち重要である) かどうかを示します。</confidence_level_description>
         <confidence_level_header>信頼水準</confidence_level_header>
         <control>A / コントロール</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>コンバージョン目標は何ですか?</conversion_header>
         <conversion_label>訪問者がページに移動します</conversion_label>
         <days_text> 日 (間)。</days_text>
