@@ -64,7 +64,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void deserializeJsonFormDataCollection_returns_empty_list_when_kpiType_empty()
+        public void DeserializeJsonFormDataCollection_returns_empty_list_when_kpiType_empty()
         {
             var jsonString = "[]";
             var webRepo = GetUnitUnderTest();
@@ -73,7 +73,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void deserializeJsonFormDataCollection_returns_correct_resultList_when_kpiTypes_are_provided()
+        public void DeserializeJsonFormDataCollection_returns_correct_resultList_when_kpiTypes_are_provided()
         {
             var jsonString = "[\n\t\"{\\\"ConversionProduct\\\": \\\"419__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\\\",\\\"widgetID\\\": \\\"KpiWidget_5\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\","+
                 "\n\t\"{\\\"ConversionProduct\\\": \\\"49__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\\\",\\\"widgetID\\\": \\\"KpiWidget_6\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\"\n]";
@@ -85,7 +85,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void activateKpiInstance_returns_commerce_kpi_when_kpiType_is_commerce()
+        public void ActivateKpiInstance_returns_commerce_kpi_when_kpiType_is_commerce()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
             kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
@@ -95,7 +95,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void activateKpiInstance_returns_financial_kpi_when_kpiType_is_financial()
+        public void ActivateKpiInstance_returns_financial_kpi_when_kpiType_is_financial()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
             kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.AverageOrderKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
@@ -105,7 +105,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void activateKpiInstance_returns_kpi_when_kpiType_is_regularKpi()
+        public void ActivateKpiInstance_returns_kpi_when_kpiType_is_regularKpi()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
             kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Common.ContentComparatorKPI, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");

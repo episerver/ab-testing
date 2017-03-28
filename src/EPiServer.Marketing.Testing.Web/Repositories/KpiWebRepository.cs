@@ -69,11 +69,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return kpiFormData;
         }
 
-        public IKpi activateKpiInstance(Dictionary<string,string> kpiFormData)
+        public IKpi activateKpiInstance(Dictionary<string, string> kpiFormData)
         {
             //Create a kpi instance based on the incomming type
             IKpi kpiInstance;
-            var kpi = Activator.CreateInstance(Type.GetType(kpiFormData[kpiTypeKey));
+            var kpi = Activator.CreateInstance(Type.GetType(kpiFormData[kpiTypeKey]));
             if (kpi is IFinancialKpi)
             {
                 var financialKpi = kpi as IFinancialKpi;
