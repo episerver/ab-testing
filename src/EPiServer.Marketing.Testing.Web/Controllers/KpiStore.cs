@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
             try
             {
-                var kpiData = _kpiRepo.deserializeJsonFormDataCollection(entity);
+                var kpiData = _kpiRepo.deserializeJsonKpiFormCollection(entity);
 
                 if (kpiData.Count > 0)
                 {

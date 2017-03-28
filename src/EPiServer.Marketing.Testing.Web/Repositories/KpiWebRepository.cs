@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return kpiManager.Save(kpiInstances);
         }      
 
-        public List<Dictionary<string,string>> deserializeJsonFormDataCollection(string jsonFormDataCollection)
+        public List<Dictionary<string,string>> deserializeJsonKpiFormCollection(string jsonFormDataCollection)
         {
             List<Dictionary<string, string>> kpiFormData = new List<Dictionary<string, string>>();
             List<string> values = javascriptSerializer.Deserialize<List<string>>(jsonFormDataCollection);
