@@ -24,14 +24,15 @@
       </stickysite_kpi>
       <timeonpage_kpi>
         <config_markup>
-          <conversionlabel path="/kpi/timeonpage_kpi/config_markup/conversionlabel/">Number of seconds visitor remains on the page.</conversionlabel>
+          <conversionlabel path="/kpi/timeonpage_kpi/config_markup/conversionlabel/">Number of minutes visitor remains on the page.</conversionlabel>
           <emptyfield path="/kpi/timeonpage_kpi/config_markup/emptyfield/">Field may not be empty.</emptyfield>
+          <notpositiveinteger path="/kpi/timeonpage_kpi/config_markup/notpositiveinteger/">Value must enter a valid whole number and greater than 0.</notpositiveinteger>
         </config_markup>
         <description path="/kpi/timeonpage_kpi/description/">Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
         <name path="/kpi/timeonpage_kpi/name/">Time on Page</name>
         <readonly_markup>
           <conversion_header path="/kpi/timeonpage_kpi/readonly_markup/conversion_header/">Conversion goal</conversion_header>
-          <conversion_selector_description path="/kpi/timeonpage_kpi/readonly_markup/conversion_selector_description/">Number of seconds visitor remains on the page:</conversion_selector_description>
+          <conversion_selector_description path="/kpi/timeonpage_kpi/readonly_markup/conversion_selector_description/">Number of minutes visitor remains on the page:</conversion_selector_description>
         </readonly_markup>
       </timeonpage_kpi>
     </kpi>
