@@ -33,6 +33,10 @@
         <goals_default_text>例: 第一項目のコピーを微調整して「時間の問題」に直に対処することで、より多くの訪問者にこのebookをダウンロードしたいと思ってもらえます。</goals_default_text>
         <goals_header>このテストの全体的な目標は何ですか?</goals_header>
         <goals_selectlist_default>目的を選択</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>はスケジュールされていません。今すぐ開始します</notscheduled_text>
         <participant_percentage_tip>参加率が高くなると、勝者の選出に十分な統計情報を収集するのに必要な時間が短縮されます。</participant_percentage_tip>
         <participation_header>何パーセントの訪問者がこのA/Bテストに参加する必要がありますか?</participation_header>

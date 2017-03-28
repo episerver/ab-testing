@@ -405,6 +405,10 @@
     font-weight: bold;
 }
 
+.epi-abtest-spacing-narrow {
+    margin-bottom:2px;
+}
+
 @media screen and (max-width: 900px) {
    .epi-abtest-preview-left-side { 
     float: none;

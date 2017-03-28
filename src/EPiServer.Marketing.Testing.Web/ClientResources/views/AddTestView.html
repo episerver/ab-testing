@@ -197,9 +197,20 @@
                             data-dojo-props="iconClass:'epi-iconSettings', checked: false">
                         ${resources.addtestview.advanced_options}
                     </button>
-                    <!-- Confidence Level -->
                     <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;">
-                        <div class="cardBody" style="padding-top: 4px;">
+                        <!-- Kpi Weights -->
+                        <div class="cardBody">
+                            <h4>${resources.addtestview.goals_weight_heading}</h4>
+                            <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_description}</p>
+                            <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_higher_description}</p>
+                            <p>${resources.addtestview.goals_weight_equal_description}</p>
+                            <div id="kpiWeightSelectors">
+                                <!-- Kpi weight selectors will beinjected here-->
+                            </div>
+                        </div>
+
+                        <!-- Confidence Level -->
+                        <div class="cardBody">
                             <h4>${resources.addtestview.confidence_level_header}</h4>
                             <p>${resources.addtestview.confidence_level_description}</p>
                             <select id="confidence" data-dojo-type="dijit/form/Select"></select>
