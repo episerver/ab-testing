@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using System;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -9,6 +10,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         List<KpiTypeModel> GetKpiTypes();
         List<Dictionary<string, string>> deserializeJsonFormDataCollection(string jsonFormDataCollection);
         IKpi activateKpiInstance(Dictionary<string, string> kpiFormData);
+        Guid SaveKpi(IKpi kpiInstance);
+        IList<Guid> SaveKpis(IList<IKpi> kpiInstances);
+
 
 
     }

@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         private IServiceLocator _locator;
         private JavaScriptSerializer javascriptSerializer;
-        private IKpiManager kpiManager;
+        private IKpiManager kpiManager;        
 
         public KpiWebRepository()
         {
@@ -45,6 +45,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
             return kpiData;
         }
+
+        public Guid SaveKpi(IKpi kpiInstance)
+        {
+            return kpiManager.Save(kpiInstance);
+        }
+
+        public IList<Guid> SaveKpis(IList<IKpi> kpiInstances)
+        {
+            return kpiManager.Save(kpiInstances);
+        }      
 
         public List<Dictionary<string,string>> deserializeJsonFormDataCollection(string jsonFormDataCollection)
         {

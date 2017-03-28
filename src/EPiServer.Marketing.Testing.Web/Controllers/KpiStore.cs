@@ -64,10 +64,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             List<IKpi> validKpiInstances = new List<IKpi>();
             Dictionary<string, string> kpiErrors = new Dictionary<string, string>();
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
-            List<string> jsonResults = new List<string>();
-
-            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            var javascriptSerializer = new JavaScriptSerializer();
 
             try
             {
@@ -75,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 if (kpiData.Count > 0)
                 {
-                    foreach(var data in kpiData)
+                    foreach (var data in kpiData)
                     {
                         IKpi kpiInstance = _kpiRepo.activateKpiInstance(data);
                         try
@@ -83,12 +79,22 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                             kpiInstance.Validate(data);
                             validKpiInstances.Add(kpiInstance);
                         }
-                        catch(KpiValidationException ex)
+                        catch (KpiValidationException ex)
                         {
-                            _logger.Error("Error creating Kpi" + ex.Message);
+                            _logger.Error("Error validating Kpi" + ex.Message);
                             kpiErrors.Add(data["widgetID"], ex.Message);
                         }
-                    }                 
+                    }
+
+                    //Send back only errors or successful results for proper handling
+                    if (kpiErrors.Count > 0)
+                    {
+                        result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, JsonConvert.SerializeObject(kpiErrors));
+                    }
+                    else
+                    {
+                        result = Rest(_kpiRepo.SaveKpis(validKpiInstances));
+                    }
                 }
                 else
                 {
@@ -97,20 +103,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Error("Error creating Kpi" + ex.Message);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
-
-            //Send back only errors or successful results for proper handling
-            if (kpiErrors.Count > 0)
-            {
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, JsonConvert.SerializeObject(kpiErrors));
-            }
-            else
-            {
-                var kpiIds = kpiManager.Save(validKpiInstances);
-                result = Rest(kpiIds);
-            }
-
+            }           
             return result;
         }
     }
