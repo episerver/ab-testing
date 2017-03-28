@@ -9,7 +9,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         List<KpiTypeModel> GetKpiTypes();
         List<Dictionary<string, string>> DeserializeJsonKpiFormCollection(string jsonFormDataCollection);
-        IKpi activateKpiInstance(Dictionary<string, string> kpiFormData);
+        IKpi ActivateKpiInstance(Dictionary<string, string> kpiFormData);
         Guid SaveKpi(IKpi kpiInstance);
         IList<Guid> SaveKpis(IList<IKpi> kpiInstances);
     }

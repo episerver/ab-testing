@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return kpiFormData;
         }
 
-        public IKpi activateKpiInstance(Dictionary<string, string> kpiFormData)
+        public IKpi ActivateKpiInstance(Dictionary<string, string> kpiFormData)
         {
             //Create a kpi instance based on the incomming type
             IKpi kpiInstance;

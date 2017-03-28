@@ -73,7 +73,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 {
                     foreach (var data in kpiData)
                     {
-                        IKpi kpiInstance = _kpiRepo.activateKpiInstance(data);
+                        IKpi kpiInstance = _kpiRepo.ActivateKpiInstance(data);
                         try
                         {
                             kpiInstance.Validate(data);
