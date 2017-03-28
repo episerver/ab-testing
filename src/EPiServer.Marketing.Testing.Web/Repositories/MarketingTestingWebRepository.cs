@@ -147,8 +147,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
-            
-            var kpi = _kpiManager.Get(testData.KpiId);
+
+            var kpis = testData.KpiId.Select(kpiId => _kpiManager.Get(kpiId)).ToList();
 
             var test = new ABTest
             {
@@ -178,7 +178,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         Conversions = 0
                     }
                 },
-                KpiInstances = new List<IKpi> { kpi },
+                KpiInstances = kpis,
                 ConfidenceLevel = testData.ConfidenceLevel
             };
 

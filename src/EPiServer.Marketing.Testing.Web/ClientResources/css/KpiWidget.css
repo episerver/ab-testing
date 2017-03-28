@@ -1,0 +1,21 @@
+﻿.epi-kpiWidget-body {
+    width:60%;
+}
+
+.epi-kpiWidget-content{
+    width:95%;
+}
+
+.epi-kpiWidget-lbl {
+    font-weight:bold;
+    font-size: larger;
+    display:block;
+    vertical-align:middle;
+}
+
+.epi-kpiWidget-remove-btn {
+    font-weight:bold;
+    font-size: larger;
+    display:block; 
+    float:right;   
+}

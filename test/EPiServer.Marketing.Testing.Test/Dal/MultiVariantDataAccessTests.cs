@@ -40,7 +40,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _marketingEvents = new DefaultMarketingTestingEvents();
 
             _kpiManager = new Mock<IKpiManager>();
-            _kpiManager.Setup(call => call.Save(It.IsAny<IKpi>())).Returns(It.IsAny<Guid>());
+            _kpiManager.Setup(call => call.Save(It.IsAny<List<IKpi>>())).Returns(It.IsAny<List<Guid>>());
 
              _serviceLocator = new Mock<IServiceLocator>();
              _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccess);

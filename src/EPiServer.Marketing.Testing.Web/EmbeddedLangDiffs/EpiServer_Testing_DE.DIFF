@@ -2,6 +2,9 @@
 <languages>
   <language name="deutsch" id="de">
     <abtesting>
+      <addtestview>
+        <conversion_description path="/abtesting/addtestview/conversion_description/">By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+      </addtestview>
       <admin>
         <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>
       </admin>

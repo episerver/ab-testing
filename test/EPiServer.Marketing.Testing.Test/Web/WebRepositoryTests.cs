@@ -13,9 +13,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
-using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -358,7 +356,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 StartDate = startDate.ToString(),
                 TestDuration = 30,
                 ParticipationPercent = 100,
-                KpiId = Guid.NewGuid(),
+                KpiId = new List<Guid>() { Guid.NewGuid()},
                 TestTitle = "Test Title",
                 Start = false,
                 ConfidenceLevel = 95,
