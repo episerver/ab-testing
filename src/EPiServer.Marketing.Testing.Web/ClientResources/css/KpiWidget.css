@@ -1,21 +1,90 @@
 ﻿.epi-kpiWidget-body {
-    width:60%;
+    width: 60%;
 }
 
-.epi-kpiWidget-content{
-    width:95%;
+.epi-kpiWidget-content {
+    width: 95%;
 }
 
 .epi-kpiWidget-lbl {
-    font-weight:bold;
+    font-weight: bold;
     font-size: larger;
-    display:block;
-    vertical-align:middle;
+    display: block;
+    vertical-align: middle;
 }
 
 .epi-kpiWidget-remove-btn {
-    font-weight:bold;
+    font-weight: bold;
     font-size: larger;
-    display:block; 
-    float:right;   
+    display: block;
+    float: right;
+}
+
+#importanceLow:checked {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 25px;
+    width: 25px;
+    background-image: url('../widgets/images/whiteCheck.png');
+    background-size: 25px 25px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#importanceMedium:checked {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 25px;
+    width: 25px;
+    background-image: url('../widgets/images/whiteCheck.png');
+    background-size: 25px 25px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#importanceHigh:checked {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 25px;
+    width: 25px;
+    background-image: url('../widgets/images/whiteCheck.png');
+    background-size: 25px 25px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#importanceLow {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 25px;
+    width: 25px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: gray;
+}
+
+#importanceMedium {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 25px;
+    width: 25px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: gray;
+}
+
+#importanceHigh {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 25px;
+    width: 25px;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: gray;
 }
