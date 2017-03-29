@@ -150,6 +150,51 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             var kpis = testData.KpiId.Select(kpiId => _kpiManager.Get(kpiId)).ToList();
 
+            var variant1ConversionResults = new List<KeyConversionResult>();
+            var variant2ConversionResults = new List<KeyConversionResult>();
+
+            // if more than 1 kpi then we need to take weights into effect
+            if (kpis.Count > 1)
+            {
+                // first check to see if all kpi's are weighted equally
+                //var firstWeight = testData.KpiInfo.First().Value;
+                //if (testData.KpiInfo.All(entries => entries.Value == firstWeight))
+                //{
+                //    // all kpi's have equal weight
+                //    conversionResults.AddRange(
+                //        kpis.Select(kpi => new KeyConversionResult() {KpiId = kpi.Id, Weight = 1.0/kpis.Count}));
+                //}
+                //else
+                //{
+                //    var weightTable = new Dictionary<Guid, decimal>();
+                //    decimal totalWeight = 0;
+
+                //    foreach (var kpiWeight in testData.KpiInfo)
+                //    {
+                //        switch (kpiWeight.Value)
+                //        {
+                //            case "low":
+                //                totalWeight += (decimal)33.333;
+                //                weightTable.Add(kpiWeight.Key, (decimal)33.333);
+                //                break;
+                //            case "medium":
+                //                totalWeight += (decimal)66.666;
+                //                weightTable.Add(kpiWeight.Key, (decimal)66.666);
+                //                break;
+                //            case "high":
+                //                totalWeight += (decimal)100.000;
+                //                weightTable.Add(kpiWeight.Key, 100);
+                //                break;
+                //        }
+                //    }
+
+                variant1ConversionResults.AddRange(kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                variant2ConversionResults.AddRange(kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                
+                //conversionResults.AddRange(weightTable.Select(kpi => new KeyConversionResult() {KpiId = kpi.Key, Weight = (double) (kpi.Value/totalWeight)}));
+                //}
+            }
+
             var test = new ABTest
             {
                 OriginalItemId = testData.TestContentId,
@@ -168,14 +213,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         ItemVersion = testData.PublishedVersion,
                         IsPublished = true,
                         Views = 0,
-                        Conversions = 0
+                        Conversions = 0,
+                        KeyConversionResults = variant1ConversionResults
                     },
                     new Variant()
                     {
                         ItemId = testData.TestContentId,
                         ItemVersion = testData.VariantVersion,
                         Views = 0,
-                        Conversions = 0
+                        Conversions = 0,
+                        KeyConversionResults = variant2ConversionResults
                     }
                 },
                 KpiInstances = kpis,
