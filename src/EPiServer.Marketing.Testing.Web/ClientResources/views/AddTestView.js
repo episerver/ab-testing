@@ -561,15 +561,21 @@ define([
                 var kpiuiElement = dom.byId("kpiui");
                 var kpiWidget = dom.byId("kpiWidgets");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
+                var kpiWeightWidget = dom.byId("kpiWeightSelectors");
 
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
+
                     new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
                         description: kpiObject.kpi.description,
                         kpiType: kpiObject.kpiType
                     }).placeAt(kpiWidget);
+
+                    new KpiWeightWidget({
+                        label: kpiObject.kpi.friendlyName
+                    }).placeAt(kpiWeightWidget);
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
                         this.isMultiKpiTest = false;
