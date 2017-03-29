@@ -1,6 +1,8 @@
-﻿<div>
-    <label class="epi-kpiWidget-lbl" style="float:left" data-dojo-attach-point="kpiLabel">${label}</label>
-    <input id="importanceLow" style="float:left" name="importanceLow" type="checkbox" />
-    <input id="importanceMedium" style="float:left" name="importanceMedium" type="checkbox" checked />
-    <input id="importanceHigh" name="importanceHigh" type="checkbox" />
+﻿<div style="max-width: 30%">
+    <div style="float:left;min-width:50%; text-align:left; vertical-align:middle">
+        <label class="epi-kpiWidget-lbl" data-dojo-attach-point="kpiLabel">${label}</label>
+    </div>
+    <div style="text-align:left">
+        <span data-dojo-type="marketing-testing/widgets/WeightSelector" data-dojo-attach-point="weightSelector" data-dojo-attach-event="onchange: _setWeight"></span>
+    </div>
 </div>
