@@ -12,8 +12,6 @@
 
         templateString: template,
 
-        label: "",
-
         value: null,
 
         _setValueAttr(value) {
@@ -30,27 +28,38 @@
         },
 
         _init: function () {
-            switch (this.value) {
-                case "low":
-                    this._lowImportanceClicked();
-                    this.importanceLow.checked = true;
-                    break;
-                case "medium":
-                    this._medImportanceClicked();
-                    this.importanceMedium.checked = true;
-                    break;
-                case "high":
-                    this._highImportanceClicked();
-                    this.importanceHigh.checked = true;
-                    break;
-                default:
-                    console.debug("KpiWeightWidget init: " + this.value + "Is not a valid weight value.");
+            this._setSelectorValueLabel();
+            this._adjustImportanceSelectors();
+        },
+
+        _setSelectorValueLabel: function () {
+            this.selectorValue.innerHTML = this.value;
+        },
+
+        _adjustImportanceSelectors: function () {
+            if (this.value) {
+                switch (this.value) {
+                    case "Low":
+                        this._lowImportanceClicked();
+                        this.importanceLow.checked = true;
+                        break;
+                    case "Medium":
+                        this._medImportanceClicked();
+                        this.importanceMedium.checked = true;
+                        break;
+                    case "High":
+                        this._highImportanceClicked();
+                        this.importanceHigh.checked = true;
+                        break;
+                    default:
+                        console.debug("KpiWeightWidget init: " + this.value + " is not a valid weight value.");
+                }
             }
         },
 
         _lowImportanceClicked: function () {
-            if (this.value && this.value != "low") {
-                this._setValueAttr("low");
+            if (this.value && this.value != "Low") {
+                this._setValueAttr("Low");
             }
             this.importanceMedium.checked = false;
             domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
@@ -59,8 +68,8 @@
         },
 
         _medImportanceClicked: function () {
-            if (this.value && this.value != "medium") {
-                this._setValueAttr("medium");
+            if (this.value && this.value != "Medium") {
+                this._setValueAttr("Medium");
             }
             this.importanceLow.checked = false;
             domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
@@ -69,8 +78,8 @@
         },
 
         _highImportanceClicked: function () {
-            if (this.value && this.value != "high") {
-                this._setValueAttr("high");
+            if (this.value && this.value != "High") {
+                this._setValueAttr("High");
             }
             this.importanceLow.checked = false;
             domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");

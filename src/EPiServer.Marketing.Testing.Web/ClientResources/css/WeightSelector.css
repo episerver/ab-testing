@@ -1,4 +1,11 @@
-﻿.epi-weightSelector-kpiweight {
+﻿.epi-weightSelector-value-label {
+    padding-top: 4px;
+    font-weight: bold;
+    display: block;
+    vertical-align: middle;
+}
+
+.epi-weightSelector-kpiweight {
     -webkit-appearance: none;
     -moz-appearance: none;
     height: 25px;
@@ -8,6 +15,7 @@
     padding: 0px;
     margin: 0px;
     border-color: #C7C9C9;
+    float:left;
 }
 
 .epi-weightSelector-kpiweight--default {
@@ -43,3 +51,6 @@
     border-color: #95C532;
 }
 
+#importanceHigh {
+margin-right: 25px;
+}
