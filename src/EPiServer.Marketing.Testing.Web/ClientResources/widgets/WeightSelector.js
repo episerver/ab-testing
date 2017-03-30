@@ -40,51 +40,58 @@
             if (this.value) {
                 switch (this.value) {
                     case "Low":
-                        this._lowImportanceClicked();
+                        this._importanceClicked();
                         this.importanceLow.checked = true;
                         break;
                     case "Medium":
-                        this._medImportanceClicked();
+                        this._importanceClicked();
                         this.importanceMedium.checked = true;
                         break;
                     case "High":
-                        this._highImportanceClicked();
+                        this._importanceClicked();
                         this.importanceHigh.checked = true;
                         break;
                     default:
-                        console.debug("KpiWeightWidget init: " + this.value + " is not a valid weight value.");
+                        console.debug("KpiWeightWidget init: " + this.value + "Is not a valid weight value.");
                 }
             }
         },
 
-        _lowImportanceClicked: function () {
-            if (this.value && this.value != "Low") {
-                this._setValueAttr("Low");
+        _importanceClicked: function (evt) {
+            var weight = this.value;
+            var me = this;
+            if (evt) {
+                weight = evt.srcElement.value;
             }
-            this.importanceMedium.checked = false;
-            domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
-            this.importanceHigh.checked = false;
-            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
-        },
-
-        _medImportanceClicked: function () {
-            if (this.value && this.value != "Medium") {
-                this._setValueAttr("Medium");
+            switch (weight) {
+                case "Low":
+                    if (me.value && me.value != "Low") {
+                        this._setValueAttr("Low");
+                    }
+                    this.importanceMedium.checked = false;
+                    domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                    this.importanceHigh.checked = false;
+                    domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                    break;
+                case "Medium":
+                    if (this.value && this.value != "Medium") {
+                        this._setValueAttr("Medium");
+                    }
+                    this.importanceLow.checked = false;
+                    domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
+                    this.importanceHigh.checked = false;
+                    domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                    break;
+                case "High":
+                    if (this.value && this.value != "High") {
+                        this._setValueAttr("High");
+                    }
+                    this.importanceLow.checked = false;
+                    domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
+                    this.importanceMedium.checked = false;
+                    domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-medium");
+                    break;
             }
-            this.importanceLow.checked = false;
-            domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
-            this.importanceHigh.checked = false;
-            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
-        },
-
-        _highImportanceClicked: function () {
-            if (this.value && this.value != "High") {
-                this._setValueAttr("High");
-            }
-            this.importanceLow.checked = false;
-            domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
-            this.importanceMedium.checked = false;
-            domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-medium");
         }
     });
 });
