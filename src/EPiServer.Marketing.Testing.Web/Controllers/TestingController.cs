@@ -125,10 +125,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
+            var kpiId = data.Get("kpiId");
+
             if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion));
+                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
 
                 return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
             }

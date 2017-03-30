@@ -4,6 +4,7 @@
     var ActiveKpis = new Array();
     var testId;
     var itemVersion;
+    var kpiId;
 
     var ClientKpiConverted = document.createEvent("Event");
     ClientKpiConverted.initEvent("ConvertClientKpi", true, false);
@@ -24,6 +25,7 @@
 
         testId = result.testId;
         itemVersion = result.itemVersion;
+        kpiId = result.kpiId;
     }
 
     function search(id, arrayObj) {
@@ -52,7 +54,7 @@
                     }
                 }
             }
-            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion);
+            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion + "&kpiId=" + kpiId);
         }
     };
 </script>
