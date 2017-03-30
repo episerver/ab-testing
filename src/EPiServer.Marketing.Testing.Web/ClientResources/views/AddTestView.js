@@ -94,7 +94,7 @@ define([
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"]
+                confidenceLevel: ["viewConfidenceLevel"],
             },
 
             //sets views starting data from view model
@@ -640,7 +640,7 @@ define([
                 var dijitSelector = dijit.byId("kpiSelector");
                 dijitSelector.set("value", "default");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
-                if (this.kpiEntries == 5 || this.isMultiKpiTest != true) {
+                if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
                     kpiSelector.style.display = "block";
