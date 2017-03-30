@@ -246,13 +246,20 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
             else
             {
-                if (type == KeyResultType.Financial)
+                switch (type)
                 {
-                    _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
-                }
-                else
-                {
-                    _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult)keyResult), (int)type);
+                    case KeyResultType.Financial:
+                        _dataAccess.AddKpiResultData(testId, itemVersion, TestManagerHelper.ConvertToDalKeyFinancialResult((KeyFinancialResult)keyResult), (int)type);
+                        break;
+                    case KeyResultType.Value:
+                        _dataAccess.AddKpiResultData(testId, itemVersion,
+                            TestManagerHelper.ConvertToDalKeyValueResult((KeyValueResult) keyResult), (int) type);
+                        break;
+                    case KeyResultType.Conversion:
+                    default:
+                        _dataAccess.AddKpiResultData(testId, itemVersion,
+                            TestManagerHelper.ConvertToDalKeyConversionResult((KeyConversionResult)keyResult), (int)type);
+                        break;
                 }
             }
         }
@@ -296,13 +303,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private Object thisLock = new Object();
 
         /// <inheritdoc />
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool asynch = true)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch = true)
         {
             if (asynch)
             {
                 var messaging = _serviceLocator.GetInstance<IMessagingManager>();
                 if (resultType == CountType.Conversion)
-                    messaging.EmitUpdateConversion(testId, itemVersion);
+                    messaging.EmitUpdateConversion(testId, itemVersion, kpiId);
                 else if (resultType == CountType.View)
                     messaging.EmitUpdateViews(testId, itemVersion);
             }
@@ -310,7 +317,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 lock (thisLock)
                 {
-                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType));
+                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType), kpiId);
                 }
             }
         }

@@ -13,6 +13,8 @@ namespace EPiServer.Marketing.KPI.DataAccess
 
         Guid Save(IDalKpi kpiObject);
 
+        IList<Guid> Save(IList<IDalKpi> kpiObjects);
+
         void Delete(Guid kpiObjectId);
 
         long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey);

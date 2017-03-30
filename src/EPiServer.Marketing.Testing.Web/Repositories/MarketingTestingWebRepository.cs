@@ -147,8 +147,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
-            
-            var kpi = _kpiManager.Get(testData.KpiId);
+
+            var kpis = testData.KpiId.Select(kpiId => _kpiManager.Get(kpiId)).ToList();
 
             var test = new ABTest
             {
@@ -178,7 +178,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         Conversions = 0
                     }
                 },
-                KpiInstances = new List<IKpi> { kpi },
+                KpiInstances = kpis,
                 ConfidenceLevel = testData.ConfidenceLevel
             };
 
@@ -249,7 +249,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, async);
+            _testManager.IncrementCount(testId, itemVersion, resultType, default(Guid), async);
         }
         
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)

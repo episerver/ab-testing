@@ -10,6 +10,9 @@ using System.Net;
 using EPiServer.Framework.Localization;
 using EPiServer.Logging;
 using EPiServer.ServiceLocation;
+using System.Linq;
+using Newtonsoft.Json;
+using EPiServer.Marketing.KPI.Exceptions;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -17,6 +20,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class KpiStore : RestControllerBase
     {
         private LocalizationService _localizationService;
+        private IKpiWebRepository _kpiRepo;
         private IServiceLocator _serviceLocator;
         private ILogger _logger;
 
@@ -25,13 +29,15 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             _serviceLocator = ServiceLocator.Current;
             _logger = _serviceLocator.GetInstance<ILogger>();
             _localizationService = _serviceLocator.GetInstance<LocalizationService>();
+            _kpiRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
         }
 
-        internal KpiStore( IServiceLocator sl )
+        internal KpiStore(IServiceLocator sl)
         {
             _serviceLocator = sl;
             _logger = _serviceLocator.GetInstance<ILogger>();
             _localizationService = _serviceLocator.GetInstance<LocalizationService>();
+            _kpiRepo = sl.GetInstance<IKpiWebRepository>();
         }
 
         /// <summary>
@@ -52,44 +58,54 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
+        [HttpPut]
         public ActionResult Put(string id, string entity)
         {
-            IKpi kpiInstance;
-            var kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            ActionResult result;
-            var javascriptSerializer = new JavaScriptSerializer();
-            Dictionary<string, string> values =
-                javascriptSerializer.Deserialize<Dictionary<string, string>>(entity);
-            if (!string.IsNullOrEmpty(entity) && values["kpiType"] != "")
-            {
-                var kpi = Activator.CreateInstance(Type.GetType(values["kpiType"]));
+            List<IKpi> validKpiInstances = new List<IKpi>();
+            Dictionary<string, string> kpiErrors = new Dictionary<string, string>();
+            ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
 
-                if (kpi is IFinancialKpi)
+            try
+            {
+                var kpiData = _kpiRepo.DeserializeJsonKpiFormCollection(entity);
+
+                if (kpiData.Count > 0)
                 {
-                    var financialKpi = kpi as IFinancialKpi;
-                    financialKpi.PreferredFinancialFormat = kpiManager.GetCommerceSettings();
-                    kpiInstance = financialKpi as IKpi;
+                    foreach (var data in kpiData)
+                    {
+                        IKpi kpiInstance = _kpiRepo.ActivateKpiInstance(data);
+                        try
+                        {
+                            kpiInstance.Validate(data);
+                            validKpiInstances.Add(kpiInstance);
+                        }
+                        catch (KpiValidationException ex)
+                        {
+                            _logger.Debug("Error validating Kpi" + ex);
+                            kpiErrors.Add(data["widgetID"], ex.Message);
+                        }
+                    }
+
+                    //Send back only errors or successful results for proper handling
+                    if (kpiErrors.Count > 0)
+                    {
+                        result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, JsonConvert.SerializeObject(kpiErrors));
+                    }
+                    else
+                    {
+                        result = Rest(_kpiRepo.SaveKpis(validKpiInstances));
+                    }
                 }
                 else
                 {
-                    kpiInstance = kpi as IKpi;
+                    result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
                 }
-
-                try
-                {
-                    kpiInstance.Validate(values);
-                    var kpiId = kpiManager.Save(kpiInstance);
-                    result = Rest(kpiId);
-                }
-                catch (Exception e)
-                {
-                    _logger.Error("Error creating Kpi" + e);
-                    result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, e.Message);
-                }
-            }else
-            {
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
             }
+            catch (Exception ex)
+            {
+                _logger.Debug("Error creating Kpi" + ex);
+                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);
+            }           
             return result;
         }
     }

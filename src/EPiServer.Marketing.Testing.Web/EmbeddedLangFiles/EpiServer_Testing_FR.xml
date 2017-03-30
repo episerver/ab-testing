@@ -17,6 +17,7 @@
         <confidence_level_description>Le niveau de confiance détermine le nombre d'erreurs autorisé. Un pourcentage élevé est en corrélation directe avec la précision des résultats du test. Cela indique si la différence mesurée entre la page de contrôle et la variante est due ou non au hasard (c'est-à-dire qu'elle est significative).</confidence_level_description>
         <confidence_level_header>Niveau de confiance</confidence_level_header>
         <control>A / Contrôle</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Quel est l’objectif de conversion ?</conversion_header>
         <conversion_label>Un visiteur arrive sur la page</conversion_label>
         <days_text> jour(s).</days_text>
@@ -32,6 +33,10 @@
         <goals_default_text>Ex. En modifiant légèrement la copie dans la première bulle pour traiter directement la question du « temps », je peux inciter plus de visiteurs à télécharger l’ebook.</goals_default_text>
         <goals_header>Quel est l’objectif général de ce test ?</goals_header>
         <goals_selectlist_default>Sélectionner un Objectif</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>non planifié, va commencer maintenant</notscheduled_text>
         <participant_percentage_tip>Un pourcentage de participation élevé réduit le temps nécessaire pour collecter suffisamment de statistiques pour pouvoir choisir un vainqueur.</participant_percentage_tip>
         <participation_header>Quel pourcentage des visiteurs devrait participer à ce test A/B ?</participation_header>

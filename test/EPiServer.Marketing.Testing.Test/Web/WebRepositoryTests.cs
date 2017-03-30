@@ -13,9 +13,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
-using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -87,7 +85,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value => value == true)), Times.Once);
         }
 
         [Fact]
@@ -95,7 +93,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View,false);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == false)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value => value == false)), Times.Once);
         }
 
         [Fact]
@@ -358,7 +356,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 StartDate = startDate.ToString(),
                 TestDuration = 30,
                 ParticipationPercent = 100,
-                KpiId = Guid.NewGuid(),
+                KpiId = new List<Guid>() { Guid.NewGuid()},
                 TestTitle = "Test Title",
                 Start = false,
                 ConfidenceLevel = 95,

@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
         void Archive(Guid testObjectId, Guid winningVariantId);
 
-        void IncrementCount(Guid testId, int itemVersion, DalCountType resultType);
+        void IncrementCount(Guid testId, int itemVersion, DalCountType resultType, Guid kpiId);
 
         void AddKpiResultData(Guid testId, int itemVersion, IDalKeyResult keyResult, int type);
 

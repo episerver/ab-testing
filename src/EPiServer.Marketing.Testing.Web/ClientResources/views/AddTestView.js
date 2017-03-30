@@ -1,5 +1,8 @@
-﻿define([
+﻿var destroyedEvent = new Event('destroyed');
+
+define([
      'dojo/_base/declare',
+     'dojo/Evented',
         'dijit/_WidgetBase',
         'dijit/_TemplatedMixin',
         'dojo/text!marketing-testing/views/AddTestView.html',
@@ -14,6 +17,7 @@
         'dojo/html',
         'dojo/dom',
         "dojo/dom-class",
+        "dojo/dom-style",
         "dojo/query",
         "dijit/registry",
         'epi/dependency',
@@ -21,6 +25,7 @@
        "dojo/dom-form",
        "dojo/json",
        "dojox/layout/ContentPane",
+       'marketing-testing/widgets/KpiWidget',
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'dijit/form/Button',
         'dijit/form/NumberSpinner',
@@ -35,6 +40,7 @@
 ],
     function (
     declare,
+    Evented,
     _WidgetBase,
     _TemplatedMixin,
     template,
@@ -48,6 +54,7 @@
     topic,
     html,
     dom,
+    domStyle,
     domClass,
     query,
     registry,
@@ -56,7 +63,7 @@
    domForm,
    JSON,
    ContentPane,
-   ContentSelector
+   KpiWidget
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -66,11 +73,19 @@
         viewKpiLimit: null;
         startButtonClickCounter: 0;
 
-        return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
+        return declare([Evented, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
         {
             templateString: template,
 
             resources: resources,
+
+            isMultiKpiTest: true,
+
+            kpiEntries: 0,
+
+            kpiList: new Array(),
+
+            kpiFormData: null,
 
             // DOJO WIDGET METHODS
 
@@ -102,13 +117,27 @@
 
             _onContextChange: function (context, caller) {
                 this.contentData = caller.contentData;
+                this.kpiEntries = 0;
+                this._adjustKpiSelectorCombo();
                 this.reset();
             },
 
             //sets default values once everything is loaded
             postCreate: function () {
-                this.reset();
-                this.inherited(arguments);
+                var me = this;
+                me.reset();
+                me.inherited(arguments);
+                document.addEventListener('destroyed', function () {
+                    me.decrementKpiEntries();
+                });
+            },
+
+            decrementKpiEntries: function () {
+                this.kpiEntries--;
+                if (this.kpiEntries == 0) {
+                    this.isMultiKpiTest = true;
+                }
+                this._adjustKpiSelectorCombo();
             },
 
             startup: function () {
@@ -213,10 +242,16 @@
             // Transforms custom KPI form data into json for processing
             _getKpiFormData: function () {
                 var me = this;
-                var kpiFormObject = dojo.formToObject(dom.byId("kpiForm"));
-                var formData = dojo.toJson(kpiFormObject, true);
-                var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
-                return formattedFormData;
+                var formDataArray = new Array();
+
+                for (var x = 1; x < document.forms.length; x++) {
+                    var kpiFormObject = dojo.formToObject(document.forms[x]);
+                    var formData = dojo.toJson(kpiFormObject, true);
+                    var formattedFormData = formData.replace(/(\r\n|\n|\r|\t)/gm, "");
+                    formDataArray.push(formattedFormData);
+                }
+                var formDataJSon = dojo.toJson(formDataArray, true);
+                return formDataJSon;
             },
 
             // FORM ELEMENT CONTROL METHODS
@@ -225,8 +260,7 @@
             _setKpiSelectList: function (kpiList) {
                 var me = this;
                 var kpiuiElement = registry.byId("kpiSelector");
-                if (kpiuiElement) {
-
+                if (kpiuiElement && kpiList) {
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
                     var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
@@ -259,6 +293,7 @@
                     this._setError(resources.addtestview.error_participation_percentage, errorTextNode, errorIconNode);
                     return false;
                 }
+
                 this._setError("", errorTextNode, errorIconNode);
                 return true;
             },
@@ -312,11 +347,11 @@
                 return true;
             },
 
-
             // FORM DATA CLEANUP
             reset: function () {
                 // reset the start button click counter
                 this.startButtonClickCounter = 0;
+                this.kpiEntries = 0;
 
                 //set view model properties to default form values.
                 if (this.descriptionText) {
@@ -360,6 +395,12 @@
                     this.scheduleDiv.style.visibility = "hidden";
                 }
 
+
+                var kpiSelector = dom.byId("kpiSelectorCombo");
+                if (kpiSelector) {
+                    kpiSelector.style.display = "block";
+                }
+
                 this._setViewConfidenceLevelAttr();
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
@@ -380,22 +421,30 @@
 
             //Clears the KPI Error text and icon
             _clearConversionErrors: function () {
-                var errorText = dom.byId("kpiErrorText");
-                if (!errorText) {
-                    return;
+                var errorTextElements = query("span[id*='kpiErrorText']");
+                var errorIconElements = query("span[id*='kpiErrorIcon']");
+
+                if (errorTextElements) {
+                    errorTextElements.forEach(function (element) {
+                        element.innerText = "";
+                        element.style.visibility = "hidden";
+                    });
                 }
-                errorText.innerText = "";
-                errorText.style.visibility = "hidden";
-                var et2 = dom.byId("kpiErrorIcon");
-                et2.style.visibility = "hidden";
+
+                if (errorIconElements) {
+                    errorIconElements.forEach(function (element) {
+                        element.style.visibility = "hidden";
+                    })
+                }
             },
 
             //Removes the custom KPI markup from the view & widget registry
             _clearCustomKpiMarkup: function () {
-                this._clearConversionErrors();
-                var kpiuiElement = dom.byId("kpiui");
+                this.kpiEntries = 0;
+                this.isMultiKpiTest = true;
+                var kpiuiElement = dom.byId("kpiWidgets");
                 if (kpiuiElement) {
-                    var contentPane = dojo.query('#kpiui > *');
+                    var contentPane = dojo.query('#kpiWidgets > *');
                     if (contentPane[0]) {
                         dojo.forEach(dijit.findWidgets(contentPane)), function (w) {
                             w.destroyRecursive();
@@ -403,22 +452,6 @@
                         var dijitContentPane = dijit.byId(contentPane[0].id);
                         dijitContentPane.destroy();
                         kpiuiElement.innerHTML = "";
-                    }
-                }
-            },
-
-            // clears kpi description
-            _clearCustomKpiDescription: function (){
-                var kpidescriptionElement = dom.byId("kpidescription");
-                if (kpidescriptionElement) {
-                    var contentPane2 = dojo.query('#kpidescription > *');
-                    if (contentPane2[0]) {
-                        dojo.forEach(dijit.findWidgets(contentPane2)), function (w) {
-                            w.destroyRecursive();
-                        };
-                        var dijitContentPane2 = dijit.byId(contentPane2[0].id);
-                        dijitContentPane2.destroy();
-                        kpidescriptionElement.innerHTML = "";
                     }
                 }
             },
@@ -451,6 +484,7 @@
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
+                this._clearConversionErrors();
                 if (this.startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 this.startButtonClickCounter++; // Increment click count
                 var me = this;
@@ -471,12 +505,11 @@
                 this.kpiFormData = this._getKpiFormData();
 
                 this.kpiModel.createKpi(this);
-
             },
 
-            createTest: function(kpiId) {
+            createTest: function (kpiIds) {
                 this._clearConversionErrors();
-                this.model.kpiId = kpiId;
+                this.model.kpiId = kpiIds;
                 if (this._isValidFormData()) {
                     this.model.createTest();
                     this._clearConversionErrors();
@@ -486,15 +519,40 @@
                 }
             },
 
-            setKpiError: function(ret) {
-                this._setError(ret.response.xhr.statusText, this.kpiErrorTextNode, this.kpiErrorIconNode);
-                this.startButtonClickCounter = 0;
+            setKpiError: function (ret) {
+                var errors = this._isObject(ret);
+                this.kpiFormData = null;
+                if (errors) {
+                    var keys = Object.keys(errors);
+                    for (var x = 0; x < keys.length; x++) {
+                        var errorIconNode = dom.byId(keys[x] + "_kpiErrorIcon");
+                        var errorTextNode = dom.byId(keys[x] + "_kpiErrorText");
+                        errorText = errors[keys[x]];
+                        this._setError(errorText, errorTextNode, errorIconNode);
+                        this.startButtonClickCounter = 0;
+                    };
+                }
+                else {
+                    this._setError(ret, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                    this.startButtonClickCounter = 0;
+                }
+            },
+
+            _isObject: function (jsonString) {
+                try {
+                    var obj = JSON.parse(jsonString);
+                    if (obj && typeof obj === "object") {
+                        return obj;
+                    }
+                } catch (e) { }
+                return false;
             },
 
             _onCancelButtonClick: function () {
                 var me = this;
+                this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
-                this._setKpiSelectList(this.kpiModel.availableKpis);
+                this._adjustKpiSelectorCombo()
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
@@ -502,27 +560,34 @@
             },
 
             _onGoalSelectChange: function (evt) {
-                this._clearCustomKpiMarkup();
-                var kpiTextField = dom.byId("kpiType");
                 var kpiuiElement = dom.byId("kpiui");
+                var kpiWidget = dom.byId("kpiWidgets");
+                var kpiSelector = dom.byId("kpiSelectorCombo");
+
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
-                    kpiTextField.value = kpiObject.kpiType;
-                    new ContentPane({
-                        content: kpiObject.kpi.uiMarkup
-                    }).placeAt(kpiuiElement);
-                } else {
-                    kpiTextField.value = "";
-                }
+                    new KpiWidget({
+                        label: kpiObject.kpi.friendlyName,
+                        markup: kpiObject.kpi.uiMarkup,
+                        description: kpiObject.kpi.description,
+                        kpiType: kpiObject.kpiType
+                    }).placeAt(kpiWidget);
 
-                this._clearCustomKpiDescription();
-                var kpidescriptionElement = dom.byId("kpidescription");
-                if (evt !== "default") {
-                    var kpiDescriptionObject = this.kpiModel.getKpiByIndex(evt);
-                    new ContentPane({
-                        content: kpiDescriptionObject.kpi.description
-                    }).placeAt(kpidescriptionElement);
+                    if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
+                        this.isMultiKpiTest = false;
+                    }
+                    this.kpiEntries++;
+
+                    this._adjustKpiSelectorCombo();
                 }
+            },
+
+            _isScrolledIntoView: function (el) {
+                var elemTop = el.getBoundingClientRect().top;
+                var elemBottom = el.getBoundingClientRect().bottom;
+
+                var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+                return isVisible;
             },
 
             // Form Field Events
@@ -569,6 +634,34 @@
                         startButton.set("label", resources.addtestview.start_default);
                         scheduleText.innerText = resources.addtestview.notscheduled_text;
                         this.model.start = true;
+                    }
+                }
+            },
+
+            _adjustKpiSelectorCombo: function () {
+                var dijitSelector = dijit.byId("kpiSelector");
+                dijitSelector.set("value", "default");
+                var kpiSelector = dom.byId("kpiSelectorCombo");
+                if (this.kpiEntries == 5 || this.isMultiKpiTest != true) {
+                    kpiSelector.style.display = "none";
+                } else {
+                    kpiSelector.style.display = "block";
+                    if (!this._isScrolledIntoView(kpiSelector)) {
+                        kpiSelector.scrollIntoView(true);
+                    }
+
+                    if (this.kpiEntries == 0) {
+                        this._setKpiSelectList(this.kpiModel.refreshKpis());
+                    }
+                    if (this.kpiEntries == 1 && this.isMultiKpiTest == true) {
+                        var allowableKpis = new Array();
+                        this.kpiModel.availableKpis.forEach(function (entry) {
+                            if (entry.kpi.kpiResultType == "KpiConversionResult") {
+                                allowableKpis.push(entry);
+                            }
+                        });
+                        this.kpiModel.availableKpis = allowableKpis;
+                        this._setKpiSelectList(this.kpiModel.availableKpis);
                     }
                 }
             }

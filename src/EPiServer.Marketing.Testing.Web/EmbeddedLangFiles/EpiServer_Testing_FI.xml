@@ -17,6 +17,7 @@
         <confidence_level_description>Luottamustaso määrittää virheiden sallitun määrän. Korkeampi prosentti korreloi suoraan testitulosten tarkkuuteen. Tällä ilmaistaan, onko kontrollisivun ja varianttisivun välinen mitattu ero ei-sattumanvarainen (eli merkittävä).</confidence_level_description>
         <confidence_level_header>Luottamustaso</confidence_level_header>
         <control>A / Kontrolli</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Mikä on muuntotavoite?</conversion_header>
         <conversion_label>Vierailija siirtyy sivulle</conversion_label>
         <days_text> päivä(ä).</days_text>
@@ -32,6 +33,10 @@
         <goals_default_text>Esimerkiksi: Voin saada enemmän vierailijoita lataamaan e-kirjan muokkaamalla ensimmäisen kohdan tekstiä niin, että siinä käsitellään suoraan ”aikaongelmaa”.</goals_default_text>
         <goals_header>Mikä on tämän testin kokonaistavoite?</goals_header>
         <goals_selectlist_default>Valitse tavoite</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>ei ajoitettu, alkaa nyt</notscheduled_text>
         <participant_percentage_tip>Korkeampi osallistumisprosentti vähentää aikaa, jota tarvitaan keräämään tarvittavat tilastot voittajan valitsemista varten.</participant_percentage_tip>
         <participation_header>Millainen tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuuden tulee olla?</participation_header>
