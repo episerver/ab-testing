@@ -52,6 +52,8 @@ define([
         //confidence level
         confidenceLevel: null,
 
+        kpiLimit: null,
+
         postscript: function () {
             this.inherited(arguments);
             this.setupContentData();
@@ -85,6 +87,7 @@ define([
                             this.set("testDuration", config.testDuration);
                             this.set("participationPercent", config.participationPercent);
                             this.set("confidenceLevel", config.confidenceLevel);
+                            this.set("kpiLimit", config.kpiLimit);
                         }.bind(this));
 
                     console.log(result);
