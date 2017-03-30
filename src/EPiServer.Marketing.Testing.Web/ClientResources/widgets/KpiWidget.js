@@ -34,7 +34,7 @@
                 content: this.markup
             }).placeAt(this.kpiMarkup);
             this._getCurrentContent();
-        },
+        },        
 
         removeWidget: function () {
             var widget = dijit.byId(this.id);
