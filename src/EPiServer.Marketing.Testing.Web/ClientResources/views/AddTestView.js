@@ -70,7 +70,6 @@ define([
         viewParticipationPercent: null;
         viewTestDuration: null;
         viewConfidenceLevel: null;
-        viewKpiLimit: null;
         startButtonClickCounter: 0;
 
         return declare([Evented, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, _ModelBindingMixing],
@@ -96,7 +95,6 @@ define([
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
                 confidenceLevel: ["viewConfidenceLevel"],
-                kpiLimit: ["viewKpiLimit"]
             },
 
             //sets views starting data from view model
