@@ -43,7 +43,6 @@
             }
 
             if (weight) {
-
                 this._resetCheckedState();
                 if (this.value != weight) {
                     this._setValueAttr(weight);
@@ -73,6 +72,5 @@
             this.importanceMedium.checked = false;
             this.importanceHigh.checked = false;
         }
-
     });
 });
