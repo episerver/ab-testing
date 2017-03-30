@@ -26,6 +26,7 @@ define([
        "dojo/json",
        "dojox/layout/ContentPane",
        'marketing-testing/widgets/KpiWidget',
+       'marketing-testing/widgets/KpiWeightWidget',
         'xstyle/css!marketing-testing/css/ABTesting.css',
         'dijit/form/Button',
         'dijit/form/NumberSpinner',
@@ -63,7 +64,8 @@ define([
    domForm,
    JSON,
    ContentPane,
-   KpiWidget
+   KpiWidget,
+   KpiWeightWidget
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -404,6 +406,7 @@ define([
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
+                this._clearKpiWeightWidgets();
                 this._resetView();
             },
 
@@ -450,6 +453,19 @@ define([
                         var dijitContentPane = dijit.byId(contentPane[0].id);
                         dijitContentPane.destroy();
                         kpiuiElement.innerHTML = "";
+                    }
+                }
+            },
+
+            _clearKpiWeightWidgets:function(){
+                var kpiWeightWidgetElement = dom.byId("kpiWeightSelectors");
+                if(kpiWeightWidgetElement){
+                    var weightSelectors = dojo.query('#kpiWeightSelectors');
+                    if(weightSelectors[0]){
+                        dojo.forEach(dijit.findWidgets(weightSelectors)),function(w){
+                            w.destroyRecursive();
+                        };
+                        kpiWeightWidgetElement.innerHTML = "";
                     }
                 }
             },
@@ -550,6 +566,7 @@ define([
                 var me = this;
                 this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
+                this._clearKpiWeightWidgets();
                 this._adjustKpiSelectorCombo()
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
@@ -561,15 +578,27 @@ define([
                 var kpiuiElement = dom.byId("kpiui");
                 var kpiWidget = dom.byId("kpiWidgets");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
+                var kpiWeightWidget = dom.byId("kpiWeightSelectors");
 
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
-                    new KpiWidget({
+
+                  
+                    var kpiWidgetInstance = new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
                         description: kpiObject.kpi.description,
-                        kpiType: kpiObject.kpiType
-                    }).placeAt(kpiWidget);
+                        kpiType: kpiObject.kpiType,                        
+                    })
+
+                    kpiWidgetInstance.placeAt(kpiWidget);
+
+                    var weightWidget = new KpiWeightWidget({
+                        label: kpiObject.kpi.friendlyName,
+                        kpiWidgetId: kpiWidgetInstance.id,
+                        value: "Medium"
+                    }).placeAt(kpiWeightWidget);
+                   
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
                         this.isMultiKpiTest = false;

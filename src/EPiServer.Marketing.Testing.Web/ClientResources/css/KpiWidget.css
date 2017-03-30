@@ -1,21 +1,41 @@
 ﻿.epi-kpiWidget-body {
-    width:60%;
+    width: 60%;
 }
 
-.epi-kpiWidget-content{
-    width:95%;
+.epi-kpiWidget-content {
+    width: 95%;
 }
 
 .epi-kpiWidget-lbl {
-    font-weight:bold;
+    padding-top: 4px;
+    font-weight: bold;
+    display: block;
+    vertical-align: middle;
+}
+
+.epi-kpiWidget-kpi-lbl {
     font-size: larger;
-    display:block;
-    vertical-align:middle;
 }
 
 .epi-kpiWidget-remove-btn {
-    font-weight:bold;
+    font-weight: bold;
     font-size: larger;
-    display:block; 
-    float:right;   
+    display: block;
+    float: right;
+}
+
+.epi-kpiWidget-weightWidget-body {
+    max-width: 30%;
+    margin-bottom: 10px;
+}
+
+.epi-kpiWidget-weightWidget-label-row {
+    float: left;
+    min-width: 50%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.epi-kpiWidget-weightWidget-row {
+    text-align:left;
 }
