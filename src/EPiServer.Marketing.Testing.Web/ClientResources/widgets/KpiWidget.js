@@ -34,12 +34,7 @@
                 content: this.markup
             }).placeAt(this.kpiMarkup);
             this._getCurrentContent();
-        },
-
-        _setValueAttr: function (value) {
-            var kpiWidget = dijit.byId(this.kpiWidgetId);
-            kpiWidget._setImportanceAttr(value);
-        },
+        },        
 
         removeWidget: function () {
             var widget = dijit.byId(this.id);
