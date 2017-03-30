@@ -52,7 +52,7 @@
                         this.importanceHigh.checked = true;
                         break;
                     default:
-                        console.debug("KpiWeightWidget init: " + this.value + "Is not a valid weight value.");
+                        console.debug("KpiWeightWidget init: " + this.value + " is not a valid weight value.");
                 }
             }
         },
