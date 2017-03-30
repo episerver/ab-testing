@@ -15,10 +15,10 @@
         label: "",
 
         id: this.id,
-
+        
         kpiWidgetId: null,
 
-        _setValueAttr: function (value) {
+        _setValueAttr: function(value){
             var kpiWidget = dijit.byId(this.kpiWidgetId);
             kpiWidget._setImportanceAttr(value);
         },
@@ -32,7 +32,7 @@
         _setWeight: function () {
             this._setValueAttr(this.weightSelector.value);
         }
-
+    
 
     });
 });

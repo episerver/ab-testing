@@ -457,12 +457,12 @@ define([
                 }
             },
 
-            _clearKpiWeightWidgets: function () {
+            _clearKpiWeightWidgets:function(){
                 var kpiWeightWidgetElement = dom.byId("kpiWeightSelectors");
-                if (kpiWeightWidgetElement) {
+                if(kpiWeightWidgetElement){
                     var weightSelectors = dojo.query('#kpiWeightSelectors');
-                    if (weightSelectors[0]) {
-                        dojo.forEach(dijit.findWidgets(weightSelectors)), function (w) {
+                    if(weightSelectors[0]){
+                        dojo.forEach(dijit.findWidgets(weightSelectors)),function(w){
                             w.destroyRecursive();
                         };
                         kpiWeightWidgetElement.innerHTML = "";
@@ -583,12 +583,12 @@ define([
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
 
-
+                  
                     var kpiWidgetInstance = new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
                         description: kpiObject.kpi.description,
-                        kpiType: kpiObject.kpiType,
+                        kpiType: kpiObject.kpiType,                        
                     })
 
                     kpiWidgetInstance.placeAt(kpiWidget);
@@ -596,9 +596,9 @@ define([
                     var weightWidget = new KpiWeightWidget({
                         label: kpiObject.kpi.friendlyName,
                         kpiWidgetId: kpiWidgetInstance.id,
-                        value: "medium"
+                        value: "Medium"
                     }).placeAt(kpiWeightWidget);
-
+                   
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
                         this.isMultiKpiTest = false;
