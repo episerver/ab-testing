@@ -32,7 +32,5 @@
         _setWeight: function () {
             this._setValueAttr(this.weightSelector.value);
         }
-    
-
     });
 });
