@@ -29,6 +29,8 @@
 
         id: this.id,
 
+        linkedWidgetId: null,
+
         postCreate: function () {
             new ContentPane({
                 content: this.markup
@@ -40,8 +42,14 @@
             this.kpiWeight.value = value;
         },
 
+        _setlinkedWidgetIdAttr: function (value) {
+            this.linkedWidgetId = value;
+        },
+
         removeWidget: function () {
             var widget = dijit.byId(this.id);
+            var linkedWidget = dijit.byId(this.linkedWidgetId);
+            linkedWidget.destroy();
             widget.destroy();
             document.dispatchEvent(destroyedEvent);
         },
