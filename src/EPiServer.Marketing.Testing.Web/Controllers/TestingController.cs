@@ -13,9 +13,7 @@ using System.Net.Http.Formatting;
 using System.Web.Http;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
-using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -146,8 +144,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             try
             { 
-                var testManager = _serviceLocator.GetInstance<ITestManager>();
-                var activeTest = testManager.Get(Guid.Parse(data.Get("testId")));
+                var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+                var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpiId = Guid.Parse(data.Get("kpiId"));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
 
