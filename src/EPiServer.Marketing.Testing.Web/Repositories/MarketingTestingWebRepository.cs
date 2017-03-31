@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
+using Newtonsoft.Json;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -148,16 +149,45 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
 
-            var kpis = testData.KpiId.Select(kpiId => _kpiManager.Get(kpiId)).ToList();
+            Dictionary<Guid, string> kpiData = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(testData.KpiId);
 
+            var kpis = kpiData.Select(kpi => _kpiManager.Get(kpi.Key)).ToList();
             var variant1ConversionResults = new List<KeyConversionResult>();
             var variant2ConversionResults = new List<KeyConversionResult>();
 
             // if more than 1 kpi then we need to take weights into effect
             if (kpis.Count > 1)
             {
-                variant1ConversionResults.AddRange(kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
-                variant2ConversionResults.AddRange(kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                // check if all weights are the same
+                var firstKpiWeight = kpiData.First().Value;
+                if (kpiData.All(entries => entries.Value == firstKpiWeight))
+                {
+                    variant1ConversionResults.AddRange(
+                        kpis.Select(kpi => new KeyConversionResult() {KpiId = kpi.Id, Weight = 1.0/kpis.Count}));
+                    variant2ConversionResults.AddRange(
+                        kpis.Select(kpi => new KeyConversionResult() {KpiId = kpi.Id, Weight = 1.0/kpis.Count}));
+                }
+                else  // otherwise we need to do some maths to calculate the weights
+                {
+                    double totalWeight = kpiData.Sum(kpiEntry => Convert.ToInt32(kpiEntry.Value));
+
+                    variant1ConversionResults.AddRange(
+                        kpiData.Select(
+                            kpiEntry =>
+                                new KeyConversionResult()
+                                {
+                                    KpiId = kpiEntry.Key,
+                                    Weight = Convert.ToDouble(kpiEntry.Value) / totalWeight
+                                }));
+                    variant2ConversionResults.AddRange(
+                        kpiData.Select(
+                            kpiEntry =>
+                                new KeyConversionResult()
+                                {
+                                    KpiId = kpiEntry.Key,
+                                    Weight = Convert.ToDouble(kpiEntry.Value) / totalWeight
+                                }));
+                }
             }
 
             var test = new ABTest
