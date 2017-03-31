@@ -96,7 +96,7 @@
                             ${resources.addtestview.conversion_header}
                         </h4>
                         <p>
-                            ${resources.addtestview.conversion_description} <a class="epi-visibleLink" onclick="showSettings();">${resources.addtestview.advanced_options}</a>.
+                            ${resources.addtestview.conversion_description} <a class="epi-visibleLink" data-dojo-attach-event="onclick: _showAdvancedOptions">${resources.addtestview.advanced_options}</a>.
                         </p>
                         <div>
                             <div id="kpiWidgets">
@@ -192,7 +192,7 @@
             <div class="cardWrapper">
                 <!-- Header / Toggle-->
                 <div class="cardBody">
-                    <button data-dojo-type="dijit/form/ToggleButton" onclick="showSettings();" class="epi-chromeless epi-flat"
+                    <button id=advancedOptionsButton data-dojo-attach-point=advancedOptions data-dojo-type="dijit/form/ToggleButton" data-dojo-attach-event="onClick: _showAdvancedOptions" class="epi-chromeless epi-flat"
                             style="background-color: #ffffff; font-size: 18px; margin: 8px 0 0 0; font-family: arial; font-weight: bold"
                             data-dojo-props="iconClass:'epi-iconSettings', checked: false">
                         ${resources.addtestview.advanced_options}
