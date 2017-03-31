@@ -206,7 +206,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var pairs = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
-                new KeyValuePair<string, string>("itemVersion", "1")
+                new KeyValuePair<string, string>("itemVersion", "1"),
+                new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString()),
             };
 
             var data = new FormDataCollection(pairs);
@@ -241,7 +242,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var pairs = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString())
+                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString())
             };
 
             var data = new FormDataCollection(pairs);
