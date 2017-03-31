@@ -92,7 +92,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void IncrementCount_Calls_TestManager_IncrementCount_WithAsynchFlag_EqualsFalse()
         {
             var aRepo = GetUnitUnderTest();
-            aRepo.IncrementCount(_testGuid, 1, CountType.View,false);
+            aRepo.IncrementCount(_testGuid, 1, CountType.View, default(Guid), false);
             _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value => value == false)), Times.Once);
         }
 

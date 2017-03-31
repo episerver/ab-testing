@@ -150,6 +150,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             var kpis = testData.KpiId.Select(kpiId => _kpiManager.Get(kpiId)).ToList();
 
+            var variant1ConversionResults = new List<KeyConversionResult>();
+            var variant2ConversionResults = new List<KeyConversionResult>();
+
+            // if more than 1 kpi then we need to take weights into effect
+            if (kpis.Count > 1)
+            {
+                variant1ConversionResults.AddRange(kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                variant2ConversionResults.AddRange(kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+            }
+
             var test = new ABTest
             {
                 OriginalItemId = testData.TestContentId,
@@ -168,14 +178,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         ItemVersion = testData.PublishedVersion,
                         IsPublished = true,
                         Views = 0,
-                        Conversions = 0
+                        Conversions = 0,
+                        KeyConversionResults = variant1ConversionResults
                     },
                     new Variant()
                     {
                         ItemId = testData.TestContentId,
                         ItemVersion = testData.VariantVersion,
                         Views = 0,
-                        Conversions = 0
+                        Conversions = 0,
+                        KeyConversionResults = variant2ConversionResults
                     }
                 },
                 KpiInstances = kpis,
@@ -247,9 +259,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetVariantContent(contentGuid);
         }
         
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, default(Guid), async);
+            _testManager.IncrementCount(testId, itemVersion, resultType, kpiId, async);
         }
         
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
