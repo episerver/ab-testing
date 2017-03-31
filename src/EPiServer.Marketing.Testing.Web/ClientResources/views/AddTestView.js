@@ -524,7 +524,7 @@ define([
             createTest: function (kpiIds) {
                 this._clearConversionErrors();
                 var jsonKpis = dojo.toJson(kpiIds, true);
-                this.model.kpiId = jsonKpis.replace(/(\r\n|\n|\r|\t)/gm, "")
+                this.model.kpiId = jsonKpis.replace(/(\r\n|\n|\r|\t)/gm, "");
                 if (this._isValidFormData()) {
                     this.model.createTest();
                     this._clearConversionErrors();
