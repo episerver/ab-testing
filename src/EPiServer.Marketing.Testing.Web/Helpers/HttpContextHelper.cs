@@ -32,9 +32,30 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             return HttpContext.Current.Response.Cookies[cookieKey].Value;
         }
 
+        public HttpCookie GetResponseCookie(string cookieKey)
+        {
+            return HttpContext.Current.Response.Cookies.Get(cookieKey);
+        }
+
+        public HttpCookie GetRequestCookie(string cookieKey)
+        {
+            return HttpContext.Current.Request.Cookies.Get(cookieKey);
+        }
+
+        public string[] GetResponseCookieKeys()
+        {
+            return HttpContext.Current.Response.Cookies.AllKeys;
+        }
+
+        public string[] GetRequestCookieKeys()
+        {
+            return HttpContext.Current.Request.Cookies.AllKeys;
+        }
+
         public void RemoveCookie(string cookieKey)
         {
             HttpContext.Current.Response.Cookies.Remove(cookieKey);
+            HttpContext.Current.Request.Cookies.Remove(cookieKey);
         }
 
         public void AddCookie(HttpCookie cookie)
