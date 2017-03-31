@@ -33,9 +33,35 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <summary>
         /// Reads the cookie value from the cookie collection in the HttpContext
         /// </summary>
-        /// <param name="cookieKey">cookie key to read from</param>
-        /// <returns></returns>
+        /// <param name="cookieKey">cookie key value to search the collection with</param>
+        /// <returns>the value of the cookie in the collection</returns>
         string GetCookieValue(string cookieKey);
+
+        /// <summary>
+        /// /// Returns the cookie from the HttpContext Response objects cookie collection
+        /// </summary>
+        /// <param name="cookieKey">cookie key value to search the collection with</param>
+        /// <returns>the cookie found in the cookie collection</returns>
+        HttpCookie GetResponseCookie(string cookieKey);
+
+        /// <summary>
+        /// Returns the cookie from the HttpContext Request objects cookie collection
+        /// </summary>
+        /// <param name="cookieKey">cookie key value to search the collection with</param>
+        /// <returns>the cookie found in the cookie collection</returns>
+        HttpCookie GetRequestCookie(string cookieKey);
+
+        /// <summary>
+        /// Gets all the keys from the HttpContext Response objects cookie collection
+        /// </summary>
+        /// <returns>all the cookie keys</returns>
+        string[] GetResponseCookieKeys();
+
+        /// <summary>
+        /// Gets all the cookie keys from the HttpContext Request objects cookie collection
+        /// </summary>
+        /// <returns>all the cookie keys</returns>
+        string[] GetRequestCookieKeys();
 
         /// <summary>
         /// Removes the specified cookie from the cookie collection in the HttpContext
