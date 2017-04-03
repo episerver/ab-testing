@@ -7,15 +7,27 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
+    [ServiceConfiguration(ServiceType = typeof(IKpiWebRepository), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiWebRepository : IKpiWebRepository
     {
+        private IServiceLocator _locator;
+        public KpiWebRepository()
+        {
+            _locator = ServiceLocator.Current;
+        }
+
+        public KpiWebRepository(IServiceLocator sl)
+        {
+            _locator = sl;
+        }
+
         /// <summary>
         /// Retrieves all KPI's available to the system.
         /// </summary>
         /// <returns></returns>
         public List<KpiTypeModel> GetKpiTypes()
         {
-            IKpiManager kpiManager = ServiceLocator.Current.GetInstance<IKpiManager>();
+            IKpiManager kpiManager = _locator.GetInstance<IKpiManager>();
             List<KpiTypeModel> kpiData = new List<KpiTypeModel>();
 
             var KpiTypes = kpiManager.GetKpiTypes();

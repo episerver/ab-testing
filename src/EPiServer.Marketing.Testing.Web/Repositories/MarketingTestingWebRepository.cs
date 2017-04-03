@@ -14,6 +14,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -22,8 +23,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         private IServiceLocator _serviceLocator;
         private ITestResultHelper _testResultHelper;
+        private ITestManager _testManager;
         private ILogger _logger;
-
+        private IKpiManager _kpiManager;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -32,6 +34,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _serviceLocator = ServiceLocator.Current;
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
+            _testManager = _serviceLocator.GetInstance<ITestManager>();
+            _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _logger = LogManager.GetLogger();
         }
         /// <summary>
@@ -40,8 +44,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="locator"></param>
         internal MarketingTestingWebRepository(IServiceLocator locator, ILogger logger)
         {
-            _serviceLocator = locator;
-            _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
+            _testResultHelper = locator.GetInstance<ITestResultHelper>();
+            _testManager = locator.GetInstance<ITestManager>();
+            _kpiManager = locator.GetInstance<IKpiManager>();
             _logger = logger;
         }
 
@@ -52,8 +57,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <returns>the first marketing test found that is not archived or an empty test in the case of no results</returns>
         public IMarketingTest GetActiveTestForContent(Guid aContentGuid)
         {
-            var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var aTest = testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
+            var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
 
             if (aTest == null)
                 aTest = new ABTest();
@@ -61,26 +65,28 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return aTest;
         }
 
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
+        {
+            return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+        }
+
         public IMarketingTest GetTestById(Guid testGuid)
         {
-            var testManager = _serviceLocator.GetInstance<ITestManager>();
-            return testManager.Get(testGuid);
+            return _testManager.Get(testGuid);
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
-            var testManager = _serviceLocator.GetInstance<ITestManager>();
-            return testManager.GetTestList(criteria);
+            return _testManager.GetTestList(criteria);
         }
 
         public void DeleteTestForContent(Guid aContentGuid)
         {
-            var testManager = _serviceLocator.GetInstance<ITestManager>();
-            var testList = testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived);
+            var testList = _testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived);
 
             foreach (var test in testList)
             {
-                testManager.Delete(test.Id);
+                _testManager.Delete(test.Id);
             }
         }
 
@@ -91,11 +97,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <returns></returns>
         public Guid CreateMarketingTest(TestingStoreModel testData)
         {
-            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-
             IMarketingTest test = ConvertToMarketingTest(testData);
-
-            return tm.Save(test);
+            return _testManager.Save(test);
         }
 
         /// <summary>
@@ -104,8 +107,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="testGuid"></param>
         public void DeleteMarketingTest(Guid testGuid)
         {
-            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.Delete(testGuid);
+            _testManager.Delete(testGuid);
         }
 
         /// <summary>
@@ -114,8 +116,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="testGuid"></param>
         public void StartMarketingTest(Guid testGuid)
         {
-            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.Start(testGuid);
+            _testManager.Start(testGuid);
         }
 
         /// <summary>
@@ -124,8 +125,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="testGuid"></param>
         public void StopMarketingTest(Guid testGuid)
         {
-            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.Stop(testGuid);
+            _testManager.Stop(testGuid);
         }
 
         /// <summary>
@@ -133,15 +133,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// </summary>
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId)
         {
-            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.Archive(testObjectId, winningVariantId);
+            _testManager.Archive(testObjectId, winningVariantId);
         }
 
         public Guid SaveMarketingTest(IMarketingTest testData)
         {
-            ITestManager tm = _serviceLocator.GetInstance<ITestManager>();
-
-            return tm.Save(testData);
+            return _testManager.Save(testData);
         }
 
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
@@ -150,9 +147,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
-
-            var kpiManager = new KpiManager();
-            var kpi = kpiManager.Get(testData.KpiId);
+            
+            var kpi = _kpiManager.Get(testData.KpiId);
 
             var test = new ABTest
             {
@@ -216,7 +212,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     //get the appropriate variant and set IsWinner to True. Archive test to remove the lock on the content
                     var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
                     ArchiveMarketingTest(currentTest.Id, workingVariantId);
- 
+
                     var draftContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.DraftContentLink));
 
                     //publish draft content for history tracking.
@@ -239,6 +235,36 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 }
             }
             return testResult.TestId;
+        }
+
+        public Variant ReturnLandingPage(Guid testId)
+        {
+            return _testManager.ReturnLandingPage(testId);
+        }
+
+        public IContent GetVariantContent(Guid contentGuid)
+        {
+            return _testManager.GetVariantContent(contentGuid);
+        }
+        
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
+        {
+            _testManager.IncrementCount(testId, itemVersion, resultType, async);
+        }
+        
+        public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
+        {
+            _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type, async);
+        }
+
+        public List<IMarketingTest> GetActiveCachedTests()
+        {
+            return _testManager.ActiveCachedTests;
+        }
+
+        public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
+        {
+            return _testManager.EvaluateKPIs(kpis, sender, e);
         }
 
         private

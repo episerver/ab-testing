@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using EPiServer.Framework;
@@ -9,6 +10,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 
 namespace EPiServer.Marketing.KPI.Initializers
 {
+    [ExcludeFromCodeCoverage]
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class KpiLanguageProvider : IInitializableModule

@@ -3,210 +3,200 @@
   <language name="Italiano" id="it">
     <abtesting>
       <addtestcommand>
-        <label_text>A/B Test Changes</label_text>
-        <tooltip_text>A/B Test Changes</tooltip_text>
+        <label_text>A / B Test cambia</label_text>
+        <tooltip_text>A / B Test cambia</tooltip_text>
       </addtestcommand>
       <addtestview>
-        <advanced_options>Advanced Options</advanced_options>
-        <cancel_default>Cancel</cancel_default>
+        <advanced_options>Opzioni avanzate</advanced_options>
+        <cancel_default>Annulla</cancel_default>
         <challenger>B / Challenger</challenger>
-        <confidence_90>90%</confidence_90>
-        <confidence_95>95%</confidence_95>
-        <confidence_98>98%</confidence_98>
-        <confidence_99>99%</confidence_99>
-        <confidence_level_description>The confidence level dictates the amount of errors allowed. A higher percentage directly correlates to the accuracy of the test results. This denotes whether the difference measured between the control page and variant page is not by chance (i.e. significant).</confidence_level_description>
-        <confidence_level_header>Confidence level</confidence_level_header>
-        <control>A / Control</control>
-        <conversion_header>What's the conversion goal?</conversion_header>
-        <conversion_label>Visitor navigates to page</conversion_label>
-        <days_text> day(s).</days_text>
-        <default> (default)</default>
-        <draft_prefix>Draft - Edited by</draft_prefix>
-        <duration_header>For how long do you wish to run the A/B test?</duration_header>
-        <error_conversiongoal>You must select a conversion goal before you can save the A/B test.</error_conversiongoal>
-        <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
-        <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
-        <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
-        <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
-        <error_test_not_schedulded_or_started>not scheduled, resolve starting date/time errors in order to schedule a test</error_test_not_schedulded_or_started>
-        <goals_default_text>Ex. By tweaking the copy in the first bullet point to directly address the ‘time issue’, I can motivate more visitors to download the ebook.</goals_default_text>
-        <goals_header>What is the overall goal for this test?</goals_header>
-        <goals_selectlist_default>Select Goal</goals_selectlist_default>
-        <notscheduled_text>not scheduled, and will start now</notscheduled_text>
-        <participant_percentage_tip>A higher participation percentage reduces the time required to gather enough statistics to be able to pick a winner.</participant_percentage_tip>
-        <participation_header>What percentage of visitors should participate in this A/B test?</participation_header>
-        <published_prefix>Published by</published_prefix>
-        <schedule_header>When should the A/B test be started?</schedule_header>
-        <schedule_selector_delay>Schedule for later</schedule_selector_delay>
-        <schedule_selector_start>Start immediately</schedule_selector_start>
-        <schedule_test>Schedule Test</schedule_test>
-        <schedule_text_prefix>A/B test is currently </schedule_text_prefix>
-        <schedule_tobegin_on>scheduled to begin on </schedule_tobegin_on>
-        <start_default>Start Test</start_default>
-        <test_description>Validate if any new addition or change to content will actually improve the conversion rate.</test_description>
+        <confidence_90>90 %</confidence_90>
+        <confidence_95>95 %</confidence_95>
+        <confidence_98>98 %</confidence_98>
+        <confidence_99>99 %</confidence_99>
+        <confidence_level_description>Il livello di fiducia determina la quantità di errori consentiti. Una percentuale più elevata correla direttamente all'accuratezza dei risultati del test. Questo denota se la differenza misurata tra le pagine di controllo e variante non è casuale (cioè significativo).</confidence_level_description>
+        <confidence_level_header>Livello di confidenza</confidence_level_header>
+        <control>A / Controllo</control>
+        <conversion_header>Qual è l'obiettivo di conversione?</conversion_header>
+        <conversion_label>Visitatore accede alla pagina</conversion_label>
+        <days_text> giorno(i).</days_text>
+        <default> (predefinito)</default>
+        <draft_prefix>Bozza - A cura di</draft_prefix>
+        <duration_header>Per quanto tempo si desidera eseguire l'A / B test?</duration_header>
+        <error_conversiongoal>È necessario selezionare un prodotto prima di poter salvare la A / B test.</error_conversiongoal>
+        <error_date_in_the_past>La data/ora di inizio del test non può essere antecedente.</error_date_in_the_past>
+        <error_duration>La durata deve essere un numero intero valido compreso tra 1 e 365</error_duration>
+        <error_invalid_date_time_value>Le informazioni immesse non sono un valore di data/ora valido</error_invalid_date_time_value>
+        <error_participation_percentage>Percentuale di partecipazione deve essere compreso tra 1 e 100</error_participation_percentage>
+        <error_test_not_schedulded_or_started>non pianificato, risolvere gli errori di data/ora di inizio al fine di programmare un test</error_test_not_schedulded_or_started>
+        <goals_default_text>Ex. Modificando la copia del primo punto di affrontare direttamente la 'questione di tempo', io posso motivare più ai visitatori di scaricare l'ebook.</goals_default_text>
+        <goals_header>Qual è l'obiettivo generale per questo test?</goals_header>
+        <goals_selectlist_default>Seleziona obiettivo</goals_selectlist_default>
+        <notscheduled_text>non programmato e inizierà ora</notscheduled_text>
+        <participant_percentage_tip>Una percentuale di partecipazione più elevata riduce il tempo necessario per raccogliere dati statistici sufficienti per essere in grado di scegliere un vincitore.</participant_percentage_tip>
+        <participation_header>Qual è la percentuale di visitatori che dovrebbe partecipare a questo A / B test?</participation_header>
+        <published_prefix>Pubblicato da</published_prefix>
+        <schedule_header>Quando dovrebbe iniziare l'A / B test?</schedule_header>
+        <schedule_selector_delay>Programmato per più tardi</schedule_selector_delay>
+        <schedule_selector_start>Avviare immediatamente</schedule_selector_start>
+        <schedule_test>Programmare test</schedule_test>
+        <schedule_text_prefix>A / B test è attualmente </schedule_text_prefix>
+        <schedule_tobegin_on>programmato per iniziare il </schedule_tobegin_on>
+        <start_default>Avvia Test</start_default>
+        <test_description>Convalida se qualsiasi nuova aggiunta o modifica contenuto effettivamente migliorerà il tasso di conversione.</test_description>
       </addtestview>
       <admin>
         <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
-        <cancel>Cancel</cancel>
-        <confidencelevel>Confidence Level:</confidencelevel>
-        <description>These settings are the defaults values used for when creating AB tests.</description>
-        <displayname>AB Testing Configuration</displayname>
-        <durationerror>Must be between 1 and 365.</durationerror>
-        <invalid>One or more values are not of the correct format.</invalid>
-        <participationerror>Must be between 1 and 100.</participationerror>
-        <participationpercent>Participation Percent:</participationpercent>
-        <save>Save</save>
-        <success>Configuration settings saved successfully.</success>
-        <testduration>Test Duration:</testduration>
+        <cancel>Annulla</cancel>
+        <confidencelevel>Livello di fiducia:</confidencelevel>
+        <description>Queste impostazioni sono i valori predefiniti utilizzati per la creazione dei test AB.</description>
+        <displayname>Configurazione test AB</displayname>
+        <durationerror>Deve essere compreso tra 1 e 365.</durationerror>
+        <invalid>Uno o più valori non sono nel formato corretto.</invalid>
+        <participationerror>Deve essere compreso tra 1 e 100.</participationerror>
+        <participationpercent>Percentuale di partecipazione:</participationpercent>
+        <save>Salva</save>
+        <success>Impostazioni di configurazione salvate correttamente.</success>
+        <testduration>Durata del test:</testduration>
       </admin>
       <archiveview>
-        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
-        <advanced_options_header>Advanced Options</advanced_options_header>
-        <button_close>Close</button_close>
-        <by> by </by>
+        <advanced_options_confidence_level>Livello di fiducia:</advanced_options_confidence_level>
+        <advanced_options_header>Opzioni avanzate</advanced_options_header>
+        <button_close>Chiudi</button_close>
+        <by> da </by>
         <content_challenger_header>B / Challenger</content_challenger_header>
-        <content_challenger_header_picked>B / Challenger - Picked to publish.</content_challenger_header_picked>
-        <content_chosen>, and content has been chosen to publish</content_chosen>
-        <content_control_header>A / Control</content_control_header>
-        <content_control_header_picked>A / Control - Picked to publish.</content_control_header_picked>
-        <content_selected>This version was picked as the winner</content_selected>
-        <conversions>conversions</conversions>
-        <conversion_header>Conversion goal</conversion_header>
-        <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> day(s), </days_divider>
-        <description_heading>Overall goal for this test</description_heading>
-        <draft_prefix>Draft - Edited by</draft_prefix>
-        <from>from</from>
-        <goal_not_specified>A goal has not been specified.</goal_not_specified>
-        <losing_version_label>Saved in Versions</losing_version_label>
-        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
-        <published_prefix>Published by</published_prefix>
-        <remaining_increment>Days</remaining_increment>
-        <started> Started </started>
-        <test_duration_header>Duration of the A/B test</test_duration_header>
-        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
-        <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>This test was completed</test_status_completed>
-        <to>to</to>
-        <total_participants_details>Current number of test participants:</total_participants_details>
-        <views>views</views>
-        <view_challenger_content>View challenger content</view_challenger_content>
-        <view_control_content>View control content</view_control_content>
-        <winning_verion_label>Winner (published)</winning_verion_label>
-        <winning_version_label>Winner (published)</winning_version_label>
+        <content_chosen>, e il contenuto è stato selezionato da pubblicare</content_chosen>
+        <content_control_header>A / Controllo</content_control_header>
+        <content_selected>Questa versione è stato scelto come il vincitore</content_selected>
+        <conversion_header>Obiettivo di conversione</conversion_header>
+        <conversion_rate>tasso di conversione</conversion_rate>
+        <conversion_selector_description>Visitatore accede alla pagina</conversion_selector_description>
+        <conversions>conversioni</conversions>
+        <days_divider> giorno(i), </days_divider>
+        <description_heading>Qual è l'obiettivo generale per questo test?</description_heading>
+        <draft_prefix>Bozza - A cura di</draft_prefix>
+        <from>da</from>
+        <goal_not_specified>Un obiettivo non è stato specificato.</goal_not_specified>
+        <losing_version_label>Salvati nelle versioni</losing_version_label>
+        <percent_participation_header>Percentuale di visitatori che partecipano a questo A / B test</percent_participation_header>
+        <published_prefix>Pubblicato da</published_prefix>
+        <remaining_increment>Giorni</remaining_increment>
+        <started> Iniziato </started>
+        <test_duration_header>Durata dell'A / B test</test_duration_header>
+        <test_percent_to_participations_divider> / Attuale numero di partecipanti è </test_percent_to_participations_divider>
+        <test_scheduled>È programmato per iniziare il </test_scheduled>
+        <test_status_completed>Questo test è stato completato</test_status_completed>
+        <to>a</to>
+        <total_participants_details>Attuale numero di partecipanti:</total_participants_details>
+        <view_challenger_content>Schermata contenuto challenger</view_challenger_content>
+        <view_control_content>Schermata contenuto controllo</view_control_content>
+        <views>schermate</views>
+        <winning_version_label>Vincitore (pubblicato)</winning_version_label>
       </archiveview>
       <canceltestcommand>
         <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
-        <label_text>Cancel A/B test and edit page</label_text>
-        <tooltip_text>Cancel A/B test and edit page</tooltip_text>
+        <label_text>Annulla A / B test e modifica pagina</label_text>
+        <tooltip_text>Annulla A / B test e modifica pagina</tooltip_text>
       </canceltestcommand>
       <detailsview>
         <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
-        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
-        <advanced_options_header>Advanced Options</advanced_options_header>
-        <button_abort_option>Abort A/B Test</button_abort_option>
-        <button_close>Close</button_close>
-        <button_options>Options</button_options>
-        <button_pick_winner_option>Pick The Winner</button_pick_winner_option>
-        <by> by </by>
+        <advanced_options_confidence_level>Livello di fiducia:</advanced_options_confidence_level>
+        <advanced_options_header>Opzioni avanzate</advanced_options_header>
+        <button_abort_option>Interrompi A / B Test</button_abort_option>
+        <button_close>Chiudi</button_close>
+        <button_options>Opzioni</button_options>
+        <button_pick_winner_option>Scegli il vincitore</button_pick_winner_option>
+        <by> da </by>
         <content_challenger_header>B / Challenger</content_challenger_header>
-        <content_control_header>A / Control</content_control_header>
-        <content_winning_tooltip>This version is performing better</content_winning_tooltip>
-        <conversions>conversions</conversions>
-        <conversion_header>Conversion goal</conversion_header>
-        <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> day(s) / </days_divider>
-        <days_remaining>day(s) remaining.</days_remaining>
-        <description_heading>Overall goal for this test</description_heading>
-        <draft_prefix>Draft - Edited by</draft_prefix>
-        <goal_not_specified>A goal has not been specified.</goal_not_specified>
-        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
-        <published_prefix>Published by</published_prefix>
-        <remaining_increment>Days</remaining_increment>
-        <started> Started </started>
-        <test_duration_completed>Completed after full duration</test_duration_completed>
-        <test_duration_header>Duration of the A/B test</test_duration_header>
-        <test_not_started_text>This test has not yet started.</test_not_started_text>
-        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
-        <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test completed, now go on and pick a winner...</test_status_completed>
-        <test_status_not_started>Test has not yet started. </test_status_not_started>
-        <test_status_running>Test is running, </test_status_running>
-        <total_participants_details>Current number of test participants:</total_participants_details>
-        <views>views</views>
-        <view_challenger_content>View challenger content</view_challenger_content>
-        <view_control_content>View control content</view_control_content>
+        <content_control_header>A / Controllo</content_control_header>
+        <content_winning_tooltip>Questa versione ha prestazioni migliori</content_winning_tooltip>
+        <conversion_rate>tasso di conversione</conversion_rate>
+        <conversions>conversioni</conversions>
+        <days_divider> giorno(i) / </days_divider>
+        <days_remaining>giorno(i) restante(i).</days_remaining>
+        <description_heading>Qual è l'obiettivo generale per questo test?</description_heading>
+        <draft_prefix>Bozza - A cura di</draft_prefix>
+        <goal_not_specified>Un obiettivo non è stato specificato.</goal_not_specified>
+        <percent_participation_header>Percentuale di visitatori che partecipano a questo A / B test</percent_participation_header>
+        <published_prefix>Pubblicato da</published_prefix>
+        <remaining_increment>Giorni</remaining_increment>
+        <started> Iniziato </started>
+        <test_duration_completed>Completato dopo durata completa</test_duration_completed>
+        <test_duration_header>Durata dell'A / B test</test_duration_header>
+        <test_not_started_text>Questo test non è ancora iniziato.</test_not_started_text>
+        <test_percent_to_participations_divider> / Attuale numero di partecipanti è </test_percent_to_participations_divider>
+        <test_scheduled>È programmato per iniziare il </test_scheduled>
+        <test_status_completed>Test completato, ora scegli un vincitore...</test_status_completed>
+        <test_status_not_started>Questo test non è ancora iniziato. </test_status_not_started>
+        <test_status_running>Test in corso, </test_status_running>
+        <total_participants_details>Attuale numero di partecipanti:</total_participants_details>
+        <view_challenger_content>Schermata contenuto challenger</view_challenger_content>
+        <view_control_content>Schermata contenuto controllo</view_control_content>
+        <views>schermate</views>
       </detailsview>
       <notificationbar>
-        <completed_test>An A/B test was completed on a version of this content. </completed_test>
-        <details_link_text>View test</details_link_text>
-        <details_link_tooltip>View test details</details_link_tooltip>
-        <ongoing_test>A version of this content is part of an on-going A/B test. </ongoing_test>
-        <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
-        <winner_link_text>Pick winner</winner_link_text>
-        <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
+        <completed_test>Un A / B test è stato completato su una versione di questo contenuto. </completed_test>
+        <details_link_text>Schermata test</details_link_text>
+        <details_link_tooltip>Schermata dettagli del test</details_link_tooltip>
+        <ongoing_test>Una versione di questo contenuto è parte del A / B test in corso. </ongoing_test>
+        <scheduled_test>Un A / B test è programmato per essere eseguito su una versione di questo contenuto </scheduled_test>
+        <winner_link_text>Scegli il vincitore</winner_link_text>
+        <winner_link_tooltip>Mostra i dettagli del test e scegli il vincitore </winner_link_tooltip>
       </notificationbar>
       <pickwinnerview>
-        <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
-        <advanced_options_header>Advanced Options</advanced_options_header>
-        <button_close>Close</button_close>
-        <by> by </by>
+        <advanced_options_confidence_level>Livello di fiducia:</advanced_options_confidence_level>
+        <advanced_options_header>Opzioni avanzate</advanced_options_header>
+        <button_close>Chiudi</button_close>
+        <by> da </by>
         <content_challenger_header>B / Challenger</content_challenger_header>
-        <content_control_header>A / Control</content_control_header>
-        <content_winning_tooltip>This version is performing better</content_winning_tooltip>
-        <conversions>conversions</conversions>
-        <conversion_header>Conversion goal</conversion_header>
-        <conversion_rate>conversion rate</conversion_rate>
-        <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
-        <days_divider> day(s) / </days_divider>
-        <days_remaining>day(s) remaining.</days_remaining>
-        <description_heading>Test goal</description_heading>
-        <draft_prefix>Draft - Edited by</draft_prefix>
+        <content_control_header>A / Controllo</content_control_header>
+        <content_winning_tooltip>Questa versione ha prestazioni migliori</content_winning_tooltip>
+        <conversion_header>Obiettivo di conversione</conversion_header>
+        <conversion_rate>tasso di conversione</conversion_rate>
+        <conversion_selector_description>Visitatore accede alla pagina</conversion_selector_description>
+        <conversions>conversioni</conversions>
+        <days_divider> giorno(i) / </days_divider>
+        <days_remaining>giorno(i) restante(i).</days_remaining>
+        <description_heading>Obiettivo del test</description_heading>
+        <draft_prefix>Bozza - A cura di</draft_prefix>
         <early_pick_winner_message>
-          This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the chosen content.
+          Questo test non è stato completato, ma si può scegliere un vincitore. La scelta di un vincitore farà terminare il test e pubblicare il contenuto scelto.
         </early_pick_winner_message>
-        <goal_not_specified>A goal has not been specified.</goal_not_specified>
-        <percent_participation_header>Percentage of visitors participating in this A/B test</percent_participation_header>
-        <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
-        <pick_winner_option_text>Pick a winner</pick_winner_option_text>
-        <published_prefix>Published by</published_prefix>
-        <remaining_increment>Days</remaining_increment>
-        <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
-        <started> Started </started>
-        <test_duration_completed>Completed after full duration</test_duration_completed>
-        <test_duration_header>Test duration</test_duration_header>
-        <test_not_started_text>This test has not yet started.</test_not_started_text>
-        <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
-        <test_scheduled>It is scheduled to begin </test_scheduled>
-        <test_status_completed>Test complete. Pick a winner.</test_status_completed>
-        <test_status_not_started>Test has not yet started. </test_status_not_started>
-        <test_status_running>Test is running, </test_status_running>
-        <total_participants_details>Number of participants</total_participants_details>
-        <views>views</views>
+        <goal_not_specified>Un obiettivo non è stato specificato.</goal_not_specified>
+        <percent_participation_header>Percentuale di visitatori che partecipano a questo A / B test</percent_participation_header>
+        <pick_a_winner_text>Scegli un vincitore!</pick_a_winner_text>
+        <pick_winner_option_text>Scegli un vincitore</pick_winner_option_text>
+        <published_prefix>Pubblicato da</published_prefix>
+        <remaining_increment>Giorni</remaining_increment>
+        <result_is_not_significant>I risultati di questo test NON sono significativi.</result_is_not_significant>
+        <started> Iniziato </started>
+        <test_duration_completed>Completato dopo durata completa</test_duration_completed>
+        <test_duration_header>Durata del test</test_duration_header>
+        <test_not_started_text>Questo test non è ancora iniziato.</test_not_started_text>
+        <test_percent_to_participations_divider> / Attuale numero di partecipanti è </test_percent_to_participations_divider>
+        <test_scheduled>È programmato per iniziare il </test_scheduled>
+        <test_status_completed>Test completato. Scegli un vincitore.</test_status_completed>
+        <test_status_not_started>Questo test non è ancora iniziato. </test_status_not_started>
+        <test_status_running>Test in corso, </test_status_running>
+        <total_participants_details>Numero di partecipanti</total_participants_details>
+        <views>schermate</views>
       </pickwinnerview>
       <publishing>
-        <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
-        <error_cannot_schedule_publish>You cannot schedule content to be published while it is being tested. To schedule your content to be published, choose a winner or cancel the current test.</error_cannot_schedule_publish>
+        <error_cannot_publish>Non è possibile pubblicare il contenuto mentre è in fase di test. Per pubblicare i tuoi contenuti, scegliere un vincitore o annullare il test corrente.</error_cannot_publish>
+        <error_cannot_schedule_publish>Non è possibile pianificare contenuti da pubblicare mentre è in fase di test. Per pubblicare i tuoi contenuti, scegliere un vincitore o annullare il test corrente.</error_cannot_schedule_publish>
       </publishing>
       <scheduler_plugin>
-        <description>Scans the list of pending or active Marketing tests and changes the test state based on the Start Date and End Date for the test.</description>
-        <displayname>Marketing Test Monitor</displayname>
-        <message>Started [{0}] Stopped [{1}] Active [{2}] Inactive [{3}] Completed [{4}]</message>
+        <description>Analizza l'elenco in sospeso o attivo di test di Marketing e le modifiche dello stato del test basato sulla data inizio e data di fine per il test.</description>
+        <displayname>Monitor test di marketing</displayname>
+        <message>Iniziato [{0}] arrestato [{1}] attivo [{2}] inattivo [{3}] completato [{4}]</message>
       </scheduler_plugin>
       <tasks>
-        <activetests>Active Tests</activetests>
-        <archivedtests>Archived Tests</archivedtests>
+        <activetests>A / B test attivo</activetests>
+        <archivedtests>A / B test archiviato</archivedtests>
         <category>A/B Tests</category>
-        <completedtests>Completed Tests</completedtests>
-        <inactivetests>Scheduled Tests</inactivetests>
+        <completedtests>A / B test completato</completedtests>
+        <inactivetests>A / B test programmato</inactivetests>
       </tasks>
     </abtesting>
-    <kpi>
-      <content_comparator_kpi>
-        <error_selected_samepage>ERROR SAME PAGE</error_selected_samepage>
-      </content_comparator_kpi>
-    </kpi>
   </language>
 </languages>

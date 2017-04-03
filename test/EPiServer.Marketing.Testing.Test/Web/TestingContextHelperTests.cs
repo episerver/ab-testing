@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -47,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Mock<IContent> testConversionContent = new Mock<IContent>();
             testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
             testConversionContent.Setup(call => call.Name).Returns("Conversion Content");
-
+            
             _mockServiceLocator = new Mock<IServiceLocator>();
             _mockContentRepository = new Mock<IContentRepository>();
             _mockKpiManager = new Mock<IKpiManager>();
@@ -59,7 +60,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContentVersionRepository = new Mock<IContentVersionRepository>();
             _mockContentVersionRepository.Setup(
                call => call.Load(It.IsAny<ContentReference>()))
-               .Returns(new ContentVersion(new ContentReference(10, 100), String.Empty, VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
 
             _mockUIHelper = new Mock<IUIHelper>();
             _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
@@ -233,6 +234,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(testResult.PublishedVersionPublishedBy == "me");
             Assert.True(testResult.DaysRemaining == "0");
             Assert.True(testResult.DaysElapsed == "5");
+            Assert.True(testResult.DraftVersionChangedBy == "me");
+            Assert.NotNull(testResult.DraftVersionChangedDate);
+            Assert.True(testResult.DraftVersionChangedBy == "me");
+            Assert.True(testResult.KpiResultType == "KpiConversionResult");
+            Assert.NotNull(testResult.LatestVersionContentLink);
+            Assert.NotNull(testResult.PublishedVersionPublishedDate);
+            Assert.True(testResult.UserHasPublishRights);
+            Assert.Equal(testResult.VisitorPercentage, "30");
         }
 
         [Fact]

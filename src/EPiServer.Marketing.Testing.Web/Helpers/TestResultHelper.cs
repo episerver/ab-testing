@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using EPiServer.Core;
-using EPiServer.DataAccess;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Initializers;
 using EPiServer.Security;
@@ -11,7 +7,7 @@ using EPiServer.Security;
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     [ServiceConfiguration(ServiceType = typeof(ITestResultHelper), Lifecycle = ServiceInstanceScope.Singleton)]
-
+    [ExcludeFromCodeCoverage]
     public class TestResultHelper : ITestResultHelper
     {
         private IServiceLocator _serviceLocator;

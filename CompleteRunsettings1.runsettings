@@ -50,6 +50,7 @@ Included items must then not match any entries in the exclude list to remain inc
               <Exclude>
                 <!--removes xunit dlls from coverage results-->
                 <ModulePath>.*xunit.*</ModulePath>
+				<ModulePath>.*structuremap.*</ModulePath>
               </Exclude>
             </ModulePaths>
 

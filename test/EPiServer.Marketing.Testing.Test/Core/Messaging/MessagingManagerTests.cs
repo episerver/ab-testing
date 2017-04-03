@@ -10,7 +10,7 @@ using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Core.Messaging
 {
-        public class MessagingManagerTests
+    public class MessagingManagerTests
     {
         private static Mock<IServiceLocator> _serviceLocator;
         private static Mock<IMarketingTestingWebRepository> _testRepository;
@@ -23,7 +23,8 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
                 _serviceLocator = new Mock<IServiceLocator>();
                 _testRepository = new Mock<IMarketingTestingWebRepository>();
                 _messageHandler = new Mock<ITestingMessageHandler>();
-                _serviceLocator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_testRepository.Object);
+                _serviceLocator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>())
+                    .Returns(_testRepository.Object);
             }
 
             return new MessagingManager(_serviceLocator.Object, _messageHandler.Object);
@@ -47,7 +48,8 @@ namespace EPiServer.Marketing.Testing.Test.Core.Messaging
             messageManager.EmitUpdateConversion(Guid.Empty, 1);
             Thread.Sleep(1000);
             _messageHandler.Verify(mh => mh.Handle(It.IsAny<UpdateConversionsMessage>()),
-                Times.AtLeastOnce, "MessageManager did not emit message or did not call handle for UpdateConversionsMessage");
+                Times.AtLeastOnce,
+                "MessageManager did not emit message or did not call handle for UpdateConversionsMessage");
         }
 
         [Fact]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
 using EPiServer.Marketing.KPI.Manager;
@@ -8,6 +9,7 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.KPI.SchemaUpdater
 {
+    [ExcludeFromCodeCoverage]
     [ServiceConfiguration(typeof(IDatabaseSchemaUpdater))]
     public class DatabaseVersionValidator : IDatabaseSchemaUpdater
     {

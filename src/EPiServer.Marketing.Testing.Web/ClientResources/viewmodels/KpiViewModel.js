@@ -37,10 +37,15 @@
                     entity: caller.kpiFormData
                 })
                     .then(function (ret) {
-                        caller.createTest(ret);
+                        if (ret.status == true) {
+                            caller.createTest(ret.obj);
+                        } else 
+                        {
+                            caller.setKpiError(ret.message)
+                        }
                     })
                     .otherwise(function (ret) {
-                        caller.setKpiError(ret);
+                        caller.setKpiError(ret.response.xhr.statusText);
                     });
             },
         });

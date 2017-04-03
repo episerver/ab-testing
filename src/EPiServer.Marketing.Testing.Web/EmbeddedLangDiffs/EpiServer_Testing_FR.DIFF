@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<languages>
+  <language name="français" id="fr">
+    <abtesting>
+      <addtestview>
+        <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
+      </addtestview>
+      <admin>
+        <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+      </admin>
+      <archiveview>
+        <content_challenger_header path="/abtesting/archiveview/content_challenger_header/">B / Challenger</content_challenger_header>
+        <conversions path="/abtesting/archiveview/conversions/">conversions</conversions>
+      </archiveview>
+      <canceltestcommand>
+        <abort_confirmation_message path="/abtesting/canceltestcommand/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
+      </canceltestcommand>
+      <detailsview>
+        <abort_confirmation_message path="/abtesting/detailsview/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
+        <button_options path="/abtesting/detailsview/button_options/">Options</button_options>
+        <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
+        <conversions path="/abtesting/detailsview/conversions/">conversions</conversions>
+      </detailsview>
+      <pickwinnerview>
+        <content_challenger_header path="/abtesting/pickwinnerview/content_challenger_header/">B / Challenger</content_challenger_header>
+        <conversions path="/abtesting/pickwinnerview/conversions/">conversions</conversions>
+      </pickwinnerview>
+      <tasks>
+        <category path="/abtesting/tasks/category/">A/B Tests</category>
+      </tasks>
+    </abtesting>
+  </language>
+</languages>
