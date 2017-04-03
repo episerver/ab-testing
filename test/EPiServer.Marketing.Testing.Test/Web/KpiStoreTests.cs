@@ -59,9 +59,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testClass = GetUnitUnderTest();
 
-            var retResult = testClass.Put("", "") as RestStatusCodeResult;
+            var retResult = testClass.Put("", "") as RestResult;
+            var response = retResult.Data as Response;
 
-            Assert.Equal((int)HttpStatusCode.InternalServerError, retResult.StatusCode);
+            Assert.False(response.status, "expected false because arguments are empty");
         }
 
         [Fact]
@@ -71,9 +72,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var entity =
                 "{\"kpiType\": \"EPiServer.Marketing.KPI.Common.ContentComparatorKPI, EPiServer.Marketing.KPI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\",\"ConversionPage\": \"16\",\"CurrentContent\": \"6_197\"}";
-            var retResult = testClass.Put("", entity) as RestStatusCodeResult;
+            var retResult = testClass.Put("", entity) as RestResult;
+            var response = retResult.Data as Response;
 
-            Assert.Equal((int)HttpStatusCode.InternalServerError, retResult.StatusCode);
+            Assert.False(response.status, "expected false because no content id specified");
         }
     }
 }
