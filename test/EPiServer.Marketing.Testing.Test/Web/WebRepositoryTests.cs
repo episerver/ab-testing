@@ -356,7 +356,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 StartDate = startDate.ToString(),
                 TestDuration = 30,
                 ParticipationPercent = 100,
-                KpiId = "",
+                KpiId = "{\"c3d26baa-dac6-4b2c-8b45-d5a05a3337d9\": 2,\"d4873545-2482-459c-b354-b6f6d5939697\": 2}",
                 TestTitle = "Test Title",
                 Start = false,
                 ConfidenceLevel = 95,
