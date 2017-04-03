@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Web.Mvc;
 using EPiServer.Framework.Localization;
 using EPiServer.Logging;
+using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -9,6 +14,7 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -26,6 +32,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _kpiWebRepoMock = new Mock<IKpiWebRepository>();
             _kpiWebRepoMock.Setup(call => call.GetKpiTypes()).Returns(new List<KpiTypeModel>() { new KpiTypeModel()});
+            
             _locator.Setup(s1 => s1.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
             
             var testStore = new KpiStore(_locator.Object);
@@ -63,6 +70,40 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var retResult = testClass.Put("", entity) as RestStatusCodeResult;
 
             Assert.Equal((int)HttpStatusCode.InternalServerError, retResult.StatusCode);
+        }
+
+        [Fact]
+        public void Put_Returns_Correct_Weight_For_Each_Kpi()
+        {
+            var testClass = GetUnitUnderTest();
+
+            var dict = new Dictionary<string, string>();
+            dict.Add("Timeout", "10");
+            dict.Add("kpiType", "EPiServer.Marketing.KPI.Common.StickySiteKpi, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            dict.Add("widgetID", "KpiWidget_0");
+            dict.Add("Weight", "Low");  // equates to weight of 1
+            dict.Add("CurrentContent", "9_198");
+
+            var dict2 = new Dictionary<string, string>();
+            dict2.Add("TargetDuration", "5");
+            dict2.Add("kpiType", "EPiServer.Marketing.KPI.Common.TimeOnPageClientKpi, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            dict2.Add("widgetID", "KpiWidget_1");
+            dict2.Add("Weight", "Medium");  // equates to weight of 2
+            dict2.Add("CurrentContent", "9_198");
+
+            var kpis = new List<Dictionary<string, string>>();
+            kpis.Add(dict);
+            kpis.Add(dict2);
+
+            _kpiWebRepoMock.Setup(call => call.DeserializeJsonKpiFormCollection(It.IsAny<string>())).Returns(kpis);
+            var sticky = new Mock<StickySiteKpi>();
+            _kpiWebRepoMock.Setup(call => call.ActivateKpiInstance(It.IsAny<Dictionary<string, string>>())).Returns(sticky.Object);
+
+            var retResult = testClass.Put("KpiFormData", "") as RestResult;
+            var kpiWeightDict = (Dictionary<Guid, double>) retResult.Data;
+
+            Assert.Equal(1, kpiWeightDict.Count(pair => pair.Value == 1));
+            Assert.Equal(1, kpiWeightDict.Count(pair => pair.Value == 2));
         }
     }
 }

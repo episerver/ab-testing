@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Testing.Web.Models
 
         public int ParticipationPercent { get; set; }
 
-        public IList<Guid> KpiId { get; set; }
+        public string KpiId { get; set; }
 
         public string TestTitle { get; set; }
 
