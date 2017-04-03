@@ -585,7 +585,6 @@
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
 
-
                     var kpiWidgetInstance = new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
