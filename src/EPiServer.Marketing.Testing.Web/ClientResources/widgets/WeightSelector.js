@@ -6,7 +6,7 @@
     "dojo/text!./templates/WeightSelector.html",
     "dojo/dom-class",
     "dojo/on",
-    'xstyle/css!marketing-testing/css/WeightSelector.css',
+    "xstyle/css!marketing-testing/css/WeightSelector.css"
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, domClass, on) {
     return declare("WeightSelector", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
@@ -41,8 +41,7 @@
         _importanceSelected: function (evt) {
             var weight = this.value;
             if (evt && !this.disabled) {
-                  weight = evt.currentTarget.id;
-                
+                  weight = evt.currentTarget.id;                
             }
 
             if (weight) {
