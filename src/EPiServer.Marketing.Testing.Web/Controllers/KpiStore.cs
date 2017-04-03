@@ -71,13 +71,31 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 if (kpiData.Count > 0)
                 {
+                    var resultset = new Dictionary<Guid, double>();
                     foreach (var data in kpiData)
                     {
+                        var kpiId = Guid.NewGuid();
                         IKpi kpiInstance = _kpiRepo.ActivateKpiInstance(data);
+                        kpiInstance.Id = kpiId;
+
                         try
                         {
                             kpiInstance.Validate(data);
                             validKpiInstances.Add(kpiInstance);
+
+                            switch (data.First(key => key.Key == "Weight").Value.ToLower())
+                            {
+                                case "low":
+                                    resultset.Add(kpiId, 1);
+                                    break;
+                                case "medium":
+                                    resultset.Add(kpiId, 2);
+                                    break;
+                                case "high":
+                                    resultset.Add(kpiId, 3);
+                                    break;
+                            }
+
                         }
                         catch (KpiValidationException ex)
                         {
@@ -93,7 +111,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     }
                     else
                     {
-                        result = Rest(_kpiRepo.SaveKpis(validKpiInstances));
+                        //var resultset = new Dictionary<Guid, double>();
+                        var savedKpis = _kpiRepo.SaveKpis(validKpiInstances);
+                        //foreach(Guid kpiid in savedKpis)
+                        //{
+                        //    resultset.Add(kpiid, 2);
+                        //}
+
+                        result = Rest(resultset);
                     }
                 }
                 else
