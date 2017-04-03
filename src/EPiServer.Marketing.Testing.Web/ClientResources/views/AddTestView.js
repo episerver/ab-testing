@@ -694,6 +694,20 @@ define([
                         this._setKpiSelectList(this.kpiModel.availableKpis);
                     }
                 }
+            },
+
+            _showAdvancedOptions(evt) {
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (dojo.style(advancedOptionsElement, "display") == "none") {
+                    dojo.style(advancedOptionsElement, "display", "initial");
+                    advancedOptionsElement.scrollIntoView(true);
+                }
+                else {
+                    dojo.style(advancedOptionsElement, "display", "none");
+                    if (!evt.srcElement.id) {
+                        this.advancedOptions.reset();
+                    }
+                }
             }
         });
     });
