@@ -3,6 +3,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -366,6 +367,34 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var test = webRepo.ConvertToMarketingTest(testResultModel);
 
             Assert.Equal(startDate.AddDays(30).Day, test.EndDate.Day);
+        }
+
+        [Fact]
+        public void ConvertToMarketingTest_Converts_Test_With_Multiple_Kpis_With_Different_Weights()
+        {
+            var webRepo = GetUnitUnderTest();
+            var startDate = DateTime.Now;
+
+            var testResultModel = new TestingStoreModel()
+            {
+                TestContentId = Guid.NewGuid(),
+                TestDescription = "Description",
+                PublishedVersion = 1,
+                VariantVersion = 2,
+                StartDate = startDate.ToString(),
+                TestDuration = 30,
+                ParticipationPercent = 100,
+                KpiId = "{\"c3d26baa-dac6-4b2c-8b45-d5a05a3337d9\": 1,\"d4873545-2482-459c-b354-b6f6d5939697\": 2}",
+                TestTitle = "Test Title",
+                Start = false,
+                ConfidenceLevel = 95,
+                AutoPublishWinner = false
+            };
+
+            var test = webRepo.ConvertToMarketingTest(testResultModel);
+
+            Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .33 && w.Weight < .34));
+            Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .66 && w.Weight < .68));
         }
     }
 }
