@@ -14,6 +14,8 @@
 
         value: null,
 
+        disabled: false,
+
         _setValueAttr(value) {
             this.value = value;
             this._init();
@@ -38,39 +40,33 @@
 
         _importanceSelected: function (evt) {
             var weight = this.value;
-            if (evt) {
-                weight = evt.srcElement.value;
+            if (evt && !this.disabled) {
+                weight = evt.currentTarget.id;
+
             }
 
             if (weight) {
-                this._resetCheckedState();
                 if (this.value != weight) {
                     this._setValueAttr(weight);
                 }
                 switch (weight) {
                     case "Low":
-                        this.importanceLow.checked = true;
+                        domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low-selected");
                         domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
                         domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
                         break;
                     case "Medium":
-                        this.importanceMedium.checked = true;
                         domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
+                        domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-medium-selected");
                         domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
                         break;
                     case "High":
-                        this.importanceHigh.checked = true;
                         domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
                         domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-medium");
+                        domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-high-selected");
                         break;
                 }
             }
         },
-
-        _resetCheckedState: function () {
-            this.importanceLow.checked = false;
-            this.importanceMedium.checked = false;
-            this.importanceHigh.checked = false;
-        }
     });
 });
