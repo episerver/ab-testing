@@ -71,11 +71,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 if (kpiData.Count > 0)
                 {
-                    var resultset = new Dictionary<Guid, double>();
+                    var kpiWeights = new Dictionary<Guid, double>();
                     foreach (var data in kpiData)
                     {
                         var kpiId = Guid.NewGuid();
                         IKpi kpiInstance = _kpiRepo.ActivateKpiInstance(data);
+
+                        // need to assign the kpi an id so we can associate its weight correctly
                         kpiInstance.Id = kpiId;
 
                         try
@@ -83,19 +85,20 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                             kpiInstance.Validate(data);
                             validKpiInstances.Add(kpiInstance);
 
+                            // if we go to more than 3 weights in the UI, this needs to be updated as well
                             switch (data.First(key => key.Key == "Weight").Value.ToLower())
                             {
                                 case "low":
-                                    resultset.Add(kpiId, 1);
-                                    break;
-                                case "medium":
-                                    resultset.Add(kpiId, 2);
+                                    kpiWeights.Add(kpiId, 1);
                                     break;
                                 case "high":
-                                    resultset.Add(kpiId, 3);
+                                    kpiWeights.Add(kpiId, 3);
+                                    break;
+                                case "medium":
+                                default:
+                                    kpiWeights.Add(kpiId, 2);
                                     break;
                             }
-
                         }
                         catch (KpiValidationException ex)
                         {
@@ -111,14 +114,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     }
                     else
                     {
-                        //var resultset = new Dictionary<Guid, double>();
-                        var savedKpis = _kpiRepo.SaveKpis(validKpiInstances);
-                        //foreach(Guid kpiid in savedKpis)
-                        //{
-                        //    resultset.Add(kpiid, 2);
-                        //}
+                        _kpiRepo.SaveKpis(validKpiInstances);
 
-                        result = Rest(resultset);
+                        result = Rest(kpiWeights);
                     }
                 }
                 else
