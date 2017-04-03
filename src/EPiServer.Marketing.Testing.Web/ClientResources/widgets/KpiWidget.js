@@ -51,7 +51,6 @@
             var linkedWidget = dijit.byId(this.linkedWidgetId);
             linkedWidget.destroy();
             widget.destroy();
-            document.dispatchEvent(destroyedEvent);
         },
 
         _getCurrentContent: function () {

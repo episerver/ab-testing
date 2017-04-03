@@ -34,11 +34,11 @@
                 return this.availableKpis;
             },
 
-            getKpiByIndex(index) {
+            getKpiByIndex: function (index) {
                 return this.availableKpis[index];
             },
 
-            createKpi(caller, kpiStore) {
+            createKpi: function (caller, kpiStore) {
                 var me = this;
                 this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.put({
