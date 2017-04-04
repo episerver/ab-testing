@@ -4,9 +4,9 @@
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/KpiWeightWidget.html",
-    'dojo/dom',
-    'xstyle/css!marketing-testing/css/KpiWidget.css',
-    'marketing-testing/widgets/WeightSelector'
+    "dojo/dom",
+    "xstyle/css!marketing-testing/css/KpiWidget.css",
+    "marketing-testing/widgets/WeightSelector"
 ], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, dom) {
     return declare("KpiWeightWidget", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 

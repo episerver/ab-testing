@@ -1,47 +1,47 @@
-﻿var destroyedEvent = new Event('destroyed');
-
-define([
+﻿define([
      'dojo/_base/declare',
      'dojo/Evented',
-        'dijit/_WidgetBase',
-        'dijit/_TemplatedMixin',
-        'dojo/text!marketing-testing/views/AddTestView.html',
-        'epi/i18n!marketing-testing/nls/abtesting',
-        'marketing-testing/viewmodels/AddTestViewModel',
-        'marketing-testing/viewmodels/KpiViewModel',
-        'dijit/_WidgetsInTemplateMixin',
-        'epi/shell/widget/_ModelBindingMixin',
-        'epi/datetime',
-        'epi/username',
-        'dojo/topic',
-        'dojo/html',
-        'dojo/dom',
-        "dojo/dom-class",
-        "dojo/dom-style",
-        "dojo/query",
-        "dijit/registry",
-        'epi/dependency',
-        "marketing-testing/scripts/rasterizeHTML",
-       "dojo/dom-form",
-       "dojo/json",
-       "dojox/layout/ContentPane",
-       'marketing-testing/widgets/KpiWidget',
-       'marketing-testing/widgets/KpiWeightWidget',
-        'xstyle/css!marketing-testing/css/ABTesting.css',
-        'dijit/form/Button',
-        'dijit/form/NumberSpinner',
-        'dijit/form/Textarea',
-        'dijit/form/RadioButton',
-        'epi/shell/widget/DateTimeSelectorDropDown',
-        'dijit/form/TextBox',
-        'epi-cms/widget/Breadcrumb',
-        "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane",
-        "dijit/form/Select"
+     'dojo/aspect',
+     'dijit/_WidgetBase',
+     'dijit/_TemplatedMixin',
+     'dojo/text!marketing-testing/views/AddTestView.html',
+     'epi/i18n!marketing-testing/nls/abtesting',
+     'marketing-testing/viewmodels/AddTestViewModel',
+     'marketing-testing/viewmodels/KpiViewModel',
+     'dijit/_WidgetsInTemplateMixin',
+     'epi/shell/widget/_ModelBindingMixin',
+     'epi/datetime',
+     'epi/username',
+     'dojo/topic',
+     'dojo/html',
+     'dojo/dom',
+     'dojo/dom-class',
+     'dojo/dom-style',
+     'dojo/query',
+     'dijit/registry',
+     'epi/dependency',
+     'marketing-testing/scripts/rasterizeHTML',
+     'dojo/dom-form',
+     'dojo/json',
+     'dojox/layout/ContentPane',
+     'marketing-testing/widgets/KpiWidget',
+     'marketing-testing/widgets/KpiWeightWidget',
+     'xstyle/css!marketing-testing/css/ABTesting.css',
+     'dijit/form/Button',
+     'dijit/form/NumberSpinner',
+     'dijit/form/Textarea',
+     'dijit/form/RadioButton',
+     'epi/shell/widget/DateTimeSelectorDropDown',
+     'dijit/form/TextBox',
+     'epi-cms/widget/Breadcrumb',
+     'dijit/layout/AccordionContainer',
+     'dijit/layout/ContentPane',
+     'dijit/form/Select'
 ],
     function (
     declare,
     Evented,
+    aspect,
     _WidgetBase,
     _TemplatedMixin,
     template,
@@ -576,6 +576,7 @@ define([
             },
 
             _onGoalSelectChange: function (evt) {
+                var me = this;
                 var kpiuiElement = dom.byId("kpiui");
                 var kpiWidget = dom.byId("kpiWidgets");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
@@ -583,7 +584,6 @@ define([
 
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
-
 
                     var kpiWidgetInstance = new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
@@ -593,15 +593,16 @@ define([
                     })
 
                     kpiWidgetInstance.placeAt(kpiWidget);
+                    aspect.after(kpiWidgetInstance, 'destroy', function () {
+                        me.decrementKpiEntries();
+                    })
 
                     var weightWidget = new KpiWeightWidget({
                         label: kpiObject.kpi.friendlyName,
                         kpiWidgetId: kpiWidgetInstance.id,
                         value: "Medium"
                     }).placeAt(kpiWeightWidget);
-
                     kpiWidgetInstance._setlinkedWidgetIdAttr(weightWidget.id);
-
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
                         this.isMultiKpiTest = false;
@@ -696,10 +697,10 @@ define([
                 }
             },
 
-            _showAdvancedOptions(evt) {
+            _showAdvancedOptions: function (evt) {
                 var advancedOptionsElement = dom.byId("advancedOptions");
                 if (dojo.style(advancedOptionsElement, "display") == "none") {
-                    dojo.style(advancedOptionsElement, "display", "initial");
+                    dojo.style(advancedOptionsElement, "display", "block");
                     advancedOptionsElement.scrollIntoView(true);
                 }
                 else {

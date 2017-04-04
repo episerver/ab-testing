@@ -10,9 +10,7 @@
     "dojox/layout/ContentPane",
     "dijit/form/Button",
     "dijit/form/Form",
-    'xstyle/css!marketing-testing/css/KpiWidget.css',
-
-
+    "xstyle/css!marketing-testing/css/KpiWidget.css"
 ], function (declare, Evented, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin, _WidgetsInTemplateMixin, template, dom, ContentPane) {
 
     return declare("KpiWidget", [Evented, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -51,7 +49,6 @@
             var linkedWidget = dijit.byId(this.linkedWidgetId);
             linkedWidget.destroy();
             widget.destroy();
-            document.dispatchEvent(destroyedEvent);
         },
 
         _getCurrentContent: function () {
