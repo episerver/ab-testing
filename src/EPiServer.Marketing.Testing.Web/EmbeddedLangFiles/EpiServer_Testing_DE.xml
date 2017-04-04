@@ -139,6 +139,11 @@
         <view_control_content>Inhalt der Referenz anzeigen</view_control_content>
         <views>Aufrufe</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Ein A/B-Test mit einer Version dieses Inhalts wurde abgeschlossen. </completed_test>
         <details_link_text>Test anzeigen</details_link_text>

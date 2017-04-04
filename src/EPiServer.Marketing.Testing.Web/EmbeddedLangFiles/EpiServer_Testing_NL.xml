@@ -139,6 +139,11 @@
         <view_control_content>Controle-content weergeven</view_control_content>
         <views>weergaven</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Er is een A/B-test voltooid op een versie van deze content. </completed_test>
         <details_link_text>Test weergeven</details_link_text>

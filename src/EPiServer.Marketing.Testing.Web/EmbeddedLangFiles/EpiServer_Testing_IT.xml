@@ -139,6 +139,11 @@
         <view_control_content>Schermata contenuto controllo</view_control_content>
         <views>schermate</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Un A / B test è stato completato su una versione di questo contenuto. </completed_test>
         <details_link_text>Schermata test</details_link_text>

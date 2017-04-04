@@ -139,6 +139,11 @@
         <view_control_content>Vis kontrollens indhold</view_control_content>
         <views>visninger</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Der blev udført en A/B-test på en version af dette indhold. </completed_test>
         <details_link_text>Vis test</details_link_text>
