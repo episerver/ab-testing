@@ -37,5 +37,17 @@
 }
 
 .epi-kpiWidget-weightWidget-row {
-    text-align:left;
+    text-align: left;
+}
+
+.epi-kpiSummaries-bold {
+    font-weight: bold;
+}
+
+.epi-kpiSummaries-summary-row {
+    height: 40px;
+}
+
+.epi-kpiWidget-summaries-td {
+    text-align: center;
 }
