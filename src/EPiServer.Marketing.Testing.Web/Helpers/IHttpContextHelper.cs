@@ -92,5 +92,24 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <param name="stream">the stream to use for the response filter</param>
         void SetResponseFilter(Stream stream);
+
+        /// <summary>
+        /// Checks the context to see if there is a current context for the HttpContext object
+        /// </summary>
+        /// <returns>if the current context exists</returns>
+        bool HasCurrentContext();
+
+        /// <summary>
+        /// Checks the HttpContext for the existance of a UserAgent
+        /// </summary>
+        /// <returns>if the UserAgent was found</returns>
+        bool HasUserAgent();
+
+        /// <summary>
+        /// Returns the HttpContext's requested raw url
+        /// </summary>
+        /// <returns>the url string</returns>
+        string RequestedUrl();
+
     }
 }

@@ -10,7 +10,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     /// <summary>
     /// interacts with the httpcontext for reading and manipulating the objects therein
     /// </summary>
-    public class HttpContextHelper : IHttpContextHelper
+    internal class HttpContextHelper : IHttpContextHelper
     {
         public bool HasItem(string itemId)
         {
@@ -76,6 +76,21 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SetResponseFilter(Stream stream)
         {
             HttpContext.Current.Response.Filter = stream;
+        }
+
+        public bool HasCurrentContext()
+        {
+            return HttpContext.Current != null;
+        }
+
+        public bool HasUserAgent()
+        {
+            return HttpContext.Current.Request.UserAgent != null;
+        }
+
+        public string RequestedUrl()
+        {
+            return HttpContext.Current.Request.RawUrl;
         }
     }
 }
