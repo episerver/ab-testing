@@ -461,6 +461,77 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void GenerateContextData_processes_the_expected_days_remaining_for_active_tests()
+        {
+
+            commerceData = new CommerceData()
+            {
+                preferredFormat = new NumberFormatInfo(),
+                CommerceCulture = "USD"
+            };
+
+            test = new ABTest()
+            {
+                CreatedDate = DateTime.Parse("5/5/2016"),
+                Description = "Unit Test Description",
+                StartDate = DateTime.Now.AddDays(-2),
+                EndDate = DateTime.Now.AddDays(10),
+                Id = testId,
+                LastModifiedBy = "Unit Test User",
+                ModifiedDate = DateTime.Parse("5/4/2016"),
+                OriginalItemId = Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664"),
+                Owner = "Unit Test",
+                ParticipationPercentage = 30,
+                State = TestState.Active
+            };
+
+            Variant publishedVariant = new Variant()
+            {
+                Conversions = 5,
+                Id = Guid.Parse("b7a2a5ea-5925-4fe6-b546-a31876dddafb"),
+                IsWinner = false,
+                ItemId = Guid.Parse("60820307-65d3-459d-8a59-6502c9655735"),
+                ItemVersion = 5,
+                Views = 25,
+                TestId = test.Id,
+                IsPublished = true,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
+            };
+
+            Variant draftVariant = new Variant()
+            {
+                Conversions = 15,
+                Id = Guid.Parse("68d8cc5e-39dc-44b7-a784-40c14221c0c1"),
+                IsWinner = false,
+                ItemId = Guid.Parse("46c3deca-e080-49ae-bbea-51c73af34f34"),
+                ItemVersion = 190,
+                Views = 50,
+                TestId = test.Id,
+                IsPublished = false,
+                KeyFinancialResults = new List<KeyFinancialResult>(),
+                KeyValueResults = new List<KeyValueResult>()
+            };
+
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            {
+                Id = Guid.NewGuid(),
+                CreatedDate = DateTime.UtcNow,
+                ModifiedDate = DateTime.UtcNow,
+                //PreferredCulture = "en-GB"
+            };
+
+            test.Variants = new List<Variant>() { publishedVariant, draftVariant };
+            test.KpiInstances = new List<IKpi>() { kpi };
+
+            var testContextHelper = GetUnitUnderTest();
+            MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
+
+            Assert.True(testResult.DaysElapsed == 2.ToString());
+            Assert.True(testResult.DaysRemaining == 10.ToString());
+        }
+
+        [Fact]
         public void Model_Contains_Published_And_Draft_Preview_Urls()
         {
             commerceData = new CommerceData()
