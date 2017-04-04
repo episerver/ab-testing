@@ -16,32 +16,20 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
-    #region UnitTestWorkaround
-    internal interface IPreviewUrlBuilder
-    {
-        string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args);
-    }
-    [ExcludeFromCodeCoverage]
-    internal class PreviewUrlBuilder : IPreviewUrlBuilder
-    {
-        public string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args)
-        {
-            return UrlResolver.Current.GetUrl(cr, language, args);
-        }
-    }
-    #endregion UnitTestWorkaround
 
     [ServiceConfiguration(ServiceType = typeof(ITestingContextHelper))]
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;
-        private IPreviewUrlBuilder _previewUrlBuilder;
+        private IHttpContextHelper _contextHelper;
+        private IEpiserverHelper _episerverHelper;
 
         [ExcludeFromCodeCoverage]
         public TestingContextHelper()
         {
             _serviceLocator = ServiceLocator.Current;
-            _previewUrlBuilder = new PreviewUrlBuilder();
+            _contextHelper = new HttpContextHelper();
+            _episerverHelper = new EpiserverHelper();
         }
 
         /// <summary>
@@ -50,11 +38,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="context"></param>
         /// <param name="mockServiceLocator"></param>
         [ExcludeFromCodeCoverage]
-        internal TestingContextHelper(HttpContext context, IServiceLocator mockServiceLocator, IPreviewUrlBuilder mockUrlBuilder)
+        internal TestingContextHelper(IHttpContextHelper contextHelper, IServiceLocator mockServiceLocator, IEpiserverHelper episerverHelper)
         {
-            HttpContext.Current = context;
+            _contextHelper = contextHelper;
             _serviceLocator = mockServiceLocator;
-            _previewUrlBuilder = mockUrlBuilder;
+            _episerverHelper = episerverHelper;
         }
 
         /// <summary>
@@ -95,9 +83,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         private bool SkipRequest()
         {
-            return HttpContext.Current == null ||
-                HttpContext.Current.Request.UserAgent == null || // MAR 797 - Ignore requests with no user agent specified
-                HttpContext.Current.Items.Contains(TestHandler.ABTestHandlerSkipFlag);
+            return !_contextHelper.HasCurrentContext() ||
+                !_contextHelper.HasUserAgent() || // MAR 797 - Ignore requests with no user agent specified
+                _contextHelper.HasItem(TestHandler.ABTestHandlerSkipFlag);
         }
 
         /// <summary>
@@ -110,15 +98,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         ///  matches requested page</returns>
         public bool IsRequestedContent(IContent loadedContent)
         {
-            var content = GetCurrentPage();
             var isMatchedPage = false;
-            if (content != null)
-            {
-                isMatchedPage = !(loadedContent is PageData) || (content.ContentLink == loadedContent.ContentLink);
-            }
-            else if (!(loadedContent is PageData))
-            {
+
+            if (!(loadedContent is PageData))
                 isMatchedPage = true;
+            else 
+            {
+                var content = GetCurrentPage();
+                if (content != null)
+                    isMatchedPage = (content.ContentLink == loadedContent.ContentLink);
             }
 
             return isMatchedPage;
@@ -134,7 +122,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             // and store in the request so we can use it later
             try
             {
-                var pageHelper = ServiceLocator.Current.GetInstance<EPiServer.Web.Routing.IPageRouteHelper>();
+                var pageHelper = _serviceLocator.GetInstance<IPageRouteHelper>();
                 return pageHelper.Page;
             }
             catch { } // sometimes requests dont contain epi pages.
@@ -223,10 +211,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var inSystemFolder = true;
 
-            if (HttpContext.Current != null)
+            if (_contextHelper.HasCurrentContext())
             {
-                inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
-                    .Contains(Shell.Paths.ProtectedRootPath.ToLower());
+                inSystemFolder = _contextHelper.RequestedUrl().ToLower()
+                    .Contains(_episerverHelper.GetRootPath().ToLower());
             }
 
             return inSystemFolder;
@@ -255,8 +243,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //Set previewUrl's from version data
             var currentCulture = ContentLanguage.PreferredCulture;
-            var publishPreview = _previewUrlBuilder.GetPreviewUrl(publishedVersionData.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
-            var draftPreview = _previewUrlBuilder.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var publishPreview = _episerverHelper.GetPreviewUrl(publishedVersionData.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
+            var draftPreview = _episerverHelper.GetPreviewUrl(draftContent.ContentLink, currentCulture.Name, new VirtualPathArguments() { ContextMode = ContextMode.Preview });
 
             model.PublishPreviewUrl = publishPreview;
             model.DraftPreviewUrl = draftPreview;

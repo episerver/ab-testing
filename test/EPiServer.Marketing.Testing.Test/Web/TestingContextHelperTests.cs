@@ -22,15 +22,15 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
-    public class TestingContextHelperTests : IDisposable
+    public class TestingContextHelperTests
     {
-        private TestingContextHelper _testingContextHelper;
         private Mock<IServiceLocator> _mockServiceLocator;
         private Mock<IContentRepository> _mockContentRepository;
         private Mock<IContentVersionRepository> _mockContentVersionRepository;
         private Mock<IUIHelper> _mockUIHelper;
-        private Mock<IPreviewUrlBuilder> _mockPreviewUrlBuilder;
         private Mock<IKpiManager> _mockKpiManager;
+        private Mock<IHttpContextHelper> _mockContextHelper;
+        private Mock<IEpiserverHelper> _mockEpiserverHelper;
 
 
         LocalizationService _localizationService = new FakeLocalizationService("test");
@@ -39,7 +39,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Guid testId = Guid.Parse("98cbde0e-4431-4712-9f04-8094e7be826b");
         private CommerceData commerceData;
 
-        private TestingContextHelper GetUnitUnderTest(HttpContext context)
+        private TestingContextHelper GetUnitUnderTest()
         {
             Mock<IContent> testPublishedData = new Mock<IContent>();
             testPublishedData.Setup(call => call.ContentLink).Returns(new ContentReference(1, 5));
@@ -78,16 +78,157 @@ namespace EPiServer.Marketing.Testing.Test.Web
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en");
             ContentLanguage.PreferredCulture = new CultureInfo("en");
 
-            _mockPreviewUrlBuilder = new Mock<IPreviewUrlBuilder>();
-
-            return new TestingContextHelper(context, _mockServiceLocator.Object, _mockPreviewUrlBuilder.Object);
+            _mockContextHelper = new Mock<IHttpContextHelper>();
+            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
+            return new TestingContextHelper(_mockContextHelper.Object, _mockServiceLocator.Object, _mockEpiserverHelper.Object);
         }
 
         [Fact]
         public void IsInSystemFolder_returns_true_if_context_is_null()
         {
-            _testingContextHelper = GetUnitUnderTest(null);
-            var swapDisabled = _testingContextHelper.IsInSystemFolder();
+            var testContextHelper = GetUnitUnderTest();
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(false);
+            var swapDisabled = testContextHelper.IsInSystemFolder();
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_false_when_we_are_able_to_swap()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ContentEventArgs(new ContentReference(1));
+            contentArgs.Content = new PageData();
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.False(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_false_if_args_are_not_the_correct_type()
+        {
+            var testContextHelper = GetUnitUnderTest();
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(new EventArgs());
+
+            Assert.False(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_true_if_there_is_no_content_to_check()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ContentEventArgs(new ContentReference(1));
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_true_if_we_should_skip_the_request()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ContentEventArgs(new ContentReference(1));
+            contentArgs.Content = new PageData();
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(true);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_true_if_useragent_is_null()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ContentEventArgs(new ContentReference(1));
+            contentArgs.Content = new PageData();
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(false);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(true);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_with_ChildrenEventArgs_returns_false_when_we_are_able_to_swap()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.False(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_with_ChildrenEventArgs_returns_true_when_there_is_no_content_in_agruments()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+            contentArgs.ContentLink = null;
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_with_ChildrenEventArgs_returns_true_when_there_is_no_children_in_argument()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+            contentArgs.ChildrenItems = null;
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
 
             Assert.True(swapDisabled);
         }
@@ -151,8 +292,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
             test.KpiInstances = new List<IKpi>() { kpi };
 
-            _testingContextHelper = GetUnitUnderTest(null);
-            MarketingTestingContextModel testResult = _testingContextHelper.GenerateContextData(test);
+            var testContextHelper = GetUnitUnderTest();
+            MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.NotNull(testResult);
             Assert.True(testResult.Test.Id == testId);
@@ -225,8 +366,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
             test.KpiInstances = new List<IKpi>() { kpi };
 
-            _testingContextHelper = GetUnitUnderTest(null);
-            MarketingTestingContextModel testResult = _testingContextHelper.GenerateContextData(test);
+            var testContextHelper = GetUnitUnderTest();
+            MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.NotNull(testResult);
             Assert.True(testResult.Test.Id == testId);
@@ -308,8 +449,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
             test.KpiInstances = new List<IKpi>() { kpi };
 
-            _testingContextHelper = GetUnitUnderTest(null);
-            MarketingTestingContextModel testResult = _testingContextHelper.GenerateContextData(test);
+            var testContextHelper = GetUnitUnderTest();
+            MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.NotNull(testResult);
             Assert.True(testResult.Test.Id == testId);
@@ -380,17 +521,66 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
             test.KpiInstances = new List<IKpi>() { kpi };
 
-            _testingContextHelper = GetUnitUnderTest(null);
-            _mockPreviewUrlBuilder.Setup(pub => pub.GetPreviewUrl(It.IsAny<ContentReference>(), It.IsAny<string>(), It.IsAny<VirtualPathArguments>())).Returns("previewUrl");
+            var testContextHelper = GetUnitUnderTest();
+            _mockEpiserverHelper.Setup(pub => pub.GetPreviewUrl(It.IsAny<ContentReference>(), It.IsAny<string>(), It.IsAny<VirtualPathArguments>())).Returns("previewUrl");
 
-            var result = _testingContextHelper.GenerateContextData(test);
+            var result = testContextHelper.GenerateContextData(test);
             Assert.False(string.IsNullOrEmpty(result.PublishPreviewUrl));
             Assert.False(string.IsNullOrEmpty(result.DraftPreviewUrl));
         }
 
-        public void Dispose()
+        [Fact]
+        public void IsRequestedContent_is_true_when_the_loaded_page_matches_the_one_in_the_request()
         {
-            HttpContext.Current = null;
+            var testContextHelper = GetUnitUnderTest();
+            var aPage = new PageData(new PageReference(1));
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IPageRouteHelper>()).Returns(new FakePageRouteHelper(aPage));
+
+            var result = testContextHelper.IsRequestedContent(aPage);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsRequestedContent_is_false_when_the_loaded_page_is_not_the_requested_page()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var aPage = new PageData(new PageReference(1));
+            var aPage2 = new PageData(new PageReference(2));
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IPageRouteHelper>()).Returns(new FakePageRouteHelper(aPage));
+
+            var result = testContextHelper.IsRequestedContent(aPage2);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsRequestedContent_is_true_when_the_loaded_content_is_not_a_page()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var aBlock = new MediaData();
+
+            var result = testContextHelper.IsRequestedContent(aBlock);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsRequestedContent_is_false_when_the_we_cant_determine_the_requested_page()
+        {
+            var testContextHelper = GetUnitUnderTest();
+            var aPage = new PageData(new PageReference(1));
+
+            var result = testContextHelper.IsRequestedContent(aPage);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void SwapDisabled_with_childevent_args_is_true_when_we_cant_figure_out_what_content_was_loaded()
+        {
+            var testContextHelper = GetUnitUnderTest();
+
         }
     }
 }
