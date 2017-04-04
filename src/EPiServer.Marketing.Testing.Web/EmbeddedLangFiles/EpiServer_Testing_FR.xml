@@ -139,6 +139,11 @@
         <view_control_content>Voir le contenu de la page de contrôle</view_control_content>
         <views>affichages</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Un test A/B a été réalisé sur une version de ce contenu. </completed_test>
         <details_link_text>Voir le test</details_link_text>

@@ -26,6 +26,11 @@
         <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/detailsview/conversions/">conversions</conversions>
       </detailsview>
+      <kpisummarywidget>
+        <conversions path="/abtesting/kpisummarywidget/conversions/">Conversions</conversions>
+        <performance path="/abtesting/kpisummarywidget/performance/">Performance</performance>
+        <weight path="/abtesting/kpisummarywidget/weight/">Weight</weight>
+      </kpisummarywidget>
       <pickwinnerview>
         <content_challenger_header path="/abtesting/pickwinnerview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/pickwinnerview/conversions/">conversions</conversions>

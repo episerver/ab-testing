@@ -139,6 +139,11 @@
         <view_control_content>Näytä kontrollisisältö</view_control_content>
         <views>tarkastelukertaa</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>A/B-testi valmistui tämän sisällön versiosta. </completed_test>
         <details_link_text>Näytä testi</details_link_text>

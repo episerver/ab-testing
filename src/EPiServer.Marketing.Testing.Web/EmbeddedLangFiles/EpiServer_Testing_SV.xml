@@ -139,6 +139,11 @@
         <view_control_content>Visa originalet</view_control_content>
         <views>sidvisningar</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Ett A/B-test utfördes på en version av det här innehållet. </completed_test>
         <details_link_text>Visa testet</details_link_text>

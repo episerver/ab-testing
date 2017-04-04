@@ -140,6 +140,11 @@
         <view_control_content>View control content</view_control_content>
         <views>views</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>An A/B test was completed on a version of this content. </completed_test>
         <details_link_text>View test</details_link_text>

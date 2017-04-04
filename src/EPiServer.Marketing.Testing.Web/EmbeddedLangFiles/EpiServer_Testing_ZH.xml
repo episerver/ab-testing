@@ -139,6 +139,11 @@
         <view_control_content>查看对照内容</view_control_content>
         <views>查看次数</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>已在此内容的一个版本上完成一项 A/B 测试。 </completed_test>
         <details_link_text>查看测试</details_link_text>
