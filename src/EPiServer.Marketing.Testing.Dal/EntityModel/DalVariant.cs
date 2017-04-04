@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// 
         /// </summary>
-        public int Conversions { get; set; }
+        public double Conversions { get; set; }
 
         /// <summary>
         /// 
@@ -54,5 +54,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public virtual IList<DalKeyFinancialResult> DalKeyFinancialResults { get; set; } = new List<DalKeyFinancialResult>();
 
         public virtual IList<DalKeyValueResult> DalKeyValueResults { get; set; } = new List<DalKeyValueResult>();
+
+        public virtual IList<DalKeyConversionResult> DalKeyConversionResults { get; set; } = new List<DalKeyConversionResult>();
     }
 }

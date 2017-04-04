@@ -64,6 +64,7 @@ namespace EPiServer.Marketing.Testing.Dal
             return DatabaseContext.ABTests
                         .Include("Variants.DalKeyFinancialResults")
                         .Include("Variants.DalKeyValueResults")
+                        .Include("Variants.DalKeyConversionResults")
                         .Include(t => t.KeyPerformanceIndicators)
                         .FirstOrDefault(t => t.Id == (Guid)id);
         }
@@ -73,6 +74,7 @@ namespace EPiServer.Marketing.Testing.Dal
             return DatabaseContext.ABTests
                 .Include("Variants.DalKeyFinancialResults")
                 .Include("Variants.DalKeyValueResults")
+                .Include("Variants.DalKeyConversionResults")
                 .Include(t => t.KeyPerformanceIndicators)
                 .AsQueryable();
         }

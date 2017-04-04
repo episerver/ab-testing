@@ -1,46 +1,47 @@
-﻿var destroyedEvent = new Event('destroyed');
-
-define([
+﻿define([
      'dojo/_base/declare',
      'dojo/Evented',
-        'dijit/_WidgetBase',
-        'dijit/_TemplatedMixin',
-        'dojo/text!marketing-testing/views/AddTestView.html',
-        'epi/i18n!marketing-testing/nls/abtesting',
-        'marketing-testing/viewmodels/AddTestViewModel',
-        'marketing-testing/viewmodels/KpiViewModel',
-        'dijit/_WidgetsInTemplateMixin',
-        'epi/shell/widget/_ModelBindingMixin',
-        'epi/datetime',
-        'epi/username',
-        'dojo/topic',
-        'dojo/html',
-        'dojo/dom',
-        "dojo/dom-class",
-        "dojo/dom-style",
-        "dojo/query",
-        "dijit/registry",
-        'epi/dependency',
-        "marketing-testing/scripts/rasterizeHTML",
-       "dojo/dom-form",
-       "dojo/json",
-       "dojox/layout/ContentPane",
-       'marketing-testing/widgets/KpiWidget',
-        'xstyle/css!marketing-testing/css/ABTesting.css',
-        'dijit/form/Button',
-        'dijit/form/NumberSpinner',
-        'dijit/form/Textarea',
-        'dijit/form/RadioButton',
-        'epi/shell/widget/DateTimeSelectorDropDown',
-        'dijit/form/TextBox',
-        'epi-cms/widget/Breadcrumb',
-        "dijit/layout/AccordionContainer",
-        "dijit/layout/ContentPane",
-        "dijit/form/Select"
+     'dojo/aspect',
+     'dijit/_WidgetBase',
+     'dijit/_TemplatedMixin',
+     'dojo/text!marketing-testing/views/AddTestView.html',
+     'epi/i18n!marketing-testing/nls/abtesting',
+     'marketing-testing/viewmodels/AddTestViewModel',
+     'marketing-testing/viewmodels/KpiViewModel',
+     'dijit/_WidgetsInTemplateMixin',
+     'epi/shell/widget/_ModelBindingMixin',
+     'epi/datetime',
+     'epi/username',
+     'dojo/topic',
+     'dojo/html',
+     'dojo/dom',
+     'dojo/dom-class',
+     'dojo/dom-style',
+     'dojo/query',
+     'dijit/registry',
+     'epi/dependency',
+     'marketing-testing/scripts/rasterizeHTML',
+     'dojo/dom-form',
+     'dojo/json',
+     'dojox/layout/ContentPane',
+     'marketing-testing/widgets/KpiWidget',
+     'marketing-testing/widgets/KpiWeightWidget',
+     'xstyle/css!marketing-testing/css/ABTesting.css',
+     'dijit/form/Button',
+     'dijit/form/NumberSpinner',
+     'dijit/form/Textarea',
+     'dijit/form/RadioButton',
+     'epi/shell/widget/DateTimeSelectorDropDown',
+     'dijit/form/TextBox',
+     'epi-cms/widget/Breadcrumb',
+     'dijit/layout/AccordionContainer',
+     'dijit/layout/ContentPane',
+     'dijit/form/Select'
 ],
     function (
     declare,
     Evented,
+    aspect,
     _WidgetBase,
     _TemplatedMixin,
     template,
@@ -63,7 +64,8 @@ define([
    domForm,
    JSON,
    ContentPane,
-   KpiWidget
+   KpiWidget,
+   KpiWeightWidget
 ) {
         viewPublishedVersion: null;
         viewCurrentVersion: null;
@@ -94,7 +96,7 @@ define([
                 currentVersion: ["viewCurrentVersion"],
                 participationPercent: ["viewParticipationPercent"],
                 testDuration: ["viewTestDuration"],
-                confidenceLevel: ["viewConfidenceLevel"]
+                confidenceLevel: ["viewConfidenceLevel"],
             },
 
             //sets views starting data from view model
@@ -404,6 +406,7 @@ define([
                 this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
+                this._clearKpiWeightWidgets();
                 this._resetView();
             },
 
@@ -450,6 +453,19 @@ define([
                         var dijitContentPane = dijit.byId(contentPane[0].id);
                         dijitContentPane.destroy();
                         kpiuiElement.innerHTML = "";
+                    }
+                }
+            },
+
+            _clearKpiWeightWidgets: function () {
+                var kpiWeightWidgetElement = dom.byId("kpiWeightSelectors");
+                if (kpiWeightWidgetElement) {
+                    var weightSelectors = dojo.query('#kpiWeightSelectors');
+                    if (weightSelectors[0]) {
+                        dojo.forEach(dijit.findWidgets(weightSelectors)), function (w) {
+                            w.destroyRecursive();
+                        };
+                        kpiWeightWidgetElement.innerHTML = "";
                     }
                 }
             },
@@ -507,7 +523,8 @@ define([
 
             createTest: function (kpiIds) {
                 this._clearConversionErrors();
-                this.model.kpiId = kpiIds;
+                var jsonKpis = dojo.toJson(kpiIds, true);
+                this.model.kpiId = jsonKpis.replace(/(\r\n|\n|\r|\t)/gm, "");
                 if (this._isValidFormData()) {
                     this.model.createTest();
                     this._clearConversionErrors();
@@ -550,6 +567,7 @@ define([
                 var me = this;
                 this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
+                this._clearKpiWeightWidgets();
                 this._adjustKpiSelectorCombo()
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
@@ -558,18 +576,33 @@ define([
             },
 
             _onGoalSelectChange: function (evt) {
+                var me = this;
                 var kpiuiElement = dom.byId("kpiui");
                 var kpiWidget = dom.byId("kpiWidgets");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
+                var kpiWeightWidget = dom.byId("kpiWeightSelectors");
 
                 if (evt !== "default") {
                     var kpiObject = this.kpiModel.getKpiByIndex(evt);
-                    new KpiWidget({
+
+                    var kpiWidgetInstance = new KpiWidget({
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
                         description: kpiObject.kpi.description,
-                        kpiType: kpiObject.kpiType
-                    }).placeAt(kpiWidget);
+                        kpiType: kpiObject.kpiType,
+                    })
+
+                    kpiWidgetInstance.placeAt(kpiWidget);
+                    aspect.after(kpiWidgetInstance, 'destroy', function () {
+                        me.decrementKpiEntries();
+                    })
+
+                    var weightWidget = new KpiWeightWidget({
+                        label: kpiObject.kpi.friendlyName,
+                        kpiWidgetId: kpiWidgetInstance.id,
+                        value: "Medium"
+                    }).placeAt(kpiWeightWidget);
+                    kpiWidgetInstance._setlinkedWidgetIdAttr(weightWidget.id);
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
                         this.isMultiKpiTest = false;
@@ -640,7 +673,7 @@ define([
                 var dijitSelector = dijit.byId("kpiSelector");
                 dijitSelector.set("value", "default");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
-                if (this.kpiEntries == 5 || this.isMultiKpiTest != true) {
+                if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
                     kpiSelector.style.display = "block";
@@ -660,6 +693,20 @@ define([
                         });
                         this.kpiModel.availableKpis = allowableKpis;
                         this._setKpiSelectList(this.kpiModel.availableKpis);
+                    }
+                }
+            },
+
+            _showAdvancedOptions: function (evt) {
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (dojo.style(advancedOptionsElement, "display") == "none") {
+                    dojo.style(advancedOptionsElement, "display", "block");
+                    advancedOptionsElement.scrollIntoView(true);
+                }
+                else {
+                    dojo.style(advancedOptionsElement, "display", "none");
+                    if (!evt.srcElement.id) {
+                        this.advancedOptions.reset();
                     }
                 }
             }

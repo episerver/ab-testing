@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
+using Newtonsoft.Json;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -148,7 +149,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
 
-            var kpis = testData.KpiId.Select(kpiId => _kpiManager.Get(kpiId)).ToList();
+            var kpiData = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(testData.KpiId);
+            var kpis = kpiData.Select(kpi => _kpiManager.Get(kpi.Key)).ToList();
+
+            var variant1ConversionResults = new List<KeyConversionResult>();
+            var variant2ConversionResults = new List<KeyConversionResult>();
+
+            // if more than 1 kpi then we need to take weights into effect
+            if (kpis.Count > 1)
+            {
+                CalculateKpiWeights(kpiData, kpis, ref variant1ConversionResults, ref variant2ConversionResults);
+            }
 
             var test = new ABTest
             {
@@ -168,14 +179,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         ItemVersion = testData.PublishedVersion,
                         IsPublished = true,
                         Views = 0,
-                        Conversions = 0
+                        Conversions = 0,
+                        KeyConversionResults = variant1ConversionResults
                     },
                     new Variant()
                     {
                         ItemId = testData.TestContentId,
                         ItemVersion = testData.VariantVersion,
                         Views = 0,
-                        Conversions = 0
+                        Conversions = 0,
+                        KeyConversionResults = variant2ConversionResults
                     }
                 },
                 KpiInstances = kpis,
@@ -189,6 +202,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             return test;
         }
+
         /// <summary>
         /// Performs functions necessary for publishing the content provided in the test result
         /// Winning variants will be published and replace current published content.
@@ -247,9 +261,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetVariantContent(contentGuid);
         }
         
-        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, bool async = true)
+        public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, async);
+            _testManager.IncrementCount(testId, itemVersion, resultType, kpiId, async);
         }
         
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
@@ -277,6 +291,47 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             DateTime endDate = DateTime.Parse(startDate);
             return endDate.AddDays(testDuration);
+        }
+
+        /// <summary>
+        /// If more than 1 kpi, we need to calculate the weights for each one.
+        /// </summary>
+        /// <param name="kpiData"></param>
+        /// <param name="kpis"></param>
+        /// <param name="variant1ConversionResults"></param>
+        /// <param name="variant2ConversionResults"></param>
+        private void CalculateKpiWeights(Dictionary<Guid, string> kpiData, List<IKpi> kpis, ref List<KeyConversionResult> variant1ConversionResults, ref List<KeyConversionResult> variant2ConversionResults)
+        {
+            // check if all weights are the same
+            var firstKpiWeight = kpiData.First().Value;
+            if (kpiData.All(entries => entries.Value == firstKpiWeight))
+            {
+                variant1ConversionResults.AddRange(
+                    kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                variant2ConversionResults.AddRange(
+                    kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+            }
+            else  // otherwise we need to do some maths to calculate the weights
+            {
+                double totalWeight = kpiData.Sum(kpiEntry => Convert.ToInt32(kpiEntry.Value));
+
+                variant1ConversionResults.AddRange(
+                    kpiData.Select(
+                        kpiEntry =>
+                            new KeyConversionResult()
+                            {
+                                KpiId = kpiEntry.Key,
+                                Weight = Convert.ToDouble(kpiEntry.Value) / totalWeight
+                            }));
+                variant2ConversionResults.AddRange(
+                    kpiData.Select(
+                        kpiEntry =>
+                            new KeyConversionResult()
+                            {
+                                KpiId = kpiEntry.Key,
+                                Weight = Convert.ToDouble(kpiEntry.Value) / totalWeight
+                            }));
+            }
         }
     }
 }

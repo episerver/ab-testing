@@ -13,6 +13,11 @@
         /// <summary>
         /// Any non monetary amount.
         /// </summary>
-        Value
+        Value,
+
+        /// <summary>
+        /// Boolean conversion result used with multiple kpi's.
+        /// </summary>
+        Conversion
     }
 }

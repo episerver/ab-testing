@@ -16,5 +16,7 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
         /// Version of the variant to increment its conversion count.
         /// </summary>
         public int ItemVersion { get; set; }
+
+        public Guid KpiId { get; set; }
     }
 }

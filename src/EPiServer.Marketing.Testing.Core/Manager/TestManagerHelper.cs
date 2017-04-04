@@ -154,7 +154,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults),
                 KeyValueResults = AdaptToManagerKeyValueResult(theDalVariant.DalKeyValueResults),
                 IsWinner = theDalVariant.IsWinner,
-                IsPublished = theDalVariant.IsPublished
+                IsPublished = theDalVariant.IsPublished,
+                KeyConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKeyConversionResults)
             };
 
             return retVariant;
@@ -219,6 +220,35 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return retVariant;
         }
 
+        internal static IList<KeyConversionResult> AdaptToManagerKeyConversionResult(IList<DalKeyConversionResult> dalConversionResults)
+        {
+            var retList = new List<KeyConversionResult>();
+
+            foreach (var result in dalConversionResults)
+            {
+                retList.Add(ConvertToManagerKeyConversionResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static KeyConversionResult ConvertToManagerKeyConversionResult(
+            DalKeyConversionResult dalConversionResult)
+        {
+            var retVariant = new KeyConversionResult
+            {
+                Id = dalConversionResult.Id,
+                KpiId = dalConversionResult.KpiId,
+                Weight = dalConversionResult.Weight,
+                Conversions = dalConversionResult.Conversions,
+                VariantId = dalConversionResult.VariantId,
+                CreatedDate = dalConversionResult.CreatedDate,
+                ModifiedDate = dalConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
         internal static IList<DalVariant> AdaptToDalVariant(IList<Variant> variants)
         {
             var retList = new List<DalVariant>();
@@ -249,6 +279,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 managerVariant.KeyValueResults = new List<KeyValueResult>();
             }
 
+            if (null == managerVariant.KeyConversionResults)
+            {
+                managerVariant.KeyConversionResults = new List<KeyConversionResult>();
+            }
+
             var retVariant = new DalVariant
             {
                 Id = managerVariant.Id,
@@ -260,7 +295,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 IsWinner = managerVariant.IsWinner,
                 IsPublished = managerVariant.IsPublished,
                 DalKeyFinancialResults = AdaptToDalKeyFinancialResult(managerVariant.KeyFinancialResults),
-                DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults)
+                DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults),
+                DalKeyConversionResults = AdaptToDalKeyConversionResult(managerVariant.KeyConversionResults)
             };
 
             return retVariant;
@@ -329,6 +365,41 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Value = managerConversionResult.Value,
+                VariantId = managerConversionResult.VariantId,
+                CreatedDate = managerConversionResult.CreatedDate,
+                ModifiedDate = managerConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<DalKeyConversionResult> AdaptToDalKeyConversionResult(IList<KeyConversionResult> managerConversionResults)
+        {
+            var retList = new List<DalKeyConversionResult>();
+
+            foreach (var result in managerConversionResults)
+            {
+                retList.Add(ConvertToDalKeyConversionResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static DalKeyConversionResult ConvertToDalKeyConversionResult(
+            KeyConversionResult managerConversionResult)
+        {
+            if (Guid.Empty == managerConversionResult.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerConversionResult.Id = Guid.NewGuid();
+            }
+
+            var retVariant = new DalKeyConversionResult
+            {
+                Id = managerConversionResult.Id,
+                KpiId = managerConversionResult.KpiId,
+                Weight = managerConversionResult.Weight,
+                Conversions = managerConversionResult.Conversions,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate

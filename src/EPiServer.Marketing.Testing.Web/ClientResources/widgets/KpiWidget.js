@@ -10,9 +10,7 @@
     "dojox/layout/ContentPane",
     "dijit/form/Button",
     "dijit/form/Form",
-    'xstyle/css!marketing-testing/css/KpiWidget.css',
-
-
+    "xstyle/css!marketing-testing/css/KpiWidget.css"
 ], function (declare, Evented, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin, _WidgetsInTemplateMixin, template, dom, ContentPane) {
 
     return declare("KpiWidget", [Evented, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -29,6 +27,8 @@
 
         id: this.id,
 
+        linkedWidgetId: null,
+
         postCreate: function () {
             new ContentPane({
                 content: this.markup
@@ -36,10 +36,19 @@
             this._getCurrentContent();
         },
 
+        _setImportanceAttr: function (value) {
+            this.kpiWeight.value = value;
+        },
+
+        _setlinkedWidgetIdAttr: function (value) {
+            this.linkedWidgetId = value;
+        },
+
         removeWidget: function () {
             var widget = dijit.byId(this.id);
+            var linkedWidget = dijit.byId(this.linkedWidgetId);
+            linkedWidget.destroy();
             widget.destroy();
-            document.dispatchEvent(destroyedEvent);
         },
 
         _getCurrentContent: function () {

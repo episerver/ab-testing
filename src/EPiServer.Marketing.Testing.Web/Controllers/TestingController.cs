@@ -6,15 +6,14 @@ using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
-using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -125,10 +124,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
+            var kpiId = data.Get("kpiId");
+
             if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion));
+                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
 
                 return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
             }
@@ -143,18 +144,23 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             try
             { 
-                var _testManager = _serviceLocator.GetInstance<ITestManager>();
-                var activeTest = _testManager.Get(Guid.Parse(data.Get("testId")));
+                var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+                var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
+                var kpiId = Guid.Parse(data.Get("kpiId"));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
 
-                TestDataCookie testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
                 if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
-                    // fixme : this code needs to be update to handly multiple kpis (see testhandler.evaluatekpis) properly
-                    // 1) we are not setting the flag in the kpi dictionary in the cookie
-                    // 2) we should only be setting the test converted flag if all kpis are converted.
+                    // update cookie dectioary so we cna handle mulitple kpi conversions
+                    testCookie.KpiConversionDictionary.Remove(kpiId);
+                    testCookie.KpiConversionDictionary.Add(kpiId, true);
+
+                    // update conversion for specific kpi
                     UpdateConversion(data);
-                    testCookie.Converted = true;
+
+                    // only update cookie if all kpi's have converted
+                    testCookie.Converted = testCookie.KpiConversionDictionary.All(x => x.Value);
                     cookieHelper.UpdateTestDataCookie(testCookie);
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");

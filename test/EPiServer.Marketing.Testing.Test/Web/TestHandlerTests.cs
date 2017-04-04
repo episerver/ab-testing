@@ -297,7 +297,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should have triggered call to save cookie data");
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once, "Content should have triggered IncrementCount View call");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value=>value == true)), Times.Once, "Content should have triggered IncrementCount View call");
             Assert.Equal(variantPage, args.Content);
             Assert.Equal(variantPage.ContentLink, args.ContentLink);
         }
@@ -351,7 +351,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             testHandler.LoadedContent(new object(), args);
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once, "Content should have triggered IncrementCount View call");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value=>value == true)), Times.Once, "Content should have triggered IncrementCount View call");
             _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()), Times.Exactly(2), "Content should have triggered call to update cookie data");
 
@@ -407,7 +407,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<bool>()), Times.Never, "Content should not have triggered IncrementCount View call");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<Guid>(), It.IsAny<bool>()), Times.Never, "Content should not have triggered IncrementCount View call");
 
             _mockTestDataCookieHelper.Verify(call => call.SaveTestDataToCookie(It.IsAny<TestDataCookie>()), Times.Never(), "Content should not have triggered call to save cookie data");
 
@@ -530,7 +530,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             testHandler.LoadedContent(new object(), args);
 
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<bool>()), Times.Never, "Test should not have attempted to increment count");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<Guid>(), It.IsAny<bool>()), Times.Never, "Test should not have attempted to increment count");
         }
 
         [Fact]
@@ -566,7 +566,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<IMarketingTest>() { test });
             _mockMarketingTestingWebRepository.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(test);
             _mockMarketingTestingWebRepository.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<object>(), It.IsAny<EventArgs>()))
-                .Returns(new List<IKpiResult> { new KpiConversionResult() { KpiId = Guid.NewGuid() } });
+                .Returns(new List<IKpiResult> { new KpiConversionResult() { HasConverted = true, KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
 
@@ -578,7 +578,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.ProxyEventHandler(new object(), args);
 
             _mockTestDataCookieHelper.Verify(call => call.UpdateTestDataCookie(testCookieOne), Times.AtLeast(1), "Test should have called save test data to cookie");
-            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<bool>()), Times.Once, "Test should have attempted to increment count");
+            _mockMarketingTestingWebRepository.Verify(call => call.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<CountType>(), It.IsAny<Guid>(), It.IsAny<bool>()), Times.Once, "Test should have attempted to increment count");
         }
 
         [Fact]
