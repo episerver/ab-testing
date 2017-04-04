@@ -44,10 +44,10 @@
     font-weight: bold;
 }
 
-.epi-kpiSummaries-summary-row {
+.epi-kpiSummaries-row {
     height: 40px;
 }
 
-.epi-kpiWidget-summaries-td {
+.epi-kpiSummaries-data {
     text-align: center;
 }

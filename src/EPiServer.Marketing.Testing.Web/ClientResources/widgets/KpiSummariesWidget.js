@@ -28,10 +28,10 @@
             if (trInsertNode) {
                 trInsertNode.innerHTML = "";
                 for (var x = 0; x < this.kpis.length; x++) {
-                    var row = domConstruct.toDom("<tr class='epi-kpiSummaries-summary-row'><td'>" + this.kpis[x].name +
-                        "</td><td class='epi-kpiWidget-summaries-td'>" + this.kpis[x].conversions +
-                        "</td><td class='epi-kpiWidget-summaries-td' id='" + this.id + "weight" + x + "'>" +
-                        "</td><td class='epi-kpiWidget-summaries-td'>" + this.kpis[x].performance + "</td></tr>");
+                    var row = domConstruct.toDom("<tr class='epi-kpiSummaries-row'><td'>" + this.kpis[x].name +
+                        "</td><td class='epi-kpiSummaries-data'>" + this.kpis[x].conversions +
+                        "</td><td class='epi-kpiSummaries-data' id='" + this.id + "weight" + x + "'>" +
+                        "</td><td class='epi-kpiSummaries-data'>" + this.kpis[x].performance + "</td></tr>");
                     domConstruct.place(row, trInsertNode);
                     new weightSelector({
                         value: this.kpis[x].weight,
