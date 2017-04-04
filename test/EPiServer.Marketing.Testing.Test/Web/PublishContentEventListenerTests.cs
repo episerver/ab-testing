@@ -109,6 +109,30 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void _checkingInContentEventHandler_cancels_scheduled_publishes_when_there_is_a_test_running()
+        {
+            var testUnit = GetUnitUnderTest();
+            var cancelReason = "test reason";
+            IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+
+            var aEventContent = new MediaData();
+            aEventContent.StartPublish = DateTime.Now.AddDays(1);
+
+            var eventArg = new ContentEventArgs(new ContentReference(111))
+            {
+                CancelAction = false,
+                CancelReason = cancelReason,
+                Content = aEventContent
+            };
+
+            testUnit._checkingInContentEventHandler(this, eventArg);
+
+            Assert.True(eventArg.CancelAction, "Should be canceling the publish action when we find a test for scheduled content");
+            Assert.True(eventArg.CancelReason != cancelReason, "Cancel reason should be set when we cancel the publish");
+        }
+
+        [Fact]
         public void EventLister_CancelsTest_If_PublishDate_In_Future_Checkin()
         {
             var testUnit = GetUnitUnderTest();
