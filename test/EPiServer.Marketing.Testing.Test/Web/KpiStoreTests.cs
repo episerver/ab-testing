@@ -100,10 +100,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _kpiWebRepoMock.Setup(call => call.ActivateKpiInstance(It.IsAny<Dictionary<string, string>>())).Returns(sticky.Object);
 
             var retResult = testClass.Put("KpiFormData", "") as RestResult;
-            var kpiWeightDict = (Dictionary<Guid, double>) retResult.Data;
+            var kpiWeightDict = (Dictionary<Guid, string>) retResult.Data;
 
-            Assert.Equal(1, kpiWeightDict.Count(pair => pair.Value == 1));
-            Assert.Equal(1, kpiWeightDict.Count(pair => pair.Value == 2));
+            Assert.Equal(1, kpiWeightDict.Count(pair => pair.Value == "Low"));
+            Assert.Equal(1, kpiWeightDict.Count(pair => pair.Value == "Medium"));
         }
     }
 }
