@@ -8,8 +8,9 @@
     "dojo/dom",
     "dojo/dom-construct",
     "marketing-testing/widgets/WeightSelector",
+    "marketing-testing/widgets/KpiSummaryRow",
     "xstyle/css!marketing-testing/css/KpiWidget.css"
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, resources, dom, domConstruct, weightSelector) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, resources, dom, domConstruct, weightSelector, kpiSummaryRow) {
 
     return declare("KpiSummariesWidget", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
@@ -25,19 +26,22 @@
 
         startup: function () {
             var trInsertNode = dom.byId(this.id + "Summaries")
+            var templatedRow;
             if (trInsertNode) {
                 trInsertNode.innerHTML = "";
                 for (var x = 0; x < this.kpis.length; x++) {
-                    var row = domConstruct.toDom("<tr class='epi-kpiSummaries-row'><td'>" + this.kpis[x].name +
-                        "</td><td class='epi-kpiSummaries-data'>" + this.kpis[x].conversions +
-                        "</td><td class='epi-kpiSummaries-data' id='" + this.id + "weight" + x + "'>" +
-                        "</td><td class='epi-kpiSummaries-data'>" + this.kpis[x].performance + "</td></tr>");
-                    domConstruct.place(row, trInsertNode);
+                    templatedRow = new KpiSummaryRow({
+                        name: this.kpis[x].name,
+                        conversions: this.kpis[x].conversions,
+                        performance: this.kpis[x].performance
+                    })
+
+                    domConstruct.place(templatedRow.domNode, trInsertNode);
                     new weightSelector({
                         value: this.kpis[x].weight,
                         disabled: true,
                         showLabel: false
-                    }).placeAt(this.id + "weight" + x);
+                    }).placeAt(templatedRow.id + "weight");
                 }
             }
         }
