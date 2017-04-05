@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 if (kpiData.Count > 0)
                 {
-                    var kpiWeights = new Dictionary<Guid, double>();
+                    var kpiWeights = new Dictionary<Guid, string>();
                     foreach (var data in kpiData)
                     {
                         var kpiId = Guid.NewGuid();
@@ -84,21 +84,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         {
                             kpiInstance.Validate(data);
                             validKpiInstances.Add(kpiInstance);
-
-                            // if we go to more than 3 weights in the UI, this needs to be updated as well
-                            switch (data.First(key => key.Key == "Weight").Value.ToLower())
-                            {
-                                case "low":
-                                    kpiWeights.Add(kpiId, 1);
-                                    break;
-                                case "high":
-                                    kpiWeights.Add(kpiId, 3);
-                                    break;
-                                case "medium":
-                                default:
-                                    kpiWeights.Add(kpiId, 2);
-                                    break;
-                            }
+                            kpiWeights.Add(kpiId, data.First(key => key.Key == "Weight").Value);
                         }
                         catch (KpiValidationException ex)
                         {
