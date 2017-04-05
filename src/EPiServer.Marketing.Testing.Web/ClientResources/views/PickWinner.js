@@ -51,6 +51,8 @@
         templateString: template,
         resources: resources,
         contextHistory: null,
+        kpiSummaryWidgets: new Array(),
+
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -64,32 +66,25 @@
         },
 
         startup: function () {
-            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
             }
         },
 
         _contextChanged: function (newContext) {
             var me = this;
+            this.kpiSummaryWidgets = new Array();
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
             me.context = newContext;
             textHelper.initializeHelper(this.context, resources.pickwinnerview);
-
             me._renderData();
-            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
-            }
         },
 
         _onCancelClick: function () {
             var me = this;
-            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
+            this.kpiSummaryWidgets = new Array();
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -107,12 +102,8 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
-                this.publishedViews,
-                this.publishedConversionPercent);
-            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
-                this.challengerViews,
-                this.challengerConversionPercent);
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlPickWinnerSummaryNode));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerPickWinnerSummaryNode));
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderSignificance();
@@ -122,6 +113,9 @@
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
                 me._renderStatusIndicatorStyles();
                 me._renderKpiMarkup("pw_conversionMarkup", "pw_kpidescription");
+                for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
+                    me.kpiSummaryWidgets[x].startup();
+                }
             });
         },
 
@@ -176,6 +170,7 @@
                 testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false })  // Force a put
                     .then(function (testId) {
+                        this.kpiSummaryWidgets = new Array();
                         var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
                         topic.publish("/epi/shell/context/request", contextParameters);
                     }).otherwise(function () {
@@ -192,6 +187,7 @@
                 testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false }) // Force a put
                 .then(function (testId) {
+                    this.kpiSummaryWidgets = new Array();
                     var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
                     topic.publish("/epi/shell/context/request", contextParameters);
                 }).otherwise(function () {

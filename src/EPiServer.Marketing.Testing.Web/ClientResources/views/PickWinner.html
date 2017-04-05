@@ -50,24 +50,7 @@
                         </div>
                         <hr class="epi-abtest-hr" />
                         <!-- Control Statistics -->
-                        <table width="100%">
-                            <tr>
-                                <td style="text-align:center;">
-                                    <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
-                                </td>
-                                <td style="text-align:center;">
-                                    <div id="controlPickWinnerPieChart" class="epi-ab-converstion-pie-chart"></div>
-                                </td>
-                                <td style="text-align:center;">
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.detailsview.conversions}
-                                    </p>
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.detailsview.views}
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
+                        <div data-dojo-attach-point="controlPickWinnerSummaryNode"></div>
                     </div>
                 </div>
                 <!-- Challenger/Draft Version-->
@@ -87,25 +70,8 @@
                             <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
-                        <table width="100%">
-                            <tr>
-                                <td style="text-align: center;">
-                                    <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
-                                </td>
-                                <td style="text-align: center;">
-                                    <div id="challengerPickWinnerPieChart" class="epi-ab-converstion-pie-chart"></div>
-                                </td>
-                                <td style="text-align: center;">
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.detailsview.conversions}
-                                    </p>
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.detailsview.views}
-                                    </p>
-                                </td>
-                                <td></td>
-                            </tr>
-                        </table>
+                        <!-- Challenger Statistics-->
+                        <div data-dojo-attach-point="challengerPickWinnerSummaryNode"></div>
                     </div>
                 </div>
             </div>
@@ -123,35 +89,35 @@
                         <div id="pw_kpidescription">
                             <!-- KPI Description -->
                         </div>
-                    <hr class="epi-abtest-hr">
-                    <div class="formsRow">
-                        <h4>${resources.detailsview.percent_participation_header}</h4>
-                        <p>
-                            <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
-                        </p>
-                    </div>
-                    <hr class="epi-abtest-hr">
-                    <div class="formsRow">
-                        <h4>${resources.detailsview.test_duration_header}</h4>
-                        <p>
-                            <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong>&nbsp;<span data-dojo-attach-point="testRemainingText"></span>
-                        </p>
-                        <div data-dojo-type="dijit/ProgressBar"
-                             data-dojo-id="durationProgressBar"
-                             style="width: 35%"></div>
+                        <hr class="epi-abtest-hr">
+                        <div class="formsRow">
+                            <h4>${resources.detailsview.percent_participation_header}</h4>
+                            <p>
+                                <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
+                            </p>
+                        </div>
+                        <hr class="epi-abtest-hr">
+                        <div class="formsRow">
+                            <h4>${resources.detailsview.test_duration_header}</h4>
+                            <p>
+                                <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong>&nbsp;<span data-dojo-attach-point="testRemainingText"></span>
+                            </p>
+                            <div data-dojo-type="dijit/ProgressBar"
+                                 data-dojo-id="durationProgressBar"
+                                 style="width: 35%"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="cardWrapper" style="margin-bottom: 80px">
-                <h3>${resources.detailsview.advanced_options_header}</h3>
-                <hr class="epi-abtest-hr" />
-                <div class="cardBody" style="padding-top: 4px;">
-                    <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
-                    <p>
-                        <strong><span data-dojo-attach-point="confidence"></span></strong>
-                    </p>
+                <div class="cardWrapper" style="margin-bottom: 80px">
+                    <h3>${resources.detailsview.advanced_options_header}</h3>
+                    <hr class="epi-abtest-hr" />
+                    <div class="cardBody" style="padding-top: 4px;">
+                        <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
+                        <p>
+                            <strong><span data-dojo-attach-point="confidence"></span></strong>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
