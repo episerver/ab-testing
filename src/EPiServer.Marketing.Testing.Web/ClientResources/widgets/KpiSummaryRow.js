@@ -16,7 +16,7 @@
 
         name: null,
 
-        conversion: null,
+        conversions: null,
 
         performance: null,
 
