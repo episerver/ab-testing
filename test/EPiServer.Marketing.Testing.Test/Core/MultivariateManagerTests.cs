@@ -282,6 +282,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                 Id = Guid.NewGuid(),
                                 KpiId = Guid.NewGuid(),
                                 Weight = .5,
+                                SelectedWeight = "Low",
+                                Performance = 25,
                                 Conversions = 1,
                                 CreatedDate = DateTime.Now,
                                 ModifiedDate = DateTime.Now

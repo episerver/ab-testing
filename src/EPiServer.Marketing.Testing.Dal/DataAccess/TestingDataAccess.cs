@@ -352,6 +352,8 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                     var result = variant.DalKeyConversionResults.First(r => r.KpiId == kpiId);
                     result.Conversions++;
                     variant.Conversions += result.Weight;
+
+                    result.Performance = Convert.ToInt32(result.Conversions * result.Weight / variant.Conversions);
                 }
                 else  // single kpi
                 {
