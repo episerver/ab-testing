@@ -352,6 +352,12 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                     var result = variant.DalKeyConversionResults.First(r => r.KpiId == kpiId);
                     result.Conversions++;
                     variant.Conversions += result.Weight;
+
+                    // need to update all kpi result perforamnces because the total number of conversions has changed
+                    foreach (var conversionResult in variant.DalKeyConversionResults)
+                    {
+                        conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / variant.Conversions * 100);
+                    }
                 }
                 else  // single kpi
                 {

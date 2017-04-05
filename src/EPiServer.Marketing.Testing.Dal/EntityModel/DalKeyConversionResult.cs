@@ -19,6 +19,8 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
 
         public string SelectedWeight { get; set; }
 
+        public int Performance { get; set; }
+
         public Guid? VariantId { get; set; }
 
         public virtual DalVariant DalVariant { get; set; }

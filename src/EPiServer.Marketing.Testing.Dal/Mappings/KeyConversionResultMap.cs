@@ -23,6 +23,9 @@ namespace EPiServer.Marketing.Testing.Dal.Mappings
             this.Property(m => m.SelectedWeight)
                 .IsRequired();
 
+            this.Property(m => m.Performance)
+                .IsRequired();
+
             this.HasRequired(m => m.DalVariant)
                 .WithMany(m => m.DalKeyConversionResults)
                 .HasForeignKey(m => m.VariantId)
