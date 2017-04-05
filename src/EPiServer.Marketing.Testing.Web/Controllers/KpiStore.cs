@@ -84,8 +84,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         {
                             kpiInstance.Validate(data);
                             validKpiInstances.Add(kpiInstance);
-
-                            // if we go to more than 3 weights in the UI, this needs to be updated as well                            
                             kpiWeights.Add(kpiId, data.First(key => key.Key == "Weight").Value);
                         }
                         catch (KpiValidationException ex)
