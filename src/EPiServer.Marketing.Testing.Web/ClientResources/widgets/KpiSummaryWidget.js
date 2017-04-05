@@ -28,6 +28,8 @@
 
         isLeader: false,
 
+        displayChart: true,
+
         postCreate: function () {
             if (this.isLeader) {
                 domClass.replace(this.conversionPercent, "epi-kpiSummary-conversionRate-leader")
@@ -35,10 +37,18 @@
         },
 
         startup: function () {
-            this.displayPieChart("pieChart" + this.id);
+
+            if (this.displayChart) {
+                this.displayPieChart("pieChart" + this.id);
+                this.conversionPercent.innerHTML = this.conversionRate + "%";
+            }
+            else {
+                this.conversionPercent.innerHTML = this.conversionRate;
+            }
         },
 
         displayPieChart: function (node) {
+
             if (dom.byId(node)) {
                 dom.byId(node).innerHTML = "";
 

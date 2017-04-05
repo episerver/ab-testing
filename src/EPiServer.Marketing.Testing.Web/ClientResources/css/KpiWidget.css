@@ -53,6 +53,10 @@
     margin:auto;
 }
 
+.epi-kpiSummary-table {
+    width:100%;
+}
+
 .epi-kpiWidget-summaries-td {
     text-align: center;
 }
