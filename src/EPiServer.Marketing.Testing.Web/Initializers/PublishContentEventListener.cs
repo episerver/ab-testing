@@ -60,6 +60,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         /// that publish calls are not rejected when we pick a winner. 
         /// </summary>
         /// <param name="content"></param>
+        [ExcludeFromCodeCoverage]
         internal static void addPublishingContent(IContent content)
         {
             lock (_listLock)
