@@ -152,14 +152,17 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                         displayChart: false,
                         views: this.publishedVariant.views,
                         conversions: this.publishedVariant.keyFinancialResults.length,
-                        conversionRate: context.data.publishedVersionFinancialsAverage
+                        conversionRate: context.data.publishedVersionFinancialsAverage,
+                        isLeader: eval(this.publishedPercent > this.draftPercent)
                     });
                 }
                 else {
                     summaryWidget = new KpiSummaryWidget({
                         views: this.publishedVariant.views,
                         conversions: this.publishedVariant.conversions,
-                        conversionRate: this.publishedPercent
+                        conversionRate: this.publishedPercent,
+                        isLeader: eval(this.publishedPercent > this.draftPercent)
+
                     });
                 }
             }
@@ -181,14 +184,16 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                         displayChart: false,
                         views: this.draftVariant.views,
                         conversions: this.draftVariant.keyFinancialResults.length,
-                        conversionRate: context.data.draftVersionFinancialsAverage
+                        conversionRate: context.data.draftVersionFinancialsAverage,
+                        isLeader: eval(this.draftPercent > this.publishedPercent)
                     });
                 }
                 else {
                     summaryWidget = new KpiSummaryWidget({
                         views: this.draftVariant.views,
                         conversions: this.draftVariant.conversions,
-                        conversionRate: this.draftPercent
+                        conversionRate: this.draftPercent,
+                        isLeader: eval(this.draftPercent > this.publishedPercent)
                     });
                 }
             }
