@@ -201,7 +201,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
-        getKpiSummary: function (id, arrayObj) {
+        _getKpiSummary: function (id, arrayObj) {
             for (var i = 0; i < arrayObj.length; i++) {
                 if (arrayObj[i].kpiId === id) {
                     return arrayObj[i];
@@ -213,7 +213,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
             for (var x = 0; x < kpiInstances.length; x++) {
-                var kpiSummary = this.getKpiSummary(kpiInstances[x].id, this.publishedVariant.keyConversionResults);
+                var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.publishedVariant.keyConversionResults);
                 var kpiResult = {
                     name: kpiInstances[x].friendlyName,
                     conversions: kpiSummary.conversions,
@@ -232,7 +232,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
             for (var x = 0; x < kpiInstances.length; x++) {
-                var kpiSummary = this.getKpiSummary(kpiInstances[x].id, this.draftVariant.keyConversionResults);
+                var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.draftVariant.keyConversionResults);
                 var kpiResult = {
                     name: kpiInstances[x].friendlyName,
                     conversions: kpiSummary.conversions,
