@@ -55,7 +55,6 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
-
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
@@ -102,7 +101,6 @@
                 node: me.challengerPickWinnerSummaryNode,
                 rate: 15
             });
-
         },
 
         _contextChanged: function (newContext) {

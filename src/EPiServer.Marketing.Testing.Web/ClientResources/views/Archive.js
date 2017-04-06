@@ -52,7 +52,6 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
-
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
@@ -73,12 +72,10 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
-
         },
 
         _setToggleAnimations() {
             var me = this;
-
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlArchiveSummaryNode,
                 rate: 15,
@@ -100,7 +97,6 @@
                 node: me.challengerArchiveSummaryNode,
                 rate: 15
             });
-
         },
 
         _contextChanged: function (newContext) {
@@ -268,6 +264,5 @@
                 this.challengerSummaryIn.play();
             }
         }
-
     });
 });

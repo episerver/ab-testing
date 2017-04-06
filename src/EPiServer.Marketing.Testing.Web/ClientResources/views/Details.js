@@ -78,7 +78,6 @@
 
         _setToggleAnimations() {
             var me = this;
-
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
                 rate: 15,
@@ -100,7 +99,6 @@
                 node: me.challengerDetailsSummaryNode,
                 rate: 15
             });
-
         },
 
         _contextChanged: function (newContext) {

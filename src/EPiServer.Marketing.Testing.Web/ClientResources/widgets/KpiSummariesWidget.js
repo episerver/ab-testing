@@ -44,18 +44,6 @@
                     }).placeAt(templatedRow.id + "weight");
                 }
             }
-        },
-
-        _toggleSummaryTable: function () {
-            var summaryTable = dom.byId(this.id + "_SummaryTable");
-            if (dojo.style(summaryTable, "visibility") == "hidden") {
-                dojo.style(summaryTable, "visibility", "visible");
-                this.summaryToggle.innerHTML = this.resources.kpisummarywidget.hide_details;
-            }
-            else {
-                dojo.style(summaryTable, "visibility", "hidden");
-                this.summaryToggle.innerHTML = this.resources.kpisummarywidget.show_details;
-            }
         }
     });
 });
