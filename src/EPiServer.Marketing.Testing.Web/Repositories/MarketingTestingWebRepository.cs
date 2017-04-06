@@ -307,9 +307,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             if (kpiData.All(entries => entries.Value == firstKpiWeight))
             {
                 variant1ConversionResults.AddRange(
-                    kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                    kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count, SelectedWeight = firstKpiWeight }));
                 variant2ConversionResults.AddRange(
-                    kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count }));
+                    kpis.Select(kpi => new KeyConversionResult() { KpiId = kpi.Id, Weight = 1.0 / kpis.Count, SelectedWeight = firstKpiWeight }));
             }
             else  // otherwise we need to do some maths to calculate the weights
             {

@@ -144,7 +144,6 @@
                     me.kpiSummaryWidgets[x].startup();
                 }
             });
-
         },
 
         _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {

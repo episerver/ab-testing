@@ -200,7 +200,6 @@
             new ContentPane({
                 content: this.context.data.test.kpiInstances[0].description
             }).placeAt(kpidescriptionElement);
-
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
@@ -281,6 +280,7 @@
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column epi-abtest-preview-right-side challengerDefaultBody");
             }
         },
+
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
             var pubThumb = dom.byId(canvasId);
 
