@@ -82,10 +82,12 @@
         <draft_prefix>Bozza - A cura di</draft_prefix>
         <from>da</from>
         <goal_not_specified>Un obiettivo non è stato specificato.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Salvati nelle versioni</losing_version_label>
         <percent_participation_header>Percentuale di visitatori che partecipano a questo A / B test</percent_participation_header>
         <published_prefix>Pubblicato da</published_prefix>
         <remaining_increment>Giorni</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Iniziato </started>
         <test_duration_header>Durata dell'A / B test</test_duration_header>
         <test_percent_to_participations_divider> / Attuale numero di partecipanti è </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Qual è l'obiettivo generale per questo test?</description_heading>
         <draft_prefix>Bozza - A cura di</draft_prefix>
         <goal_not_specified>Un obiettivo non è stato specificato.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Percentuale di visitatori che partecipano a questo A / B test</percent_participation_header>
         <published_prefix>Pubblicato da</published_prefix>
         <remaining_increment>Giorni</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Iniziato </started>
         <test_duration_completed>Completato dopo durata completa</test_duration_completed>
         <test_duration_header>Durata dell'A / B test</test_duration_header>
@@ -141,9 +145,7 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
-        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
-        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
@@ -175,12 +177,14 @@
           Questo test non è stato completato, ma si può scegliere un vincitore. La scelta di un vincitore farà terminare il test e pubblicare il contenuto scelto.
         </early_pick_winner_message>
         <goal_not_specified>Un obiettivo non è stato specificato.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Percentuale di visitatori che partecipano a questo A / B test</percent_participation_header>
         <pick_a_winner_text>Scegli un vincitore!</pick_a_winner_text>
         <pick_winner_option_text>Scegli un vincitore</pick_winner_option_text>
         <published_prefix>Pubblicato da</published_prefix>
         <remaining_increment>Giorni</remaining_increment>
         <result_is_not_significant>I risultati di questo test NON sono significativi.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Iniziato </started>
         <test_duration_completed>Completato dopo durata completa</test_duration_completed>
         <test_duration_header>Durata del test</test_duration_header>

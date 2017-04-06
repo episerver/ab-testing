@@ -82,10 +82,12 @@
         <draft_prefix>Kladde – redigeret af</draft_prefix>
         <from>fra</from>
         <goal_not_specified>Der er ikke angivet et mål.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Gemt i Versioner</losing_version_label>
         <percent_participation_header>Procentdel af de besøgende, som deltager i denne A/B-test</percent_participation_header>
         <published_prefix>Publiceret af</published_prefix>
         <remaining_increment>Dage</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startet </started>
         <test_duration_header>A/B-testens varighed</test_duration_header>
         <test_percent_to_participations_divider> / Det aktuelle antal deltagere er </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Overordnet mål for denne test</description_heading>
         <draft_prefix>Kladde – redigeret af</draft_prefix>
         <goal_not_specified>Der er ikke angivet et mål.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Procentdel af de besøgende, som deltager i denne A/B-test</percent_participation_header>
         <published_prefix>Publiceret af</published_prefix>
         <remaining_increment>Dage</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startet </started>
         <test_duration_completed>Afsluttet efter fuld tid</test_duration_completed>
         <test_duration_header>A/B-testens varighed</test_duration_header>
@@ -141,9 +145,7 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
-        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
-        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
@@ -173,12 +175,14 @@
         <draft_prefix>Kladde – redigeret af</draft_prefix>
         <early_pick_winner_message>Denne test er ikke fuldført, men du kan vælge en vinder. Hvis du vælger en vinder nu, afsluttes testen, og det valgte indhold publiceres.</early_pick_winner_message>
         <goal_not_specified>Der er ikke angivet et mål.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Procentdel af de besøgende, som deltager i denne A/B-test</percent_participation_header>
         <pick_a_winner_text>Vælg en vinder!</pick_a_winner_text>
         <pick_winner_option_text>Vælg en vinder</pick_winner_option_text>
         <published_prefix>Publiceret af</published_prefix>
         <remaining_increment>Dage</remaining_increment>
         <result_is_not_significant>Resultaterne af denne test er IKKE væsentlige.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Startet </started>
         <test_duration_completed>Afsluttet efter fuld tid</test_duration_completed>
         <test_duration_header>Testens varighed</test_duration_header>

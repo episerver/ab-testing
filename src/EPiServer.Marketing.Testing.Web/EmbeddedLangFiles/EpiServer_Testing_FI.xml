@@ -82,10 +82,12 @@
         <draft_prefix>Luonnos – Muokannut</draft_prefix>
         <from>alkaen</from>
         <goal_not_specified>Tavoitetta ei ole määritetty.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Tallennettu versioina</losing_version_label>
         <percent_participation_header>Tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuus</percent_participation_header>
         <published_prefix>Julkaissut</published_prefix>
         <remaining_increment>Päivät</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Aloitettu </started>
         <test_duration_header>A/B-testin kesto</test_duration_header>
         <test_percent_to_participations_divider> / Osallistujien nykyinen määrä on </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Tämän testin kokonaistavoite</description_heading>
         <draft_prefix>Luonnos – Muokannut</draft_prefix>
         <goal_not_specified>Tavoitetta ei ole määritetty.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuus</percent_participation_header>
         <published_prefix>Julkaissut</published_prefix>
         <remaining_increment>Päivät</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Aloitettu </started>
         <test_duration_completed>Valmistui täyden keston jälkeen</test_duration_completed>
         <test_duration_header>A/B-testin kesto</test_duration_header>
@@ -141,9 +145,7 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
-        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
-        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
@@ -175,12 +177,14 @@
           Tätä testiä ei ole suoritettu, mutta voit valita voittajan. Voittajan valitseminen nyt päättää testin ja valittu sisältö julkaistaan.
         </early_pick_winner_message>
         <goal_not_specified>Tavoitetta ei ole määritetty.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuus</percent_participation_header>
         <pick_a_winner_text>Valitse voittaja!</pick_a_winner_text>
         <pick_winner_option_text>Valitse voittaja</pick_winner_option_text>
         <published_prefix>Julkaissut</published_prefix>
         <remaining_increment>Päivät</remaining_increment>
         <result_is_not_significant>Tämän testin tulokset EIVÄT ole merkittäviä.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Aloitettu </started>
         <test_duration_completed>Valmistui täyden keston jälkeen</test_duration_completed>
         <test_duration_header>Testin kesto</test_duration_header>

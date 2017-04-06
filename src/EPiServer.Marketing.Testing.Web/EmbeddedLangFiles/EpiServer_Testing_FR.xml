@@ -82,10 +82,12 @@
         <draft_prefix>Projet - édité par</draft_prefix>
         <from>de</from>
         <goal_not_specified>L’objectif A n’a pas été précisé.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Enregistré dans les Versions</losing_version_label>
         <percent_participation_header>Pourcentage des visiteurs participant au test A/B</percent_participation_header>
         <published_prefix>Publié par</published_prefix>
         <remaining_increment>Jours</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Commencé </started>
         <test_duration_header>Durée du test A/B</test_duration_header>
         <test_percent_to_participations_divider> / le nombre actuel de participants est </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Objectif général du test</description_heading>
         <draft_prefix>Projet - édité par</draft_prefix>
         <goal_not_specified>L’objectif A n’a pas été précisé.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Pourcentage des visiteurs participant au test A/B</percent_participation_header>
         <published_prefix>Publié par</published_prefix>
         <remaining_increment>Jours</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Commencé </started>
         <test_duration_completed>Terminé à l’issue de la durée totale prévue</test_duration_completed>
         <test_duration_header>Durée du test A/B</test_duration_header>
@@ -141,9 +145,7 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
-        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
-        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
@@ -175,12 +177,14 @@
           Ce test n’est pas encore terminé, mais vous pouvez choisir un vainqueur. Choisir un vainqueur dès maintenant mettra fin au test et déclenchera la publication du contenu choisi.
         </early_pick_winner_message>
         <goal_not_specified>L’objectif A n’a pas été précisé.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Pourcentage des visiteurs participant au test A/B</percent_participation_header>
         <pick_a_winner_text>Choisir un vainqueur !</pick_a_winner_text>
         <pick_winner_option_text>Choisir un vainqueur</pick_winner_option_text>
         <published_prefix>Publié par</published_prefix>
         <remaining_increment>Jours</remaining_increment>
         <result_is_not_significant>Les résultats de ce test NE SONT PAS significatifs.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Commencé </started>
         <test_duration_completed>Terminé à l’issue de la durée totale prévue</test_duration_completed>
         <test_duration_header>Durée du test</test_duration_header>

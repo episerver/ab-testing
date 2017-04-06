@@ -54,24 +54,10 @@
                             <br />
                         </p>
                         <!-- Control Statistics -->
-                        <table width="100%">
-                            <tr>
-                                <td style="text-align:center;">
-                                    <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
-                                </td>
-                                <td style="text-align:center;">
-                                    <div id="controlPieChart"  class="epi-ab-converstion-pie-chart"></div>
-                                </td>
-                                <td style="text-align:center;">
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.detailsview.conversions}
-                                    </p>
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.detailsview.views}
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="epi-abTest-summaryToggle">
+                            <a class="epi-visibleLink" data-dojo-attach-point="summaryToggle" data-dojo-attach-event="onclick: _toggleSummaries">${resources.detailsview.hide_summary}</a>
+                        </div>
+                        <div data-dojo-attach-point="controlDetailsSummaryNode"></div>
                     </div>
                 </div>
                 <!-- Challenger/Draft Version-->
@@ -89,25 +75,9 @@
                             <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
                             <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
                         </p>
-                        <table width="100%">
-                            <tr>
-                                <td style="text-align: center;">
-                                    <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
-                                </td>
-                                <td style="text-align: center;">
-                                    <div id="challengerPieChart" class="epi-ab-converstion-pie-chart"></div>
-                                </td>
-                                <td style="text-align: center;">
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.detailsview.conversions}
-                                    </p>
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.detailsview.views}
-                                    </p>
-                                </td>
-                                <td></td>
-                            </tr>
-                        </table>
+                        <!-- Challenger Statistics-->
+                        <div class="epi-abTest-summaryToggle"></div>
+                        <div data-dojo-attach-point="challengerDetailsSummaryNode"></div>
                     </div>
                 </div>
             </div>
@@ -143,8 +113,8 @@
                              data-dojo-id="durationProgressBar"
                              style="width: 35%"></div>
                     </div>
-                    </div>
                 </div>
+            </div>
             <div class="cardWrapper" style="margin-bottom: 114px">
                 <h3 class="epi-abtest-advanced-header">${resources.detailsview.advanced_options_header}</h3>
                 <div class="cardBody">

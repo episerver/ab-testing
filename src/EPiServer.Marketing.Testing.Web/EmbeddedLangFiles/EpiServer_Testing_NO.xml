@@ -82,10 +82,12 @@
         <draft_prefix>Utkast – redigert av</draft_prefix>
         <from>fra</from>
         <goal_not_specified>Det er ikke angitt et mål.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Lagret i versjoner</losing_version_label>
         <percent_participation_header>Prosentandel av gjester som deltar i denne A/B-testen</percent_participation_header>
         <published_prefix>Publisert av</published_prefix>
         <remaining_increment>Dager</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startet </started>
         <test_duration_header>A/B-testens varighet</test_duration_header>
         <test_percent_to_participations_divider> / Antall deltakere er </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Overordnet mål for denne testen</description_heading>
         <draft_prefix>Utkast – redigert av</draft_prefix>
         <goal_not_specified>Det er ikke angitt et mål.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Prosentandel av gjester som deltar i denne A/B-testen</percent_participation_header>
         <published_prefix>Publisert av</published_prefix>
         <remaining_increment>Dager</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startet </started>
         <test_duration_completed>Gjennomført etter full varighet</test_duration_completed>
         <test_duration_header>A/B-testens varighet</test_duration_header>
@@ -141,9 +145,7 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
-        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
-        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
@@ -175,12 +177,14 @@
           Denne testen er ikke fullført, men du kan velge en vinner. Hvis du velger en vinner nå, avsluttes testen, og det valgte innholdet publiseres.
         </early_pick_winner_message>
         <goal_not_specified>Det er ikke angitt et mål.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Prosentandel av gjester som deltar i denne A/B-testen</percent_participation_header>
         <pick_a_winner_text>Velg en vinner!</pick_a_winner_text>
         <pick_winner_option_text>Velg en vinner</pick_winner_option_text>
         <published_prefix>Publisert av</published_prefix>
         <remaining_increment>Dager</remaining_increment>
         <result_is_not_significant>Resultatene av denne testen er IKKE signifikante.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Startet </started>
         <test_duration_completed>Gjennomført etter full varighet</test_duration_completed>
         <test_duration_header>Testens varighet</test_duration_header>

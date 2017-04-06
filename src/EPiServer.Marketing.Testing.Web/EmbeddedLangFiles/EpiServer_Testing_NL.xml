@@ -82,10 +82,12 @@
         <draft_prefix>Concept - Bewerkt door</draft_prefix>
         <from>vanaf</from>
         <goal_not_specified>Er is geen doel opgegeven.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Opgeslagen in versies</losing_version_label>
         <percent_participation_header>Percentage bezoekers dat deelneemt aan deze A / B-test</percent_participation_header>
         <published_prefix>Gepubliceerd door</published_prefix>
         <remaining_increment>Dagen</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Gestart </started>
         <test_duration_header>Duur van de A / B-test</test_duration_header>
         <test_percent_to_participations_divider> / Huidige aantal deelnemers is </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Algemeen doel van deze test</description_heading>
         <draft_prefix>Concept - Bewerkt door</draft_prefix>
         <goal_not_specified>Er is geen doel opgegeven.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Percentage bezoekers dat deelneemt aan deze A / B-test</percent_participation_header>
         <published_prefix>Gepubliceerd door</published_prefix>
         <remaining_increment>Dagen</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Gestart </started>
         <test_duration_completed>Voltooid na volledige duur</test_duration_completed>
         <test_duration_header>Duur van de A / B-test</test_duration_header>
@@ -141,9 +145,7 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
-        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
-        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
@@ -175,12 +177,14 @@
           Deze test is niet voltooid, maar u kunt wel een winnaar kiezen. Als u nu een winnaar kiest, wordt de test beëindigd en de gekozen content gepubliceerd.
         </early_pick_winner_message>
         <goal_not_specified>Er is geen doel opgegeven.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Percentage bezoekers dat deelneemt aan deze A / B-test</percent_participation_header>
         <pick_a_winner_text>Kies een winnaar!</pick_a_winner_text>
         <pick_winner_option_text>Kies een winnaar</pick_winner_option_text>
         <published_prefix>Gepubliceerd door</published_prefix>
         <remaining_increment>Dagen</remaining_increment>
         <result_is_not_significant>De resultaten van deze test zijn NIET significant.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Gestart </started>
         <test_duration_completed>Voltooid na volledige duur</test_duration_completed>
         <test_duration_header>Testduur</test_duration_header>
