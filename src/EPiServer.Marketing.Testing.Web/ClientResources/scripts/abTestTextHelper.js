@@ -167,14 +167,6 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
-        getKpiFriendlyName: function (kpiId, arrayObj) {
-            for (var i = 0; i < arrayObj.length; i++) {
-                if (arrayObj[i].id === kpiId) {
-                    return arrayObj[i].friendlyName;
-                }
-            }
-        },
-
         renderChallengerSummary: function (summaryNode) {
             this._removeSummaryWidgets(summaryNode)
             var summaryWidget;
@@ -204,16 +196,24 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
+        getKpiSummary: function (id, arrayObj) {
+            for (var i = 0; i < arrayObj.length; i++) {
+                if (arrayObj[i].kpiId === id) {
+                    return arrayObj[i];
+                }
+            }
+        },
+
         _renderControlSummaries: function () {
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
-            for (var x = 0; x < this.publishedVariant.keyConversionResults.length; x++) {
-                var KpiFriendlyName = this.getKpiFriendlyName(this.publishedVariant.keyConversionResults[x].kpiId, kpiInstances);
+            for (var x = 0; x < kpiInstances.length; x++) {
+                var kpiSummary = this.getKpiSummary(kpiInstances[x].id, this.publishedVariant.keyConversionResults);
                 var kpiResult = {
-                    name: KpiFriendlyName,
-                    conversions: this.publishedVariant.keyConversionResults[x].conversions,
-                    weight: "Low",
-                    performance: 50
+                    name: kpiInstances[x].friendlyName,
+                    conversions: kpiSummary.conversions,
+                    weight: kpiSummary.selectedWeight,
+                    performance: kpiSummary.performance
                 }
                 kpiResults.push(kpiResult);
             }
@@ -226,13 +226,13 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
         _renderChallengerSummaries: function () {
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
-            for (var x = 0; x < this.draftVariant.keyConversionResults.length; x++) {
-                var KpiFriendlyName = this.getKpiFriendlyName(this.draftVariant.keyConversionResults[x].kpiId, kpiInstances);
+            for (var x = 0; x < kpiInstances.length; x++) {
+                var kpiSummary = this.getKpiSummary(kpiInstances[x].id, this.draftVariant.keyConversionResults);
                 var kpiResult = {
-                    name: KpiFriendlyName,
-                    conversions: this.draftVariant.keyConversionResults[x].conversions,
-                    weight: "Low",
-                    performance: 50
+                    name: kpiInstances[x].friendlyName,
+                    conversions: kpiSummary.conversions,
+                    weight: kpiSummary.selectedWeight,
+                    performance: kpiSummary.performance
                 }
                 kpiResults.push(kpiResult);
             }
