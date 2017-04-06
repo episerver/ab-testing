@@ -48,24 +48,7 @@
                     </div>
                     <hr class="epi-abtest-hr" />
                     <!-- Control Statistics -->
-                    <table width="100%">
-                        <tr>
-                            <td style="text-align:center;">
-                                <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.archiveview.conversion_rate}
-                            </td>
-                            <td style="text-align:center;">
-                                <div id="controlArchivePieChart" class="epi-ab-converstion-pie-chart"></div>
-                            </td>
-                            <td style="text-align:center;">
-                                <p>
-                                    <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.archiveview.conversions}
-                                </p>
-                                <p>
-                                    <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.archiveview.views}
-                                </p>
-                            </td>
-                        </tr>
-                    </table>
+                    <div data-dojo-attach-point="controlArchiveSummaryNode"></div>
                 </div>
             </div>
             <!-- Challenger/Draft Version-->
@@ -87,25 +70,8 @@
                         <h2 data-dojo-attach-point="challengerVersionTestResult"></h2>
                     </div>
                     <hr class="epi-abtest-hr" />
-                    <table width="100%">
-                        <tr>
-                            <td style="text-align: center;">
-                                <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.archiveview.conversion_rate}
-                            </td>
-                            <td style="text-align:center;">
-                                <div id="challengerArchivePieChart" class="epi-ab-converstion-pie-chart"></div>
-                            </td>
-                            <td style="text-align: center;">
-                                <p>
-                                    <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.archiveview.conversions}
-                                </p>
-                                <p>
-                                    <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.archiveview.views}
-                                </p>
-                            </td>
-                            <td></td>
-                        </tr>
-                    </table>
+                    <!-- Challenger Statistics-->
+                    <div data-dojo-attach-point="challengerArchiveSummaryNode"></div>
                 </div>
             </div>
             <!-- Test Information -->
@@ -120,7 +86,7 @@
                             <!-- KPI Generated Markup -->
                         </div>
                         <div id="archive_kpidescription">
-                            <!-- KPI Description -->  
+                            <!-- KPI Description -->
                         </div>
                     </div>
                     <hr class="epi-abtest-hr">
