@@ -25,7 +25,9 @@
       </detailsview>
       <kpisummarywidget>
         <conversions path="/abtesting/kpisummarywidget/conversions/">Conversions</conversions>
+        <hide_details path="/abtesting/kpisummarywidget/hide_details/">Hide Details</hide_details>
         <performance path="/abtesting/kpisummarywidget/performance/">Performance</performance>
+        <show_details path="/abtesting/kpisummarywidget/show_details/">Show Details</show_details>
         <weight path="/abtesting/kpisummarywidget/weight/">Weight</weight>
       </kpisummarywidget>
       <pickwinnerview>

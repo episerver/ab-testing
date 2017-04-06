@@ -142,7 +142,9 @@
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
+        <hide_details>Hide Details</hide_details>
         <performance>Performance</performance>
+        <show_details>Show Details</show_details>
         <weight>Weight</weight>
       </kpisummarywidget>
       <notificationbar>
