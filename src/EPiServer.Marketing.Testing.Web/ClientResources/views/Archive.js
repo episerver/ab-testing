@@ -69,9 +69,9 @@
             }
             if (this.context.data.test.kpiInstances.length > 1) {
                 this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible"
+                this.summaryToggle.style.visibility = "visible";
             } else {
-                this.summaryToggle.style.visibility = "hidden"
+                this.summaryToggle.style.visibility = "hidden";
             }
         },
 
