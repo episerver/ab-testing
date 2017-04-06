@@ -293,7 +293,7 @@
             }
         },
 
-        _toggleSummaries: function (evt) {
+        _toggleSummaries: function () {
             if (this.summaryToggle.innerHTML === this.resources.detailsview.hide_summary) {
                 this.controlSummaryOut.play();
                 this.challengerSummaryOut.play();

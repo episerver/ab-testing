@@ -300,7 +300,7 @@
             }
         },
 
-        _toggleSummaries: function (evt) {
+        _toggleSummaries: function () {
             if (this.summaryToggle.innerHTML === this.resources.pickwinnerview.hide_summary) {
                 this.controlSummaryOut.play();
                 this.challengerSummaryOut.play();

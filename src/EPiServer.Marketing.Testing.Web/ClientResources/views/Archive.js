@@ -255,7 +255,7 @@
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
 
-        _toggleSummaries: function (evt) {
+        _toggleSummaries: function () {
             if (this.summaryToggle.innerHTML === this.resources.archiveview.hide_summary) {
                 this.controlSummaryOut.play();
                 this.challengerSummaryOut.play();
