@@ -82,10 +82,12 @@
         <draft_prefix>Entwurf - Bearbeitet von</draft_prefix>
         <from>von</from>
         <goal_not_specified>Es wurde kein Ziel festgelegt.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Gespeichert in Versionen</losing_version_label>
         <percent_participation_header>Prozent der Besucher, die an diesem A/B-Test teilnehmen</percent_participation_header>
         <published_prefix>Veröffentlicht von</published_prefix>
         <remaining_increment>Tage</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Gestartet </started>
         <test_duration_header>Dauer des A/B-Tests</test_duration_header>
         <test_percent_to_participations_divider> /Aktuelle Teilnehmerzahl beträgt </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Gesamtziel für diesen Test</description_heading>
         <draft_prefix>Entwurf - Bearbeitet von</draft_prefix>
         <goal_not_specified>Es wurde kein Ziel festgelegt.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Prozent der Besucher, die an diesem A/B-Test teilnehmen</percent_participation_header>
         <published_prefix>Veröffentlicht von</published_prefix>
         <remaining_increment>Tage</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Gestartet </started>
         <test_duration_completed>Abgeschlossen nach vollständiger Dauer</test_duration_completed>
         <test_duration_header>Dauer des A/B-Tests</test_duration_header>
@@ -173,12 +177,14 @@
           Dieser Test wurde noch nicht abgeschlossen, aber Sie können einen Gewinner ermitteln. Wenn Sie jetzt einen Gewinner ermitteln, wird der Test beendet und der gewählte Inhalt veröffentlicht.
         </early_pick_winner_message>
         <goal_not_specified>Es wurde kein Ziel festgelegt.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Prozent der Besucher, die an diesem A/B-Test teilnehmen</percent_participation_header>
         <pick_a_winner_text>Gewinner ermitteln!</pick_a_winner_text>
         <pick_winner_option_text>Gewinner ermitteln</pick_winner_option_text>
         <published_prefix>Veröffentlicht von</published_prefix>
         <remaining_increment>Tage</remaining_increment>
         <result_is_not_significant>Die Ergebnisse dieses Tests sind NICHT signifikant.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Gestartet </started>
         <test_duration_completed>Abgeschlossen nach vollständiger Dauer</test_duration_completed>
         <test_duration_header>Testdauer</test_duration_header>

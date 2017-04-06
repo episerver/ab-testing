@@ -18,6 +18,7 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
+ "dojo/fx",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -43,7 +44,8 @@
     query,
     textHelper,
     rasterizehtml,
-    ContentPane
+    ContentPane,
+    CoreFX
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -67,6 +69,37 @@
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
             }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible";
+            } else {
+                this.summaryToggle.style.visibility = "hidden";
+            }
+        },
+
+        _setToggleAnimations() {
+            var me = this;
+            this.controlSummaryOut = CoreFX.wipeOut({
+                node: me.controlDetailsSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.detailsview.show_summary }
+            });
+
+            this.controlSummaryIn = CoreFX.wipeIn({
+                node: me.controlDetailsSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.detailsview.hide_summary }
+            });
+
+            this.challengerSummaryOut = CoreFX.wipeOut({
+                node: me.challengerDetailsSummaryNode,
+                rate: 15
+            });
+
+            this.challengerSummaryIn = CoreFX.wipeIn({
+                node: me.challengerDetailsSummaryNode,
+                rate: 15
+            });
         },
 
         _contextChanged: function (newContext) {
@@ -257,6 +290,17 @@
                     function success(renderResult) {
                         query('.' + parentContainerClass).addClass('hide-bg');
                     });
+            }
+        },
+
+        _toggleSummaries: function () {
+            if (this.summaryToggle.innerHTML === this.resources.detailsview.hide_summary) {
+                this.controlSummaryOut.play();
+                this.challengerSummaryOut.play();
+            }
+            else {
+                this.controlSummaryIn.play();
+                this.challengerSummaryIn.play();
             }
         }
     });

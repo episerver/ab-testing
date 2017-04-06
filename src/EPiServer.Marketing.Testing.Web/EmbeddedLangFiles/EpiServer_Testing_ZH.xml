@@ -82,10 +82,12 @@
         <draft_prefix>草稿 - 编辑者</draft_prefix>
         <from>自</from>
         <goal_not_specified>目标尚未指定。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>已保存的版本</losing_version_label>
         <percent_participation_header>参加此 A/B 测试的访客比例</percent_participation_header>
         <published_prefix>发布人</published_prefix>
         <remaining_increment>天</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> 已开始 </started>
         <test_duration_header>A/B 测试持续时间</test_duration_header>
         <test_percent_to_participations_divider> /当前参与人数为 </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>此测试的总体目标</description_heading>
         <draft_prefix>草稿 - 编辑者</draft_prefix>
         <goal_not_specified>目标尚未指定。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>参加此 A/B 测试的访客比例</percent_participation_header>
         <published_prefix>发布人</published_prefix>
         <remaining_increment>天</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> 已开始 </started>
         <test_duration_completed>从头到尾全部完成</test_duration_completed>
         <test_duration_header>A/B 测试持续时间</test_duration_header>
@@ -173,12 +177,14 @@
           此测试尚未完成，但您可以挑选优胜者。 现在挑选优胜者将结束测试并发布选定的内容。
         </early_pick_winner_message>
         <goal_not_specified>目标尚未指定。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>参加此 A/B 测试的访客比例</percent_participation_header>
         <pick_a_winner_text>挑选优胜者！</pick_a_winner_text>
         <pick_winner_option_text>挑选优胜者</pick_winner_option_text>
         <published_prefix>发布人</published_prefix>
         <remaining_increment>天</remaining_increment>
         <result_is_not_significant>此测试的结果不显著。</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> 已开始 </started>
         <test_duration_completed>从头到尾全部完成</test_duration_completed>
         <test_duration_header>测试持续时间</test_duration_header>

@@ -82,10 +82,12 @@
         <draft_prefix>Utkast - redigerat av</draft_prefix>
         <from>från</from>
         <goal_not_specified>Ett mål har inte angivits för testet.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Sparat i Versioner</losing_version_label>
         <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
         <published_prefix>Publicerat av</published_prefix>
         <remaining_increment>Dagar</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startat </started>
         <test_duration_header>Testets längd</test_duration_header>
         <test_percent_to_participations_divider> / Antalet testdeltagare just nu </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Mål med testet</description_heading>
         <draft_prefix>Utkast - Redigerat av</draft_prefix>
         <goal_not_specified>Ett mål har inte angivits för testet.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
         <published_prefix>Publicerat av</published_prefix>
         <remaining_increment>Dagar</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startat </started>
         <test_duration_completed>Avslutat efter fulltid</test_duration_completed>
         <test_duration_header>Testets längd</test_duration_header>
@@ -173,12 +177,14 @@
           Det här testet är inte avslutat men du kan välja en vinnare. Om du väljer en vinnare nu avslutas testet och det valda innehållet publiceras.
         </early_pick_winner_message>
         <goal_not_specified>Ett mål har inte angivits.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
         <pick_a_winner_text>Välj en vinnare!</pick_a_winner_text>
         <pick_winner_option_text>Välj en vinnare</pick_winner_option_text>
         <published_prefix>Publicerat av</published_prefix>
         <remaining_increment>Dagar</remaining_increment>
         <result_is_not_significant>Testresultaten är INTE signifikanta.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Startat </started>
         <test_duration_completed>Avslutat efter fulltid</test_duration_completed>
         <test_duration_header>Testets längd</test_duration_header>
