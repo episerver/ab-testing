@@ -115,12 +115,10 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/stickysite_kpi/readonly_markup/conversion_header");
                 var conversionDescription = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/stickysite_kpi/readonly_markup/conversion_selector_description");
                 conversionDescription = string.Format(conversionDescription, Timeout);
-                markup = string.Format(markup, conversionHeaderText, conversionDescription);
+                markup = string.Format(markup, conversionDescription);
                 return markup;
             }
         }

@@ -71,14 +71,14 @@
             }
             if (this.context.data.test.kpiInstances.length > 1) {
                 this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible";
             } else {
-                this.summaryToggle.style.visibility = "hidden";
+                this.summaryToggle.style.visibility = "hidden"
             }
         },
 
         _setToggleAnimations() {
             var me = this;
+
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
                 rate: 15,
@@ -100,6 +100,7 @@
                 node: me.challengerDetailsSummaryNode,
                 rate: 15
             });
+
         },
 
         _contextChanged: function (newContext) {
@@ -189,16 +190,19 @@
 
         _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
-            this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
-
             var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
+
+            this._clearKpiMarkup(kpiuiElement);
+            var kpidescriptionElement = dom.byId(kpidescriptionId);
+
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+                new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].description
+                }).placeAt(kpidescriptionElement);
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
@@ -293,7 +297,7 @@
             }
         },
 
-        _toggleSummaries: function () {
+        _toggleSummaries: function (evt) {
             if (this.summaryToggle.innerHTML === this.resources.detailsview.hide_summary) {
                 this.controlSummaryOut.play();
                 this.challengerSummaryOut.play();

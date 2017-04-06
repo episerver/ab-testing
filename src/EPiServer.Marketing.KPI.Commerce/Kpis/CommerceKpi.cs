@@ -100,8 +100,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             {
                 string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = LocalizationService.Current
-                    .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_header");
                 var conversionDescription = LocalizationService.Current
                     .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_selector_description");
 
@@ -109,7 +107,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
                 {
                     var contentRepository = _servicelocator.GetInstance<IContentRepository>();
                     var content = contentRepository.Get<IContent>(ContentGuid);
-                    markup = string.Format(markup, conversionHeaderText, conversionDescription,
+                    markup = string.Format(markup, conversionDescription,
                         content.ContentLink, content.Name);
                 }
 
