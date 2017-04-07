@@ -19,6 +19,7 @@
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
  "dojo/fx",
+ "dojo/dom-construct",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -43,7 +44,8 @@
     textHelper,
     rasterizehtml,
     ContentPane,
-    CoreFX
+    CoreFX,
+    DomConstruct
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
