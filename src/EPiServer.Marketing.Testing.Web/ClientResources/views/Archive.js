@@ -136,7 +136,7 @@
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
-                me._renderKpiMarkup("archive_conversionMarkup", "archive_kpidescription");
+                me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
                 }
@@ -146,15 +146,15 @@
         _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
 
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
+
+                var goalsContent = new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+                dojo.place(goalsDescription, goalsContent.containerNode);
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
