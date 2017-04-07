@@ -75,7 +75,6 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden";
             }
-
         },
 
         _setToggleAnimations() {

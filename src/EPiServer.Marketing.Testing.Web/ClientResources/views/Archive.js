@@ -52,7 +52,6 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
-
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
