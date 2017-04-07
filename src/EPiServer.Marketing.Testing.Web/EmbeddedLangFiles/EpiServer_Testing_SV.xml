@@ -32,6 +32,7 @@
         <error_test_not_schedulded_or_started>inte schemalagt, korrigera felet på startdag/startdag för att schemalägga ett test</error_test_not_schedulded_or_started>
         <goals_default_text>Exempel: Få fler nedladdningar av e-boken genom att byta reklambilden.</goals_default_text>
         <goals_header>Vad är målet med testet?</goals_header>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Välj mål</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>

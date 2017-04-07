@@ -32,6 +32,7 @@
         <error_test_not_schedulded_or_started>ikke planlagt, løs fejl ved startdato/-klokkeslæt for at planlægge en test</error_test_not_schedulded_or_started>
         <goals_default_text>F.eks. Ved at tilpasse teksten i det første punkt på listen, så den takler "tidsproblemet", kan jeg motivere flere brugere til at hente e-bogen.</goals_default_text>
         <goals_header>Hvad er det overordnede mål for denne test?</goals_header>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Vælg mål</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
