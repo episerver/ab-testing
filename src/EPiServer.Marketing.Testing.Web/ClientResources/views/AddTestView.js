@@ -263,7 +263,23 @@
                 if (kpiuiElement && kpiList) {
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
+
+                    var defaultOption = null;
+
+                    if (this.kpiEntries == 0) {
+                        defaultOption = {
+                            value: "default",
+                            label: me.resources.addtestview.goals_selectlist_default,
+                            selected: true
+                        };
+                    } else {
+                        defaultOption = {
+                            value: "default",
+                            label: me.resources.addtestview.goals_selectlist_additional_kpi,
+                            selected: true
+                        };
+                    }
+
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < kpiList.length; x++) {
                         var option = { value: x.toString(), label: kpiList[x].kpi.friendlyName };
@@ -568,7 +584,7 @@
                 this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
-                this._adjustKpiSelectorCombo()
+                this._adjustKpiSelectorCombo();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };

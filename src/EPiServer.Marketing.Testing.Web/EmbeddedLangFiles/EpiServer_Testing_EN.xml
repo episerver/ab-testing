@@ -33,7 +33,7 @@
         <goals_default_text>Example: Get more click-throughs to download the ebook by changing the advertisement image.</goals_default_text>
         <goals_header>Test goal</goals_header>
         <goals_selectlist_default>Select goal</goals_selectlist_default>
-        <goals_selectlist_default>Select Goal</goals_selectlist_default>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
