@@ -42,6 +42,7 @@
         <participant_percentage_tip>Un pourcentage de participation élevé réduit le temps nécessaire pour collecter suffisamment de statistiques pour pouvoir choisir un vainqueur.</participant_percentage_tip>
         <participation_header>Quel pourcentage des visiteurs devrait participer à ce test A/B ?</participation_header>
         <published_prefix>Publié par</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Quand le test A/B devrait-il commencer ?</schedule_header>
         <schedule_selector_delay>Programmer pour plus tard</schedule_selector_delay>
         <schedule_selector_start>Commencer immédiatement</schedule_selector_start>

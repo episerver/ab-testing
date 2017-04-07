@@ -42,6 +42,7 @@
         <participant_percentage_tip>More participation reduces time to gather statistics and pick a winner.</participant_percentage_tip>
         <participation_header>Participation percentage</participation_header>
         <published_prefix>Published by</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Start test</schedule_header>
         <schedule_selector_delay>Schedule for later</schedule_selector_delay>
         <schedule_selector_start>Start immediately</schedule_selector_start>

@@ -42,6 +42,7 @@
         <participant_percentage_tip>Ein höherer Beteiligungsprozentsatz verkürzt die erforderliche Zeit, um ausreichende Statistiken für die Gewinnerermittlung zu erfassen.</participant_percentage_tip>
         <participation_header>Wie viel Prozent der Besucher sollten an diesem A/B-Test teilnehmen?</participation_header>
         <published_prefix>Veröffentlicht von</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Wann soll der A/B-Test beginnen?</schedule_header>
         <schedule_selector_delay>Für späteren Zeitpunkt planen</schedule_selector_delay>
         <schedule_selector_start>Sofort starten</schedule_selector_start>

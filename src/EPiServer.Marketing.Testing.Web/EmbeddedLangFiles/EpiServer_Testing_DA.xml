@@ -42,6 +42,7 @@
         <participant_percentage_tip>En højere deltagelsesprocent reducerer den tid, det tager at indsamle nok data til at kunne vælge en vinder.</participant_percentage_tip>
         <participation_header>Hvilken procentdel af de besøgende skal deltage i denne A/B-test?</participation_header>
         <published_prefix>Publiceret af</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Hvornår skal A/B-testen starte?</schedule_header>
         <schedule_selector_delay>Planlæg til senere</schedule_selector_delay>
         <schedule_selector_start>Start med det samme</schedule_selector_start>

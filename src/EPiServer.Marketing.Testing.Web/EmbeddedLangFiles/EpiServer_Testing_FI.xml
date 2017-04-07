@@ -42,6 +42,7 @@
         <participant_percentage_tip>Korkeampi osallistumisprosentti vähentää aikaa, jota tarvitaan keräämään tarvittavat tilastot voittajan valitsemista varten.</participant_percentage_tip>
         <participation_header>Millainen tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuuden tulee olla?</participation_header>
         <published_prefix>Julkaissut</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Milloin A/B-testin pitää alkaa?</schedule_header>
         <schedule_selector_delay>Ajoita myöhemmäksi</schedule_selector_delay>
         <schedule_selector_start>Aloita heti</schedule_selector_start>

@@ -42,6 +42,7 @@
         <participant_percentage_tip>Ett högre deltagandeantal minskar tiden som krävs för att samla tillräckligt med data för att kunna peka ut en vinnare.</participant_percentage_tip>
         <participation_header>Hur stor del av besökarantalet, i procent, ska delta i testet?</participation_header>
         <published_prefix>Publicerat av</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>När ska A/B-testet starta?</schedule_header>
         <schedule_selector_delay>Schemalägg för senare publicering</schedule_selector_delay>
         <schedule_selector_start>Starta omedelbart</schedule_selector_start>

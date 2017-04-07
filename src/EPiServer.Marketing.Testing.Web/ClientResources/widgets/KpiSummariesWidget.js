@@ -26,7 +26,7 @@
         kpis: null,
 
         startup: function () {
-            var trInsertNode = dom.byId(this.id + "Summaries")
+            var trInsertNode = dom.byId(this.id + "Summaries");
             var templatedRow;
             if (trInsertNode) {
                 trInsertNode.innerHTML = "";

@@ -42,6 +42,7 @@
         <participant_percentage_tip>Een hoger deelnamepercentage vermindert de tijd die nodig is voor het verzamelen van voldoende statistische gegevens om een winnaar te kunnen kiezen.</participant_percentage_tip>
         <participation_header>Welk percentage bezoekers moet deelnemen aan deze A / B-test?</participation_header>
         <published_prefix>Gepubliceerd door</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Wanneer moet de A / B-test worden gestart?</schedule_header>
         <schedule_selector_delay>Plannen voor later</schedule_selector_delay>
         <schedule_selector_start>Onmiddellijk beginnen</schedule_selector_start>
