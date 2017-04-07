@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private Stream stream;
         private StreamWriter streamWriter;
         string bufferedHtml;
-        private string _clientScript;
+        internal string _clientScript;
 
         public ABResponseFilter(Stream stm, string script)
         {
