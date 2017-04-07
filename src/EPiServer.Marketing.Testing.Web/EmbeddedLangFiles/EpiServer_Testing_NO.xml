@@ -42,6 +42,7 @@
         <participant_percentage_tip>Høyere deltakelsesprosent reduserer tiden som trengs for å innhente nok statistikk til å kunne velge en vinner.</participant_percentage_tip>
         <participation_header>Hvilken prosentandel av gjester skal delta i denne A/B-testen?</participation_header>
         <published_prefix>Publisert av</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Når skal A/B-testen startes?</schedule_header>
         <schedule_selector_delay>Tidsstyrt for senere</schedule_selector_delay>
         <schedule_selector_start>Start umiddelbart</schedule_selector_start>

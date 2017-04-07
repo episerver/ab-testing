@@ -42,6 +42,7 @@
         <participant_percentage_tip>参加率が高くなると、勝者の選出に十分な統計情報を収集するのに必要な時間が短縮されます。</participant_percentage_tip>
         <participation_header>何パーセントの訪問者がこのA/Bテストに参加する必要がありますか?</participation_header>
         <published_prefix>公開者名:</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>A/Bテストをいつ開始しますか?</schedule_header>
         <schedule_selector_delay>後でスケジュール</schedule_selector_delay>
         <schedule_selector_start>今すぐ開始</schedule_selector_start>
