@@ -152,27 +152,22 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                         displayChart: false,
                         views: this.publishedVariant.views,
                         conversions: this.publishedVariant.keyFinancialResults.length,
-                        conversionRate: context.data.publishedVersionFinancialsAverage
+                        conversionRate: context.data.publishedVersionFinancialsAverage,
+                        isLeader: eval(this.publishedPercent > this.draftPercent)
                     });
                 }
                 else {
                     summaryWidget = new KpiSummaryWidget({
                         views: this.publishedVariant.views,
                         conversions: this.publishedVariant.conversions,
-                        conversionRate: this.publishedPercent
+                        conversionRate: this.publishedPercent,
+                        isLeader: eval(this.publishedPercent > this.draftPercent)
+
                     });
                 }
             }
             summaryWidget.placeAt(summaryNode);
             return summaryWidget;
-        },
-
-        getKpiFriendlyName: function (kpiId, arrayObj) {
-            for (var i = 0; i < arrayObj.length; i++) {
-                if (arrayObj[i].id === kpiId) {
-                    return arrayObj[i].friendlyName;
-                }
-            }
         },
 
         renderChallengerSummary: function (summaryNode) {
@@ -189,14 +184,16 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                         displayChart: false,
                         views: this.draftVariant.views,
                         conversions: this.draftVariant.keyFinancialResults.length,
-                        conversionRate: context.data.draftVersionFinancialsAverage
+                        conversionRate: context.data.draftVersionFinancialsAverage,
+                        isLeader: eval(this.draftPercent > this.publishedPercent)
                     });
                 }
                 else {
                     summaryWidget = new KpiSummaryWidget({
                         views: this.draftVariant.views,
                         conversions: this.draftVariant.conversions,
-                        conversionRate: this.draftPercent
+                        conversionRate: this.draftPercent,
+                        isLeader: eval(this.draftPercent > this.publishedPercent)
                     });
                 }
             }
@@ -204,16 +201,24 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
+        _getKpiSummary: function (id, arrayObj) {
+            for (var i = 0; i < arrayObj.length; i++) {
+                if (arrayObj[i].kpiId === id) {
+                    return arrayObj[i];
+                }
+            }
+        },
+
         _renderControlSummaries: function () {
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
-            for (var x = 0; x < this.publishedVariant.keyConversionResults.length; x++) {
-                var KpiFriendlyName = this.getKpiFriendlyName(this.publishedVariant.keyConversionResults[x].kpiId, kpiInstances);
+            for (var x = 0; x < kpiInstances.length; x++) {
+                var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.publishedVariant.keyConversionResults);
                 var kpiResult = {
-                    name: KpiFriendlyName,
-                    conversions: this.publishedVariant.keyConversionResults[x].conversions,
-                    weight: "Low",
-                    performance: 50
+                    markup: kpiInstances[x].uiReadOnlyMarkup,
+                    conversions: kpiSummary.conversions,
+                    weight: kpiSummary.selectedWeight,
+                    performance: kpiSummary.performance
                 }
                 kpiResults.push(kpiResult);
             }
@@ -226,13 +231,13 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
         _renderChallengerSummaries: function () {
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
-            for (var x = 0; x < this.draftVariant.keyConversionResults.length; x++) {
-                var KpiFriendlyName = this.getKpiFriendlyName(this.draftVariant.keyConversionResults[x].kpiId, kpiInstances);
+            for (var x = 0; x < kpiInstances.length; x++) {
+                var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.draftVariant.keyConversionResults);
                 var kpiResult = {
-                    name: KpiFriendlyName,
-                    conversions: this.draftVariant.keyConversionResults[x].conversions,
-                    weight: "Low",
-                    performance: 50
+                    markup: kpiInstances[x].uiReadOnlyMarkup,
+                    conversions: kpiSummary.conversions,
+                    weight: kpiSummary.selectedWeight,
+                    performance: kpiSummary.performance
                 }
                 kpiResults.push(kpiResult);
             }
