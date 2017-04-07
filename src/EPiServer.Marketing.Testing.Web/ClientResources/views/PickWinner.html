@@ -50,6 +50,9 @@
                         </div>
                         <hr class="epi-abtest-hr" />
                         <!-- Control Statistics -->
+                        <div class="epi-abTest-summaryToggle">
+                            <a class="epi-visibleLink" data-dojo-attach-point="summaryToggle" data-dojo-attach-event="onclick: _toggleSummaries">${resources.pickwinnerview.hide_summary}</a>
+                        </div>
                         <div data-dojo-attach-point="controlPickWinnerSummaryNode"></div>
                     </div>
                 </div>
@@ -71,6 +74,7 @@
                         </div>
                         <hr class="epi-abtest-hr" />
                         <!-- Challenger Statistics-->
+                        <div class="epi-abTest-summaryToggle"></div>
                         <div data-dojo-attach-point="challengerPickWinnerSummaryNode"></div>
                     </div>
                 </div>

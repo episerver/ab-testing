@@ -15,6 +15,8 @@
       </admin>
       <archiveview>
         <content_control_header path="/abtesting/archiveview/content_control_header/">A / Control</content_control_header>
+        <hide_summary path="/abtesting/archiveview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/archiveview/show_summary/">Show Details</show_summary>
       </archiveview>
       <canceltestcommand>
         <abort_confirmation_message path="/abtesting/canceltestcommand/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
@@ -22,6 +24,8 @@
       <detailsview>
         <abort_confirmation_message path="/abtesting/detailsview/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
         <content_control_header path="/abtesting/detailsview/content_control_header/">A / Control</content_control_header>
+        <hide_summary path="/abtesting/detailsview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/detailsview/show_summary/">Show Details</show_summary>
       </detailsview>
       <kpisummarywidget>
         <conversions path="/abtesting/kpisummarywidget/conversions/">Conversions</conversions>
@@ -30,6 +34,8 @@
       </kpisummarywidget>
       <pickwinnerview>
         <content_control_header path="/abtesting/pickwinnerview/content_control_header/">A / Control</content_control_header>
+        <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/pickwinnerview/show_summary/">Show Details</show_summary>
       </pickwinnerview>
       <tasks>
         <category path="/abtesting/tasks/category/">A/B Tests</category>

@@ -16,6 +16,8 @@
       <archiveview>
         <content_challenger_header path="/abtesting/archiveview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/archiveview/conversions/">conversions</conversions>
+        <hide_summary path="/abtesting/archiveview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/archiveview/show_summary/">Show Details</show_summary>
       </archiveview>
       <canceltestcommand>
         <abort_confirmation_message path="/abtesting/canceltestcommand/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
@@ -25,6 +27,8 @@
         <button_options path="/abtesting/detailsview/button_options/">Options</button_options>
         <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/detailsview/conversions/">conversions</conversions>
+        <hide_summary path="/abtesting/detailsview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/detailsview/show_summary/">Show Details</show_summary>
       </detailsview>
       <kpisummarywidget>
         <conversions path="/abtesting/kpisummarywidget/conversions/">Conversions</conversions>
@@ -34,6 +38,8 @@
       <pickwinnerview>
         <content_challenger_header path="/abtesting/pickwinnerview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/pickwinnerview/conversions/">conversions</conversions>
+        <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/pickwinnerview/show_summary/">Show Details</show_summary>
       </pickwinnerview>
       <tasks>
         <category path="/abtesting/tasks/category/">A/B Tests</category>

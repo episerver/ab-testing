@@ -82,10 +82,12 @@
         <draft_prefix>Borrador - Editado por</draft_prefix>
         <from>desde</from>
         <goal_not_specified>No se ha especificado un objetivo.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Guardado en las versiones</losing_version_label>
         <percent_participation_header>Porcentaje de visitantes que participan en esta prueba A/B</percent_participation_header>
         <published_prefix>Publicada por</published_prefix>
         <remaining_increment>Días</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Iniciada </started>
         <test_duration_header>Duración de la prueba A/B</test_duration_header>
         <test_percent_to_participations_divider> / El número actual de participantes es de </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>Objetivo general de esta prueba</description_heading>
         <draft_prefix>Borrador - Editado por</draft_prefix>
         <goal_not_specified>No se ha especificado un objetivo.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Porcentaje de visitantes que participan en esta prueba A/B</percent_participation_header>
         <published_prefix>Publicada por</published_prefix>
         <remaining_increment>Días</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Iniciada </started>
         <test_duration_completed>Completada después de la duración total</test_duration_completed>
         <test_duration_header>Duración de la prueba A/B</test_duration_header>
@@ -173,12 +177,14 @@
           Esta prueba no se ha completado, pero puede elegir un ganador. Al elegir un ganador ahora, la prueba finalizará y se publicará el contenido seleccionado.
         </early_pick_winner_message>
         <goal_not_specified>No se ha especificado un objetivo.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Porcentaje de visitantes que participan en esta prueba A/B</percent_participation_header>
         <pick_a_winner_text>¡Elegir un ganador!</pick_a_winner_text>
         <pick_winner_option_text>Elegir un ganador</pick_winner_option_text>
         <published_prefix>Publicada por</published_prefix>
         <remaining_increment>Días</remaining_increment>
         <result_is_not_significant>Los resultados de esta prueba NO son significativos.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Iniciada </started>
         <test_duration_completed>Completada después de la duración total</test_duration_completed>
         <test_duration_header>Duración de la prueba</test_duration_header>

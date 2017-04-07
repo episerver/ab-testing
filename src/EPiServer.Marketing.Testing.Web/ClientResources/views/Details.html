@@ -54,6 +54,9 @@
                             <br />
                         </p>
                         <!-- Control Statistics -->
+                        <div class="epi-abTest-summaryToggle">
+                            <a class="epi-visibleLink" data-dojo-attach-point="summaryToggle" data-dojo-attach-event="onclick: _toggleSummaries">${resources.detailsview.hide_summary}</a>
+                        </div>
                         <div data-dojo-attach-point="controlDetailsSummaryNode"></div>
                     </div>
                 </div>
@@ -73,6 +76,7 @@
                             <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
                         </p>
                         <!-- Challenger Statistics-->
+                        <div class="epi-abTest-summaryToggle"></div>
                         <div data-dojo-attach-point="challengerDetailsSummaryNode"></div>
                     </div>
                 </div>

@@ -82,10 +82,12 @@
         <draft_prefix>ドラフト - 作成者名: </draft_prefix>
         <from>開始:</from>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>バージョンで保存済み</losing_version_label>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> 開始済み </started>
         <test_duration_header>A/Bテストの期間</test_duration_header>
         <test_percent_to_participations_divider> / 現在の参加者数は </test_percent_to_participations_divider>
@@ -122,9 +124,11 @@
         <description_heading>このテストの全体的目標</description_heading>
         <draft_prefix>ドラフト - 作成者名: </draft_prefix>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> 開始済み </started>
         <test_duration_completed>期間満了後に完了</test_duration_completed>
         <test_duration_header>A/Bテストの期間</test_duration_header>
@@ -173,12 +177,14 @@
           このテストは完了していませんが、勝者を選出できます。 勝者を選出するとテストはこれで終了し、選択されたコンテンツが公開されます。
         </early_pick_winner_message>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <pick_a_winner_text>勝者を選出してください!</pick_a_winner_text>
         <pick_winner_option_text>勝者を選出してください</pick_winner_option_text>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
         <result_is_not_significant>このテストの結果は重要ではありません。</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> 開始済み </started>
         <test_duration_completed>期間満了後に完了</test_duration_completed>
         <test_duration_header>テスト期間</test_duration_header>

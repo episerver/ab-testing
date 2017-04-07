@@ -12,17 +12,27 @@
       <admin>
         <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>
       </admin>
+      <archiveview>
+        <hide_summary path="/abtesting/archiveview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/archiveview/show_summary/">Show Details</show_summary>
+      </archiveview>
       <canceltestcommand>
         <abort_confirmation_message path="/abtesting/canceltestcommand/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
       </canceltestcommand>
       <detailsview>
         <abort_confirmation_message path="/abtesting/detailsview/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
+        <hide_summary path="/abtesting/detailsview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/detailsview/show_summary/">Show Details</show_summary>
       </detailsview>
       <kpisummarywidget>
         <conversions path="/abtesting/kpisummarywidget/conversions/">Conversions</conversions>
         <performance path="/abtesting/kpisummarywidget/performance/">Performance</performance>
         <weight path="/abtesting/kpisummarywidget/weight/">Weight</weight>
       </kpisummarywidget>
+      <pickwinnerview>
+        <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/pickwinnerview/show_summary/">Show Details</show_summary>
+      </pickwinnerview>
       <tasks>
         <category path="/abtesting/tasks/category/">A/B Tests</category>
       </tasks>

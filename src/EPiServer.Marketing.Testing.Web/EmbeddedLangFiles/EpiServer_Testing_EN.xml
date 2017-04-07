@@ -83,10 +83,12 @@
         <draft_prefix>Draft - Edited by</draft_prefix>
         <from>from</from>
         <goal_not_specified>A goal has not been specified.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Saved in Versions</losing_version_label>
         <percent_participation_header>Participation percentage</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Started </started>
         <test_duration_header>Test duration</test_duration_header>
         <test_percent_to_participations_divider> / Current number of participants is </test_percent_to_participations_divider>
@@ -123,9 +125,11 @@
         <description_heading>Test goal</description_heading>
         <draft_prefix>Draft - Edited by</draft_prefix>
         <goal_not_specified>A goal has not been specified.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Participation percentage</percent_participation_header>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Started </started>
         <test_duration_completed>Completed after full duration</test_duration_completed>
         <test_duration_header>Test duration</test_duration_header>
@@ -174,12 +178,14 @@
           This test has not been completed yet, but you may pick a winner. Picking a winner now will end the test and publish the chosen content.
         </early_pick_winner_message>
         <goal_not_specified>A goal has not been specified</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Participation percentage</percent_participation_header>
         <pick_a_winner_text>Pick a winner!</pick_a_winner_text>
         <pick_winner_option_text>Pick a winner</pick_winner_option_text>
         <published_prefix>Published by</published_prefix>
         <remaining_increment>Days</remaining_increment>
         <result_is_not_significant>The results of this test are NOT significant.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Started </started>
         <test_duration_completed>Completed after full duration</test_duration_completed>
         <test_duration_header>Test duration</test_duration_header>

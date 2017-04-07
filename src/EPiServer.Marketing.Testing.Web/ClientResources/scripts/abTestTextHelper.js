@@ -215,7 +215,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             for (var x = 0; x < kpiInstances.length; x++) {
                 var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.publishedVariant.keyConversionResults);
                 var kpiResult = {
-                    markup: kpiInstances[x].uiReadOnlyMarkup,
+                    name: kpiInstances[x].friendlyName,
                     conversions: kpiSummary.conversions,
                     weight: kpiSummary.selectedWeight,
                     performance: kpiSummary.performance
@@ -234,7 +234,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             for (var x = 0; x < kpiInstances.length; x++) {
                 var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.draftVariant.keyConversionResults);
                 var kpiResult = {
-                    markup: kpiInstances[x].uiReadOnlyMarkup,
+                    name: kpiInstances[x].friendlyName,
                     conversions: kpiSummary.conversions,
                     weight: kpiSummary.selectedWeight,
                     performance: kpiSummary.performance

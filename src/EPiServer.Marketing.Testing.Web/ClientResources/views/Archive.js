@@ -18,6 +18,7 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
+ "dojo/fx",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -41,7 +42,8 @@
     query,
     textHelper,
     rasterizehtml,
-    ContentPane
+    ContentPane,
+    CoreFX
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -66,6 +68,37 @@
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
             }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible";
+            } else {
+                this.summaryToggle.style.visibility = "hidden";
+            }
+        },
+
+        _setToggleAnimations() {
+            var me = this;
+            this.controlSummaryOut = CoreFX.wipeOut({
+                node: me.controlArchiveSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.archiveview.show_summary }
+            });
+
+            this.controlSummaryIn = CoreFX.wipeIn({
+                node: me.controlArchiveSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.archiveview.hide_summary }
+            });
+
+            this.challengerSummaryOut = CoreFX.wipeOut({
+                node: me.challengerArchiveSummaryNode,
+                rate: 15
+            });
+
+            this.challengerSummaryIn = CoreFX.wipeIn({
+                node: me.challengerArchiveSummaryNode,
+                rate: 15
+            });
         },
 
         _contextChanged: function (newContext) {
@@ -109,7 +142,6 @@
                     me.kpiSummaryWidgets[x].startup();
                 }
             });
-
         },
 
         _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
@@ -222,6 +254,17 @@
             var me = this;
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _toggleSummaries: function () {
+            if (this.summaryToggle.innerHTML === this.resources.archiveview.hide_summary) {
+                this.controlSummaryOut.play();
+                this.challengerSummaryOut.play();
+            }
+            else {
+                this.controlSummaryIn.play();
+                this.challengerSummaryIn.play();
+            }
         }
     });
 });
