@@ -78,7 +78,6 @@
 
         _setToggleAnimations() {
             var me = this;
-
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
                 rate: 15,

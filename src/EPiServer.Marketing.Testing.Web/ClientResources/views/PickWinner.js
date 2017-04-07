@@ -80,7 +80,6 @@
 
         _setToggleAnimations() {
             var me = this;
-
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlPickWinnerSummaryNode,
                 rate: 15,
