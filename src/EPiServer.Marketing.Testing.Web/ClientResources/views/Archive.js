@@ -145,14 +145,15 @@
 
         _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
-            var goalsContent;
             this._clearKpiMarkup(kpiuiElement);
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
 
             for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
-                goalsContent = new ContentPane({
+                var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
+
+                var goalsContent = new ContentPane({
                     content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
                 }).placeAt(kpiuiElement);
+                dojo.place(goalsDescription, goalsContent.containerNode);
             }
         },
 
