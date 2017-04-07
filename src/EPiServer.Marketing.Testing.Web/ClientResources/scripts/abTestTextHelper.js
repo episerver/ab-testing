@@ -138,12 +138,18 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             }
         },
 
-        renderControlSummary: function (summaryNode) {
+        renderControlSummary: function (summaryNode, controlPercentageNode) {
             this._removeSummaryWidgets(summaryNode)
+            this._removePercentageWidgets(controlPercentageNode);
             var summaryWidget;
 
             if (context.data.test.kpiInstances.length > 1) {
-                summaryWidget = this._renderControlSummaries(summaryNode)
+                summaryWidget = this._renderControlSummaries(summaryNode);
+                new ConversionPercentTemplate({
+                    conversionPercent: this.publishedPercent,
+                    views: this.publishedVariant.views,
+                    isLeader: eval(this.publishedPercent > this.draftPercent)
+                }).placeAt(controlPercentageNode);
             }
             else {
                 var kpiResultType = context.data.kpiResultType;
@@ -170,12 +176,19 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
-        renderChallengerSummary: function (summaryNode) {
+        renderChallengerSummary: function (summaryNode, challengerPercentageNode) {
             this._removeSummaryWidgets(summaryNode)
+            this._removePercentageWidgets(challengerPercentageNode);
+
             var summaryWidget;
 
             if (context.data.test.kpiInstances.length > 1) {
-                summaryWidget = this._renderChallengerSummaries(summaryNode)
+                summaryWidget = this._renderChallengerSummaries(summaryNode);
+                new ConversionPercentTemplate({
+                    conversionPercent: this.draftPercent,
+                    views: this.draftVariant.views,
+                    isLeader: eval(this.draftPercent > this.publishedPercent)
+                }).placeAt(challengerPercentageNode);
             }
             else {
                 var kpiResultType = context.data.kpiResultType;
@@ -199,14 +212,6 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             }
             summaryWidget.placeAt(summaryNode);
             return summaryWidget;
-        },
-
-        _getKpiSummary: function (id, arrayObj) {
-            for (var i = 0; i < arrayObj.length; i++) {
-                if (arrayObj[i].kpiId === id) {
-                    return arrayObj[i];
-                }
-            }
         },
 
         _renderControlSummaries: function () {

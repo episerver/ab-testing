@@ -49,6 +49,8 @@
                             <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onPublishedVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
+                        <!-- Multi KPI Conv % -->
+                        <div data-dojo-attach-point="controlConversionPercent"></div>
                         <!-- Control Statistics -->
                         <div class="epi-abTest-summaryToggle">
                             <a class="epi-visibleLink" data-dojo-attach-point="summaryToggle" data-dojo-attach-event="onclick: _toggleSummaries">${resources.pickwinnerview.hide_summary}</a>
@@ -73,6 +75,8 @@
                             <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
+                        <!-- Multi KPI Conv % -->
+                        <div data-dojo-attach-point="challengerConversionPercent"></div>
                         <!-- Challenger Statistics-->
                         <div class="epi-abTest-summaryToggle"></div>
                         <div data-dojo-attach-point="challengerPickWinnerSummaryNode"></div>
