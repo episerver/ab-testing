@@ -24,6 +24,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         void SetItemValue(string itemId, object value);
 
         /// <summary>
+        /// Removes an item from the HttpContexts Items collection
+        /// </summary>
+        /// <param name="itemId">key of the item to remove</param>
+        void RemoveItem(string itemId);
+
+        /// <summary>
         /// Searches the HttpContexts cookie collection to determin if the cookie key passed in is present
         /// </summary>
         /// <param name="cookieKey">cookie key value to search the collection with</param>

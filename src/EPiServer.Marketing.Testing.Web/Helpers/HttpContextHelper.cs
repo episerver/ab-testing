@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     /// <summary>
     /// interacts with the httpcontext for reading and manipulating the objects therein
     /// </summary>
+    [ExcludeFromCodeCoverage]
     internal class HttpContextHelper : IHttpContextHelper
     {
         public bool HasItem(string itemId)
@@ -20,6 +22,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SetItemValue(string itemId, object value)
         {
             HttpContext.Current.Items[itemId] = value;
+        }
+
+        public void RemoveItem(string itemId)
+        {
+            HttpContext.Current.Items.Remove(itemId);
         }
 
         public bool HasCookie(string cookieKey)

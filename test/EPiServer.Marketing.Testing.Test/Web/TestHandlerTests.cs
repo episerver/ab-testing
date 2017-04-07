@@ -72,6 +72,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private MyLogger _logger = new MyLogger();
         private Mock<IClientKpiInjector> _clientKpiInjector;
         private Mock<IContentEvents> _contentEvents;
+        private Mock<IHttpContextHelper> _mockHttpContextHelper;
 
         private readonly Guid _noAssociatedTestGuid = Guid.Parse("b6168ed9-50d4-4609-b566-8a70ce3f5b0d");
         private readonly Guid _associatedTestGuid = Guid.Parse("1d01f747-427e-4dd7-ad58-2449f1e28e81");
@@ -98,8 +99,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                         Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } }
                     }
                 });
-            _mockMarketingTestingWebRepository.Setup(call => call.StartMarketingTest(It.IsAny<Guid>()));
-            _mockMarketingTestingWebRepository.Setup(call => call.DeleteMarketingTest(It.IsAny<Guid>()));
+
             Variant testVariant = new Variant()
             {
                 Id = _matchingVariantId,
@@ -140,8 +140,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _contentEvents = new Mock<IContentEvents>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
-
-            return new TestHandler(_mockServiceLocator.Object);
+            _mockHttpContextHelper = new Mock<IHttpContextHelper>();
+            return new TestHandler(_mockServiceLocator.Object, _mockHttpContextHelper.Object);
         }
 
         [Fact]
