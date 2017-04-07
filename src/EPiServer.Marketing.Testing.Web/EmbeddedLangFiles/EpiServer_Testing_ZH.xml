@@ -32,6 +32,7 @@
         <error_test_not_schedulded_or_started>尚未计划，请解决开始日期/时间错误以计划测试</error_test_not_schedulded_or_started>
         <goals_default_text>例如 通过微调第一个项目点号中的副本以直接解决“时间问题”，我可以动员更多访客下载电子书。</goals_default_text>
         <goals_header>此测试的总体目标是什么？</goals_header>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>选择目标</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
@@ -41,6 +42,7 @@
         <participant_percentage_tip>较高的参与百分比会降低挑选优胜者所需的数据统计收集时间。</participant_percentage_tip>
         <participation_header>访客参加此 A/B 测试的百分比是多少？</participation_header>
         <published_prefix>发布人</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>A/B 测试应何时开始？</schedule_header>
         <schedule_selector_delay>计划后续进行</schedule_selector_delay>
         <schedule_selector_start>立即开始</schedule_selector_start>

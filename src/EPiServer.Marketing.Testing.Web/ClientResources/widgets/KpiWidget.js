@@ -8,14 +8,17 @@
     "dojo/text!./templates/KpiWidget.html",
     'dojo/dom',
     "dojox/layout/ContentPane",
+    "epi/i18n!marketing-testing/nls/abtesting",
     "dijit/form/Button",
     "dijit/form/Form",
     "xstyle/css!marketing-testing/css/KpiWidget.css"
-], function (declare, Evented, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin, _WidgetsInTemplateMixin, template, dom, ContentPane) {
+], function (declare, Evented, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin, _WidgetsInTemplateMixin, template, dom, ContentPane, resources) {
 
     return declare("KpiWidget", [Evented, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
+
+        resources: resources,
 
         label: "",
 

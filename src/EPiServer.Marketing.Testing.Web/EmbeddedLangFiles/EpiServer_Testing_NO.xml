@@ -32,6 +32,7 @@
         <error_test_not_schedulded_or_started>ikke planlagt, løs problemer med startdato/-klokkeslett for å planlegge en test</error_test_not_schedulded_or_started>
         <goals_default_text>F.eks. Ved å tilpasse teksten i det første kulepunktet slik at det handler om «tidsproblemet», kan jeg motivere flere gjester til å laste ned e-boken.</goals_default_text>
         <goals_header>Hva er det overordnede målet for denne testen?</goals_header>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Velg mål</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
@@ -41,6 +42,7 @@
         <participant_percentage_tip>Høyere deltakelsesprosent reduserer tiden som trengs for å innhente nok statistikk til å kunne velge en vinner.</participant_percentage_tip>
         <participation_header>Hvilken prosentandel av gjester skal delta i denne A/B-testen?</participation_header>
         <published_prefix>Publisert av</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Når skal A/B-testen startes?</schedule_header>
         <schedule_selector_delay>Tidsstyrt for senere</schedule_selector_delay>
         <schedule_selector_start>Start umiddelbart</schedule_selector_start>

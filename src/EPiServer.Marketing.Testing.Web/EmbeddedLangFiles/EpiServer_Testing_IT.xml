@@ -32,6 +32,7 @@
         <error_test_not_schedulded_or_started>non pianificato, risolvere gli errori di data/ora di inizio al fine di programmare un test</error_test_not_schedulded_or_started>
         <goals_default_text>Ex. Modificando la copia del primo punto di affrontare direttamente la 'questione di tempo', io posso motivare più ai visitatori di scaricare l'ebook.</goals_default_text>
         <goals_header>Qual è l'obiettivo generale per questo test?</goals_header>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Seleziona obiettivo</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
@@ -41,6 +42,7 @@
         <participant_percentage_tip>Una percentuale di partecipazione più elevata riduce il tempo necessario per raccogliere dati statistici sufficienti per essere in grado di scegliere un vincitore.</participant_percentage_tip>
         <participation_header>Qual è la percentuale di visitatori che dovrebbe partecipare a questo A / B test?</participation_header>
         <published_prefix>Pubblicato da</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>Quando dovrebbe iniziare l'A / B test?</schedule_header>
         <schedule_selector_delay>Programmato per più tardi</schedule_selector_delay>
         <schedule_selector_start>Avviare immediatamente</schedule_selector_start>
