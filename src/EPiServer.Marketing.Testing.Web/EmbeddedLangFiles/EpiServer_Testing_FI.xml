@@ -32,6 +32,7 @@
         <error_test_not_schedulded_or_started>ei ajoitettu, ajoita testi korjaamalla aloitusajan/-päivämäärän virheet</error_test_not_schedulded_or_started>
         <goals_default_text>Esimerkiksi: Voin saada enemmän vierailijoita lataamaan e-kirjan muokkaamalla ensimmäisen kohdan tekstiä niin, että siinä käsitellään suoraan ”aikaongelmaa”.</goals_default_text>
         <goals_header>Mikä on tämän testin kokonaistavoite?</goals_header>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Valitse tavoite</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
