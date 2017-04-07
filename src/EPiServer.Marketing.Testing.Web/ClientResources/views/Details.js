@@ -19,6 +19,7 @@
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
  "dojo/fx",
+ "dojo/dom-construct",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -45,7 +46,8 @@
     textHelper,
     rasterizehtml,
     ContentPane,
-    CoreFX
+    CoreFX,
+    DomConstruct
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
@@ -71,6 +73,7 @@
             }
             if (this.context.data.test.kpiInstances.length > 1) {
                 this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
@@ -115,6 +118,13 @@
             me._renderData();
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
+            }
+
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
             }
         },
 
@@ -171,9 +181,8 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode, this.controlConversionPercent));
-            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode, this.challengerConversionPercent));
-            textHelper.renderDescription(this.testDescription);
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode));
 
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
