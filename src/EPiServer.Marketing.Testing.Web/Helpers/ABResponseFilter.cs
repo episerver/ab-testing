@@ -1,12 +1,7 @@
-﻿using EPiServer.ServiceLocation;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -18,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     {
         private Stream stream;
         private StreamWriter streamWriter;
-        string bufferedHtml;
+        internal string bufferedHtml;
         internal string _clientScript;
 
         public ABResponseFilter(Stream stm, string script)
@@ -32,16 +27,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public override void Write(byte[] buffer, int offset, int count)
         {
             //intercept the write and build the content for cases where data is chunked
-            bufferedHtml += System.Text.Encoding.UTF8.GetString(buffer);
+            bufferedHtml += Encoding.UTF8.GetString(buffer);
         }
 
+        //Unable to get a handle on the stream for unit testing, as it is disposed of after the streamwriter is disposed of. 
+        //Can revisit to see if there is a good solution for this, excluding it from coverage for now.
+        [ExcludeFromCodeCoverage]
         public override void Flush()
         {
             //transform the html and put it back into the stream
             string html = bufferedHtml;
             html = html.Replace("</body>", _clientScript + "</body>");
 
-            using (StreamWriter streamWriter = new StreamWriter(stream, System.Text.Encoding.UTF8))
+            using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8))
             {
                 streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
                 streamWriter.Flush();
@@ -49,6 +47,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         #region abstract required methods - not implemented
+        [ExcludeFromCodeCoverage]
         public override bool CanRead
         {
             get
@@ -57,6 +56,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override bool CanSeek
         {
             get
@@ -65,6 +65,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override bool CanWrite
         {
             get
@@ -73,6 +74,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override long Length
         {
             get
@@ -81,6 +83,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
         }
 
+        [ExcludeFromCodeCoverage]
         public override long Position
         {
             get
@@ -92,18 +95,21 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 throw new NotImplementedException();
             }
-        }      
+        }
 
+        [ExcludeFromCodeCoverage]
         public override int Read(byte[] buffer, int offset, int count)
         {
             throw new NotImplementedException();
         }
 
+        [ExcludeFromCodeCoverage]
         public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotImplementedException();
         }
 
+        [ExcludeFromCodeCoverage]
         public override void SetLength(long value)
         {
             throw new NotImplementedException();
