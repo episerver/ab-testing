@@ -71,12 +71,6 @@
             }
             if (this.context.data.test.kpiInstances.length > 1) {
                 this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible";
-            } else {
-                this.summaryToggle.style.visibility = "hidden";
-            }
-            if (this.context.data.test.kpiInstances.length > 1) {
-                this._setToggleAnimations();
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
@@ -84,6 +78,7 @@
 
         _setToggleAnimations() {
             var me = this;
+
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
                 rate: 15,
@@ -105,6 +100,7 @@
                 node: me.challengerDetailsSummaryNode,
                 rate: 15
             });
+
         },
 
         _contextChanged: function (newContext) {
@@ -184,7 +180,7 @@
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
-                me._renderKpiMarkup("details_conversionMarkup", "details_kpidescription");
+                me._renderKpiMarkup("details_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
                 }
@@ -192,20 +188,16 @@
             this.renderStatusIndicatorStyles();
         },
 
-        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
+        _renderKpiMarkup: function (conversionMarkupId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-
+            var goalsContent;
             this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
 
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                goalsContent = new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
@@ -300,7 +292,7 @@
             }
         },
 
-        _toggleSummaries: function () {
+        _toggleSummaries: function (evt) {
             if (this.summaryToggle.innerHTML === this.resources.detailsview.hide_summary) {
                 this.controlSummaryOut.play();
                 this.challengerSummaryOut.play();

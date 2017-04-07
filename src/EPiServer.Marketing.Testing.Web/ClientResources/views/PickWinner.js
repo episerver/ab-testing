@@ -145,26 +145,23 @@
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
                 me._renderStatusIndicatorStyles();
-                me._renderKpiMarkup("pw_conversionMarkup", "pw_kpidescription");
+                me._renderKpiMarkup("pw_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
                 }
             });
         },
 
-        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
+        _renderKpiMarkup: function (conversionMarkupId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
-            var x = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
+            var goalsContent;
             this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
 
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                goalsContent = new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {

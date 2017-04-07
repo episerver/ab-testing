@@ -87,41 +87,40 @@
                         <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
                     </div>
                     <div class="formsRow">
+                        <h4>Conversion Goal(s)</h4>
                         <div id="pw_conversionMarkup">
                             <!-- KPI Generated Markup -->
                         </div>
-                        <div id="pw_kpidescription">
-                            <!-- KPI Description -->
-                        </div>
-                        <hr class="epi-abtest-hr">
-                        <div class="formsRow">
-                            <h4>${resources.detailsview.percent_participation_header}</h4>
-                            <p>
-                                <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
-                            </p>
-                        </div>
-                        <hr class="epi-abtest-hr">
-                        <div class="formsRow">
-                            <h4>${resources.detailsview.test_duration_header}</h4>
-                            <p>
-                                <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong>&nbsp;<span data-dojo-attach-point="testRemainingText"></span>
-                            </p>
-                            <div data-dojo-type="dijit/ProgressBar"
-                                 data-dojo-id="durationProgressBar"
-                                 style="width: 35%"></div>
-                        </div>
                     </div>
-                </div>
-                <div class="cardWrapper" style="margin-bottom: 80px">
-                    <h3>${resources.detailsview.advanced_options_header}</h3>
-                    <hr class="epi-abtest-hr" />
-                    <div class="cardBody" style="padding-top: 4px;">
-                        <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
+                    <hr class="epi-abtest-hr">
+                    <div class="formsRow">
+                        <h4>${resources.detailsview.percent_participation_header}</h4>
                         <p>
-                            <strong><span data-dojo-attach-point="confidence"></span></strong>
+                            <strong><span data-dojo-attach-point="participationPercentage"></span>% </strong>${resources.detailsview.test_percent_to_participations_divider}<strong><span data-dojo-attach-point="totalParticipants"></span></strong>
                         </p>
                     </div>
+                    <hr class="epi-abtest-hr">
+                    <div class="formsRow">
+                        <h4>${resources.detailsview.test_duration_header}</h4>
+                        <p>
+                            <strong><span data-dojo-attach-point="testDuration"></span></strong> ${resources.detailsview.days_divider} <strong><span data-dojo-attach-point="testRemaining"> </span></strong>&nbsp;<span data-dojo-attach-point="testRemainingText"></span>
+                        </p>
+                        <div data-dojo-type="dijit/ProgressBar"
+                             data-dojo-id="durationProgressBar"
+                             style="width: 35%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cardWrapper" style="margin-bottom: 80px">
+                <h3>${resources.detailsview.advanced_options_header}</h3>
+                <hr class="epi-abtest-hr" />
+                <div class="cardBody" style="padding-top: 4px;">
+                    <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
+                    <p>
+                        <strong><span data-dojo-attach-point="confidence"></span></strong>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+</div>
