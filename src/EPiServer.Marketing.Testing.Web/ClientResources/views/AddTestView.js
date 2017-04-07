@@ -625,7 +625,7 @@
                     }
                     this.kpiEntries++;
 
-                    this._adjustKpiSelectorCombo();
+                    this._adjustKpiSelectorCombo(kpiWidgetInstance.id);
                 }
             },
 
@@ -685,10 +685,15 @@
                 }
             },
 
-            _adjustKpiSelectorCombo: function () {
+            _adjustKpiSelectorCombo: function (kpiId) {
                 var dijitSelector = dijit.byId("kpiSelector");
                 dijitSelector.set("value", "default");
-                var kpiSelector = dom.byId("kpiSelectorCombo");
+                var kpiSelector = null;
+                if (kpiId) {
+                    kpiSelector = dom.byId(kpiId);
+                } else {
+                    kpiSelector = dom.byId("kpiSelectorCombo");
+                }
                 if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
