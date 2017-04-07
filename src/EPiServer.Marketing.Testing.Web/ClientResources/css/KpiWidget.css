@@ -61,4 +61,16 @@
     text-align: center;
 }
 
+.epi-kpiSummaries-markup-td{
+    width:50%;
+}
+
+.epi-kpiSummaries-data-td {
+    width:15%;
+}
+
+.epi-kpiSummaries-selector-td{
+    width:25%;
+}
+
 

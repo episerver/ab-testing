@@ -7,10 +7,11 @@
     "epi/i18n!marketing-testing/nls/abtesting",
     "dojo/dom",
     "dojo/dom-construct",
+    "dojox/layout/ContentPane",
     "marketing-testing/widgets/WeightSelector",
     "marketing-testing/widgets/KpiSummaryRow",
     "xstyle/css!marketing-testing/css/KpiWidget.css"
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, resources, dom, domConstruct, weightSelector, kpiSummaryRow) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, resources, dom, domConstruct, ContentPane, weightSelector, kpiSummaryRow) {
 
     return declare("KpiSummariesWidget", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
@@ -31,7 +32,7 @@
                 trInsertNode.innerHTML = "";
                 for (var x = 0; x < this.kpis.length; x++) {
                     templatedRow = new KpiSummaryRow({
-                        name: this.kpis[x].name,
+                        name: this.kpis[x].markup,
                         conversions: this.kpis[x].conversions,
                         performance: this.kpis[x].performance
                     })
@@ -42,6 +43,10 @@
                         disabled: true,
                         showLabel: false
                     }).placeAt(templatedRow.id + "weight");
+
+                    new ContentPane({
+                        content: this.kpis[x].markup
+                    }).placeAt(templatedRow.id + "markup");
                 }
             }
         }
