@@ -181,8 +181,8 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode));
-            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode));
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode, this.controlConversionPercent));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode, this.challengerConversionPercent));
 
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {

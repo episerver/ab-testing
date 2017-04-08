@@ -6,11 +6,12 @@
 "epi/username",
 "dojo/dom-class",
 "marketing-testing/widgets/KpiSummaryWidget",
-"marketing-testing/widgets/KpiSummariesWidget"
+"marketing-testing/widgets/KpiSummariesWidget",
+"marketing-testing/widgets/ConversionPercentTemplate"
 
 ],
 
-function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget) {
+function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
     //"privates"
     var context, resources;
 
@@ -138,6 +139,23 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             }
         },
 
+        _removePercentageWidgets: function (percentageWidgetNode) {
+            var me = this;
+            if (percentageWidgetNode) {
+                var percentageWidget = dojo.query(percentageWidgetNode);
+                if (percentageWidget) {
+                    dojo.forEach(dijit.findWidgets(percentageWidget)), function (w) {
+                        var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
+                        if (widgetToRemove) {
+                            me.kpiSummaryWidgets.splice(widgetToRemove, 1);
+                        }
+                        w.destroyRecursive();
+                    };
+                    percentageWidgetNode.innerHTML = "";
+                }
+            }
+        },
+
         renderControlSummary: function (summaryNode, controlPercentageNode) {
             this._removeSummaryWidgets(summaryNode)
             this._removePercentageWidgets(controlPercentageNode);
@@ -212,6 +230,14 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             }
             summaryWidget.placeAt(summaryNode);
             return summaryWidget;
+        },
+
+        _getKpiSummary: function (id, arrayObj) {
+            for (var i = 0; i < arrayObj.length; i++) {
+                if (arrayObj[i].kpiId === id) {
+                    return arrayObj[i];
+                }
+            }
         },
 
         _renderControlSummaries: function () {
