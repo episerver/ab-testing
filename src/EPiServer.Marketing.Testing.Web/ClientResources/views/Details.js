@@ -79,7 +79,7 @@
             }
         },
 
-        _setToggleAnimations() {
+        _setToggleAnimations: function() {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
