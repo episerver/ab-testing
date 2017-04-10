@@ -98,11 +98,6 @@
                         <p>
                             ${resources.addtestview.conversion_description} <a class="epi-visibleLink" data-dojo-attach-event="onclick: _showAdvancedOptions">${resources.addtestview.advanced_options}</a>.
                         </p>
-                        <div>
-                            <div id="kpiWidgets">
-                                <!-- Kpis added here-->
-                            </div>
-                        </div>
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
                               class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
@@ -112,6 +107,11 @@
                         <!-- KPI UI Element-->
                         <div id="kpiSelectorCombo">
                             <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onGoalSelectChange"></select>
+                        </div>
+                        <div>
+                            <div id="kpiWidgets">
+                                <!-- Kpis added here-->
+                            </div>
                         </div>
                     </div>
                     <hr class="epi-abtest-hr" />

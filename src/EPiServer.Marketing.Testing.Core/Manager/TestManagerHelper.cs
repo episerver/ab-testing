@@ -240,7 +240,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Id = dalConversionResult.Id,
                 KpiId = dalConversionResult.KpiId,
                 Weight = dalConversionResult.Weight,
+                SelectedWeight = dalConversionResult.SelectedWeight,
                 Conversions = dalConversionResult.Conversions,
+                Performance = dalConversionResult.Performance,
                 VariantId = dalConversionResult.VariantId,
                 CreatedDate = dalConversionResult.CreatedDate,
                 ModifiedDate = dalConversionResult.ModifiedDate
@@ -399,7 +401,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Weight = managerConversionResult.Weight,
+                SelectedWeight = managerConversionResult.SelectedWeight,
                 Conversions = managerConversionResult.Conversions,
+                Performance = managerConversionResult.Performance,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate

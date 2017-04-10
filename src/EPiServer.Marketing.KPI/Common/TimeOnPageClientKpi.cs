@@ -93,13 +93,11 @@ namespace EPiServer.Marketing.KPI.Common
 
                 if (TargetDuration != 0)
                 {
-                    var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                        .GetString("/kpi/timeonpage_kpi/readonly_markup/conversion_header");
                     var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
                         .GetString("/kpi/timeonpage_kpi/readonly_markup/conversion_selector_description");
 
 
-                    markup = string.Format(markup, conversionHeaderText, conversionDescription, TargetDuration);
+                    markup = string.Format(markup, conversionDescription, TargetDuration);
                 }
 
                 return markup;

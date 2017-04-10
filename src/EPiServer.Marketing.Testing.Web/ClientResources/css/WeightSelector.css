@@ -1,4 +1,9 @@
-﻿.epi-weightSelector-value-label {
+﻿.epi-weightSelector-body {
+    display: inline-block;
+    margin:auto;
+}
+
+.epi-weightSelector-value-label {
     padding-top: 4px;
     font-weight: bold;
     display: block;
@@ -49,6 +54,6 @@
     border-color: #95C532;
 }
 
-#High {
+.epi-weightSelector-high-padded{
     margin-right: 25px;
 }

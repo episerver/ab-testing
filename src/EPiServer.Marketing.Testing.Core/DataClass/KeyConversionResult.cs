@@ -19,6 +19,16 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public double Weight { get; set; }
 
         /// <summary>
+        /// Weight box that was chosen during test creation.
+        /// </summary>
+        public string SelectedWeight { get; set; }
+
+        /// <summary>
+        /// Percentage of overal conversion rate that a specific kpi contributed.
+        /// </summary>
+        public int Performance { get; set; }
+
+        /// <summary>
         /// Id of the variant the result pertains to.
         /// </summary>
         public Guid? VariantId { get; set; }

@@ -5,10 +5,12 @@
       <addtestview>
         <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
         <conversion_description path="/abtesting/addtestview/conversion_description/">By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <goals_selectlist_additional_kpi path="/abtesting/addtestview/goals_selectlist_additional_kpi/">Add another goal</goals_selectlist_additional_kpi>
         <goals_weight_description path="/abtesting/addtestview/goals_weight_description/">Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description path="/abtesting/addtestview/goals_weight_equal_description/">If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
         <goals_weight_heading path="/abtesting/addtestview/goals_weight_heading/">Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description path="/abtesting/addtestview/goals_weight_higher_description/">If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <remove_kpi_tooltip path="/abtesting/addtestview/remove_kpi_tooltip/">Remove this goal</remove_kpi_tooltip>
       </addtestview>
       <admin>
         <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>
@@ -16,6 +18,8 @@
       <archiveview>
         <content_challenger_header path="/abtesting/archiveview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/archiveview/conversions/">conversions</conversions>
+        <hide_summary path="/abtesting/archiveview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/archiveview/show_summary/">Show Details</show_summary>
       </archiveview>
       <canceltestcommand>
         <abort_confirmation_message path="/abtesting/canceltestcommand/abort_confirmation_message/">Are you sure you want to abort this test?</abort_confirmation_message>
@@ -25,10 +29,23 @@
         <button_options path="/abtesting/detailsview/button_options/">Options</button_options>
         <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/detailsview/conversions/">conversions</conversions>
+        <hide_summary path="/abtesting/detailsview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/detailsview/show_summary/">Show Details</show_summary>
       </detailsview>
+      <kpisummarywidget>
+        <conversions path="/abtesting/kpisummarywidget/conversions/">Conversions</conversions>
+        <performance path="/abtesting/kpisummarywidget/performance/">Performance</performance>
+        <weight path="/abtesting/kpisummarywidget/weight/">Weight</weight>
+      </kpisummarywidget>
+      <percentagetemplate>
+        <conversion_rate path="/abtesting/percentagetemplate/conversion_rate/">Conversion Rate</conversion_rate>
+        <views path="/abtesting/percentagetemplate/views/">views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <content_challenger_header path="/abtesting/pickwinnerview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/pickwinnerview/conversions/">conversions</conversions>
+        <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
+        <show_summary path="/abtesting/pickwinnerview/show_summary/">Show Details</show_summary>
       </pickwinnerview>
       <tasks>
         <category path="/abtesting/tasks/category/">A/B Tests</category>

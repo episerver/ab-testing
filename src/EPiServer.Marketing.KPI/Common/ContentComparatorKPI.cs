@@ -61,16 +61,14 @@ namespace EPiServer.Marketing.KPI.Common
 
                 if (ContentGuid != Guid.Empty)
                 {
-                    var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                        .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
-                    var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                     var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
                         .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
 
                     var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
                     var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                     var conversionContent = contentRepository.Get<IContent>(ContentGuid);
                     var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
-                    markup = string.Format(markup, conversionHeaderText, conversionDescription, conversionLink,
+                    markup = string.Format(markup, conversionDescription, conversionLink,
                         conversionContent.Name);
                 }
 

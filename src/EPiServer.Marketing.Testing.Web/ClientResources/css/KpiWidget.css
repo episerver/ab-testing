@@ -37,5 +37,55 @@
 }
 
 .epi-kpiWidget-weightWidget-row {
-    text-align:left;
+    text-align: left;
+}
+
+.epi-kpiSummaries-bold {
+    font-weight: bold;
+}
+
+.epi-kpiSummaries-summary-row {
+    height: 40px;
+}
+
+.epi-kpiSummaries-table {
+    width: 80%;
+    margin: auto;
+}
+
+.epi-kpiSummary-table {
+    width: 100%;
+}
+
+.epi-kpiWidget-summaries-td {
+    text-align: center;
+}
+
+.epi-kpiSummaries-markup-td {
+    width: 50%;
+}
+
+.epi-kpiSummaries-data-td {
+    width: 15%;
+}
+
+.epi-kpiSummaries-selector-td {
+    width: 25%;
+}
+
+.epi-percentTemplate {
+    width: 50%;
+    height: 50px;
+    margin: auto;
+}
+
+.epi-percentTemplate-conversionPercent {
+    text-align: center;
+    width: 50%;
+}
+
+.epi-percentTemplate-views {
+    text-align: center;
+    width: 50%;
+    float: right;
 }

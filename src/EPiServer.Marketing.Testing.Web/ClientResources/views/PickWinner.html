@@ -49,25 +49,13 @@
                             <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onPublishedVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
+                        <!-- Multi KPI Conv % -->
+                        <div data-dojo-attach-point="controlConversionPercent"></div>
                         <!-- Control Statistics -->
-                        <table width="100%">
-                            <tr>
-                                <td style="text-align:center;">
-                                    <span id="controlPercent" data-dojo-attach-point="publishedConversionPercent"></span><br>${resources.detailsview.conversion_rate}
-                                </td>
-                                <td style="text-align:center;">
-                                    <div id="controlPickWinnerPieChart" class="epi-ab-converstion-pie-chart"></div>
-                                </td>
-                                <td style="text-align:center;">
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="publishedConversions"></span><br>${resources.detailsview.conversions}
-                                    </p>
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="publishedViews"></span><br>${resources.detailsview.views}
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="epi-abTest-summaryToggle">
+                            <a class="epi-visibleLink" data-dojo-attach-point="summaryToggle" data-dojo-attach-event="onclick: _toggleSummaries">${resources.pickwinnerview.hide_summary}</a>
+                        </div>
+                        <div data-dojo-attach-point="controlPickWinnerSummaryNode"></div>
                     </div>
                 </div>
                 <!-- Challenger/Draft Version-->
@@ -87,25 +75,11 @@
                             <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
-                        <table width="100%">
-                            <tr>
-                                <td style="text-align: center;">
-                                    <span id="challengerPercent" data-dojo-attach-point="challengerConversionPercent"> %</span><br>${resources.detailsview.conversion_rate}
-                                </td>
-                                <td style="text-align: center;">
-                                    <div id="challengerPickWinnerPieChart" class="epi-ab-converstion-pie-chart"></div>
-                                </td>
-                                <td style="text-align: center;">
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="challengerConversions"></span><br>${resources.detailsview.conversions}
-                                    </p>
-                                    <p>
-                                        <span class="viewsAndConversions" data-dojo-attach-point="challengerViews"></span><br>${resources.detailsview.views}
-                                    </p>
-                                </td>
-                                <td></td>
-                            </tr>
-                        </table>
+                        <!-- Multi KPI Conv % -->
+                        <div data-dojo-attach-point="challengerConversionPercent"></div>
+                        <!-- Challenger Statistics-->
+                        <div class="epi-abTest-summaryToggle"></div>
+                        <div data-dojo-attach-point="challengerPickWinnerSummaryNode"></div>
                     </div>
                 </div>
             </div>
@@ -117,12 +91,11 @@
                         <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
                     </div>
                     <div class="formsRow">
-                        <div id="pw_conversionMarkup">
+                        <h4>Conversion Goal(s)</h4>
+                        <div class="epi-abtest-kpimarkup-div" id="pw_conversionMarkup">
                             <!-- KPI Generated Markup -->
                         </div>
-                        <div id="pw_kpidescription">
-                            <!-- KPI Description -->
-                        </div>
+                    </div>
                     <hr class="epi-abtest-hr">
                     <div class="formsRow">
                         <h4>${resources.detailsview.percent_participation_header}</h4>

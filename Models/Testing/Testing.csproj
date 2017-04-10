@@ -129,6 +129,14 @@
     <Compile Include="Migrations\201703231704110_Add_ConversionReuslt_And_Change_Conversion_Type.Designer.cs">
       <DependentUpon>201703231704110_Add_ConversionReuslt_And_Change_Conversion_Type.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704041955194_AddSelectedWeight_To_ConversionResult.cs" />
+    <Compile Include="Migrations\201704041955194_AddSelectedWeight_To_ConversionResult.Designer.cs">
+      <DependentUpon>201704041955194_AddSelectedWeight_To_ConversionResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704051826523_AddPerformanceToConversionResult.cs" />
+    <Compile Include="Migrations\201704051826523_AddPerformanceToConversionResult.Designer.cs">
+      <DependentUpon>201704051826523_AddPerformanceToConversionResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -148,6 +156,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703231704110_Add_ConversionReuslt_And_Change_Conversion_Type.resx">
       <DependentUpon>201703231704110_Add_ConversionReuslt_And_Change_Conversion_Type.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704041955194_AddSelectedWeight_To_ConversionResult.resx">
+      <DependentUpon>201704041955194_AddSelectedWeight_To_ConversionResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704051826523_AddPerformanceToConversionResult.resx">
+      <DependentUpon>201704051826523_AddPerformanceToConversionResult.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

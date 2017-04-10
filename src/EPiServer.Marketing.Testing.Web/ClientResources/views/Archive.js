@@ -18,6 +18,8 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
+ "dojo/fx",
+ "dojo/dom-construct",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -41,13 +43,16 @@
     query,
     textHelper,
     rasterizehtml,
-    ContentPane
+    ContentPane,
+    CoreFX,
+    DomConstruct
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
         templateString: template,
         resources: resources,
         contextHistory: null,
+        kpiSummaryWidgets: new Array(),
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -61,32 +66,56 @@
         },
 
         startup: function () {
-            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerArchivePieChart", textHelper.draftPercent);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
             }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible";
+            } else {
+                this.summaryToggle.style.visibility = "hidden";
+            }
+        },
+
+        _setToggleAnimations: function() {
+            var me = this;
+            this.controlSummaryOut = CoreFX.wipeOut({
+                node: me.controlArchiveSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.archiveview.show_summary }
+            });
+
+            this.controlSummaryIn = CoreFX.wipeIn({
+                node: me.controlArchiveSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.archiveview.hide_summary }
+            });
+
+            this.challengerSummaryOut = CoreFX.wipeOut({
+                node: me.challengerArchiveSummaryNode,
+                rate: 15
+            });
+
+            this.challengerSummaryIn = CoreFX.wipeIn({
+                node: me.challengerArchiveSummaryNode,
+                rate: 15
+            });
         },
 
         _contextChanged: function (newContext) {
             var me = this;
+            this.kpiSummaryWidgets = new Array();
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
             me.context = newContext;
             textHelper.initializeHelper(this.context, resources.archiveview);
-
             me._renderData();
-            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlArchivePieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerArchivePieChart", textHelper.draftPercent);
-            }
         },
 
         _onCloseClick: function () {
             var me = this;
-            textHelper.clearPieCharts("controlArchivePieChart", "challengerArchivePieChart");
+            this.kpiSummaryWidgets = new Array();
             me.contextParameters = { uri: "epi.cms.contentdata:///" + me.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -100,12 +129,8 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
-                this.publishedViews,
-                this.publishedConversionPercent);
-            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
-                this.challengerViews,
-                this.challengerConversionPercent);
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlArchiveSummaryNode, this.controlConversionPercent));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerArchiveSummaryNode, this.challengerConversionPercent));
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderStatus();
@@ -113,23 +138,25 @@
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
-                me._renderKpiMarkup("archive_conversionMarkup", "archive_kpidescription");
+                me._renderKpiMarkup("archive_conversionMarkup");
+                for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
+                    me.kpiSummaryWidgets[x].startup();
+                }
             });
-
         },
 
         _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
 
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
+
+                var goalsContent = new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+                dojo.place(goalsDescription, goalsContent.containerNode);
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
@@ -228,6 +255,17 @@
             var me = this;
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.draftVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
+        },
+
+        _toggleSummaries: function () {
+            if (this.summaryToggle.innerHTML === this.resources.archiveview.hide_summary) {
+                this.controlSummaryOut.play();
+                this.challengerSummaryOut.play();
+            }
+            else {
+                this.controlSummaryIn.play();
+                this.challengerSummaryIn.play();
+            }
         }
     });
 });

@@ -263,7 +263,23 @@
                 if (kpiuiElement && kpiList) {
                     kpiuiElement.set("value", "");
                     dijit.byId('kpiSelector').removeOption(dijit.byId('kpiSelector').getOptions());
-                    var defaultOption = { value: "default", label: me.resources.addtestview.goals_selectlist_default, selected: true, };
+
+                    var defaultOption = null;
+
+                    if (this.kpiEntries == 0) {
+                        defaultOption = {
+                            value: "default",
+                            label: me.resources.addtestview.goals_selectlist_default,
+                            selected: true
+                        };
+                    } else {
+                        defaultOption = {
+                            value: "default",
+                            label: me.resources.addtestview.goals_selectlist_additional_kpi,
+                            selected: true
+                        };
+                    }
+
                     kpiuiElement.addOption(defaultOption);
                     for (var x = 0; x < kpiList.length; x++) {
                         var option = { value: x.toString(), label: kpiList[x].kpi.friendlyName };
@@ -568,7 +584,7 @@
                 this.kpiEntries = 0;
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
-                this._adjustKpiSelectorCombo()
+                this._adjustKpiSelectorCombo();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
@@ -589,13 +605,15 @@
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
                         description: kpiObject.kpi.description,
-                        kpiType: kpiObject.kpiType,
-                    })
+                        kpiType: kpiObject.kpiType
+                    });
 
                     kpiWidgetInstance.placeAt(kpiWidget);
-                    aspect.after(kpiWidgetInstance, 'destroy', function () {
-                        me.decrementKpiEntries();
-                    })
+                    aspect.after(kpiWidgetInstance,
+                        'destroy',
+                        function() {
+                            me.decrementKpiEntries();
+                        });
 
                     var weightWidget = new KpiWeightWidget({
                         label: kpiObject.kpi.friendlyName,
@@ -609,7 +627,7 @@
                     }
                     this.kpiEntries++;
 
-                    this._adjustKpiSelectorCombo();
+                    this._adjustKpiSelectorCombo(kpiWidgetInstance.id);
                 }
             },
 
@@ -669,17 +687,21 @@
                 }
             },
 
-            _adjustKpiSelectorCombo: function () {
+            _adjustKpiSelectorCombo: function (kpiId) {
                 var dijitSelector = dijit.byId("kpiSelector");
                 dijitSelector.set("value", "default");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
+
+                if (kpiId) {
+                    var kpiWidget = dom.byId(kpiId);
+                    if (!this._isScrolledIntoView(kpiWidget)) {
+                        kpiWidget.scrollIntoView(true);
+                    }
+                }
                 if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
                     kpiSelector.style.display = "block";
-                    if (!this._isScrolledIntoView(kpiSelector)) {
-                        kpiSelector.scrollIntoView(true);
-                    }
 
                     if (this.kpiEntries == 0) {
                         this._setKpiSelectList(this.kpiModel.refreshKpis());

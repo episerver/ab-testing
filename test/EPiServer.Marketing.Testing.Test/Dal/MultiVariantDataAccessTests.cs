@@ -444,6 +444,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                             Conversions = 1,
                             KpiId = Guid.NewGuid(),
                             Weight = .5,
+                            SelectedWeight = "Medium",
                             CreatedDate = DateTime.Now,
                             ModifiedDate = DateTime.Now,
                             Id = Guid.NewGuid()

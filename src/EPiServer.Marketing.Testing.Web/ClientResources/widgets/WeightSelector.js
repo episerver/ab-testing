@@ -16,7 +16,9 @@
 
         disabled: false,
 
-        _setValueAttr: function(value) {
+        showLabel: true,
+
+        _setValueAttr: function (value) {
             this.value = value;
             this._init();
             on.emit(this, "change", {
@@ -30,18 +32,24 @@
         },
 
         _init: function () {
-            this._setSelectorValueLabel();
             this._importanceSelected();
+            this._setSelectorValueLabel();
         },
 
         _setSelectorValueLabel: function () {
-            this.selectorValue.innerHTML = this.value;
+            if (this.showLabel) {
+                this.selectorValue.innerHTML = this.value;
+            }
+            else {
+                dojo.destroy(this.selectorValue);
+                domClass.remove(this.importanceHigh, "epi-weightSelector-high-padded");
+            }
         },
 
         _importanceSelected: function (evt) {
             var weight = this.value;
             if (evt && !this.disabled) {
-                  weight = evt.currentTarget.id;                
+                weight = evt.currentTarget.id;
             }
 
             if (weight) {
@@ -52,20 +60,32 @@
                     case "Low":
                         domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low-selected");
                         domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
-                        domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                        if (!this.disabled) {
+                            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default epi-weightSelector-high-padded");
+                        } else {
+                            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                        }
                         break;
                     case "Medium":
                         domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
                         domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-medium-selected");
-                        domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                        if (!this.disabled) {
+                            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default epi-weightSelector-high-padded");
+                        } else {
+                            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight--default");
+                        }
                         break;
                     case "High":
                         domClass.replace(this.importanceLow, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-low");
                         domClass.replace(this.importanceMedium, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-medium");
-                        domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-high-selected" );
+                        if (!this.disabled) {
+                            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-high-selected epi-weightSelector-high-padded");
+                        } else {
+                            domClass.replace(this.importanceHigh, "epi-weightSelector-kpiweight epi-weightSelector-kpiweight-high-selected");
+                        }
                         break;
                 }
             }
-        },       
+        },
     });
 });
