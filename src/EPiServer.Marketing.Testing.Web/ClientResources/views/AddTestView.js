@@ -688,19 +688,18 @@
             _adjustKpiSelectorCombo: function (kpiId) {
                 var dijitSelector = dijit.byId("kpiSelector");
                 dijitSelector.set("value", "default");
-                var kpiSelector = null;
+                var kpiSelector = dom.byId("kpiSelectorCombo");
+
                 if (kpiId) {
-                    kpiSelector = dom.byId(kpiId);
-                } else {
-                    kpiSelector = dom.byId("kpiSelectorCombo");
+                    var kpiWidget = dom.byId(kpiId);
+                    if (!this._isScrolledIntoView(kpiWidget)) {
+                        kpiWidget.scrollIntoView(true);
+                    }
                 }
                 if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
                     kpiSelector.style.display = "block";
-                    if (!this._isScrolledIntoView(kpiSelector)) {
-                        kpiSelector.scrollIntoView(true);
-                    }
 
                     if (this.kpiEntries == 0) {
                         this._setKpiSelectList(this.kpiModel.refreshKpis());
