@@ -8,7 +8,6 @@
 "marketing-testing/widgets/KpiSummaryWidget",
 "marketing-testing/widgets/KpiSummariesWidget",
 "marketing-testing/widgets/ConversionPercentTemplate"
-
 ],
 
 function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
@@ -35,8 +34,8 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
         initializeHelper: function (testContext, stringResources, mModules) {
             context = testContext;
 
-            this.publishedVariant = context.data.test.variants.find(function (obj) { return obj.isPublished });
-            this.draftVariant = context.data.test.variants.find(function (obj) { return !obj.isPublished });
+            this.publishedVariant = this._findInArray(context.data.test.variants, "isPublished", true);
+            this.draftVariant = this._findInArray(context.data.test.variants, "isPublished", false);
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
@@ -48,7 +47,16 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                 username = mModules.username;
                 domClass = mModules.domClass;
             };
+        },
 
+        // replacement for .find to support IE
+        //arrayObj = array to search, property = property to seach on, value = value to match
+        _findInArray: function (arrayObj, property, value) {
+            for (var i = 0; i < arrayObj.length; i++) {
+                if (arrayObj[i][property] === value) {
+                    return arrayObj[i];
+                }
+            }
         },
 
         //sets text content of provided node to the context test title
@@ -139,6 +147,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             }
         },
 
+        //destroys any percentage widgets loaded into the view
         _removePercentageWidgets: function (percentageWidgetNode) {
             var me = this;
             if (percentageWidgetNode) {
@@ -156,6 +165,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             }
         },
 
+        //renders test summary for control (published) content
         renderControlSummary: function (summaryNode, controlPercentageNode) {
             this._removeSummaryWidgets(summaryNode)
             this._removePercentageWidgets(controlPercentageNode);
@@ -194,6 +204,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
+        //renders test summary for challenger (draft) content.
         renderChallengerSummary: function (summaryNode, challengerPercentageNode) {
             this._removeSummaryWidgets(summaryNode)
             this._removePercentageWidgets(challengerPercentageNode);
@@ -232,19 +243,12 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaryWidget;
         },
 
-        _getKpiSummary: function (id, arrayObj) {
-            for (var i = 0; i < arrayObj.length; i++) {
-                if (arrayObj[i].kpiId === id) {
-                    return arrayObj[i];
-                }
-            }
-        },
-
+        //renders multiple kpi summary for control (published) content
         _renderControlSummaries: function () {
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
             for (var x = 0; x < kpiInstances.length; x++) {
-                var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.publishedVariant.keyConversionResults);
+                var kpiSummary = this._findInArray(this.publishedVariant.keyConversionResults, "kpiId", kpiInstances[x].id);
                 var kpiResult = {
                     markup: kpiInstances[x].uiReadOnlyMarkup,
                     conversions: kpiSummary.conversions,
@@ -259,11 +263,12 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             return summaries;
         },
 
+        //renders multiple kpi summary for challenger (draft) content
         _renderChallengerSummaries: function () {
             var kpiInstances = context.data.test.kpiInstances;
             var kpiResults = new Array();
             for (var x = 0; x < kpiInstances.length; x++) {
-                var kpiSummary = this._getKpiSummary(kpiInstances[x].id, this.draftVariant.keyConversionResults);
+                var kpiSummary = this._findInArray(this.draftVariant.keyConversionResults, "kpiId", kpiInstances[x].id);
                 var kpiResult = {
                     markup: kpiInstances[x].uiReadOnlyMarkup,
                     conversions: kpiSummary.conversions,
@@ -300,6 +305,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             contentLinkAnchorNode.textContent = context.data.conversionContentName;
         },
 
+        //sets and renders duration progress bar
         renderDurationProgress: function (durationProgressIndicatorNode) {
             var totalTestDuration = Number(context.data.daysElapsed) + Number(context.data.daysRemaining);
             durationProgressIndicatorNode.set({ maximum: totalTestDuration });
