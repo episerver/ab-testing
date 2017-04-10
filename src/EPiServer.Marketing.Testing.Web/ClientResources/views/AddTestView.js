@@ -605,13 +605,15 @@
                         label: kpiObject.kpi.friendlyName,
                         markup: kpiObject.kpi.uiMarkup,
                         description: kpiObject.kpi.description,
-                        kpiType: kpiObject.kpiType,
-                    })
+                        kpiType: kpiObject.kpiType
+                    });
 
                     kpiWidgetInstance.placeAt(kpiWidget);
-                    aspect.after(kpiWidgetInstance, 'destroy', function () {
-                        me.decrementKpiEntries();
-                    })
+                    aspect.after(kpiWidgetInstance,
+                        'destroy',
+                        function() {
+                            me.decrementKpiEntries();
+                        });
 
                     var weightWidget = new KpiWeightWidget({
                         label: kpiObject.kpi.friendlyName,
