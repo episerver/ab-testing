@@ -37,6 +37,10 @@
         <performance path="/abtesting/kpisummarywidget/performance/">Performance</performance>
         <weight path="/abtesting/kpisummarywidget/weight/">Weight</weight>
       </kpisummarywidget>
+      <percentagetemplate>
+        <conversion_rate path="/abtesting/percentagetemplate/conversion_rate/">Conversion Rate</conversion_rate>
+        <views path="/abtesting/percentagetemplate/views/">views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <content_challenger_header path="/abtesting/pickwinnerview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/pickwinnerview/conversions/">conversions</conversions>

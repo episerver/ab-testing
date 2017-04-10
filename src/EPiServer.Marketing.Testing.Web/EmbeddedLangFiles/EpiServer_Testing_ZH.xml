@@ -159,6 +159,10 @@
         <winner_link_text>挑选优胜者</winner_link_text>
         <winner_link_tooltip>查看测试详情并挑选优胜者 </winner_link_tooltip>
       </notificationbar>
+      <percentagetemplate>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <views>views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>可信度</advanced_options_confidence_level>
         <advanced_options_header>高级选项</advanced_options_header>

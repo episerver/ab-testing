@@ -77,7 +77,7 @@
             }
         },
 
-        _setToggleAnimations() {
+        _setToggleAnimations: function() {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlArchiveSummaryNode,
@@ -129,8 +129,8 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlArchiveSummaryNode));
-            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerArchiveSummaryNode));
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlArchiveSummaryNode, this.controlConversionPercent));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerArchiveSummaryNode, this.challengerConversionPercent));
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderStatus();

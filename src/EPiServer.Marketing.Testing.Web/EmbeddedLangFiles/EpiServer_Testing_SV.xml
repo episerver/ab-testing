@@ -159,6 +159,10 @@
         <winner_link_text>Välj vinnare</winner_link_text>
         <winner_link_tooltip>Visa testdetaljer och välj vinnare </winner_link_tooltip>
       </notificationbar>
+      <percentagetemplate>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <views>views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
         <advanced_options_header>Avancerade inställningar</advanced_options_header>
