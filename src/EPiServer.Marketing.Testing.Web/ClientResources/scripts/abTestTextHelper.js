@@ -1,5 +1,6 @@
 ﻿define([
 "dojo/dom",
+"dijit/registry",
 "dojox/charting/Chart",
 "dojox/charting/plot2d/Pie",
 "epi/datetime",
@@ -10,7 +11,7 @@
 "marketing-testing/widgets/ConversionPercentTemplate"
 ],
 
-function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
+function (dom, registry, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
     //"privates"
     var context, resources;
 
@@ -135,7 +136,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             if (summaryNode) {
                 var controlWidget = dojo.query(summaryNode);
                 if (controlWidget) {
-                    dojo.forEach(dijit.findWidgets(controlWidget)), function (w) {
+                    dojo.forEach(registry.findWidgets(controlWidget)), function (w) {
                         var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
                         if (widgetToRemove) {
                             me.kpiSummaryWidgets.splice(widgetToRemove, 1);
@@ -153,7 +154,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             if (percentageWidgetNode) {
                 var percentageWidget = dojo.query(percentageWidgetNode);
                 if (percentageWidget) {
-                    dojo.forEach(dijit.findWidgets(percentageWidget)), function (w) {
+                    dojo.forEach(registry.findWidgets(percentageWidget)), function (w) {
                         var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
                         if (widgetToRemove) {
                             me.kpiSummaryWidgets.splice(widgetToRemove, 1);
