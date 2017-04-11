@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Exceptions;
@@ -78,12 +79,27 @@ namespace EPiServer.Marketing.KPI.Manager
         public IEnumerable<Type> GetKpiTypes()
         {
             var type = typeof(IKpi);
-            // exclude interfaces, abstract instances, and the convience base class Kpi
-            var types =
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi));
-            return (types);
+
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var types = new List<Type>();
+
+            foreach (var assembly in assemblies)
+            {
+                IEnumerable<Type> kpiTypes;
+                try
+                {
+                    kpiTypes = assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi));
+                }
+                catch (ReflectionTypeLoadException e)  // This exception gets thrown if any dependencies for an assembly can't be found.
+                {
+                    // In this case, we just get whatever kpis that we can and ignore any that have missing dependencies
+                    kpiTypes = e.Types.Where(t => t != null && type.IsAssignableFrom(t) && !t.IsInterfaceOrAbstract() && t != typeof(Kpi)).ToArray();
+                }
+
+                types.AddRange(kpiTypes);
+            }
+
+            return types;
         }
 
         /// <inheritdoc />
