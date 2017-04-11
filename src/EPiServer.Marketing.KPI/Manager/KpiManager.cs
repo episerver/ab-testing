@@ -12,6 +12,7 @@ using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using StructureMap.TypeRules;
 using EPiServer.Data.Dynamic;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -21,6 +22,7 @@ namespace EPiServer.Marketing.KPI.Manager
     {
         private IKpiDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
+        private ILogger _logger;
         public bool DatabaseNeedsConfiguring;
 
         /// <summary>
@@ -30,6 +32,7 @@ namespace EPiServer.Marketing.KPI.Manager
         public KpiManager()
         {
             _serviceLocator = ServiceLocator.Current;
+            _logger = LogManager.GetLogger();
 
             try
             {
@@ -48,7 +51,8 @@ namespace EPiServer.Marketing.KPI.Manager
         internal KpiManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
-            _dataAccess = _serviceLocator.GetInstance<IKpiDataAccess>();
+            _dataAccess = serviceLocator.GetInstance<IKpiDataAccess>();
+            _logger = serviceLocator.GetInstance<ILogger>();
         }
 
         /// <inheritdoc />
@@ -94,6 +98,11 @@ namespace EPiServer.Marketing.KPI.Manager
                 {
                     // In this case, we just get whatever kpis that we can and ignore any that have missing dependencies
                     kpiTypes = e.Types.Where(t => t != null && type.IsAssignableFrom(t) && !t.IsInterfaceOrAbstract() && t != typeof(Kpi)).ToArray();
+
+                    foreach (var loaderException in e.LoaderExceptions)
+                    {
+                        _logger.Error("AB Testing: ", loaderException);
+                    }
                 }
 
                 types.AddRange(kpiTypes);
