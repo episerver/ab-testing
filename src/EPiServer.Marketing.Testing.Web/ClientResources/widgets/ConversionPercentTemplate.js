@@ -22,11 +22,11 @@
 
         _setIsLeaderAttr: function (leader) {
             if (leader) {
-                domClass.replace(this.percentage, "epi-kpiSummary-conversionRate-leader");
-                domClass.replace(this.views, "epi-kpiSummary-conversionRate-leader");
+                domClass.replace(this.percentageNode, "epi-kpiSummary-conversionRate-leader");
+                domClass.replace(this.viewsNode, "epi-kpiSummary-conversionRate-leader");
             } else {
-                domClass.replace(this.percentage, "epi-kpiSummary-conversionRate-default");
-                domClass.replace(this.views, "epi-kpiSummary-conversionRate-default");
+                domClass.replace(this.percentageNode, "epi-kpiSummary-conversionRate-default");
+                domClass.replace(this.viewsNode, "epi-kpiSummary-conversionRate-default");
             }
         }
     });
