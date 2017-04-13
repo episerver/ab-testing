@@ -141,40 +141,40 @@
                 expect(aCommand.canExecute).to.be.false;
             });
 
-            it("Calls to cancel the current test setup when executed", function () {
-                var me = this,
-                    aCommand = new CancelTestCommand(),
-                    retPublishView,
-                    mockResult = {
-                        title: "something clever"
-                    },
-                    contentGuid,
-                    store = {
-                        get: function (id) {
-                            return this;
-                        },
-                        then: function (successFunc) {
-                            successFunc();
-                            return this;
-                        },
-                        remove: function (id) {
-                            contentGuid = id;
-                            return this;
-                        }
-                    };
+            //it("Calls to cancel the current test setup when executed", function () {
+            //    var me = this,
+            //        aCommand = new CancelTestCommand(),
+            //        retPublishView,
+            //        mockResult = {
+            //            title: "something clever"
+            //        },
+            //        contentGuid,
+            //        store = {
+            //            get: function (id) {
+            //                return this;
+            //            },
+            //            then: function (successFunc) {
+            //                successFunc();
+            //                return this;
+            //            },
+            //            remove: function (id) {
+            //                contentGuid = id;
+            //                return this;
+            //            }
+            //        };
 
-                aCommand.store = store;
-                aCommand.model = {
-                    contentData: {
-                        contentLink: "5_202",
-                        contentGuid: "a test guid",
-                        accessMask: ""
-                    }
-                };
-                aCommand._execute();
+            //    aCommand.store = store;
+            //    aCommand.model = {
+            //        contentData: {
+            //            contentLink: "5_202",
+            //            contentGuid: "a test guid",
+            //            accessMask: ""
+            //        }
+            //    };
+            //    aCommand._execute();
 
-                expect(contentGuid).to.equal(aCommand.model.contentData.contentGuid);
-            });
+            //    expect(contentGuid).to.equal(aCommand.model.contentData.contentGuid);
+            //});
 
             it("is visible when the test is done, but a winner has not been picked yet", function () {
                 var me = this,

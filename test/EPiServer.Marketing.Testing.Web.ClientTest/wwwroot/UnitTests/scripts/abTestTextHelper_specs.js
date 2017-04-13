@@ -1,8 +1,9 @@
 ﻿define([
+    'dojo/dom-construct',
         'marketing-testing/scripts/abTestTextHelper',
         'epi/_Module'
 ],
-    function (abTestTextHelper, Module) {
+    function (DomConstruct, abTestTextHelper, Module) {
         describe("abTestTextHelper - Details View",
             function () {
                 var mockStringResources = {
@@ -19,8 +20,6 @@
                         "This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.",
                     test_duration_completed: "Completed after full duration",
                     goal_not_specified: "A goal has not been specified."
-
-
                 };
                 var defaultTextContent = "Default Text",
                     context = {
@@ -61,7 +60,7 @@
                             }
                         }
                     };
-                context.data.test.variants.push({ itemVersion: "3", isPublished: true,conversions: 10, views: 100 });
+                context.data.test.variants.push({ itemVersion: "3", isPublished: true, conversions: 10, views: 100 });
                 context.data.test.variants.push({ itemVersion: "150", isPublished: false, conversions: 150, views: 200 });
 
                 it("Correctly initializes properties based on given context",
@@ -75,6 +74,26 @@
                         expect(abTestTextHelper.draftVariant.views).to.equal(200);
                         expect(abTestTextHelper.publishedPercent).to.equal(10);
                         expect(abTestTextHelper.draftPercent).to.equal(75)
+                    });
+
+                it("Searches and finds the correct object based on supplied property and value",
+                    function () {
+                        var mockArray = new Array();
+                        var mockObject = {
+                            value1: "A",
+                            value2: "B",
+                            value3: "C"
+                        }
+                        mockArray.push(mockObject);
+                        var mockObject = {
+                            value1: "D",
+                            value2: "E",
+                            value3: "F"
+                        }
+                        mockArray.push(mockObject);
+                        var returnedObject = abTestTextHelper._findInArray(mockArray, "value2", "F");
+
+                        expect(returnedObject).to.equal(mockObject[1]);
                     });
 
                 it("Correctly sets the textContent of the provided title element",
@@ -96,7 +115,7 @@
                         abTestTextHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
                         expect(mockStatusElement.textContent).to.equal("Test has not yet started. ");
-                        expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
+                        expect(mockStartedElement.textContent).to.equal("It is scheduled to begin 8/3/16, 3:27 PM")
 
                     });
 
@@ -110,7 +129,7 @@
                         abTestTextHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
                         expect(mockStatusElement.textContent).to.equal("Test is running, 26 day(s) remaining.");
-                        expect(mockStartedElement.textContent).to.equal("started Aug 3, 3:27 PM by MockTestOwner");
+                        expect(mockStartedElement.textContent).to.equal("started 8/3/16, 3:27 PM by MockTestOwner");
 
                     });
 
@@ -146,7 +165,7 @@
                         var mockDaysRemainingText = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderTestRemaining(mockDaysRemainingElement,mockDaysRemainingText);
+                        abTestTextHelper.renderTestRemaining(mockDaysRemainingElement, mockDaysRemainingText);
 
                         expect(mockDaysRemainingElement.textContent).to.equal("Test has not yet started. ");
                         expect(mockDaysRemainingText.textContent).to.equal("");
@@ -199,7 +218,7 @@
                         abTestTextHelper.renderPublishedInfo(mockPublishedElement, mockDatePublishedElement);
 
                         expect(mockPublishedElement.textContent).to.equal("MockPublishedUser");
-                        expect(mockDatePublishedElement.textContent).to.equal("May 1, 8:00 PM");
+                        expect(mockDatePublishedElement.textContent).to.equal("5/1/16, 8:00 PM");
                     });
 
                 it("Renders correct draft(challenger) content information based on the context provided",
@@ -211,40 +230,29 @@
                         abTestTextHelper.renderDraftInfo(mockChangedByElement, mockdateChangedElement);
 
                         expect(mockChangedByElement.textContent).to.equal("MockChangedByUser");
-                        expect(mockdateChangedElement.textContent).to.equal("May 2, 9:00 PM");
+                        expect(mockdateChangedElement.textContent).to.equal("5/2/16, 9:00 PM");
                     });
 
                 it("Renders correct published(control) variant views, conversions and conversion percent based on the context provided",
                     function () {
-                        var mockPublishedConversionsNode = { textContent: defaultTextContent },
-                            mockPublishedViewsNode = { textContent: defaultTextContent },
-                            mockPublishedConversionPercentNode = { textContent: defaultTextContent };
+                        context.data.test.kpiInstances = [{ id: "kpi1" },
+                                                          { id: "kpi2" },
+                                                          { id: "kpi3" }];
 
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderPublishedViewsAndConversions(mockPublishedConversionsNode,
-                            mockPublishedViewsNode,
-                            mockPublishedConversionPercentNode);
+                        context.data.test.variants[0].keyConversionResults = new Array();
+                        context.data.test.variants[0].keyConversionResults.push({ kpiId: "kpi1", conversions: 10, views: 5 });
+                        context.data.test.variants[0].keyConversionResults.push({ kpiId: "kpi2", conversions: 20, views: 6 });
+                        context.data.test.variants[0].keyConversionResults.push({ kpiId: "kpi3", conversions: 30, views: 7 });
 
-                        expect(mockPublishedConversionsNode.textContent).to.equal(10);
-                        expect(mockPublishedViewsNode.textContent).to.equal(100);
-                        expect(mockPublishedConversionPercentNode.textContent).to.equal("10%");
-
+                        var summaryNode = DomConstruct.toDom("<div id='summaryNode'></div>");
+                        var controlPercentageNode = DomConstruct.toDom("<div id='controlPercentageNode'></div>");
+                        var widget = abTestTextHelper.renderControlSummary(summaryNode, controlPercentageNode);
+                        expect("x").to.equal("y");
                     });
 
                 it("Renders correct draft(challenger) variant views, conversions and conversion percent based on the context provided",
                     function () {
-                        var mockchallengerConversionsNode = { textContent: defaultTextContent },
-                            mockchallengerViewsNode = { textContent: defaultTextContent },
-                            mockchallengerConversionPercentNode = { textContent: defaultTextContent };
-
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderDraftViewsAndConversions(mockchallengerConversionsNode,
-                            mockchallengerViewsNode,
-                            mockchallengerConversionPercentNode);
-
-                        expect(mockchallengerConversionsNode.textContent).to.equal(150);
-                        expect(mockchallengerViewsNode.textContent).to.equal(200);
-                        expect(mockchallengerConversionPercentNode.textContent).to.equal("75%");
+                        expect("This needs to be ").to.equal("refactored")
                     });
 
                 it("Renders a properly formatted description when description is not null",
@@ -289,6 +297,6 @@
                         expect(contentLinkAnchorNode.href).to.equal("testLink");
                         expect(contentLinkAnchorNode.textContent).to.equal("conversion content");
                     });
-             
+
             });
     });
