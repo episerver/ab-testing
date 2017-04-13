@@ -141,6 +141,7 @@
                 expect(aCommand.canExecute).to.be.false;
             });
 
+            // Temporary test removal until we can find rogue alert.
             //it("Calls to cancel the current test setup when executed", function () {
             //    var me = this,
             //        aCommand = new CancelTestCommand(),
