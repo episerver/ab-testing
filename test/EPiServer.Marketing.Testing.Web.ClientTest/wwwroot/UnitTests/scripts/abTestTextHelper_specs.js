@@ -1,8 +1,9 @@
 ﻿define([
+    'dojo/dom-construct',
         'marketing-testing/scripts/abTestTextHelper',
         'epi/_Module'
 ],
-    function (abTestTextHelper, Module) {
+    function (DomConstruct, abTestTextHelper, Module) {
         describe("abTestTextHelper - Details View",
             function () {
                 var mockStringResources = {
@@ -19,8 +20,6 @@
                         "This test has not been completed, but you may pick a winner. Picking a winner now will end the test and publish the content chosen.",
                     test_duration_completed: "Completed after full duration",
                     goal_not_specified: "A goal has not been specified."
-
-
                 };
                 var defaultTextContent = "Default Text",
                     context = {
@@ -59,9 +58,29 @@
                             replace: function (oldClass, newClass) {
                                 oldClass.mockClass = newClass;
                             }
+                        },
+                        conversionpercenttemplate: function (params) {
+                            return {
+                                placeAt: function (params) { }
+                            };
+                        },
+                        kpisummarywidget: function (params) {
+                            return {
+                                views: params.views,
+                                conversions: params.conversions,
+                                conversionRate: params.conversionRate,
+                                isLeader: params.isLeader,
+                                placeAt: function (params) { }
+                            };
+                        },
+                        kpisummarieswidget: function (params) {
+                            return {
+                                kpis: params.kpis,
+                                placeAt: function (params) { }
+                            };
                         }
                     };
-                context.data.test.variants.push({ itemVersion: "3", isPublished: true,conversions: 10, views: 100 });
+                context.data.test.variants.push({ itemVersion: "3", isPublished: true, conversions: 10, views: 100 });
                 context.data.test.variants.push({ itemVersion: "150", isPublished: false, conversions: 150, views: 200 });
 
                 it("Correctly initializes properties based on given context",
@@ -75,6 +94,26 @@
                         expect(abTestTextHelper.draftVariant.views).to.equal(200);
                         expect(abTestTextHelper.publishedPercent).to.equal(10);
                         expect(abTestTextHelper.draftPercent).to.equal(75)
+                    });
+
+                it("Searches and finds the correct object based on supplied property and value",
+                    function () {
+                        var mockArray = new Array();
+                        var mockObject = {
+                            value1: "A",
+                            value2: "B",
+                            value3: "C"
+                        }
+                        mockArray.push(mockObject);
+                        var mockObject = {
+                            value1: "D",
+                            value2: "E",
+                            value3: "F"
+                        }
+                        mockArray.push(mockObject);
+                        var returnedObject = abTestTextHelper._findInArray(mockArray, "value2", "F");
+
+                        expect(returnedObject).to.equal(mockObject[1]);
                     });
 
                 it("Correctly sets the textContent of the provided title element",
@@ -96,8 +135,7 @@
                         abTestTextHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
                         expect(mockStatusElement.textContent).to.equal("Test has not yet started. ");
-                        expect(mockStartedElement.textContent).to.equal("It is scheduled to begin Aug 3, 3:27 PM")
-
+                        expect(mockStartedElement.textContent).to.equal("It is scheduled to begin 8/3/16, 3:27 PM")
                     });
 
                 it("Renders correct status and messaging for a test which is active (state = 1)",
@@ -110,8 +148,7 @@
                         abTestTextHelper.renderTestStatus(mockStatusElement, mockStartedElement);
 
                         expect(mockStatusElement.textContent).to.equal("Test is running, 26 day(s) remaining.");
-                        expect(mockStartedElement.textContent).to.equal("started Aug 3, 3:27 PM by MockTestOwner");
-
+                        expect(mockStartedElement.textContent).to.equal("started 8/3/16, 3:27 PM by MockTestOwner");
                     });
 
                 it("Renders correct status and messaging for a test which is done (state = 2)",
@@ -125,7 +162,6 @@
 
                         expect(mockStatusElement.textContent).to.equal("Test completed, now go on and pick a winner...");
                         expect(mockStartedElement.textContent).to.equal("");
-
                     });
 
                 it("Renders correct daysElapsed based on the context provided",
@@ -146,7 +182,7 @@
                         var mockDaysRemainingText = { textContent: defaultTextContent };
 
                         abTestTextHelper.initializeHelper(context, mockStringResources, mockDependencies);
-                        abTestTextHelper.renderTestRemaining(mockDaysRemainingElement,mockDaysRemainingText);
+                        abTestTextHelper.renderTestRemaining(mockDaysRemainingElement, mockDaysRemainingText);
 
                         expect(mockDaysRemainingElement.textContent).to.equal("Test has not yet started. ");
                         expect(mockDaysRemainingText.textContent).to.equal("");
@@ -199,7 +235,7 @@
                         abTestTextHelper.renderPublishedInfo(mockPublishedElement, mockDatePublishedElement);
 
                         expect(mockPublishedElement.textContent).to.equal("MockPublishedUser");
-                        expect(mockDatePublishedElement.textContent).to.equal("May 1, 8:00 PM");
+                        expect(mockDatePublishedElement.textContent).to.equal("5/1/16, 8:00 PM");
                     });
 
                 it("Renders correct draft(challenger) content information based on the context provided",
@@ -211,41 +247,94 @@
                         abTestTextHelper.renderDraftInfo(mockChangedByElement, mockdateChangedElement);
 
                         expect(mockChangedByElement.textContent).to.equal("MockChangedByUser");
-                        expect(mockdateChangedElement.textContent).to.equal("May 2, 9:00 PM");
+                        expect(mockdateChangedElement.textContent).to.equal("5/2/16, 9:00 PM");
                     });
 
-                it("Renders correct published(control) variant views, conversions and conversion percent based on the context provided",
+                it("Creates and populates a control KpiSummaryWidget with the proper number of kpis and correct associated data",
                     function () {
-                        var mockPublishedConversionsNode = { textContent: defaultTextContent },
-                            mockPublishedViewsNode = { textContent: defaultTextContent },
-                            mockPublishedConversionPercentNode = { textContent: defaultTextContent };
+                        context.data.test.kpiInstances = [{ id: "kpi1", uiReadOnlyMarkup: "markup1" }];
 
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderPublishedViewsAndConversions(mockPublishedConversionsNode,
-                            mockPublishedViewsNode,
-                            mockPublishedConversionPercentNode);
-
-                        expect(mockPublishedConversionsNode.textContent).to.equal(10);
-                        expect(mockPublishedViewsNode.textContent).to.equal(100);
-                        expect(mockPublishedConversionPercentNode.textContent).to.equal("10%");
-
+                        var summaryNode = DomConstruct.toDom("<div id='summaryNode'></div>");
+                        var widget = abTestTextHelper.renderControlSummary(summaryNode);
+                        expect(widget.conversionRate).to.equal(10);
+                        expect(widget.conversions).to.equal(10);
+                        expect(widget.views).to.equal(100);
+                        expect(widget.isLeader).to.equal(false);
                     });
 
-                it("Renders correct draft(challenger) variant views, conversions and conversion percent based on the context provided",
+                it("Creates and populates a challenger KpiSummaryWidget with the proper number of kpis and correct associated data",
                     function () {
-                        var mockchallengerConversionsNode = { textContent: defaultTextContent },
-                            mockchallengerViewsNode = { textContent: defaultTextContent },
-                            mockchallengerConversionPercentNode = { textContent: defaultTextContent };
+                        context.data.test.kpiInstances = [{ id: "kpi1", uiReadOnlyMarkup: "markup1" }];
 
-                        abTestTextHelper.initializeHelper(context);
-                        abTestTextHelper.renderDraftViewsAndConversions(mockchallengerConversionsNode,
-                            mockchallengerViewsNode,
-                            mockchallengerConversionPercentNode);
-
-                        expect(mockchallengerConversionsNode.textContent).to.equal(150);
-                        expect(mockchallengerViewsNode.textContent).to.equal(200);
-                        expect(mockchallengerConversionPercentNode.textContent).to.equal("75%");
+                        var summaryNode = DomConstruct.toDom("<div id='summaryNode'></div>");
+                        var widget = abTestTextHelper.renderChallengerSummary(summaryNode);
+                        expect(widget.conversionRate).to.equal(75);
+                        expect(widget.conversions).to.equal(150);
+                        expect(widget.views).to.equal(200);
+                        expect(widget.isLeader).to.equal(true);
                     });
+
+                it("Creates and populates a control KpiSummariesWidget with the proper number of kpis and correct associated data",
+                   function () {
+                       context.data.test.kpiInstances = [{ id: "kpi1", uiReadOnlyMarkup: "markup1" },
+                                                         { id: "kpi2", uiReadOnlyMarkup: "markup2" },
+                                                         { id: "kpi3", uiReadOnlyMarkup: "markup3" }];
+
+                       context.data.test.variants[0].keyConversionResults = new Array();
+                       context.data.test.variants[0].keyConversionResults.push({ kpiId: "kpi1", performance: .5, selectedWeight: "high", conversions: 10, views: 5 });
+                       context.data.test.variants[0].keyConversionResults.push({ kpiId: "kpi2", performance: .3, selectedWeight: "medium", conversions: 20, views: 6 });
+                       context.data.test.variants[0].keyConversionResults.push({ kpiId: "kpi3", performance: .2, selectedWeight: "low", conversions: 30, views: 7 });
+
+                       var summaryNode = DomConstruct.toDom("<div id='summaryNode'></div>");
+                       var controlPercentageNode = DomConstruct.toDom("<div id='controlPercentageNode'></div>");
+                       var widget = abTestTextHelper.renderControlSummary(summaryNode, controlPercentageNode);
+
+                       expect(widget.kpis[0].conversions).to.equal(10);
+                       expect(widget.kpis[0].markup).to.equal("markup1");
+                       expect(widget.kpis[0].performance).to.equal(0.5);
+                       expect(widget.kpis[0].weight).to.equal("high");
+
+                       expect(widget.kpis[1].conversions).to.equal(20);
+                       expect(widget.kpis[1].markup).to.equal("markup2");
+                       expect(widget.kpis[1].performance).to.equal(0.3);
+                       expect(widget.kpis[1].weight).to.equal("medium");
+
+                       expect(widget.kpis[2].conversions).to.equal(30);
+                       expect(widget.kpis[2].markup).to.equal("markup3");
+                       expect(widget.kpis[2].performance).to.equal(0.2);
+                       expect(widget.kpis[2].weight).to.equal("low");
+                   });                               
+
+                it("Creates and populates a challenger KpiSummariesWidget with the proper number of kpis and correct associated data",
+                   function () {
+                       context.data.test.kpiInstances = [{ id: "kpi4", uiReadOnlyMarkup: "markup4" },
+                                                         { id: "kpi5", uiReadOnlyMarkup: "markup5" },
+                                                         { id: "kpi6", uiReadOnlyMarkup: "markup6" }];
+
+                       context.data.test.variants[1].keyConversionResults = new Array();
+                       context.data.test.variants[1].keyConversionResults.push({ kpiId: "kpi4", performance: .5, selectedWeight: "high", conversions: 10, views: 5 });
+                       context.data.test.variants[1].keyConversionResults.push({ kpiId: "kpi5", performance: .3, selectedWeight: "medium", conversions: 20, views: 6 });
+                       context.data.test.variants[1].keyConversionResults.push({ kpiId: "kpi6", performance: .2, selectedWeight: "low", conversions: 30, views: 7 });
+
+                       var summaryNode = DomConstruct.toDom("<div id='summaryNode'></div>");
+                       var controlPercentageNode = DomConstruct.toDom("<div id='controlPercentageNode'></div>");
+                       var widget = abTestTextHelper.renderChallengerSummary(summaryNode, controlPercentageNode);
+
+                       expect(widget.kpis[0].conversions).to.equal(10);
+                       expect(widget.kpis[0].markup).to.equal("markup4");
+                       expect(widget.kpis[0].performance).to.equal(0.5);
+                       expect(widget.kpis[0].weight).to.equal("high");
+
+                       expect(widget.kpis[1].conversions).to.equal(20);
+                       expect(widget.kpis[1].markup).to.equal("markup5");
+                       expect(widget.kpis[1].performance).to.equal(0.3);
+                       expect(widget.kpis[1].weight).to.equal("medium");
+
+                       expect(widget.kpis[2].conversions).to.equal(30);
+                       expect(widget.kpis[2].markup).to.equal("markup6");
+                       expect(widget.kpis[2].performance).to.equal(0.2);
+                       expect(widget.kpis[2].weight).to.equal("low");
+                   });
 
                 it("Renders a properly formatted description when description is not null",
                     function () {
@@ -289,6 +378,5 @@
                         expect(contentLinkAnchorNode.href).to.equal("testLink");
                         expect(contentLinkAnchorNode.textContent).to.equal("conversion content");
                     });
-             
             });
     });

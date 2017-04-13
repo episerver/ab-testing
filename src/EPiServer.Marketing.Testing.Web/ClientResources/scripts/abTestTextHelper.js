@@ -1,7 +1,6 @@
 ﻿define([
 "dojo/dom",
-"dojox/charting/Chart",
-"dojox/charting/plot2d/Pie",
+"dijit/registry",
 "epi/datetime",
 "epi/username",
 "dojo/dom-class",
@@ -10,7 +9,7 @@
 "marketing-testing/widgets/ConversionPercentTemplate"
 ],
 
-function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
+function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
     //"privates"
     var context, resources;
 
@@ -43,9 +42,13 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                 resources = stringResources;
             }
 
+            //support for unit tests
             if (mModules) {
                 username = mModules.username;
                 domClass = mModules.domClass;
+                ConversionPercentTemplate = mModules.conversionpercenttemplate;
+                KpiSummariesWidget = mModules.kpisummarieswidget;
+                KpiSummaryWidget = mModules.kpisummarywidget;
             };
         },
 
@@ -109,7 +112,6 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
                 testRemainingNode.textContent = context.data.daysRemaining;
                 testRemainingTextNode.textContent = resources.days_remaining;
             }
-
         },
 
         //sets text content of provided node to the context confidence level
@@ -135,7 +137,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             if (summaryNode) {
                 var controlWidget = dojo.query(summaryNode);
                 if (controlWidget) {
-                    dojo.forEach(dijit.findWidgets(controlWidget)), function (w) {
+                    dojo.forEach(registry.findWidgets(controlWidget)), function (w) {
                         var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
                         if (widgetToRemove) {
                             me.kpiSummaryWidgets.splice(widgetToRemove, 1);
@@ -153,7 +155,7 @@ function (dom, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSu
             if (percentageWidgetNode) {
                 var percentageWidget = dojo.query(percentageWidgetNode);
                 if (percentageWidget) {
-                    dojo.forEach(dijit.findWidgets(percentageWidget)), function (w) {
+                    dojo.forEach(registry.findWidgets(percentageWidget)), function (w) {
                         var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
                         if (widgetToRemove) {
                             me.kpiSummaryWidgets.splice(widgetToRemove, 1);
