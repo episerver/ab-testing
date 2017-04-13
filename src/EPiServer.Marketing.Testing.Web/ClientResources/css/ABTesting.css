@@ -412,10 +412,6 @@
     margin-bottom: 2px;
 }
 
-.epi-abtest-kpimarkup-div {
-    width: 60%;
-}
-
 @media screen and (max-width: 900px) {
     .epi-abtest-preview-left-side {
         float: none;
