@@ -175,7 +175,7 @@ function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSumm
 
             if (context.data.test.kpiInstances.length > 1) {
                 summaryWidget = this._renderControlSummaries(summaryNode);
-                var cpt = new ConversionPercentTemplate({
+                new ConversionPercentTemplate({
                     conversionPercent: this.publishedPercent,
                     views: this.publishedVariant.views,
                     isLeader: eval(this.publishedPercent > this.draftPercent)
