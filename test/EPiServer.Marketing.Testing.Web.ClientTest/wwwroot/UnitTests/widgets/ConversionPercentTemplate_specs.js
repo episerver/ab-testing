@@ -46,11 +46,11 @@
                             resources: mockStringResources,
                             conversionPercent: 25,
                             views: 10,
-                            isLeader: true
+                            isLeader: false
                         });
 
-                        expect(domClass.contains(testWidget.viewsNode, "epi-kpiSummary-conversionRate-default")).to.equal(false);
-                        expect(domClass.contains(testWidget.percentageNode, "epi-kpiSummary-conversionRate-default")).to.equal(false);
+                        expect(domClass.contains(testWidget.viewsNode, "epi-kpiSummary-conversionRate-default")).to.equal(true);
+                        expect(domClass.contains(testWidget.percentageNode, "epi-kpiSummary-conversionRate-default")).to.equal(true);
                     });
             });
     });
