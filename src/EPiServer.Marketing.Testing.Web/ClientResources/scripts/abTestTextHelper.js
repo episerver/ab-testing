@@ -1,8 +1,6 @@
 ﻿define([
 "dojo/dom",
 "dijit/registry",
-"dojox/charting/Chart",
-"dojox/charting/plot2d/Pie",
 "epi/datetime",
 "epi/username",
 "dojo/dom-class",
@@ -11,7 +9,7 @@
 "marketing-testing/widgets/ConversionPercentTemplate"
 ],
 
-function (dom, registry, chart, pie, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
+function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
     //"privates"
     var context, resources;
 
@@ -44,9 +42,13 @@ function (dom, registry, chart, pie, datetime, username, domClass, KpiSummaryWid
                 resources = stringResources;
             }
 
+            //support for unit tests
             if (mModules) {
                 username = mModules.username;
                 domClass = mModules.domClass;
+                ConversionPercentTemplate = mModules.conversionpercenttemplate;
+                KpiSummariesWidget = mModules.kpisummarieswidget;
+                KpiSummaryWidget = mModules.kpisummarywidget;
             };
         },
 
@@ -110,7 +112,6 @@ function (dom, registry, chart, pie, datetime, username, domClass, KpiSummaryWid
                 testRemainingNode.textContent = context.data.daysRemaining;
                 testRemainingTextNode.textContent = resources.days_remaining;
             }
-
         },
 
         //sets text content of provided node to the context confidence level
@@ -174,7 +175,7 @@ function (dom, registry, chart, pie, datetime, username, domClass, KpiSummaryWid
 
             if (context.data.test.kpiInstances.length > 1) {
                 summaryWidget = this._renderControlSummaries(summaryNode);
-                new ConversionPercentTemplate({
+                var cpt = new ConversionPercentTemplate({
                     conversionPercent: this.publishedPercent,
                     views: this.publishedVariant.views,
                     isLeader: eval(this.publishedPercent > this.draftPercent)
