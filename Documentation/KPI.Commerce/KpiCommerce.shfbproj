@@ -54,12 +54,31 @@
     <PlugInConfigurations>
       <PlugInConfig id="Wildcard Assembly References" enabled="True">
         <configuration>
-  <references>
-    <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
-  </references>
-</configuration>
+          <references>
+            <reference path="..\..\packages\" wildcard="*.dll" recurse="true" />
+          </references>
+        </configuration>
       </PlugInConfig>
-<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding><dependentAssembly><assemblyIdentity name="EPiServer.UI" /><bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.1.0.0" /></dependentAssembly></assemblyBinding><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer" /><assemblyIdentity name="EPiServer.Data" /><assemblyIdentity name="EPiServer.Framework" /><assemblyIdentity name="EPiServer.UI" /><assemblyIdentity name="Mediachase.Commerce" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
+        <configuration useGAC="false">
+          <assemblyBinding>
+            <dependentAssembly>
+              <assemblyIdentity name="EPiServer.UI" />
+              <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.1.0.0" />
+            </dependentAssembly>
+          </assemblyBinding>
+          <ignoreIfUnresolved>
+            <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+            <assemblyIdentity name="EPiServer" />
+            <assemblyIdentity name="EPiServer.Data" />
+            <assemblyIdentity name="EPiServer.Framework" />
+            <assemblyIdentity name="EPiServer.UI" />
+            <assemblyIdentity name="Mediachase.Commerce" />
+            <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+          </ignoreIfUnresolved>
+        </configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Config" isExposed="False" />
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Initializers" isExposed="False" />
@@ -87,11 +106,11 @@
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
-    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
     <KeepLogFile>False</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
-    <CleanIntermediates>True</CleanIntermediates>
+    <CleanIntermediates>False</CleanIntermediates>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
