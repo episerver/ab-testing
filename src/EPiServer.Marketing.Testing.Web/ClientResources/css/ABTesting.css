@@ -197,18 +197,13 @@
     margin-top: 0;
 }
 
-.controlDefaultBody #controlPercent,
-.controlTrailingBody #controlPercent,
-.challengerDefaultBody #challengerPercent {
-    font-family: arial;
+.epi-kpiSummary-conversionRate-default {
+    font-family: Arial;
     font-size: 32px;
 }
 
-.controlLeaderBody #controlPercent,
-.challengerLeaderBody #challengerPercent,
-.controlPublishedBody #controlPercent,
-.challengerPublishedBody #challengerPercent {
-    font-family: arial;
+.epi-kpiSummary-conversionRate-leader{
+    font-family: Arial;
     font-size: 42px;
 }
 
@@ -320,8 +315,16 @@
     display: block;
 }
 
+.epi-abTest-weightSelectors-margin {
+    margin-left: 25px;
+}
+
 .epi-abtest-thumbnail--losing {
     opacity: .4;
+}
+
+.epi-abTest-summaryToggle {
+    min-height:25px;
 }
 
 .versionData {
@@ -405,14 +408,19 @@
     font-weight: bold;
 }
 
+.epi-abtest-spacing-narrow {
+    margin-bottom: 2px;
+}
+
 @media screen and (max-width: 900px) {
-   .epi-abtest-preview-left-side { 
-    float: none;
-    margin-right:0;
-    width:auto; 
-  }
-   .epi-abtest-preview-right-side{
-       float:left;
-       width:auto;
-   }
+    .epi-abtest-preview-left-side {
+        float: none;
+        margin-right: 0;
+        width: auto;
+    }
+
+    .epi-abtest-preview-right-side {
+        float: left;
+        width: auto;
+    }
 }

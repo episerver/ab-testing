@@ -74,9 +74,34 @@ namespace EPiServer.Marketing.KPI.Test
             {
                 Id = theGuid
             };
-            tm.Save(kpi);
 
-            _kpiDataAccess.Verify(da => da.Save(It.Is<DalKpi>(arg => arg.Id == theGuid)),
+            _kpiDataAccess.Setup(call => call.Save(It.IsAny<List<IDalKpi>>())).Returns(new List<Guid>() { theGuid });
+
+            var id = tm.Save(kpi);
+
+            Assert.Equal(theGuid, id);
+        }
+
+        [Fact]
+        public void KpiTestManager_CallsSaveWithMultipleKpis()
+        {
+            var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            var kpi = new Kpi()
+            {
+                Id = theGuid
+            };
+
+            var kpi2 = new Kpi()
+            {
+                Id = theGuid
+            };
+
+            var kpis = new List<IKpi>() { kpi, kpi2};
+
+            tm.Save(kpis);
+
+            _kpiDataAccess.Verify(da => da.Save(It.Is<List<IDalKpi>>(arg => arg.Count == 2)),
                 "DataAcessLayer Save was never called or object did not match.");
         }
 

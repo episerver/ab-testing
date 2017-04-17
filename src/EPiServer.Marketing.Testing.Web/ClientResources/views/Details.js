@@ -18,6 +18,8 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
+ "dojo/fx",
+ "dojo/dom-construct",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -43,12 +45,15 @@
     query,
     textHelper,
     rasterizehtml,
-    ContentPane
+    ContentPane,
+    CoreFX,
+    DomConstruct
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
     {
         templateString: template,
         resources: resources,
+        kpiSummaryWidgets: new Array(),
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -63,34 +68,69 @@
 
         startup: function () {
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            //make the charts at start up as the dom is not ready for it prior to this on 
-            //the first load.
-            textHelper.clearPieCharts("controlPieChart", "challengerPieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
             }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+        },
+
+        _setToggleAnimations: function() {
+            var me = this;
+            this.controlSummaryOut = CoreFX.wipeOut({
+                node: me.controlDetailsSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.detailsview.show_summary }
+            });
+
+            this.controlSummaryIn = CoreFX.wipeIn({
+                node: me.controlDetailsSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.detailsview.hide_summary }
+            });
+
+            this.challengerSummaryOut = CoreFX.wipeOut({
+                node: me.challengerDetailsSummaryNode,
+                rate: 15
+            });
+
+            this.challengerSummaryIn = CoreFX.wipeIn({
+                node: me.challengerDetailsSummaryNode,
+                rate: 15
+            });
+
         },
 
         _contextChanged: function (newContext) {
             var me = this;
+            this.kpiSummaryWidgets = new Array();
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
             me.context = newContext;
             this._displayOptionsButton(this.context.data.userHasPublishRights);
             textHelper.initializeHelper(me.context, resources.detailsview);
+
             me._renderData();
-            textHelper.clearPieCharts("controlPieChart", "challengerPieChart");
-            //redraw the charts when the context changes to update the stored dom.
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlPieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerPieChart", textHelper.draftPercent);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
+            }
+
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
             }
         },
 
         _onPickWinnerOptionClicked: function () {
             var me = this;
+            this.kpiSummaryWidgets = new Array();
             me.contextParameters = {
                 uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner"
             };
@@ -99,6 +139,7 @@
 
         _onAbortOptionClicked: function () {
             if (confirm(resources.detailsview.abort_confirmation_message)) {
+                this.kpiSummaryWidgets = new Array();
                 var me = this, store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
                 store.remove(this.context.data.test.originalItemId);
                 me.contextParameters = {
@@ -110,7 +151,7 @@
 
         _onCancelClick: function () {
             var me = this;
-            textHelper.clearPieCharts("controlPieChart", "challengerPieChart");
+            this.kpiSummaryWidgets = new Array();
             me.contextParameters = {
                 uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink
             };
@@ -131,6 +172,7 @@
 
         _renderData: function () {
             var me = this;
+            var summaryWidget;
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
@@ -139,35 +181,33 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
-                this.publishedViews,
-                this.publishedConversionPercent);
-            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
-                this.challengerViews,
-                this.challengerConversionPercent);
-            textHelper.renderDescription(this.testDescription);
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode, this.controlConversionPercent));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode, this.challengerConversionPercent));
+
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
-                me._renderKpiMarkup("details_conversionMarkup", "details_kpidescription");
+                me._renderKpiMarkup("details_conversionMarkup");
+                for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
+                    me.kpiSummaryWidgets[x].startup();
+                }
             });
             this.renderStatusIndicatorStyles();
         },
 
-        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
+        _renderKpiMarkup: function (conversionMarkupId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
 
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
-            
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
+
+                var goalsContent = new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+                dojo.place(goalsDescription, goalsContent.containerNode);
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
@@ -248,6 +288,7 @@
                 domClass.replace(this.challengerWrapper, me.baseWrapper + " 2column epi-abtest-preview-right-side challengerDefaultBody");
             }
         },
+
         _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
             var pubThumb = dom.byId(canvasId);
 
@@ -258,6 +299,17 @@
                     function success(renderResult) {
                         query('.' + parentContainerClass).addClass('hide-bg');
                     });
+            }
+        },
+
+        _toggleSummaries: function (evt) {
+            if (this.summaryToggle.innerHTML === this.resources.detailsview.hide_summary) {
+                this.controlSummaryOut.play();
+                this.challengerSummaryOut.play();
+            }
+            else {
+                this.controlSummaryIn.play();
+                this.challengerSummaryIn.play();
             }
         }
     });

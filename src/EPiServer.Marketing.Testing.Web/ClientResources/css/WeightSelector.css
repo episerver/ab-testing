@@ -1,0 +1,59 @@
+﻿.epi-weightSelector-body {
+    display: inline-block;
+    margin:auto;
+}
+
+.epi-weightSelector-value-label {
+    padding-top: 4px;
+    font-weight: bold;
+    display: block;
+    vertical-align: middle;
+}
+
+.epi-weightSelector-kpiweight {
+    height: 25px;
+    width: 25px;
+    border-style: solid;
+    border: 1px;
+    padding: 0px;
+    margin: 0px;
+    border-color: #C7C9C9;
+    float: left;
+}
+
+.epi-weightSelector-kpiweight--default {
+    background-color: #EDEDED;
+}
+
+.epi-weightSelector-kpiweight-low {
+    background-color: #CBE25E;
+}
+
+.epi-weightSelector-kpiweight-medium {
+    background-color: #B4D633;
+}
+.epi-weightSelector-kpiweight-low-selected, 
+.epi-weightSelector-kpiweight-medium-selected,
+.epi-weightSelector-kpiweight-high-selected {
+    background-size:25px 25px;
+    background-repeat: no-repeat;
+}
+
+.epi-weightSelector-kpiweight-low-selected {
+    background-image: url('../widgets/images/LowImportanceChecked.png');
+    border-color: #CBE25E;
+}
+
+.epi-weightSelector-kpiweight-medium-selected {
+    background-image: url('../widgets/images/MediumImportanceChecked.png');
+    border-color: #B4D633;
+}
+
+.epi-weightSelector-kpiweight-high-selected {
+    background-image: url('../widgets/images/HighImportanceChecked.png');
+    border-color: #95C532;
+}
+
+.epi-weightSelector-high-padded{
+    margin-right: 25px;
+}

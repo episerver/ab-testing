@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Dal.Exceptions;
+using EPiServer.Marketing.Testing.Dal.Mappings;
 using EPiServer.Marketing.Testing.Dal.Migrations;
 
 namespace EPiServer.Marketing.Testing.Dal.DataAccess
@@ -141,19 +142,19 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return tests;
         }
 
-        public void IncrementCount(Guid testId, int itemVersion, DalCountType resultType)
+        public void IncrementCount(Guid testId, int itemVersion, DalCountType resultType, Guid kpiId)
         {
             if (_UseEntityFramework)
             {
                 using (var dbContext = new DatabaseContext())
                 {
                     var repository = new BaseRepository(dbContext);
-                    IncrementCountHelper(repository, testId, itemVersion, resultType);
+                    IncrementCountHelper(repository, testId, itemVersion, resultType, kpiId);
                 }
             }
             else
             {
-                IncrementCountHelper(_repository, testId, itemVersion, resultType);
+                IncrementCountHelper(_repository, testId, itemVersion, resultType, kpiId);
             }
         }
 
@@ -334,7 +335,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             return results.ToList<IABTest>();
         }
 
-        private void IncrementCountHelper(IRepository repo, Guid testId, int itemVersion, DalCountType resultType)
+        private void IncrementCountHelper(IRepository repo, Guid testId, int itemVersion, DalCountType resultType, Guid kpiId)
         {
             var test = repo.GetById(testId);
             var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
@@ -345,7 +346,23 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             }
             else
             {
-                variant.Conversions++;
+                // multiple kpi's - increase count for the specific kpi that converted and increase conversion count for test by the kpi's weight
+                if (variant.DalKeyConversionResults.Count > 0)
+                {
+                    var result = variant.DalKeyConversionResults.First(r => r.KpiId == kpiId);
+                    result.Conversions++;
+                    variant.Conversions += result.Weight;
+
+                    // need to update all kpi result perforamnces because the total number of conversions has changed
+                    foreach (var conversionResult in variant.DalKeyConversionResults)
+                    {
+                        conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / variant.Conversions * 100);
+                    }
+                }
+                else  // single kpi
+                {
+                    variant.Conversions++;
+                }
             }
 
             variant.ModifiedDate = DateTime.UtcNow;
@@ -358,13 +375,17 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
             var test = repo.GetById(testId);
             var variant = test.Variants.First(v => v.ItemVersion == itemVersion);
 
-            if (type == 0)
+            if (type == (int)DalKeyResultType.Financial)
             {
                 variant.DalKeyFinancialResults.Add((DalKeyFinancialResult)keyResult);
             }
-            else
+            else if (type == (int)DalKeyResultType.Value)
             {
                 variant.DalKeyValueResults.Add((DalKeyValueResult)keyResult);
+            }
+            else if (type == (int)DalKeyResultType.Conversion)
+            {
+                variant.DalKeyConversionResults.Add((DalKeyConversionResult)keyResult);
             }
 
             variant.ModifiedDate = DateTime.UtcNow;

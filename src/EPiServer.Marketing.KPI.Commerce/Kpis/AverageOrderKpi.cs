@@ -76,12 +76,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             get
             {
-                var conversionHeader = LocalizationService.Current
-                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_header");
-
                 var conversionText = LocalizationService.Current
                    .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_description");
-                return string.Format(base.UiReadOnlyMarkup, conversionHeader, conversionText);
+                return string.Format(base.UiReadOnlyMarkup, conversionText);
             }
         }
 

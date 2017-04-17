@@ -1,16 +1,17 @@
 ﻿define([
 "dojo/dom",
-"dojox/charting/Chart",
-"dojox/charting/plot2d/Pie",
+"dijit/registry",
 "epi/datetime",
 "epi/username",
-"dojo/dom-class"
-
+"dojo/dom-class",
+"marketing-testing/widgets/KpiSummaryWidget",
+"marketing-testing/widgets/KpiSummariesWidget",
+"marketing-testing/widgets/ConversionPercentTemplate"
 ],
 
-function (dom, chart, pie, datetime, userModule, dojoDomClass) {
+function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSummariesWidget, ConversionPercentTemplate) {
     //"privates"
-    var context, resources, username = userModule, domClass = dojoDomClass;
+    var context, resources;
 
     //used to cacluate the percentages for the control and challenger content.
     function getPercent(visitors, conversions) {
@@ -32,8 +33,8 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
         initializeHelper: function (testContext, stringResources, mModules) {
             context = testContext;
 
-            this.publishedVariant = context.data.test.variants.find(function (obj) { return obj.isPublished });
-            this.draftVariant = context.data.test.variants.find(function (obj) { return !obj.isPublished });
+            this.publishedVariant = this._findInArray(context.data.test.variants, "isPublished", true);
+            this.draftVariant = this._findInArray(context.data.test.variants, "isPublished", false);
 
             this.publishedPercent = getPercent(this.publishedVariant.conversions, this.publishedVariant.views);
             this.draftPercent = getPercent(this.draftVariant.conversions, this.draftVariant.views);
@@ -41,11 +42,24 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 resources = stringResources;
             }
 
+            //support for unit tests
             if (mModules) {
                 username = mModules.username;
                 domClass = mModules.domClass;
+                ConversionPercentTemplate = mModules.conversionpercenttemplate;
+                KpiSummariesWidget = mModules.kpisummarieswidget;
+                KpiSummaryWidget = mModules.kpisummarywidget;
             };
+        },
 
+        // replacement for .find to support IE
+        //arrayObj = array to search, property = property to seach on, value = value to match
+        _findInArray: function (arrayObj, property, value) {
+            for (var i = 0; i < arrayObj.length; i++) {
+                if (arrayObj[i][property] === value) {
+                    return arrayObj[i];
+                }
+            }
         },
 
         //sets text content of provided node to the context test title
@@ -98,7 +112,6 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 testRemainingNode.textContent = context.data.daysRemaining;
                 testRemainingTextNode.textContent = resources.days_remaining;
             }
-
         },
 
         //sets text content of provided node to the context confidence level
@@ -118,34 +131,158 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             dateChangedNode.textContent = datetime.toUserFriendlyString(context.data.draftVersionChangedDate);
         },
 
-        //sets text content of provided nodes to the published variant conversions, views and conversion percent
-        renderPublishedViewsAndConversions: function (publishedConversionsNode, publishedViewsNode, publishedConversionPercentNode) {
-            var kpiResultType = context.data.kpiResultType;
-            if (kpiResultType === "KpiFinancialResult") {
-                publishedConversionsNode.textContent = this.publishedVariant.keyFinancialResults.length;
-                publishedViewsNode.textContent = this.publishedVariant.views;
-                publishedConversionPercentNode.textContent = context.data.publishedVersionFinancialsAverage;
-            }
-            else {
-                publishedConversionsNode.textContent = this.publishedVariant.conversions;
-                publishedViewsNode.textContent = this.publishedVariant.views;
-                publishedConversionPercentNode.textContent = this.publishedPercent + "%";
+        //creates and places appropriate summary widgets
+        _removeSummaryWidgets: function (summaryNode) {
+            var me = this;
+            if (summaryNode) {
+                var controlWidget = dojo.query(summaryNode);
+                if (controlWidget) {
+                    dojo.forEach(registry.findWidgets(controlWidget)), function (w) {
+                        var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
+                        if (widgetToRemove) {
+                            me.kpiSummaryWidgets.splice(widgetToRemove, 1);
+                        }
+                        w.destroyRecursive();
+                    };
+                    summaryNode.innerHTML = "";
+                }
             }
         },
 
-        //sets text content of provided nodes to the draft variant conversions, views and conversion percent
-        renderDraftViewsAndConversions: function (challengerConversionsNode, challengerViewsNode, challengerConversionPercentNode) {
-            var kpiResultType = context.data.kpiResultType;
-            if (kpiResultType === "KpiFinancialResult") {
-                challengerConversionsNode.textContent = this.draftVariant.keyFinancialResults.length;
-                challengerViewsNode.textContent = this.draftVariant.views;
-                challengerConversionPercentNode.textContent = context.data.draftVersionFinancialsAverage;
+        //destroys any percentage widgets loaded into the view
+        _removePercentageWidgets: function (percentageWidgetNode) {
+            var me = this;
+            if (percentageWidgetNode) {
+                var percentageWidget = dojo.query(percentageWidgetNode);
+                if (percentageWidget) {
+                    dojo.forEach(registry.findWidgets(percentageWidget)), function (w) {
+                        var widgetToRemove = me.kpiSummaryWidgets.indexOf(w);
+                        if (widgetToRemove) {
+                            me.kpiSummaryWidgets.splice(widgetToRemove, 1);
+                        }
+                        w.destroyRecursive();
+                    };
+                    percentageWidgetNode.innerHTML = "";
+                }
+            }
+        },
+
+        //renders test summary for control (published) content
+        renderControlSummary: function (summaryNode, controlPercentageNode) {
+            this._removeSummaryWidgets(summaryNode)
+            this._removePercentageWidgets(controlPercentageNode);
+            var summaryWidget;
+
+            if (context.data.test.kpiInstances.length > 1) {
+                summaryWidget = this._renderControlSummaries(summaryNode);
+                new ConversionPercentTemplate({
+                    conversionPercent: this.publishedPercent,
+                    views: this.publishedVariant.views,
+                    isLeader: eval(this.publishedPercent > this.draftPercent)
+                }).placeAt(controlPercentageNode);
             }
             else {
-                challengerConversionsNode.textContent = this.draftVariant.conversions;
-                challengerViewsNode.textContent = this.draftVariant.views;
-                challengerConversionPercentNode.textContent = this.draftPercent + "%";
+                var kpiResultType = context.data.kpiResultType;
+                if (kpiResultType === "KpiFinancialResult") {
+                    summaryWidget = new KpiSummaryWidget({
+                        displayChart: false,
+                        views: this.publishedVariant.views,
+                        conversions: this.publishedVariant.keyFinancialResults.length,
+                        conversionRate: context.data.publishedVersionFinancialsAverage,
+                        isLeader: eval(this.publishedPercent > this.draftPercent)
+                    });
+                }
+                else {
+                    summaryWidget = new KpiSummaryWidget({
+                        views: this.publishedVariant.views,
+                        conversions: this.publishedVariant.conversions,
+                        conversionRate: this.publishedPercent,
+                        isLeader: eval(this.publishedPercent > this.draftPercent)
+
+                    });
+                }
             }
+            summaryWidget.placeAt(summaryNode);
+            return summaryWidget;
+        },
+
+        //renders test summary for challenger (draft) content.
+        renderChallengerSummary: function (summaryNode, challengerPercentageNode) {
+            this._removeSummaryWidgets(summaryNode)
+            this._removePercentageWidgets(challengerPercentageNode);
+
+            var summaryWidget;
+
+            if (context.data.test.kpiInstances.length > 1) {
+                summaryWidget = this._renderChallengerSummaries(summaryNode);
+                new ConversionPercentTemplate({
+                    conversionPercent: this.draftPercent,
+                    views: this.draftVariant.views,
+                    isLeader: eval(this.draftPercent > this.publishedPercent)
+                }).placeAt(challengerPercentageNode);
+            }
+            else {
+                var kpiResultType = context.data.kpiResultType;
+                if (kpiResultType === "KpiFinancialResult") {
+                    summaryWidget = new KpiSummaryWidget({
+                        displayChart: false,
+                        views: this.draftVariant.views,
+                        conversions: this.draftVariant.keyFinancialResults.length,
+                        conversionRate: context.data.draftVersionFinancialsAverage,
+                        isLeader: eval(this.draftPercent > this.publishedPercent)
+                    });
+                }
+                else {
+                    summaryWidget = new KpiSummaryWidget({
+                        views: this.draftVariant.views,
+                        conversions: this.draftVariant.conversions,
+                        conversionRate: this.draftPercent,
+                        isLeader: eval(this.draftPercent > this.publishedPercent)
+                    });
+                }
+            }
+            summaryWidget.placeAt(summaryNode);
+            return summaryWidget;
+        },
+
+        //renders multiple kpi summary for control (published) content
+        _renderControlSummaries: function () {
+            var kpiInstances = context.data.test.kpiInstances;
+            var kpiResults = new Array();
+            for (var x = 0; x < kpiInstances.length; x++) {
+                var kpiSummary = this._findInArray(this.publishedVariant.keyConversionResults, "kpiId", kpiInstances[x].id);
+                var kpiResult = {
+                    markup: kpiInstances[x].uiReadOnlyMarkup,
+                    conversions: kpiSummary.conversions,
+                    weight: kpiSummary.selectedWeight,
+                    performance: kpiSummary.performance
+                }
+                kpiResults.push(kpiResult);
+            }
+            var summaries = new KpiSummariesWidget({
+                kpis: kpiResults,
+            })
+            return summaries;
+        },
+
+        //renders multiple kpi summary for challenger (draft) content
+        _renderChallengerSummaries: function () {
+            var kpiInstances = context.data.test.kpiInstances;
+            var kpiResults = new Array();
+            for (var x = 0; x < kpiInstances.length; x++) {
+                var kpiSummary = this._findInArray(this.draftVariant.keyConversionResults, "kpiId", kpiInstances[x].id);
+                var kpiResult = {
+                    markup: kpiInstances[x].uiReadOnlyMarkup,
+                    conversions: kpiSummary.conversions,
+                    weight: kpiSummary.selectedWeight,
+                    performance: kpiSummary.performance
+                }
+                kpiResults.push(kpiResult);
+            }
+            var summaries = new KpiSummariesWidget({
+                kpis: kpiResults,
+            })
+            return summaries;
         },
 
         //sets text content of provided node to a formatted version of the context test description
@@ -170,6 +307,7 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
             contentLinkAnchorNode.textContent = context.data.conversionContentName;
         },
 
+        //sets and renders duration progress bar
         renderDurationProgress: function (durationProgressIndicatorNode) {
             var totalTestDuration = Number(context.data.daysElapsed) + Number(context.data.daysRemaining);
             durationProgressIndicatorNode.set({ maximum: totalTestDuration });
@@ -180,63 +318,5 @@ function (dom, chart, pie, datetime, userModule, dojoDomClass) {
                 durationProgressIndicatorNode.set({ value: context.data.daysElapsed });
             }
         },
-
-        //Checks for an available node and attaches a pie chart widget
-        //show based on a single value of a 100%
-        displayPieChart: function (node, data) {
-            if (dom.byId(node)) {
-                dom.byId(node).innerHTML = "";
-
-                var chartNode = dom.byId(node);
-                var pieChart = new chart(chartNode);
-
-                var chartData = [
-                    {
-                        x: 1,
-                        y: 100 - data,
-                        fill: "#edebe9"
-                    }, {
-                        x: 1,
-                        y: data,
-                        fill: "#86c740"
-                    }
-                ];
-
-                pieChart.addPlot("default",
-                {
-                    type: "Pie",
-                    labels: false,
-                    radius: 50
-                });
-                pieChart.addSeries("", chartData, { stroke: { width: 0 } });
-                pieChart.render();
-            }
-        },
-
-        clearPieCharts: function (controlChartId, challengerChartId) {
-            var controlChartNode = dom.byId(controlChartId);
-            var challengerChartNode = dom.byId(challengerChartId);
-
-            if (controlChartNode) {
-                var controlChart = dojo.query("#" + controlChartId + " > *");
-                if (controlChart[0]) {
-                    dojo.forEach(dijit.findWidgets(controlChart)), function (w) {
-                        w.destroyRecursive();
-                    };
-                    controlChartNode.innerHTML = "";
-                }
-            }
-
-            if (challengerChartNode) {
-                var challengerChart = dojo.query("#" + challengerChartId + " > *");
-                if (challengerChart[0]) {
-                    dojo.forEach(dijit.findWidgets(challengerChart)), function (w) {
-                        w.destroyRecursive();
-                    };
-                    challengerChartNode.innerHTML = "";
-                }
-            }
-        },
-
     };
 });
