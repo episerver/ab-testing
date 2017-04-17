@@ -50,7 +50,7 @@ Included items must then not match any entries in the exclude list to remain inc
               <Exclude>
                 <!--removes xunit dlls from coverage results-->
                 <ModulePath>.*xunit.*</ModulePath>
-				<ModulePath>.*structuremap.*</ModulePath>
+				        <ModulePath>.*structuremap.*</ModulePath>
               </Exclude>
             </ModulePaths>
 
@@ -63,6 +63,8 @@ Included items must then not match any entries in the exclude list to remain inc
                 <Function>^EPiServer\.Marketing\.Testing\.Dal\.Migrations\..*</Function>
                 <!--removes kpi.test.dll from coverage results-->
                 <Function>^EPiServer\.Marketing\.KPI\.Test\..*</Function>
+                <!--removes kpi.commerce.test.dll from coverage results-->
+                <Function>^EPiServer\.Marketing\.KPI\.Commerce\.Test\..*</Function>
                 <!--removes testing.test.dll from coverage results-->
                 <Function>^EPiServer\.Marketing\.Testing\.Test\..*</Function>
                 <!--removes messaging.test.dll from coverage results-->

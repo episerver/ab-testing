@@ -36,6 +36,7 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly DefaultMarketingTestingEvents _marketingTestingEvents;
         /// Used to keep track of how many times for the same service/event we add the proxy event handler
         private readonly IReferenceCounter _ReferenceCounter = new ReferenceCounter();
+        private IHttpContextHelper _httpContextHelper;
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -48,11 +49,10 @@ namespace EPiServer.Marketing.Testing.Web
         public TestHandler()
         {
             _serviceLocator = ServiceLocator.Current;
-
             _testDataCookieHelper = new TestDataCookieHelper();
             _contextHelper = new TestingContextHelper();
             _logger = LogManager.GetLogger();
-
+            _httpContextHelper = new HttpContextHelper();
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
 
@@ -67,17 +67,15 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         //To support unit testing
-        internal TestHandler(IServiceLocator serviceLocator)
+        internal TestHandler(IServiceLocator serviceLocator, IHttpContextHelper httpContextHelper)
         {
             _serviceLocator = serviceLocator;
-
             _testDataCookieHelper = serviceLocator.GetInstance<ITestDataCookieHelper>();
             _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
             _logger = serviceLocator.GetInstance<ILogger>();
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-
+            _httpContextHelper = httpContextHelper;
             _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
-
             IReferenceCounter rc = serviceLocator.GetInstance<IReferenceCounter>();
             _ReferenceCounter = rc;
         }
@@ -250,7 +248,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
-                        HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
+                        _httpContextHelper.SetItemValue(ABTestHandlerSkipFlag, true);
                         _testRepo.GetVariantContent(e.Content.ContentGuid);
                         if (!hasData && DbReadWrite())
                         {
@@ -260,8 +258,7 @@ namespace EPiServer.Marketing.Testing.Web
 
                         Swap(testCookieData, activeTest, e);
                         EvaluateViews(testCookieData, originalContent);
-
-                        HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
+                        _httpContextHelper.RemoveItem(ABTestHandlerSkipFlag);
                     }
                 }
                 catch (Exception err)
@@ -309,12 +306,13 @@ namespace EPiServer.Marketing.Testing.Web
                     //The SkipRaiseContentSwitchEvent flag is necessary in order to only raise our ContentSwitchedEvent
                     //once per content per request.  We save an item of activecontent+flag because we may have multiple 
                     //content items per request which will need to be handled.
-                    if (!HttpContext.Current.Items.Contains(activeContent + SkipRaiseContentSwitchEvent))
+                    var itemKey = activeContent.Content.ContentGuid.ToString() + SkipRaiseContentSwitchEvent;
+                    if (!_httpContextHelper.HasItem(itemKey))
                     {
                         _marketingTestingEvents.RaiseMarketingTestingEvent(
                             DefaultMarketingTestingEvents.ContentSwitchedEvent,
                             new TestEventArgs(activeTest, activeContent.Content));
-                        HttpContext.Current.Items[activeContent + SkipRaiseContentSwitchEvent] = true;
+                        _httpContextHelper.SetItemValue(itemKey, true);
                     }
                 }
             }
@@ -391,7 +389,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 // We only want to evaluate for the LoadedContent event's Kpis one time per request. 
                 // If the flag is set we already evaluated, bail out
-                if (HttpContext.Current.Items.Contains(ABTestHandlerSkipKpiEval))
+                if (_httpContextHelper.HasItem(ABTestHandlerSkipKpiEval))
                 {
                     return;
                 }
@@ -401,7 +399,7 @@ namespace EPiServer.Marketing.Testing.Web
                     var pageHelper = _serviceLocator.GetInstance<IPageRouteHelper>();
                     if (pageHelper.PageLink.ID == cea.ContentLink.ID)
                     {
-                        HttpContext.Current.Items[ABTestHandlerSkipKpiEval] = true;
+                        _httpContextHelper.SetItemValue(ABTestHandlerSkipKpiEval, true);
                     }
                 }
                 catch (Exception err)
@@ -438,9 +436,9 @@ namespace EPiServer.Marketing.Testing.Web
                 }
 
                 // if kpi object loads content we dont want to get triggered.
-                HttpContext.Current.Items[ABTestHandlerSkipFlag] = true;
+                _httpContextHelper.SetItemValue(ABTestHandlerSkipFlag, true);
                 var kpiResults = _testRepo.EvaluateKPIs(kpis, sender, e);
-                HttpContext.Current.Items.Remove(ABTestHandlerSkipFlag);
+                _httpContextHelper.RemoveItem(ABTestHandlerSkipFlag);
 
                 var conversionResults = kpiResults.OfType<KpiConversionResult>();
                 ProcessKpiConversionResults(tdcookie, test, kpis, conversionResults);

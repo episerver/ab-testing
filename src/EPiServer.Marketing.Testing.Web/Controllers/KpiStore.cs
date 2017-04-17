@@ -118,4 +118,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             return result;
         }
     }
+    public class Response
+    {
+        public bool status { get; set; }
+        public object obj { get; set; }
+        public object message { get; set; }
+    }
 }
