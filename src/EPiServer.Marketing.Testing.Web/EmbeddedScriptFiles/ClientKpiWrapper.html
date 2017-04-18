@@ -5,6 +5,7 @@
     var testId;
     var itemVersion;
     var kpiId;
+    var resultValue;
 
     var ClientKpiConverted = document.createEvent("Event");
     ClientKpiConverted.initEvent("ConvertClientKpi", true, false);
@@ -13,8 +14,8 @@
         convert();
     });
 
-    function addKpiData(kId, tId, itemVersion) {
-        var data = { kpiId: kId, testId: tId, itemVersion: itemVersion }
+    function addKpiData(kId, tId, itemVersion, value) {
+        var data = { kpiId: kId, testId: tId, itemVersion: itemVersion, resultValue: value }
         ActiveKpis.push(data);
     }
 
@@ -26,6 +27,7 @@
         testId = result.testId;
         itemVersion = result.itemVersion;
         kpiId = result.kpiId;
+        resultValue = result.resultValue;
     }
 
     function search(id, arrayObj) {
@@ -39,6 +41,7 @@
     function convert() {
         {
             var xhttp = new XMLHttpRequest();
+            var xhttpData;
             xhttp.open("POST", "http://" + window.location.host + "/api/episerver/testing/UpdateClientConversion", true);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.onreadystatechange = function () {
@@ -54,7 +57,11 @@
                     }
                 }
             }
-            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion + "&kpiId=" + kpiId);
+            xhttpData = "testId=" + testId + "&itemVersion=" + itemVersion + "&kpiId=" + kpiId;
+            if (resultValue) {
+                xhttpData += "&resultValue=" + resultValue
+            }
+            xhttp.send(xhttpData);
         }
     };
 </script>
