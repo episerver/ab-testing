@@ -1,11 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<content xml:space="preserve" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<content xml:space="preserve"
+	xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
 	<!-- Translations provided by Sergey Zhurikhin -->
 
 	<!-- Note text -->
 	<item id="notDocumented">Это API не документировано.</item>
-	<item id="preliminaryText">Это предварительная документация, которая в будущем может измениться.</item>
-
+	<item id="preliminary">Это предварительная документация, которая в будущем может измениться.</item>
+	
 	<!-- Inserted boilerplate -->
 	<item id="definedBy">(Определяется {0}.)</item>
 	<item id="inheritedFrom">(Унаследован от {0}.)</item>
@@ -286,7 +286,6 @@
   <item id="altText_XNAFramework">Поддерживается платформой XNA Framework</item>
   <item id="altText_SilverlightMobile">Поддерживается платформой <include item="silverlight_mobile"/></item>
   <item id="altText_ExplicitInterface">Явные реализации интерфейса</item>
-  <item id="altText_CodeExample">Пример кода</item>
 
   <item id="boilerplate_seeAlsoNamespaceLink">{0} - пространство имён</item>
   <item id="boilerplate_seeAlsoTypeLink">{0} - <include item="text_{1}Upper"/></item>
@@ -480,8 +479,4 @@
   <item id="SMCMissingTag"><span class="MissingComment">[&lt;{0}&gt; отсутствует в документации для "{1}"]</span></item>
   <item id="SMCMissingParamTag"><span class="MissingComment">[&lt;{0} name="{1}"/&gt; отсутствует в документации для "{2}"]</span></item>
   <item id="SMCMissingIncludeTarget"><span class="MissingComment">[&lt;include&gt; отсутствует в '{0}'.  Файл: '{1}' Путь: '{2}']</span></item>
-
-	<!-- View Source link text -->
-	<item id="sourceCodeLinkText">View Source</item>
-	<item id="sourceCodeLinkTitle">View the source code</item>
 </content>

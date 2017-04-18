@@ -105,12 +105,6 @@
         <member name="M:Microsoft.Ddue.Tools.ManagedCPlusPlusDeclarationSyntaxGenerator.WriteFieldSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.ManagedCPlusPlusDeclarationSyntaxGenerator.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.ManagedCPlusPlusDeclarationSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
         <member name="T:Microsoft.Ddue.Tools.ManagedCPlusPlusDeclarationSyntaxGenerator.Factory">
             <summary>
             This is used to create a new instance of the syntax generator
@@ -221,12 +215,6 @@
         <member name="M:Microsoft.Ddue.Tools.FSharpDeclarationSyntaxGenerator.WriteFieldSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.FSharpDeclarationSyntaxGenerator.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.FSharpDeclarationSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
         <member name="T:Microsoft.Ddue.Tools.FSharpDeclarationSyntaxGenerator.Factory">
             <summary>
             This is used to create a new instance of the syntax generator
@@ -333,7 +321,11 @@
             <param name="writer">The syntax writer to which it is written</param>
         </member>
         <member name="M:Microsoft.Ddue.Tools.JavaScriptDeclarationSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
+            <summary>
+            Write out a normal type reference
+            </summary>
+            <param name="api">The API name</param>
+            <param name="writer">The syntax writer to which it is written</param>
         </member>
         <member name="M:Microsoft.Ddue.Tools.JavaScriptDeclarationSyntaxGenerator.WriteParameter(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <summary>
@@ -364,7 +356,11 @@
             <param name="writer">The syntax writer to which it is written</param>
         </member>
         <member name="M:Microsoft.Ddue.Tools.JavaScriptDeclarationSyntaxGenerator.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
+            <summary>
+            Write out the type reference
+            </summary>
+            <param name="reference">The reference information</param>
+            <param name="writer">The syntax writer to which it is written</param>
         </member>
         <member name="M:Microsoft.Ddue.Tools.JavaScriptDeclarationSyntaxGenerator.WriteAttachedEventSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <summary>
@@ -526,9 +522,6 @@
         <member name="M:Microsoft.Ddue.Tools.JScriptDeclarationSyntaxGenerator.WriteEventSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.JScriptDeclarationSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
         <member name="T:Microsoft.Ddue.Tools.JScriptDeclarationSyntaxGenerator.Factory">
             <summary>
             This is used to create a new instance of the syntax generator
@@ -579,9 +572,6 @@
             <inheritdoc />
         </member>
         <member name="M:Microsoft.Ddue.Tools.JSharpDeclarationSyntaxGenerator.WriteFieldSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.JSharpDeclarationSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
         <member name="T:Microsoft.Ddue.Tools.JSharpDeclarationSyntaxGenerator.Factory">
@@ -640,15 +630,6 @@
             <inheritdoc />
         </member>
         <member name="M:Microsoft.Ddue.Tools.VisualBasicDeclarationSyntaxGenerator.WriteFieldSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.VisualBasicDeclarationSyntaxGenerator.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.VisualBasicDeclarationSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.VisualBasicDeclarationSyntaxGenerator.WriteConstantValue(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
         <member name="M:Microsoft.Ddue.Tools.VisualBasicDeclarationSyntaxGenerator.WriteWithLineBreakIfNeededVB(Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter,System.String,System.String)">
@@ -722,12 +703,6 @@
         <member name="M:Microsoft.Ddue.Tools.VisualBasicUsageSyntaxGenerator.WriteEventSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.VisualBasicUsageSyntaxGenerator.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.VisualBasicUsageSyntaxGenerator.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
         <member name="T:Microsoft.Ddue.Tools.VisualBasicUsageSyntaxGenerator.Factory">
             <summary>
             This is used to create a new instance of the syntax generator
@@ -793,9 +768,6 @@
             <inheritdoc />
         </member>
         <member name="M:Microsoft.Ddue.Tools.XamlUsageSyntaxGenerator.WriteFieldSyntax(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.XamlUsageSyntaxGenerator.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
             <inheritdoc />
         </member>
         <member name="T:Microsoft.Ddue.Tools.XamlUsageSyntaxGenerator.Factory">

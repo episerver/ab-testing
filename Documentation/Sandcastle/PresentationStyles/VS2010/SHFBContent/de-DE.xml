@@ -24,7 +24,7 @@
 	<item id="locale">{@Locale}</item>
 	<item id="brandingLocaleCss">branding-{@LocaleMixedCase}.css</item>
 
-	<item id="preliminary"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Diese Seite ist eine Vorabausgabe der Dokumentation und kann in zukÃ¼nftigen Ausgaben geÃ¤ndert werden. Leere Seiten sind als Platzhalter eingefÃ¼gt.]</p></item>
+	<item id="preliminary"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Diese Seite ist eine Vorabausgabe der Dokumentation und kann in zukünftigen Ausgaben geändert werden. Leere Seiten sind als Platzhalter eingefügt.]</p></item>
 
 	<item id="comments"><div class="OH_feedbacklink">Senden Sie Kommentare zu diesem Feature an
         <a id="HT_MailLink" href="mailto:{@UrlEncFeedbackEMailAddress}?Subject={@UrlEncHelpTitle}">{@HtmlEncFeedbackEMailAddress}</a></div>
@@ -38,22 +38,4 @@
 	<!-- To format the copyright HREF and/or copyright text into a message of your choosing, you can specify
 			 @HtmlEncCopyrightHref and/or @HtmlEncCopyrightText in braces -->
 	<item id="copyright">{@HtmlEncCopyrightInfo}</item>
-
-	<!-- Request Example link -->
-	<item id="requestExample"><a id="HT_RequestExampleLink" href="{0}" target="_blank" class="button"
-		title="Request an example for this topic">Request Example</a>
-		<script type="text/javascript">
-		var HT_requestExampleLink = document.getElementById("HT_RequestExampleLink");
-		var HT_requestExampleLinkText = HT_requestExampleLink.innerHTML;
-				
-		if(HT_requestExampleLink.href.substring(0, 4).toLowerCase() == "http")
-			HT_requestExampleLink.href += "?title=";
-		else
-			HT_requestExampleLink.href += "?subject={@UrlEncHelpTitle}: ";
-
-		HT_requestExampleLink.href += "Add an Example for " + encodeURIComponent(document.title) + "&amp;body=" +
-			encodeURIComponent("Please add an example for " + document.title + ".%0D%0DTODO (optional): Describe a specific " +
-			"scenario you would like to see addressed.%0D%0DHelp Topic: " + window.location.href).replace(/%250D/g, "%0D");
-		HT_requestExampleLink.innerHTML = HT_requestExampleLinkText;
-		</script></item>
 </content>

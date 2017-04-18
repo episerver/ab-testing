@@ -130,9 +130,9 @@
         </member>
         <member name="T:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn">
             <summary>
-            This plug-in class is designed to add additional reference link targets to the <strong>Reflection Index
-            Data</strong> and <strong>Resolve Reference Links</strong> build components so that links can be created
-            to other third party help in a help collection or additional online MSDN content.
+            This plug-in class is designed to add additional reference link targets to the <b>Reflection Index
+            Data</b> and <b>Resolve Reference Links</b> build components so that links can be created to other third
+            party help in Help 2/MS Help Viewer collections or additional online MSDN content.
             </summary>
         </member>
         <member name="M:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.ConfigurePlugIn(SandcastleBuilder.Utils.SandcastleProject,System.String)">
@@ -166,11 +166,13 @@
             file.
             </summary>
         </member>
-        <member name="M:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.MergeReflectionInfo(System.String)">
+        <member name="M:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.MergeReflectionInfo(System.String,System.Boolean)">
             <summary>
             This is used to merge the reflection file info into the named configuration file.
             </summary>
             <param name="configFilename">The configuration filename</param>
+            <param name="isConceptual">True if it is the conceptual configuration file or false if it is the
+            reference configuration file.</param>
         </member>
         <member name="M:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.Dispose">
             <summary>
@@ -185,14 +187,12 @@
             <param name="workingPath">The working path for the project</param>
             <returns>Returns true if successful, false if not</returns>
         </member>
-        <member name="M:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.Report(SandcastleBuilder.Utils.BuildEngine.BuildProgressEventArgs)">
+        <member name="M:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.buildProcess_BuildStepChanged(System.Object,SandcastleBuilder.Utils.BuildEngine.BuildProgressEventArgs)">
             <summary>
-            This is called by the build process to report build progress for the reference link projects
+            This is called by the build process thread to update the application with the current build step.
             </summary>
-            <param name="value">The event arguments</param>
-            <remarks>Since the build is synchronous in this plug-in, we need to implement the interface and
-            report progress synchronously as well or the final few messages can get lost and it looks like the
-            build failed.</remarks>
+            <param name="sender">The sender of the event</param>
+            <param name="e">The event arguments</param>
         </member>
         <member name="P:SandcastleBuilder.PlugIns.AdditionalReferenceLinksPlugIn.ExecutionPoints">
             <summary>
@@ -281,8 +281,6 @@
             This plug-in class is designed to generate XML comments and reflection file information for Atlas client
             script libraries using AjaxDoc.
             </summary>
-            <remarks><note type="note">If you want the visibility settings and API filter applied, add the Manual
-            Visibility/API filter plug-in to the project as well.</note></remarks>
         </member>
         <member name="M:SandcastleBuilder.PlugIns.AjaxDocPlugIn.ConfigurePlugIn(SandcastleBuilder.Utils.SandcastleProject,System.String)">
             <summary>
@@ -437,6 +435,12 @@
             This method is used to execute the plug-in during the build process
             </summary>
             <param name="context">The current execution context</param>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.BibliographySupportPlugIn.AddBibliographyParameter(System.String)">
+            <summary>
+            Add the bibliography file parameter to the TransformComponent configuration
+            </summary>
+            <param name="configFilename">The BuildAssembler configuration file to modify</param>
         </member>
         <member name="M:SandcastleBuilder.PlugIns.BibliographySupportPlugIn.Dispose">
             <summary>
@@ -925,7 +929,7 @@
             Validate the control values and, if valid, create and return a new
             deployment location settings object.
             </summary>
-            <returns>The deployment location settings if they are valid or
+            <returns>The deployment location settings if they are valud or
             null if they are not valid.</returns>
         </member>
         <member name="M:SandcastleBuilder.PlugIns.DeploymentConfigUserControl.chkUseDefaultCredentials_CheckedChanged(System.Object,System.EventArgs)">
@@ -969,32 +973,68 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="T:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn">
+        <member name="T:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg">
             <summary>
-            This plug-in is used to automatically generate an API filter based on the XML comments member IDs to
-            limit the help file content to only the documented entities.
+            This form is used to configure the settings for the <see cref="T:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn"/>
             </summary>
-            <remarks><para>This plug-in is unique in that it runs both before and after the <c>GenerateReflectionInfo</c>
-            step.  This is necessary as we must remove any project-based API filter and generate a full set of API
-            information in order to compare it to the XML comments member IDs.  Once we have done that, we can
-            generate an API filter and apply it by building the reflection information again.</para>
-            
-            <para>Note that we are still constrained by the rules of the API filter.  Specifically, if you exclude
-            one member of an overloaded method set, all of them will be excluded.  There is no getting around that
-            rule.</para>
-            
-            <para>In addition, since inherited documentation is generated after reflection data is generated,
-            undocumented members of explicitly implemented interfaces will not be included.  If you want them
-            included, you must explicitly add an <c>inheritdoc</c> tag on those members.</para>
-            
-            <para>To explicitly exclude a documented member, add the <c>exclude</c> XML comment tag to its
-            comments.  If placed on a type, it will exclude the entire type regardless of whether or not it has
-            documented members.  If placed on a <c>NamespaceDoc</c> class, it will exclude all types within the
-            namespace regardless of whether or not they are documented.  Note that namespace exclusions defined in
-            the project namespace summaries will have no effect.  You must either add a <c>NamespaceDoc</c> class for
-            the excluded namespace or exclude all of its types.</para></remarks>
         </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.ConfigurePlugIn(SandcastleBuilder.Utils.SandcastleProject,System.String)">
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="currentConfig">The current XML configuration XML fragment</param>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.btnCancel_Click(System.Object,System.EventArgs)">
+            <summary>
+            Close without saving
+            </summary>
+            <param name="sender">The sender of the event</param>
+            <param name="e">The event arguments</param>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.project_LinkClicked(System.Object,System.Windows.Forms.LinkLabelLinkClickedEventArgs)">
+            <summary>
+            Launch the URL in the web browser.
+            </summary>
+            <param name="sender">The sender of the event</param>
+            <param name="e">The event arguments</param>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.btnOK_Click(System.Object,System.EventArgs)">
+            <summary>
+            Validate the configuration and save it
+            </summary>
+            <param name="sender">The sender of the event</param>
+            <param name="e">The event arguments</param>
+        </member>
+        <member name="F:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:SandcastleBuilder.PlugIns.HierarchicalTocConfigDlg.Configuration">
+            <summary>
+            This is used to return the configuration information
+            </summary>
+        </member>
+        <member name="T:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn">
+            <summary>
+            This plug-in class can be used to rearrange the table of contents such that namespaces are nested within
+            their parent namespaces rather than appearing as a flat list of all namespaces at the root level.
+            </summary>
+            <remarks>This plug-in has been deprecated.  Use the namespace grouping project options instead.</remarks>
+        </member>
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn.ConfigurePlugIn(SandcastleBuilder.Utils.SandcastleProject,System.String)">
             <summary>
             This method is used by the Sandcastle Help File Builder to let the plug-in perform its own
             configuration.
@@ -1004,106 +1044,28 @@
             <returns>A string containing the new configuration XML fragment</returns>
             <remarks>The configuration data will be stored in the help file builder project</remarks>
         </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.Initialize(SandcastleBuilder.Utils.BuildEngine.BuildProcess,System.Xml.XPath.XPathNavigator)">
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn.Initialize(SandcastleBuilder.Utils.BuildEngine.BuildProcess,System.Xml.XPath.XPathNavigator)">
             <summary>
             This method is used to initialize the plug-in at the start of the build process
             </summary>
             <param name="buildProcess">A reference to the current build process</param>
             <param name="configuration">The configuration data that the plug-in should use to initialize itself</param>
         </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.Execute(SandcastleBuilder.Utils.BuildComponent.ExecutionContext)">
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn.Execute(SandcastleBuilder.Utils.BuildComponent.ExecutionContext)">
             <summary>
             This method is used to execute the plug-in during the build process
             </summary>
             <param name="context">The current execution context</param>
         </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.Finalize">
-            <summary>
-            This handles garbage collection to ensure proper disposal of the plug-in if not done explicitly
-            with <see cref="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.Dispose"/>.
-            </summary>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.Dispose">
+        <member name="M:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn.Dispose">
             <summary>
             This implements the Dispose() interface to properly dispose of the plug-in object
             </summary>
         </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.ExecutionPoints">
+        <member name="P:SandcastleBuilder.PlugIns.HierarchicalTocPlugIn.ExecutionPoints">
             <summary>
             This read-only property returns a collection of execution points that define when the plug-in should
             be invoked during the build process.
-            </summary>
-        </member>
-        <member name="T:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState">
-            <summary>
-            This is used to store the documentation state for the members
-            </summary>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.ToString">
-            <inheritdoc />
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.FromApiMember(System.Xml.XPath.XPathNavigator)">
-            <summary>
-            This is used to get the member information from a reflection information file node
-            </summary>
-            <param name="member">The reflection information file node from which to obtain the details</param>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.MemberId">
-            <summary>
-            This is used to get or set the full member ID (type:namespace[.type[.member]]).
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.IdType">
-            <summary>
-            This returns the member ID type (N = Namespace, T = Type, anything else = member)
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.NamespaceName">
-            <summary>
-            This is used to get or set the namespace name
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.FullTypeName">
-            <summary>
-            This is used to get the full type name including the namespace
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.TypeName">
-            <summary>
-            This is used to get or set the type name if for types and their members
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.MemberName">
-            <summary>
-            This is used to get or set the member name for type members
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.IsAutoDocumented">
-            <summary>
-            This is used to get or set whether or not the member is an auto-documented constructor or dispose
-            method.
-            </summary>
-            <value>If true and no other members are documented, the type containing the auto-documented
-            constructors and dispose methods will be excluded.</value>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.IsDocumented">
-            <summary>
-            This is used to get or set the documented state
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.IsExplicitlyExcluded">
-            <summary>
-            This is used to get whether or not the member is explicitly excluded via an <c>exclude</c>
-            XML comments tag.
-            </summary>
-            <remarks>Namespaces that are explicitly excluded will exclude all of their contained types even
-            if they are documented.  Types that are explicitly excluded will exclude all of their members
-            even if they are documented.  If not explicitly included, the types/members will be included if
-            documented even if their parent namespace/type is not documented.</remarks>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.DocumentedEntitiesOnlyPlugIn.DocumentationState.Members">
-            <summary>
-            This returns the documentation state of the members for namespaces and types
             </summary>
         </member>
         <member name="T:SandcastleBuilder.PlugIns.IntelliSenseOnlyPlugIn">
@@ -1200,140 +1162,6 @@
         </member>
         <member name="P:SandcastleBuilder.PlugIns.LightweightWebsiteStylePlugIn.ExecutionPoints">
             <inheritdoc/>
-        </member>
-        <member name="T:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn">
-            <summary>
-            This plug-in class can be used to manually apply the visibility settings and API filter from the project
-            to the reflection data file.
-            </summary>
-            <remarks><note type="note">This is only necessary if the Generate Reflection Information build step is
-            suppressed or replaced by some other means.  In such cases, the visibility settings and API filter are
-            not applied unless this plug-in is used.  If the reflection information file is produced by
-            <strong>MRefBuilder.exe</strong>, there is no need to use this plug-in as it will apply the visibility
-            settings and API filter automatically to the file that it produces.</note></remarks>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.ConfigurePlugIn(SandcastleBuilder.Utils.SandcastleProject,System.String)">
-            <summary>
-            This method is used by the Sandcastle Help File Builder to let the plug-in perform its own
-            configuration.
-            </summary>
-            <param name="project">A reference to the active project</param>
-            <param name="currentConfig">The current configuration XML fragment</param>
-            <returns>A string containing the new configuration XML fragment</returns>
-            <remarks>The configuration data will be stored in the help file builder project</remarks>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.Initialize(SandcastleBuilder.Utils.BuildEngine.BuildProcess,System.Xml.XPath.XPathNavigator)">
-            <summary>
-            This method is used to initialize the plug-in at the start of the build process
-            </summary>
-            <param name="buildProcess">A reference to the current build process</param>
-            <param name="configuration">The configuration data that the plug-in should use to initialize itself</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.Execute(SandcastleBuilder.Utils.BuildComponent.ExecutionContext)">
-            <summary>
-            This method is used to execute the plug-in during the build process
-            </summary>
-            <param name="context">The current execution context</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.Dispose">
-            <summary>
-            This implements the Dispose() interface to properly dispose of the plug-in object
-            </summary>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.ApplyVisibilityProperties(System.String)">
-            <summary>
-            Apply the project's Visibility category properties to the given reflection information file
-            </summary>
-            <param name="reflectionInfoFile">The name of the reflection information file to use</param>
-            <remarks>This is used to remove entries from the reflection information file so that it does not
-            appear in the help file.  See the <c>Document*</c> properties in the <see cref="T:SandcastleBuilder.Utils.SandcastleProject"/>
-            class for information on the items removed.</remarks>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveAttributes(System.Xml.XmlNode)">
-            <summary>
-            Remove attribute information
-            </summary>
-            <param name="apisRoot">The root APIs node</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveExplicitInterfaceImplementations(System.Xml.XmlNode)">
-            <summary>
-            Remove explicit interface implementation information
-            </summary>
-            <param name="apisRoot">The root APIs node</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveInheritedMembers(System.Xml.XmlNode)">
-            <summary>
-            Remove inherited member information from each type's element list based on the project settings
-            </summary>
-            <param name="apisRoot">The root APIs node</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveMembers(System.Xml.XmlNode,System.String,System.String)">
-            <summary>
-            Remove member information matching the specified XPath query.
-            </summary>
-            <param name="apisRoot">The root APIs node</param>
-            <param name="xpath">The XPath query used to find the members.</param>
-            <param name="memberDesc">A description of the members removed.</param>
-            <returns>The number of members to be removed</returns>
-            <remarks>Actual removal of the members is deferred.  On very large files, the XPath queries took too
-            long when removing the &lt;element&gt; members.</remarks>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.ModifyProtectedInternalVisibility(System.Xml.XmlNode)">
-            <summary>
-            Change the visibility of "protected internal" members to
-            "protected".
-            </summary>
-            <param name="apisRoot">The root APIs node</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveSealedProtected(System.Xml.XmlNode)">
-            <summary>
-            Remove protected members from sealed classes.
-            </summary>
-            <param name="apisRoot">The root APIs node</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.OnExcludeElement(System.Text.RegularExpressions.Match)">
-            <summary>
-            This is used as the match evaluator for the regular expression that finds the &lt;element&gt; entries
-            to remove from the reflection information file.
-            </summary>
-            <param name="m">The match found</param>
-            <returns>The string with which to replace the match</returns>
-            <remarks>The removals are done this way as it proved to be a very slow process to remove the child
-            elements at the time they were found with an XPath query on very large files.</remarks>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.ApplyManualApiFilter(SandcastleBuilder.Utils.ApiFilterCollection,System.String)">
-            <summary>
-            This is used to manually apply the specified API filter to the specified reflection information file
-            </summary>
-            <param name="filterToApply">The API filter to apply</param>
-            <param name="reflectionFilename">The reflection information file</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.ApplyMemberFilter(System.Xml.XmlNode,SandcastleBuilder.Utils.ApiFilter)">
-            <summary>
-            Apply a member filter to the specified type.
-            </summary>
-            <param name="apis">The APIs node from which to remove info</param>
-            <param name="typeFilter">The type filter to be processed</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveNamespace(System.Xml.XmlNode,System.String)">
-            <summary>
-            Remove an entire namespace and all of its members
-            </summary>
-            <param name="apis">The APIs node from which to remove info</param>
-            <param name="id">The namespace ID to remove</param>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.RemoveType(System.Xml.XmlNode,System.String)">
-            <summary>
-            Remove an entire type and all of its members
-            </summary>
-            <param name="apis">The APIs node from which to remove info</param>
-            <param name="id">The type ID to remove</param>
-        </member>
-        <member name="P:SandcastleBuilder.PlugIns.ManualVisibilityApiFilterPlugIn.ExecutionPoints">
-            <summary>
-            This read-only property returns a collection of execution points that define when the plug-in should
-            be invoked during the build process.
-            </summary>
         </member>
         <member name="T:SandcastleBuilder.PlugIns.MemberIdFixUpPlugIn">
             <summary>
@@ -1554,6 +1382,11 @@
         <member name="P:SandcastleBuilder.PlugIns.ReferenceLinkSettings.HtmlSdkLinkType">
             <summary>
             This is used to get or set the HTML Help 1 SDK link type for the target
+            </summary>
+        </member>
+        <member name="P:SandcastleBuilder.PlugIns.ReferenceLinkSettings.MSHelp2SdkLinkType">
+            <summary>
+            This is used to get or set the MS Help 2 SDK link type for the target
             </summary>
         </member>
         <member name="P:SandcastleBuilder.PlugIns.ReferenceLinkSettings.MSHelpViewerSdkLinkType">
@@ -2113,6 +1946,13 @@
             <param name="workingPath">The working path for the project</param>
             <returns>Returns true if successful, false if not</returns>
         </member>
+        <member name="M:SandcastleBuilder.PlugIns.VersionBuilderPlugIn.buildProcess_BuildStepChanged(System.Object,SandcastleBuilder.Utils.BuildEngine.BuildProgressEventArgs)">
+            <summary>
+            This is called by the build process thread to update the application with the current build step
+            </summary>
+            <param name="sender">The sender of the event</param>
+            <param name="e">The event arguments</param>
+        </member>
         <member name="M:SandcastleBuilder.PlugIns.VersionBuilderPlugIn.CreateVersionBuilderConfigurationFile">
             <summary>
             This creates the Version Builder configuration file
@@ -2122,15 +1962,6 @@
             <summary>
             This is used to modify the GenerateRefInfo.proj file for use with VersionBuilder
             </summary>
-        </member>
-        <member name="M:SandcastleBuilder.PlugIns.VersionBuilderPlugIn.Report(SandcastleBuilder.Utils.BuildEngine.BuildProgressEventArgs)">
-            <summary>
-            This is called by the build process to report build progress for the reference link projects
-            </summary>
-            <param name="value">The event arguments</param>
-            <remarks>Since the build is synchronous in this plug-in, we need to implement the interface and
-            report progress synchronously as well or the final few messages can get lost and it looks like the
-            build failed.</remarks>
         </member>
         <member name="P:SandcastleBuilder.PlugIns.VersionBuilderPlugIn.ExecutionPoints">
             <summary>

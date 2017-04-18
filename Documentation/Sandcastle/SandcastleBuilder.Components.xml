@@ -26,6 +26,7 @@
                       used in the SaveComponent instances. --&gt;
                  &lt;outputPaths&gt;
                    &lt;path value="Output\HtmlHelp1\" /&gt;
+                   &lt;path value="Output\MSHelp2\" /&gt;
                    &lt;path value="Output\MSHelpViewer\" /&gt;
                    &lt;path value="Output\Website\" /&gt;
                  &lt;/outputPaths&gt;
@@ -114,13 +115,6 @@
             </summary>
             <param name="document">The XML document with which to work.</param>
             <param name="key">The key (member name) of the item being documented.</param>
-        </member>
-        <member name="M:SandcastleBuilder.Components.CodeBlockComponent.Dispose(System.Boolean)">
-            <summary>
-            At disposal, copy the script and style files if any topics with code blocks were encountered
-            </summary>
-            <param name="disposing">Pass true to dispose of the managed and unmanaged resources or false to just
-            dispose of the unmanaged resources.</param>
         </member>
         <member name="M:SandcastleBuilder.Components.CodeBlockComponent.LoadNestedCodeBlocks(System.String,System.Xml.XPath.XPathNavigator,System.Xml.XPath.XPathExpression,Sandcastle.Core.BuildAssembler.MessageLevel)">
             <summary>
@@ -344,11 +338,11 @@
             one or more persistent ESENT databases.
             </summary>
         </member>
-        <member name="M:SandcastleBuilder.Components.Commands.ESentIndexedCache.#ctor(Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
+        <member name="M:SandcastleBuilder.Components.Commands.ESentIndexedCache.#ctor(Microsoft.Ddue.Tools.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
             <summary>
             Constructor
             </summary>
-            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
+            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
             <param name="context">A context to use with the key and value XPath expressions</param>
             <param name="configuration">The configuration to use</param>
         </member>
@@ -509,7 +503,7 @@
             formats.  Only the components related to the requested set of format types will be executed.</remarks>
             <example>
             <code lang="xml" title="Example Configuration"
-                source="..\..\SHFB\Source\PresentationStyles\VS2013\Configuration\BuildAssembler.config"
+                source="..\..\SHFB\Source\PresentationStyles\VS2013\Configuration\SHFBReference.config"
                 region="Multi-format output component" />
             </example>
         </member>
@@ -531,10 +525,6 @@
         </member>
         <member name="M:SandcastleBuilder.Components.MultiFormatOutputComponent.Dispose(System.Boolean)">
             <inheritdoc />
-        </member>
-        <member name="P:SandcastleBuilder.Components.MultiFormatOutputComponent.GroupId">
-            <inheritdoc />
-            <remarks>This sets a unique group ID for each format</remarks>
         </member>
         <member name="T:SandcastleBuilder.Components.MultiFormatOutputComponent.Factory">
             <summary>
@@ -1009,11 +999,11 @@
             persistent SQL database.
             </summary>
         </member>
-        <member name="M:SandcastleBuilder.Components.Commands.SqlIndexedCache.#ctor(Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
+        <member name="M:SandcastleBuilder.Components.Commands.SqlIndexedCache.#ctor(Microsoft.Ddue.Tools.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
             <summary>
             Constructor
             </summary>
-            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
+            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
             <param name="context">A context to use with the key and value XPath expressions</param>
             <param name="configuration">The configuration to use</param>
         </member>

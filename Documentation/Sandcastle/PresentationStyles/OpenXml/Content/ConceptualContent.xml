@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<content xml:space="preserve" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<content xml:space="preserve"
+	xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
 
 	<!-- Section titles -->
 	<item id="title_inThisSection">In This Section</item>
@@ -32,8 +32,8 @@
 	<item id="title_example">Example</item>
 
 	<!-- AutoOutline boilerplate -->
-	<item id="boilerplate_autoOutlineTopLevelIntro">This topic contains the following sections:</item>
-	<item id="boilerplate_autoOutlineSubsectionIntro">This section contains the following subsections:</item>
+	<item id="boilerplate_autoOutlineTopLevelIntro">This topic contains the following sections.</item>
+	<item id="boilerplate_autoOutlineSubsectionIntro">This section contains the following subsections.</item>
 
 	<!-- Resolve the autoOutline token -->
 	<item id="autoOutline">

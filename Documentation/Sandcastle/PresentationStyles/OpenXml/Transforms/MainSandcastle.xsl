@@ -105,18 +105,18 @@
 		<xsl:apply-templates select="/document/reference/family"/>
 
 		<!-- Assembly information -->
-		<xsl:if test="not($g_apiTopicGroup='list' or $g_apiTopicGroup='rootGroup' or $g_apiTopicGroup='root' or $g_apiTopicGroup='namespace' or $g_apiTopicGroup='namespaceGroup')">
+		<xsl:if test="not($g_apiTopicGroup='list' or $g_apiTopicGroup='root' or $g_apiTopicGroup='namespace' or $g_apiTopicGroup='namespaceGroup')">
 			<xsl:call-template name="t_putRequirementsInfo"/>
 		</xsl:if>
 
 		<!-- Syntax -->
-		<xsl:if test="not($g_apiTopicGroup='list' or $g_apiTopicGroup='rootGroup' or $g_apiTopicGroup='root' or $g_apiTopicGroup='namespace' or $g_apiTopicGroup='namespaceGroup')">
+		<xsl:if test="not($g_apiTopicGroup='list' or $g_apiTopicGroup='root' or $g_apiTopicGroup='namespace' or $g_apiTopicGroup='namespaceGroup')">
 			<xsl:apply-templates select="/document/syntax"/>
 		</xsl:if>
 
 		<!-- Members -->
 		<xsl:choose>
-			<xsl:when test="$g_apiTopicGroup='rootGroup' or $g_apiTopicGroup='root'">
+			<xsl:when test="$g_apiTopicGroup='root'">
 				<xsl:apply-templates select="/document/reference/elements" mode="root"/>
 			</xsl:when>
 			<xsl:when test="$g_apiTopicGroup='namespace'">
@@ -158,7 +158,7 @@
 		<!-- Contracts -->
 		<xsl:call-template name="t_contracts"/>
 		<!-- Versions -->
-		<xsl:if test="not($g_apiTopicGroup='list' or $g_apiTopicGroup='rootGroup' or $g_apiTopicGroup='root' or $g_apiTopicGroup='namespace' or $g_apiTopicGroup='namespaceGroup')">
+		<xsl:if test="not($g_apiTopicGroup='list' or $g_apiTopicGroup='root' or $g_apiTopicGroup='namespace' or $g_apiTopicGroup='namespaceGroup')">
 			<xsl:apply-templates select="/document/reference/versions"/>
 		</xsl:if>
 		<!-- Permissions -->
@@ -311,9 +311,6 @@
 						<xsl:with-param name="p_nodeCount" select="count(./div[@codeLanguage])"/>
 						<xsl:with-param name="p_codeLangAttr" select="'codeLanguage'"/>
 					</xsl:call-template>
-
-					<!-- Source context -->
-					<xsl:apply-templates select="/document/reference/sourceContext" />
 
 					<!-- Parameters & return value -->
 					<xsl:apply-templates select="/document/reference/parameters"/>
@@ -837,16 +834,7 @@
 														<xsl:value-of select="concat('P:', substring-before(substring(@inheritedFrom, 3), '.get_'), '.', substring-after(@inheritedFrom, '.get_'))"/>
 													</xsl:when>
 													<xsl:when test="contains(@inheritedFrom, '.set_')">
-														<!-- For the setter, we need to strip the last parameter too -->
-														<xsl:variable name="lastParam">
-															<xsl:call-template name="t_getLastParameter">
-																<xsl:with-param name="p_string" select="@inheritedFrom" />
-															</xsl:call-template>
-														</xsl:variable>
-														<xsl:variable name="setterName">
-															<xsl:value-of select="concat('P:', substring-before(substring(@inheritedFrom, 3), '.set_'), '.', substring-after(@inheritedFrom, '.set_'))"/>
-														</xsl:variable>
-														<xsl:value-of select="concat(substring-before($setterName, $lastParam), ')')"/>
+														<xsl:value-of select="concat('P:', substring-before(substring(@inheritedFrom, 3), '.set_'), '.', substring-after(@inheritedFrom, '.set_'))"/>
 													</xsl:when>
 													<xsl:otherwise>
 														<xsl:value-of select="@inheritedFrom"/>
@@ -883,21 +871,6 @@
 				<w:spacing w:after="0" />
 			</w:pPr>
 		</w:p>
-	</xsl:template>
-
-	<!-- Gets the parameter following the last comma in the given string -->
-	<xsl:template name="t_getLastParameter">
-		<xsl:param name="p_string" />
-		<xsl:choose>
-			<xsl:when test="contains($p_string, ',')">
-				<xsl:call-template name="t_getLastParameter">
-					<xsl:with-param name="p_string" select="substring-after($p_string, ',')" />
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="concat(',', $p_string)" />
-			</xsl:otherwise>
-		</xsl:choose>
 	</xsl:template>
 
 	<!-- ======================================================================================== -->
@@ -1047,39 +1020,14 @@
 
 	<xsl:template match="see[@cref]" name="t_seeCRef">
 		<xsl:choose>
-			<xsl:when test="starts-with(@cref,'R:')">
-				<referenceLink target="{@cref}">
-					<xsl:choose>
-						<xsl:when test="normalize-space(.)">
-							<xsl:value-of select="." />
-						</xsl:when>
-						<xsl:otherwise>
-							<include item="topicTitle_root" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</referenceLink>
-			</xsl:when>
 			<xsl:when test="starts-with(@cref,'O:')">
 				<referenceLink target="{concat('Overload:',substring(@cref,3))}" display-target="format"
-					show-parameters="false">
-					<xsl:if test="@autoUpgrade">
-						<xsl:attribute name="prefer-overload">
-							<xsl:value-of select="@autoUpgrade"/>
-						</xsl:attribute>
-					</xsl:if>
+						show-parameters="false">
 					<xsl:choose>
 						<xsl:when test="normalize-space(.)">
 							<xsl:value-of select="." />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:if test="@qualifyHint">
-								<xsl:attribute name="show-container">
-									<xsl:value-of select="@qualifyHint"/>
-								</xsl:attribute>
-								<xsl:attribute name="show-parameters">
-									<xsl:value-of select="@qualifyHint"/>
-								</xsl:attribute>
-							</xsl:if>
 							<include item="boilerplate_seeAlsoOverloadLink">
 								<parameter>{0}</parameter>
 							</include>
@@ -1089,30 +1037,11 @@
 			</xsl:when>
 			<xsl:when test="normalize-space(.)">
 				<referenceLink target="{@cref}">
-					<xsl:if test="@autoUpgrade">
-						<xsl:attribute name="prefer-overload">
-							<xsl:value-of select="@autoUpgrade"/>
-						</xsl:attribute>
-					</xsl:if>
 					<xsl:apply-templates/>
 				</referenceLink>
 			</xsl:when>
 			<xsl:otherwise>
-				<referenceLink target="{@cref}">
-					<xsl:if test="@autoUpgrade">
-						<xsl:attribute name="prefer-overload">
-							<xsl:value-of select="@autoUpgrade"/>
-						</xsl:attribute>
-					</xsl:if>
-					<xsl:if test="@qualifyHint">
-						<xsl:attribute name="show-container">
-							<xsl:value-of select="@qualifyHint"/>
-						</xsl:attribute>
-						<xsl:attribute name="show-parameters">
-							<xsl:value-of select="@qualifyHint"/>
-						</xsl:attribute>
-					</xsl:if>
-				</referenceLink>
+				<referenceLink target="{@cref}" />
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -1144,9 +1073,6 @@
 			</xsl:when>
 			<xsl:when test="@langword='abstract' or @langword='MustInherit'">
 				<include item="devlang_abstractKeyword"/>
-			</xsl:when>
-			<xsl:when test="@langword='sealed' or @langword='NotInheritable'">
-				<include item="devlang_sealedKeyword"/>
 			</xsl:when>
 			<xsl:when test="@langword='async' or @langword='async'">
 				<include item="devlang_asyncKeyword"/>
@@ -1180,21 +1106,9 @@
 		<xsl:param name="displaySeeAlso" select="false()"/>
 		<xsl:if test="$displaySeeAlso">
 			<xsl:choose>
-				<xsl:when test="starts-with(@cref,'R:')">
-					<referenceLink target="{@cref}">
-						<xsl:choose>
-							<xsl:when test="normalize-space(.)">
-								<xsl:value-of select="." />
-							</xsl:when>
-							<xsl:otherwise>
-								<include item="topicTitle_root" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</referenceLink>
-				</xsl:when>
 				<xsl:when test="starts-with(@cref,'O:')">
 					<referenceLink target="{concat('Overload:',substring(@cref,3))}" display-target="format"
-						show-parameters="false">
+							show-parameters="false">
 						<xsl:choose>
 							<xsl:when test="normalize-space(.)">
 								<xsl:apply-templates />
@@ -1209,22 +1123,11 @@
 				</xsl:when>
 				<xsl:when test="normalize-space(.)">
 					<referenceLink target="{@cref}" qualified="true">
-						<xsl:if test="@autoUpgrade">
-							<xsl:attribute name="prefer-overload">
-								<xsl:value-of select="@autoUpgrade"/>
-							</xsl:attribute>
-						</xsl:if>
 						<xsl:apply-templates />
 					</referenceLink>
 				</xsl:when>
 				<xsl:otherwise>
-					<referenceLink target="{@cref}" qualified="true">
-						<xsl:if test="@autoUpgrade">
-							<xsl:attribute name="prefer-overload">
-								<xsl:value-of select="@autoUpgrade"/>
-							</xsl:attribute>
-						</xsl:if>
-					</referenceLink>
+					<referenceLink target="{@cref}" qualified="true"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>

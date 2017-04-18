@@ -1,9 +1,9 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<!-- Sandcastle Help File Builder Tasks.  https://GitHub.com/EWSoftware/SHFB -->
 	<UsingTask TaskName="SandcastleBuilder.Utils.MSBuild.BuildHelp"
-    AssemblyFile="SandcastleBuilder.Utils.dll" />
+    AssemblyFile="$(SHFBROOT)\SandcastleBuilder.Utils.dll" />
 	<UsingTask TaskName="SandcastleBuilder.Utils.MSBuild.CleanHelp"
-    AssemblyFile="SandcastleBuilder.Utils.dll" />
+    AssemblyFile="$(SHFBROOT)\SandcastleBuilder.Utils.dll" />
 
 	<!-- Define OutDir if not set already so that it doesn't pick up our project OutputPath setting
        when the common targets are imported below. -->
@@ -38,19 +38,18 @@
 	<!-- The Core Build Help target -->
 	<Target Name="CoreBuildHelp">
 		<SandcastleBuilder.Utils.MSBuild.BuildHelp
-        ProjectFile="$(MSBuildProjectFullPath)"
+				ProjectFile="$(MSBuildProjectFullPath)"
 				Configuration="$(Configuration)"
 				Platform="$(Platform)"
-        Properties="$(SubstitutionTags)"
 				OutDir="$(OutDir)"
 				Verbose="$(Verbose)"
 				DumpLogOnFailure="$(DumpLogOnFailure)"
 				AlwaysLoadProject="$(AlwaysLoadProject)">
 			<Output TaskParameter="Help1Files" ItemName="Help1Files" />
+			<Output TaskParameter="Help2Files" ItemName="Help2Files" />
 			<Output TaskParameter="HelpViewerFiles" ItemName="HelpViewerFiles" />
 			<Output TaskParameter="WebsiteFiles" ItemName="WebsiteFiles" />
 			<Output TaskParameter="OpenXmlFiles" ItemName="OpenXmlFiles" />
-			<Output TaskParameter="MarkdownFiles" ItemName="MarkdownFiles" />
 			<Output TaskParameter="AllHelpFiles" ItemName="AllHelpFiles" />
 		</SandcastleBuilder.Utils.MSBuild.BuildHelp>
 
