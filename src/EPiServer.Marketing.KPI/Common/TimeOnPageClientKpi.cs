@@ -7,6 +7,8 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using EPiServer.Marketing.KPI.Manager;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -16,10 +18,19 @@ namespace EPiServer.Marketing.KPI.Common
         text_id = "/kpi/timeonpage_kpi/name",
         description_id = "/kpi/timeonpage_kpi/description")]
     [ClientScript(ClientSideEvaluationScript = "EPiServer.Marketing.KPI.Markup.TimeOnPageEvaluationScript.html")]
-    public class TimeOnPageClientKpi : ClientKpi
+    public class TimeOnPageClientKpi : ClientKpi, IFinancialKpi
     {
         [DataMember]
         int TargetDuration { get; set; }
+
+        [DataMember]
+        public override string KpiResultType
+        {
+            get
+            {
+                return typeof(KpiFinancialResult).Name.ToString();
+            }
+        }
 
         public override void Validate(Dictionary<string, string> responseData)
         {
@@ -102,6 +113,21 @@ namespace EPiServer.Marketing.KPI.Common
 
                 return markup;
             }
+        }
+
+        public CommerceData PreferredFinancialFormat
+        {
+            get
+            {
+                return new CommerceData()
+                {
+                    CommerceCulture = "EN",
+                    preferredFormat = CultureInfo.CurrentCulture.NumberFormat
+                };
+            }
+            set { }
+
+            
         }
     }
 }
