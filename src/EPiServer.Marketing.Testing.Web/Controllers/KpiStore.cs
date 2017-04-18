@@ -96,30 +96,31 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     //Send back only errors or successful results for proper handling
                     if (kpiErrors.Count > 0)
                     {
-                        result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, JsonConvert.SerializeObject(kpiErrors));
+                        result = Rest(new Response() { status = false, errors= JsonConvert.SerializeObject(kpiErrors), message = _localizationService.GetString("/abtesting/addtestview/error_conversiongoal") });
+                        
                     }
                     else
                     {
                         _kpiRepo.SaveKpis(validKpiInstances);
 
-                        result = Rest(kpiWeights);
+                        result = Rest(new Response() { status = true, obj = kpiWeights });
                     }
                 }
                 else
                 {
-                    result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
+                    result = Rest(new Response() { status = false, message = _localizationService.GetString("/abtesting/addtestview/error_conversiongoal") });
                 }
             }
             catch (Exception ex)
             {
-                _logger.Debug("Error creating Kpi" + ex);
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);
-            }           
+                result = Rest(new Response() { status = false, obj = ex, message = ex.Message });
+            }
             return result;
         }
     }
     public class Response
     {
+        public object errors { get; set; }
         public bool status { get; set; }
         public object obj { get; set; }
         public object message { get; set; }

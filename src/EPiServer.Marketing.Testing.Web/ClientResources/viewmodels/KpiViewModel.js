@@ -46,10 +46,18 @@
                     entity: caller.kpiFormData
                 })
                     .then(function (ret) {
-                        caller.createTest(ret);
+                        if (ret.status) {
+                            caller.createTest(ret);
+                        } else {
+                            if (ret.errors) {
+                                caller.setKpiError(ret.errors)
+                            } else {
+                                caller.setKpiError(ret.message)
+                            }
+                        }
                     })
                     .otherwise(function (ret) {
-                        caller.setKpiError(ret.xhr.statusText);
+                        caller.setKpiError(ret.response.xhr.statusText);
                     });
             },
         });
