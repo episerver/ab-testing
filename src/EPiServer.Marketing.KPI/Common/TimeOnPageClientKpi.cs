@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.KPI.Common
         text_id = "/kpi/timeonpage_kpi/name",
         description_id = "/kpi/timeonpage_kpi/description")]
     [ClientScript(ClientSideEvaluationScript = "EPiServer.Marketing.KPI.Markup.TimeOnPageEvaluationScript.html")]
-    public class TimeOnPageClientKpi : ClientKpi, IFinancialKpi
+    public class TimeOnPageClientKpi : ClientKpi
     {
         [DataMember]
         int TargetDuration { get; set; }
@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             get
             {
-                return typeof(KpiFinancialResult).Name.ToString();
+                return typeof(KpiConversionResult).Name.ToString();
             }
         }
 
@@ -113,22 +113,7 @@ namespace EPiServer.Marketing.KPI.Common
 
                 return markup;
             }
-        }
-
-        public CommerceData PreferredFinancialFormat
-        {
-            get
-            {
-                return new CommerceData()
-                {
-                    CommerceCulture = "EN",
-                    preferredFormat = CultureInfo.CurrentCulture.NumberFormat
-                };
-            }
-            set { }
-
-            
-        }
+        }     
     }
 }
 
