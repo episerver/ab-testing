@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EPiServer.Marketing.Messaging
+﻿namespace EPiServer.Marketing.Messaging
 {
     /// <summary>
     /// The FanOutMessageDispatcher class routes messages to all registered 
@@ -47,9 +45,9 @@ namespace EPiServer.Marketing.Messaging
             {
                 this.handlerInvoker.Invoke(handler, message);
             }
-            catch (Exception ex)
+            catch
             {
-                var x = ex;
+                
             }
         }
     }

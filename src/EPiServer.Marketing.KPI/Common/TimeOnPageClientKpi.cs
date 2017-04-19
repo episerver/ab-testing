@@ -7,8 +7,6 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using EPiServer.Marketing.KPI.Manager;
-using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -22,15 +20,6 @@ namespace EPiServer.Marketing.KPI.Common
     {
         [DataMember]
         int TargetDuration { get; set; }
-
-        [DataMember]
-        public override string KpiResultType
-        {
-            get
-            {
-                return typeof(KpiConversionResult).Name.ToString();
-            }
-        }
 
         public override void Validate(Dictionary<string, string> responseData)
         {
@@ -113,7 +102,7 @@ namespace EPiServer.Marketing.KPI.Common
 
                 return markup;
             }
-        }     
+        }
     }
 }
 
