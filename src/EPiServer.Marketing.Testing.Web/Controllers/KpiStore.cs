@@ -107,13 +107,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 }
                 else
                 {
-                    result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, _localizationService.GetString("/abtesting/addtestview/error_conversiongoal"));
+                    result = Rest(new Response() { status = false, message = _localizationService.GetString("/abtesting/addtestview/error_conversiongoal") });
                 }
             }
             catch (Exception ex)
             {
                 _logger.Debug("Error creating Kpi" + ex);
-                result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, ex.Message);
+                result = Rest(new Response() { status = false, obj = ex, message = ex.Message });                
             }           
             return result;
         }

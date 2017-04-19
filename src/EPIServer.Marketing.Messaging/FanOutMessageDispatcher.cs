@@ -45,9 +45,9 @@
             {
                 this.handlerInvoker.Invoke(handler, message);
             }
-            catch 
+            catch
             {
-                
+
             }
         }
     }

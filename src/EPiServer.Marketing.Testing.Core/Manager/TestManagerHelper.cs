@@ -8,6 +8,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -330,9 +331,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Total = managerConversionResult.Total,
-                TotalMarketCulture = managerConversionResult.TotalMarketCulture,
-                ConvertedTotal = managerConversionResult.ConvertedTotal,
-                ConvertedTotalCulture = managerConversionResult.ConvertedTotalCulture,
+                TotalMarketCulture = managerConversionResult.TotalMarketCulture != null ? managerConversionResult.TotalMarketCulture : CultureInfo.CurrentCulture.ThreeLetterISOLanguageName,
+                ConvertedTotal = managerConversionResult.ConvertedTotal != 0 ? managerConversionResult.ConvertedTotal : managerConversionResult.Total,
+                ConvertedTotalCulture = managerConversionResult.ConvertedTotalCulture != null ? managerConversionResult.ConvertedTotalCulture : CultureInfo.CurrentCulture.ThreeLetterISOLanguageName,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate
