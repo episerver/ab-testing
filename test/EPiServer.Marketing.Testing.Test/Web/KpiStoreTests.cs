@@ -55,9 +55,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testClass = GetUnitUnderTest();
 
-            var retResult = testClass.Put("", "") as RestStatusCodeResult;
+            var retResult = testClass.Put("", "") as RestResult;
 
-            Assert.Equal((int)HttpStatusCode.InternalServerError, retResult.StatusCode);
+            var responseDataStatus = (bool)retResult.Data.GetType().GetProperty("status").GetValue(retResult.Data, null);
+
+            Assert.False(responseDataStatus);
         }
 
         [Fact]
@@ -67,9 +69,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var entity =
                 "{\"kpiType\": \"EPiServer.Marketing.KPI.Common.ContentComparatorKPI, EPiServer.Marketing.KPI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\",\"ConversionPage\": \"16\",\"CurrentContent\": \"6_197\"}";
-            var retResult = testClass.Put("", entity) as RestStatusCodeResult;
+            var retResult = testClass.Put("", entity) as RestResult;
 
-            Assert.Equal((int)HttpStatusCode.InternalServerError, retResult.StatusCode);
+            var responseDataStatus = (bool)retResult.Data.GetType().GetProperty("status").GetValue(retResult.Data, null);
+
+            Assert.False(responseDataStatus);
         }
 
         [Fact]

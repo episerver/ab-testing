@@ -16,6 +16,9 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager;
 using System.Collections.Generic;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -29,17 +32,20 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class TestingController : ApiController, IConfigurableModule
     {
         private IServiceLocator _serviceLocator;
+        private IKpiManager _kpiManager;
 
         [ExcludeFromCodeCoverage]
         public TestingController()
         {
             _serviceLocator = ServiceLocator.Current;
+            _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
         }
 
         [ExcludeFromCodeCoverage]
         internal TestingController(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
+            _kpiManager = serviceLocator.GetInstance<IKpiManager>();
         }
 
         [ExcludeFromCodeCoverage]
@@ -133,7 +139,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
 
-                return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
+                return Request.CreateResponse(HttpStatusCode.OK, "Conversion Successful");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
@@ -145,7 +151,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
             try
-            { 
+            {
                 var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
                 var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpiId = Guid.Parse(data.Get("kpiId"));
@@ -164,13 +170,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     // only update cookie if all kpi's have converted
                     testCookie.Converted = testCookie.KpiConversionDictionary.All(x => x.Value);
                     cookieHelper.UpdateTestDataCookie(testCookie);
-                    if (data.Get("resultValue") != null) {
-                        SaveKpiResult(data);                        
+                    if (data.Get("resultValue") != null)
+                    {
+                        SaveKpiResult(data);
                     }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception(ex.Message));
             }
@@ -184,11 +191,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var itemVersion = data.Get("itemVersion");
             var kpiId = data.Get("kpiId");
             var value = data.Get("resultValue");
-            var kpiManager = new KpiManager();
-            var kpi = kpiManager.Get(Guid.Parse(kpiId));            
+            var kpi = _kpiManager.Get(Guid.Parse(kpiId));
 
             IKeyResult keyResult;
-            KeyResultType resultType; 
+            KeyResultType resultType;
 
             if (kpi.KpiResultType == "KpiFinancialResult")
             {
@@ -215,10 +221,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
 
-                return Request.CreateResponse(HttpStatusCode.OK,"KpiResult Saved");
+                return Request.CreateResponse(HttpStatusCode.OK, "KpiResult Saved");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
         }
-    }
+    }    
 }
