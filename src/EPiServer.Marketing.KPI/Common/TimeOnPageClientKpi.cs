@@ -10,6 +10,11 @@ using System.Runtime.Serialization;
 
 namespace EPiServer.Marketing.KPI.Common
 {
+    /// <summary>
+    /// Monitors how long a visitor spends on a page and converts after a specified amount of time.  
+    /// Views: Number of visitors that viewed the page under test.  
+    /// Conversions: The number of visitors that remained on the page for the minimum time specified.
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.TimeOnPageConfiguration.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.TimeOnPageReadOnly.html",
@@ -21,6 +26,7 @@ namespace EPiServer.Marketing.KPI.Common
         [DataMember]
         int TargetDuration { get; set; }
 
+        /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
             int parsedInt;
@@ -41,16 +47,14 @@ namespace EPiServer.Marketing.KPI.Common
             }
 
         }
-        /// <summary>
-        /// Determines if a conversion has happened.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e">Event Argument</param>
+
+        /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             return new KpiConversionResult();
         }
 
+        /// <inheritdoc />
         public override string ClientEvaluationScript
         {
             get
@@ -72,6 +76,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiMarkup
         {
@@ -84,6 +89,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiReadOnlyMarkup
         {

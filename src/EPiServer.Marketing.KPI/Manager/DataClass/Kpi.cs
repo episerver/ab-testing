@@ -178,7 +178,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         public CommerceData PreferredCommerceFormat {get; set;}
 
         /// <inheritdoc />
-        public virtual void Validate(Dictionary<string, string> kpiData)
+        public virtual void Validate(Dictionary<string, string> responseData)
         {
             throw new NotImplementedException();
         }

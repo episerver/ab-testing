@@ -26,6 +26,9 @@ namespace EPiServer.Marketing.KPI.Common
         description_id = "/kpi/content_comparator_kpi/description")]
     public class ContentComparatorKPI : Kpi
     {
+        /// <summary>
+        /// Id of the content to be tested.
+        /// </summary>
         [DataMember]
         public Guid ContentGuid;
         public IContent _content;
@@ -35,11 +38,16 @@ namespace EPiServer.Marketing.KPI.Common
         {
         }
 
+        /// <summary>
+        /// Id of the content to be tested.
+        /// </summary>
+        /// <param name="contentGuid">Id of the content to be tested.</param>
         public ContentComparatorKPI(Guid contentGuid)
         {
             ContentGuid = contentGuid;
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiMarkup
         {
@@ -52,6 +60,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiReadOnlyMarkup
         {
@@ -78,6 +87,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
             var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
@@ -95,6 +105,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;
@@ -146,6 +157,8 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         private EventHandler<ContentEventArgs> _eh;
+
+        /// <inheritdoc />
         public override event EventHandler EvaluateProxyEvent
         {
             add {

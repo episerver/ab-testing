@@ -13,6 +13,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
     public abstract class ClientKpi : Kpi, IClientKpi
     {
+        /// <summary>
+        /// Client side script to determine if a user has converted based on certain criteria.
+        /// </summary>
         public virtual string ClientEvaluationScript
         {
             get
