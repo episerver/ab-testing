@@ -27,9 +27,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <inheritdoc />
         [DataMember]
         public Guid Id { get; set; }
-        
-        [DataMember]
+
         /// <inheritdoc />
+        [DataMember]
         public virtual ResultComparison ResultComparison
         {
             get
@@ -173,7 +173,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Kpi implentation for using the DynamicDataStore that is part of EPiServer for storing commerce related settings.
+        /// </summary>
         [DataMember]
         public CommerceData PreferredCommerceFormat {get; set;}
 

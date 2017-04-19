@@ -54,34 +54,32 @@
     <CleanIntermediates>False</CleanIntermediates>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI" filterName="ContentComparatorKPI" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._content" filterName="_content" isExposed="False" />
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepath" filterName="_startpagepath" isExposed="False" />
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI.ContentGuid" filterName="ContentGuid" isExposed="False" />
-        </Filter>
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi" filterName="StickySiteKpi" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.TestContentGuid" filterName="TestContentGuid" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Exceptions" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Manager.KpiManager" filterName="KpiManager" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Manager.KpiManager.DatabaseNeedsConfiguring" filterName="DatabaseNeedsConfiguring" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager.DataClass" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Manager.DataClass.Kpi" filterName="Kpi" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Manager.DataClass.Kpi._servicelocator" filterName="_servicelocator" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
-      <Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" />
-    </ApiFilter>
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI" filterName="ContentComparatorKPI" isExposed="True">
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._content" filterName="_content" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepath" filterName="_startpagepath" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI.ContentGuid" filterName="ContentGuid" isExposed="False" />
+  </Filter>
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi" filterName="StickySiteKpi" isExposed="True">
+    <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.AddSessionOnLoadedContent" filterName="AddSessionOnLoadedContent" isExposed="False" />
+    <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.Initialize" filterName="Initialize" isExposed="False" />
+    <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.Uninitialize" filterName="Uninitialize" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.TestContentGuid" filterName="TestContentGuid" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common.Helpers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Exceptions" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager" isExposed="True">
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Manager.KpiManager" filterName="KpiManager" isExposed="True">
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Manager.KpiManager.DatabaseNeedsConfiguring" filterName="DatabaseNeedsConfiguring" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
+<Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" /></ApiFilter>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, ProtectedInternalAsProtected</VisibleItems>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <PlugInConfigurations>
@@ -110,6 +108,7 @@
     </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <RootNamespaceTitle>Framework Reference</RootNamespaceTitle>
+    <CppCommentsFixup>False</CppCommentsFixup>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
