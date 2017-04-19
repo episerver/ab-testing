@@ -81,28 +81,25 @@
     </PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Config" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Initializers" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Kpis" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Commerce.Kpis.CommerceKpi" filterName="CommerceKpi" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Commerce.Kpis.CommerceKpi.ContentGuid" filterName="ContentGuid" isExposed="False" />
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Commerce.Kpis.CommerceKpi.isVariant" filterName="isVariant" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common.Attributes" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Exceptions" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
-      <Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Shell.WebForms" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Shell.WebForms.WebFormsBase" filterName="WebFormsBase" isExposed="False" />
-      </Filter>
-    </ApiFilter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Initializers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Kpis" isExposed="True">
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Commerce.Kpis.CommerceKpi" filterName="CommerceKpi" isExposed="True">
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Commerce.Kpis.CommerceKpi.ContentGuid" filterName="ContentGuid" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Commerce.Kpis.CommerceKpi.isVariant" filterName="isVariant" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common.Attributes" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common.Helpers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Exceptions" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
+<Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" /></ApiFilter>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>

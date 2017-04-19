@@ -85,6 +85,9 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             }
         }
 
+        /// <summary>
+        /// Kpi implentation for using the DynamicDataStore that is part of EPiServer for storing commerce related settings.
+        /// </summary>
         [DataMember]
         public CommerceData PreferredFinancialFormat { get; set; }       
 
