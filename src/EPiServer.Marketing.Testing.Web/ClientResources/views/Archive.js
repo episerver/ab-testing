@@ -145,17 +145,19 @@
             });
         },
 
-        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
+        _renderKpiMarkup: function (conversionMarkupId) {
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
 
             for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                var goalsFriendlyName = DomConstruct.toDom("<label class='epi-kpiLabel-bold'>" + this.context.data.test.kpiInstances[x].friendlyName + "</label>");
                 var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
 
                 var goalsContent = new ContentPane({
                     content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
                 }).placeAt(kpiuiElement);
-                dojo.place(goalsDescription, goalsContent.containerNode);
+                dojo.place(goalsFriendlyName, goalsContent.containerNode, "first");
+                dojo.place(goalsDescription, goalsContent.containerNode, "last");
             }
         },
 
