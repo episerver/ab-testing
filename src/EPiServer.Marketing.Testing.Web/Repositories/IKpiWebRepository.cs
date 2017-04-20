@@ -12,5 +12,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         IKpi ActivateKpiInstance(Dictionary<string, string> kpiFormData);
         Guid SaveKpi(IKpi kpiInstance);
         IList<Guid> SaveKpis(IList<IKpi> kpiInstances);
+        IKpi GetKpiInstance(Guid kpiId);
     }
 }

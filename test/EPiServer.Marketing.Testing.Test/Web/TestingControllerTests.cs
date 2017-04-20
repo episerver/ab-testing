@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IMessagingManager> _messagingManagerMock;
         private Mock<ITestDataCookieHelper> _testDataCookieHelperMock;
         private Mock<ITestManager> _testManagerMock;
-        private Mock<IKpiManager> _kpiManagerMock = new Mock<IKpiManager>();
+        private Mock<IKpiWebRepository> _kpiWebRepoMock = new Mock<IKpiWebRepository>();
 
         private TestingController GetUnitUnderTest()
         {
@@ -59,7 +59,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new ABTest());
             _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestManager>()).Returns(_testManagerMock.Object);
 
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManagerMock.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -118,7 +118,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("total", "3")
             };
 
-            _kpiManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new testFinancialKpi());
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new testFinancialKpi());
 
             var data = new FormDataCollection(pairs);
 
@@ -140,7 +140,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("total", "3")
             };
 
-            _kpiManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new Kpi());
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
 
             var data = new FormDataCollection(pairs);
 
@@ -163,7 +163,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("total", "3")
             };
 
-            _kpiManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new Kpi());
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
 
             var data = new FormDataCollection(pairs);
 

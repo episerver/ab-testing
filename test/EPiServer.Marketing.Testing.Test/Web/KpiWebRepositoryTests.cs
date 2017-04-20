@@ -114,6 +114,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(result is IKpi);
         }
 
+        [Fact]
+        public void GetKpiInstance_calls_KpiManager_Get()
+        {
+            Guid testGuid = Guid.Parse("48fe0e90-67f9-4171-a65c-aa00efc0ce77");
+            var webRepo = GetUnitUnderTest();
+            webRepo.GetKpiInstance(testGuid);
+            _mockKpiManager.Verify(call => call.Get(It.Is<Guid>(val => val == testGuid)),Times.Once);
+        }
+
 
     }
 }

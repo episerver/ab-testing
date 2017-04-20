@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -26,6 +27,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestResultHelper> _mockTestResultHelper;
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
         private Mock<IKpiManager> _mockKpiManager;
+        private Mock<IMessagingManager> _mockMessagingManager = new Mock<IMessagingManager>();
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -52,6 +54,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_mockMarketingTestingWebRepository.Object);
+
+            _mockServiceLocator.Setup(call => call.GetInstance<IMessagingManager>()).Returns(_mockMessagingManager.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
@@ -395,6 +399,47 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .33 && w.Weight < .34));
             Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .66 && w.Weight < .68));
+        }
+
+        [Fact]
+        public void EmitUpdateViews_calls_MessagingManager_EmitUpdateViews()
+        {
+            Guid testGuid = Guid.Parse("48fe0e90-67f9-4171-a65c-aa00efc0ce77");
+            int itemVersion = 101;
+
+            var webRepo = GetUnitUnderTest();
+            webRepo.EmitUpdateViews(testGuid, itemVersion);
+            _mockMessagingManager.Verify(call => call.EmitUpdateViews(It.Is<Guid>(val => val == testGuid), It.Is<int>(val => val == itemVersion)), Times.Once);            
+        }
+
+        [Fact]
+        public void EmitUpdateConversion_calls_MessagingManager_EmitUpdateConversion()
+        {
+            Guid testGuid = Guid.Parse("48fe0e90-67f9-4171-a65c-aa00efc0ce77");
+            int itemVersion = 101;
+            Guid kpiId = Guid.Parse("6951bd87-a599-4771-90c5-19f3235bf3d0");
+
+            var webRepo = GetUnitUnderTest();
+            webRepo.EmitUpdateConversion(testGuid, itemVersion, kpiId);
+            _mockMessagingManager.Verify(call=>call.EmitUpdateConversion(It.Is<Guid>(val=>val == testGuid),It.Is<int>(val=>val == itemVersion),It.Is<Guid>(val=>val == kpiId)),Times.Once);
+        }
+
+        [Fact]
+        public void EmitKpiResultData_call_MessagingManager_EmitKpiResultData()
+        {
+            Guid testGuid = Guid.Parse("48fe0e90-67f9-4171-a65c-aa00efc0ce77");
+            Guid kpiId = Guid.Parse("36322a7b-3226-4902-8447-42f305e2ccfa");
+            int itemVersion = 101;
+            var keyResult = new KeyValueResult()
+            {
+                KpiId = kpiId,
+                Value = Convert.ToDouble(100)
+            };
+            var resultType = KeyResultType.Value;
+
+            var webRepo = GetUnitUnderTest();
+            webRepo.EmitKpiResultData(testGuid, itemVersion, keyResult, resultType);
+            _mockMessagingManager.Verify(call => call.EmitKpiResultData(It.Is<Guid>(val => val == testGuid), It.Is<int>(val => val == itemVersion), It.Is<KeyValueResult>(val => val == keyResult), It.Is<KeyResultType>(val => val == KeyResultType.Value)), Times.Once);            
         }
     }
 }

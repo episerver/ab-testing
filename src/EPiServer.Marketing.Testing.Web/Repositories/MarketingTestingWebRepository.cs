@@ -16,6 +16,7 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
+using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -27,6 +28,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private ITestManager _testManager;
         private ILogger _logger;
         private IKpiManager _kpiManager;
+        private IMessagingManager _messagingManager;
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -37,6 +39,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
             _testManager = _serviceLocator.GetInstance<ITestManager>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
+            _messagingManager = _serviceLocator.GetInstance<IMessagingManager>();
             _logger = LogManager.GetLogger();
         }
         /// <summary>
@@ -48,6 +51,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testResultHelper = locator.GetInstance<ITestResultHelper>();
             _testManager = locator.GetInstance<ITestManager>();
             _kpiManager = locator.GetInstance<IKpiManager>();
+            _messagingManager = locator.GetInstance<IMessagingManager>();
             _logger = logger;
         }
 
@@ -280,6 +284,21 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             return _testManager.EvaluateKPIs(kpis, sender, e);
         }
+
+        public void EmitUpdateViews(Guid testId, int itemVersion)
+        {
+            _messagingManager.EmitUpdateViews(testId, itemVersion);
+        }
+
+        public void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId) {
+            _messagingManager.EmitUpdateConversion(testId, itemVersion, kpiId);
+        }
+
+        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType resultType)
+        {
+            _messagingManager.EmitKpiResultData(testId, itemVersion, keyResult, resultType);
+        }
+        
 
         private
             string GetCurrentUser()
