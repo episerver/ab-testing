@@ -590,6 +590,10 @@
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
                 this._adjustKpiSelectorCombo();
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (advancedOptionsElement) {
+                    dojo.style(advancedOptionsElement, "display", "none");
+                }
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
