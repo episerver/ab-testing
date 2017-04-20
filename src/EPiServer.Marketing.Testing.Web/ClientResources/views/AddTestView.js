@@ -429,7 +429,6 @@
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
                 this._resetView();
-
             },
 
             //forces both add test view containers to return to the top
