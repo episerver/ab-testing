@@ -38,19 +38,18 @@
 	<!-- The Core Build Help target -->
 	<Target Name="CoreBuildHelp">
 		<SandcastleBuilder.Utils.MSBuild.BuildHelp
-        ProjectFile="$(MSBuildProjectFullPath)"
+				ProjectFile="$(MSBuildProjectFullPath)"
 				Configuration="$(Configuration)"
 				Platform="$(Platform)"
-        Properties="$(SubstitutionTags)"
 				OutDir="$(OutDir)"
 				Verbose="$(Verbose)"
 				DumpLogOnFailure="$(DumpLogOnFailure)"
 				AlwaysLoadProject="$(AlwaysLoadProject)">
 			<Output TaskParameter="Help1Files" ItemName="Help1Files" />
+			<Output TaskParameter="Help2Files" ItemName="Help2Files" />
 			<Output TaskParameter="HelpViewerFiles" ItemName="HelpViewerFiles" />
 			<Output TaskParameter="WebsiteFiles" ItemName="WebsiteFiles" />
 			<Output TaskParameter="OpenXmlFiles" ItemName="OpenXmlFiles" />
-			<Output TaskParameter="MarkdownFiles" ItemName="MarkdownFiles" />
 			<Output TaskParameter="AllHelpFiles" ItemName="AllHelpFiles" />
 		</SandcastleBuilder.Utils.MSBuild.BuildHelp>
 

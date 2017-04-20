@@ -234,25 +234,6 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="t_sealedKeyword">
-		<xsl:param name="p_syntaxKeyword" select="''"/>
-		<xsl:choose>
-			<xsl:when test="$p_syntaxKeyword">
-				<span class="keyword">
-					<span class="languageSpecificText">
-						<span class="vb">NotInheritable</span>
-						<span class="nu">sealed</span>
-					</span>
-				</span>
-			</xsl:when>
-			<xsl:otherwise>
-				<span>
-					<include item="devlang_sealedKeyword"/>
-				</span>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
 	<xsl:template name="t_inKeyword">
 		<span class="keyword">
 			<span class="languageSpecificText">
@@ -379,13 +360,11 @@
 					</td>
 				</xsl:if>
 				<td class="OH_tdTitleColumn">
-					<h1>
-						<include item="boilerplate_pageTitle">
-							<parameter>
-								<xsl:call-template name="t_topicTitleDecorated"/>
-							</parameter>
-						</include>
-					</h1>
+					<include item="boilerplate_pageTitle">
+						<parameter>
+							<xsl:call-template name="t_topicTitleDecorated"/>
+						</parameter>
+					</include>
 				</td>
 				<td class="OH_tdRunningTitleColumn">
 					<include item="runningHeaderText" />

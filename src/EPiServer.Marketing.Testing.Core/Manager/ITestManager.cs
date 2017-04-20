@@ -9,6 +9,9 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
+    /// <summary>
+    /// Central point of access for test data and test manipulation.
+    /// </summary>
     public interface ITestManager
     {
         /// <summary>
@@ -37,15 +40,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Don't want to use refernce the cache here.  The criteria could be anything, not just active tests which
         /// is what the cache is intended to have in it.
         /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
+        /// <param name="criteria">A group of filters that are applied to the list of tests in order to limit what is returned.</param>
+        /// <returns>A list of tests based on the criteria passed in.</returns>
         List<IMarketingTest> GetTestList(TestCriteria criteria);
 
         /// <summary>
         /// Saves a test to the database.
         /// </summary>
         /// <param name="testObject">A test.</param>
-        /// <returns></returns>
+        /// <returns>Id of the test.</returns>
         Guid Save(IMarketingTest testObject);
 
         /// <summary>
@@ -70,6 +73,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Archives a test.
         /// </summary>
         /// <param name="testObjectId">Id of a test.</param>
+        /// <param name="winningVariantId">Id of the variant that was declared the winner.</param>
         void Archive(Guid testObjectId, Guid winningVariantId);
 
         /// <summary>
@@ -96,22 +100,23 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Randomly decides if a new user is to be part of the ongoing test.  If so, chooses 1 of the 2 variants that are part of the test to display to the user.
         /// </summary>
         /// <param name="testId">Id of a test.</param>
-        /// <returns></returns>
+        /// <returns>The original or variant item under test.</returns>
         Variant ReturnLandingPage(Guid testId);
 
         /// <summary>
         /// Gets the variant content from the variant cache.
         /// </summary>
         /// <param name="contentGuid">Id of the content to retrieve.</param>
-        /// <returns></returns>
+        /// <returns>A content item.</returns>
         IContent GetVariantContent(Guid contentGuid);
 
         /// <summary>
         /// Given a list of Kpi's and an EventArg object, each KPI will be evaluated and a list of Kpi instances 
         /// that have been evaluated will be returned.
         /// </summary>
-        /// <param name="kpis"></param>
-        /// <param name="e"></param>
+        /// <param name="kpis">List of kpis to evaluate for conersion.</param>
+        /// <param name="sender">Sender of the event that pertains to the kpi.</param>
+        /// <param name="e">Args associated with the kpis.</param>
         /// <returns></returns>
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
 

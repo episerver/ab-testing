@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <content xml:space="preserve">
 <!-- Translations provided by Sergey Zhurikhin -->
 
@@ -38,8 +37,8 @@
   <item id="title_example">Пример</item>
 
   <!-- autoOutline boilerplate -->
-  <item id="boilerplate_autoOutlineTopLevelIntro">Эта тема содержит следующие разделы:</item>
-	<item id="boilerplate_autoOutlineSubsectionIntro">В этом разделе содержатся следующие подразделы:</item>
+  <item id="boilerplate_autoOutlineTopLevelIntro">Эта тема содержит следующие разделы.</item>
+	<item id="boilerplate_autoOutlineSubsectionIntro">В этом разделе содержатся следующие подразделы.</item>
 
   <!-- resolve the autoOutline token -->
   <item id="autoOutline">

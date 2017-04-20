@@ -18,12 +18,18 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
+    /// <summary>
+    /// Used to say what operation should be done to the cache.
+    /// </summary>
     public enum CacheOperator
     {
         Add,
         Remove
     }
 
+    /// <summary>
+    /// Central point of access for test data and test manipulation.
+    /// </summary>
     [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
@@ -37,8 +43,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private DefaultMarketingTestingEvents _marketingTestingEvents;
 
         public bool DatabaseNeedsConfiguring;
-    
 
+        /// <inheritdoc />
         public List<IMarketingTest> ActiveCachedTests
         {
             get
@@ -142,7 +148,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return testList;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Saves a test to the database.
+        /// </summary>
+        /// <param name="multivariateTest">A test.</param>
+        /// <returns>Id of the test.</returns>
         public Guid Save(IMarketingTest multivariateTest)
         {
             // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception

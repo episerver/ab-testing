@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<content xml:space="preserve" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<content xml:space="preserve"
+	xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
 
   <!-- Note text -->
   <item id="notDocumented">This API is not documented.</item>
@@ -283,7 +283,6 @@
   <item id="altText_XNAFramework">Supported by the XNA Framework</item>
   <item id="altText_SilverlightMobile">Supported by <include item="silverlight_mobile"/></item>
   <item id="altText_ExplicitInterface">Explicit interface implementation</item>
-  <item id="altText_CodeExample">Code example</item>
 
   <item id="boilerplate_seeAlsoNamespaceLink">{0} Namespace</item>
   <item id="boilerplate_seeAlsoTypeLink">{0} <include item="text_{1}Upper"/></item>
@@ -477,8 +476,4 @@
   <item id="SMCMissingTag"><span class="MissingComment">[Missing &lt;{0}&gt; documentation for "{1}"]</span></item>
   <item id="SMCMissingParamTag"><span class="MissingComment">[Missing &lt;{0} name="{1}"/&gt; documentation for "{2}"]</span></item>
   <item id="SMCMissingIncludeTarget"><span class="MissingComment">[Missing &lt;include&gt; target documentation in '{0}'.  File: '{1}' Path: '{2}']</span></item>
-
-	<!-- View Source link text -->
-	<item id="sourceCodeLinkText">View Source</item>
-	<item id="sourceCodeLinkTitle">View the source code</item>
 </content>

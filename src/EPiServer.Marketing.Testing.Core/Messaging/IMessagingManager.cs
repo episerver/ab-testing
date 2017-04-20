@@ -5,7 +5,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 namespace EPiServer.Marketing.Testing.Messaging
 {
     /// <summary>
-    /// 
+    /// Emits asynchronous messages for views, conversions, and kpi results.
     /// </summary>
     public interface IMessagingManager
     {

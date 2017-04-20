@@ -2,6 +2,9 @@
 
 namespace EPiServer.Marketing.KPI.Results
 {
+    /// <summary>
+    /// Minimum information required to save a KPI conversion.
+    /// </summary>
     public interface IKpiResult
     {
         /// <summary>
