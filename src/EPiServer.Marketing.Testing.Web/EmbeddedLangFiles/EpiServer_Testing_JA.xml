@@ -33,7 +33,7 @@
         <goals_default_text>例: 第一項目のコピーを微調整して「時間の問題」に直に対処することで、より多くの訪問者にこのebookをダウンロードしたいと思ってもらえます。</goals_default_text>
         <goals_header>このテストの全体的な目標は何ですか?</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>目的を選択</goals_selectlist_default>
+        <goals_selectlist_default>Add a goal</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
