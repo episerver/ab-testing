@@ -207,6 +207,10 @@
     font-size: 42px;
 }
 
+.epi-kpiLabel-bold{
+    font-weight: bold;
+}
+
 .draftIcon {
     background-image: url('../../images/drafticon.png');
     background-repeat: no-repeat;
