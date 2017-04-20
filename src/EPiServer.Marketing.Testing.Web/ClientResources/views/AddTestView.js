@@ -608,7 +608,7 @@
                         kpiType: kpiObject.kpiType
                     });
 
-                    kpiWidgetInstance.placeAt(kpiWidget, 'after');
+                    kpiWidgetInstance.placeAt(kpiWidget, 'first');
                     aspect.after(kpiWidgetInstance,
                         'destroy',
                         function () {
@@ -619,7 +619,7 @@
                         label: kpiObject.kpi.friendlyName,
                         kpiWidgetId: kpiWidgetInstance.id,
                         value: "Medium"
-                    }).placeAt(kpiWeightWidget, 'after');
+                    }).placeAt(kpiWeightWidget, 'first');
                     kpiWidgetInstance._setlinkedWidgetIdAttr(weightWidget.id);
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
