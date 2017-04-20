@@ -417,6 +417,11 @@
                     kpiSelector.style.display = "block";
                 }
 
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (advancedOptionsElement) {
+                    dojo.style(advancedOptionsElement, "display", "none");
+                }
+
                 this._setViewConfidenceLevelAttr();
                 this._setViewPublishedVersionAttr(true);
                 this._setViewCurrentVersionAttr();
@@ -585,6 +590,10 @@
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
                 this._adjustKpiSelectorCombo();
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (advancedOptionsElement) {
+                    dojo.style(advancedOptionsElement, "display", "none");
+                }
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
@@ -712,9 +721,10 @@
                     advancedOptionsElement.scrollIntoView(true);
                 }
                 else {
-                    dojo.style(advancedOptionsElement, "display", "none");
-                    if (!evt.srcElement.id) {
-                        this.advancedOptions.reset();
+                    if (evt.currentTarget.id == "advancedOptionsLink") {
+                        advancedOptionsElement.scrollIntoView(true);
+                    } else {
+                        dojo.style(advancedOptionsElement, "display", "none");
                     }
                 }
             }
