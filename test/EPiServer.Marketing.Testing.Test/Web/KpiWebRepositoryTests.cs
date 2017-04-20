@@ -122,7 +122,5 @@ namespace EPiServer.Marketing.Testing.Test.Web
             webRepo.GetKpiInstance(testGuid);
             _mockKpiManager.Verify(call => call.Get(It.Is<Guid>(val => val == testGuid)),Times.Once);
         }
-
-
     }
 }
