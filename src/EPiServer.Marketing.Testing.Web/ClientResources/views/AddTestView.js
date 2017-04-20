@@ -608,10 +608,10 @@
                         kpiType: kpiObject.kpiType
                     });
 
-                    kpiWidgetInstance.placeAt(kpiWidget);
+                    kpiWidgetInstance.placeAt(kpiWidget, 'after');
                     aspect.after(kpiWidgetInstance,
                         'destroy',
-                        function() {
+                        function () {
                             me.decrementKpiEntries();
                         });
 
@@ -619,7 +619,7 @@
                         label: kpiObject.kpi.friendlyName,
                         kpiWidgetId: kpiWidgetInstance.id,
                         value: "Medium"
-                    }).placeAt(kpiWeightWidget);
+                    }).placeAt(kpiWeightWidget, 'after');
                     kpiWidgetInstance._setlinkedWidgetIdAttr(weightWidget.id);
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
@@ -627,16 +627,8 @@
                     }
                     this.kpiEntries++;
 
-                    this._adjustKpiSelectorCombo(kpiWidgetInstance.id);
+                    this._adjustKpiSelectorCombo();
                 }
-            },
-
-            _isScrolledIntoView: function (el) {
-                var elemTop = el.getBoundingClientRect().top;
-                var elemBottom = el.getBoundingClientRect().bottom;
-
-                var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-                return isVisible;
             },
 
             // Form Field Events
@@ -692,12 +684,6 @@
                 dijitSelector.set("value", "default");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
 
-                if (kpiId) {
-                    var kpiWidget = dom.byId(kpiId);
-                    if (!this._isScrolledIntoView(kpiWidget)) {
-                        kpiWidget.scrollIntoView(true);
-                    }
-                }
                 if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
