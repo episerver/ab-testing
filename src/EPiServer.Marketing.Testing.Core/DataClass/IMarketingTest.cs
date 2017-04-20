@@ -6,10 +6,13 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     /// <summary>
-    /// 
+    /// Defines the minimum data set required for a marketing test.
     /// </summary>
     public interface IMarketingTest
     {
+        /// <summary>
+        /// Test Id.
+        /// </summary>
         Guid Id { get; set; }
 
         /// <summary>

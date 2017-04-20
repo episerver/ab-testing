@@ -4,6 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Object that stores all info related to an item under test.
+    /// </summary>
     public class Variant : CoreEntityBase
     {
         /// <summary>
@@ -42,10 +45,10 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// </summary>
         public bool IsPublished { get; set; }
 
-        [ExcludeFromCodeCoverage]
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual ABTest ABTest { get; set; }
 
         /// <summary>

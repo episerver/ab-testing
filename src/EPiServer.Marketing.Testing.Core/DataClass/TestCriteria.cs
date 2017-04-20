@@ -27,6 +27,10 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
             }
         }
 
+        /// <summary>
+        /// Returns the list of filters that are part of the criteria.
+        /// </summary>
+        /// <returns>List of filters that are part of the criteria.</returns>
         public List<ABTestFilter> GetFilters()
         {
             return _filters;
@@ -38,6 +42,12 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     /// </summary>
     public class ABTestFilter
     {
+        /// <summary>
+        /// Used to filter test query results. 
+        /// </summary>
+        /// <param name="theProperty">Test property to filter against.</param>
+        /// <param name="theOperator">AND or OR.</param>
+        /// <param name="theValue">Value used to filter against(i.e. contentId, Active test state, etc.)</param>
         public ABTestFilter(ABTestProperty theProperty, FilterOperator theOperator, object theValue)
         {
             Property = theProperty;

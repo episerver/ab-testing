@@ -16,6 +16,9 @@ using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web.ClientKPI
 {
+    /// <summary>
+    /// Handles client side kpi markup.
+    /// </summary>
     [ServiceConfiguration(ServiceType = typeof(IClientKpiInjector), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ClientKpiInjector : IClientKpiInjector
     {
@@ -49,8 +52,8 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         /// Checks for any client kpis which may be assigned to the test and injects the provided
         /// markup via the current response.
         /// </summary>
-        /// <param name="kpiInstances"></param>
-        /// <param name="cookieData"></param>
+        /// <param name="kpiInstances">List of KPIs.</param>
+        /// <param name="cookieData">Cookie data related to the current test and KPIs.</param>
         public void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
         {
             Dictionary<Guid, TestDataCookie> ClientKpiList = new Dictionary<Guid, TestDataCookie>();
@@ -75,6 +78,9 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             }
         }
 
+        /// <summary>
+        /// Gets the associated script for a client kpi and appends it.
+        /// </summary>
         public void AppendClientKpiScript()
         {
             //Check if the current response has client kpis.  This lets us know we are in the correct response
