@@ -138,6 +138,7 @@
                     this.isMultiKpiTest = true;
                 }
                 this._adjustKpiSelectorCombo();
+                this._toggleKpiWeights();
             },
 
             startup: function () {
@@ -636,7 +637,19 @@
                     }
                     this.kpiEntries++;
 
+                    this._toggleKpiWeights();
                     this._adjustKpiSelectorCombo();
+                }
+            },
+
+            _toggleKpiWeights: function () {
+                var kpiWeights = dom.byId("kpiWeightAdvancedSection");
+
+                if (this.kpiEntries > 1) {
+                    kpiWeights.style.display = 'block';
+                }
+                else {
+                    kpiWeights.style.display = 'none';
                 }
             },
 
