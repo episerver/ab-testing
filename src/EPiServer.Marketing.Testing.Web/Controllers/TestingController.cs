@@ -39,15 +39,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public TestingController()
         {
             _serviceLocator = ServiceLocator.Current;
-            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-            _kpiWebRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
         }
 
         [ExcludeFromCodeCoverage]
         internal TestingController(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
-            _kpiWebRepo = serviceLocator.GetInstance<IKpiWebRepository>();
         }
 
         [ExcludeFromCodeCoverage]
@@ -74,6 +71,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetAllTests()
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(_webRepo.GetTestList(new TestCriteria()), Formatting.Indented,
                 new JsonSerializerSettings
                 {
@@ -88,6 +87,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetTest(string id)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = Guid.Parse(id);
             var test = _webRepo.GetTestById(testId);
             if (test != null)
@@ -111,6 +112,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateView(FormDataCollection data)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             if (!string.IsNullOrWhiteSpace(testId))
@@ -127,6 +130,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             var kpiId = data.Get("kpiId");
@@ -146,10 +151,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             try
             {
-                var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-                var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
+                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpiId = Guid.Parse(data.Get("kpiId"));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
 
@@ -183,6 +189,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage SaveKpiResult(FormDataCollection data)
         {
+            _kpiWebRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             var kpiId = data.Get("kpiId");
