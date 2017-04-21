@@ -183,7 +183,7 @@
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
             this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode, this.controlConversionPercent));
             this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode, this.challengerConversionPercent));
-
+            textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
