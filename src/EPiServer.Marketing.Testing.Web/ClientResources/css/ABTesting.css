@@ -94,6 +94,17 @@
         overflow: visible;
     }
 
+.controlDefaultBody,
+.controlLeaderBody,
+.controlPublishedBody,
+.controlTrailingBody,
+.challengerDefaultBody,
+.challengerLeaderBody,
+.challengerPublishedBody,
+.challengerTrailingBody {
+    min-width: 350px;
+}
+
 .controlDefaultBody {
     width: 49%;
     display: inline-block;
