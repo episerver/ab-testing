@@ -223,7 +223,11 @@
 
 .epi-ab-errorText {
     color: #f7542b;
-    visibility: hidden;
+    visibility: hidden;    
+}
+
+.epi-ab-errorIcon {
+    margin-bottom: 2px;
 }
 
 .formsRow {
@@ -357,8 +361,7 @@
     overflow-x: hidden;
 }
 
-#conversionDescription,
-#kpiSelectorCombo {
+.epi-abtest-narrowMarginBottom {
     margin: 0px 0px 5px 0px;
 }
 
