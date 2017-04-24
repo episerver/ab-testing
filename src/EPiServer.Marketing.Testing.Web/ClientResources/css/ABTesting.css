@@ -202,12 +202,12 @@
     font-size: 32px;
 }
 
-.epi-kpiSummary-conversionRate-leader{
+.epi-kpiSummary-conversionRate-leader {
     font-family: Arial;
     font-size: 42px;
 }
 
-.epi-kpiLabel-bold{
+.epi-kpiLabel-bold {
     font-weight: bold;
 }
 
@@ -328,7 +328,7 @@
 }
 
 .epi-abTest-summaryToggle {
-    min-height:25px;
+    min-height: 25px;
 }
 
 .versionData {
@@ -355,6 +355,11 @@
 
 #breadcrumb {
     overflow-x: hidden;
+}
+
+#conversionDescription,
+#kpiSelectorCombo {
+    margin: 0px 0px 5px 0px;
 }
 
 .epi-ab-converstion-pie-chart {
