@@ -78,8 +78,19 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     /// </summary>
     public enum ABTestProperty
     {
+        /// <summary>
+        /// State of the test(Active, Inactive, etc).
+        /// </summary>
         State = 0,
+
+        /// <summary>
+        /// Id of the content item under test.
+        /// </summary>
         OriginalItemId = 1,
+
+        /// <summary>
+        /// Id of the variant item under test.
+        /// </summary>
         VariantId = 2
     }
 
@@ -88,7 +99,14 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     /// </summary>
     public enum FilterOperator
     {
+        /// <summary>
+        /// Binary AND operator.
+        /// </summary>
         And = 0,
+
+        /// <summary>
+        /// Binary OR operator.
+        /// </summary>
         Or = 1
     }
 
