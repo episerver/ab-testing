@@ -4,7 +4,9 @@ using EPiServer.Framework.Localization;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Base class for client KPIs.  This ensures all client KPIs reference a script that can be used to figure out when a conversion happens.
+    /// </summary>
     public abstract class ClientKpi : Kpi, IClientKpi
     {
         /// <summary>
