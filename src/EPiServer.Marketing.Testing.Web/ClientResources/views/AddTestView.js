@@ -345,7 +345,7 @@
                             errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
-                    } else if (new Date(start).toLocaleString < now.toLocaleString) {
+                    } else if (new Date(start).toLocaleString() < now.toLocaleString()) {
                         this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
                         scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
                         return false;
