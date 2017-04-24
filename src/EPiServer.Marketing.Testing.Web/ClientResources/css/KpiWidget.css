@@ -75,7 +75,7 @@
 }
 
 .epi-kpiSummaries-selector-td {
-    width: 25%;
+    min-width: 75px;
 }
 
 .epi-percentTemplate {
