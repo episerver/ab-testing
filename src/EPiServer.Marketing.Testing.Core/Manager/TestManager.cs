@@ -310,26 +310,39 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return retData ?? UpdateVariantContentCache(contentGuid);
         }
 
-        private Object thisLock = new Object();
+        private Object _incrementLock = new Object();
+        /// <inheritdoc />
+        public void IncrementCount(IncrementCountCriteria criteria)
+        {
+            if (criteria.asynch)
+            {
+                var messaging = _serviceLocator.GetInstance<IMessagingManager>();
+                if (criteria.resultType == CountType.Conversion)
+                    messaging.EmitUpdateConversion(criteria.testId, criteria.itemVersion, criteria.kpiId, criteria.clientId);
+                else if (criteria.resultType == CountType.View)
+                    messaging.EmitUpdateViews(criteria.testId, criteria.itemVersion);
+            }
+            else
+            {
+                lock (_incrementLock)
+                {
+                    _dataAccess.IncrementCount(criteria.testId, criteria.itemVersion, TestManagerHelper.AdaptToDalCount(criteria.resultType), criteria.kpiId);
+                }
+            }
+        }
 
         /// <inheritdoc />
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch = true)
         {
-            if (asynch)
+            var c = new IncrementCountCriteria()
             {
-                var messaging = _serviceLocator.GetInstance<IMessagingManager>();
-                if (resultType == CountType.Conversion)
-                    messaging.EmitUpdateConversion(testId, itemVersion, kpiId);
-                else if (resultType == CountType.View)
-                    messaging.EmitUpdateViews(testId, itemVersion);
-            }
-            else
-            {
-                lock (thisLock)
-                {
-                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType), kpiId);
-                }
-            }
+                testId = testId,
+                itemVersion = itemVersion,
+                resultType = resultType,
+                kpiId = kpiId,
+                asynch = asynch
+            };
+            IncrementCount(c);
         }
 
         /// <inheritdoc />

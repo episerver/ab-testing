@@ -19,6 +19,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             return HttpContext.Current.Items.Contains(itemId);
         }
 
+        public string GetRequestParam(string itemId)
+        {
+            return HttpContext.Current.Request.Params[itemId];
+        }
+
         public void SetItemValue(string itemId, object value)
         {
             HttpContext.Current.Items[itemId] = value;
