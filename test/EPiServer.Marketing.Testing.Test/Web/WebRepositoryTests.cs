@@ -26,6 +26,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestResultHelper> _mockTestResultHelper;
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
         private Mock<IKpiManager> _mockKpiManager;
+        private Mock<IHttpContextHelper> _mockHttpHelper;
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -52,6 +53,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_mockMarketingTestingWebRepository.Object);
+
+            _mockHttpHelper = new Mock<IHttpContextHelper>();
+            _mockServiceLocator.Setup(call => call.GetInstance<IHttpContextHelper>())
+                .Returns(_mockHttpHelper.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
@@ -86,7 +91,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value => value == true)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<IncrementCountCriteria>(value => value.asynch == true)), Times.Once);
         }
 
         [Fact]
@@ -94,7 +99,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View, default(Guid), false);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.IsAny<Guid>(), It.Is<bool>(value => value == false)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<IncrementCountCriteria>(value => value.asynch == false)), Times.Once);
         }
 
         [Fact]

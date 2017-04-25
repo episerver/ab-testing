@@ -89,10 +89,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         }
 
         /// <inheritdoc />
-        public void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId = default(Guid))
+        public void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId = default(Guid), string clientId=null)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = testId, ItemVersion = itemVersion, KpiId = kpiId} );
+            emitterFactory.Emit<UpdateConversionsMessage>(new UpdateConversionsMessage() {TestId = testId, ItemVersion = itemVersion, KpiId = kpiId, ClientIdentifier = clientId} );
         }
 
         /// <inheritdoc />

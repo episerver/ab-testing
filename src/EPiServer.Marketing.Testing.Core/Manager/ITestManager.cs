@@ -89,6 +89,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <summary>
         /// Increments a view or conversion by 1 for a given variant that is part of a given test.
         /// </summary>
+        /// <param name="criteria">Critera class to define what to increment.</param>
+        void IncrementCount(IncrementCountCriteria criteria);
+
+        /// <summary>
+        /// Increments a view or conversion by 1 for a given variant that is part of a given test.
+        /// </summary>
         /// <param name="testId">Id of a test.</param>
         /// <param name="itemVersion">Version of the variant that should be updated.</param>
         /// <param name="kpiId">Id of the kpi count to increment.</param>

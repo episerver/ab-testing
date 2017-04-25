@@ -27,17 +27,20 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class TestingController : ApiController, IConfigurableModule
     {
         private IServiceLocator _serviceLocator;
+        private IHttpContextHelper _httpContextHelper;
 
         [ExcludeFromCodeCoverage]
         public TestingController()
         {
             _serviceLocator = ServiceLocator.Current;
+            _httpContextHelper = new HttpContextHelper();
         }
 
         [ExcludeFromCodeCoverage]
-        internal TestingController(IServiceLocator serviceLocator)
+        internal TestingController(IHttpContextHelper contexthelper)
         {
-            _serviceLocator = serviceLocator;
+            _serviceLocator = ServiceLocator.Current;
+            _httpContextHelper = contexthelper;
         }
 
         [ExcludeFromCodeCoverage]
@@ -129,6 +132,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
+                var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
+
                 mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
 
                 return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");

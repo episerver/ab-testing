@@ -56,7 +56,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
-            return new TestingController()
+            Mock<IHttpContextHelper> contextHelper = new Mock<IHttpContextHelper>();
+            return new TestingController(contextHelper.Object)
             {
                 Request = new System.Net.Http.HttpRequestMessage(),
                 Configuration = new HttpConfiguration()

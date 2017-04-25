@@ -458,7 +458,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<int>(arg => arg.Equals(1)), It.IsAny<Guid>()),
+                It.Is<int>(arg => arg.Equals(1)), It.IsAny<Guid>(), It.IsAny<string>()),
                 "Guids are not correct or update conversion message not emmited");
         }
 

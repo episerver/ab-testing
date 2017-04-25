@@ -18,5 +18,10 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
         public int ItemVersion { get; set; }
 
         public Guid KpiId { get; set; }
+
+        /// <summary>
+        /// Set this property to a unique value that is client specific to prevent aggressive clients from triggering multiple conversions
+        /// </summary>
+        public string ClientIdentifier { get; set; }
     }
 }
