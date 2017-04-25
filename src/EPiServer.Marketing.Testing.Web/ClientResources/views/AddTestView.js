@@ -332,28 +332,33 @@
 
             //Validates the date information is A) a valid date format and B) not in the past
             _isValidStartDate: function () {
-                var errorTextNode = dom.byId("datePickerErrorText");
-                var errorIconNode = dom.byId("datePickerErrorIcon");
-                var scheduleText = dom.byId("ScheduleText");
-                var start = this.startDatePicker.get("value");
-                var now = new Date();
+                if (dom.byId("delayStartOption").checked) {
+                    var errorTextNode = dom.byId("datePickerErrorText");
+                    var errorIconNode = dom.byId("datePickerErrorIcon");
+                    var scheduleText = dom.byId("ScheduleText");
+                    var start = this.startDatePicker.get("value");
+                    var now = new Date();
 
-                if (start !== "") {
-                    if (isNaN(new Date(start))) {
-                        this._setError(resources.addtestview.error_invalid_date_time_value,
-                            errorTextNode,
-                            errorIconNode);
-                        scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
-                        return false;
-                    } else if (new Date(start).toLocaleString() < now.toLocaleString()) {
-                        this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
-                        scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
-                        return false;
+                    if (start !== "") {
+                        if (isNaN(new Date(start))) {
+                            this._setError(resources.addtestview.error_invalid_date_time_value,
+                                errorTextNode,
+                                errorIconNode);
+                            scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
+                            return false;
+                        } else if (new Date(start).getTime() < now.getTime()) {
+                            this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
+                            scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
+                            return false;
+                        }
                     }
-                }
 
-                this._setError("", errorTextNode, errorIconNode);
-                return true;
+                    this._setError("", errorTextNode, errorIconNode);
+                    return true;
+                }
+                else {
+                    return true;
+                }
             },
 
             //Validates the supplied string as a positive integer
