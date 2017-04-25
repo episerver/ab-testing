@@ -50,9 +50,9 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         {
             var repo = _serviceLocator.GetInstance<IScheduledJobRepository>();
             var job = repo.Get("Execute", "EPiServer.Marketing.Testing.Web.Jobs.TestSchedulingJob", "EPiServer.Marketing.Testing.Web");
-            if (job.NextExecution > e.Test.StartDate)
+            if (job.NextExecution.ToUniversalTime() > e.Test.StartDate.ToUniversalTime())
             {
-                job.NextExecution = e.Test.StartDate; // NextExecution has to be local time
+                job.NextExecution = e.Test.StartDate.ToLocalTime(); // NextExecution has to be local time
                 repo.Save(job);
             }
         }
