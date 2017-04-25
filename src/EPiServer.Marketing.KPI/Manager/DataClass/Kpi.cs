@@ -11,7 +11,9 @@ using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
+    /// </summary>
     [DataContract]
     public class Kpi : IKpi
     {
