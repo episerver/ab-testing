@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using StructureMap.TypeRules;
 using EPiServer.Data.Dynamic;
 using EPiServer.Logging;
+using System.Globalization;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -145,7 +146,7 @@ namespace EPiServer.Marketing.KPI.Manager
         public CommerceData GetCommerceSettings()
         {
             var store = GetDataStore(typeof(CommerceData));
-            var settings = store.LoadAll<CommerceData>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceData { CommerceCulture = "DEFAULT" };
+            var settings = store.LoadAll<CommerceData>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new CommerceData { CommerceCulture = "DEFAULT", preferredFormat = CultureInfo.CurrentCulture.NumberFormat };
             return settings;
         }
 

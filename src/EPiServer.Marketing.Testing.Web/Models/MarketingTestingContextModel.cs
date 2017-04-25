@@ -11,12 +11,12 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public string PublishedVersionPublishedBy { get; set; }
         public string PublishedVersionPublishedDate { get; set; }
         public string PublishedVersionContentLink { get; set; }
-        public string PublishedVersionFinancialsAverage { get; set; }
+        public string PublishedVersionValuesAverage { get; set; }
         public string DraftVersionContentLink { get; set; }
         public string DraftVersionName { get; set; }
         public string DraftVersionChangedBy { get; set; }
         public string DraftVersionChangedDate { get; set; }
-        public string DraftVersionFinancialsAverage { get; set; }
+        public string DraftVersionValuesAverage { get; set; }
         public string VisitorPercentage { get; set; }
         public int TotalParticipantCount { get; set; }
         public string PublishedUrl { get; set; }
