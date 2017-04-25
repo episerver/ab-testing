@@ -134,7 +134,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
 
-                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
+                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId), sessionid);
 
                 return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
             }
