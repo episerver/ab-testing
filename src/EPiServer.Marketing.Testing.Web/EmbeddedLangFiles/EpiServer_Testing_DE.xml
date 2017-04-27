@@ -212,6 +212,11 @@
         <displayname>Marketingtest-Monitor</displayname>
         <message>Gestartet [{0}] Gestoppt [{1}] Aktiv [{2}] Inaktiv [{3}] Abgeschlossen [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Aktive A/B-Tests</activetests>
         <archivedtests>Archivierte A/B-Tests</archivedtests>

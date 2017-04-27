@@ -212,6 +212,11 @@
         <displayname>マーケティングテストモニター</displayname>
         <message>開始 [{0}] 停止 [{1}] アクティブ [{2}] 非アクティブ [{3}] 完了 [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>アクティブなA/Bテスト</activetests>
         <archivedtests>アーカイブ済みのA/Bテスト</archivedtests>

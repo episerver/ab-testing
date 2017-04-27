@@ -212,6 +212,11 @@
         <displayname>Marknadstestövervakare</displayname>
         <message>Startat [{0}] Stoppat [{1}] Aktivt [{2}] Inaktivt [{3}] Avslutat [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Aktiva A/B-test</activetests>
         <archivedtests>Arkiverade A/B-test</archivedtests>
