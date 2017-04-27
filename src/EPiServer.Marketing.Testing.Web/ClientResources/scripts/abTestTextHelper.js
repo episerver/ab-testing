@@ -183,24 +183,29 @@ function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSumm
             }
             else {
                 var kpiResultType = context.data.kpiResultType;
+                var hasChart = true;
+                var kpiConversions;
                 if (kpiResultType === "KpiFinancialResult") {
-                    summaryWidget = new KpiSummaryWidget({
-                        displayChart: false,
-                        views: this.publishedVariant.views,
-                        conversions: this.publishedVariant.keyFinancialResults.length,
-                        conversionRate: context.data.publishedVersionFinancialsAverage,
-                        isLeader: eval(this.publishedPercent > this.draftPercent)
-                    });
-                }
-                else {
-                    summaryWidget = new KpiSummaryWidget({
-                        views: this.publishedVariant.views,
-                        conversions: this.publishedVariant.conversions,
-                        conversionRate: this.publishedPercent,
-                        isLeader: eval(this.publishedPercent > this.draftPercent)
+                    hasChart = false;
+                    kpiConversions = this.publishedVariant.keyFinancialResults.length;
+                    kpiConversionRate = context.data.publishedVersionValuesAverage;
+                } else if (kpiResultType === "KpiValueResult") {
+                    hasChart = false;
+                    kpiConversions = this.publishedVariant.keyValueResults.length;
+                    kpiConversionRate = context.data.publishedVersionValuesAverage;
+                } else {
+                    hasChart = true;
+                    kpiConversions = this.publishedVariant.conversions;
+                    kpiConversionRate = this.publishedPercent;
+                };
 
-                    });
-                }
+                summaryWidget = new KpiSummaryWidget({
+                    displayChart: hasChart,
+                    views: this.publishedVariant.views,
+                    conversions: kpiConversions,
+                    conversionRate: kpiConversionRate,
+                    isLeader: eval(this.publishedPercent > this.draftPercent)
+                });
             }
             summaryWidget.placeAt(summaryNode);
             return summaryWidget;
@@ -223,23 +228,30 @@ function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSumm
             }
             else {
                 var kpiResultType = context.data.kpiResultType;
+                var hasChart = true;
+                var kpiConversions;
                 if (kpiResultType === "KpiFinancialResult") {
-                    summaryWidget = new KpiSummaryWidget({
-                        displayChart: false,
-                        views: this.draftVariant.views,
-                        conversions: this.draftVariant.keyFinancialResults.length,
-                        conversionRate: context.data.draftVersionFinancialsAverage,
-                        isLeader: eval(this.draftPercent > this.publishedPercent)
-                    });
-                }
-                else {
-                    summaryWidget = new KpiSummaryWidget({
-                        views: this.draftVariant.views,
-                        conversions: this.draftVariant.conversions,
-                        conversionRate: this.draftPercent,
-                        isLeader: eval(this.draftPercent > this.publishedPercent)
-                    });
-                }
+                    hasChart = false;
+                    kpiConversions = this.draftVariant.keyFinancialResults.length;
+                    kpiConversionRate = context.data.draftVersionValuesAverage;
+                } else if (kpiResultType === "KpiValueResult") {
+                    hasChart = false;
+                    kpiConversions = this.draftVariant.keyValueResults.length;
+                    kpiConversionRate = context.data.draftVersionValuesAverage;
+                } else {
+                    hasChart = true;
+                    kpiConversions = this.draftVariant.conversions;
+                    kpiConversionRate = this.draftPercent;
+                };
+
+                summaryWidget = new KpiSummaryWidget({
+                    displayChart: hasChart,
+                    views: this.draftVariant.views,
+                    conversions: kpiConversions,
+                    conversionRate: kpiConversionRate,
+                    isLeader: eval(this.draftPercent > this.publishedPercent)
+                });
+
             }
             summaryWidget.placeAt(summaryNode);
             return summaryWidget;

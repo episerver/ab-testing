@@ -164,15 +164,23 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             model.VisitorPercentage = testData.ParticipationPercentage.ToString();
             model.LatestVersionContentLink = Content.ContentLink.ToString();
 
-            
-            if (publishedVariant.KeyFinancialResults != null)
+            if (testData.KpiInstances.Count == 1)
             {
-                var commerceSettings = _serviceLocator.GetInstance<IKpiManager>().GetCommerceSettings();
+                var kpiResultType = testData.KpiInstances[0].KpiResultType;
+                if (kpiResultType == "KpiFinancialResult")
+                {
+                    var commerceSettings = _serviceLocator.GetInstance<IKpiManager>().GetCommerceSettings();
 
-                model.PublishedVersionFinancialsAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : publishedVersionAverage.ToString("C", commerceSettings.preferredFormat);
-                model.DraftVersionFinancialsAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : draftVersionAverage.ToString("C", commerceSettings.preferredFormat);
+                    model.PublishedVersionValuesAverage = publishedVariant.KeyFinancialResults.Count > 0 ? publishedVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : publishedVersionAverage.ToString("C", commerceSettings.preferredFormat);
+                    model.DraftVersionValuesAverage = draftVariant.KeyFinancialResults.Count > 0 ? draftVariant.KeyFinancialResults.Average(x => x.ConvertedTotal).ToString("C", commerceSettings.preferredFormat) : draftVersionAverage.ToString("C", commerceSettings.preferredFormat);
+                } else if (kpiResultType == "KpiValueResult")
+                {
+                    model.PublishedVersionValuesAverage = publishedVariant.KeyValueResults.Count > 0 ? publishedVariant.KeyValueResults.Average(x => x.Value).ToString() : "0";
+                    model.DraftVersionValuesAverage = draftVariant.KeyValueResults.Count > 0 ? draftVariant.KeyValueResults.Average(x => x.Value).ToString() : "0";
+                }
             }
-            
+
+
             model.KpiResultType = testData.KpiInstances[0].KpiResultType;
 
             // Map the version data

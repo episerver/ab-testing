@@ -14,6 +14,11 @@ using System.Web.Http;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.Marketing.KPI.Manager;
+using System.Collections.Generic;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -27,6 +32,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class TestingController : ApiController, IConfigurableModule
     {
         private IServiceLocator _serviceLocator;
+        private IMarketingTestingWebRepository _webRepo;
+        private IKpiWebRepository _kpiWebRepo;
 
         [ExcludeFromCodeCoverage]
         public TestingController()
@@ -64,9 +71,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetAllTests()
         {
-            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
-            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(tm.GetTestList(new TestCriteria()), Formatting.Indented,
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(_webRepo.GetTestList(new TestCriteria()), Formatting.Indented,
                 new JsonSerializerSettings
                 {
                     // Apparently there is some loop referenceing problem with the 
@@ -80,10 +87,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetTest(string id)
         {
-            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
             var testId = Guid.Parse(id);
-            var test = tm.GetTestById(testId);
+            var test = _webRepo.GetTestById(testId);
             if (test != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(test, Formatting.Indented,
@@ -105,12 +112,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateView(FormDataCollection data)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             if (!string.IsNullOrWhiteSpace(testId))
-            {
-                var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
+            {                
+                _webRepo.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -122,16 +130,17 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             var kpiId = data.Get("kpiId");
 
             if (!string.IsNullOrWhiteSpace(testId))
             {
-                var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
+                _webRepo.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
 
-                return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
+                return Request.CreateResponse(HttpStatusCode.OK, "Conversion Successful");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
@@ -142,17 +151,18 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             try
-            { 
-                var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-                var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
+            {
+                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpiId = Guid.Parse(data.Get("kpiId"));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
 
                 var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
                 if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
-                    // update cookie dectioary so we cna handle mulitple kpi conversions
+                    // update cookie dectioary so we can handle mulitple kpi conversions
                     testCookie.KpiConversionDictionary.Remove(kpiId);
                     testCookie.KpiConversionDictionary.Add(kpiId, true);
 
@@ -162,10 +172,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     // only update cookie if all kpi's have converted
                     testCookie.Converted = testCookie.KpiConversionDictionary.All(x => x.Value);
                     cookieHelper.UpdateTestDataCookie(testCookie);
+                    if (data.Get("resultValue") != null)
+                    {
+                        SaveKpiResult(data);
+                    }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception(ex.Message));
             }
@@ -175,42 +189,47 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage SaveKpiResult(FormDataCollection data)
         {
+            _kpiWebRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
-            var keyResultType = data.Get("keyResultType");
             var kpiId = data.Get("kpiId");
-            var total = data.Get("total");
-
-            var resultType = (KeyResultType) Convert.ToInt32(keyResultType);
+            var value = data.Get("resultValue");
+            
+            var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
 
             IKeyResult keyResult;
+            KeyResultType resultType;
 
-            if (resultType == KeyResultType.Financial)
+            if (kpi.KpiResultType == "KpiFinancialResult")
             {
+                resultType = KeyResultType.Financial;
                 keyResult = new KeyFinancialResult()
                 {
                     KpiId = Guid.Parse(kpiId),
-                    Total = Convert.ToDecimal(total)
+                    Total = Convert.ToDecimal(value)
                 };
             }
             else
             {
+                resultType = KeyResultType.Value;
+
                 keyResult = new KeyValueResult()
                 {
                     KpiId = Guid.Parse(kpiId),
-                    Value = Convert.ToDouble(total)
+                    Value = Convert.ToDouble(value)
                 };
             }
 
             if (!string.IsNullOrWhiteSpace(testId))
             {
-                var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                _webRepo.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
 
-                return Request.CreateResponse(HttpStatusCode.OK,"KpiResult Saved");
+                return Request.CreateResponse(HttpStatusCode.OK, "KpiResult Saved");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
         }
-    }
+    }    
 }
