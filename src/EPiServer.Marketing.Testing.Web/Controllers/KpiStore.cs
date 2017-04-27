@@ -3,8 +3,6 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Shell.Services.Rest;
 using System;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.KPI.Manager;
-using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.Net;
 using EPiServer.Framework.Localization;
@@ -71,39 +69,45 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 if (kpiData.Count > 0)
                 {
+
+                    //Check if any of the KPIs are identical in type and values
+                    kpiErrors = VerifyUniqueKpiData(kpiData);
+
                     var kpiWeights = new Dictionary<Guid, string>();
-                    foreach (var data in kpiData)
+                    if (kpiErrors.Count == 0) // if Unique KPI verifications passed validate the individual items
                     {
-                        var kpiId = Guid.NewGuid();
-                        IKpi kpiInstance = _kpiRepo.ActivateKpiInstance(data);
-
-                        // need to assign the kpi an id so we can associate its weight correctly
-                        kpiInstance.Id = kpiId;
-
-                        try
+                        foreach (var data in kpiData)
                         {
-                            kpiInstance.Validate(data);
-                            validKpiInstances.Add(kpiInstance);
-                            kpiWeights.Add(kpiId, data.First(key => key.Key == "Weight").Value);
-                        }
-                        catch (KpiValidationException ex)
-                        {
-                            _logger.Debug("Error validating Kpi" + ex);
-                            kpiErrors.Add(data["widgetID"], ex.Message);
+                            var kpiId = Guid.NewGuid();
+                            IKpi kpiInstance = _kpiRepo.ActivateKpiInstance(data);
+
+                            // need to assign the kpi an id so we can associate its weight correctly
+                            kpiInstance.Id = kpiId;
+
+                            try
+                            {
+                                kpiInstance.Validate(data);
+                                validKpiInstances.Add(kpiInstance);
+                                kpiWeights.Add(kpiId, data.First(key => key.Key == "Weight").Value);
+                            }
+                            catch (KpiValidationException ex)
+                            {
+                                _logger.Debug("Error validating Kpi" + ex);
+                                kpiErrors.Add(data["widgetID"], ex.Message);
+                            }
                         }
                     }
-
                     //Send back only errors or successful results for proper handling
                     if (kpiErrors.Count > 0)
                     {
-                        result = Rest(new Response() { status = false, errors= JsonConvert.SerializeObject(kpiErrors), message = _localizationService.GetString("/abtesting/addtestview/error_conversiongoal") });
-                        
+                        result = Rest(new Response() { status = false, errors = JsonConvert.SerializeObject(kpiErrors), message = _localizationService.GetString("/abtesting/addtestview/error_conversiongoal") });
+
                     }
                     else
                     {
-                        _kpiRepo.SaveKpis(validKpiInstances);
+                        _kpiRepo.SaveKpis(validKpiInstances);
 
-                        result = Rest(new Response() { status = true, obj = kpiWeights });
+                        result = Rest(new Response() { status = true, obj = kpiWeights });
                     }
                 }
                 else
@@ -117,12 +121,46 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
             return result;
         }
-    }
-    public class Response
-    {
-        public object errors { get; set; }
-        public bool status { get; set; }
-        public object obj { get; set; }
-        public object message { get; set; }
-    }
+
+        
+        public Dictionary<string, string> VerifyUniqueKpiData(List<Dictionary<string, string>> data)
+        {
+            var errors = new Dictionary<string, string>();
+
+            for (var x = 0; x < data.Count; x++)
+            {
+                for (var y = 0; y < data.Count; y++)
+                {
+                    if (x != y)
+                    {
+                        if (data[x]["kpiType"] == data[y]["kpiType"])
+                        {
+                            //Get any/all user defined keys and check their values
+                            var userKeys = data[x].Keys.Where(kv => kv != "kpiType" && kv != "widgetID" && kv != "CurrentContent" && kv != "Weight");
+                            foreach (var key in userKeys)
+                                if (data[x][key] == data[y][key])
+                                {
+                                    try
+                                    {
+                                        errors.Add(data[x]["widgetID"], _localizationService.GetString("/abtesting/addtestview/error_duplicate_kpi_values"));
+                                    }
+                                    catch (ArgumentException) { //In this case we don't worry if a duplicate key exists as we expect it and just want to ignore it
+                                    }
+                                    
+                                }
+                        }
+                    }
+                }
+            }        
+            return errors;
+        }
+}
+
+public class Response
+{
+    public object errors { get; set; }
+    public bool status { get; set; }
+    public object obj { get; set; }
+    public object message { get; set; }
+}
 }
