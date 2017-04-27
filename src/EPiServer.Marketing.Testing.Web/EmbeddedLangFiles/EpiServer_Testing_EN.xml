@@ -7,6 +7,7 @@
         <tooltip_text>A/B Test Changes</tooltip_text>
       </addtestcommand>
       <addtestview>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <advanced_options>Advanced Options</advanced_options>
         <cancel_default>Cancel</cancel_default>
         <challenger>B / Challenger</challenger>
