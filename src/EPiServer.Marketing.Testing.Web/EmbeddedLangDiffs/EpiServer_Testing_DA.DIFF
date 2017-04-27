@@ -40,6 +40,11 @@
         <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
         <show_summary path="/abtesting/pickwinnerview/show_summary/">Show Details</show_summary>
       </pickwinnerview>
+      <summary_widget>
+        <conversion_rate path="/abtesting/summary_widget/conversion_rate/">Conversion Rate</conversion_rate>
+        <conversions path="/abtesting/summary_widget/conversions/">Conversions</conversions>
+        <views path="/abtesting/summary_widget/views/">Views</views>
+      </summary_widget>
       <tasks>
         <category path="/abtesting/tasks/category/">A/B Tests</category>
       </tasks>

@@ -210,6 +210,11 @@
         <displayname>Marketingtestovervåger</displayname>
         <message>Startet [{0}] Stoppet [{1}] Aktiv [{2}] Inaktiv [{3}] Fuldført [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Aktive A/B-test</activetests>
         <archivedtests>Arkiverede A/B-test</archivedtests>

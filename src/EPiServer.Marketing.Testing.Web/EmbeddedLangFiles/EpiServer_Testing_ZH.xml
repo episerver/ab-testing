@@ -212,6 +212,11 @@
         <displayname>市场营销测试监控器</displayname>
         <message>已开始 [{0}] 已停止 [{1}] 正在进行 [{2}] 未在进行 [{3}] 已完成 [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>正在进行的 A/B 测试</activetests>
         <archivedtests>已归档的 A/B 测试</archivedtests>
