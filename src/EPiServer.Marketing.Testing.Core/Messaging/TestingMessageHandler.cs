@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Messaging
                     if (!_sessionCache.Contains(key))
                     {
                         CacheItemPolicy policy = new CacheItemPolicy();
-                        policy.SlidingExpiration = TimeSpan.FromSeconds(5);
+                        policy.SlidingExpiration = TimeSpan.FromSeconds(30);
                         _sessionCache.Add(key, "", policy);
                         retval = true; // next time we return false so we dont process the message
                     }
