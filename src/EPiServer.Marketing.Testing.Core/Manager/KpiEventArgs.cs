@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public IKpi Kpi { get; private set; }
 
         /// <summary>
-        /// Keeps track of all the KPI's for a test and used to determine when they have all converted.
+        /// Keeps track of all the KPIs for a test and used to determine when they have all converted.
         /// </summary>
         public IDictionary<Guid, bool> KpiConversionDictionary { get; private set; }
 

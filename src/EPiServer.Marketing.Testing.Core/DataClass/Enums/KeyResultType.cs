@@ -16,7 +16,7 @@
         Value,
 
         /// <summary>
-        /// Boolean conversion result used with multiple KPI's.
+        /// Boolean conversion result used with multiple KPIs.
         /// </summary>
         Conversion
     }

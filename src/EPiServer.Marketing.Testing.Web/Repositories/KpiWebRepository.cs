@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         }
 
         /// <summary>
-        /// Retrieves all KPI's available to the system.
+        /// Retrieves all KPIs available to the system.
         /// </summary>
         /// <returns></returns>
         public List<KpiTypeModel> GetKpiTypes()

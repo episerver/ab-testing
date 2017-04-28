@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <summary>
         /// Deletes KPI object from the DB.
         /// </summary>
-        /// <param name="kpiId">Id of the KPI to delete.</param>
+        /// <param name="kpiId">ID of the KPI to delete.</param>
         void Delete(Guid kpiId);
 
         /// <summary>

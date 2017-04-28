@@ -58,7 +58,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public ABTestFilter() { }
         
         /// <summary>
-        /// The ab test property that the filter will be based on.
+        /// The A/B test property that the filter will be based on.
         /// </summary>
         public ABTestProperty Property { get; set; }
 
@@ -84,12 +84,12 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         State = 0,
 
         /// <summary>
-        /// Id of the content item under test.
+        /// ID of the content item under test.
         /// </summary>
         OriginalItemId = 1,
 
         /// <summary>
-        /// Id of the variant item under test.
+        /// ID of the variant item under test.
         /// </summary>
         VariantId = 2
     }

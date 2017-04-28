@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <summary>
         /// Retrieves all tests, regardless of test state, that have the supplied OriginalItemId.
         /// </summary>
-        /// <param name="originalItemId">Id of the item under test.</param>
+        /// <param name="originalItemId">ID of the item under test.</param>
         /// <returns>List of tests.</returns>
         List<IMarketingTest> GetTestByItemId(Guid originalItemId);
 
@@ -54,19 +54,19 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <summary>
         /// Removes a test from the database.
         /// </summary>
-        /// <param name="testObjectId">Id of a test.</param>
+        /// <param name="testObjectId">ID of a test.</param>
         void Delete(Guid testObjectId);
 
         /// <summary>
         /// Starts a test.
         /// </summary>
-        /// <param name="testObjectId">Id of a test.</param>
+        /// <param name="testObjectId">ID of a test.</param>
         void Start(Guid testObjectId);
 
         /// <summary>
         /// Stops a test.
         /// </summary>
-        /// <param name="testObjectId">Id of a test.</param>
+        /// <param name="testObjectId">ID of a test.</param>
         void Stop(Guid testObjectId);
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <summary>
         /// Saves a KPI result.  The result is appended to the list of results for a given variant version for a test for both historical and statistical calculations.
         /// </summary>
-        /// <param name="testId">Id of a test to save the result to</param>
+        /// <param name="testId">ID of a test to save the result to</param>
         /// <param name="itemVersion">Version of the variant the result pertains to.</param>
         /// <param name="keyResult">The result to save.</param>
         /// <param name="type">Type of the result to save.</param>
@@ -97,7 +97,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         /// <param name="testId">ID of a test.</param>
         /// <param name="itemVersion">Version of the variant that should be updated.</param>
-        /// <param name="kpiId">Id of the KPI count to increment.</param>
+        /// <param name="kpiId">ID of the KPI count to increment.</param>
         /// /// <param name="resultType">Type of count to increment.</param>
         /// <param name="asynch">Boolean stating whether the result should be saved asynchronously or not.</param>
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch=true);

@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.KPI.Common
     public class ContentComparatorKPI : Kpi
     {
         /// <summary>
-        /// Id of the content to be tested.
+        /// ID of the content to be tested.
         /// </summary>
         [DataMember]
         public Guid ContentGuid;
@@ -39,9 +39,9 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         /// <summary>
-        /// Id of the content to be tested.
+        /// ID of the content to be tested.
         /// </summary>
-        /// <param name="contentGuid">Id of the content to be tested.</param>
+        /// <param name="contentGuid">ID of the content to be tested.</param>
         public ContentComparatorKPI(Guid contentGuid)
         {
             ContentGuid = contentGuid;
