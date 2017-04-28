@@ -221,7 +221,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(testId))
             {
-                _webRepo.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
 
                 return Request.CreateResponse(HttpStatusCode.OK, "KpiResult Saved");
             }

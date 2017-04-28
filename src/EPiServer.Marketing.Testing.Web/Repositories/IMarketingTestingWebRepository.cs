@@ -29,10 +29,5 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true);
         List<IMarketingTest> GetActiveCachedTests();
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
-        void EmitUpdateViews(Guid testId, int itemVersion);
-        void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId);
-        void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType resultType);
-
-
     }
 }
