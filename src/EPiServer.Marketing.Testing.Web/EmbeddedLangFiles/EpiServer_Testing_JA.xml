@@ -161,7 +161,7 @@
       </notificationbar>
       <percentagetemplate>
         <conversion_rate>Conversion Rate</conversion_rate>
-        <views>views</views>
+        <views>Views</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>信頼水準</advanced_options_confidence_level>
