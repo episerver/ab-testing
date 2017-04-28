@@ -166,14 +166,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 CalculateKpiWeights(kpiData, kpis, ref variant1ConversionResults, ref variant2ConversionResults);
             }
 
+            // convert startDate to DateTime in UTC
+            var startDate = DateTime.Parse(testData.StartDate).ToUniversalTime();
+
             var test = new ABTest
             {
                 OriginalItemId = testData.TestContentId,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
-                StartDate = DateTime.Parse(testData.StartDate).ToUniversalTime(),
-                EndDate = CalculateEndDateFromDuration(testData.StartDate, testData.TestDuration),
+                StartDate = startDate,
+                EndDate = startDate.AddDays(testData.TestDuration),
                 ParticipationPercentage = testData.ParticipationPercent,
                 State = testData.Start ? TestState.Active : TestState.Inactive,
                 Variants = new List<Variant>
