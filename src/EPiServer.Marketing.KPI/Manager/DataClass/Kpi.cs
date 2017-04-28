@@ -11,7 +11,9 @@ using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
+    /// </summary>
     [DataContract]
     public class Kpi : IKpi
     {
@@ -27,9 +29,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <inheritdoc />
         [DataMember]
         public Guid Id { get; set; }
-        
-        [DataMember]
+
         /// <inheritdoc />
+        [DataMember]
         public virtual ResultComparison ResultComparison
         {
             get
@@ -173,12 +175,14 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Kpi implentation for using the DynamicDataStore that is part of EPiServer for storing commerce related settings.
+        /// </summary>
         [DataMember]
         public CommerceData PreferredCommerceFormat {get; set;}
 
         /// <inheritdoc />
-        public virtual void Validate(Dictionary<string, string> kpiData)
+        public virtual void Validate(Dictionary<string, string> responseData)
         {
             throw new NotImplementedException();
         }

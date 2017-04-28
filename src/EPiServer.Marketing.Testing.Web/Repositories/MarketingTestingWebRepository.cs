@@ -28,7 +28,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private ITestManager _testManager;
         private ILogger _logger;
         private IKpiManager _kpiManager;
-        private IMessagingManager _messagingManager;
+        private IHttpContextHelper _httpContextHelper;
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -39,7 +40,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
             _testManager = _serviceLocator.GetInstance<ITestManager>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-            _messagingManager = _serviceLocator.GetInstance<IMessagingManager>();
+            _httpContextHelper = new HttpContextHelper();
             _logger = LogManager.GetLogger();
         }
         /// <summary>
@@ -51,7 +52,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testResultHelper = locator.GetInstance<ITestResultHelper>();
             _testManager = locator.GetInstance<ITestManager>();
             _kpiManager = locator.GetInstance<IKpiManager>();
-            _messagingManager = locator.GetInstance<IMessagingManager>();
+            _httpContextHelper = locator.GetInstance<IHttpContextHelper>();
+
             _logger = logger;
         }
 
@@ -267,7 +269,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)
         {
-            _testManager.IncrementCount(testId, itemVersion, resultType, kpiId, async);
+            var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
+            var c = new IncrementCountCriteria()
+            {
+                testId = testId,
+                itemVersion = itemVersion,
+                resultType = resultType,
+                kpiId = kpiId,
+                asynch = async,
+                clientId = sessionid
+            };
+            _testManager.IncrementCount(c);
         }
         
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
@@ -284,21 +296,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             return _testManager.EvaluateKPIs(kpis, sender, e);
         }
-
-        public void EmitUpdateViews(Guid testId, int itemVersion)
-        {
-            _messagingManager.EmitUpdateViews(testId, itemVersion);
-        }
-
-        public void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId) {
-            _messagingManager.EmitUpdateConversion(testId, itemVersion, kpiId);
-        }
-
-        public void EmitKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType resultType)
-        {
-            _messagingManager.EmitKpiResultData(testId, itemVersion, keyResult, resultType);
-        }
-        
 
         private
             string GetCurrentUser()

@@ -62,7 +62,7 @@ else
 if([System.Convert]::ToBoolean($generateDoc) -eq $true) {
 	&"$msbuild" /p:Configuration=Release ..\Documentation\KPI\Kpi.shfbproj
 	&"$msbuild" /p:Configuration=Release ..\Documentation\\KPI.Commerce\Kpicommerce.shfbproj
-	&"$msbuild" /p:Configuration=Release ..\Documentation\Messaging\Messaging.shfbproj
+	#&"$msbuild" /p:Configuration=Release ..\Documentation\Messaging\Messaging.shfbproj
 	&"$msbuild" /p:Configuration=Release ..\Documentation\Testing\Testing.shfbproj
 }
 # TODO: 

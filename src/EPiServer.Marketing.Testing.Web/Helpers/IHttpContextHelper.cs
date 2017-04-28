@@ -17,6 +17,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         bool HasItem(string itemId);
 
         /// <summary>
+        /// Returns a request param value, if it exists
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <returns></returns>
+        string GetRequestParam(string itemId);
+
+        /// <summary>
         /// Sets the value of the specified item in the HttpContexts items collection
         /// </summary>
         /// <param name="itemId">id of the item in the collection</param>

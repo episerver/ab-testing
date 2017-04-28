@@ -35,7 +35,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="kpiConversionDictionary"></param>
+        /// <param name="kpiConversionDictionary">Keeps track of each kpi that is part of the test and whether it has converted or not.</param>
         /// <param name="marketingTest">The test the event pertains to.</param>
         public KpiEventArgs(IDictionary<Guid,bool> kpiConversionDictionary, IMarketingTest marketingTest) : base(marketingTest)
         {

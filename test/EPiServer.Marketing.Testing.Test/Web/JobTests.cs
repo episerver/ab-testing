@@ -12,6 +12,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -29,18 +30,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Guid TestToChangeSchedule1 = Guid.NewGuid();
         private Guid TestToChangeSchedule2 = Guid.NewGuid();
 
+        private AdminConfigTestSettings _config = new AdminConfigTestSettings();
+
         private TestSchedulingJob GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ITestingContextHelper>()).Returns(_contextHelper.Object);
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
             _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_ls);
             _locator.Setup(sl => sl.GetInstance<IScheduledJobRepository>()).Returns(_jobRepo.Object);
+            _locator.Setup(sl => sl.GetInstance<AdminConfigTestSettings>()).Returns(_config);
 
             var mtcm = new MarketingTestingContextModel() { DraftVersionContentLink = "draft", PublishedVersionContentLink = "published"};
 
             _contextHelper.Setup(call => call.GenerateContextData(It.IsAny<IMarketingTest>())).Returns(mtcm);
             
-
             var testToPublish = new ABTest()
             {
                 Id = TestToAutoPublish,
@@ -135,12 +138,32 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void ExcuteStopsTest()
         {
             var unit = GetUnitUnderTest();
+            _config.AutoPublishWinner = false;
+
             unit.Execute();
 
             _webRepo.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), 
                 "Get did not call getTestList");
             _webRepo.Verify(tm => tm.StopMarketingTest(It.Is<Guid>(g => g == TestToStop)), Times.Once, 
                 "Failed to stop test with proper Guid");
+            _webRepo.Verify(m => m.PublishWinningVariant(It.IsAny<TestResultStoreModel>()), Times.Never,
+                "Tried to publish results even though auto publish is false.");
+        }
+
+        [Fact]
+        public void ExcuteStopsTestAndAutoPublishes()
+        {
+            var unit = GetUnitUnderTest();
+            _config.AutoPublishWinner = true;
+
+            unit.Execute();
+
+            _webRepo.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()),
+                "Get did not call getTestList");
+            _webRepo.Verify(tm => tm.StopMarketingTest(It.Is<Guid>(g => g == TestToStop)), Times.Once,
+                "Failed to stop test with proper Guid");
+            _webRepo.Verify(m => m.PublishWinningVariant(It.IsAny<TestResultStoreModel>()), Times.Exactly(2),
+                "Failed to auto publish results");
         }
 
         public class MyLS : LocalizationService

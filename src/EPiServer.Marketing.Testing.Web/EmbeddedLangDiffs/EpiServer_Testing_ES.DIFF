@@ -6,6 +6,7 @@
         <control path="/abtesting/addtestview/control/">A / Control</control>
         <conversion_description path="/abtesting/addtestview/conversion_description/">By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <goals_selectlist_additional_kpi path="/abtesting/addtestview/goals_selectlist_additional_kpi/">Add another goal</goals_selectlist_additional_kpi>
+        <goals_selectlist_default path="/abtesting/addtestview/goals_selectlist_default/">Add a goal</goals_selectlist_default>
         <goals_weight_description path="/abtesting/addtestview/goals_weight_description/">Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description path="/abtesting/addtestview/goals_weight_equal_description/">If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
         <goals_weight_heading path="/abtesting/addtestview/goals_weight_heading/">Balance the importance of the test goals:</goals_weight_heading>
@@ -36,13 +37,18 @@
       </kpisummarywidget>
       <percentagetemplate>
         <conversion_rate path="/abtesting/percentagetemplate/conversion_rate/">Conversion Rate</conversion_rate>
-        <views path="/abtesting/percentagetemplate/views/">views</views>
+        <views path="/abtesting/percentagetemplate/views/">Views</views>
       </percentagetemplate>
       <pickwinnerview>
         <content_control_header path="/abtesting/pickwinnerview/content_control_header/">A / Control</content_control_header>
         <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
         <show_summary path="/abtesting/pickwinnerview/show_summary/">Show Details</show_summary>
       </pickwinnerview>
+      <summary_widget>
+        <conversion_rate path="/abtesting/summary_widget/conversion_rate/">Conversion Rate</conversion_rate>
+        <conversions path="/abtesting/summary_widget/conversions/">Conversions</conversions>
+        <views path="/abtesting/summary_widget/views/">Views</views>
+      </summary_widget>
       <tasks>
         <category path="/abtesting/tasks/category/">A/B Tests</category>
       </tasks>

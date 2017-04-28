@@ -66,12 +66,16 @@
     width: 50%;
 }
 
+.epi-kpiSummaries-markup-td div {
+    margin-top:20px;
+}
+
 .epi-kpiSummaries-data-td {
     width: 15%;
 }
 
 .epi-kpiSummaries-selector-td {
-    width: 25%;
+    min-width: 75px;
 }
 
 .epi-percentTemplate {

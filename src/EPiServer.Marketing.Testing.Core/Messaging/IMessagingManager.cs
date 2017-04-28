@@ -5,7 +5,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 namespace EPiServer.Marketing.Testing.Messaging
 {
     /// <summary>
-    /// 
+    /// Emits asynchronous messages for views, conversions, and kpi results.
     /// </summary>
     public interface IMessagingManager
     {
@@ -22,7 +22,8 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <param name="testId">Id of a test.</param>
         /// <param name="itemVersion">Version of the cms item that caused a conversion.</param>
         /// <param name="kpiId">Id of the kpi that caused a conversion.</param>
-        void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId = default(Guid));
+        /// <param name="clientId">Optional client id that will be used to throttle agressive clients and prevent multiple conversions.</param>
+        void EmitUpdateConversion(Guid testId, int itemVersion, Guid kpiId = default(Guid), string clientId=null);
 
         /// <summary>
         /// Emits the asynchronous message to add a kpi result to the specified Variant version.

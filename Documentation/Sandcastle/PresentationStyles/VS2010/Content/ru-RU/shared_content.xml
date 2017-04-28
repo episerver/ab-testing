@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <content xml:space="preserve"
 				 xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
 <!-- Translations provided by Sergey Zhurikhin -->
@@ -103,7 +102,6 @@
   <item id="devlang_trueKeyword"><span class="keyword">true</span> (<span class="keyword">True</span> в Visual Basic)</item>
   <item id="devlang_falseKeyword"><span class="keyword">false</span> (<span class="keyword">False</span> в Visual Basic)</item>
   <item id="devlang_abstractKeyword"><span class="keyword">abstract</span> (<span class="keyword">MustInherit</span> в Visual Basic)</item>
-  <item id="devlang_sealedKeyword"><span class="keyword">sealed</span> (<span class="keyword">NotInheritable</span> в Visual Basic)</item>
   <item id="devlang_asyncKeyword"><span class="keyword">async</span> (<span class="keyword">Async</span> в Visual Basic)</item>
   <item id="devlang_awaitKeyword"><span class="keyword">await</span> (<span class="keyword">Await</span> в Visual Basic)</item>
   <item id="devlang_asyncAwaitKeyword"><span class="keyword">async</span>/<span class="keyword">await</span> (<span class="keyword">Async</span>/<span class="keyword">Await</span> в Visual Basic)</item>

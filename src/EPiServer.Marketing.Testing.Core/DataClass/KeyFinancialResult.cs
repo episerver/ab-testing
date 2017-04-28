@@ -37,10 +37,10 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// </summary>
         public Guid? VariantId { get; set; }
 
-        [ExcludeFromCodeCoverage]
         /// <summary>
         /// The variant the result pertains to.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual Variant Variant { get; set; }
 
     }

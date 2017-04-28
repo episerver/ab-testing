@@ -183,7 +183,7 @@
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
             this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlDetailsSummaryNode, this.controlConversionPercent));
             this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerDetailsSummaryNode, this.challengerConversionPercent));
-
+            textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
@@ -201,12 +201,14 @@
             this._clearKpiMarkup(kpiuiElement);
 
             for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                var goalsFriendlyName = DomConstruct.toDom("<label class='epi-kpiLabel-bold'>" + this.context.data.test.kpiInstances[x].friendlyName + "</label>");
                 var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
 
                 var goalsContent = new ContentPane({
                     content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
                 }).placeAt(kpiuiElement);
-                dojo.place(goalsDescription, goalsContent.containerNode);
+                dojo.place(goalsFriendlyName, goalsContent.containerNode, "first");
+                dojo.place(goalsDescription, goalsContent.containerNode, "last");
             }
         },
 

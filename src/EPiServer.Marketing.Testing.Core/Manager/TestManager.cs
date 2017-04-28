@@ -18,12 +18,18 @@ using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
+    /// <summary>
+    /// Used to say what operation should be done to the cache.
+    /// </summary>
     public enum CacheOperator
     {
         Add,
         Remove
     }
 
+    /// <summary>
+    /// Central point of access for test data and test manipulation.
+    /// </summary>
     [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {
@@ -37,8 +43,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private DefaultMarketingTestingEvents _marketingTestingEvents;
 
         public bool DatabaseNeedsConfiguring;
-    
 
+        /// <inheritdoc />
         public List<IMarketingTest> ActiveCachedTests
         {
             get
@@ -142,7 +148,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return testList;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Saves a test to the database.
+        /// </summary>
+        /// <param name="multivariateTest">A test.</param>
+        /// <returns>Id of the test.</returns>
         public Guid Save(IMarketingTest multivariateTest)
         {
             // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
@@ -300,26 +310,39 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return retData ?? UpdateVariantContentCache(contentGuid);
         }
 
-        private Object thisLock = new Object();
+        private Object _incrementLock = new Object();
+        /// <inheritdoc />
+        public void IncrementCount(IncrementCountCriteria criteria)
+        {
+            if (criteria.asynch)
+            {
+                var messaging = _serviceLocator.GetInstance<IMessagingManager>();
+                if (criteria.resultType == CountType.Conversion)
+                    messaging.EmitUpdateConversion(criteria.testId, criteria.itemVersion, criteria.kpiId, criteria.clientId);
+                else if (criteria.resultType == CountType.View)
+                    messaging.EmitUpdateViews(criteria.testId, criteria.itemVersion);
+            }
+            else
+            {
+                lock (_incrementLock)
+                {
+                    _dataAccess.IncrementCount(criteria.testId, criteria.itemVersion, TestManagerHelper.AdaptToDalCount(criteria.resultType), criteria.kpiId);
+                }
+            }
+        }
 
         /// <inheritdoc />
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch = true)
         {
-            if (asynch)
+            var c = new IncrementCountCriteria()
             {
-                var messaging = _serviceLocator.GetInstance<IMessagingManager>();
-                if (resultType == CountType.Conversion)
-                    messaging.EmitUpdateConversion(testId, itemVersion, kpiId);
-                else if (resultType == CountType.View)
-                    messaging.EmitUpdateViews(testId, itemVersion);
-            }
-            else
-            {
-                lock (thisLock)
-                {
-                    _dataAccess.IncrementCount(testId, itemVersion, TestManagerHelper.AdaptToDalCount(resultType), kpiId);
-                }
-            }
+                testId = testId,
+                itemVersion = itemVersion,
+                resultType = resultType,
+                kpiId = kpiId,
+                asynch = asynch
+            };
+            IncrementCount(c);
         }
 
         /// <inheritdoc />

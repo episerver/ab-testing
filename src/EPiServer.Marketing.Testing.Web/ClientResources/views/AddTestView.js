@@ -138,6 +138,7 @@
                     this.isMultiKpiTest = true;
                 }
                 this._adjustKpiSelectorCombo();
+                this._toggleKpiWeights();
             },
 
             startup: function () {
@@ -331,28 +332,33 @@
 
             //Validates the date information is A) a valid date format and B) not in the past
             _isValidStartDate: function () {
-                var errorTextNode = dom.byId("datePickerErrorText");
-                var errorIconNode = dom.byId("datePickerErrorIcon");
-                var scheduleText = dom.byId("ScheduleText");
-                var start = this.startDatePicker.get("value");
-                var now = new Date();
+                if (dom.byId("delayStartOption").checked) {
+                    var errorTextNode = dom.byId("datePickerErrorText");
+                    var errorIconNode = dom.byId("datePickerErrorIcon");
+                    var scheduleText = dom.byId("ScheduleText");
+                    var start = this.startDatePicker.get("value");
+                    var now = new Date();
 
-                if (start !== "") {
-                    if (isNaN(new Date(start))) {
-                        this._setError(resources.addtestview.error_invalid_date_time_value,
-                            errorTextNode,
-                            errorIconNode);
-                        scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
-                        return false;
-                    } else if (new Date(start).toLocaleString < now.toLocaleString) {
-                        this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
-                        scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
-                        return false;
+                    if (start !== "") {
+                        if (isNaN(new Date(start))) {
+                            this._setError(resources.addtestview.error_invalid_date_time_value,
+                                errorTextNode,
+                                errorIconNode);
+                            scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
+                            return false;
+                        } else if (new Date(start).getTime() < now.getTime()) {
+                            this._setError(resources.addtestview.error_date_in_the_past, errorTextNode, errorIconNode);
+                            scheduleText.innerText = resources.addtestview.error_test_not_schedulded_or_started;
+                            return false;
+                        }
                     }
-                }
 
-                this._setError("", errorTextNode, errorIconNode);
-                return true;
+                    this._setError("", errorTextNode, errorIconNode);
+                    return true;
+                }
+                else {
+                    return true;
+                }
             },
 
             //Validates the supplied string as a positive integer
@@ -415,6 +421,11 @@
                 var kpiSelector = dom.byId("kpiSelectorCombo");
                 if (kpiSelector) {
                     kpiSelector.style.display = "block";
+                }
+
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (advancedOptionsElement) {
+                    dojo.style(advancedOptionsElement, "display", "none");
                 }
 
                 this._setViewConfidenceLevelAttr();
@@ -539,7 +550,7 @@
 
             createTest: function (kpiIds) {
                 this._clearConversionErrors();
-                var jsonKpis = dojo.toJson(kpiIds, true);
+                var jsonKpis = dojo.toJson(kpiIds.obj, true);
                 this.model.kpiId = jsonKpis.replace(/(\r\n|\n|\r|\t)/gm, "");
                 if (this._isValidFormData()) {
                     this.model.createTest();
@@ -585,6 +596,10 @@
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
                 this._adjustKpiSelectorCombo();
+                var advancedOptionsElement = dom.byId("advancedOptions");
+                if (advancedOptionsElement) {
+                    dojo.style(advancedOptionsElement, "display", "none");
+                }
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
@@ -608,10 +623,10 @@
                         kpiType: kpiObject.kpiType
                     });
 
-                    kpiWidgetInstance.placeAt(kpiWidget);
+                    kpiWidgetInstance.placeAt(kpiWidget, 'first');
                     aspect.after(kpiWidgetInstance,
                         'destroy',
-                        function() {
+                        function () {
                             me.decrementKpiEntries();
                         });
 
@@ -619,7 +634,7 @@
                         label: kpiObject.kpi.friendlyName,
                         kpiWidgetId: kpiWidgetInstance.id,
                         value: "Medium"
-                    }).placeAt(kpiWeightWidget);
+                    }).placeAt(kpiWeightWidget, 'first');
                     kpiWidgetInstance._setlinkedWidgetIdAttr(weightWidget.id);
 
                     if (kpiObject.kpi.kpiResultType != "KpiConversionResult") {
@@ -627,16 +642,20 @@
                     }
                     this.kpiEntries++;
 
-                    this._adjustKpiSelectorCombo(kpiWidgetInstance.id);
+                    this._toggleKpiWeights();
+                    this._adjustKpiSelectorCombo();
                 }
             },
 
-            _isScrolledIntoView: function (el) {
-                var elemTop = el.getBoundingClientRect().top;
-                var elemBottom = el.getBoundingClientRect().bottom;
+            _toggleKpiWeights: function () {
+                var kpiWeights = dom.byId("kpiWeightAdvancedSection");
 
-                var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
-                return isVisible;
+                if (this.kpiEntries > 1) {
+                    kpiWeights.style.display = 'block';
+                }
+                else {
+                    kpiWeights.style.display = 'none';
+                }
             },
 
             // Form Field Events
@@ -692,12 +711,6 @@
                 dijitSelector.set("value", "default");
                 var kpiSelector = dom.byId("kpiSelectorCombo");
 
-                if (kpiId) {
-                    var kpiWidget = dom.byId(kpiId);
-                    if (!this._isScrolledIntoView(kpiWidget)) {
-                        kpiWidget.scrollIntoView(true);
-                    }
-                }
                 if (this.kpiEntries == this.model.kpiLimit || this.isMultiKpiTest != true) {
                     kpiSelector.style.display = "none";
                 } else {
@@ -726,9 +739,10 @@
                     advancedOptionsElement.scrollIntoView(true);
                 }
                 else {
-                    dojo.style(advancedOptionsElement, "display", "none");
-                    if (!evt.srcElement.id) {
-                        this.advancedOptions.reset();
+                    if (evt.currentTarget.id == "advancedOptionsLink") {
+                        advancedOptionsElement.scrollIntoView(true);
+                    } else {
+                        dojo.style(advancedOptionsElement, "display", "none");
                     }
                 }
             }

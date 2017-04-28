@@ -14,11 +14,6 @@ using System.Web.Http;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Marketing.KPI.Manager;
-using System.Collections.Generic;
-using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
-using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -32,6 +27,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class TestingController : ApiController, IConfigurableModule
     {
         private IServiceLocator _serviceLocator;
+        private IHttpContextHelper _httpContextHelper;
         private IMarketingTestingWebRepository _webRepo;
         private IKpiWebRepository _kpiWebRepo;
 
@@ -39,12 +35,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public TestingController()
         {
             _serviceLocator = ServiceLocator.Current;
+            _httpContextHelper = new HttpContextHelper();
         }
 
         [ExcludeFromCodeCoverage]
-        internal TestingController(IServiceLocator serviceLocator)
+        internal TestingController(IHttpContextHelper contexthelper)
         {
-            _serviceLocator = serviceLocator;
+            _serviceLocator = ServiceLocator.Current;
+            _httpContextHelper = contexthelper;
         }
 
         [ExcludeFromCodeCoverage]
@@ -71,9 +69,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetAllTests()
         {
-            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
-            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(_webRepo.GetTestList(new TestCriteria()), Formatting.Indented,
+            return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(tm.GetTestList(new TestCriteria()), Formatting.Indented,
                 new JsonSerializerSettings
                 {
                     // Apparently there is some loop referenceing problem with the 
@@ -87,10 +85,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public HttpResponseMessage GetTest(string id)
         {
-            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
 
             var testId = Guid.Parse(id);
-            var test = _webRepo.GetTestById(testId);
+            var test = tm.GetTestById(testId);
             if (test != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(test, Formatting.Indented,
@@ -112,13 +110,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateView(FormDataCollection data)
         {
-            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             if (!string.IsNullOrWhiteSpace(testId))
-            {                
-                _webRepo.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
+            {
+                var mm = _serviceLocator.GetInstance<IMessagingManager>();
+                mm.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -130,15 +127,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
-            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
             var kpiId = data.Get("kpiId");
 
             if (!string.IsNullOrWhiteSpace(testId))
             {
-                _webRepo.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId));
+                var mm = _serviceLocator.GetInstance<IMessagingManager>();
+                var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
+
+                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId), sessionid);
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Conversion Successful");
             }
@@ -151,11 +149,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
-            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-
             try
-            {
-                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
+            { 
+                var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+                var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpiId = Guid.Parse(data.Get("kpiId"));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
 

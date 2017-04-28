@@ -3,6 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Used to track conversions for a given kpi and content item(variant).
+    /// </summary>
     public class KeyConversionResult : CoreEntityBase, IKeyResult
     {
         /// <inheritdoc />

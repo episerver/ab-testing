@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <summary>
         /// Scans all assemblies and gets all instances of type IKPI
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of all KPI types found in assemblies in the current app domain.</returns>
         IEnumerable<Type> GetKpiTypes();
 
         /// <summary>

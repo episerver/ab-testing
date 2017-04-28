@@ -95,17 +95,17 @@
                         <h4>
                             ${resources.addtestview.conversion_header}
                         </h4>
-                        <p>
-                            ${resources.addtestview.conversion_description} <a class="epi-visibleLink" data-dojo-attach-event="onclick: _showAdvancedOptions">${resources.addtestview.advanced_options}</a>.
+                        <p class="epi-abtest-narrowMarginBottom">
+                            ${resources.addtestview.conversion_description} <a id="advancedOptionsLink" class="epi-visibleLink" data-dojo-attach-event="onclick: _showAdvancedOptions">${resources.addtestview.advanced_options}</a>.
                         </p>
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
-                              class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                              class="epi-ab-errorIcon epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
                         </span>
                         <span id="kpiErrorText" class="epi-ab-errorText">
                         </span>
                         <!-- KPI UI Element-->
-                        <div id="kpiSelectorCombo">
+                        <div id="kpiSelectorCombo" class="epi-abtest-narrowMarginBottom">
                             <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onGoalSelectChange"></select>
                         </div>
                         <div>
@@ -199,7 +199,7 @@
                     </button>
                     <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;">
                         <!-- Kpi Weights -->
-                        <div class="cardBody">
+                        <div id="kpiWeightAdvancedSection" class="cardBody" style="display: none;">
                             <h4>${resources.addtestview.goals_weight_heading}</h4>
                             <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_description}</p>
                             <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_higher_description}</p>

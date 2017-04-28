@@ -58,18 +58,19 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// The last time the kpi was modified.
         /// </summary>
         DateTime ModifiedDate { get; set; }
-        
+
         /// <summary>
         /// Provides specific validation of data prior to creating the KPI
         /// </summary>
-        /// <param name="kpiData">dictionary of data used to validate and save an instance of a KPI</param>
-        void Validate(Dictionary<string,string> kpiData);
+        /// <param name="responseData">Dictionary of data used to validate and save an instance of a KPI</param>
+        void Validate(Dictionary<string,string> responseData);
 
         /// <summary>
         /// Determines if a conversion has happened.  Each kpi will decide this differently based on the sender, event args, and the purpose of the kpi.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e">Event Argument</param>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">The expected Event Argument which contains the necessary info used to decide if a conversion has occured.</param>
+        /// <returns>A result containing the necessary data to record a conversion.</returns>
         IKpiResult Evaluate(object sender, EventArgs e);
 
         /// <summary>

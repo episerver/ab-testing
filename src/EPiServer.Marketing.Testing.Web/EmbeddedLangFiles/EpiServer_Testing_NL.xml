@@ -33,7 +33,7 @@
         <goals_default_text>Bijv. Door de kopie in het eerste aandachtspunt zo aan te passen dat het ‘tijdprobleem’ direct wordt aangepakt, kan ik meer bezoekers motiveren om het e-book te downloaden.</goals_default_text>
         <goals_header>Wat is het algemene doel van deze test?</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Selecteer doel</goals_selectlist_default>
+        <goals_selectlist_default>Add a goal</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
@@ -161,7 +161,7 @@
       </notificationbar>
       <percentagetemplate>
         <conversion_rate>Conversion Rate</conversion_rate>
-        <views>views</views>
+        <views>Views</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Betrouwbaarheidsniveau</advanced_options_confidence_level>
@@ -212,6 +212,11 @@
         <displayname>Marketingtestmonitor</displayname>
         <message>Gestart [{0}] Gestopt [{1}] Actief [{2}] Inactief [{3}] Voltooid [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Actieve A/B-tests</activetests>
         <archivedtests>Gearchiveerde A/B-tests</archivedtests>

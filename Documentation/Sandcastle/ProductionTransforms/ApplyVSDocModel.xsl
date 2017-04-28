@@ -5,17 +5,19 @@
                 version="2.0">
 
 	<xsl:output indent="yes" encoding="UTF-8" />
-
 	<xsl:param name="derivedTypesLimit" />
 	<xsl:param name="project" />
 
-	<!-- Set to true to create a separate All Members topic or false if members are listed in the type topic -->
+	<!-- Set to true for vs2005; set to false for vsorcas/prototype. -->
 	<xsl:param name="IncludeAllMembersTopic" select="'false'" />
+
+	<!-- If member list topics handle overloads with one row that points to an overload topic, set IncludeInheritedOverloadTopics to false. -->
+	<!-- If member list topics show a separate row for each overload signature, set IncludeInheritedOverloadTopics to false. -->
+	<xsl:param name="IncludeInheritedOverloadTopics" select="'false'" />
 
 	<xsl:key name="index" match="/reflection/apis/api" use="@id" />
 
 	<xsl:variable name="root" select="/" />
-
 	<xsl:template match="/">
 		<reflection>
 			<xsl:apply-templates select="/reflection/assemblies" />
@@ -111,7 +113,7 @@
                                   ]
                                 ]" />
 									<!-- When the reflection data includes multiple versions, $overloadSet may include multiple elements that have 
-                       the same signature (same params and return type), which we call a signature set. 
+                       the same signature (same params and return type), which we call a signatureset. 
                        For example, NetFx and CF apis that have the same signature but different ids. 
                        These are treated as a primary <element> node for the NetFx api, with a nested <element> node for CF api.
                   -->
@@ -122,7 +124,7 @@
 											<xsl:with-param name="typeId" select="$typeId"/>
 										</xsl:call-template>
 									</xsl:variable>
-									<!-- it's an overload if there are multiple signature sets -->
+									<!-- it's an overload if there are multiple signaturesets -->
 									<xsl:if test="count(msxsl:node-set($signatureSet)/*) &gt; 1">
 										<!-- the api is overloaded, so add @overload = idOfOverloadTopic -->
 										<xsl:attribute name="overload">
@@ -379,7 +381,7 @@
 				<xsl:with-param name="typeId" select="$typeId" />
 			</xsl:call-template>
 
-			<!-- property list topic -->
+			<!-- propety list topic -->
 			<xsl:call-template name="AddMemberlistAPI">
 				<xsl:with-param name="subgroup">property</xsl:with-param>
 				<xsl:with-param name="topicSubgroup">Properties</xsl:with-param>
@@ -491,8 +493,8 @@
 						<xsl:choose>
 							<!-- don't need an overload topic if only one signature -->
 							<xsl:when test="count(msxsl:node-set($signatureSet)/*) &lt; 2"/>
-							<!-- don't need an overload topic if all overloads are inherited -->
-							<xsl:when test="not(boolean($declaredMembers))"/>
+							<!-- don't need an overload topic if all overloads are inherited and config'd to omit overload topics when all are inherited -->
+							<xsl:when test="(not(boolean($declaredMembers)) and $IncludeInheritedOverloadTopics='false')"/>
 							<!-- otherwise, add an overload topic -->
 							<xsl:otherwise>
 								<api>
@@ -580,8 +582,8 @@
 						<xsl:choose>
 							<!-- don't need an overload topic if only one signature -->
 							<xsl:when test="count(msxsl:node-set($signatureSet)/*) &lt; 2"/>
-							<!-- don't need an overload topic if all overloads are inherited -->
-							<xsl:when test="not(boolean($declaredMembers))"/>
+							<!-- don't need an overload topic if all overloads are inherited and config'd to omit overload topics when all are inherited -->
+							<xsl:when test="(not(boolean($declaredMembers)) and $IncludeInheritedOverloadTopics='false')"/>
 							<!-- extension methods do not get overload topics -->
 							<xsl:when test="$subsubgroup='extension'"/>
 							<!-- otherwise, add an overload topic -->
@@ -738,7 +740,7 @@
 										<xsl:if test="count(msxsl:node-set($nonPrimaryVersionElementSet)/*) &gt; 0">
 											<xsl:attribute name="signatureset"/>
 										</xsl:if>
-										<!-- copy attributes and inner xml from the original element node -->
+										<!-- copy attributes and innerxml from the original element node -->
 										<xsl:choose>
 											<xsl:when test="local-name()='element'">
 												<xsl:copy-of select="@*"/>
@@ -750,7 +752,7 @@
 												</xsl:for-each>
 											</xsl:otherwise>
 										</xsl:choose>
-										<!-- for the secondary version groups, copy in the signature set's latest member (if different from primary member) -->
+										<!-- for the secondary version groups, copy in the signatureset's latest member (if different from primary member) -->
 										<xsl:copy-of select="msxsl:node-set($nonPrimaryVersionElementSet)/*"/>
 									</element>
 								</xsl:for-each>
@@ -875,7 +877,7 @@
 		<xsl:variable name="memberName">
 			<xsl:choose>
 				<xsl:when test="$apidataName='.ctor' or $apidataName='.cctor'">ctor</xsl:when>
-				<!-- for explicit interface implementation members, return the member name with # instead of ., so it matches cref ids -->
+				<!-- for explicit interface implementation members, return the membername with # instead of ., so it matches cref ids -->
 				<xsl:when test="memberdata[@visibility='private'] and proceduredata[@virtual = 'true']">
 					<xsl:value-of select="translate($apidataName,'.','#')"/>
 				</xsl:when>
@@ -998,6 +1000,11 @@
 								<xsl:when test="count(msxsl:node-set($signatureSet)/*) = 1">
 									<xsl:copy-of select="msxsl:node-set($signatureSet)/*"/>
 								</xsl:when>
+								<!-- just copy the elements if all overloads are inherited and config'd to omit overload topics when all are inherited -->
+								<!-- !EFW - Do generate overloads in the member and method list pages so that the parameters show up -->
+								<!--                <xsl:when test="(not(boolean($declaredMembers)) and $IncludeInheritedOverloadTopics='false')">
+                  <xsl:copy-of select="msxsl:node-set($signatureSet)/*"/>
+                </xsl:when> -->
 								<xsl:otherwise>
 									<element>
 										<xsl:attribute name="api">
@@ -1055,8 +1062,13 @@
 								<xsl:when test="count(msxsl:node-set($signatureSet)/*) = 1">
 									<xsl:copy-of select="msxsl:node-set($signatureSet)/*"/>
 								</xsl:when>
+								<!-- just copy the elements if all overloads are inherited and config'd to omit overload topics when all are inherited -->
+								<!-- !EFW - Do generate overloads in the member and method list pages so that the parameters show up -->
+								<!--                <xsl:when test="(not(boolean($declaredMembers)) and $IncludeInheritedOverloadTopics='false')">
+                  <xsl:copy-of select="msxsl:node-set($signatureSet)/*"/>
+                </xsl:when> -->
 								<!-- no overload topics for extension methods -->
-								<!-- but we need to mark the elements as overloaded (so the member list link shows parameters) -->
+								<!-- but we need to mark the elements as overloaded (so the memberlist link shows parameters) -->
 								<xsl:when test="$subsubgroup='extension'">
 									<xsl:for-each select="msxsl:node-set($signatureSet)/*">
 										<element>

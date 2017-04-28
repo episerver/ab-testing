@@ -33,7 +33,7 @@
         <goals_default_text>F.eks. Ved at tilpasse teksten i det første punkt på listen, så den takler "tidsproblemet", kan jeg motivere flere brugere til at hente e-bogen.</goals_default_text>
         <goals_header>Hvad er det overordnede mål for denne test?</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Vælg mål</goals_selectlist_default>
+        <goals_selectlist_default>Add a goal</goals_selectlist_default>
         <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
@@ -161,7 +161,7 @@
       </notificationbar>
       <percentagetemplate>
         <conversion_rate>Conversion Rate</conversion_rate>
-        <views>views</views>
+        <views>Views</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Tillidsniveau</advanced_options_confidence_level>
@@ -210,6 +210,11 @@
         <displayname>Marketingtestovervåger</displayname>
         <message>Startet [{0}] Stoppet [{1}] Aktiv [{2}] Inaktiv [{3}] Fuldført [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Aktive A/B-test</activetests>
         <archivedtests>Arkiverede A/B-test</archivedtests>

@@ -79,6 +79,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         #endregion
 
+        /// <summary>
+        /// Instance used to fire events.
+        /// </summary>
         public static DefaultMarketingTestingEvents Instance
         {
             get
@@ -217,13 +220,21 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         #endregion
 
         #region Event Raisers
-        /// <inheritdoc />
+        /// <summary>
+        /// Fires off an event based off the key passed in and containing the args passed in.
+        /// </summary>
+        /// <param name="key">Name of the event to fire.</param>
+        /// <param name="eventArgs">Test details pertaining to the event.</param>
         public virtual void RaiseMarketingTestingEvent(string key, TestEventArgs eventArgs)
         {
             Task.Factory.StartNew(() => (Events[GetEventKey(key)] as EventHandler<TestEventArgs>)?.Invoke(this, eventArgs));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Fires off an event based off the key passed in and containing the args passed in.
+        /// </summary>
+        /// <param name="key">Name of the event to fire.</param>
+        /// <param name="eventArgs">KPI details pertaining to the event.</param>
         public virtual void RaiseMarketingTestingEvent(string key, KpiEventArgs eventArgs)
         {
             Task.Factory.StartNew(() => (Events[GetEventKey(key)] as EventHandler<KpiEventArgs>)?.Invoke(this, eventArgs));

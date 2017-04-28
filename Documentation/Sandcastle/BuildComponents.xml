@@ -4,7 +4,7 @@
         <name>BuildComponents</name>
     </assembly>
     <members>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.AdditionalHeaderResourcesComponent">
+        <member name="T:Microsoft.Ddue.Tools.AdditionalHeaderResourcesComponent">
             <summary>
             This component is used add additional metadata, style sheet, and script file resources to the header of
             the transformed topics.
@@ -14,24 +14,24 @@
             elements will be appended to the end of the <c>head</c> element.  In addition, <c>meta</c> elements can
             be added.  The metadata will be added to the start of the <c>head</c> element verbatim.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.AdditionalHeaderResourcesComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.AdditionalHeaderResourcesComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.AdditionalHeaderResourcesComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.AdditionalHeaderResourcesComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.AdditionalHeaderResourcesComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.AdditionalHeaderResourcesComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.AdditionalHeaderResourcesComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.AdditionalHeaderResourcesComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.AdditionalHeaderResourcesComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.AdditionalHeaderResourcesComponent.Factory.Create">
             <inheritdoc />
         </member>
         <member name="T:Microsoft.Ddue.Tools.Commands.CopyCommand">
@@ -73,7 +73,7 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.Commands.CopyFromFileCommand">
             <summary>
-            This represents the copy command for the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent"/>
+            This represents the copy command for the <see cref="T:Microsoft.Ddue.Tools.CopyFromFileComponent"/>
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Commands.CopyFromFileCommand.#ctor(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore,System.Xml.XPath.XPathDocument,System.String,System.String)">
@@ -99,7 +99,7 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.Commands.CopyFromFilesCommand">
             <summary>
-            This represents the copy command for the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent"/>
+            This represents the copy command for the <see cref="T:Microsoft.Ddue.Tools.CopyFromFilesComponent"/>
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Commands.CopyFromFilesCommand.#ctor(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore,System.String,System.String,System.String,System.String)">
@@ -131,7 +131,7 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.Commands.CopyFromIndexCommand">
             <summary>
-            This represents the copy command for the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent"/>
+            This represents the copy command for the <see cref="T:Microsoft.Ddue.Tools.CopyFromIndexComponent"/>
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Commands.CopyFromIndexCommand.#ctor(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore,Microsoft.Ddue.Tools.Commands.IndexedCache,System.String,System.String,System.String,System.Boolean,System.Boolean)">
@@ -195,11 +195,11 @@
             such as reflection information and XML comments.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.Commands.IndexedCache.#ctor(Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.Commands.IndexedCache.#ctor(Microsoft.Ddue.Tools.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
             <summary>
             Constructor
             </summary>
-            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
+            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
             <param name="context">A context to use with the key and value XPath expressions</param>
             <param name="configuration">The configuration to use</param>
         </member>
@@ -253,7 +253,7 @@
         </member>
         <member name="P:Microsoft.Ddue.Tools.Commands.IndexedCache.Component">
             <summary>
-            This read-only property returns a reference to the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent"/> that owns it
+            This read-only property returns a reference to the <see cref="T:Microsoft.Ddue.Tools.CopyFromIndexComponent"/> that owns it
             </summary>
         </member>
         <member name="P:Microsoft.Ddue.Tools.Commands.IndexedCache.Name">
@@ -298,11 +298,11 @@
             containing the requested keys are loaded and cached in memory.  When the cache fills, the oldest file is
             unloaded to make room for a new file.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.Commands.InMemoryIndexedCache.#ctor(Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.Commands.InMemoryIndexedCache.#ctor(Microsoft.Ddue.Tools.CopyFromIndexComponent,System.Xml.XmlNamespaceManager,System.Xml.XPath.XPathNavigator)">
             <summary>
             Constructor
             </summary>
-            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
+            <param name="component">The <see cref="T:Microsoft.Ddue.Tools.CopyFromIndexComponent"/> to which the indexed cache belongs</param>
             <param name="context">A context to use with the key and value XPath expressions</param>
             <param name="configuration">The indexed cache configuration</param>
         </member>
@@ -339,9 +339,9 @@
             This read-only property returns the XPath navigator for the specified key
             </summary>
             <param name="key">The key to look up</param>
-            <returns>The XPath navigator associated with the key</returns>
+            <returns>The XPath navigagor associated with the key</returns>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.LanguageSpecificTextComponent">
+        <member name="T:Microsoft.Ddue.Tools.LanguageSpecificTextComponent">
             <summary>
             This component is used to convert the span style language-specific text elements to the script style
             elements used in the VS2010 and later styles.
@@ -350,29 +350,29 @@
             the JavaScript function to call can be specified.  If omitted, the function name defaults to
             "<c>AddLanguageSpecificTextSet</c>".</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.LanguageSpecificTextComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.LanguageSpecificTextComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.LanguageSpecificTextComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.LanguageSpecificTextComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.LanguageSpecificTextComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.LanguageSpecificTextComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.LanguageSpecificTextComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.LanguageSpecificTextComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.LanguageSpecificTextComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.LanguageSpecificTextComponent.Factory.Create">
             <inheritdoc />
         </member>
         <member name="T:Microsoft.Ddue.Tools.Snippets.CodeSnippet">
             <summary>
-            This is used to track a single code snippet in the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent"/>
+            This is used to track a single code snippet in the <see cref="T:Microsoft.Ddue.Tools.SyntaxComponent"/>
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Snippets.CodeSnippet.#ctor(System.Xml.XmlElement)">
@@ -413,7 +413,7 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.Snippets.CodeSnippetGroup">
             <summary>
-            This is used to track a group of related code snippets in the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent"/>
+            This is used to track a group of related code snippets in the <see cref="T:Microsoft.Ddue.Tools.SyntaxComponent"/>
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Snippets.CodeSnippetGroup.#ctor(System.Xml.XmlElement)">
@@ -437,11 +437,6 @@
         <member name="P:Microsoft.Ddue.Tools.Snippets.CodeSnippetGroup.IsStandalone">
             <summary>
             This is used to get or set whether or not the group is a single, standalone snippet
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.Snippets.CodeSnippetGroup.IsSyntaxSection">
-            <summary>
-            This is used to get or set whether or not the group is a syntax section
             </summary>
         </member>
         <member name="T:Microsoft.Ddue.Tools.Snippets.ColorizationRule">
@@ -587,12 +582,7 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.Targets.ArtTarget">
             <summary>
-            This class holds art target information used to resolve art links by the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent"/>
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.Targets.ArtTarget.Id">
-            <summary>
-            This is used to get or set the ID used to identify the file
+            This class holds art target information used to resolve art links by the <see cref="T:Microsoft.Ddue.Tools.ResolveArtLinksComponent"/>
             </summary>
         </member>
         <member name="P:Microsoft.Ddue.Tools.Targets.ArtTarget.InputPath">
@@ -635,10 +625,132 @@
             This is used to get or set the XPath expression used to determine the relative reference link path
             </summary>
         </member>
+        <member name="T:Microsoft.Ddue.Tools.BrandingComponent">
+            <summary>
+            This component applies formatting that makes the help content compatible with
+            the MS Help Viewer branding package.
+            </summary>
+            <remarks>
+            <note type="warning">PLEASE NOTE: The Branding Component has been deprecated.  Presentation styles are
+            now responsible for generating all aspects of the topic.  This component will be removed in a future
+            release.</note>
+            
+            <para>There are three different possible operation modes:</para>
+            
+            <list type="number">
+            <item>For self-branded MS Help Viewer content, it applies the branding package formatting
+            that the MS Help Viewer would apply if the content were not self-branded (except for
+            Microsoft-specific stuff like copyright, logo, feedback, etc.)</item>
+            <item>For branded MS Help Viewer content, it applies minimal formatting to ensure that
+            the help content conforms to the MTPS conventions expected by the MS Help Viewer.</item>
+            <item>For targets other than the MS Help Viewer (eg. Help1 or Web), it performs full
+            branding package formatting.</item>
+            </list>
+            <example>
+            <code lang="xml" title="Example configuration - MS Help Viewer - default catalog">
+               &lt;data self-branded="true"
+                  branding-content="branding"           The relative path of the branding package transforms
+                  help-output="MSHelpViewer" /&gt;
+            </code>
+            <code lang="xml" title="Example configuration - MS Help Viewer - custom catalog">
+               &lt;data self-branded="false"
+                  branding-content="branding"           The full or relative path to the branding package transforms
+                  help-output="MSHelpViewer"
+                  vendor-name="VendorName"              The custom catalog vendor name
+                  -- Optional elements - leave blank to use the default --
+                  catalog-product-id="XX"               The custom catalog product id 
+                  catalog-version="123"                 The custom catalog product version
+                  locale="en-US"                        The custom catalog locale
+                  branding-package="MyBrandingPackage"  The custom branding package name (without extension)
+                  /&gt;
+            </code>
+            <code lang="xml" title="Example configuration - other targets">
+               &lt;data self-branded="true"
+                  branding-content="branding"           The full or relative path to the branding package transforms
+                  help-output="other" /&gt;
+            </code>
+            </example>
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="buildAssembler">A reference to the build assembler</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.Apply(System.Xml.XmlDocument,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.ApplyBranding(System.Xml.XmlDocument,System.String)">
+            <summary>
+            This method applies the branding package transforms.
+            </summary>
+            <param name="document">The current document.</param>
+            <param name="key">The document's unique identifier.</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.SetSelfBranding(System.Xml.XmlDocument,System.Boolean)">
+            <summary>
+            Mark the document as SelfBranded for the branding transforms.
+            </summary>
+            <param name="document">The current document.</param>
+            <param name="selfBranded">The SelfBranded setting.</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.RemoveUnusedNamespaces(System.Xml.XmlDocument)">
+            <summary>
+            Remove extra unused namespace declarations.
+            </summary>
+            <param name="document">The current document.</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.LoadBrandingTransform">
+            <summary>
+            Loads the main branding transform.
+            <para>The name of the branding transform file is extracted from <c>branding.xml</c> depending
+            on the current locale.</para>
+            <para>Any global parameters specified by <c>branding.xml</c> are applied and then specific
+            parameters are applied according to the component configuration.</para>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.LoadBrandingConfig(System.String,System.String@)">
+            <summary>
+            Loads the branding transform configuration from <c>branding.xml</c>
+            </summary>
+            <param name="configPath">The full path of <c>branding.xml</c></param>
+            <param name="transformName">The full path of the branding transform file to load.</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.PutTransformParam(System.String,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.ReformatLanguageSpecific(System.Xml.XmlDocument)">
+            <summary>
+            Reformats all LanguageSpecific spans to the format used by the MS Help Viewer
+            </summary>
+            <param name="document">The current document.</param>
+        </member>
+        <member name="T:Microsoft.Ddue.Tools.BrandingComponent.Factory">
+            <summary>
+            This is used to create a new instance of the build component
+            </summary>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.BrandingComponent.Factory.Create">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Ddue.Tools.BrandingComponent.SpecialXmlReader">
+            <summary>
+            This is an override of the default <see cref="T:System.Xml.XmlTextReader"/> that allows
+            "xmlns" attributes to be skipped.  It's used to remove unused namespaces from an XML file.
+            </summary>
+        </member>
         <member name="T:Microsoft.Ddue.Tools.Targets.ConceptualLinkInfo">
             <summary>
-            This class is used to hold conceptual link information used by the
-            <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent"/>.
+            This class is used to hold conceptual link information used by by the
+            <see cref="T:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Targets.ConceptualLinkInfo.#ctor(System.Xml.XPath.XPathNavigator)">
@@ -663,88 +775,143 @@
             This read-only property returns the text to show for the link
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.FileCreatedEventArgs">
+        <member name="T:Microsoft.Ddue.Tools.FileCreatedEventArgs">
             <summary>
             This event arguments class is used by build components to indicate that they have saved a file of some
             sort (help content or fragment).
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.FileCreatedEventArgs.#ctor(System.String,System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.FileCreatedEventArgs.#ctor(System.String,System.Boolean)">
             <summary>
             Constructor
             </summary>
             <param name="filePath">The path to the saved file</param>
             <param name="isContentFile">True if the saved file is a help content file, false if not</param>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.FileCreatedEventArgs.FilePath">
+        <member name="P:Microsoft.Ddue.Tools.FileCreatedEventArgs.FilePath">
             <summary>
             This read-only property returns the path to the saved file
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.FileCreatedEventArgs.IsContentFile">
+        <member name="P:Microsoft.Ddue.Tools.FileCreatedEventArgs.IsContentFile">
             <summary>
             This read-only property indicates whether or not the file is a help content file
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent">
+        <member name="T:Microsoft.Ddue.Tools.HxfGeneratorComponent">
             <summary>
-            Inherit documentation copy component
+            This build component is used to generate an HxF file for the Help 2 compiler that contains all of the
+            content files to compile into it.
             </summary>
-            <remarks>This has been superseded by the Generate Inherited Documentation tool but remains here as an
-            example of a copy component.</remarks>
+            <remarks>Rather than modifying the document, this responds to component events with an event argument
+            type of <see cref="T:Microsoft.Ddue.Tools.FileCreatedEventArgs"/> to save file information to the HxF file.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore)">
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="buildAssembler">A reference to the build assembler</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.Apply(System.Xml.XmlDocument,System.String)">
+            <summary>
+            This component does not change the document
+            </summary>
+            <param name="document">Not used</param>
+            <param name="key">Not used</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.Dispose(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.FileCreatedHandler(System.Object,System.EventArgs)">
+            <summary>
+            This is used to create the HxF files as needed and write the filenames to them
+            </summary>
+            <param name="sender">The sender of the event</param>
+            <param name="e">The event arguments</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.WriteFile(System.String)">
+            <summary>
+            This creates a new HxF file and, if an input seed file has been specified, it writes out the
+            filenames from it to the new HxF file.
+            </summary>
+            <param name="path">The path to the new HxF file</param>
+            <returns>The Xml writer to use when adding more file elements to the HxF file</returns>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.WriteFileElement(System.Xml.XmlWriter,System.String)">
+            <summary>
+            This adds a file element to the HxF file
+            </summary>
+            <param name="writer">The XML writer to use</param>
+            <param name="url">The URL of the file</param>
+        </member>
+        <member name="T:Microsoft.Ddue.Tools.HxfGeneratorComponent.Factory">
+            <summary>
+            This is used to create a new instance of the build component
+            </summary>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.HxfGeneratorComponent.Factory.Create">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Ddue.Tools.InheritDocumentationComponent">
+            <summary>
+            InheritDocumentationComponent class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore)">
             <summary>
             Constructor
             </summary>
             <param name="parent">The parent build component</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.Initialize(System.Xml.XPath.XPathNavigator,System.Collections.Generic.IDictionary{System.String,System.Object})">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.Initialize(System.Xml.XPath.XPathNavigator,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.Apply(System.Xml.XmlDocument,System.String)">
             <summary>
             Implement inheritDocumentation.
             </summary>
             <param name="document">document to be parsed</param>
             <param name="key">Id pf the topic specified</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.DeleteNode(System.Xml.XPath.XPathNavigator,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.DeleteNode(System.Xml.XPath.XPathNavigator,System.String)">
             <summary>
             Deletes the specified node and logs the message.
             </summary>
             <param name="inheritDocNodeNavigator">navigator for inheritdoc node</param>
             <param name="key">Id of the topic specified</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.InheritDocumentation(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.InheritDocumentation(System.String)">
             <summary>
             Inherit the documentation.
             </summary>
             <param name="key">Id of the topic specified</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.UpdateNode(System.Xml.XPath.XPathNavigator,System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.UpdateNode(System.Xml.XPath.XPathNavigator,System.Xml.XPath.XPathNavigator)">
             <summary>
             Updates the node replacing inheritdoc node with comments found.
             </summary>
             <param name="inheritDocNodeNavigator">Navigator for inheritdoc node</param>
             <param name="contentNodeNavigator">Navigator for content</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.GetComments(System.Xml.XPath.XPathNodeIterator,System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.GetComments(System.Xml.XPath.XPathNodeIterator,System.Xml.XPath.XPathNavigator)">
             <summary>
             Gets the comments for inheritdoc node.
             </summary>
             <param name="iterator">Iterator for API information</param>
             <param name="inheritDocNodeNavigator">Navigator for inheritdoc node</param>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.InheritDocumentationComponent.Factory">
             <summary>
             This is used to create a new instance of the copy component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.InheritDocumentationComponent.Factory.Create(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore)">
+        <member name="M:Microsoft.Ddue.Tools.InheritDocumentationComponent.Factory.Create(Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent">
+        <member name="T:Microsoft.Ddue.Tools.IntelliSenseComponent">
             <summary>
             This build component is used to generate IntelliSense files based on the documented APIs.
             </summary>
@@ -762,122 +929,64 @@
                      Include Namespaces (false by default)
                      Namespaces filename ("Namespaces" if not specified or empty)
                      Directory (current folder if not specified or empty) --&gt;
-                     Bounded cache capacity (0 if not specified --&gt;
              &lt;output includeNamespaces="false" namespacesFile="Namespaces"
-                 folder="C:\ProjectDocs\" boundedCapacity="100" /&gt;
+                 folder="C:\ProjectDocs\" /&gt;
             &lt;/component&gt;
             </code>
             </example>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.Dispose(System.Boolean)">
             <summary>
-            Wait for the comments writer task to complete when disposed
+            Write out closing tags and close all open XML writers when disposed.
             </summary>
             <param name="disposing">Pass true to dispose of the managed and unmanaged resources or false to just
             dispose of the unmanaged resources.</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.WriteComments">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.WriteComments(System.String,System.String,System.Xml.XPath.XPathNavigator)">
             <summary>
-            This is used to write the comments to the appropriate assembly XML comments file
+            Write the comments to the assembly's XML comments file
             </summary>
+            <param name="key">The key (member name) of the item being documented.</param>
+            <param name="filename">The assembly filename</param>
+            <param name="navComments">The comments XPath navigator</param>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.IntelliSenseComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Factory.#ctor">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.Factory.#ctor">
             <summary>
             Constructor
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Factory.ConfigureComponent(System.String,System.ComponentModel.Composition.Hosting.CompositionContainer)">
+        <member name="M:Microsoft.Ddue.Tools.IntelliSenseComponent.Factory.ConfigureComponent(System.String,System.ComponentModel.Composition.Hosting.CompositionContainer)">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Factory.DefaultConfiguration">
+        <member name="P:Microsoft.Ddue.Tools.IntelliSenseComponent.Factory.DefaultConfiguration">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.Factory.Dependencies">
+        <member name="P:Microsoft.Ddue.Tools.IntelliSenseComponent.Factory.Dependencies">
             <inheritdoc />
             <remarks>Indicate a dependency on the missing documentation component as it will produce more
             complete documentation with all the proper elements present.</remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo">
-            <summary>
-            This is used to contain the XML comments elements information that will be written to the
-            IntelliSense files.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.#ctor(Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent,System.String,System.String,System.Xml.XPath.XPathNavigator)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="component">The component creating the instance</param>
-            <param name="assemblyName">The assembly name</param>
-            <param name="memberName">The member name</param>
-            <param name="comments">The XPath navigator from which to extract the comments information</param>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.AssemblyName">
-            <summary>
-            The assembly name
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.MemberName">
-            <summary>
-            The member name
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.Summary">
-            <summary>
-            The summary element comments
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.Params">
-            <summary>
-            The parameter element comments
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.TypeParams">
-            <summary>
-            The type parameter element comments
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.Returns">
-            <summary>
-            The returns element comments
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.Exceptions">
-            <summary>
-            The exception element comments
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.CodeContracts">
-            <summary>
-            The code contracts element comments
-            </summary>
-        </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent.CommentsInfo.EnumElements">
-            <summary>
-            For enumerated types, the enum member element summary comments
-            </summary>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MSHCComponent">
+        <member name="T:Microsoft.Ddue.Tools.MSHCComponent">
              <summary>
              This class is a modified version of the original <c>MSHCComponent</c> that is used to add MS Help Viewer
              meta data to the topics.  This version allows the inclusion of a <c>sortOrder</c> attribute on the table
@@ -915,41 +1024,45 @@
              </code>
              </example>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MSHCComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.MSHCComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MSHCComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.MSHCComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MSHCComponent.Apply(System.Xml.XmlDocument,System.String)">
-            <inheritdoc />
+        <member name="M:Microsoft.Ddue.Tools.MSHCComponent.Apply(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Applies Microsoft Help System transformation to the output document.
+            </summary>
+            <param name="document">The <see cref="T:System.Xml.XmlDocument"/> to apply transformation to.</param>
+            <param name="key">Topic key of the output document.</param>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MSHCComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.MSHCComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MSHCComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.MSHCComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver">
+        <member name="T:Microsoft.Ddue.Tools.MsdnResolver">
             <summary>
             This is used to perform lookups using the Microsoft/TechNet Publishing System (MTPS) content service
             on .NET Framework member IDs and return the MSDN URL for them.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.#ctor">
+        <member name="M:Microsoft.Ddue.Tools.MsdnResolver.#ctor">
             <summary>
             Default constructor
             </summary>
             <remarks>The default constructor creates a simple dictionary to hold the cached MSDN content IDs</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.#ctor(System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.MsdnResolver.#ctor(System.Collections.Generic.IDictionary{System.String,System.String},System.Boolean)">
             <summary>
-            This constructor is used to create the MSDN resolver using an existing cache
+            This constructor is used to create the MSDN resolver using given existing cache
             </summary>
             <param name="msdnIdCache">A cache of existing MSDN content IDs</param>
             <param name="isShared">True if the cache is shared, false if not.  If not shared, the cache will
@@ -957,55 +1070,103 @@
             <remarks>This constructor allows you to pass in a persistent cache with preloaded values that will
             save looking up values that have already been determined.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.GetMsdnUrl(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.MsdnResolver.GetMsdnUrl(System.String)">
             <summary>
             This is used to get the MSDN URL for the given .NET Framework member ID
             </summary>
             <param name="id">The member ID to look up</param>
             <returns>The MSDN URL for the member ID or null if not found</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.Dispose">
+        <member name="M:Microsoft.Ddue.Tools.MsdnResolver.Dispose">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.IsDisposed">
+        <member name="P:Microsoft.Ddue.Tools.MsdnResolver.IsDisposed">
             <summary>
             This read-only property can be used to determine whether or not the resolver has been disposed
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.IsDisabled">
+        <member name="P:Microsoft.Ddue.Tools.MsdnResolver.IsDisabled">
             <summary>
             This read-only property indicates whether or not the MSDN resolver is disabled
             </summary>
             <value>If true, reference links cannot be looked up</value>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.DisabledReason">
+        <member name="P:Microsoft.Ddue.Tools.MsdnResolver.DisabledReason">
             <summary>
             If disabled, this returns the reason
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.Locale">
+        <member name="P:Microsoft.Ddue.Tools.MsdnResolver.Locale">
             <summary>
             This is used to get or set the locale for the reference links
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.MsdnContentIdCache">
+        <member name="P:Microsoft.Ddue.Tools.MsdnResolver.MsdnContentIdCache">
             <summary>
             This read-only property returns the MSDN content ID cache
             </summary>
             <remarks>The key is the member ID, the value is the content ID</remarks>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver.CacheItemsAdded">
+        <member name="P:Microsoft.Ddue.Tools.MsdnResolver.CacheItemsAdded">
             <summary>
-            This read-only property is used to return the number of items added to the cache during the latest
-            run.
+            This read-only property is used to determine if items were added to the cache during the latest run
             </summary>
-            <value>Returns a non-zero number if items were added or zero if no new items were added or errors
-            occurred that invalidate the updates made.  This can be used to determine if the cache should be
-            persisted in some fashion.</value>
-            <remarks>This is static as multiple instances of this component may exist and we need to know if any
-            of them add values to the shared cache.</remarks>
+            <value>Returns true if items were added, false if not.  This can be used to determine if the cache
+            should be persisted in some fashion.</value>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent">
+        <member name="T:Microsoft.Ddue.Tools.MSHelpAttrComponent">
+            <summary>
+            This build component is used to add additional MS Help 2 attributes to the XML data island in each
+            generated API topic.
+            </summary>
+            <example>
+            <code lang="xml" title="Example configuration">
+            &lt;!-- MS Help 2 attribute configuration.  This must appear after
+                 the TransformComponent. --&gt;
+            &lt;component id="Help 2 Help Attribute Component"&gt;
+                &lt;!-- Additional attributes.  If no attributes are specified,
+                     the component will do nothing. --&gt;
+                &lt;attributes&gt;
+                    &lt;!-- The "name" attribute is required.  The "value" attribute
+                         is optional. --&gt;
+                    &lt;attribute name="DocSet" value="NETFramework" / &gt;
+                    &lt;attribute name="DocSet" value="ProjectNamespace" / &gt;
+                    &lt;attribute name="TargetOS" value="Windows" / &gt;
+                &lt;/attributes&gt;
+            &lt;/component&gt;
+            </code>
+            </example>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.MSHelpAttrComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="buildAssembler">A reference to the build assembler</param>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.MSHelpAttrComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+            <inheritdoc/>
+            <remarks>See the <see cref="T:Microsoft.Ddue.Tools.MSHelpAttrComponent"/> class topic for an example of the configuration</remarks>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException">This is thrown if an error is detected in the
+            configuration.</exception>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.MSHelpAttrComponent.Apply(System.Xml.XmlDocument,System.String)">
+            <summary>
+            This is implemented to add the attributes to the XML data island.
+            </summary>
+            <param name="document">The XML document with which to work.</param>
+            <param name="key">The key (member name) of the item being documented.</param>
+        </member>
+        <member name="T:Microsoft.Ddue.Tools.MSHelpAttrComponent.Factory">
+            <summary>
+            This is used to create a new instance of the build component
+            </summary>
+            <remarks>The help file builder project contains properties for this component so it isn't exposed or
+            configurable here.</remarks>
+        </member>
+        <member name="M:Microsoft.Ddue.Tools.MSHelpAttrComponent.Factory.Create">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent">
              <summary>
              This is a modified version of the original <c>ResolveConceptualLinksComponent</c> that is used to resolve
              links to conceptual topics.
@@ -1046,23 +1207,23 @@
              </code>
              </example>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.Apply(System.Xml.XmlDocument,System.String)">
             <summary>
             This is implemented to resolve the conceptual links
             </summary>
             <param name="document">The XML document with which to work.</param>
             <param name="key">The key (member name) of the item being documented.</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.BrokenLinkDisplayText(System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.BrokenLinkDisplayText(System.String,System.String)">
             <summary>
             Determine what to display for broken links
             </summary>
@@ -1070,63 +1231,63 @@
             <param name="text">The link text</param>
             <returns>The text to display for the broken link</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.CompileXPathExpression(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.CompileXPathExpression(System.String)">
             <summary>
             Compile an XPath expression and report an error if it fails
             </summary>
             <param name="xpath">The XPath expression to compile.</param>
             <returns>The compiled XPath expression.</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.GetTargetInfoFromCache(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.GetTargetInfoFromCache(System.String)">
             <summary>
             Get target info
             </summary>
             <param name="target">The target for which to get info</param>
             <returns>The target info object if found or null if not found</returns>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent">
+        <member name="T:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent">
             <summary>
             This build component is used to resolve links to reference topics
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.SharedMsdnContentIdCacheId">
+        <member name="F:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.SharedMsdnContentIdCacheId">
             <summary>
             This is used as the key name when sharing the MSDN content ID cache across instances
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.SharedReferenceTargetsId">
+        <member name="F:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.SharedReferenceTargetsId">
             <summary>
             This is used as the key name when sharing the target dictionaries across instances
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.Dispose(System.Boolean)">
             <summary>
             This is overridden to save the updated cache information and dispose of target information
             </summary>
             <param name="disposing">Pass true to dispose of the managed and unmanaged resources or false to just
             dispose of the unmanaged resources.</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.CreateMsdnResolver(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.CreateMsdnResolver(System.Xml.XPath.XPathNavigator)">
             <summary>
             This is used to create an MSDN resolver for the reference link to use in looking up MSDN content iDs
             </summary>
@@ -1137,17 +1298,17 @@
             across instances by placing it in the <see cref="P:Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore.Data"/> dictionary using the key
             name <c>SharedMsdnContentIdCacheID</c>.
             
-            <para>If overridden, the <see cref="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.UpdateMsdnContentIdCache"/> method should also be overridden to
+            <para>If overridden, the <see cref="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.UpdateMsdnContentIdCache"/> method should also be overridden to
             persist changes to the cache if needed.</para></remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.UpdateMsdnContentIdCache">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.UpdateMsdnContentIdCache">
             <summary>
             This is used to update the MSDN content ID cache file
             </summary>
             <remarks>The default implementation serializes the standard dictionary to a file using binary
             serialization if new entries were added and it loaded the cache file.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.CreateTargetDictionary(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.CreateTargetDictionary(System.Xml.XPath.XPathNavigator)">
             <summary>
             This is used to create a <see cref="T:Microsoft.Ddue.Tools.Targets.TargetDictionary"/> used to store reference link targets
             </summary>
@@ -1157,209 +1318,204 @@
             <remarks>This can be overridden in derived classes to provide persistent caches with backing stores
             other than the default <see cref="T:System.Collections.Generic.Dictionary`2"/></remarks>.
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.MsdnResolver">
+        <member name="P:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.MsdnResolver">
             <summary>
             This read-only property returns the MSDN resolver instance
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.Targets">
+        <member name="P:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.Targets">
             <summary>
             This read-only property returns the target type dictionary
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CloneComponent">
+        <member name="T:Microsoft.Ddue.Tools.CloneComponent">
             <summary>
             This build component is used to clone the topic for each set of build components and execute them
             on the cloned topic.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.CloneComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.CloneComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
             <remarks>Multiple <c>branch</c> elements are specified as the configuration.  Each <c>branch</c>
             element can contain one or more <c>component</c> definitions that will be created and executed when
             this component is applied.  Each branch receives a clone of the document.  This may be useful for
             generating multiple help output formats in one build configuration.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.CloneComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.CloneComponent.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.GroupId">
-            <inheritdoc />
-            <remarks>This sets a unique group ID for each branch</remarks>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.CloneComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CloneComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.CloneComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent">
+        <member name="T:Microsoft.Ddue.Tools.CopyFromFileComponent">
             <summary>
             This build component copies elements from one or more constant XML files into the target document based
             on one or more copy commands that define the elements to copy and where to put them.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFileComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFileComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFileComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.CopyFromFileComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFileComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFileComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent">
+        <member name="T:Microsoft.Ddue.Tools.CopyFromFilesComponent">
             <summary>
             This build component copies elements from one or more XML files determined using an XPath query into the
             target document based on one or more copy commands that define the elements to copy and where to put them.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFilesComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFilesComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFilesComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.CopyFromFilesComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromFilesComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromFilesComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent">
+        <member name="T:Microsoft.Ddue.Tools.CopyFromIndexComponent">
             <summary>
             This build component copies elements from an indexed set of XML files into the target document based on
             one or more copy commands that define the elements to copy and where to put them.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore,System.Collections.Generic.List{System.Lazy{Sandcastle.Core.BuildAssembler.BuildComponent.ICopyComponentFactory,Sandcastle.Core.BuildAssembler.BuildComponent.ICopyComponentMetadata}})">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromIndexComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore,System.Collections.Generic.List{System.Lazy{Sandcastle.Core.BuildAssembler.BuildComponent.ICopyComponentFactory,Sandcastle.Core.BuildAssembler.BuildComponent.ICopyComponentMetadata}})">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
             <param name="copyComponentFactories">The list of available copy component factory components</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.CreateIndex(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromIndexComponent.CreateIndex(System.Xml.XPath.XPathNavigator)">
             <summary>
             This is used to create the index cache
             </summary>
             <param name="configuration">The index configuration</param>
             <returns>An instance of an <see cref="T:Microsoft.Ddue.Tools.Commands.IndexedCache"/> derived class</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromIndexComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromIndexComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromIndexComponent.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Context">
+        <member name="P:Microsoft.Ddue.Tools.CopyFromIndexComponent.Context">
             <summary>
             This read-only property returns the context to use for the index when evaluating XPath expressions
             </summary>
-            <remarks>Since this is only for providing XML namespaces, it can be shared amongst all indexes</remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.CopyFromIndexComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.CopyFromIndexComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.CopyFromIndexComponent.Factory.CopyComponents">
+        <member name="P:Microsoft.Ddue.Tools.CopyFromIndexComponent.Factory.CopyComponents">
             <summary>
             This is used to import the list of copy component factories that is passed to the build component
             when it is created.
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.DisplayComponent">
+        <member name="T:Microsoft.Ddue.Tools.DisplayComponent">
             <summary>
             This component serves as a debugging aid.  It dumps the current document to the message log
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.DisplayComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.DisplayComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.DisplayComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.DisplayComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
             <remarks>If an <c>xpath</c> element is found in the configuration, it's inner text will be used as
             a filter expression to select elements to dump.  If not found, the entire document is dumped.   The
             expression can have a single replacement parameter (<c>{0}</c>).  If present, it will be replaced
             with the current document key.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.DisplayComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.DisplayComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.DisplayComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.DisplayComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.DisplayComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.DisplayComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent">
+        <member name="T:Microsoft.Ddue.Tools.ExampleComponent">
             <summary>
             This build component is used to replace code references with snippets from a file
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.LoadContent(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.LoadContent(System.String)">
             <summary>
             Snippet loading logic
             </summary>
             <param name="file">The file from which to load the snippets</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.ColorizeSnippet(System.String,System.Collections.Generic.List{Microsoft.Ddue.Tools.Snippets.ColorizationRule})">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.ColorizeSnippet(System.String,System.Collections.Generic.List{Microsoft.Ddue.Tools.Snippets.ColorizationRule})">
             <summary>
             Colorization logic
             </summary>
@@ -1367,137 +1523,129 @@
             <param name="rules">The colorization rules</param>
             <returns>A collection of colorized code regions</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.WriteColorizedSnippet(System.Collections.Generic.ICollection{Microsoft.Ddue.Tools.Snippets.Region},System.Xml.XmlWriter)">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.WriteColorizedSnippet(System.Collections.Generic.ICollection{Microsoft.Ddue.Tools.Snippets.Region},System.Xml.XmlWriter)">
             <summary>
             Write the colorized code snippet to the output
             </summary>
             <param name="regions">A collection of colorized code regions</param>
             <param name="writer">The XML writer to which the colorized code is written</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.StripLeadingSpaces(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.StripLeadingSpaces(System.String)">
             <summary>
             Strip a common amount of leading whitespace from each line of the given text block
             </summary>
             <param name="text">The text from which to strip leading whitespace</param>
             <returns>The text with the leading whitespace stripped from each line</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ExampleComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ExampleComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ExampleComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent">
+        <member name="T:Microsoft.Ddue.Tools.ForEachComponent">
             <summary>
             This component is used to execute a set of components on the topic
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ForEachComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ForEachComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ForEachComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.ForEachComponent.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.ApplyComponents(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ForEachComponent.ApplyComponents(System.Xml.XmlDocument,System.String)">
             <summary>
             Apply the components to the document
             </summary>
             <param name="document">The document to which the topics are applied</param>
             <param name="key">The document key</param>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.GroupId">
-            <inheritdoc />
-            <remarks>This sets the group ID for each subcomponent</remarks>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ForEachComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ForEachComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ForEachComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent">
+        <member name="T:Microsoft.Ddue.Tools.IfThenComponent">
             <summary>
             This component is used to conditionally execute a set of components based on an XPath condition
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.IfThenComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.IfThenComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.IfThenComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.IfThenComponent.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.GroupId">
-            <inheritdoc />
-            <remarks>This sets a unique group ID for each branch</remarks>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.IfThenComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IfThenComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.IfThenComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent">
+        <member name="T:Microsoft.Ddue.Tools.PlatformsComponent">
             <summary>
             This component is used to insert platform information into the topics
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.PlatformsComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.PlatformsComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent.ParseDocuments(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.PlatformsComponent.ParseDocuments(System.String)">
             <summary>
             Parse platform information
             </summary>
             <param name="wildcardPath">The path to the platform information files</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.PlatformsComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.PlatformsComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.PlatformsComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.PlatformsComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.VersionFilter.IsIncludedType(System.Xml.XPath.XPathNavigator,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.VersionFilter.IsIncludedType(System.Xml.XPath.XPathNavigator,System.String)">
             <summary>
             If we get here, we know that the platform supports this version, and the api is included in this version.
             So returns true unless the type or its namespace are explicitly excluded by this version filter.
@@ -1506,91 +1654,72 @@
             <param name="topicNamespaceName">The topic namespace name</param>
             <returns>True if it is an included type, false if not</returns>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent">
+        <member name="T:Microsoft.Ddue.Tools.ResolveArtLinksComponent">
             <summary>
             This component is used to resolve links to media files (i.e images)
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveArtLinksComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveArtLinksComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ResolveArtLinksComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent.Dispose(System.Boolean)">
-            <summary>
-            At disposal, copy the media files that were encountered
-            </summary>
-            <param name="disposing">Pass true to dispose of the managed and unmanaged resources or false to just
-            dispose of the unmanaged resources.</param>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ResolveArtLinksComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ResolveArtLinksComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ResolveArtLinksComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SaveComponent">
+        <member name="T:Microsoft.Ddue.Tools.SaveComponent">
             <summary>
             This build component is used to save the generated document or parts of it to a file
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.SaveComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.SaveComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SaveComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.Dispose(System.Boolean)">
-            <summary>
-            Wait for the document writer task to complete when disposed
-            </summary>
-            <param name="disposing">Pass true to dispose of the managed and unmanaged resources or false to just
-            dispose of the unmanaged resources.</param>
-        </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.WriteDocuments">
-            <summary>
-            This is used to write the document to its destination file
-            </summary>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.SaveComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SaveComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.SaveComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent">
+        <member name="T:Microsoft.Ddue.Tools.SharedContentComponent">
             <summary>
             This build component is used to replace a given set of elements with the content of shared content items
             loaded from XML files.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.Apply(System.Xml.XmlDocument,System.String)">
             <summary>
             Search for elements to replace and insert the shared content in their place
             </summary>
@@ -1598,19 +1727,19 @@
             <param name="key">The document key</param>
             <remarks>Shared content items are replaced recursively</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ParseDocuments(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.ParseDocuments(System.String)">
             <summary>
             Find content files using the given wildcard and load all of the content items in them
             </summary>
             <param name="wildcardPath">The wildcard path used to locate content item files</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.LoadContent(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.LoadContent(System.String)">
             <summary>
             Load all shared content items from the specified file
             </summary>
             <param name="file">The shared content file to load</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ResolveContent(System.String,System.Xml.XmlDocument,System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.ResolveContent(System.String,System.Xml.XmlDocument,System.Xml.XPath.XPathNavigator)">
             <summary>
             Look up the shared content elements, find their corresponding shared content item and replace the
             elements with the content item value.
@@ -1620,31 +1749,31 @@
             <param name="start">The XPath navigator to search for content elements</param>
             <remarks>This method will replace content items within other content items recursively</remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.DefaultFactory">
+        <member name="T:Microsoft.Ddue.Tools.SharedContentComponent.DefaultFactory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.DefaultFactory.Create">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.DefaultFactory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ApiTokenResolutionComponentFactory">
+        <member name="T:Microsoft.Ddue.Tools.SharedContentComponent.ApiTokenResolutionComponentFactory">
             <summary>
             This is used to create a new instance of the build component used for API token resolution
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ApiTokenResolutionComponentFactory.#ctor">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.ApiTokenResolutionComponentFactory.#ctor">
             <summary>
             Constructor
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ApiTokenResolutionComponentFactory.Create">
+        <member name="M:Microsoft.Ddue.Tools.SharedContentComponent.ApiTokenResolutionComponentFactory.Create">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ApiTokenResolutionComponentFactory.DefaultConfiguration">
+        <member name="P:Microsoft.Ddue.Tools.SharedContentComponent.ApiTokenResolutionComponentFactory.DefaultConfiguration">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.SharedContentComponent.ApiTokenResolutionComponentFactory.Dependencies">
+        <member name="P:Microsoft.Ddue.Tools.SharedContentComponent.ApiTokenResolutionComponentFactory.Dependencies">
             <inheritdoc />
             <remarks>Indicate a dependency on the missing documentation component as that's the best
             placement if the IntelliSense component is used too.</remarks>
@@ -1659,6 +1788,9 @@
         </member>
         <member name="F:Microsoft.Ddue.Tools.Targets.ConceptualLinkType.Local">
             <summary>Local links</summary>
+        </member>
+        <member name="F:Microsoft.Ddue.Tools.Targets.ConceptualLinkType.Index">
+            <summary>Index links (MS Help 2 only)</summary>
         </member>
         <member name="F:Microsoft.Ddue.Tools.Targets.ConceptualLinkType.Id">
             <summary>Id links (MS Help Viewer only)</summary>
@@ -1792,8 +1924,8 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.Targets.ReferenceLinkInfo">
             <summary>
-            This class is used to hold reference link information used by the
-            <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ResolveReferenceLinksComponent"/>.
+            This class is used to hold reference link information used by by the
+            <see cref="T:Microsoft.Ddue.Tools.ResolveReferenceLinksComponent"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Targets.ReferenceLinkInfo.#ctor(System.Xml.XPath.XPathNavigator)">
@@ -1840,6 +1972,12 @@
         <member name="F:Microsoft.Ddue.Tools.Targets.ReferenceLinkType.Local">
             <summary>Local links</summary>
         </member>
+        <member name="F:Microsoft.Ddue.Tools.Targets.ReferenceLinkType.Index">
+            <summary>Index links (MS Help 2 only)</summary>
+        </member>
+        <member name="F:Microsoft.Ddue.Tools.Targets.ReferenceLinkType.LocalOrIndex">
+            <summary>Local or Index links (MS Help 2 only, the component will decide the type at runtime)</summary>
+        </member>
         <member name="F:Microsoft.Ddue.Tools.Targets.ReferenceLinkType.Msdn">
             <summary>Online links to MSDN (Framework types only)</summary>
         </member>
@@ -1883,7 +2021,7 @@
             value is to be added as an attribute.
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent">
+        <member name="T:Microsoft.Ddue.Tools.ShowMissingComponent">
              <summary>
              This build component is used to add "missing" notes for missing summary, parameter, returns, value, and
              remarks tags.  It can also add default summary documentation for constructors.
@@ -1928,26 +2066,26 @@
              </code>
              </example>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc/>
-            <remarks>See the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent"/> class topic for an example of the configuration</remarks>
+            <remarks>See the <see cref="T:Microsoft.Ddue.Tools.ShowMissingComponent"/> class topic for an example of the configuration</remarks>
             <exception cref="T:System.Configuration.ConfigurationErrorsException">This is thrown if an error is detected in the
             configuration.</exception>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.Apply(System.Xml.XmlDocument,System.String)">
             <summary>
             This is implemented to add the missing documentation tags
             </summary>
             <param name="document">The XML document with which to work.</param>
             <param name="key">The key (member name) of the item being documented.</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.CheckForMissingText(System.Xml.XmlNode,System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.CheckForMissingText(System.Xml.XmlNode,System.String,System.String)">
             <summary>
             Check for missing text in the specified documentation tag and, if it doesn't exist or the text is
             blank, add a "missing" message as the documentation tag's text.
@@ -1959,7 +2097,7 @@
             element to that they pass through without being removed by the <c>TransformComponent</c> XSL
             transformations.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.CheckForMissingParameter(System.Xml.XmlNode,System.String,System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.CheckForMissingParameter(System.Xml.XmlNode,System.String,System.String,System.String)">
             <summary>
             Check for missing text in the specified &lt;param&gt; or &lt;typeparam&gt; tag and, if it doesn't
             exist or the text is blank, add a "missing" message as the tag's text.
@@ -1972,7 +2110,7 @@
             element to that they pass through without being removed by the <c>TransformComponent</c> XSL
             transformations.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.CheckForMissingIncludeTarget(System.Xml.XmlNode,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.CheckForMissingIncludeTarget(System.Xml.XmlNode,System.String)">
             <summary>
             Check for bad <c>include</c> elements and, if any are found, add a "missing" message to the summary
             tag's text.
@@ -1983,148 +2121,148 @@
             element to that they pass through without being removed by the <c>TransformComponent</c> XSL
             transformations.</remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ShowMissingComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.Factory.#ctor">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.Factory.#ctor">
             <summary>
             Constructor
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ShowMissingComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ShowMissingComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent">
+        <member name="T:Microsoft.Ddue.Tools.SnippetComponent">
             <summary>
             SnippetComponent class to replace the snippet code references.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.validSnippetReference">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.validSnippetReference">
             <summary>
             Regex to validate the snippet references.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.languageMap">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.languageMap">
             <summary>
             Dictionary to map language folder names to language id.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.languageList">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.languageList">
             <summary>
             List that controls the order in which languages snippets are displayed.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.exampleIndex">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.exampleIndex">
             <summary>
             Dictionary consisting of example name as key and example path as value.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.approvedSnippetIndex">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.approvedSnippetIndex">
             <summary>
             Dictionary consisting of exampleName\unitName as key with a null value.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.rejectedSnippetIndex">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.rejectedSnippetIndex">
             <summary>
             Dictionary containing the example name as key and list of rejected language snippets as values.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.excludedUnits">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.excludedUnits">
             <summary>
             List of unit folder names to exclude from sample parsing.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.snippetCache">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.snippetCache">
             <summary>
             Dictionary consisting of exampleName\unitName as key with a null value.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.selector">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.selector">
             <summary>
             XPathExpression to look for snippet references in the topics.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.context">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.context">
             <summary>
             XmlNamespaceManager to set the context.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.languages">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.languages">
             <summary>
             List of languages.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.snippets">
+        <member name="F:Microsoft.Ddue.Tools.SnippetComponent.snippets">
             <summary>
             snippet store.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.Apply(System.Xml.XmlDocument,System.String)">
             <summary>
             Apply method to perform the actual work of the component.
             </summary>
             <param name="document">document to be parsed for snippet references</param>
             <param name="key">Id of a topic</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.LoadExamples(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.LoadExamples(System.String)">
             <summary>
             Index the example names to paths.
             </summary>
             <param name="rootDirectory">root directory location of parsnip samples</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.ParseApprovalLogFiles(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.ParseApprovalLogFiles(System.String)">
             <summary>
             Index the approved snippets.
             </summary>
             <param name="file">approved snippets log file</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.WriteSnippetContent(System.Xml.XPath.XPathNavigator,System.Collections.Generic.List{Microsoft.Ddue.Tools.BuildComponent.Snippet})">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.WriteSnippetContent(System.Xml.XPath.XPathNavigator,System.Collections.Generic.List{Microsoft.Ddue.Tools.Snippet})">
             <summary>
             Write the snippet content to output files.
             </summary>
             <param name="node">code reference node</param>
             <param name="snippetList">List of snippets</param>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.SnippetComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SnippetComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.SnippetComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.Language">
+        <member name="T:Microsoft.Ddue.Tools.Language">
             <summary>
             Language class.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.Language.languageId">
+        <member name="F:Microsoft.Ddue.Tools.Language.languageId">
             <summary>
             The id of the programming language.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.Language.extension">
+        <member name="F:Microsoft.Ddue.Tools.Language.extension">
             <summary>
             Language file extension.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.Language.colorizationRules">
+        <member name="F:Microsoft.Ddue.Tools.Language.colorizationRules">
             <summary>
             List of colorization rules.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.Language.#ctor(System.String,System.String,System.Collections.Generic.List{Microsoft.Ddue.Tools.Snippets.ColorizationRule})">
+        <member name="M:Microsoft.Ddue.Tools.Language.#ctor(System.String,System.String,System.Collections.Generic.List{Microsoft.Ddue.Tools.Snippets.ColorizationRule})">
             <summary>
             Language Constructor
             </summary>
@@ -2132,7 +2270,7 @@
             <param name="extension">language file extension</param>
             <param name="rules">colorization rules</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.Language.IsMatch(System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.Language.IsMatch(System.String,System.String)">
             <summary>
             Check if the language is defined.
             </summary>
@@ -2140,86 +2278,86 @@
             <param name="extension">file extension</param>
             <returns>boolean indicating if a language is defined</returns>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Language.LanguageId">
+        <member name="P:Microsoft.Ddue.Tools.Language.LanguageId">
             <summary>
             Gets the languageId.
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Language.Extension">
+        <member name="P:Microsoft.Ddue.Tools.Language.Extension">
             <summary>
             Gets the file extension
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Language.ColorizationRules">
+        <member name="P:Microsoft.Ddue.Tools.Language.ColorizationRules">
             <summary>
             Gets the colorization rules
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.Snippet">
+        <member name="T:Microsoft.Ddue.Tools.Snippet">
             <summary>
             Snippet class.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.Snippet.content">
+        <member name="F:Microsoft.Ddue.Tools.Snippet.content">
             <summary>
             snippet content.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.Snippet.language">
+        <member name="F:Microsoft.Ddue.Tools.Snippet.language">
             <summary>
             snippet language
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.Snippet.#ctor(System.String,Microsoft.Ddue.Tools.BuildComponent.Language)">
+        <member name="M:Microsoft.Ddue.Tools.Snippet.#ctor(System.String,Microsoft.Ddue.Tools.Language)">
             <summary>
             Constructor for Snippet class.
             </summary>
             <param name="content">snippet content</param>
             <param name="language">snippet language</param>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Snippet.Content">
+        <member name="P:Microsoft.Ddue.Tools.Snippet.Content">
             <summary>
             Gets the snippet content.
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Snippet.Language">
+        <member name="P:Microsoft.Ddue.Tools.Snippet.Language">
             <summary>
             Gets the snippet language.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.exampleSnippets">
+        <member name="F:Microsoft.Ddue.Tools.IndexedExample.exampleSnippets">
             <summary>
             snippet store.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.IsApprovedUnit(System.IO.DirectoryInfo)">
+        <member name="M:Microsoft.Ddue.Tools.IndexedExample.IsApprovedUnit(System.IO.DirectoryInfo)">
             <summary>
             Check whether the snippet unit is approved
             </summary>
             <param name="unit">unit directory</param>
             <returns>boolean indicating whether the snippet unit is approved</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.ParseExample(System.IO.DirectoryInfo)">
+        <member name="M:Microsoft.Ddue.Tools.IndexedExample.ParseExample(System.IO.DirectoryInfo)">
             <summary>
             Parse the example directory.
             </summary>
             <param name="exampleDirectory">The example directory</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.ParseUnit(System.IO.DirectoryInfo)">
+        <member name="M:Microsoft.Ddue.Tools.IndexedExample.ParseUnit(System.IO.DirectoryInfo)">
             <summary>
             Parse the unit directory for language files.
             </summary>
             <param name="unit">unit directory containing a language-specific version of the example</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.ParseDirectory(System.IO.DirectoryInfo,System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.IndexedExample.ParseDirectory(System.IO.DirectoryInfo,System.String,System.String)">
             <summary>
-            Parse an example subfolder looking for source files containing snippets.
+            Parse an example subdir looking for source files containing snipppets.
             </summary>
             <param name="directory">The directory to parse</param>
             <param name="language">the id of a programming language</param>
             <param name="exampleName">the name of the example</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.ParseFile(System.IO.FileInfo,System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.IndexedExample.ParseFile(System.IO.FileInfo,System.String,System.String)">
             <summary>
             Parse the language files to retrieve the snippet content.
             </summary>
@@ -2227,7 +2365,7 @@
             <param name="language">The snippet language</param>
             <param name="exampleName">The name of the example that contains this file</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.ParseSnippetContent(System.String,System.String,System.String,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.IndexedExample.ParseSnippetContent(System.String,System.String,System.String,System.String)">
             <summary>
             Parse the snippet content.
             </summary>
@@ -2236,78 +2374,74 @@
             <param name="extension">file extension</param>
             <param name="example">snippet example</param>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.find">
+        <member name="F:Microsoft.Ddue.Tools.IndexedExample.find">
             <summary>
             Regex to find the snippet content.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.clean">
+        <member name="F:Microsoft.Ddue.Tools.IndexedExample.clean">
             <summary>
             Regex to clean the snippet content.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.cleanAtStart">
+        <member name="F:Microsoft.Ddue.Tools.IndexedExample.cleanAtStart">
             <summary>
             Regex to clean the start of the snippet.
             </summary>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.IndexedExample.cleanAtEnd">
+        <member name="F:Microsoft.Ddue.Tools.IndexedExample.cleanAtEnd">
             <summary>
             Regex to clean the end of the snippet.
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent">
+        <member name="T:Microsoft.Ddue.Tools.SwitchComponent">
             <summary>
             This build component executes a set of build components on the topic based on the result of an XPath
             expression.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.SwitchComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.SwitchComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SwitchComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.Dispose(System.Boolean)">
+        <member name="M:Microsoft.Ddue.Tools.SwitchComponent.Dispose(System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.GroupId">
-            <inheritdoc />
-            <remarks>This sets a unique group ID for each branch</remarks>
-        </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.SwitchComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SwitchComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.SwitchComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent">
+        <member name="T:Microsoft.Ddue.Tools.SyntaxComponent">
             <summary>
             This build component is used to generate syntax sections for API member topics
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore,System.Collections.Generic.List{System.Lazy{Sandcastle.Core.BuildAssembler.SyntaxGenerator.ISyntaxGeneratorFactory,Sandcastle.Core.BuildAssembler.SyntaxGenerator.ISyntaxGeneratorMetadata}})">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore,System.Collections.Generic.List{System.Lazy{Sandcastle.Core.BuildAssembler.SyntaxGenerator.ISyntaxGeneratorFactory,Sandcastle.Core.BuildAssembler.SyntaxGenerator.ISyntaxGeneratorMetadata}})">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
             <param name="generatorFactories">The list of available syntax generator factory components</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.TransformComponent_TopicTransforming(System.Object,System.EventArgs)">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.TransformComponent_TopicTransforming(System.Object,System.EventArgs)">
             <summary>
             This is used to group and sort code snippets based on the order of the defined syntax generators
             </summary>
@@ -2318,23 +2452,23 @@
             By running just prior to XSL transformation all other components that may insert code snippets will
             have been executed.</remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.SyntaxComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Factory.#ctor">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.Factory.#ctor">
             <summary>
             Constructor
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Factory.ConfigureComponent(System.String,System.ComponentModel.Composition.Hosting.CompositionContainer)">
+        <member name="M:Microsoft.Ddue.Tools.SyntaxComponent.Factory.ConfigureComponent(System.String,System.ComponentModel.Composition.Hosting.CompositionContainer)">
             <inheritdoc />
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.SyntaxComponent.Factory.DefaultConfiguration">
+        <member name="P:Microsoft.Ddue.Tools.SyntaxComponent.Factory.DefaultConfiguration">
             <inheritdoc />
         </member>
         <member name="T:Microsoft.Ddue.Tools.Targets.InMemoryTargetDictionary">
@@ -2547,7 +2681,7 @@
             <summary>
             This represents a targets directory along with all the associated expressions used to find target
             metadata files in it, and extract URLs and link text from those files using the
-            <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent"/>.
+            <see cref="T:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Targets.TargetDirectory.#ctor(System.String,System.Xml.XPath.XPathExpression,System.Xml.XPath.XPathExpression,System.Xml.XPath.XPathExpression,Microsoft.Ddue.Tools.Targets.ConceptualLinkType)">
@@ -2575,7 +2709,7 @@
         <member name="T:Microsoft.Ddue.Tools.Targets.TargetDirectoryCollection">
             <summary>
             This class contains a set of <see cref="T:Microsoft.Ddue.Tools.Targets.TargetDirectory"/> items used by
-            <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent"/>.
+            <see cref="T:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent"/>.
             </summary>
         </member>
         <member name="P:Microsoft.Ddue.Tools.Targets.TargetDirectoryCollection.Item(System.String)">
@@ -2589,7 +2723,7 @@
         <member name="T:Microsoft.Ddue.Tools.Targets.TargetInfo">
             <summary>
             This class is used to represent a resolved target containing all the information necessary to actually
-            write out the link by using the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.ResolveConceptualLinksComponent"/>.
+            write out the link by using the <see cref="T:Microsoft.Ddue.Tools.ResolveConceptualLinksComponent"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.Targets.TargetInfo.#ctor(System.String,System.String,Microsoft.Ddue.Tools.Targets.ConceptualLinkType)">
@@ -2714,7 +2848,7 @@
         <member name="P:Microsoft.Ddue.Tools.Targets.TargetTypeDictionary.NeedsMsdnResolver">
             <summary>
             This read-only property is used to determine if any of the target dictionaries require the
-            <see cref="T:Microsoft.Ddue.Tools.BuildComponent.MsdnResolver"/> to look up links.
+            <see cref="T:Microsoft.Ddue.Tools.MsdnResolver"/> to look up links.
             </summary>
         </member>
         <member name="T:Microsoft.Ddue.Tools.Targets.TextReferenceUtilities">
@@ -2836,31 +2970,31 @@
             This is used to get or set the container expression
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent">
+        <member name="T:Microsoft.Ddue.Tools.TaskGrabberComponent">
             <summary>
             Task grabber component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.TaskGrabberComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.TaskGrabberComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.TaskGrabberComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.ParseDocuments(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.TaskGrabberComponent.ParseDocuments(System.String)">
             <summary>
             Parse task grabber files
             </summary>
             <param name="wildcardPath">The path to the files</param>
             <returns>The count of how many documents were parsed</returns>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.AddValueToListDictionary``2(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{``1}},``0,``1)">
+        <member name="M:Microsoft.Ddue.Tools.TaskGrabberComponent.AddValueToListDictionary``2(System.Collections.Generic.Dictionary{``0,System.Collections.Generic.List{``1}},``0,``1)">
             <summary>
             Add a value to the list dictionary
             </summary>
@@ -2870,35 +3004,35 @@
             <param name="key">The key value</param>
             <param name="value">The value</param>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.TaskGrabberComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TaskGrabberComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.TaskGrabberComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.Transform">
+        <member name="T:Microsoft.Ddue.Tools.Transform">
             <summary>
             This class is used to contain information for an XSLT transformation
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.Transform.#ctor(System.String)">
+        <member name="M:Microsoft.Ddue.Tools.Transform.#ctor(System.String)">
             <summary>
             Constructor
             </summary>
             <param name="file">The path to the XSLT transformation file</param>
-            <remarks>The transforms presumably come from a trusted source so scripting and the document function
+            <remarks>The transforms presumably come from a trusted source scripting and the document function
             are enabled in them.</remarks>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Transform.Xslt">
+        <member name="P:Microsoft.Ddue.Tools.Transform.Xslt">
             <summary>
             This read-only property returns the compiled XSL transformation
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.Transform.Arguments">
+        <member name="P:Microsoft.Ddue.Tools.Transform.Arguments">
             <summary>
-            This read-only property returns a dictionary containing the XSL transformation arguments list values
+            This read-only property returns the XSL transformation arguments list
             </summary>
             <remarks>Arguments can be added to this to pass them to them to the transformation when it is
             executed.
@@ -2907,22 +3041,22 @@
             topic is transformed.  It will contain the current topic's key.</note>
             </remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.TransformComponent">
+        <member name="T:Microsoft.Ddue.Tools.TransformComponent">
             <summary>
             This build component is used to transform the intermediate topic to its final form such as an HTML
             document.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TransformComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.TransformComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TransformComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.TransformComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TransformComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.TransformComponent.Apply(System.Xml.XmlDocument,System.String)">
             <summary>
             This is overridden to apply the XSL transformations to the document
             </summary>
@@ -2931,63 +3065,62 @@
             <remarks><note type="important">An argument called <c>key</c> is automatically added to the argument
             list when each topic is transformed.  It will contain the current topic's key.</note></remarks>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.TransformComponent.Transformations">
+        <member name="P:Microsoft.Ddue.Tools.TransformComponent.Transformations">
             <summary>
-            This read-only property returns an enumerable list of XSL transformations that will be applied to
-            the topics.
+            This read-only property returns the list of XSL transformations that will be applied to the topics
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.TransformComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.TransformComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TransformComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.TransformComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.TransformedTopicEventArgs">
+        <member name="T:Microsoft.Ddue.Tools.TransformedTopicEventArgs">
             <summary>
-            This is used by the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.TransformComponent"/> to indicate that it has finished transforming the
+            This is used by the <see cref="T:Microsoft.Ddue.Tools.TransformComponent"/> to indicate that it has finished transforming the
             given topic.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TransformedTopicEventArgs.#ctor(System.String,System.Xml.XmlDocument)">
+        <member name="M:Microsoft.Ddue.Tools.TransformedTopicEventArgs.#ctor(System.String,System.Xml.XmlDocument)">
             <summary>
             Constructor
             </summary>
             <param name="key">The transformed topic key</param>
             <param name="document">The transformed topic document</param>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.TransformedTopicEventArgs.Key">
+        <member name="P:Microsoft.Ddue.Tools.TransformedTopicEventArgs.Key">
             <summary>
             This read-only property returns the topic key
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.TransformedTopicEventArgs.Document">
+        <member name="P:Microsoft.Ddue.Tools.TransformedTopicEventArgs.Document">
             <summary>
             This read-only property returns the transformed topic document
             </summary>
             <remarks>Event handlers can further modify the topic's XML as needed</remarks>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.TransformingTopicEventArgs">
+        <member name="T:Microsoft.Ddue.Tools.TransformingTopicEventArgs">
             <summary>
-            This is used by the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.TransformComponent"/> to indicate that it is about to transform the
+            This is used by the <see cref="T:Microsoft.Ddue.Tools.TransformComponent"/> to indicate that it is about to transform the
             given topic.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.TransformingTopicEventArgs.#ctor(System.String,System.Xml.XmlDocument)">
+        <member name="M:Microsoft.Ddue.Tools.TransformingTopicEventArgs.#ctor(System.String,System.Xml.XmlDocument)">
             <summary>
             Constructor
             </summary>
             <param name="key">The transformed topic key</param>
             <param name="document">The transformed topic document</param>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.TransformingTopicEventArgs.Key">
+        <member name="P:Microsoft.Ddue.Tools.TransformingTopicEventArgs.Key">
             <summary>
             This read-only property returns the topic key
             </summary>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.TransformingTopicEventArgs.Document">
+        <member name="P:Microsoft.Ddue.Tools.TransformingTopicEventArgs.Document">
             <summary>
             This read-only property returns the topic document that will be transformed
             </summary>
@@ -2995,7 +3128,8 @@
         </member>
         <member name="T:Microsoft.Ddue.Tools.UI.IntelliSenseConfigDlg">
             <summary>
-            This form is used to configure the settings for the <see cref="T:Microsoft.Ddue.Tools.BuildComponent.IntelliSenseComponent"/>
+            This form is used to configure the settings for the
+            <see cref="T:Microsoft.Ddue.Tools.IntelliSenseComponent"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Ddue.Tools.UI.IntelliSenseConfigDlg.#ctor(System.String)">
@@ -3174,272 +3308,272 @@
             This is used to get or set the current configuration
             </summary>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ValidateComponent">
+        <member name="T:Microsoft.Ddue.Tools.ValidateComponent">
             <summary>
             This component serves as a debugging aid.  It is used to validate the generated document against one
             or more XML schemas.
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ValidateComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
+        <member name="M:Microsoft.Ddue.Tools.ValidateComponent.#ctor(Sandcastle.Core.BuildAssembler.BuildAssemblerCore)">
             <summary>
             Constructor
             </summary>
             <param name="buildAssembler">A reference to the build assembler</param>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ValidateComponent.Initialize(System.Xml.XPath.XPathNavigator)">
+        <member name="M:Microsoft.Ddue.Tools.ValidateComponent.Initialize(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
             <remarks>The configuration should contain one or more <c>schema</c> elements with a <c>file</c>
             attribute that specifies the XSD schema file to use.</remarks>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ValidateComponent.Apply(System.Xml.XmlDocument,System.String)">
+        <member name="M:Microsoft.Ddue.Tools.ValidateComponent.Apply(System.Xml.XmlDocument,System.String)">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.ValidateComponent.Factory">
+        <member name="T:Microsoft.Ddue.Tools.ValidateComponent.Factory">
             <summary>
             This is used to create a new instance of the build component
             </summary>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.ValidateComponent.Factory.Create">
+        <member name="M:Microsoft.Ddue.Tools.ValidateComponent.Factory.Create">
             <inheritdoc />
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.ContentService">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.#ctor">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.#ctor">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetContent(Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetContent(Microsoft.Ddue.Tools.MtpsContentService.getContentRequest)">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetContentAsync(Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetContentAsync(Microsoft.Ddue.Tools.MtpsContentService.getContentRequest)">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetContentAsync(Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest,System.Object)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetContentAsync(Microsoft.Ddue.Tools.MtpsContentService.getContentRequest,System.Object)">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetNavigationPaths(Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsRequest)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetNavigationPaths(Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsRequest)">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetNavigationPathsAsync(Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsRequest)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetNavigationPathsAsync(Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsRequest)">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetNavigationPathsAsync(Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsRequest,System.Object)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetNavigationPathsAsync(Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsRequest,System.Object)">
             <remarks/>
         </member>
-        <member name="M:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.CancelAsync(System.Object)">
+        <member name="M:Microsoft.Ddue.Tools.MtpsContentService.ContentService.CancelAsync(System.Object)">
             <remarks/>
         </member>
-        <member name="E:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetContentCompleted">
+        <member name="E:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetContentCompleted">
             <remarks/>
         </member>
-        <member name="E:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.ContentService.GetNavigationPathsCompleted">
+        <member name="E:Microsoft.Ddue.Tools.MtpsContentService.ContentService.GetNavigationPathsCompleted">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.appId">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.appId">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.appId.value">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.appId.value">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPathNode">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.navigationPathNode">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPathNode.title">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationPathNode.title">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPathNode.isPhantom">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationPathNode.isPhantom">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPathNode.isPhantomSpecified">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationPathNode.isPhantomSpecified">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPathNode.navigationNodeKey">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationPathNode.navigationNodeKey">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPathNode.contentNodeKey">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationPathNode.contentNodeKey">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationKey">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.navigationKey">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationKey.contentId">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationKey.contentId">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationKey.locale">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationKey.locale">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationKey.version">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationKey.version">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPath">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.navigationPath">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.navigationPath.navigationPathNodes">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.navigationPath.navigationPathNodes">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.availableVersionAndLocale">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.availableVersionAndLocale">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.availableVersionAndLocale.locale">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.availableVersionAndLocale.locale">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.availableVersionAndLocale.version">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.availableVersionAndLocale.version">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.requestedDocument">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.requestedDocument">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.requestedDocument.selector">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.requestedDocument.selector">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.requestedDocument.type">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.requestedDocument.type">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.documentTypes">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.documentTypes">
             <remarks/>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.documentTypes.primary">
+        <member name="F:Microsoft.Ddue.Tools.MtpsContentService.documentTypes.primary">
             <remarks/>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.documentTypes.common">
+        <member name="F:Microsoft.Ddue.Tools.MtpsContentService.documentTypes.common">
             <remarks/>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.documentTypes.image">
+        <member name="F:Microsoft.Ddue.Tools.MtpsContentService.documentTypes.image">
             <remarks/>
         </member>
-        <member name="F:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.documentTypes.feature">
+        <member name="F:Microsoft.Ddue.Tools.MtpsContentService.documentTypes.feature">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.primary">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.primary">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.primary.Any">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.primary.Any">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.primary.primaryFormat">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.primary.primaryFormat">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.primary.location">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.primary.location">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.image">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.image">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.image.name">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.image.name">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.image.imageFormat">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.image.imageFormat">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.image.location">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.image.location">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.image.Value">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.image.Value">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.common">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.common">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.common.Any">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.common.Any">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.common.commonFormat">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.common.commonFormat">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.common.location">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.common.location">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.feature">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.feature">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.feature.Any">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.feature.Any">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.feature.featureFormat">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.feature.featureFormat">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.feature.location">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.feature.location">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.getContentRequest">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest.contentIdentifier">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentRequest.contentIdentifier">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest.locale">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentRequest.locale">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest.version">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentRequest.version">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentRequest.requestedDocuments">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentRequest.requestedDocuments">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.contentId">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.contentId">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.contentGuid">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.contentGuid">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.contentAlias">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.contentAlias">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.locale">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.locale">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.version">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.version">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.availableVersionsAndLocales">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.availableVersionsAndLocales">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.primaryDocuments">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.primaryDocuments">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.imageDocuments">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.imageDocuments">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.commonDocuments">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.commonDocuments">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getContentResponse.featureDocuments">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getContentResponse.featureDocuments">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsRequest">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsRequest">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsRequest.root">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsRequest.root">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsRequest.target">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsRequest.target">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsResponse">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsResponse">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.getNavigationPathsResponse.navigationPaths">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.getNavigationPathsResponse.navigationPaths">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.GetContentCompletedEventHandler">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.GetContentCompletedEventHandler">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.GetContentCompletedEventArgs">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.GetContentCompletedEventArgs">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.GetContentCompletedEventArgs.Result">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.GetContentCompletedEventArgs.Result">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.GetNavigationPathsCompletedEventHandler">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.GetNavigationPathsCompletedEventHandler">
             <remarks/>
         </member>
-        <member name="T:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.GetNavigationPathsCompletedEventArgs">
+        <member name="T:Microsoft.Ddue.Tools.MtpsContentService.GetNavigationPathsCompletedEventArgs">
             <remarks/>
         </member>
-        <member name="P:Microsoft.Ddue.Tools.BuildComponent.MtpsContentService.GetNavigationPathsCompletedEventArgs.Result">
+        <member name="P:Microsoft.Ddue.Tools.MtpsContentService.GetNavigationPathsCompletedEventArgs.Result">
             <remarks/>
         </member>
     </members>
