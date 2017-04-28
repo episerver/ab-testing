@@ -117,7 +117,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         IContent GetVariantContent(Guid contentGuid);
 
         /// <summary>
-        /// Given a list of KPI's and an EventArg object, each KPI will be evaluated and a list of KPI instances 
+        /// Given a list of KPIs and an EventArg object, each KPI will be evaluated and a list of KPI instances 
         /// that have been evaluated will be returned.
         /// </summary>
         /// <param name="kpis">List of KPIs to evaluate for conersion.</param>
@@ -127,7 +127,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
 
         /// <summary>
-        /// If the database needs to be configured, then we return so that it can be set up.  If it has already been configured, we get the version of the current kpi schema and upgrade it if it is an older version.
+        /// If the database needs to be configured, then we return so that it can be set up.  If it has already been configured, we get the version of the current KPI schema and upgrade it if it is an older version.
         /// </summary>
         /// <param name="dbConnection">Connection properties for the desired database to connect to.</param>
         /// <param name="schema">Schema that should be applied to the database (upgrade or downgrade) if the database is outdated.</param>

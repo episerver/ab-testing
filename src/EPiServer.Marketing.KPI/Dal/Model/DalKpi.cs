@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         public string ClassName { get; set; }
 
         /// <summary>
-        /// Json serialized string storing all necessary properties of a Kpi.
+        /// Json serialized string storing all necessary properties of a KPI.
         /// </summary>
         public string Properties { get; set; }
 

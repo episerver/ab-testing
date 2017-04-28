@@ -3,7 +3,7 @@
 namespace EPiServer.Marketing.KPI.Results
 {
     /// <summary>
-    /// Boolean conversion result for kpi's.
+    /// Boolean conversion result for KPIs.
     /// </summary>
     public class KpiConversionResult : IKpiResult
     {
