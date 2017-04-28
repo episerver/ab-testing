@@ -26,6 +26,7 @@
         <duration_header>¿Durante cuánto tiempo desea ejecutar la prueba A/B?</duration_header>
         <error_conversiongoal>Debe seleccionar un objetivo de conversión antes de guardar la prueba A/B.</error_conversiongoal>
         <error_date_in_the_past>La fecha/hora de inicio de la prueba no puede ser anterior a la fecha actual.</error_date_in_the_past>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>La duración debe ser un número entero válido entre 1 y 365</error_duration>
         <error_invalid_date_time_value>La información introducida no es un valor válido de fecha/hora</error_invalid_date_time_value>
         <error_participation_percentage>El porcentaje de participación debe estar entre 1 y 100</error_participation_percentage>

@@ -26,6 +26,7 @@
         <duration_header>どのくらいの期間、A/Bテストを実施したいですか?</duration_header>
         <error_conversiongoal>A/Bテストを保存する前に、コンバージョン目標を選択する必要があります。</error_conversiongoal>
         <error_date_in_the_past>テストの開始日/時刻を過去にすることはできません。</error_date_in_the_past>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>期間は1から365までの有効な整数でなければなりません</error_duration>
         <error_invalid_date_time_value>入力された情報は、有効な日付/時刻値ではありません</error_invalid_date_time_value>
         <error_participation_percentage>参加割合は1から100の間でなければなりません</error_participation_percentage>

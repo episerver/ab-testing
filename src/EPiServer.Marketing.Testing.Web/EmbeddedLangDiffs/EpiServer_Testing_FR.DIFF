@@ -5,6 +5,7 @@
       <addtestview>
         <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
         <conversion_description path="/abtesting/addtestview/conversion_description/">By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <error_duplicate_kpi_values path="/abtesting/addtestview/error_duplicate_kpi_values/">Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <goals_selectlist_additional_kpi path="/abtesting/addtestview/goals_selectlist_additional_kpi/">Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default path="/abtesting/addtestview/goals_selectlist_default/">Add a goal</goals_selectlist_default>
         <goals_weight_description path="/abtesting/addtestview/goals_weight_description/">Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
