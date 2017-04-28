@@ -34,7 +34,7 @@
       </kpisummarywidget>
       <percentagetemplate>
         <conversion_rate path="/abtesting/percentagetemplate/conversion_rate/">Conversion Rate</conversion_rate>
-        <views path="/abtesting/percentagetemplate/views/">views</views>
+        <views path="/abtesting/percentagetemplate/views/">Views</views>
       </percentagetemplate>
       <pickwinnerview>
         <hide_summary path="/abtesting/pickwinnerview/hide_summary/">Hide Details</hide_summary>
