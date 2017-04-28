@@ -177,7 +177,7 @@
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
             textHelper.renderTestDuration(this.testDuration);
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
-            textHelper.renderDurationProgress(durationProgressBar);
+            textHelper.renderDurationProgress(durationProgressBarDetails);
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
