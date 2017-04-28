@@ -6,7 +6,7 @@
     public interface IClientKpi
     {
         /// <summary>
-        /// Scripts used to evaluate kpi conversion conditions
+        /// Scripts used to evaluate kpi conversion conditions.
         /// </summary>
         string ClientEvaluationScript { get; }
     }
