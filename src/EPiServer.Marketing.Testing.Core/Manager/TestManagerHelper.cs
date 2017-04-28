@@ -42,15 +42,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Owner = theDalTest.Owner,
                 OriginalItemId = theDalTest.OriginalItemId,
                 State = AdaptToManagerState(theDalTest.State),
-                StartDate = theDalTest.StartDate.ToLocalTime(),
-                EndDate = theDalTest.EndDate,
+                StartDate = DateTime.SpecifyKind(theDalTest.StartDate, DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(theDalTest.EndDate, DateTimeKind.Utc),
                 ParticipationPercentage = theDalTest.ParticipationPercentage,
                 IsSignificant = theDalTest.IsSignificant,
                 ZScore = theDalTest.ZScore,
                 ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
-                CreatedDate = theDalTest.CreatedDate.ToLocalTime(),
-                ModifiedDate = theDalTest.ModifiedDate.ToLocalTime(),
+                CreatedDate = DateTime.SpecifyKind(theDalTest.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(theDalTest.ModifiedDate, DateTimeKind.Utc),
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
                 KpiInstances = AdaptToManagerKPI(_kpiManager, theDalTest.KeyPerformanceIndicators)
             };
@@ -182,8 +182,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KpiId = dalConversionResult.KpiId,
                 Total = dalConversionResult.Total,
                 VariantId = dalConversionResult.VariantId,
-                CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate,
+                CreatedDate = DateTime.SpecifyKind(dalConversionResult.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(dalConversionResult.ModifiedDate, DateTimeKind.Utc),
                 TotalMarketCulture = dalConversionResult.TotalMarketCulture,
                 ConvertedTotal = dalConversionResult.ConvertedTotal,
                 ConvertedTotalCulture = dalConversionResult.ConvertedTotalCulture
@@ -213,8 +213,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KpiId = dalConversionResult.KpiId,
                 Value = dalConversionResult.Value,
                 VariantId = dalConversionResult.VariantId,
-                CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate
+                CreatedDate = DateTime.SpecifyKind(dalConversionResult.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(dalConversionResult.ModifiedDate, DateTimeKind.Utc)
             };
 
             return retVariant;
@@ -244,8 +244,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Conversions = dalConversionResult.Conversions,
                 Performance = dalConversionResult.Performance,
                 VariantId = dalConversionResult.VariantId,
-                CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate
+                CreatedDate = DateTime.SpecifyKind(dalConversionResult.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(dalConversionResult.ModifiedDate, DateTimeKind.Utc)
             };
 
             return retVariant;
