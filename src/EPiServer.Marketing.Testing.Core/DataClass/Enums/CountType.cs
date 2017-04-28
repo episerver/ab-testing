@@ -11,7 +11,7 @@
         View,
 
         /// <summary>
-        /// Represents when a user converts based on the kpi(s) associated with a test.
+        /// Represents when a user converts based on the KPI(s) associated with a test.
         /// </summary>
         Conversion
     }

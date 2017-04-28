@@ -1,7 +1,7 @@
 ﻿namespace EPiServer.Marketing.Testing.Core.DataClass.Enums
 {
     /// <summary>
-    /// Type of kpi data to save.
+    /// Type of KPI data to save.
     /// </summary>
     public enum KeyResultType
     {
@@ -16,7 +16,7 @@
         Value,
 
         /// <summary>
-        /// Boolean conversion result used with multiple kpi's.
+        /// Boolean conversion result used with multiple KPI's.
         /// </summary>
         Conversion
     }

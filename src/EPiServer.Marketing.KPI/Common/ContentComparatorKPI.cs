@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.KPI.Common
 {
 
     /// <summary>
-    /// Common KPI class that can be used to compare IContent Guid values
+    /// Common KPI class that can be used to compare IContent Guid values.
     /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
