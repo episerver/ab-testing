@@ -15,17 +15,17 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         }
 
         /// <summary>
-        /// Id of an AB Test object.
+        /// ID of an AB Test object.
         /// </summary>
         public Guid Id { get; set; }
         
         /// <summary>
-        /// Date this object was created
+        /// Date this object was created.
         /// </summary>
         public DateTime CreatedDate { get; set; }
 
         /// <summary>
-        /// Date this object was updated or modified
+        /// Date this object was updated or modified.
         /// </summary>
         public DateTime ModifiedDate { get; set; }
     }

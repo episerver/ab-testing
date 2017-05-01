@@ -155,10 +155,10 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
         /// <summary>
-        /// Serialize the kpi to a Json string and save it in the properties field.
+        /// Serialize the KPI to a JSON string and save it in the properties field.
         /// </summary>
-        /// <param name="kpis">List of Kpi's to save to the db (i.e. contentcomparatorkpi, timeonpagekpi, etc.</param>
-        /// <returns>EF Kpi object to save in the db.</returns>
+        /// <param name="kpis">List of KPIs to save to the DB (i.e. contentcomparatorkpi, timeonpagekpi, etc.)</param>
+        /// <returns>EF KPI object to save in the DB.</returns>
         private List<IDalKpi> ConvertToDalKpis(IList<IKpi> kpis)
         {
             var dalKpis = new List<IDalKpi>();

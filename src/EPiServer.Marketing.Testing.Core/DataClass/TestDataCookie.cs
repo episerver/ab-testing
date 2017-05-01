@@ -11,17 +11,17 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         private IDictionary<Guid, bool> kpis = new Dictionary<Guid, bool>();
 
         /// <summary>
-        /// Test Id.
+        /// Test ID.
         /// </summary>
         public Guid TestId { get; set; }
 
         /// <summary>
-        /// Id of item under test.
+        /// ID of item under test.
         /// </summary>
         public Guid TestContentId { get; set; }
 
         /// <summary>
-        /// Id of item variant being tested.
+        /// ID of item variant being tested.
         /// </summary>
         public Guid TestVariantId { get; set; }
 
@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public bool Viewed { get; set; }
 
         /// <summary>
-        /// Has the current user converted based on the kpi(s) associated with the test.
+        /// Has the current user converted based on the KPI(s) associated with the test.
         /// </summary>
         public bool Converted { get; set; }
 

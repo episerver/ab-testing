@@ -10,12 +10,12 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     public class Variant : CoreEntityBase
     {
         /// <summary>
-        /// Id of the test this variant is associated with.
+        /// ID of the test this variant is associated with.
         /// </summary>
         public Guid? TestId { get; set; }
 
         /// <summary>
-        /// Id of modified content to use instead of the original item for a test.
+        /// ID of modified content to use instead of the original item for a test.
         /// </summary>
         public Guid ItemId { get; set; }
 
@@ -52,17 +52,17 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public virtual ABTest ABTest { get; set; }
 
         /// <summary>
-        /// A list of any financial results that are the result of a kpi associated with the test this variant is part of.
+        /// A list of any financial results that are the result of a KPI associated with the test this variant is part of.
         /// </summary>
         public IList<KeyFinancialResult> KeyFinancialResults { get; set; }
 
         /// <summary>
-        /// A list of any value results(i.e. any numerical value that is not fiancial in nature) that are the result of a kpi associated with the test this variant is part of.
+        /// A list of any value results(i.e. any numerical value that is not fiancial in nature) that are the result of a KPI associated with the test this variant is part of.
         /// </summary>
         public IList<KeyValueResult> KeyValueResults { get; set; }
 
         /// <summary>
-        /// A list of conversion results that are related to a kpi.
+        /// A list of conversion results that are related to a KPI.
         /// </summary>
         public IList<KeyConversionResult> KeyConversionResults { get; set; }
     }
