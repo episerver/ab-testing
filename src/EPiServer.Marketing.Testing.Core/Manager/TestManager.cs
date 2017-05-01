@@ -181,7 +181,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public void Delete(Guid testObjectId)
         {
-            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
+            var testToDelete = Get(testObjectId);
+            RemoveCachedVariant(testToDelete.OriginalItemId);
+
+            foreach (var kpi in testToDelete.KpiInstances)
+            {
+                _kpiManager.Delete(kpi.Id);
+            }
 
             _dataAccess.Delete(testObjectId);
 
