@@ -14,6 +14,7 @@ namespace EPiServer.Marketing.Testing.Web
     public class TestHandlerInitializer : IInitializableHttpModule
     {
         private TestHandler _testHandler;
+        private IClientKpiInjector _clientKpiInjector;
 
         [ExcludeFromCodeCoverage]
         public TestHandlerInitializer()
@@ -24,6 +25,7 @@ namespace EPiServer.Marketing.Testing.Web
         public void Initialize(InitializationEngine context)
         {
             _testHandler = new TestHandler();
+            _clientKpiInjector = new ClientKpiInjector();
         }
 
         [ExcludeFromCodeCoverage]
@@ -38,8 +40,7 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void onPostReleaseRequestState(object sender, EventArgs e)
         {
-            var clientKpiInjector = new ClientKpiInjector();
-            clientKpiInjector.AppendClientKpiScript();
+            _clientKpiInjector.AppendClientKpiScript();
         }
 
         //Interface Requirement but not used.

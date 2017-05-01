@@ -158,6 +158,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KeyConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKeyConversionResults)
             };
 
+            // need to update all kpi result perforamnces because the total number of conversions has changed
+            if (retVariant.Conversions != 0)
+            {
+                foreach (var conversionResult in retVariant.KeyConversionResults)
+                {
+                    conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / retVariant.Conversions * 100);
+                }
+            }
+            
             return retVariant;
         }
 
