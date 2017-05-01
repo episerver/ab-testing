@@ -20,12 +20,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         event EventHandler<TestEventArgs> TestDeleted;
 
         /// <summary>
-        /// Occurs after a test has transitioned to the started state and cache changes made
+        /// Occurs after a test has transitioned to the started state and cache changes made.
         /// </summary>
         event EventHandler<TestEventArgs> TestStarted;
 
         /// <summary>
-        /// Occurs after a test has transitioned to the stopped state and cache changes made
+        /// Occurs after a test has transitioned to the stopped state and cache changes made.
         /// </summary>
         event EventHandler<TestEventArgs> TestStopped;
 
@@ -36,12 +36,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         event EventHandler<TestEventArgs> TestArchived;
 
         /// <summary>
-        /// Occurs after a test has been added to the active test cache
+        /// Occurs after a test has been added to the active test cache.
         /// </summary>
         event EventHandler<TestEventArgs> TestAddedToCache;
 
         /// <summary>
-        /// Occurs after a test has been removed from the active test cache
+        /// Occurs after a test has been removed from the active test cache.
         /// </summary>
         event EventHandler<TestEventArgs> TestRemovedFromCache;
 
@@ -62,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         event EventHandler<KpiEventArgs> KpiConverted;
 
         /// <summary>
-        /// Occurs when all Kpis associated with a given test have been converted
+        /// Occurs when all Kpis associated with a given test have been converted.
         /// </summary>
         event EventHandler<KpiEventArgs> AllKpisConverted;
     }

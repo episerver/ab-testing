@@ -152,7 +152,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Saves a test to the database.
         /// </summary>
         /// <param name="multivariateTest">A test.</param>
-        /// <returns>Id of the test.</returns>
+        /// <returns>ID of the test.</returns>
         public Guid Save(IMarketingTest multivariateTest)
         {
             // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception

@@ -13,7 +13,7 @@ namespace EPiServer.Marketing.Testing.Messaging
     /// <summary>
     /// The messaging manager provides an interface for sending asynchronous messages to update view and 
     /// conversion data for a specific test. Since its a service it can be loaded via the standard service 
-    /// locator methods found in Epi
+    /// locator methods found in EpiServer.
     /// </summary>
     [ServiceConfiguration(ServiceType = typeof(IMessagingManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class MessagingManager : IMessagingManager

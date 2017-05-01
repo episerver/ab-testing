@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <summary>
         /// Emits the asynchronous message to update the view result for the specified Variant version.
         /// </summary>
-        /// <param name="testId">Id of a test.</param>
+        /// <param name="testId">ID of a test.</param>
         /// <param name="itemVersion">Version of the cms item that was viewed.</param>
         void EmitUpdateViews(Guid testId, int itemVersion);
 

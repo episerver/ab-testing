@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
         /// </summary>
         /// <param name="originalItemId">ID of the item under test.</param>
-        /// <returns>List of tests</returns>
+        /// <returns>List of tests.</returns>
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Saves a test to the database.
         /// </summary>
         /// <param name="testObject">A test.</param>
-        /// <returns>Id of the test.</returns>
+        /// <returns>ID of the test.</returns>
         Guid Save(IMarketingTest testObject);
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <summary>
         /// Saves a KPI result.  The result is appended to the list of results for a given variant version for a test for both historical and statistical calculations.
         /// </summary>
-        /// <param name="testId">ID of a test to save the result to</param>
+        /// <param name="testId">ID of a test to save the result to.</param>
         /// <param name="itemVersion">Version of the variant the result pertains to.</param>
         /// <param name="keyResult">The result to save.</param>
         /// <param name="type">Type of the result to save.</param>

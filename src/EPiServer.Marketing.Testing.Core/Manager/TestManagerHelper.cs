@@ -24,9 +24,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return contentToCache;
         }
 
-        // TODO: generate randomness better!
-        // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
-        // to determine what page to display to the user.
         internal static int GetRandomNumber()
         {
             return _r.Next(1, 3);
