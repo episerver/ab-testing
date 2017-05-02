@@ -155,6 +155,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KeyConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKeyConversionResults)
             };
 
+            if (retVariant.Conversions != 0)
+            {
+                foreach (var conversionResult in retVariant.KeyConversionResults)
+                {
+                    conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / retVariant.Conversions * 100);
+                }
+            }
+            
             return retVariant;
         }
 
