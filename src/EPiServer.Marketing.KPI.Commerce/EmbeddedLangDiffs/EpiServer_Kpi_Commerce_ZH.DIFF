@@ -3,13 +3,13 @@
   <language name="中文 (Chinese)" id="zh-CN">
     <commercekpi>
       <addtocart>
-        <description path="/commercekpi/addtocart/description/">Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
+        <description path="/commercekpi/addtocart/description/">Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
         <name path="/commercekpi/addtocart/name/">Add To Cart</name>
       </addtocart>
       <admin>
         <cancel path="/commercekpi/admin/cancel/">Cancel</cancel>
-        <description path="/commercekpi/admin/description/">These settings are the defaults values used for Commerce KPIs when added to a test.</description>
-        <displayname path="/commercekpi/admin/displayname/">Commerce Kpi Configuration</displayname>
+        <description path="/commercekpi/admin/description/">These settings are the default values used for Commerce conversion goals when added to a test.</description>
+        <displayname path="/commercekpi/admin/displayname/">Commerce Conversion Goals Configuration</displayname>
         <financialculturepreference path="/commercekpi/admin/financialculturepreference/">Select which culture to use when saving and viewing financial results</financialculturepreference>
         <save path="/commercekpi/admin/save/">Save</save>
       </admin>
@@ -19,7 +19,7 @@
           <error_defaultmarketundefined path="/commercekpi/averageorder/config_markup/error_defaultmarketundefined/">A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
           <error_undefinedmarket path="/commercekpi/averageorder/config_markup/error_undefinedmarket/">The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
         </config_markup>
-        <description path="/commercekpi/averageorder/description/">Views: The number of visitors that viewed the item under test.  Conversions: The total represents the average cart total across all visitors that checked out as part of the test.</description>
+        <description path="/commercekpi/averageorder/description/">Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
         <name path="/commercekpi/averageorder/name/">Average Order</name>
         <readonly_markup>
           <conversion_description path="/commercekpi/averageorder/readonly_markup/conversion_description/">Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>

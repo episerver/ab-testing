@@ -26,7 +26,7 @@
         <duration_header>您希望 A/B 测试进行多久？</duration_header>
         <error_conversiongoal>您必须选择一个转换目标方可保存 A/B 测试。</error_conversiongoal>
         <error_date_in_the_past>测试的开始日期/时间不可为过去的日期/时间。</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
         <error_duration>持续时间必须为 1 和 365 之间的一个有效整数</error_duration>
         <error_invalid_date_time_value>输入的信息为无效日期/时间值</error_invalid_date_time_value>
         <error_participation_percentage>参与百分比必须在 1 到 100 之间</error_participation_percentage>
@@ -35,8 +35,8 @@
         <goals_header>此测试的总体目标是什么？</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_description>Here you can decide if one of the goals is more important than the others when measuring a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>尚未计划，并将立即开始</notscheduled_text>
@@ -54,7 +54,7 @@
         <test_description>验证是否有任何新的内容添加或变更将切实提高转换率。</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>Automatically publish the winner of the test if the results are statistically significant?</autopublishwinner>
         <cancel>取消</cancel>
         <confidencelevel>可信度：</confidencelevel>
         <description>这些设置为默认值，在创建 AB 测试时使用。</description>

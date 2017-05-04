@@ -26,7 +26,7 @@
         <duration_header>Wie lange soll der A/B-Test durchgeführt werden?</duration_header>
         <error_conversiongoal>Sie müssen ein Konversionsziel auswählen, bevor Sie den A/B-Test speichern können.</error_conversiongoal>
         <error_date_in_the_past>Das Startdatum bzw. die Startzeit des Tests kann nicht in der Vergangenheit liegen.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
         <error_duration>Als Dauer muss eine gültige Ganzzahl zwischen 1 und 365 angegeben werden.</error_duration>
         <error_invalid_date_time_value>Die eingegebenen Informationen sind kein gültiger Datums-/Zeitwert.</error_invalid_date_time_value>
         <error_participation_percentage>Der Teilnahmeprozentsatz muss zwischen 1 und 100 liegen.</error_participation_percentage>
@@ -35,8 +35,8 @@
         <goals_header>Was ist das Gesamtziel für diesen Test?</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_description>Here you can decide if one of the goals is more important than the others when measuring a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>nicht geplant, startet jetzt</notscheduled_text>
@@ -54,7 +54,7 @@
         <test_description>Überprüfen Sie, ob neue Ergänzungen oder Änderungen des Inhalts die Konversionsrate tatsächlich erhöhen.</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>Automatically publish the winner of the test if the results are statistically significant?</autopublishwinner>
         <cancel>Abbrechen</cancel>
         <confidencelevel>Konfidenzniveau:</confidencelevel>
         <description>Diese Einstellungen sind die Standardwerte für die Erstellung von A/B-Tests.</description>

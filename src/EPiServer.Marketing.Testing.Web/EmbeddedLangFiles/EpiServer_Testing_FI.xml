@@ -26,7 +26,7 @@
         <duration_header>Kuinka pitkään haluat suorittaa A/B-testiä?</duration_header>
         <error_conversiongoal>Muuntotavoite on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversiongoal>
         <error_date_in_the_past>Testin aloitusaika/-päivämäärä ei voi olla menneisyydessä.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
         <error_duration>Keston on oltava kelvollinen kokonaisluku 1–365</error_duration>
         <error_invalid_date_time_value>Annettu tieto ei ole kelvollinen päivämäärän/ajan arvo</error_invalid_date_time_value>
         <error_participation_percentage>Osallistumisprosentin on oltava 1–100</error_participation_percentage>
@@ -35,8 +35,8 @@
         <goals_header>Mikä on tämän testin kokonaistavoite?</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_description>Here you can decide if one of the goals is more important than the others when measuring a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>ei ajoitettu, alkaa nyt</notscheduled_text>
@@ -54,7 +54,7 @@
         <test_description>Vahvista, jos uusi lisäys tai muutos sisältöön parantaa muuntonopeutta.</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>Automatically publish the winner of the test if the results are statistically significant?</autopublishwinner>
         <cancel>Peruuta</cancel>
         <confidencelevel>Luottamustaso:</confidencelevel>
         <description>Nämä asetukset ovat oletusarvoja, joita käytetään AB-testien luomiseen.</description>

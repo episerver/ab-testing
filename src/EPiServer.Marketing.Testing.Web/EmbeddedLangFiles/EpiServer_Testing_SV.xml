@@ -26,7 +26,7 @@
         <duration_header>Hur länge vill du köra A/B-testet?</duration_header>
         <error_conversiongoal>Du måste välja ett konverteringsmål innan du kan spara A/B-testet.</error_conversiongoal>
         <error_date_in_the_past>Testets startdag/starttid måste vara i framtiden.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
         <error_duration>Testtiden måste vara ett heltal mellan 1 och 365</error_duration>
         <error_invalid_date_time_value>Den angivna informationen är inte ett godkänt värde för dag/tid</error_invalid_date_time_value>
         <error_participation_percentage>Deltagandet (i procent) måste vara mellan 1 och 100</error_participation_percentage>
@@ -35,8 +35,8 @@
         <goals_header>Vad är målet med testet?</goals_header>
         <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_description>Here you can decide if one of the goals is more important than the others when measuring a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>inte schemalagt, kommer att starta nu</notscheduled_text>
@@ -54,7 +54,7 @@
         <test_description>Validera om nya tillägg eller innehållsändringar faktiskt påverkar antalet konverteringar.</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>Automatically publish the winner of the test if the results are statistically significant?</autopublishwinner>
         <cancel>Avbryt</cancel>
         <confidencelevel>Konfidensnivå:</confidencelevel>
         <description>Dessa inställningar är standardvärden som används vid skapandet av A/B-test.</description>

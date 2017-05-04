@@ -8,7 +8,7 @@
           <error_conversionproduct>Du skal vælge et produkt, før du kan gemme A/B-testen.</error_conversionproduct>
           <error_not_published_product>Du skal vælge et produkt eller en produktvariant, der er publiceret, før du kan gemme A/B-testen.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
+        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
         <name>Add To Cart</name>
         <readonly_markup>
           <conversion_header>Føj produkt til indkøbsvogn</conversion_header>
@@ -17,8 +17,8 @@
       </addtocart>
       <admin>
         <cancel>Cancel</cancel>
-        <description>These settings are the defaults values used for Commerce KPIs when added to a test.</description>
-        <displayname>Commerce Kpi Configuration</displayname>
+        <description>These settings are the default values used for Commerce conversion goals when added to a test.</description>
+        <displayname>Commerce Conversion Goals Configuration</displayname>
         <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
         <save>Save</save>
       </admin>
@@ -28,7 +28,7 @@
           <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
           <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the item under test.  Conversions: The total represents the average cart total across all visitors that checked out as part of the test.</description>
+        <description>Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
         <name>Average Order</name>
         <readonly_markup>
           <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
