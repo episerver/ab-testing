@@ -56,7 +56,6 @@
         resources: resources,
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
-        publishButtonClickCounter: 0,
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -70,7 +69,7 @@
         },
 
         startup: function () {
-            this.publishButtonClickCounter = 0;
+            this.disablePickButtons(false);
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
             }
@@ -108,7 +107,6 @@
         },
 
         _contextChanged: function (newContext) {
-            this.publishButtonClickCounter = 0;
             var me = this;
             this.kpiSummaryWidgets = new Array();
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
@@ -127,7 +125,6 @@
         },
 
         _renderData: function () {
-            this.publishButtonClickCounter = 0;
             var me = this;
             this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
             this.topic = this.topic || topic;
@@ -158,6 +155,7 @@
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
+            this.disablePickButtons(false);
             var kpiuiElement = dom.byId(conversionMarkupId);
             this._clearKpiMarkup(kpiuiElement);
 
@@ -202,8 +200,8 @@
         },
 
         _onPublishedVersionClick: function () {
-            if (this.publishButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
-            this.publishButtonClickCounter++; // Increment click count
+            var me = this;
+            this.disablePickButtons(true);
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
@@ -217,10 +215,13 @@
                     }).otherwise(function () {
                         alert("Error Processing Winner: Unable to process and save selected version");
                         console.log("Error occurred while processing winning content");
+                        me.disablePickButtons(false);
                     });
         },
 
         _onVariantVersionClick: function () {
+            var me = this;
+            this.disablePickButtons(true);
             if (this.publishButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
             this.publishButtonClickCounter++; // Increment click count
             this.store.put({
@@ -236,7 +237,14 @@
                 }).otherwise(function () {
                     alert("Error Processing Winner: Unable to process and save selected version");
                     console.log("Error occurred while processing winning content");
+                    me.disablePickButtons(false);
                 });
+        },
+
+        disablePickButtons: function(isDisabled)
+        {
+            this.controlPickButton.set("disabled", isDisabled);
+            this.challengerPickButton.set("disabled", isDisabled);
         },
 
         _renderSignificance: function () {
