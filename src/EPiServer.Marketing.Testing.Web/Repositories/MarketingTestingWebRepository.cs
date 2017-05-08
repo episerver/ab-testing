@@ -229,12 +229,18 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
                 IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
+                var initialTestState = currentTest;
                 try
                 {
                     //get the appropriate variant and set IsWinner to True. Archive test to remove the lock on the content
                     var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
 
                     var draftContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.DraftContentLink));
+
+                    //Pre Archive the test to unlock content and attempt to publish the winning version
+                    //This only sets the state to archived.
+                    currentTest.State = TestState.Archived;
+                    SaveMarketingTest(currentTest);
 
                     //publish draft content for history tracking.
                     //Even if winner is the current published version we want to show the draft
@@ -255,7 +261,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 {
                     _logger.Error("PickWinner Failed: Unable to process and/or publish winning test results", ex);
                     // restore the previous test data in the event of an error in case we archive the test but fail to publish the winning variant
-                    try { SaveMarketingTest(currentTest); } catch { }
+                    try
+                    {
+                        SaveMarketingTest(initialTestState);
+                    }
+                    catch { }
                 }
             }
             return testResult.TestId;
@@ -270,7 +280,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             return _testManager.GetVariantContent(contentGuid);
         }
-        
+
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)
         {
             var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
@@ -285,7 +295,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             };
             _testManager.IncrementCount(c);
         }
-        
+
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
         {
             _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type, async);
