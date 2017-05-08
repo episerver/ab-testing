@@ -233,7 +233,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 {
                     //get the appropriate variant and set IsWinner to True. Archive test to remove the lock on the content
                     var workingVariantId = currentTest.Variants.FirstOrDefault(x => x.ItemVersion == winningVersion).Id;
-                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
 
                     var draftContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.DraftContentLink));
 
@@ -248,6 +247,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         var publishedContent = _testResultHelper.GetClonedContentFromReference(ContentReference.Parse(testResult.PublishedContentLink));
                         _testResultHelper.PublishContent(publishedContent);
                     }
+
+                    // only want to archive the test if publishing the winning variant succeeds.
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
                 }
                 catch (Exception ex)
                 {

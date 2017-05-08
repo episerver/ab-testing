@@ -6,6 +6,8 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Principal;
+using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Statistics;
@@ -13,6 +15,7 @@ using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -158,6 +161,15 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         TestId = test.Id.ToString(),
                         WinningContentLink = winningLink
                     };
+
+                    // We need to impersonate an admin because the job may not have sufficient priviledges.  If there is no context(i.e. someone didn't force run the job) then 
+                    // this temp admin will be used and the log will show this user name.
+                    if (HttpContext.Current == null)
+                    {
+                        PrincipalInfo.CurrentPrincipal = new GenericPrincipal(
+                            new GenericIdentity("A/B Testing Job Auto Publisher"),
+                            new[] { "Administrators" });
+                    }
 
                     webRepo.PublishWinningVariant(storeModel);
                 }
