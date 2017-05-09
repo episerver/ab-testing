@@ -162,13 +162,11 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         WinningContentLink = winningLink
                     };
 
-                    // We need to impersonate an admin because the job may not have sufficient priviledges.  If there is no context(i.e. someone didn't force run the job) then 
-                    // this temp admin will be used and the log will show this user name.
+                    // We need to impersonate the user that created the test because the job may not have sufficient priviledges.  If there is no context(i.e. someone didn't force run the job) then 
+                    // the test creator will be used and the log will show this user name.
                     if (HttpContext.Current == null)
                     {
-                        PrincipalInfo.CurrentPrincipal = new GenericPrincipal(
-                            new GenericIdentity("A/B Testing Job Auto Publisher"),
-                            new[] { "Administrators" });
+                        PrincipalInfo.CurrentPrincipal = PrincipalInfo.CreatePrincipal(test.Owner);
                     }
 
                     webRepo.PublishWinningVariant(storeModel);
