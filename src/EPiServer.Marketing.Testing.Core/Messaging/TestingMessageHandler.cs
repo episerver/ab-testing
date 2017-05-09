@@ -35,8 +35,11 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <param name="message"></param>
         public void Handle(UpdateViewsMessage message)
         {
-            var tm = _serviceLocator.GetInstance<ITestManager>();
-            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, default(Guid), false);
+            if (ProcessMessage(message.TestId.ToString() + message.ClientIdentifier))
+            {
+                var tm = _serviceLocator.GetInstance<ITestManager>();
+                tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, default(Guid), false);
+            }
         }
 
         /// <summary>
@@ -45,19 +48,24 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <param name="message"></param>
         public void Handle(UpdateConversionsMessage message)
         {
-            if (ProcessMessage(message))
+            if (ProcessMessage(message.KpiId.ToString() + message.ClientIdentifier))
             {
                 var tm = _serviceLocator.GetInstance<ITestManager>();
                 tm.IncrementCount(message.TestId, message.ItemVersion, CountType.Conversion, message.KpiId, false);
             }
         }
 
-        private bool ProcessMessage(UpdateConversionsMessage message)
+        /// <summary>
+        /// Checks and Adds the specified key to an in memory cache which can be used to limit aggressive clients from 
+        /// incrementing view or conversion counts too quickly
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>true if the message should be processed, else false.</returns>
+        private bool ProcessMessage(String key)
         {
             bool retval = false;
-            if (message.ClientIdentifier != null)
+            if (key != null)
             {
-                string key = message.KpiId.ToString() + message.ClientIdentifier;
                 lock (_sessionCache)
                 {
                     if (!_sessionCache.Contains(key))
