@@ -291,7 +291,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 resultType = resultType,
                 kpiId = kpiId,
                 asynch = async,
-                clientId = sessionid
+                clientId = sessionid + testId.ToString()
             };
             _testManager.IncrementCount(c);
         }

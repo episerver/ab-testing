@@ -82,10 +82,10 @@ namespace EPiServer.Marketing.Testing.Messaging
         }
 
         /// <inheritdoc />
-        public void EmitUpdateViews(Guid testId, int itemVersion)
+        public void EmitUpdateViews(Guid testId, int itemVersion, string clientId = null)
         {
             var emitterFactory = new InMemoryMessageEmitter(_queueStore.Get(QueName));
-            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = testId, ItemVersion = itemVersion});
+            emitterFactory.Emit<UpdateViewsMessage>(new UpdateViewsMessage() { TestId = testId, ItemVersion = itemVersion, ClientIdentifier = clientId });
         }
 
         /// <inheritdoc />
