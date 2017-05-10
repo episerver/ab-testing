@@ -67,6 +67,10 @@
         <success>Configuration settings saved successfully.</success>
         <testduration>Test Duration:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <title>Archived Tests</title>
+        <description>Shows archived tests for the select content.</description>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>
