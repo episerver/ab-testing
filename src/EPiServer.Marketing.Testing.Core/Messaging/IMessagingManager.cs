@@ -14,8 +14,7 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// </summary>
         /// <param name="testId">ID of a test.</param>
         /// <param name="itemVersion">Version of the cms item that was viewed.</param>
-        /// <param name="clientId">Optional client ID that will be used to throttle agressive clients and prevent multiple views.</param>
-        void EmitUpdateViews(Guid testId, int itemVersion, string clientId = null);
+        void EmitUpdateViews(Guid testId, int itemVersion);
 
         /// <summary>
         /// Emits the asynchronous message to update a conversion result for the specified Variant version.
