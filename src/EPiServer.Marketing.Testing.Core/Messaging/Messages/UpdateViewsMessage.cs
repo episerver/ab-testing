@@ -16,10 +16,5 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
         /// Version of the variant to increment its view count.
         /// </summary>
         public int ItemVersion { get; set; }
-
-        /// <summary>
-        /// Set this property to a unique value that is client specific to prevent aggressive clients from triggering multiple conversions.
-        /// </summary>
-        public string ClientIdentifier { get; set; }
     }
 }

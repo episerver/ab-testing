@@ -326,7 +326,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 if (criteria.resultType == CountType.Conversion)
                     messaging.EmitUpdateConversion(criteria.testId, criteria.itemVersion, criteria.kpiId, criteria.clientId);
                 else if (criteria.resultType == CountType.View)
-                    messaging.EmitUpdateViews(criteria.testId, criteria.itemVersion, criteria.clientId);
+                    messaging.EmitUpdateViews(criteria.testId, criteria.itemVersion);
             }
             else
             {

@@ -477,7 +477,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             messageManager.Verify(mm => mm.EmitUpdateViews(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<int>(arg => arg.Equals(1)), It.IsAny<string>()),
+                It.Is<int>(arg => arg.Equals(1))),
                 "Guids are not correct or update View message not emmited");
         }
 

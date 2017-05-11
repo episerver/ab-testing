@@ -35,11 +35,8 @@ namespace EPiServer.Marketing.Testing.Messaging
         /// <param name="message"></param>
         public void Handle(UpdateViewsMessage message)
         {
-            if (ProcessMessage(message))
-            {
-                var tm = _serviceLocator.GetInstance<ITestManager>();
-                tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, default(Guid), false);
-            }
+            var tm = _serviceLocator.GetInstance<ITestManager>();
+            tm.IncrementCount(message.TestId, message.ItemVersion, CountType.View, default(Guid), false);
         }
 
         /// <summary>
@@ -53,32 +50,6 @@ namespace EPiServer.Marketing.Testing.Messaging
                 var tm = _serviceLocator.GetInstance<ITestManager>();
                 tm.IncrementCount(message.TestId, message.ItemVersion, CountType.Conversion, message.KpiId, false);
             }
-        }
-
-        private bool ProcessMessage(UpdateViewsMessage message)
-        {
-            bool retval = false;
-            if (message.ClientIdentifier != null)
-            {
-                string key = message.TestId.ToString() + message.ClientIdentifier;
-                lock (_sessionCache)
-                {
-                    if (!_sessionCache.Contains(key))
-                    {
-                        CacheItemPolicy policy = new CacheItemPolicy();
-                        policy.SlidingExpiration = TimeSpan.FromSeconds(5);
-                        _sessionCache.Add(key, "", policy);
-                        retval = true; // next time we return false so we dont process the message
-                    }
-                }
-            }
-            else
-            {
-                // not using a unique client Id
-                retval = true;
-            }
-
-            return retval;
         }
 
         private bool ProcessMessage(UpdateConversionsMessage message)
