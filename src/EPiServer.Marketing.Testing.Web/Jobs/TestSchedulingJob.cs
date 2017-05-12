@@ -6,6 +6,8 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Security.Principal;
+using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Statistics;
@@ -13,6 +15,7 @@ using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -33,16 +36,19 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
     public class TestSchedulingJob : ScheduledJobBase
     {
         private IServiceLocator _locator;
+        private AdminConfigTestSettings _config;
 
         [ExcludeFromCodeCoverage]
         public TestSchedulingJob()
         {
             _locator = ServiceLocator.Current;
+            _config = AdminConfigTestSettings.Current;
         }
 
         internal TestSchedulingJob(IServiceLocator locator)
         {
             _locator = locator;
+            _config = _locator.GetInstance<AdminConfigTestSettings>();
         }
 
         public override string Execute()
@@ -55,14 +61,8 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
             var jobRepo = _locator.GetInstance<IScheduledJobRepository>();
             var job = jobRepo.Get(this.ScheduledJobId);
             var nextExecutionUTC = job.NextExecutionUTC;
-            var autoPublishTestResults = true;
 
-            // throw this in a try in case we can't access the big table for some reason, that shouldn't be a reason to not be able to create a test - this really shouldn't happen though.
-            try
-            {
-                autoPublishTestResults = AdminConfigTestSettings.Current.AutoPublishWinner;
-            }
-            catch { }
+            var autoPublishTestResults = _config.AutoPublishWinner;
             
             // Start / stop any tests that need to be.
             // If any tests are scheduled to start or stop prior to the next scheduled
@@ -72,7 +72,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                 switch (test.State)
                 {
                     case TestState.Active:
-                        var utcEndDate = test.EndDate;
+                        var utcEndDate = test.EndDate.ToUniversalTime();
                         if (DateTime.UtcNow > utcEndDate) // stop it now
                         {
                             webRepo.StopMarketingTest(test.Id);
@@ -88,7 +88,7 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         }
                         break;
                     case TestState.Inactive:
-                        var utcStartDate = test.StartDate;
+                        var utcStartDate = test.StartDate.ToUniversalTime();
                         if ( DateTime.UtcNow > utcStartDate) // start it now
                         {
                             webRepo.StartMarketingTest(test.Id);
@@ -161,6 +161,13 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         TestId = test.Id.ToString(),
                         WinningContentLink = winningLink
                     };
+
+                    // We need to impersonate the user that created the test because the job may not have sufficient priviledges.  If there is no context(i.e. someone didn't force run the job) then 
+                    // the test creator will be used and the log will show this user name.
+                    if (HttpContext.Current == null)
+                    {
+                        PrincipalInfo.CurrentPrincipal = PrincipalInfo.CreatePrincipal(test.Owner);
+                    }
 
                     webRepo.PublishWinningVariant(storeModel);
                 }

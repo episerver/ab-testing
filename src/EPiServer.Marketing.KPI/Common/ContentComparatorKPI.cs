@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.KPI.Common
 {
 
     /// <summary>
-    /// Common KPI class that can be used to compare IContent Guid values
+    /// Common KPI class that can be used to compare IContent Guid values.
     /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
@@ -26,6 +26,9 @@ namespace EPiServer.Marketing.KPI.Common
         description_id = "/kpi/content_comparator_kpi/description")]
     public class ContentComparatorKPI : Kpi
     {
+        /// <summary>
+        /// ID of the content to be tested.
+        /// </summary>
         [DataMember]
         public Guid ContentGuid;
         public IContent _content;
@@ -35,11 +38,16 @@ namespace EPiServer.Marketing.KPI.Common
         {
         }
 
+        /// <summary>
+        /// ID of the content to be tested.
+        /// </summary>
+        /// <param name="contentGuid">ID of the content to be tested.</param>
         public ContentComparatorKPI(Guid contentGuid)
         {
             ContentGuid = contentGuid;
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiMarkup
         {
@@ -52,6 +60,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         [DataMember]
         public override string UiReadOnlyMarkup
         {
@@ -61,16 +70,14 @@ namespace EPiServer.Marketing.KPI.Common
 
                 if (ContentGuid != Guid.Empty)
                 {
-                    var conversionHeaderText = ServiceLocator.Current.GetInstance<LocalizationService>()
-                        .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_header");
-                    var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
+                     var conversionDescription = ServiceLocator.Current.GetInstance<LocalizationService>()
                         .GetString("/kpi/content_comparator_kpi/readonly_markup/conversion_selector_description");
 
                     var urlHelper = ServiceLocator.Current.GetInstance<UrlHelper>();
                     var contentRepository = ServiceLocator.Current.GetInstance<IContentRepository>();
                     var conversionContent = contentRepository.Get<IContent>(ContentGuid);
                     var conversionLink = urlHelper.ContentUrl(conversionContent.ContentLink);
-                    markup = string.Format(markup, conversionHeaderText, conversionDescription, conversionLink,
+                    markup = string.Format(markup, conversionDescription, conversionLink,
                         conversionContent.Name);
                 }
 
@@ -78,6 +85,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
             var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
@@ -95,6 +103,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;
@@ -146,6 +155,8 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         private EventHandler<ContentEventArgs> _eh;
+
+        /// <inheritdoc />
         public override event EventHandler EvaluateProxyEvent
         {
             add {

@@ -1,13 +1,6 @@
-﻿<h4>{0}</h4>
-<p>
-    <label>{1}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span>
-    <span class="epi-visibleLink" onclick="switchToProduct();">{3}</span>
+﻿<p>
+    <label>{0}</label> <span class="dijitInline dijitReset digitIcon epi-iconPage"></span>
+    <span class="epi-visibleLink" onclick="var topic = require('dojo/topic');
+            var contextParameters = {{ uri: 'epi.cms.contentdata:///{1}' }};
+            topic.publish('/epi/shell/context/request', contextParameters); ">{2}</span>
 </p>
-<script type="text/javascript">
-        function switchToProduct() {{
-            var topic = require("dojo/topic");
-            var contextParameters = {{ uri: "epi.cms.contentdata:///{2}" }};
-            topic.publish("/epi/shell/context/request", contextParameters);
-        }};
-
-</script>

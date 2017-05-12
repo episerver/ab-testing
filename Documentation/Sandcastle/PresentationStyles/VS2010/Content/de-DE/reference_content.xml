@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <content xml:space="preserve">
 	<!-- Translations provided by Michael Buchner -->
 
@@ -384,7 +383,7 @@
   <item id="text_contravariant">Dieser Typparameter ist kontravariant. Das bedeutet, Sie können entweder den spezifizierten oder einen weniger abgeleiteten Typ verwenden. </item>
   <item id="text_variance">Für mehr Informationen über Kovarianz und Kontravarianz siehe <a href="http://msdn.microsoft.com/en-us/library/ee207183.aspx" target="_blank">Kovarianz und Kontravarianz (C# und Visual Basic).</a>.</item>
 
-  <!-- Non-CLS Compliant boilerplate text-->
+  <!-- Non Cls Compliant boilerplate text-->
   <item id="boilerplate_NotClsCompliant">Die API ist nicht CLS-konform.</item>
   <item id="boilerplate_AltClsCompliant">The CLS-konforme Alternative ist {0}.</item>
   
@@ -550,8 +549,4 @@
   <item id="SMCMissingTag"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;{0}&gt; documentation for "{1}"]</p></item>
   <item id="SMCMissingParamTag"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;{0} name="{1}"/&gt; documentation for "{2}"]</p></item>
   <item id="SMCMissingIncludeTarget"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[Missing &lt;include&gt; target documentation in '{0}'.  File: '{1}' Path: '{2}']</p></item>
-
-	<!-- View Source link text -->
-	<item id="sourceCodeLinkText">View Source</item>
-	<item id="sourceCodeLinkTitle">View the source code</item>
 </content>

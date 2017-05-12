@@ -1,0 +1,96 @@
+﻿.epi-kpiWidget-body {
+    background-color: #f8f8f8;
+    padding-left:5px;
+}
+
+.epi-kpiWidget-content {
+    width: 95%;
+}
+
+.epi-kpiWidget-lbl {
+    padding-top: 4px;
+    font-weight: bold;
+    display: block;
+    vertical-align: middle;
+}
+
+.epi-kpiWidget-kpi-lbl {
+    font-size: larger;
+}
+
+.epi-kpiWidget-remove-btn {
+    font-weight: bold;
+    font-size: larger;
+    display: block;
+    float: right;
+}
+
+.epi-kpiWidget-weightWidget-body {
+    max-width: 30%;
+    margin-bottom: 10px;
+}
+
+.epi-kpiWidget-weightWidget-label-row {
+    float: left;
+    min-width: 50%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.epi-kpiWidget-weightWidget-row {
+    text-align: left;
+}
+
+.epi-kpiSummaries-bold {
+    font-weight: bold;
+}
+
+.epi-kpiSummaries-summary-row {
+    height: 40px;
+}
+
+.epi-kpiSummaries-table {
+    width: 80%;
+    margin: auto;
+}
+
+.epi-kpiSummary-table {
+    width: 100%;
+}
+
+.epi-kpiWidget-summaries-td {
+    text-align: center;
+}
+
+.epi-kpiSummaries-markup-td {
+    width: 50%;
+}
+
+.epi-kpiSummaries-markup-td div {
+    margin-top:20px;
+}
+
+.epi-kpiSummaries-data-td {
+    width: 15%;
+}
+
+.epi-kpiSummaries-selector-td {
+    min-width: 75px;
+}
+
+.epi-percentTemplate {
+    width: 50%;
+    height: 50px;
+    margin: auto;
+}
+
+.epi-percentTemplate-conversionPercent {
+    text-align: center;
+    width: 50%;
+}
+
+.epi-percentTemplate-views {
+    text-align: center;
+    width: 50%;
+    float: right;
+}

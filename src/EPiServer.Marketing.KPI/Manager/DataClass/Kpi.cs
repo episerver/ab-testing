@@ -11,7 +11,9 @@ using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// KPI object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
+    /// </summary>
     [DataContract]
     public class Kpi : IKpi
     {
@@ -27,9 +29,9 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         /// <inheritdoc />
         [DataMember]
         public Guid Id { get; set; }
-        
-        [DataMember]
+
         /// <inheritdoc />
+        [DataMember]
         public virtual ResultComparison ResultComparison
         {
             get
@@ -61,7 +63,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         }
 
         /// <summary>
-        /// Indicates the result type used by the kpi.
+        /// Indicates the result type used by the KPI.
         /// Override to properly display values in the UI.
         /// </summary>
         [DataMember]
@@ -143,11 +145,11 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
 
         /// <summary>
         /// Given the specified Namespace.filename key we will load the string from the file found in this assembly. If this fails 
-        /// its probably because the key is wrong or the resources is not in the assembly. See 
+        /// it's probably because the key is wrong or the resources is not in the assembly. See 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        /// <returns>true if loaded, else false. If false value contains the exception message.</returns>
+        /// <returns>True if loaded, else false. If false value contains the exception message.</returns>
         internal bool TryGetResourceString(string key, out string value)
         {
             bool retval = false;
@@ -173,12 +175,14 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         [DataMember]
         public DateTime ModifiedDate { get; set; }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// KPI implentation for using the DynamicDataStore that is part of EPiServer for storing commerce related settings.
+        /// </summary>
         [DataMember]
         public CommerceData PreferredCommerceFormat {get; set;}
 
         /// <inheritdoc />
-        public virtual void Validate(Dictionary<string, string> kpiData)
+        public virtual void Validate(Dictionary<string, string> responseData)
         {
             throw new NotImplementedException();
         }
@@ -190,7 +194,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         }
 
         /// <summary>
-        /// Override to initalize any internal data
+        /// Override to initalize any internal data.
         /// </summary>
         [ExcludeFromCodeCoverage]
         public virtual void Initialize()
@@ -198,7 +202,7 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
         }
 
         /// <summary>
-        /// Overided for any internal kpi instance cleanup
+        /// Overided for any internal KPI instance cleanup.
         /// </summary>
         [ExcludeFromCodeCoverage]
         public virtual void Uninitialize()

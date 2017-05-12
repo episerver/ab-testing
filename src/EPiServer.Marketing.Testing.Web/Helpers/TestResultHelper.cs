@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public ContentReference PublishContent(IContent contentToPublish)
         {
             PublishContentEventListener.addPublishingContent(contentToPublish);
-            return _contentRepository.Save(contentToPublish, DataAccess.SaveAction.Publish, AccessLevel.Administer);
+            return _contentRepository.Save(contentToPublish, DataAccess.SaveAction.Publish, AccessLevel.Publish);
         }
     }
 }

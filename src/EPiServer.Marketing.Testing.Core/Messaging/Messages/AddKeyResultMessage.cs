@@ -5,17 +5,17 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
 {
     /// <summary>
-    /// Message used for saving any type of kpi result that implements IKeyResult.
+    /// Message used for saving any type of KPI result that implements IKeyResult.
     /// </summary>
     public class AddKeyResultMessage
     {
         /// <summary>
-        /// Id of the test that the kpi result pertains to.
+        /// ID of the test that the KPI result pertains to.
         /// </summary>
         public Guid TestId { get; set; }
 
         /// <summary>
-        /// Version of the variant that the kpi result pertains to.
+        /// Version of the variant that the KPI result pertains to.
         /// </summary>
         public int ItemVersion { get; set; }
 

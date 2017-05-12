@@ -7,18 +7,27 @@ using EPiServer.Security;
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
-    /// Used with testmanager IMarketing Test events as well as a base for Kpi events.
+    /// Used with testmanager IMarketing Test events as well as a base for KPI events.
     /// </summary>
     public class TestEventArgs : EventArgs
     {
         public TestEventArgs() { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="test">A test.</param>
         public TestEventArgs(IMarketingTest test)
         {
             this.Test = test;
             this.CurrentUser = PrincipalInfo.Current.Principal.Identity;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="test">A test.</param>
+        /// <param name="currentContent">The content to check.</param>
         public TestEventArgs(IMarketingTest test, IContent currentContent) : this(test)
         {
             this.CurrentContent = currentContent;

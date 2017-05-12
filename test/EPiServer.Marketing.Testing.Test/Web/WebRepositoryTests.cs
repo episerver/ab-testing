@@ -3,6 +3,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -13,9 +14,7 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
-using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.KPI.Manager;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -27,6 +26,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ITestResultHelper> _mockTestResultHelper;
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
         private Mock<IKpiManager> _mockKpiManager;
+        private Mock<IHttpContextHelper> _mockHttpHelper;
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -53,6 +53,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_mockMarketingTestingWebRepository.Object);
+
+            _mockHttpHelper = new Mock<IHttpContextHelper>();
+            _mockServiceLocator.Setup(call => call.GetInstance<IHttpContextHelper>())
+                .Returns(_mockHttpHelper.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
@@ -87,15 +91,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             aRepo.IncrementCount(_testGuid, 1, CountType.View);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == true)), Times.Once);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<IncrementCountCriteria>(value => value.asynch == true)), Times.Once);
         }
 
         [Fact]
         public void IncrementCount_Calls_TestManager_IncrementCount_WithAsynchFlag_EqualsFalse()
         {
             var aRepo = GetUnitUnderTest();
-            aRepo.IncrementCount(_testGuid, 1, CountType.View,false);
-            _mockTestManager.Verify(called => called.IncrementCount(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.Is<CountType>(value => value == CountType.View), It.Is<bool>(value => value == false)), Times.Once);
+            aRepo.IncrementCount(_testGuid, 1, CountType.View, default(Guid), false);
+            _mockTestManager.Verify(called => called.IncrementCount(It.Is<IncrementCountCriteria>(value => value.asynch == false)), Times.Once);
         }
 
         [Fact]
@@ -358,7 +362,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 StartDate = startDate.ToString(),
                 TestDuration = 30,
                 ParticipationPercent = 100,
-                KpiId = Guid.NewGuid(),
+                KpiId = "{\"c3d26baa-dac6-4b2c-8b45-d5a05a3337d9\": 2,\"d4873545-2482-459c-b354-b6f6d5939697\": 2}",
                 TestTitle = "Test Title",
                 Start = false,
                 ConfidenceLevel = 95,
@@ -368,6 +372,34 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var test = webRepo.ConvertToMarketingTest(testResultModel);
 
             Assert.Equal(startDate.AddDays(30).Day, test.EndDate.Day);
+        }
+
+        [Fact]
+        public void ConvertToMarketingTest_Converts_Test_With_Multiple_Kpis_With_Different_Weights()
+        {
+            var webRepo = GetUnitUnderTest();
+            var startDate = DateTime.Now;
+
+            var testResultModel = new TestingStoreModel()
+            {
+                TestContentId = Guid.NewGuid(),
+                TestDescription = "Description",
+                PublishedVersion = 1,
+                VariantVersion = 2,
+                StartDate = startDate.ToString(),
+                TestDuration = 30,
+                ParticipationPercent = 100,
+                KpiId = "{\"c3d26baa-dac6-4b2c-8b45-d5a05a3337d9\": \"Low\",\"d4873545-2482-459c-b354-b6f6d5939697\": \"Medium\"}",
+                TestTitle = "Test Title",
+                Start = false,
+                ConfidenceLevel = 95,
+                AutoPublishWinner = false
+            };
+
+            var test = webRepo.ConvertToMarketingTest(testResultModel);
+
+            Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .33 && w.Weight < .34));
+            Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .66 && w.Weight < .68));
         }
     }
 }

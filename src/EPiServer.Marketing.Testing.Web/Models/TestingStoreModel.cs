@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Web.Models
@@ -10,16 +11,27 @@ namespace EPiServer.Marketing.Testing.Web.Models
     public class TestingStoreModel
     {
         public Guid TestContentId { get; set; }
+
         public string TestDescription { get; set; }
+
         public int PublishedVersion { get; set; }
+
         public int VariantVersion { get; set; }
+
         public string StartDate { get; set; }
+
         public int TestDuration { get; set; }
+
         public int ParticipationPercent { get; set; }
-        public Guid KpiId { get; set; }
+
+        public string KpiId { get; set; }
+
         public string TestTitle { get; set; }
+
         public bool Start { get; set; }
+
         public double ConfidenceLevel { get; set; }
+
         public bool AutoPublishWinner { get; set; }
 
     }

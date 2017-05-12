@@ -39,9 +39,9 @@ namespace EPiServer.Marketing.KPI.DataAccess
         }
 
         /// <summary>
-        /// Deletes KPI object from the db.
+        /// Deletes KPI object from the DB.
         /// </summary>
-        /// <param name="kpiId">Id of the KPI to delete.</param>
+        /// <param name="kpiId">ID of the KPI to delete.</param>
         public void Delete(Guid kpiId)
         {
             if (_UseEntityFramework)
@@ -65,9 +65,9 @@ namespace EPiServer.Marketing.KPI.DataAccess
         }
 
         /// <summary>
-        /// Returns a KPI object based on its Id.
+        /// Returns a KPI object based on its ID.
         /// </summary>
-        /// <param name="kpiId">Id of the KPI to retrieve.</param>
+        /// <param name="kpiId">ID of the KPI to retrieve.</param>
         /// <returns>KPI object.</returns>
         public IDalKpi Get(Guid kpiId)
         {
@@ -126,50 +126,66 @@ namespace EPiServer.Marketing.KPI.DataAccess
         /// <summary>
         /// Adds or updates a KPI object.
         /// </summary>
-        /// <param name="kpiObject">Id of the KPI to add/update.</param>
-        /// <returns>The Id of the KPI object that was added/updated.</returns>
+        /// <param name="kpiObject">ID of the KPI to add/update.</param>
+        /// <returns>The ID of the KPI object that was added/updated.</returns>
         public Guid Save(IDalKpi kpiObject)
         {
-            Guid id;
-
-            if (_UseEntityFramework)
-            {
-                using (var dbContext = new DatabaseContext())
-                {
-                    var repository = new BaseRepository(dbContext);
-                    id = SaveHelper(repository, kpiObject);
-                }
-            }
-            else
-            {
-                id = SaveHelper(_repository, kpiObject);
-            }
-
-            return id;
+            return Save(new List<IDalKpi>() { kpiObject }).First();
         }
 
-
-        public Guid SaveHelper(IRepository repo, IDalKpi kpiObject)
+        /// <summary>
+        /// Adds or updates multiple KPI objects.
+        /// </summary>
+        /// <param name="kpiObjects">List of KPIs to add/update.</param>
+        /// <returns>The IDs of the KPI objects that were added/updated.</returns>
+        public IList<Guid> Save(IList<IDalKpi> kpiObjects)
         {
-            var kpi = repo.GetById(kpiObject.Id) as DalKpi;
-            Guid id;
+                IList<Guid> ids;
 
-            // if a test doesn't exist, add it to the db
-            if (kpi == null)
+                if (_UseEntityFramework)
+                {
+                    using (var dbContext = new DatabaseContext())
+                    {
+                        var repository = new BaseRepository(dbContext);
+                        ids = SaveHelper(repository, kpiObjects);
+                    }
+                }
+                else
+                {
+                    ids = SaveHelper(_repository, kpiObjects);
+                }
+
+            return ids;
+        }
+
+        private IList<Guid> SaveHelper(IRepository repo, IList<IDalKpi> kpiObjects)
+        {
+            var ids = new List<Guid>();
+
+            foreach (var kpiObject in kpiObjects)
             {
-                repo.Add(kpiObject);
-                id = kpiObject.Id;
-            }
-            else
-            {
-                kpi.ClassName = kpiObject.ClassName;
-                kpi.Properties = kpiObject.Properties;
-                id = kpi.Id;
+                var kpi = repo.GetById(kpiObject.Id) as DalKpi;
+                Guid id;
+
+                // if a test doesn't exist, add it to the db
+                if (kpi == null)
+                {
+                    repo.Add(kpiObject);
+                    id = kpiObject.Id;
+                }
+                else
+                {
+                    kpi.ClassName = kpiObject.ClassName;
+                    kpi.Properties = kpiObject.Properties;
+                    id = kpi.Id;
+                }
+
+                ids.Add(id);
             }
 
             repo.SaveChanges();
-
-            return id;
+            
+            return ids;
         }
 
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey)

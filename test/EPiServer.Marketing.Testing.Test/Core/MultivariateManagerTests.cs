@@ -276,7 +276,18 @@ namespace EPiServer.Marketing.Testing.Test.Core
                             Views = 0,
                             Conversions = 0,
                             KeyFinancialResults = new List<KeyFinancialResult>(),
-                            KeyValueResults = new List<KeyValueResult>()
+                            KeyValueResults = new List<KeyValueResult>(),
+                            KeyConversionResults = new List<KeyConversionResult>() { new KeyConversionResult()
+                            {
+                                Id = Guid.NewGuid(),
+                                KpiId = Guid.NewGuid(),
+                                Weight = .5,
+                                SelectedWeight = "Low",
+                                Performance = 25,
+                                Conversions = 1,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
+                            }  }
                         }
                     },
                 KpiInstances =
@@ -301,22 +312,22 @@ namespace EPiServer.Marketing.Testing.Test.Core
             CountType type = CountType.Conversion;
 
             var tm = GetUnitUnderTest();
-            tm.IncrementCount(theGuid, theItemVersion, type, false);
-
+            tm.IncrementCount(theGuid, theItemVersion, type, default(Guid), false);
+                
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.Is<Guid>(arg => arg.Equals(theGuid)), It.IsAny<int>(),
-                        It.IsAny<DalCountType>()),
+                        It.IsAny<DalCountType>(), It.IsAny<Guid>()),
                 "DataAcessLayer IncrementCount was never called or Test Guid did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.IsAny<Guid>(), It.Is<int>(arg => arg.Equals(theItemVersion)),
-                        It.IsAny<DalCountType>()),
+                        It.IsAny<DalCountType>(), It.IsAny<Guid>()),
                 "DataAcessLayer IncrementCount was never called or test item version did not match.");
             _dataAccessLayer.Verify(
                 da =>
                     da.IncrementCount(It.IsAny<Guid>(), It.IsAny<int>(),
-                        It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion))),
+                        It.Is<DalCountType>(arg => arg.Equals(DalCountType.Conversion)), It.IsAny<Guid>()),
                 "DataAcessLayer IncrementCount was never called or CountType did not match.");
         }
 
@@ -447,7 +458,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             messageManager.Verify(mm => mm.EmitUpdateConversion(
                 It.Is<Guid>(arg => arg.Equals(original)),
-                It.Is<int>(arg => arg.Equals(1))),
+                It.Is<int>(arg => arg.Equals(1)), It.IsAny<Guid>(), It.IsAny<string>()),
                 "Guids are not correct or update conversion message not emmited");
         }
 

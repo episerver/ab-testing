@@ -6,10 +6,13 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     /// <summary>
-    /// 
+    /// Defines the minimum data set required for a marketing test.
     /// </summary>
     public interface IMarketingTest
     {
+        /// <summary>
+        /// Test ID.
+        /// </summary>
         Guid Id { get; set; }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         double ConfidenceLevel { get; set; }
 
         /// <summary>
-        /// Calculated z-score to determine statistical significance.
+        /// Calculated Z-Score to determine statistical significance.
         /// </summary>
         double ZScore { get; set; }
 
@@ -89,7 +92,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         List<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of key performance indicators.  These can be time on a page, form submission, etc.
+        /// List of KPIs.  These can be time on a page, form submission, etc.
         /// </summary>
         List<IKpi> KpiInstances { get; set; }
     }

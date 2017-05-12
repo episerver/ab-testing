@@ -371,8 +371,8 @@
         </member>
         <member name="M:SandcastleBuilder.WPF.EntityReference.Find(System.String)">
             <summary>
-            This is used to find the specified text within the reference's label text or ID value or any of its
-            sub-entities.
+            This is used to find the specified text within the reference's label text or ID value
+            or any of its sub-entities.
             </summary>
             <param name="findText">The text to find</param>
             <returns>An enumerable list of all matches</returns>
@@ -825,7 +825,7 @@
             </summary>
             <param name="props">The element properties</param>
             <remarks>For ignored elements, we don't return to the parent element after parsing
-            this one's children as there may be other sibling elements after it.</remarks>
+            this one's children as there may be other sibiling elements after it.</remarks>
         </member>
         <member name="M:SandcastleBuilder.WPF.Maml.MamlToFlowDocumentConverter.IgnoredElementWithChildren(SandcastleBuilder.WPF.Maml.ElementProperties)">
             <summary>
@@ -833,7 +833,7 @@
             </summary>
             <param name="props">The element properties</param>
             <remarks>This ignores all child elements too.  For ignored elements, we don't return to the parent
-            element as there may be other sibling elements after it.</remarks>
+            element as there may be other sibiling elements after it.</remarks>
         </member>
         <member name="M:SandcastleBuilder.WPF.Maml.MamlToFlowDocumentConverter.MarkupElement(SandcastleBuilder.WPF.Maml.ElementProperties)">
             <summary>
@@ -1030,437 +1030,6 @@
         <member name="P:SandcastleBuilder.WPF.SharedResources.SecurityIcon">
             <summary>
             This read-only property returns the Security icon for the <see cref="T:SandcastleBuilder.WPF.Maml.MamlToFlowDocumentConverter"/>.
-            </summary>
-        </member>
-        <member name="T:SandcastleBuilder.WPF.Theme.ThemeColorId">
-            <summary>
-            This enumerated type is used to map theme color IDs to Visual Studio theme key elements
-            </summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonBackgroundColor">
-            <summary>Button background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonBorderColor">
-            <summary>Button border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonDisabledBackgroundColor">
-            <summary>Button disabled background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonDisabledBorderColor">
-            <summary>Button disabled border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonDisabledForegroundColor">
-            <summary>Button disabled foreground color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonForegroundColor">
-            <summary>Button foreground color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonHoverBackgroundColor">
-            <summary>Button hover background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonHoverBorderColor">
-            <summary>Button hover border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonHoverForegroundColor">
-            <summary>Button hover foreground color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonPressedBackgroundColor">
-            <summary>Button pressed background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonPressedBorderColor">
-            <summary>Button pressed border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ButtonPressedForegroundColor">
-            <summary>Button pressed foreground color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ComboBoxButtonMouseOverBackgroundColor">
-            <summary>Combo box mouse over background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ComboBoxDisabledGlyphColor">
-            <summary>Combo box disabled glyph color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ComboBoxGlyphColor">
-            <summary>Combo box glyph color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ComboBoxPopupBackground">
-            <summary>Combo box pop-up background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.DisabledTextColor">
-            <summary>Disabled text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemBorderColor">
-            <summary>Item border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemColor">
-            <summary>Item color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemHoverColor">
-            <summary>Item hover color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemHoverBorderColor">
-            <summary>Item hover border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemHoverTextColor">
-            <summary>Item hover text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemSelectedBorderColor">
-            <summary>Item selected border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemSelectedBorderNotFocusedColor">
-            <summary>Item selected border not focused color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemSelectedColor">
-            <summary>Item selected color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemSelectedNotFocusedColor">
-            <summary>Item selected not focused color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemSelectedTextColor">
-            <summary>Item selected text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemSelectedTextNotFocusedColor">
-            <summary>Item selected text not focused color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ItemTextColor">
-            <summary>Item text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.LinkTextColor">
-            <summary>Link text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.LinkTextHoverColor">
-            <summary>Link text hover color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.MenuBackgroundColor">
-            <summary>Menu background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.MenuBorderColor">
-            <summary>Menu border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.MenuHoverBackgroundColor">
-            <summary>Menu hover background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.MenuHoverTextColor">
-            <summary>Menu hover text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.MenuSeparatorColor">
-            <summary>Menu separator color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.MenuTextColor">
-            <summary>Menu text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.LightBorderColor">
-            <summary>Light border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.NotificationColor">
-            <summary>Notification color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.NotificationTextColor">
-            <summary>Notification text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.TextBoxBorderColor">
-            <summary>Text box border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.TextBoxColor">
-            <summary>Text box color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.TextBoxTextColor">
-            <summary>Text box text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ToolWindowBackgroundColor">
-            <summary>Tool window background color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ToolWindowBorderColor">
-            <summary>Tool window border color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.ToolWindowTextColor">
-            <summary>Tool window text color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.TreeViewGlyphColor">
-            <summary>Tree view glyph color</summary>
-        </member>
-        <member name="F:SandcastleBuilder.WPF.Theme.ThemeColorId.TreeViewHoverGlyphColor">
-            <summary>Tree view hover glyph color</summary>
-        </member>
-        <member name="T:SandcastleBuilder.WPF.Theme.ThemeColors">
-            <summary>
-            This class is used to provide Visual Studio Theme colors in a version independent manner
-            </summary>
-        </member>
-        <member name="M:SandcastleBuilder.WPF.Theme.ThemeColors.#ctor">
-            <summary>
-            Private constructor
-            </summary>
-        </member>
-        <member name="M:SandcastleBuilder.WPF.Theme.ThemeColors.OnPropertyChanged(System.String)">
-            <summary>
-            This raises the <see cref="E:SandcastleBuilder.WPF.Theme.ThemeColors.PropertyChanged"/> event
-            </summary>
-            <param name="propertyName">The property name that changed</param>
-        </member>
-        <member name="M:SandcastleBuilder.WPF.Theme.ThemeColors.GetColor(SandcastleBuilder.WPF.Theme.ThemeColorId)">
-            <summary>
-            This is used to get a Visual Studio theme color for the given theme color ID
-            </summary>
-            <param name="id">The theme color ID for which to get the Visual Studio theme color</param>
-            <returns>The theme color to use</returns>
-            <remarks>Theme colors do not appear to be available at design time.  As such, this will return
-            related default system colors in their place.</remarks>
-        </member>
-        <member name="M:SandcastleBuilder.WPF.Theme.ThemeColors.GetDefaultColor(SandcastleBuilder.WPF.Theme.ThemeColorId)">
-            <summary>
-            This is used to return a default system color for the given theme color ID
-            </summary>
-            <param name="id">The theme color ID for which to get the default system color</param>
-            <returns>The default system color to use</returns>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.Instance">
-            <summary>
-            This read-only property returns the theme color instance
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonBackgroundColor">
-            <summary>
-            Button background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonBorderColor">
-            <summary>
-            Button border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonDisabledBackgroundColor">
-            <summary>
-            Button disabled background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonDisabledBorderColor">
-            <summary>
-            Button disabled border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonDisabledForegroundColor">
-            <summary>
-            Button disabled foreground color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonForegroundColor">
-            <summary>
-            Button foreground color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonHoverBackgroundColor">
-            <summary>
-            Button hover background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonHoverBorderColor">
-            <summary>
-            Button hover border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonHoverForegroundColor">
-            <summary>
-            Button hover foreground color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonPressedBackgroundColor">
-            <summary>
-            Button pressed background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonPressedBorderColor">
-            <summary>
-            Button pressed border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ButtonPressedForegroundColor">
-            <summary>
-            Button pressed foreground color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ComboBoxButtonMouseOverBackgroundColor">
-            <summary>
-            Combo box button mouse over color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ComboBoxDisabledGlyphColor">
-            <summary>
-            Combo box disabled glyph color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ComboBoxGlyphColor">
-            <summary>
-            Combo box glyph color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ComboBoxPopupBackground">
-            <summary>
-            Combo box pop-up background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.DisabledTextColor">
-            <summary>
-            Disabled text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemBorderColor">
-            <summary>
-            Item border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemColor">
-            <summary>
-            Item color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemHoverColor">
-            <summary>
-            Item hover color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemHoverBorderColor">
-            <summary>
-            Item hover border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemHoverTextColor">
-            <summary>
-            Item hover text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemSelectedBorderColor">
-            <summary>
-            Item selected border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemSelectedBorderNotFocusedColor">
-            <summary>
-            Item selected border not focused color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemSelectedColor">
-            <summary>
-            Item selected color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemSelectedNotFocusedColor">
-            <summary>
-            Item selected not focused color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemSelectedTextColor">
-            <summary>
-            Item selected text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemSelectedTextNotFocusedColor">
-            <summary>
-            Item selected text not focused color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ItemTextColor">
-            <summary>
-            Item text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.LightBorderColor">
-            <summary>
-            Light border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.LinkTextColor">
-            <summary>
-            Link text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.LinkTextHoverColor">
-            <summary>
-            Link text hover color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.MenuBackgroundColor">
-            <summary>
-            Menu background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.MenuBorderColor">
-            <summary>
-            Menu border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.MenuHoverBackgroundColor">
-            <summary>
-            Menu hover background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.MenuHoverTextColor">
-            <summary>
-            Menu hover text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.MenuSeparatorColor">
-            <summary>
-            Menu separator color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.MenuTextColor">
-            <summary>
-            Menu text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.NotificationColor">
-            <summary>
-            Notification color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.NotificationTextColor">
-            <summary>
-            Notification text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.TextBoxBorderColor">
-            <summary>
-            Text box border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.TextBoxColor">
-            <summary>
-            Text box color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.TextBoxTextColor">
-            <summary>
-            Text box text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ToolWindowBackgroundColor">
-            <summary>
-            Tool window background color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ToolWindowBorderColor">
-            <summary>
-            Tool window border color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.ToolWindowTextColor">
-            <summary>
-            Tool window text color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.TreeViewGlyphColor">
-            <summary>
-            Tree view glyph color
-            </summary>
-        </member>
-        <member name="P:SandcastleBuilder.WPF.Theme.ThemeColors.TreeViewHoverGlyphColor">
-            <summary>
-            Tree view mouse over glyph color
-            </summary>
-        </member>
-        <member name="E:SandcastleBuilder.WPF.Theme.ThemeColors.PropertyChanged">
-            <summary>
-            The property changed event
             </summary>
         </member>
         <member name="T:SandcastleBuilder.WPF.UserControls.BuildLogViewerControl">
@@ -2630,7 +2199,7 @@
         </member>
         <member name="M:SandcastleBuilder.WPF.UserControls.TopicPreviewerControl.AdjustPageWidth">
             <summary>
-            This is used to adjust the page width to accommodate images wider than the available
+            This is used to adjust the page width to accomodate images wider than the available
             display area.
             </summary>
             <remarks>If not adjusted, the images get clipped.</remarks>
@@ -2686,7 +2255,7 @@
         </member>
         <member name="M:SandcastleBuilder.WPF.UserControls.TopicPreviewerControl.fdViewer_SizeChanged(System.Object,System.Windows.SizeChangedEventArgs)">
             <summary>
-            Resize the page width as needed to accommodate images wider than the display area
+            Resize the page width as needed to accomodate images wider than the display area
             </summary>
             <param name="sender">The sender of the event</param>
             <param name="e">The event arguments</param>
@@ -2851,7 +2420,7 @@
         </member>
         <member name="M:SandcastleBuilder.WPF.Behaviors.SupportAnimatedGIFBehavior.OnCurrentFrameIndexChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
             <summary>
-            Update the current image source to the relevant frame.
+            Update the current image source to the relevenat frame.
             </summary>
             <param name="dpo"></param>
             <param name="e"></param>

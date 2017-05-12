@@ -5,27 +5,27 @@ using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 namespace EPiServer.Marketing.Testing.Dal.EntityModel
 {
     /// <summary>
-    /// Entity framework model class
+    /// Entity framework model class.
     /// </summary>
     public class DalABTest : EntityBase, IABTest
     {
         /// <summary>
-        /// Id
+        /// ID.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Test Title
+        /// Test Title.
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Test Title
+        /// Test Title.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Person that created the test
+        /// Person that created the test.
         /// </summary>
         public string Owner { get; set; }
 
@@ -76,7 +76,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public double ConfidenceLevel { get; set; }
 
         /// <summary>
-        /// Calculated z-score to determine statistical significance.
+        /// Calculated Z-Score to determine statistical significance.
         /// </summary>
         public double ZScore { get; set; }
 

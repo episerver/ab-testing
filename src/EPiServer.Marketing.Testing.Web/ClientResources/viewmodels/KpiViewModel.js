@@ -17,7 +17,16 @@
                 this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.get()
                 .then(function (retKpis) {
-                    me._changeAttrValue("availableKpis",retKpis );
+                    me._changeAttrValue("availableKpis", retKpis);
+                });
+            },
+
+            refreshKpis: function (kpiStore) {
+                var me = this;
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
+                this.kpistore.get()
+                .then(function (retKpis) {
+                    me._changeAttrValue("availableKpis", retKpis);
                 });
             },
 
@@ -25,23 +34,26 @@
                 return this.availableKpis;
             },
 
-            getKpiByIndex(index) {
+            getKpiByIndex: function (index) {
                 return this.availableKpis[index];
             },
 
-            createKpi(caller, kpiStore) {
+            createKpi: function (caller, kpiStore) {
                 var me = this;
-                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore"); 
+                this.kpistore = kpiStore || dependency.resolve("epi.storeregistry").get("marketing.kpistore");
                 this.kpistore.put({
                     id: "KpiFormData",
                     entity: caller.kpiFormData
                 })
                     .then(function (ret) {
-                        if (ret.status == true) {
-                            caller.createTest(ret.obj);
-                        } else 
-                        {
-                            caller.setKpiError(ret.message)
+                        if (ret.status) {
+                            caller.createTest(ret);
+                        } else {
+                            if (ret.errors) {
+                                caller.setKpiError(ret.errors)
+                            } else {
+                                caller.setKpiError(ret.message)
+                            }
                         }
                     })
                     .otherwise(function (ret) {

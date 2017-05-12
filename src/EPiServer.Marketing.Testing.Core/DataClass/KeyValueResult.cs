@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     /// <summary>
-    /// Kpi result that handles any numerical value.
+    /// KPI result that handles any numerical value.
     /// </summary>
     public class KeyValueResult : CoreEntityBase, IKeyResult
     {
@@ -17,14 +17,14 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public double Value { get; set; }
 
         /// <summary>
-        /// Id of the variant the result pertains to.
+        /// ID of the variant the result pertains to.
         /// </summary>
         public Guid? VariantId { get; set; }
 
-        [ExcludeFromCodeCoverage]
         /// <summary>
         /// The variant the result pertains to.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual Variant Variant { get; set; }
     }
 }

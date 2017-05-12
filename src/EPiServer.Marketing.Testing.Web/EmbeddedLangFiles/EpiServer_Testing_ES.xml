@@ -17,6 +17,7 @@
         <confidence_level_description>El nivel de confianza determina la cantidad de errores permitidos. Un porcentaje más alto está relacionado directamente con la precisión de los resultados de la prueba. Esto indica si la diferencia medida entre la página de control y la página de la variante no es por casualidad, es decir, es significativa.</confidence_level_description>
         <confidence_level_header>Nivel de confianza</confidence_level_header>
         <control>A / Control</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>¿Cuál es el objetivo de conversión?</conversion_header>
         <conversion_label>El visitante entra en la página</conversion_label>
         <days_text> día(s).</days_text>
@@ -31,11 +32,17 @@
         <error_test_not_schedulded_or_started>no está programada; resuelva los errores de hora/fecha de inicio para programar una prueba</error_test_not_schedulded_or_started>
         <goals_default_text>Ej. Ajustando la copia en el primer punto para abordar directamente la «cuestión de tiempo», puedo motivar a más visitantes para que descarguen el libro electrónico.</goals_default_text>
         <goals_header>¿Cuál es el objetivo general de esta prueba?</goals_header>
-        <goals_selectlist_default>Seleccionar objetivo</goals_selectlist_default>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>Add a goal</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>no está programada y comenzará ahora</notscheduled_text>
         <participant_percentage_tip>Un porcentaje de participación más alto reduce el tiempo necesario para recopilar estadísticas suficientes que permitan elegir un ganador.</participant_percentage_tip>
         <participation_header>¿Qué porcentaje de visitantes debería participar en esta prueba A/B?</participation_header>
         <published_prefix>Publicada por</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>¿Cuándo debe iniciarse la prueba A/B?</schedule_header>
         <schedule_selector_delay>Programar para más tarde</schedule_selector_delay>
         <schedule_selector_start>Iniciar inmediatamente</schedule_selector_start>
@@ -77,10 +84,12 @@
         <draft_prefix>Borrador - Editado por</draft_prefix>
         <from>desde</from>
         <goal_not_specified>No se ha especificado un objetivo.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Guardado en las versiones</losing_version_label>
         <percent_participation_header>Porcentaje de visitantes que participan en esta prueba A/B</percent_participation_header>
         <published_prefix>Publicada por</published_prefix>
         <remaining_increment>Días</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Iniciada </started>
         <test_duration_header>Duración de la prueba A/B</test_duration_header>
         <test_percent_to_participations_divider> / El número actual de participantes es de </test_percent_to_participations_divider>
@@ -117,9 +126,11 @@
         <description_heading>Objetivo general de esta prueba</description_heading>
         <draft_prefix>Borrador - Editado por</draft_prefix>
         <goal_not_specified>No se ha especificado un objetivo.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Porcentaje de visitantes que participan en esta prueba A/B</percent_participation_header>
         <published_prefix>Publicada por</published_prefix>
         <remaining_increment>Días</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Iniciada </started>
         <test_duration_completed>Completada después de la duración total</test_duration_completed>
         <test_duration_header>Duración de la prueba A/B</test_duration_header>
@@ -134,6 +145,11 @@
         <view_control_content>Ver el contenido de control</view_control_content>
         <views>vistas</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Ya se ha realizado una prueba A/B en una versión de este contenido. </completed_test>
         <details_link_text>Ver prueba</details_link_text>
@@ -143,6 +159,10 @@
         <winner_link_text>Elegir ganador</winner_link_text>
         <winner_link_tooltip>Ver detalles de la prueba y elegir ganador </winner_link_tooltip>
       </notificationbar>
+      <percentagetemplate>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <views>Views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Nivel de confianza</advanced_options_confidence_level>
         <advanced_options_header>Opciones avanzadas</advanced_options_header>
@@ -163,12 +183,14 @@
           Esta prueba no se ha completado, pero puede elegir un ganador. Al elegir un ganador ahora, la prueba finalizará y se publicará el contenido seleccionado.
         </early_pick_winner_message>
         <goal_not_specified>No se ha especificado un objetivo.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Porcentaje de visitantes que participan en esta prueba A/B</percent_participation_header>
         <pick_a_winner_text>¡Elegir un ganador!</pick_a_winner_text>
         <pick_winner_option_text>Elegir un ganador</pick_winner_option_text>
         <published_prefix>Publicada por</published_prefix>
         <remaining_increment>Días</remaining_increment>
         <result_is_not_significant>Los resultados de esta prueba NO son significativos.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Iniciada </started>
         <test_duration_completed>Completada después de la duración total</test_duration_completed>
         <test_duration_header>Duración de la prueba</test_duration_header>
@@ -190,6 +212,11 @@
         <displayname>Supervisión de la prueba de marketing</displayname>
         <message>Iniciada [{0}] Detenida [{1}] Activa [{2}] Inactiva [{3}] Completada [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Pruebas A/B activas</activetests>
         <archivedtests>Pruebas A/B archivadas</archivedtests>

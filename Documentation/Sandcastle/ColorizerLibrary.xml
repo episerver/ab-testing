@@ -12,9 +12,6 @@
             <p/>Modified by Eric Woodruff (Eric@EWoodruff.us) 11/2006. The original Code Project article and code by
             Jonathan can be found at:
             <see href="http://www.codeproject.com/Articles/3767/Multiple-Language-Syntax-Highlighting-Part-2-C-Con"/>.</remarks>
-            <threadsafety>The <see cref="M:ColorizerLibrary.CodeColorizer.ProcessAndHighlightText(System.String)"/> and <see cref="M:ColorizerLibrary.CodeColorizer.ColorizePlainText(System.String,System.String,System.Boolean,System.Nullable{System.Int32})"/> methods are
-            thread safe.  All other public instance properties and methods are not guaranteed to be thread safe
-            and are intended for setting the defaults prior to colorizing code.</threadsafety>
         </member>
         <member name="M:ColorizerLibrary.CodeColorizer.#ctor">
             <summary>
@@ -50,7 +47,7 @@
             <c>&lt;pre&gt;...&lt;/pre&gt;</c> tags.
             </summary>
             <param name="htmlText">The HTML text to colorize</param>
-            <returns>The HTML with colorized code blocks</returns>
+            <returns>HTML with colorized code blocks</returns>
             <remarks>See highlight.xml for a list of available languages.</remarks>
         </member>
         <member name="M:ColorizerLibrary.CodeColorizer.ColorizePlainText(System.String,System.String,System.Boolean,System.Nullable{System.Int32})">
@@ -63,7 +60,6 @@
             with no colorization</param>
             <param name="tabSize">Null for the default tab size or a positive non-zero value to specify a
             different tab size.  This will override the language's default tab size if there is one.</param>
-            <returns>The text with colorized code blocks</returns>
         </member>
         <member name="M:ColorizerLibrary.CodeColorizer.LoadDefaultConfigFiles">
             <summary>
@@ -73,27 +69,20 @@
             loaded, if the <c>ColorizerLibrary/syntax</c> node is not found, or if the
             <c>ColorizerLibrary/style</c> node is not found.</exception>
         </member>
-        <member name="M:ColorizerLibrary.CodeColorizer.StripLeadingWhitespace(System.String,System.Int32,System.Boolean,System.Collections.Generic.IList{ColorizerLibrary.CodeColorizer.CollapsibleRegion}@)">
+        <member name="M:ColorizerLibrary.CodeColorizer.StripLeadingWhitespace(System.String,System.Int32)">
             <summary>
             This is used to strip a common amount of leading whitespace on all lines of code in the block to
             colorize and to convert tabs to a consistent number of spaces.
             </summary>
             <param name="text">The text containing the lines to clean up.</param>
             <param name="tabSize">The number of spaces to which tab characters are converted.</param>
-            <param name="willAddOutlining">True if outlining will be added, false if not</param>
-            <param name="regions">On return, if outlining is to be added, this will contain an enumerable list
-            of collapsible regions.</param>
         </member>
-        <member name="M:ColorizerLibrary.CodeColorizer.NumberAndOutlineHtml(System.String,System.Boolean,System.Boolean,System.Collections.Generic.IList{ColorizerLibrary.CodeColorizer.CollapsibleRegion})">
+        <member name="M:ColorizerLibrary.CodeColorizer.NumberAndOutlineHtml(System.String)">
             <summary>
             This is used to number lines and/or add collapsible sections for #region and #if/#else/#endif blocks
             based on the current settings for HTML.
             </summary>
             <param name="text">The text containing the lines to modify.</param>
-            <param name="addLineNumbers">True to add line numbers, false if not</param>
-            <param name="addOutlining">True to add outlining, false if not</param>
-            <param name="regions">If adding outlining, this will contain an enumerable list of the collapsible
-            regions.</param>
         </member>
         <member name="M:ColorizerLibrary.CodeColorizer.NumberFlowDocument(System.String)">
             <summary>
@@ -159,14 +148,12 @@
             <exception cref="T:System.InvalidOperationException">This is thrown if a rule match cannot be found or if a
             matching context node cannot be found.</exception>
         </member>
-        <member name="M:ColorizerLibrary.CodeColorizer.BuildHighlightTree(System.Xml.XmlNode,System.String,System.Boolean,System.String)">
+        <member name="M:ColorizerLibrary.CodeColorizer.BuildHighlightTree(System.Xml.XmlNode,System.String,System.String)">
             <summary>
             Create and populate an xml document with the corresponding parsed language tree for highlighting.
             </summary>
             <param name="languageNode">The language node to use for parsing the code.</param> 
-            <param name="rootTag">Root tag (under parsed code) for the generated xml tree.</param>
-            <param name="inBox">True if the code should be rendered in a box (<c>pre</c> element) or inline
-            (a <c>span</c> element).</param>
+            <param name="rootTag">Root tag (under parsed code) for the generated xml tree.</param> 
             <param name="code">The code to parse</param>
             <returns>Returns an <seealso cref="T:System.Xml.XmlDocument"/> document containing the parsed nodes.</returns>
             <remarks>This method builds an XML tree containing context node.  Use an XSL file to render it.</remarks>
@@ -180,6 +167,16 @@
             This method is used as the match evaluator for the main colorizer regular expression
             </summary>
             <param name="match">Full match</param>
+        </member>
+        <member name="M:ColorizerLibrary.CodeColorizer.OnSeeTagFound(System.Text.RegularExpressions.Match)">
+            <summary>
+            Replace a see tag with a marker and store it in the list
+            </summary>
+        </member>
+        <member name="M:ColorizerLibrary.CodeColorizer.OnMarkerFound(System.Text.RegularExpressions.Match)">
+            <summary>
+            Replace a see tag marker with the next entry from the saved list of tags
+            </summary>
         </member>
         <member name="P:ColorizerLibrary.CodeColorizer.OutputFormat">
             <summary>
@@ -251,13 +248,13 @@
         </member>
         <member name="P:ColorizerLibrary.CodeColorizer.FriendlyNames">
             <summary>
-            This is used to return a read-only dictionary that maps the language IDs to friendly names.
+            This is used to return a dictionary that maps the language IDs to friendly names.
             </summary>
         </member>
         <member name="P:ColorizerLibrary.CodeColorizer.AlternateIds">
             <summary>
-            This is used to return a read-only dictionary that maps the alternate IDs to actual IDs present in
-            the syntax file.
+            This is used to return a dictionary that maps the alternate IDs to actual IDs present in the syntax
+            file.
             </summary>
         </member>
         <member name="T:ColorizerLibrary.CodeColorizer.CollapsibleRegion">
@@ -353,7 +350,7 @@
             <summary>
             Retrieve the regular expression options from the language node
             </summary>
-            <param name="languageNode">language name</param>
+            <param name="languageNode">langue name</param>
             <returns>RegexOptions enumeration combination</returns>
         </member>
         <member name="M:ColorizerLibrary.RegexDictionary.AddKey(System.Xml.XmlNode,System.Xml.XmlNode,System.String)">

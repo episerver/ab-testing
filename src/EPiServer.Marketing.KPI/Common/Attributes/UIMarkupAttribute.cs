@@ -5,33 +5,33 @@ namespace EPiServer.Marketing.KPI.Common.Attributes
 {
     /// <summary>
     /// KPI Class attribute that specifies a file embedded in your assembly 
-    /// to use for the configuration and readonly ui markup fragment.
+    /// to use for the configuration and readonly UI markup fragment.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class UIMarkupAttribute : Attribute
     {
         /// <summary>
-        /// the resource name, including namespace, for the kpi configuration markup
+        /// The resource name, including namespace, for the KPI configuration markup.
         /// </summary>
         public string configmarkup { get; set; }
         /// <summary>
-        /// the resource name, including namespace, for the kpi readonly markup
+        /// The resource name, including namespace, for the KPI readonly markup.
         /// </summary>
         public string readonlymarkup { get; set; }
         /// <summary>
-        /// text that is the Kpi object
+        /// Text that is the KPI object.
         /// </summary>
         public string text { get; set; }
         /// <summary>
-        /// Description of the Kpi object, what it does etc.
+        /// Description of the KPI object, what it does etc.
         /// </summary>
         public string description { get; set; }
         /// <summary>
-        /// Translation id for text
+        /// Translation ID for text.
         /// </summary>
         public string text_id { get; set; }
        /// <summary>
-       /// translation id for description text
+       /// Translation ID for description text.
        /// </summary>
        public string description_id { get; set; }
     }

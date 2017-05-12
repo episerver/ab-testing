@@ -24,9 +24,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return contentToCache;
         }
 
-        // TODO: generate randomness better!
-        // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
-        // to determine what page to display to the user.
         internal static int GetRandomNumber()
         {
             return _r.Next(1, 3);
@@ -42,15 +39,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Owner = theDalTest.Owner,
                 OriginalItemId = theDalTest.OriginalItemId,
                 State = AdaptToManagerState(theDalTest.State),
-                StartDate = theDalTest.StartDate.ToLocalTime(),
-                EndDate = theDalTest.EndDate,
+                StartDate = DateTime.SpecifyKind(theDalTest.StartDate, DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(theDalTest.EndDate, DateTimeKind.Utc),
                 ParticipationPercentage = theDalTest.ParticipationPercentage,
                 IsSignificant = theDalTest.IsSignificant,
                 ZScore = theDalTest.ZScore,
                 ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
-                CreatedDate = theDalTest.CreatedDate.ToLocalTime(),
-                ModifiedDate = theDalTest.ModifiedDate.ToLocalTime(),
+                CreatedDate = DateTime.SpecifyKind(theDalTest.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(theDalTest.ModifiedDate, DateTimeKind.Utc),
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
                 KpiInstances = AdaptToManagerKPI(_kpiManager, theDalTest.KeyPerformanceIndicators)
             };
@@ -154,9 +151,18 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KeyFinancialResults = AdaptToManagerKeyFinancialResult(theDalVariant.DalKeyFinancialResults),
                 KeyValueResults = AdaptToManagerKeyValueResult(theDalVariant.DalKeyValueResults),
                 IsWinner = theDalVariant.IsWinner,
-                IsPublished = theDalVariant.IsPublished
+                IsPublished = theDalVariant.IsPublished,
+                KeyConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKeyConversionResults)
             };
 
+            if (retVariant.Conversions != 0)
+            {
+                foreach (var conversionResult in retVariant.KeyConversionResults)
+                {
+                    conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / retVariant.Conversions * 100);
+                }
+            }
+            
             return retVariant;
         }
 
@@ -181,8 +187,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KpiId = dalConversionResult.KpiId,
                 Total = dalConversionResult.Total,
                 VariantId = dalConversionResult.VariantId,
-                CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate,
+                CreatedDate = DateTime.SpecifyKind(dalConversionResult.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(dalConversionResult.ModifiedDate, DateTimeKind.Utc),
                 TotalMarketCulture = dalConversionResult.TotalMarketCulture,
                 ConvertedTotal = dalConversionResult.ConvertedTotal,
                 ConvertedTotalCulture = dalConversionResult.ConvertedTotalCulture
@@ -212,8 +218,39 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KpiId = dalConversionResult.KpiId,
                 Value = dalConversionResult.Value,
                 VariantId = dalConversionResult.VariantId,
-                CreatedDate = dalConversionResult.CreatedDate,
-                ModifiedDate = dalConversionResult.ModifiedDate
+                CreatedDate = DateTime.SpecifyKind(dalConversionResult.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(dalConversionResult.ModifiedDate, DateTimeKind.Utc)
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<KeyConversionResult> AdaptToManagerKeyConversionResult(IList<DalKeyConversionResult> dalConversionResults)
+        {
+            var retList = new List<KeyConversionResult>();
+
+            foreach (var result in dalConversionResults)
+            {
+                retList.Add(ConvertToManagerKeyConversionResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static KeyConversionResult ConvertToManagerKeyConversionResult(
+            DalKeyConversionResult dalConversionResult)
+        {
+            var retVariant = new KeyConversionResult
+            {
+                Id = dalConversionResult.Id,
+                KpiId = dalConversionResult.KpiId,
+                Weight = dalConversionResult.Weight,
+                SelectedWeight = dalConversionResult.SelectedWeight,
+                Conversions = dalConversionResult.Conversions,
+                Performance = dalConversionResult.Performance,
+                VariantId = dalConversionResult.VariantId,
+                CreatedDate = DateTime.SpecifyKind(dalConversionResult.CreatedDate, DateTimeKind.Utc),
+                ModifiedDate = DateTime.SpecifyKind(dalConversionResult.ModifiedDate, DateTimeKind.Utc)
             };
 
             return retVariant;
@@ -249,6 +286,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 managerVariant.KeyValueResults = new List<KeyValueResult>();
             }
 
+            if (null == managerVariant.KeyConversionResults)
+            {
+                managerVariant.KeyConversionResults = new List<KeyConversionResult>();
+            }
+
             var retVariant = new DalVariant
             {
                 Id = managerVariant.Id,
@@ -260,7 +302,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 IsWinner = managerVariant.IsWinner,
                 IsPublished = managerVariant.IsPublished,
                 DalKeyFinancialResults = AdaptToDalKeyFinancialResult(managerVariant.KeyFinancialResults),
-                DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults)
+                DalKeyValueResults = AdaptToDalKeyValueResult(managerVariant.KeyValueResults),
+                DalKeyConversionResults = AdaptToDalKeyConversionResult(managerVariant.KeyConversionResults)
             };
 
             return retVariant;
@@ -329,6 +372,43 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 Id = managerConversionResult.Id,
                 KpiId = managerConversionResult.KpiId,
                 Value = managerConversionResult.Value,
+                VariantId = managerConversionResult.VariantId,
+                CreatedDate = managerConversionResult.CreatedDate,
+                ModifiedDate = managerConversionResult.ModifiedDate
+            };
+
+            return retVariant;
+        }
+
+        internal static IList<DalKeyConversionResult> AdaptToDalKeyConversionResult(IList<KeyConversionResult> managerConversionResults)
+        {
+            var retList = new List<DalKeyConversionResult>();
+
+            foreach (var result in managerConversionResults)
+            {
+                retList.Add(ConvertToDalKeyConversionResult(result));
+            }
+
+            return retList;
+        }
+
+        internal static DalKeyConversionResult ConvertToDalKeyConversionResult(
+            KeyConversionResult managerConversionResult)
+        {
+            if (Guid.Empty == managerConversionResult.Id)
+            {
+                // if the kpi.id is null, its because we are creating a new one.
+                managerConversionResult.Id = Guid.NewGuid();
+            }
+
+            var retVariant = new DalKeyConversionResult
+            {
+                Id = managerConversionResult.Id,
+                KpiId = managerConversionResult.KpiId,
+                Weight = managerConversionResult.Weight,
+                SelectedWeight = managerConversionResult.SelectedWeight,
+                Conversions = managerConversionResult.Conversions,
+                Performance = managerConversionResult.Performance,
                 VariantId = managerConversionResult.VariantId,
                 CreatedDate = managerConversionResult.CreatedDate,
                 ModifiedDate = managerConversionResult.ModifiedDate

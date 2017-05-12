@@ -56,7 +56,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
-            return new TestingController()
+            Mock<IHttpContextHelper> contextHelper = new Mock<IHttpContextHelper>();
+            return new TestingController(contextHelper.Object)
             {
                 Request = new System.Net.Http.HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
@@ -206,7 +207,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var pairs = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
-                new KeyValuePair<string, string>("itemVersion", "1")
+                new KeyValuePair<string, string>("itemVersion", "1"),
+                new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString()),
             };
 
             var data = new FormDataCollection(pairs);
@@ -241,7 +243,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var pairs = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString())
+                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString())
             };
 
             var data = new FormDataCollection(pairs);

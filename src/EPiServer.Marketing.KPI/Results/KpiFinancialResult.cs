@@ -3,7 +3,7 @@
 namespace EPiServer.Marketing.KPI.Results
 {
     /// <summary>
-    /// Financial result for kpi's.
+    /// Financial result for KPIs.
     /// </summary>
     public class KpiFinancialResult : IKpiResult
     {
@@ -14,12 +14,12 @@ namespace EPiServer.Marketing.KPI.Results
         public bool HasConverted { get; set; }
 
         /// <summary>
-        /// The financial total that was calculated as part of the kpi's evaluate method.
+        /// The financial total that was calculated as part of the KPIs evaluate method.
         /// </summary>
         public decimal Total { get; set; }
 
         /// <summary>
-        /// String representing the commerce "market" to be used for financial conversions
+        /// String representing the commerce "market" to be used for financial conversions.
         /// "Default" represents the default market as defined in the system.
         /// </summary>
         public string TotalMarketCulture { get; set; }

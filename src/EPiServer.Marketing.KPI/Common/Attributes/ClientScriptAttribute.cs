@@ -2,6 +2,9 @@
 
 namespace EPiServer.Marketing.KPI.Common.Attributes
 {
+    /// <summary>
+    /// KPI Class attribute that specifies the script to run to determine conversions.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ClientScriptAttribute : Attribute
     {

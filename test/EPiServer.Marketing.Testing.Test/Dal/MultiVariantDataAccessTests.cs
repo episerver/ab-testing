@@ -40,7 +40,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _marketingEvents = new DefaultMarketingTestingEvents();
 
             _kpiManager = new Mock<IKpiManager>();
-            _kpiManager.Setup(call => call.Save(It.IsAny<IKpi>())).Returns(It.IsAny<Guid>());
+            _kpiManager.Setup(call => call.Save(It.IsAny<List<IKpi>>())).Returns(It.IsAny<List<Guid>>());
 
              _serviceLocator = new Mock<IServiceLocator>();
              _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccess);
@@ -355,8 +355,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             // check that a variant exists
             Assert.Equal(test.Variants.Count(), 1);
 
-            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.View);
-            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.Conversion);
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.View, new Guid());
+            _dataAccess.IncrementCount(testId, itemVersion, DalCountType.Conversion, new Guid());
 
             // check the variant is incremented correctly
             Assert.Equal(1, test.Variants.FirstOrDefault(r => r.ItemVersion == itemVersion).Views);
@@ -431,7 +431,26 @@ namespace EPiServer.Marketing.Testing.Test.Dal
             _dataAccess.Save(tests[0]);
 
             var variantItemId2 = Guid.NewGuid();
-            var variant2 = new DalVariant() { Id = Guid.NewGuid(), ItemId = variantItemId2, ItemVersion = 1 };
+            var variant2 = new DalVariant()
+            {
+                Id = Guid.NewGuid(),
+                ItemId = variantItemId2,
+                ItemVersion = 1,
+                DalKeyConversionResults =
+                    new List<DalKeyConversionResult>()
+                    {
+                        new DalKeyConversionResult()
+                        {
+                            Conversions = 1,
+                            KpiId = Guid.NewGuid(),
+                            Weight = .5,
+                            SelectedWeight = "Medium",
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now,
+                            Id = Guid.NewGuid()
+                        }
+                    }
+            };
             tests[0].Variants.Add(variant2);
 
             _dataAccess.Save(tests[0]);
@@ -456,9 +475,9 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                     new List<Variant>()
                     {
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 130, KeyFinancialResults = new List<KeyFinancialResult>(),
-                            KeyValueResults = new List<KeyValueResult>() },
+                            KeyValueResults = new List<KeyValueResult>(), KeyConversionResults = new List<KeyConversionResult>() },
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100, KeyFinancialResults = new List<KeyFinancialResult>(),
-                            KeyValueResults = new List<KeyValueResult>() }
+                            KeyValueResults = new List<KeyValueResult>(), KeyConversionResults = new List<KeyConversionResult>()}
                     },
                 KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
                 Title = "test",

@@ -18,6 +18,8 @@
  "marketing-testing/scripts/abTestTextHelper",
  "marketing-testing/scripts/rasterizeHTML",
  "dojox/layout/ContentPane",
+ "dojo/fx",
+ "dojo/dom-construct",
  "xstyle/css!marketing-testing/css/ABTesting.css",
  "dijit/form/DropDownButton",
  "dijit/TooltipDialog",
@@ -43,7 +45,9 @@
     query,
     textHelper,
     rasterizehtml,
-    ContentPane
+    ContentPane,
+    CoreFX,
+    DomConstruct
 
 ) {
     return declare([widgetBase, templatedMixin, widgetsInTemplateMixin],
@@ -51,6 +55,7 @@
         templateString: template,
         resources: resources,
         contextHistory: null,
+        kpiSummaryWidgets: new Array(),
 
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -64,32 +69,57 @@
         },
 
         startup: function () {
-            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
+            this.disablePickButtons(false);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
             }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible";
+            } else {
+                this.summaryToggle.style.visibility = "hidden";
+            }
+        },
+
+        _setToggleAnimations: function() {
+            var me = this;
+            this.controlSummaryOut = CoreFX.wipeOut({
+                node: me.controlPickWinnerSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.pickwinnerview.show_summary }
+            });
+
+            this.controlSummaryIn = CoreFX.wipeIn({
+                node: me.controlPickWinnerSummaryNode,
+                rate: 15,
+                onBegin: function () { me.summaryToggle.innerHTML = me.resources.pickwinnerview.hide_summary }
+            });
+
+            this.challengerSummaryOut = CoreFX.wipeOut({
+                node: me.challengerPickWinnerSummaryNode,
+                rate: 15
+            });
+
+            this.challengerSummaryIn = CoreFX.wipeIn({
+                node: me.challengerPickWinnerSummaryNode,
+                rate: 15
+            });
         },
 
         _contextChanged: function (newContext) {
             var me = this;
+            this.kpiSummaryWidgets = new Array();
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
             me.context = newContext;
             textHelper.initializeHelper(this.context, resources.pickwinnerview);
-
             me._renderData();
-            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
-            if (this.context.data.kpiResultType === "KpiConversionResult") {
-                textHelper.displayPieChart("controlPickWinnerPieChart", textHelper.publishedPercent);
-                textHelper.displayPieChart("challengerPickWinnerPieChart", textHelper.draftPercent);
-            }
         },
 
         _onCancelClick: function () {
             var me = this;
-            textHelper.clearPieCharts("controlPickWinnerPieChart", "challengerPickWinnerPieChart");
+            this.kpiSummaryWidgets = new Array();
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -107,12 +137,8 @@
             textHelper.renderConfidence(this.confidence);
             textHelper.renderPublishedInfo(this.publishedBy, this.datePublished);
             textHelper.renderDraftInfo(this.changedBy, this.dateChanged);
-            textHelper.renderPublishedViewsAndConversions(this.publishedConversions,
-                this.publishedViews,
-                this.publishedConversionPercent);
-            textHelper.renderDraftViewsAndConversions(this.challengerConversions,
-                this.challengerViews,
-                this.challengerConversionPercent);
+            this.kpiSummaryWidgets.push(textHelper.renderControlSummary(this.controlPickWinnerSummaryNode, this.controlConversionPercent));
+            this.kpiSummaryWidgets.push(textHelper.renderChallengerSummary(this.challengerPickWinnerSummaryNode, this.challengerConversionPercent));
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderSignificance();
@@ -121,23 +147,28 @@
                 me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
                 me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
                 me._renderStatusIndicatorStyles();
-                me._renderKpiMarkup("pw_conversionMarkup", "pw_kpidescription");
+                me._renderKpiMarkup("pw_conversionMarkup");
+                for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
+                    me.kpiSummaryWidgets[x].startup();
+                }
             });
         },
 
-        _renderKpiMarkup: function (conversionMarkupId, kpidescriptionId) {
+        _renderKpiMarkup: function (conversionMarkupId) {
+            this.disablePickButtons(false);
             var kpiuiElement = dom.byId(conversionMarkupId);
-            var x = this.context.data.test.kpiInstances[0].uiReadOnlyMarkup;
             this._clearKpiMarkup(kpiuiElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].uiReadOnlyMarkup
-            }).placeAt(kpiuiElement);
 
-            var kpidescriptionElement = dom.byId(kpidescriptionId);
-            this._clearKpiDescription(kpidescriptionElement);
-            new ContentPane({
-                content: this.context.data.test.kpiInstances[0].description
-            }).placeAt(kpidescriptionElement);
+            for (var x = 0; x < this.context.data.test.kpiInstances.length; x++) {
+                var goalsFriendlyName = DomConstruct.toDom("<label class='epi-kpiLabel-bold'>" + this.context.data.test.kpiInstances[x].friendlyName + "</label>");
+                var goalsDescription = DomConstruct.toDom("<P>" + this.context.data.test.kpiInstances[x].description + "</p>");
+
+                var goalsContent = new ContentPane({
+                    content: this.context.data.test.kpiInstances[x].uiReadOnlyMarkup
+                }).placeAt(kpiuiElement);
+                dojo.place(goalsFriendlyName, goalsContent.containerNode, "first");
+                dojo.place(goalsDescription, goalsContent.containerNode, "last");
+            }
         },
 
         _clearKpiMarkup: function (conversionMarkupElement) {
@@ -169,6 +200,8 @@
         },
 
         _onPublishedVersionClick: function () {
+            var me = this;
+            this.disablePickButtons(true);
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
@@ -176,15 +209,21 @@
                 testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false })  // Force a put
                     .then(function (testId) {
+                        this.kpiSummaryWidgets = new Array();
                         var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
                         topic.publish("/epi/shell/context/request", contextParameters);
                     }).otherwise(function () {
                         alert("Error Processing Winner: Unable to process and save selected version");
                         console.log("Error occurred while processing winning content");
+                        me.disablePickButtons(false);
                     });
         },
 
         _onVariantVersionClick: function () {
+            var me = this;
+            this.disablePickButtons(true);
+            if (this.publishButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
+            this.publishButtonClickCounter++; // Increment click count
             this.store.put({
                 publishedContentLink: this.context.data.publishedVersionContentLink,
                 draftContentLink: this.context.data.draftVersionContentLink,
@@ -192,12 +231,20 @@
                 testId: this.context.data.test.id
             }, { id: this.context.data.test.id }, { "options.incremental": false }) // Force a put
                 .then(function (testId) {
+                    this.kpiSummaryWidgets = new Array();
                     var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
                     topic.publish("/epi/shell/context/request", contextParameters);
                 }).otherwise(function () {
                     alert("Error Processing Winner: Unable to process and save selected version");
                     console.log("Error occurred while processing winning content");
+                    me.disablePickButtons(false);
                 });
+        },
+
+        disablePickButtons: function(isDisabled)
+        {
+            this.controlPickButton.set("disabled", isDisabled);
+            this.challengerPickButton.set("disabled", isDisabled);
         },
 
         _renderSignificance: function () {
@@ -268,6 +315,17 @@
                     function success(renderResult) {
                         query('.' + parentContainerClass).addClass('hide-bg');
                     });
+            }
+        },
+
+        _toggleSummaries: function () {
+            if (this.summaryToggle.innerHTML === this.resources.pickwinnerview.hide_summary) {
+                this.controlSummaryOut.play();
+                this.challengerSummaryOut.play();
+            }
+            else {
+                this.controlSummaryIn.play();
+                this.challengerSummaryIn.play();
             }
         }
     });

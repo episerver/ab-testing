@@ -5,6 +5,9 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Central test object that keeps track of everything related to a marketing test.
+    /// </summary>
     public class ABTest : CoreEntityBase, IMarketingTest
     {
         /// <inheritdoc />

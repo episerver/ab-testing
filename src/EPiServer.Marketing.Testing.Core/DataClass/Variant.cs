@@ -4,15 +4,18 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
+    /// <summary>
+    /// Object that stores all info related to an item under test.
+    /// </summary>
     public class Variant : CoreEntityBase
     {
         /// <summary>
-        /// Id of the test this variant is associated with.
+        /// ID of the test this variant is associated with.
         /// </summary>
         public Guid? TestId { get; set; }
 
         /// <summary>
-        /// Id of modified content to use instead of the original item for a test.
+        /// ID of modified content to use instead of the original item for a test.
         /// </summary>
         public Guid ItemId { get; set; }
 
@@ -30,7 +33,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// <summary>
         /// A running count of how many users have converted after viewing the item under test.
         /// </summary>
-        public int Conversions { get; set; }
+        public double Conversions { get; set; }
 
         /// <summary>
         /// A running count of how many users have viewed the item under test.
@@ -42,20 +45,25 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// </summary>
         public bool IsPublished { get; set; }
 
-        [ExcludeFromCodeCoverage]
         /// <summary>
         /// Reference to the test this is associated with.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual ABTest ABTest { get; set; }
 
         /// <summary>
-        /// A list of any financial results that are the result of a kpi associated with the test this variant is part of.
+        /// A list of any financial results that are the result of a KPI associated with the test this variant is part of.
         /// </summary>
         public IList<KeyFinancialResult> KeyFinancialResults { get; set; }
 
         /// <summary>
-        /// A list of any value results(i.e. any numerical value that is not fiancial in nature) that are the result of a kpi associated with the test this variant is part of.
+        /// A list of any value results(i.e. any numerical value that is not fiancial in nature) that are the result of a KPI associated with the test this variant is part of.
         /// </summary>
         public IList<KeyValueResult> KeyValueResults { get; set; }
+
+        /// <summary>
+        /// A list of conversion results that are related to a KPI.
+        /// </summary>
+        public IList<KeyConversionResult> KeyConversionResults { get; set; }
     }
 }

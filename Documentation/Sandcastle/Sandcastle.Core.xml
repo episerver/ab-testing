@@ -68,7 +68,7 @@
             <returns>A count of the number of topics processed</returns>
             <overloads>There are two overloads for this method</overloads>
         </member>
-        <member name="M:Sandcastle.Core.BuildAssembler.BuildAssemblerCore.Apply(System.Collections.Generic.IEnumerable{Sandcastle.Core.BuildAssembler.ManifestTopic})">
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildAssemblerCore.Apply(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Apply the current set of components to the given list of topics
             </summary>
@@ -98,7 +98,7 @@
             <summary>
             This is used to load a set of components in a configuration and return them as an enumerable list
             </summary>
-            <param name="configuration">The configuration node from which to get the components</param>
+            <param name="configuration">The con</param>
             <returns>An enumerable list of components created based on the configuration information</returns>
         </member>
         <member name="M:Sandcastle.Core.BuildAssembler.BuildAssemblerCore.LoadComponent(System.Xml.XPath.XPathNavigator)">
@@ -169,6 +169,11 @@
             <param name="message">The message to write to the console</param>
             <remarks>If the message level is below the current verbosity level setting, the message is ignored</remarks>
         </member>
+        <member name="P:Sandcastle.Core.BuildAssembler.BuildAssemblerCore.Context">
+            <summary>
+            This read-only property returns the current build context
+            </summary>
+        </member>
         <member name="P:Sandcastle.Core.BuildAssembler.BuildAssemblerCore.BuildComponents">
             <summary>
             This read-only property returns the current list of build components
@@ -213,6 +218,13 @@
             <exception cref="T:System.ArgumentNullException">This is thrown if the <paramref name="node"/> parameter
             is null.</exception>
         </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildComponentUtilities.ConvertNodeIteratorToArray(System.Xml.XPath.XPathNodeIterator)">
+            <summary>
+            This method is obsolete and has been replaced by <see cref="M:Sandcastle.Core.BuildAssembler.BuildComponentUtilities.ToArray(System.Xml.XPath.XPathNodeIterator)"/>
+            </summary>
+            <param name="iterator">The XPath iterator to convert to an array</param>
+            <returns>An array with the cloned nodes from the iterator</returns>
+        </member>
         <member name="M:Sandcastle.Core.BuildAssembler.BuildComponentUtilities.ToArray(System.Xml.XPath.XPathNodeIterator)">
             <summary>
             Convert an XPath node iterator to an array
@@ -228,7 +240,6 @@
             <param name="document">The document to use</param>
             <param name="expression">The XPath expression to evaluate</param>
             <param name="context">The context to use</param>
-            <returns>The evaluated expression result</returns>
             <overloads>There are two overloads for this method</overloads>
         </member>
         <member name="M:Sandcastle.Core.BuildAssembler.BuildComponentUtilities.EvalXPathExpr(System.Xml.XPath.IXPathNavigable,System.Xml.XPath.XPathExpression,System.String[])">
@@ -239,7 +250,6 @@
             <param name="document">The document to use</param>
             <param name="expression">The XPath expression to evaluate</param>
             <param name="keyValuePairs">A set of key/value pairs to use when creating the context</param>
-            <returns>The evaluated expression result</returns>
             <example>
             <code language="cs">
             string result = document.EvalXPathExpr("concat($key, '.htm')", "key", "filename");
@@ -255,7 +265,6 @@
             </summary>
             <param name="path">The path to adjust including the filename</param>
             <param name="basePath">The base path to use including the filename</param>
-            <returns>The path argument as a path relative to the given base path</returns>
             <example>
             <code language="none" title=" ">
             path:     "xxx/aaa/target.html"
@@ -355,11 +364,11 @@
             between build components.
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore.GroupId">
+        <member name="P:Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentCore.IsThreadSafe">
             <summary>
-            This is used to set an optional group ID for use with component events
+            Reserved for future use
             </summary>
-            <value>If not overridden, the default group ID is null (no group)</value>
+            <value>This property is not currently used.  It is reserved for future use.</value>
         </member>
         <member name="T:Sandcastle.Core.BuildAssembler.BuildComponent.BuildComponentExportAttribute">
             <summary>
@@ -695,6 +704,79 @@
         <member name="F:Sandcastle.Core.BuildAssembler.BuildComponent.PlacementAction.Replace">
             <summary>Replace the indicated component configuration with this one</summary>
         </member>
+        <member name="T:Sandcastle.Core.BuildAssembler.BuildContext">
+            <summary>
+            This represents the build context used by BuildAssembler
+            </summary>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.AddNamespace(System.String,System.String)">
+            <summary>
+            This adds an XML namespace to the context
+            </summary>
+            <param name="prefix">The namespace prefix</param>
+            <param name="uri">The namespace URI</param>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.LookupNamespace(System.String)">
+            <summary>
+            This looks up a namespace by prefix
+            </summary>
+            <param name="prefix">The namespace prefix to look up</param>
+            <returns>The URI if found or null if not found</returns>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.RemoveNamespace(System.String)">
+            <summary>
+            This removes a namespace from the context
+            </summary>
+            <param name="prefix">The namespace prefix to remove</param>
+            <returns>True if found and removed or false if not found</returns>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.AddVariable(System.String,System.String)">
+            <summary>
+            Add a variable to the context with the specified value
+            </summary>
+            <param name="name">The variable to add</param>
+            <param name="value">The value to assign the variable</param>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.LookupVariable(System.String)">
+            <summary>
+            Look up the named variable
+            </summary>
+            <param name="name">The variable to look up</param>
+            <returns>The variable value if found or null if not found</returns>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.RemoveVariable(System.String)">
+            <summary>
+            Remove the named variable from the context
+            </summary>
+            <param name="name">The variable to remove</param>
+            <returns>True if found and removed or false if not found</returns>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.ClearVariables">
+            <summary>
+            Remove all variables from the context
+            </summary>
+        </member>
+        <member name="M:Sandcastle.Core.BuildAssembler.BuildContext.Load(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            This is used to load the context settings from the given configuration information
+            </summary>
+            <param name="configuration">The configuration information from which to load the context
+            settings.</param>
+            <remarks>There should be one ore more <c>namespace</c> elements with a <c>prefix</c> and a
+            <c>uri</c> attribute that identify the namespace to add to the context.</remarks>
+        </member>
+        <member name="P:Sandcastle.Core.BuildAssembler.BuildContext.Item(System.String)">
+            <summary>
+            Indexer
+            </summary>
+            <param name="name">The variable for which to get or set the value</param>
+            <returns>The variable value if found or null if the named variable was not found</returns>
+        </member>
+        <member name="P:Sandcastle.Core.BuildAssembler.BuildContext.XsltContext">
+            <summary>
+            This read-only property returns the context used for XPath queries
+            </summary>
+        </member>
         <member name="T:Sandcastle.Core.BuildAssembler.CustomContext">
             <summary>
             This represents a custom XSLT context used by BuildAssembler
@@ -704,14 +786,6 @@
             <summary>
             Constructor
             </summary>
-            <overloads>There are two overloads for the constructor</overloads>
-        </member>
-        <member name="M:Sandcastle.Core.BuildAssembler.CustomContext.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-            This constructor takes a dictionary containing the namespaces (the key is the prefix, the value is
-            the namespace URI).
-            </summary>
-            <param name="namespaces">A dictionary containing the namespaces to add to the context</param>
         </member>
         <member name="M:Sandcastle.Core.BuildAssembler.CustomContext.ClearVariable(System.String)">
             <summary>
@@ -739,12 +813,8 @@
             <exception cref="T:System.NotImplementedException">This method is not implemented</exception>
         </member>
         <member name="M:Sandcastle.Core.BuildAssembler.CustomContext.CompareDocument(System.String,System.String)">
-            <summary>
-            This method is not used
-            </summary>
-            <param name="baseUri">Not used</param>
-            <param name="nextBaseUri">Not used</param>
-            <returns>This implementation always returns zero</returns>
+            <inheritdoc />
+            <remarks>This implementation always returns zero</remarks>
         </member>
         <member name="M:Sandcastle.Core.BuildAssembler.CustomContext.PreserveWhitespace(System.Xml.XPath.XPathNavigator)">
             <inheritdoc />
@@ -787,28 +857,6 @@
         <member name="P:Sandcastle.Core.BuildAssembler.CustomVariable.VariableType">
             <inheritdoc/>
             <value>This implementation always returns <see cref="F:System.Xml.XPath.XPathResultType.String"/></value>
-        </member>
-        <member name="T:Sandcastle.Core.BuildAssembler.ManifestTopic">
-            <summary>
-            This is used to hold the topic ID and type for a BuildAssembler manifest file entry
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.BuildAssembler.ManifestTopic.#ctor(System.String,System.String)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="id">The topic ID</param>
-            <param name="topicType">The topic type</param>
-        </member>
-        <member name="P:Sandcastle.Core.BuildAssembler.ManifestTopic.Id">
-            <summary>
-            This read-only property is used to get the topic ID
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.BuildAssembler.ManifestTopic.TopicType">
-            <summary>
-            This read-only property is used to get the topic type
-            </summary>
         </member>
         <member name="T:Sandcastle.Core.BuildAssembler.MessageLevel">
             <summary>
@@ -1377,27 +1425,6 @@
             <param name="indent">An optional indent to write after the line break</param>
             <returns>True if a new line was written, false if not</returns>
         </member>
-        <member name="M:Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxGeneratorTemplate.WriteTypeReference(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <summary>
-            Write out a type reference
-            </summary>
-            <param name="reference">The type reference to output</param>
-            <param name="writer">The syntax writer to which the type reference is written</param>
-        </member>
-        <member name="M:Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxGeneratorTemplate.WriteNormalTypeReference(System.String,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <summary>
-            Write out a normal type reference
-            </summary>
-            <param name="api">The type reference to output</param>
-            <param name="writer">The syntax writer to which the type reference is written</param>
-        </member>
-        <member name="M:Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxGeneratorTemplate.WriteConstantValue(System.Xml.XPath.XPathNavigator,Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxWriter)">
-            <summary>
-            Write out a constant's value
-            </summary>
-            <param name="parent">The parent node</param>
-            <param name="writer">The syntax writer</param>
-        </member>
         <member name="P:Sandcastle.Core.BuildAssembler.SyntaxGenerator.SyntaxGeneratorTemplate.Language">
             <summary>
             This is used to get or set the language name
@@ -1421,29 +1448,17 @@
             syntax generators, and presentation styles.
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.ComponentUtilities.AssemblyFolder(System.Reflection.Assembly)">
-            <summary>
-            This is used to get the physical location of the specified assembly
-            </summary>
-            <param name="assembly">The assembly for which to get the physical location (the currently executing
-            (calling) assembly if null).</param>
-            <returns>This returns the actual location of the assembly, where it was found versus where it is
-            executing from, which may be different if shadow copied.  This is required in order to find
-            supporting files which will not be present in the shadow copied location.</returns>
-        </member>
         <member name="M:Sandcastle.Core.ComponentUtilities.SetPaths">
             <summary>
             Set the paths used to find component configuration files and assemblies
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.ComponentUtilities.CreateComponentContainer(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+        <member name="M:Sandcastle.Core.ComponentUtilities.CreateComponentContainer(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             This is used to return a composition container filled with the available build components (SHFB
             plug-ins, presentation styles, and BuildAssembler components and syntax generators).
             </summary>
             <param name="folders">An enumerable list of additional folders to search recursively for components.</param>
-            <param name="cancellationToken">An optional cancellation token or null if not supported by the caller.</param>
-            <returns>The a composition container that contains all of the available components</returns>
             <remarks>The following folders are searched in the following order.  If the given folder has not been
             specified or does not exist, it is ignored.
             
@@ -1463,7 +1478,7 @@
             ID will be used.  As such, assemblies in a folder with a higher search precedence can override
             copies in folders lower in the search order.</remarks>
         </member>
-        <member name="M:Sandcastle.Core.ComponentUtilities.AddAssemblyCatalogs(System.ComponentModel.Composition.Hosting.AggregateCatalog,System.String,System.Collections.Generic.HashSet{System.String},System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Sandcastle.Core.ComponentUtilities.AddAssemblyCatalogs(System.ComponentModel.Composition.Hosting.AggregateCatalog,System.String,System.Collections.Generic.HashSet{System.String},System.Boolean)">
             <summary>
             This adds assembly catalogs to the given aggregate catalog for the given folder and all of its
             subfolders recursively.
@@ -1474,7 +1489,6 @@
             <param name="searchedFolders">A hash set of folders that have already been searched and added.</param>
             <param name="includeSubfolders">True to search subfolders recursively, false to only search the given
             folder.</param>
-            <param name="cancellationToken">An optional cancellation token or null if not supported by the caller.</param>
             <remarks>It is done this way to prevent a single assembly that would normally be discovered via a
             directory catalog from preventing all assemblies from loading if it cannot be examined when the parts
             are composed (i.e. trying to load a Windows Store assembly on Windows 7).</remarks>
@@ -1530,34 +1544,6 @@
             <returns>An enumerable list of syntax filter generator resource item files.  If localized versions in
             the specified language do not exit, the default resource item files (typically English US) will be
             returned.</returns>
-        </member>
-        <member name="M:Sandcastle.Core.ComponentUtilities.XmlStreamAxis(System.String,System.String)">
-            <summary>
-            This provides a fast and efficient way of querying large XML files for a specific element type
-            </summary>
-            <param name="xmlFile">The XML file to search</param>
-            <param name="elementName">The element name for which to search</param>
-            <returns>An enumerable list of <see cref="T:System.Xml.Linq.XElement"/> instances for each of the found nodes</returns>
-            <remarks>This version only looks for a single element type which cannot contain nested instances of
-            the given element.</remarks>
-            <overloads>
-            <summary>There are two overloads for this method</summary>
-            <remarks>Using these methods to search for specific elements avoids having to load the entire file
-            which can be quite costly in terms of memory when it is extremely large.  It is typically faster as
-            well since it doesn't have to load and parse the whole file before starting the search.</remarks>
-            </overloads>
-        </member>
-        <member name="M:Sandcastle.Core.ComponentUtilities.XmlStreamAxis(System.String,System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            This provides a fast and efficient way of querying large XML files for specific element types which
-            themselves may contain instances of the given elements.
-            </summary>
-            <param name="xmlFile">The XML file to search</param>
-            <param name="elementNames">An enumerable list of element names for which to search</param>
-            <returns>An enumerable list of <see cref="T:System.Xml.Linq.XElement"/> instances for each of the found nodes including
-            any nested instances of elements with those names.</returns>
-            <remarks>If the element contains nested instances of the elements, the parent is returned first
-            followed by the nested elements (one level deep only).</remarks>
         </member>
         <member name="P:Sandcastle.Core.ComponentUtilities.ToolsFolder">
             <summary>
@@ -1863,18 +1849,14 @@
         </member>
         <member name="M:Sandcastle.Core.ConsoleApplication.GetConfigurationFile">
             <summary>
-            Get a configuration file for the currently executing (the calling) assembly
+            Get a configuration file for the currently executing assembly.
             </summary>
             <returns>An XML document containing the configuration</returns>
-            <remarks>This returns the configuration from the actual location of the assembly, where it was found
-            versus where it is executing from, which may be different if shadow copied.</remarks>
-            <overloads>There are two overloads for this method</overloads>
         </member>
         <member name="M:Sandcastle.Core.ConsoleApplication.GetConfigurationFile(System.String)">
             <summary>
             Load the specified configuration file
             </summary>
-            <param name="file">The configuration file to load</param>
             <returns>An XML document containing the configuration</returns>
         </member>
         <member name="M:Sandcastle.Core.ConsoleApplication.WriteBanner">
@@ -1907,7 +1889,7 @@
         </member>
         <member name="P:Sandcastle.Core.ConsoleApplication.VerbosityLevel">
             <summary>
-            The verbosity level for the <see cref="O:Sandcastle.Core.ConsoleApplication.WriteMessage"/>
+            The verbosity level for the <see cref="O:Microsoft.Ddue.Tools.CommandLine.WriteMessage"/>
             methods.
             </summary>
             <value>The default level is <see cref="F:Sandcastle.Core.LogLevel.Info"/> so that all messages are displayed.
@@ -1952,30 +1934,24 @@
             folder and contains custom build components that can be added to a project.
             </summary>
         </member>
-        <member name="T:Sandcastle.Core.Reflection.AssemblyDetails">
+        <member name="T:Sandcastle.Core.Frameworks.AssemblyDetails">
             <summary>
-            This class is used to hold the details for an assembly
+            This class is used to hold the details for a .NET Framework assembly
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.#ctor">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.#ctor">
             <summary>
             Private constructor
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.OnPropertyChanged(System.String)">
-            <summary>
-            This raises the <see cref="E:Sandcastle.Core.Reflection.AssemblyDetails.PropertyChanged"/> event
-            </summary>
-            <param name="propertyName">The property name that changed</param>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.FromAssemblyName(System.Reflection.AssemblyName)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.FromAssemblyName(System.Reflection.AssemblyName)">
             <summary>
             This is used to create an assembly details instance from an assembly name
             </summary>
-            <param name="name">The assembly name information</param>
+            <param name="name"></param>
             <returns>The new assembly details item</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.FromXml(System.String,System.Xml.Linq.XElement)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.FromXml(System.String,System.Xml.Linq.XElement)">
             <summary>
             This is used to create an assembly details instance from an XML element
             </summary>
@@ -1983,98 +1959,67 @@
             <param name="details">The XML element containing the details</param>
             <returns>The new assembly details item</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.ToXml(System.String)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.ToXml">
             <summary>
             This is used to convert the assembly detail to an XML element
             </summary>
-            <param name="basePath">The base path for the assembly</param>
             <returns>The assembly details as an XML element</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.ToString">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.ToString">
             <summary>
             This is overridden to convert the assembly details to a string in the strong name format
             </summary>
             <returns>The assembly details as a strong name string</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.GetHashCode">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.GetHashCode">
             <summary>
             This is used to return a hash code for the assembly details in string format
             </summary>
             <returns>The hash code for the assembly details</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyDetails.Equals(System.Object)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyDetails.Equals(System.Object)">
             <summary>
             This is overridden to allow proper comparison of assembly detail objects
             </summary>
             <param name="obj">The object to which this instance is compared</param>
             <returns>Returns true if the object equals this instance, false if it does not</returns>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.Filename">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyDetails.Filename">
             <summary>
             This read-only property returns the assembly filename
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.Name">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyDetails.Name">
             <summary>
             This read-only property returns the assembly name
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.Version">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyDetails.Version">
             <summary>
             This read-only property is used to get the version for the assembly
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.Culture">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyDetails.Culture">
             <summary>
             This read-only property is used to get the culture for the assembly
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.PublicKeyToken">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyDetails.PublicKeyToken">
             <summary>
             This read-only property returns the public key token for the assembly
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.IsIncluded">
+        <member name="T:Sandcastle.Core.Frameworks.AssemblyLocation">
             <summary>
-            This is used to get or set whether or not to include the assembly
-            </summary>
-            <remarks>Certain assemblies cannot be parsed or do not contain any useful information.  This can
-            be set to false to exclude them from being processed.</remarks>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyDetails.Description">
-            <summary>
-            This read-only property returns the assembly description which is a combination of the name,
-            version, culture, and public key token.
+            This class defines the settings for a .NET Framework assembly location
             </summary>
         </member>
-        <member name="E:Sandcastle.Core.Reflection.AssemblyDetails.PropertyChanged">
-            <summary>
-            The property changed event
-            </summary>
-        </member>
-        <member name="T:Sandcastle.Core.Reflection.AssemblyLocation">
-            <summary>
-            This class defines the settings for a specific assembly location
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyLocation.#ctor">
-            <summary>
-            Default constructor
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyLocation.#ctor(System.String)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyLocation.#ctor">
             <summary>
             Private constructor
             </summary>
-            <param name="storedPath">The stored path to use</param>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyLocation.OnPropertyChanged(System.String)">
-            <summary>
-            This raises the <see cref="E:Sandcastle.Core.Reflection.AssemblyLocation.PropertyChanged"/> event
-            </summary>
-            <param name="propertyName">The property name that changed</param>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyLocation.FromXml(System.Xml.Linq.XElement)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyLocation.FromXml(System.Xml.Linq.XElement)">
             <summary>
             This is used to load the settings for an assembly location from an XML element
             </summary>
@@ -2083,172 +2028,128 @@
             <remarks>If the location element is empty, the assembly details will be created by scanning the
             location for assemblies.</remarks>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyLocation.ToXml">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyLocation.ToXml">
             <summary>
             This is used to convert the assembly location to an XML element
             </summary>
             <returns>The assembly location as an XML element</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.AssemblyLocation.DetermineAssemblyDetails(System.Boolean)">
+        <member name="M:Sandcastle.Core.Frameworks.AssemblyLocation.DetermineAssemblyDetails">
             <summary>
             This can be used to load an empty location with information about the assemblies it contains
             </summary>
-            <param name="clearAndRefresh">True to clear and refresh all file information or false to only remove
-            assemblies that no longer exist and add new assemblies.</param>
+            <remarks>If the location already has assembly details, it will do nothing.</remarks>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyLocation.StoredPath">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyLocation.Path">
             <summary>
-            This is used to get or set the path to the assembly location
+            This read-only property returns the path to the assembly location
             </summary>
-            <value>The path may contain environment variable references</value>
-            <remarks>When the stored path is changed, the set of assemblies in it is updated as well</remarks>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyLocation.Path">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyLocation.IsCoreLocation">
             <summary>
-            This read-only property returns the actual path to the assembly location
-            </summary>
-            <remarks>This returns the path with any environment variable references replaced with the actual
-            path elements.</remarks>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyLocation.IsCoreLocation">
-            <summary>
-            This read-only property is used to determine if this entry represents a core framework location
+            This read-only property determine if this is the core assembly location
             </summary>
             <value>True if it is the core location, false if not</value>
-            <remarks>The core location is determined by searching for <c>mscorlib</c> in the assembly set</remarks>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyLocation.AllAssemblies">
+        <member name="P:Sandcastle.Core.Frameworks.AssemblyLocation.Assemblies">
             <summary>
-            This read-only property returns a bindable list of all assembly details for this location
+            This read-only property returns an enumerable list of assembly details for this location
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.AssemblyLocation.IncludedAssemblies">
+        <member name="T:Sandcastle.Core.Frameworks.FrameworkDictionary">
             <summary>
-            This read-only property returns an enumerable list of only the included assembly details for this
-            location.
+            This dictionary contains the settings for all known .NET Framework versions
             </summary>
         </member>
-        <member name="E:Sandcastle.Core.Reflection.AssemblyLocation.PropertyChanged">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkDictionary.#ctor">
             <summary>
-            The property changed event
+            Private constructor
             </summary>
-        </member>
-        <member name="T:Sandcastle.Core.Reflection.ReflectionDataSetDictionary">
-            <summary>
-            This dictionary contains reflection data settings for the various .NET Framework platforms and versions
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSetDictionary.#ctor(System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Constructor
-            </summary>
-            <param name="componentLocations">An optional enumerable list of additional component locations to
-            search for reflection data set files.</param>
             <remarks>Keys are case-insensitive</remarks>
-            <remarks>The following folders are searched in the following order.  If the given folder has not been
-            specified or does not exist, it is ignored.
-            
-            <list type="number">
-                <item><c>SHFBROOT</c> - The root Sandcastle Help File Builder installation folder and its
-            subfolders.  This allows for XCOPY deployments that keep everything together.</item>
-                <item>Common application data folder - The help file builder's common application data folder
-            where third-party build components are typically installed.</item>
-                <item>The enumerable list of additional folders - This is typically the current project's
-            <c>ComponentPath</c> folder and the current project's folder.  This allows for project-specific
-            reflection data files.  If the project's <c>ComponentPath</c> property is set, that folder is
-            searched first and then the project's folder is searched.</item>
-            </list>
-            
-            All folders and their subfolders are search recursively for reflection data files (*.reflection).
-            There may be duplicate titles across the files found.  If duplicates are found, the last one seen is
-            used.  As such, reflection data files in a folder with a later search precedence can override
-            copies in folders earlier in the search order.</remarks>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSetDictionary.CoreFrameworkByTitle(System.String,System.Boolean)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkDictionary.LoadSandcastleFrameworkDictionary">
             <summary>
-            This is used to find the first core framework matching the specified title or the next highest
-            version if found but not installed if redirection is requested.
+            This is used to load the framework dictionary used by the Sandcastle tools
             </summary>
-            <param name="title">The title to find</param>
-            <param name="withRedirect">True to redirect to the next highest version that is installed if the
-            requested title is not installed or false to return the exact match even if not present.</param>
-            <returns>The framework settings if found or null if not found</returns>
+            <returns>The framework dictionary loaded from the <strong>Frameworks.xml</strong> file located in the
+            Sandcastle tools folder.</returns>
+            <exception cref="T:System.IO.FileNotFoundException">This is thrown if the file cannot be found</exception>
+            <exception cref="T:System.InvalidOperationException">This is thrown if the framework definition file cannot be
+            parsed properly.  The nested exception will contain the reason.</exception>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSetDictionary.CoreFrameworkMatching(System.String,System.Version,System.Boolean)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkDictionary.FromXml(System.String)">
             <summary>
-            This is used to find the first core framework matching the specified platform and version or the next
-            highest version if not found and redirection is requested.
+            This is used to load a framework dictionary XML file
             </summary>
-            <param name="platform">The platform to find.</param>
-            <param name="version">The version to find.  This can be a partial version number if redirection is
-            requested.</param>
-            <param name="withRedirect">True to redirect to the next highest version that is installed or false to
-            return the exact match even if not present.</param>
-            <returns>The framework settings if found or null if not found</returns>
+            <param name="filename">The filename to load</param>
+            <returns>The new framework dictionary containing the file's content</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSetDictionary.CoreFrameworkMostRecent(System.String)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkDictionary.ToXml">
             <summary>
-            This is used to find the most recent core framework matching the specified platform
+            This is used to convert the framework dictionary to an XML document
+            </summary>
+            <returns>The framework dictionary as an XML document</returns>
+        </member>
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkDictionary.FrameworkMatching(System.String,System.Version,System.Boolean)">
+            <summary>
+            This is used to find the first framework matching the specified platform and version
             </summary>
             <param name="platform">The platform to find</param>
-            <returns>The framework settings if found or null if not found</returns>
+            <param name="version">The version to find.  This can be a full or partial version number</param>
+            <param name="withRedirect">True to redirect to a version that is present or false to return the
+            exact match even if not present.</param>
+            <returns>The framework settings if found or null if not found.</returns>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSetDictionary.DefaultFrameworkTitle">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkDictionary.GetFrameworkWithRedirect(System.String)">
+            <summary>
+            This is used to get the specified framework settings or a suitable redirected version if not
+            present on the current system.
+            </summary>
+            <param name="key">The title of the framework to find</param>
+            <returns>The specified framework settings.  If the specified framework does not appear to be
+            present and redirect information is available, the settings for the redirected version are
+            returned.  If no suitable redirect can be found, it returns null.</returns>
+        </member>
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkDictionary.AllFrameworks">
+            <summary>
+            This read-only property returns the values in the collection
+            </summary>
+        </member>
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkDictionary.DefaultFrameworkTitle">
             <summary>
             This read-only property is used to get the title of the default framework version to use
             </summary>
-            <remarks>The default is the .NET Framework 4.5</remarks>
+            <remarks>The default is the .NET Framework 4.0</remarks>
         </member>
-        <member name="T:Sandcastle.Core.Reflection.ReflectionDataSet">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkDictionary.FrameworkFilePath">
             <summary>
-            This class contains information used to obtain reflection data and comments for a specific set of
-            assemblies.
+            This read-only property returns the path to the framework definition file
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.#ctor">
+        <member name="T:Sandcastle.Core.Frameworks.FrameworkSettings">
             <summary>
-            Constructor
+            This class is used to contain settings for a specific .NET Framework version
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.#ctor(System.String)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.#ctor">
             <summary>
-            File constructor
-            </summary>
-            <param name="filename">The filename from which to load the reflection data set information</param>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.OnPropertyChanged(System.String)">
-            <summary>
-            This raises the <see cref="E:Sandcastle.Core.Reflection.ReflectionDataSet.PropertyChanged"/> event
-            </summary>
-            <param name="propertyName">The property name that changed</param>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.Save">
-            <summary>
-            This is used to save the reflection data set information to an XML file
+            Private constructor
             </summary>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.IgnoreIfUnresolvedConfiguration">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.FromXml(System.Xml.Linq.XElement)">
             <summary>
-            This is used to return the <c>ignoreIfUnresolved</c> configuration entries for the MRefBuilder
-            configuration file.
+            This is used to load the settings for a .NET Framework version from an XML element
             </summary>
-            <returns>The configuration entries</returns>
+            <param name="framework">The XML element containing the settings</param>
+            <returns>The new framework settings item</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirectionConfiguration">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.ToXml">
             <summary>
-            This is used to return the <c>assemblyBinding</c> configuration entries for the MRefBuilder
-            configuration file.
+            This is used to convert the framework settings to an XML element
             </summary>
-            <returns>The configuration entries</returns>
+            <returns>The framework settings as an XML element</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.IgnoredNamespacesConfiguration">
-            <summary>
-            This is used to return the API filter <c>namespace</c> configuration entries for the MRefBuilder
-            configuration file.
-            </summary>
-            <returns>The configuration entries</returns>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.CommentsFileLocations(System.Globalization.CultureInfo)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.CommentsFileLocations(System.Globalization.CultureInfo)">
             <summary>
             This is used to return an enumerable list of comments file locations
             </summary>
@@ -2256,7 +2157,7 @@
             null to use the current language.</param>
             <returns>An enumerable list of file paths to search for XML comments files</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.CultureSpecificCommentsFileFolder(Sandcastle.Core.Reflection.AssemblyLocation,System.Globalization.CultureInfo)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.CultureSpecificCommentsFileFolder(Sandcastle.Core.Frameworks.AssemblyLocation,System.Globalization.CultureInfo)">
             <summary>
             This is used to see if any comments files exist in a culture-specific framework location folder
             </summary>
@@ -2264,7 +2165,7 @@
             <param name="language">The language used to check for a culture-specific folder</param>
             <returns>True if files were</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.ContainsAssembly(System.String)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.ContainsAssembly(System.String)">
             <summary>
             This is used to see if the framework contains an assembly that uses the specified name
             </summary>
@@ -2273,16 +2174,16 @@
             present in the framework.  Assembly names are compare case-insensitively.</param>
             <returns>True if the framework contains the named assembly, false if not.</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.FindAssembly(System.String)">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.FindAssembly(System.String)">
             <summary>
             This is used to find an assembly by name
             </summary>
             <param name="assemblyName">The assembly name without a path or extension or a strong name value.
             If a strong name value is specified, only the name part is used to determine if the assembly is
-            present in the framework.  Assembly names are compared case-insensitively.</param>
+            present in the framework.  Assembly names are compare case-insensitively.</param>
             <returns>The assembly if found or null if not found</returns>
         </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.GetReferencedNamespaces(System.Globalization.CultureInfo,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:Sandcastle.Core.Frameworks.FrameworkSettings.GetReferencedNamespaces(System.Globalization.CultureInfo,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             This is used to get an enumerable list of unique namespaces referenced in the XML comments files of
             the given set of namespaces.
@@ -2292,194 +2193,60 @@
             <param name="validNamespaces">An enumerable list of valid namespaces</param>
             <returns>An enumerable list of unique namespaces in the related XML comments files</returns>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.Filename">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.Title">
             <summary>
-            This is used to get or set the filename
+            This read-only property returns the framework title
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.Platform">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.Platform">
             <summary>
-            This is used to get or set the platform associated with the reflection data set
+            This read-only property returns the platform associated with the framework
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.Version">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.Version">
             <summary>
-            This is used to get or set the version number associated with the reflection data set if applicable
+            This read-only property returns the version number associated with the framework
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.Title">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.Redirect">
             <summary>
-            This is used to get or set the reflection data set title
+            This read-only property returns the framework version to use for redirection if this version is not
+            present.
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.Notes">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.AssemblyLocations">
             <summary>
-            This is used to get or set notes about this reflection data set
+            This read-only property returns an enumerable list of assembly locations
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.AllSystemTypesRedirected">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.IsFrameworkPresent">
             <summary>
-            This is used to get or set whether or not all <c>System</c> types are redirected to other assemblies
+            This read-only property can be used to determine if the framework is present on the current system
             </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.IsCoreFramework">
-            <summary>
-            This read-only property is used to determine if this entry represents a core framework
-            </summary>
-            <value>True if it is the core framework, false if not</value>
-            <remarks>The core location is determined by searching for <c>mscorlib</c> in the assembly set</remarks>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.CoreFrameworkLocation">
-            <summary>
-            This read-only property is used to get the core framework location if there is one
-            </summary>
-            <value>The core framework location or null if there isn't one</value>
-            <remarks>The core location is determined by searching for <c>mscorlib</c> in the assembly set</remarks>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.AssemblyLocations">
-            <summary>
-            This read-only property returns a bindable list of assembly locations
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.IgnoredNamespaces">
-            <summary>
-            This read-only property returns a bindable list of ignored namespaces used for building the
-            reflection data.
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.IgnoredUnresolved">
-            <summary>
-            This read-only property returns a bindable list of ignored unresolved assembly identities used for
-            building the reflection data.
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirections">
-            <summary>
-            This read-only property returns a bindable list of binding redirections used for building the
-            reflection data.
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.IsPresent">
-            <summary>
-            This read-only property can be used to determine if the reflection data set's core assemblies are
-            present on the current system
-            </summary>
-            <returns>True if the core assembly folder exists and contains the first assembly, false if not.  If
+            <returns>True if the core framework folder exists and contains the first assembly, false if not.  If
             the first assembly is present, it is assumed that all of them are.</returns>
         </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.IncludedAssemblies">
+        <member name="P:Sandcastle.Core.Frameworks.FrameworkSettings.AllAssemblies">
             <summary>
-            This read-only property returns an enumerable list of all included assemblies in the reflection data
-            set.
+            This read-only property returns an enumerable list of all assemblies in the framework version
             </summary>
         </member>
-        <member name="E:Sandcastle.Core.Reflection.ReflectionDataSet.PropertyChanged">
-            <summary>
-            The property changed event
-            </summary>
-        </member>
-        <member name="T:Sandcastle.Core.Reflection.ReflectionDataSet.StringWrapper">
-            <summary>
-            This is used to create a bindable, editable list of string values
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.StringWrapper.op_Implicit(Sandcastle.Core.Reflection.ReflectionDataSet.StringWrapper)~System.String">
-            <summary>
-            This is used to handle an implicit conversion from a <see cref="T:Sandcastle.Core.Reflection.ReflectionDataSet.StringWrapper"/> object to a string
-            </summary>
-            <param name="wrapper">The <see cref="T:Sandcastle.Core.Reflection.ReflectionDataSet.StringWrapper"/> to convert</param>
-            <returns>The value of the given wrapper as a string</returns>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.StringWrapper.Value">
-            <summary>
-            The string value
-            </summary>
-        </member>
-        <member name="T:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection">
-            <summary>
-            This class is used to edit binding redirection settings
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.FromXml(System.Xml.Linq.XElement)">
-            <summary>
-            Create an instance from an XML element
-            </summary>
-            <param name="redirection">The binding redirection settings</param>
-            <returns>The binding redirection settings created from the XML element</returns>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.ToXml">
-            <summary>
-            This is used to convert the binding redirection to an XML element
-            </summary>
-            <returns>The binding redirection as an XML element</returns>
-        </member>
-        <member name="M:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.ToBindingRedirectionElement">
-            <summary>
-            This is used to convert the binding redirection entry to an MRefBuilder configuration file
-            assembly binding redirection element.
-            </summary>
-            <returns>The binding redirection as an MRefBuilder configuration element</returns>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.Name">
-            <summary>
-            The assembly name
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.Culture">
-            <summary>
-            The assembly culture (optional)
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.PublicKeyToken">
-            <summary>
-            The public key token
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.OldVersion">
-            <summary>
-            The old version
-            </summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.ReflectionDataSet.BindingRedirection.NewVersion">
-            <summary>
-            The new version
-            </summary>
-        </member>
-        <member name="T:Sandcastle.Core.Reflection.PlatformType">
+        <member name="T:Sandcastle.Core.Frameworks.PlatformType">
             <summary>
             This class holds a set of constants used to define the various .NET platform types
             </summary>
         </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.DotNetCore">
-            <summary>.NET Core (Windows Store Apps) Framework</summary>
-        </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.DotNetFramework">
+        <member name="F:Sandcastle.Core.Frameworks.PlatformType.DotNetFramework">
             <summary>.NET Framework</summary>
         </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.DotNetMicroFramework">
-            <summary>.NET Micro Framework</summary>
-        </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.DotNetPortable">
+        <member name="F:Sandcastle.Core.Frameworks.PlatformType.DotNetPortable">
             <summary>.NET Portable Library Framework</summary>
         </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.Silverlight">
+        <member name="F:Sandcastle.Core.Frameworks.PlatformType.Silverlight">
             <summary>Silverlight Framework</summary>
         </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.WindowsPhone">
-            <summary>Windows Phone Framework</summary>
-        </member>
-        <member name="F:Sandcastle.Core.Reflection.PlatformType.WindowsPhoneApp">
-            <summary>Windows Phone Store Apps Framework</summary>
-        </member>
-        <member name="P:Sandcastle.Core.Reflection.PlatformType.PlatformTypes">
-            <summary>
-            This read-only property returns an enumerable list of the valid platform types
-            </summary>
+        <member name="F:Sandcastle.Core.Frameworks.PlatformType.DotNetCore">
+            <summary>.NET Core (Windows Store Apps) Framework</summary>
         </member>
         <member name="T:Sandcastle.Core.HelpFileFormats">
             <summary>
@@ -2489,6 +2256,9 @@
         <member name="F:Sandcastle.Core.HelpFileFormats.HtmlHelp1">
             <summary>HTML Help 1 (.chm) format built with HHC.EXE</summary>
         </member>
+        <member name="F:Sandcastle.Core.HelpFileFormats.MSHelp2">
+            <summary>MS Help 2 (.HxS) format built with HXCOMP.EXE</summary>
+        </member>
         <member name="F:Sandcastle.Core.HelpFileFormats.MSHelpViewer">
             <summary>MS Help Viewer (.mshc) format, a ZIP file containing the help content</summary>
         </member>
@@ -2497,9 +2267,6 @@
         </member>
         <member name="F:Sandcastle.Core.HelpFileFormats.OpenXml">
             <summary>Open XML (.docx) format, compatible with Microsoft Word and Open Office</summary>
-        </member>
-        <member name="F:Sandcastle.Core.HelpFileFormats.Markdown">
-            <summary>Markdown (.md) format, suitable for use in wikis such as those for GitHub projects</summary>
         </member>
         <member name="T:Sandcastle.Core.LogLevel">
             <summary>
@@ -2802,9 +2569,14 @@
             This is used to get or set the intermediate TOC transformation file and its parameters
             </summary>
         </member>
-        <member name="P:Sandcastle.Core.PresentationStyle.PresentationStyleSettings.BuildAssemblerConfiguration">
+        <member name="P:Sandcastle.Core.PresentationStyle.PresentationStyleSettings.ConceptualBuildConfiguration">
             <summary>
-            This is used to get or set the BuildAssembler configuration filename
+            This is used to get or set the BuildAssembler configuration filename for conceptual builds
+            </summary>
+        </member>
+        <member name="P:Sandcastle.Core.PresentationStyle.PresentationStyleSettings.ReferenceBuildConfiguration">
+            <summary>
+            This is used to get or set the BuildAssembler configuration filename for reference builds
             </summary>
         </member>
         <member name="P:Sandcastle.Core.PresentationStyle.PresentationStyleSettings.TransformComponentArguments">

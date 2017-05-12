@@ -21,7 +21,7 @@
 			// faster at lookups than List<T>.
 			private static HashSet<string> filenames = new HashSet<string>();
 
-			private static Regex reInvalidChars = new Regex("[ :.`#<>*?|]");
+			private static Regex reInvalidChars = new Regex("[ :.`#<>*?]");
 
 			// Convert a member ID to a filename based on the given naming method
 			public static string GetFileName(string id, string namingMethod)
@@ -92,17 +92,23 @@
 
 	<xsl:template match="/">
 		<reflection>
-			<xsl:copy-of select="/reflection/@*"/>
-			<xsl:copy-of select="/reflection/assemblies" />
-			<apis>
-				<xsl:apply-templates select="/reflection/apis/api" />
-			</apis>
+			<xsl:apply-templates select="/reflection/assemblies" />
+			<xsl:apply-templates select="/reflection/apis" />
 		</reflection>
 	</xsl:template>
 
+	<xsl:template match="assemblies">
+		<xsl:copy-of select="." />
+	</xsl:template>
+
+	<xsl:template match="apis">
+		<apis>
+			<xsl:apply-templates select="api" />
+		</apis>
+	</xsl:template>
+
 	<xsl:template match="api">
-		<api>
-			<xsl:copy-of select="@*" />
+		<api id="{@id}">
 			<xsl:copy-of select="*" />
 			<file name="{ddue:GetFileName(@id, $namingMethod)}" />
 		</api>

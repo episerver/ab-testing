@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <content xml:space="preserve">
 <!-- Translations provided by Sergey Zhurikhin -->
 
   <!-- note text -->
   <item id="notDocumented">Это API не документировано.</item>
-  <item id="preliminaryText">Это предварительная документация, которая в будущем может измениться.</item>
-
+  <item id="preliminary">Это предварительная документация, которая в будущем может измениться.</item>
+	
 	<!-- main window stuff -->
 	<item id="productTitle">Библиотека классов .NET Framework</item>
 
@@ -141,7 +140,7 @@
 	<item id="title_platforms">Платформы</item>
   <item id="title_relatedTopics">См. также</item>
   <item id="title_extensionUsage">Примечание об использовании</item>
-  <item id="text_extensionUsage">В Visual Basic и C# этот метод можно вызывать как метод экземпляра для любого объекта типа {0}. При вызове метода для экземпляра следует опускать первый параметр. Дополнительные сведения см. в разделе <a href="http://msdn.microsoft.com/ru-ru/library/bb384936.aspx" target="_blank">Методы расширения (Visual Basic)</a> или <a href="http://msdn.microsoft.com/ru-ru/library/bb383977.aspx" target="_blank">Методы расширения (Руководство по программированию в C#)</a>.</item>
+  <item id="text_extensionUsage">В Visual Basic и C# этот метод можно вызывать как метод экземпляра для любого объекта типа {0}. При вызове метода для экземпляра следует опускать первый параметр. Дополнительные сведения см. в разделе <a href="http://msdn.microsoft.com/ru-ru/library/bb384936.aspx" target="_blank">Методы расширения (Visual Basic)</a> или <a href="http://msdn.microsoft.com/ru-ru/library/bb383977.aspx" target="_blank">Методы расширения (Руководство по программированию в C#)</a> или <conceptualLink target="b8020aae-374d-46a9-bcb7-8cc2390b93b6" /> или <conceptualLink target="175ce3ff-9bbf-4e64-8421-faeb81a0bb51" />.</item>
 	<item id="text_moreInheritance">Подробнее...</item>
 
 	<!-- table headers -->
@@ -384,7 +383,7 @@
   <item id="text_contravariant">Этот параметр типа является контрвариантным. Это означает, что можно использовать либо указанный тип, либо менее производный тип. </item>
   <item id="text_variance">Дополнительные сведения о ковариации и контрвариации см. в разделе <a href="http://msdn.microsoft.com/ru-ru/library/ee207183.aspx" target="_blank">Ковариация и контравариация в универсальных шаблонах</a>.</item>
   
-  <!-- Non-CLS Compliant boilerplate text-->
+  <!-- Non Cls Compliant boilerplate text-->
   <item id="boilerplate_NotClsCompliant">Этот интерфейс API CLS-несовместим.</item>
   <item id="boilerplate_AltClsCompliant">CLS-совместимая альтернатива - {0}.</item>
   
@@ -550,8 +549,4 @@
   <item id="SMCMissingTag"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[&lt;{0}&gt; отсутствует в документации для "{1}"]</p></item>
   <item id="SMCMissingParamTag"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[&lt;{0} name="{1}"/&gt; отсутствует в документации для "{2}"]</p></item>
   <item id="SMCMissingIncludeTarget"><p style="color: #dc143c; font-size: 8.5pt; font-weight: bold;">[&lt;include&gt; отсутствует в '{0}'.  Файл: '{1}' Путь: '{2}']</p></item>
-
-	<!-- View Source link text -->
-	<item id="sourceCodeLinkText">View Source</item>
-	<item id="sourceCodeLinkTitle">View the source code</item>
 </content>

@@ -34,12 +34,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             LocalizationSection = "addtocart";
             _servicelocator = serviceLocator;
         }
+
         /// <summary>
-        /// Called when we are expected to evaluate. 
+        /// Determines if a conversion has happened.  Each KPI will decide this differently based on the sender, event args, and the purpose of the KPI.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">The expected Event Argument which contains the necessary info used to decide if a conversion has occured.</param>
+        /// <returns>A result containing the necessary data to record a conversion.</returns>
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;

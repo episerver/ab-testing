@@ -17,6 +17,7 @@
         <confidence_level_description>Konfidensnivån anger mängden tillåtna fel. Ju högre konfidensnivå, desto större blir testresultatens noggrannhet. Detta anger om skillnaden mätt mellan kontrollsidan och variantsidan inte är en slump (dvs om skillnaden är signifikant eller inte).</confidence_level_description>
         <confidence_level_header>Konfidensnivå</confidence_level_header>
         <control>A / Original</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>Vad är konverteringsmålet?</conversion_header>
         <conversion_label>Besökare går till sida</conversion_label>
         <days_text> dag(ar).</days_text>
@@ -31,11 +32,17 @@
         <error_test_not_schedulded_or_started>inte schemalagt, korrigera felet på startdag/startdag för att schemalägga ett test</error_test_not_schedulded_or_started>
         <goals_default_text>Exempel: Få fler nedladdningar av e-boken genom att byta reklambilden.</goals_default_text>
         <goals_header>Vad är målet med testet?</goals_header>
-        <goals_selectlist_default>Välj mål</goals_selectlist_default>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>Add a goal</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>inte schemalagt, kommer att starta nu</notscheduled_text>
         <participant_percentage_tip>Ett högre deltagandeantal minskar tiden som krävs för att samla tillräckligt med data för att kunna peka ut en vinnare.</participant_percentage_tip>
         <participation_header>Hur stor del av besökarantalet, i procent, ska delta i testet?</participation_header>
         <published_prefix>Publicerat av</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>När ska A/B-testet starta?</schedule_header>
         <schedule_selector_delay>Schemalägg för senare publicering</schedule_selector_delay>
         <schedule_selector_start>Starta omedelbart</schedule_selector_start>
@@ -77,10 +84,12 @@
         <draft_prefix>Utkast - redigerat av</draft_prefix>
         <from>från</from>
         <goal_not_specified>Ett mål har inte angivits för testet.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>Sparat i Versioner</losing_version_label>
         <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
         <published_prefix>Publicerat av</published_prefix>
         <remaining_increment>Dagar</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startat </started>
         <test_duration_header>Testets längd</test_duration_header>
         <test_percent_to_participations_divider> / Antalet testdeltagare just nu </test_percent_to_participations_divider>
@@ -117,9 +126,11 @@
         <description_heading>Mål med testet</description_heading>
         <draft_prefix>Utkast - Redigerat av</draft_prefix>
         <goal_not_specified>Ett mål har inte angivits för testet.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
         <published_prefix>Publicerat av</published_prefix>
         <remaining_increment>Dagar</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> Startat </started>
         <test_duration_completed>Avslutat efter fulltid</test_duration_completed>
         <test_duration_header>Testets längd</test_duration_header>
@@ -134,6 +145,11 @@
         <view_control_content>Visa originalet</view_control_content>
         <views>sidvisningar</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>Ett A/B-test utfördes på en version av det här innehållet. </completed_test>
         <details_link_text>Visa testet</details_link_text>
@@ -143,6 +159,10 @@
         <winner_link_text>Välj vinnare</winner_link_text>
         <winner_link_tooltip>Visa testdetaljer och välj vinnare </winner_link_tooltip>
       </notificationbar>
+      <percentagetemplate>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <views>Views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
         <advanced_options_header>Avancerade inställningar</advanced_options_header>
@@ -163,12 +183,14 @@
           Det här testet är inte avslutat men du kan välja en vinnare. Om du väljer en vinnare nu avslutas testet och det valda innehållet publiceras.
         </early_pick_winner_message>
         <goal_not_specified>Ett mål har inte angivits.</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>Andelen av besökarna som deltar i testet (i procent)</percent_participation_header>
         <pick_a_winner_text>Välj en vinnare!</pick_a_winner_text>
         <pick_winner_option_text>Välj en vinnare</pick_winner_option_text>
         <published_prefix>Publicerat av</published_prefix>
         <remaining_increment>Dagar</remaining_increment>
         <result_is_not_significant>Testresultaten är INTE signifikanta.</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> Startat </started>
         <test_duration_completed>Avslutat efter fulltid</test_duration_completed>
         <test_duration_header>Testets längd</test_duration_header>
@@ -190,6 +212,11 @@
         <displayname>Marknadstestövervakare</displayname>
         <message>Startat [{0}] Stoppat [{1}] Aktivt [{2}] Inaktivt [{3}] Avslutat [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>Aktiva A/B-test</activetests>
         <archivedtests>Arkiverade A/B-test</archivedtests>

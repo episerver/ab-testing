@@ -18,6 +18,11 @@ using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.KPI.Common
 {
+    /// <summary>
+    /// Converts when a user visits the content under test and then visits any other page within the same browser session.  
+    /// Results: Views are the number of visitors that visited the web page.  
+    /// Conversions are the number of visitors that clicked through to any other page within the specified time.
+    /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.StickySiteConfigMarkup.html",
         readonlymarkup = "EPiServer.Marketing.KPI.Markup.StickySiteReadOnlyMarkup.html",
@@ -30,6 +35,10 @@ namespace EPiServer.Marketing.KPI.Common
 
         [DataMember]
         public Guid TestContentGuid;
+
+        /// <summary>
+        /// Number of minutes until another page is visited.
+        /// </summary>
         [DataMember]
         public int Timeout;
 
@@ -45,6 +54,7 @@ namespace EPiServer.Marketing.KPI.Common
             _stickyHelper = helper;
         }
 
+        /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
             var retval = false;
@@ -70,6 +80,7 @@ namespace EPiServer.Marketing.KPI.Common
             return new KpiConversionResult() { KpiId = Id, HasConverted = retval };
         }
 
+        /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
             if (responseData["Timeout"] == "" || responseData["CurrentContent"] == "")
@@ -97,6 +108,7 @@ namespace EPiServer.Marketing.KPI.Common
             Timeout = int.Parse(responseData["Timeout"]);
         }
 
+        /// <inheritdoc />
         public override string UiMarkup
         {
             get
@@ -109,23 +121,24 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         public override string UiReadOnlyMarkup
         {
             get
             {
                 string markup = base.UiReadOnlyMarkup;
 
-                var conversionHeaderText = _servicelocator.GetInstance<LocalizationService>()
-                    .GetString("/kpi/stickysite_kpi/readonly_markup/conversion_header");
                 var conversionDescription = _servicelocator.GetInstance<LocalizationService>()
                     .GetString("/kpi/stickysite_kpi/readonly_markup/conversion_selector_description");
                 conversionDescription = string.Format(conversionDescription, Timeout);
-                markup = string.Format(markup, conversionHeaderText, conversionDescription);
+                markup = string.Format(markup, conversionDescription);
                 return markup;
             }
         }
 
         private EventHandler<ContentEventArgs> _eh;
+
+        /// <inheritdoc />
         public override event EventHandler EvaluateProxyEvent
         {
             add
@@ -141,6 +154,7 @@ namespace EPiServer.Marketing.KPI.Common
             }
         }
 
+        /// <inheritdoc />
         [ExcludeFromCodeCoverage]
         public override void Initialize()
         {
@@ -148,6 +162,7 @@ namespace EPiServer.Marketing.KPI.Common
             service.LoadedContent += AddSessionOnLoadedContent;
         }
 
+        /// <inheritdoc />
         [ExcludeFromCodeCoverage]
         public override void Uninitialize()
         {
@@ -155,6 +170,11 @@ namespace EPiServer.Marketing.KPI.Common
             service.LoadedContent -= AddSessionOnLoadedContent;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void AddSessionOnLoadedContent(object sender, ContentEventArgs e)
         {
             var isInSystemFolder = _stickyHelper.IsInSystemFolder();

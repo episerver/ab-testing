@@ -76,15 +76,15 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         {
             get
             {
-                var conversionHeader = LocalizationService.Current
-                   .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_header");
-
                 var conversionText = LocalizationService.Current
                    .GetString("/commercekpi/" + LocalizationSection + "/readonly_markup/conversion_description");
-                return string.Format(base.UiReadOnlyMarkup, conversionHeader, conversionText);
+                return string.Format(base.UiReadOnlyMarkup, conversionText);
             }
         }
 
+        /// <summary>
+        /// Kpi implentation for using the DynamicDataStore that is part of EPiServer for storing commerce related settings.
+        /// </summary>
         [DataMember]
         public CommerceData PreferredFinancialFormat { get; set; }       
 

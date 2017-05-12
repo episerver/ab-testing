@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using EPiServer.Core;
 using EPiServer.Framework.Localization;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Common;
-using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -16,7 +14,9 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
+using System.Collections;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -25,7 +25,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<ILogger> _logger = new Mock<ILogger>();
         private Mock<IKpiWebRepository> _kpiWebRepoMock;
-        private Mock<IKpiManager> _kpiManagerMock;
 
         private KpiStore GetUnitUnderTest()
         {
@@ -34,11 +33,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _kpiWebRepoMock = new Mock<IKpiWebRepository>();
             _kpiWebRepoMock.Setup(call => call.GetKpiTypes()).Returns(new List<KpiTypeModel>() { new KpiTypeModel()});
+            
             _locator.Setup(s1 => s1.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
-
-            _kpiManagerMock = new Mock<IKpiManager>();
-            _kpiManagerMock.Setup(call => call.Save(It.IsAny<IKpi>())).Returns(Guid.NewGuid());
-
+            
             var testStore = new KpiStore(_locator.Object);
             return testStore;
         }
@@ -60,9 +57,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testClass = GetUnitUnderTest();
 
             var retResult = testClass.Put("", "") as RestResult;
-            var response = retResult.Data as Response;
 
-            Assert.False(response.status, "expected false because arguments are empty");
+            var responseDataStatus = (bool)retResult.Data.GetType().GetProperty("status").GetValue(retResult.Data, null);
+
+            Assert.False(responseDataStatus);
         }
 
         [Fact]
@@ -73,9 +71,83 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var entity =
                 "{\"kpiType\": \"EPiServer.Marketing.KPI.Common.ContentComparatorKPI, EPiServer.Marketing.KPI, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\",\"ConversionPage\": \"16\",\"CurrentContent\": \"6_197\"}";
             var retResult = testClass.Put("", entity) as RestResult;
-            var response = retResult.Data as Response;
 
-            Assert.False(response.status, "expected false because no content id specified");
+            var responseDataStatus = (bool)retResult.Data.GetType().GetProperty("status").GetValue(retResult.Data, null);
+
+            Assert.False(responseDataStatus);
         }
-    }
+
+        [Fact]
+        public void Put_Returns_Correct_Weight_For_Each_Kpi()
+        {
+            var testClass = GetUnitUnderTest();
+
+            var dict = new Dictionary<string, string>();
+            dict.Add("Timeout", "10");
+            dict.Add("kpiType", "EPiServer.Marketing.KPI.Common.StickySiteKpi, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            dict.Add("widgetID", "KpiWidget_0");
+            dict.Add("Weight", "Low");  // equates to weight of 1
+            dict.Add("CurrentContent", "9_198");
+
+            var dict2 = new Dictionary<string, string>();
+            dict2.Add("TargetDuration", "5");
+            dict2.Add("kpiType", "EPiServer.Marketing.KPI.Common.TimeOnPageClientKpi, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            dict2.Add("widgetID", "KpiWidget_1");
+            dict2.Add("Weight", "Medium");  // equates to weight of 2
+            dict2.Add("CurrentContent", "9_198");
+
+            var kpis = new List<Dictionary<string, string>>();
+            kpis.Add(dict);
+            kpis.Add(dict2);
+
+            _kpiWebRepoMock.Setup(call => call.DeserializeJsonKpiFormCollection(It.IsAny<string>())).Returns(kpis);
+            var sticky = new Mock<StickySiteKpi>();
+            _kpiWebRepoMock.Setup(call => call.ActivateKpiInstance(It.IsAny<Dictionary<string, string>>())).Returns(sticky.Object);
+
+            var retResult = testClass.Put("KpiFormData", "") as RestResult;
+            
+            var responseDataObj= (Dictionary<Guid,string>)retResult.Data.GetType().GetProperty("obj").GetValue(retResult.Data, null);
+
+            Assert.Equal(1, responseDataObj.Count(pair => pair.Value == "Low"));
+            Assert.Equal(1, responseDataObj.Count(pair => pair.Value == "Medium"));
+        }
+
+        [Fact]
+        public void Put_With_Duplicate_Kpis_and_Values_Returns_Proper_Errors()
+        {
+            var testClass = GetUnitUnderTest();
+
+            var dict = new Dictionary<string, string>();
+            dict.Add("Timeout", "10");
+            dict.Add("kpiType", "EPiServer.Marketing.KPI.Common.StickySiteKpi, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            dict.Add("widgetID", "KpiWidget_0");
+            dict.Add("Weight", "Low");  // equates to weight of 1
+            dict.Add("CurrentContent", "9_198");
+
+            var dict2 = new Dictionary<string, string>();
+            dict2.Add("Timeout", "10");
+            dict2.Add("kpiType", "EPiServer.Marketing.KPI.Common.StickySiteKpi, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            dict2.Add("widgetID", "KpiWidget_1");
+            dict2.Add("Weight", "Medium");  // equates to weight of 2
+            dict2.Add("CurrentContent", "9_198");
+
+            var kpis = new List<Dictionary<string, string>>();
+            kpis.Add(dict);
+            kpis.Add(dict2);
+
+            _kpiWebRepoMock.Setup(call => call.DeserializeJsonKpiFormCollection(It.IsAny<string>())).Returns(kpis);
+            var sticky = new Mock<StickySiteKpi>();
+            _kpiWebRepoMock.Setup(call => call.ActivateKpiInstance(It.IsAny<Dictionary<string, string>>())).Returns(sticky.Object);
+
+            var retResult = testClass.Put("KpiFormData", "") as RestResult;
+
+            var responseDataErrors = JsonConvert.DeserializeObject<Dictionary<string,string>>(retResult.Data.GetType().GetProperty("errors").GetValue(retResult.Data, null).ToString());
+
+            Assert.Equal(2, responseDataErrors.Count);
+            Assert.True(responseDataErrors.Keys.Contains("KpiWidget_0"));
+            Assert.True(responseDataErrors["KpiWidget_0"] == "testing");
+            Assert.True(responseDataErrors.Keys.Contains("KpiWidget_1"));
+            Assert.True(responseDataErrors["KpiWidget_1"] == "testing");
+        }
+    }   
 }

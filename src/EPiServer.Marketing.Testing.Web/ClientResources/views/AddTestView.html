@@ -95,27 +95,23 @@
                         <h4>
                             ${resources.addtestview.conversion_header}
                         </h4>
+                        <p class="epi-abtest-narrowMarginBottom">
+                            ${resources.addtestview.conversion_description} <a id="advancedOptionsLink" class="epi-visibleLink" data-dojo-attach-event="onclick: _showAdvancedOptions">${resources.addtestview.advanced_options}</a>.
+                        </p>
                         <!-- Errors returned by custom validation will be displayed here-->
                         <span id="kpiErrorIcon"
-                              class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
+                              class="epi-ab-errorIcon epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger">
                         </span>
                         <span id="kpiErrorText" class="epi-ab-errorText">
                         </span>
                         <!-- KPI UI Element-->
-                        <div>
+                        <div id="kpiSelectorCombo" class="epi-abtest-narrowMarginBottom">
                             <select id="kpiSelector" data-dojo-type="dijit/form/Select" data-dojo-attach-event="onChange: _onGoalSelectChange"></select>
                         </div>
-                        <!-- KPI Description -->
                         <div>
-                            <p id="kpidescription"></p>
-                        </div>
-                        <div>
-                            <form id="kpiForm">
-                                <input type="text" id="kpiType" name="kpiType" hidden />
-                                <div id="kpiui">
-                                    <!-- KPI Supplied UI will be injected here -->
-                                </div>
-                            </form>
+                            <div id="kpiWidgets">
+                                <!-- Kpis added here-->
+                            </div>
                         </div>
                     </div>
                     <hr class="epi-abtest-hr" />
@@ -196,14 +192,24 @@
             <div class="cardWrapper">
                 <!-- Header / Toggle-->
                 <div class="cardBody">
-                    <button data-dojo-type="dijit/form/ToggleButton" onclick="showSettings();" class="epi-chromeless epi-flat"
+                    <button id=advancedOptionsButton data-dojo-attach-point=advancedOptions data-dojo-type="dijit/form/ToggleButton" data-dojo-attach-event="onClick: _showAdvancedOptions" class="epi-chromeless epi-flat"
                             style="background-color: #ffffff; font-size: 18px; margin: 8px 0 0 0; font-family: arial; font-weight: bold"
                             data-dojo-props="iconClass:'epi-iconSettings', checked: false">
                         ${resources.addtestview.advanced_options}
                     </button>
-                    <!-- Confidence Level -->
                     <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;">
-                        <div class="cardBody" style="padding-top: 4px;">
+                        <!-- Kpi Weights -->
+                        <div id="kpiWeightAdvancedSection" class="cardBody" style="display: none;">
+                            <h4>${resources.addtestview.goals_weight_heading}</h4>
+                            <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_description}</p>
+                            <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_higher_description}</p>
+                            <p>${resources.addtestview.goals_weight_equal_description}</p>
+                            <div id="kpiWeightSelectors" class="epi-abTest-weightSelectors-margin">
+                                <!-- Kpi weight selectors will beinjected here-->
+                            </div>
+                        </div>
+                        <!-- Confidence Level -->
+                        <div class="cardBody">
                             <h4>${resources.addtestview.confidence_level_header}</h4>
                             <p>${resources.addtestview.confidence_level_description}</p>
                             <select id="confidence" data-dojo-type="dijit/form/Select"></select>

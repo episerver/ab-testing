@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace EPiServer.Marketing.Testing.Core.DataClass
 {
     /// <summary>
-    /// Kpi result that handles any type of financial values.  It can also handle conversions between currencies.
+    /// KPI result that handles any type of financial values.  It can also handle conversions between currencies.
     /// </summary>
     public class KeyFinancialResult : CoreEntityBase, IKeyResult
     {
@@ -33,14 +33,14 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         public string ConvertedTotalCulture { get; set; }
 
         /// <summary>
-        /// Id of the variant the result pertains to.
+        /// ID of the variant the result pertains to.
         /// </summary>
         public Guid? VariantId { get; set; }
 
-        [ExcludeFromCodeCoverage]
         /// <summary>
         /// The variant the result pertains to.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         public virtual Variant Variant { get; set; }
 
     }

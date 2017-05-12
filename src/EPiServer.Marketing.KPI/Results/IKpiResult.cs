@@ -2,10 +2,13 @@
 
 namespace EPiServer.Marketing.KPI.Results
 {
+    /// <summary>
+    /// Minimum information required to save a KPI conversion.
+    /// </summary>
     public interface IKpiResult
     {
         /// <summary>
-        /// Id of the Kpi that the result pertains.
+        /// ID of the KPI that the result pertains.
         /// </summary>
         Guid KpiId { get; set; }
 

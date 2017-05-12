@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using EPiServer.Marketing.KPI.Dal.Model;
 using EPiServer.Marketing.KPI.DataAccess;
 using EPiServer.Marketing.KPI.Exceptions;
@@ -11,6 +12,7 @@ using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
 using StructureMap.TypeRules;
 using EPiServer.Data.Dynamic;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.KPI.Manager
 {
@@ -20,6 +22,7 @@ namespace EPiServer.Marketing.KPI.Manager
     {
         private IKpiDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
+        private ILogger _logger;
         public bool DatabaseNeedsConfiguring;
 
         /// <summary>
@@ -29,6 +32,7 @@ namespace EPiServer.Marketing.KPI.Manager
         public KpiManager()
         {
             _serviceLocator = ServiceLocator.Current;
+            _logger = LogManager.GetLogger();
 
             try
             {
@@ -47,7 +51,8 @@ namespace EPiServer.Marketing.KPI.Manager
         internal KpiManager(IServiceLocator serviceLocator)
         {
             _serviceLocator = serviceLocator;
-            _dataAccess = _serviceLocator.GetInstance<IKpiDataAccess>();
+            _dataAccess = serviceLocator.GetInstance<IKpiDataAccess>();
+            _logger = serviceLocator.GetInstance<ILogger>();
         }
 
         /// <inheritdoc />
@@ -65,7 +70,13 @@ namespace EPiServer.Marketing.KPI.Manager
         /// <inheritdoc />
         public Guid Save(IKpi kpi)
         {
-            return _dataAccess.Save(ConvertToDalKpi(kpi));
+            return Save(new List<IKpi>() { kpi }).First();
+        }
+
+        /// <inheritdoc />
+        public IList<Guid> Save(IList<IKpi> kpis)
+        {
+            return _dataAccess.Save(ConvertToDalKpis(kpis));
         }
 
         /// <inheritdoc />
@@ -78,12 +89,32 @@ namespace EPiServer.Marketing.KPI.Manager
         public IEnumerable<Type> GetKpiTypes()
         {
             var type = typeof(IKpi);
-            // exclude interfaces, abstract instances, and the convience base class Kpi
-            var types =
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi));
-            return (types);
+
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var types = new List<Type>();
+
+            foreach (var assembly in assemblies)
+            {
+                IEnumerable<Type> kpiTypes;
+                try
+                {
+                    kpiTypes = assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi));
+                }
+                catch (ReflectionTypeLoadException e)  // This exception gets thrown if any dependencies for an assembly can't be found.
+                {
+                    // In this case, we just get whatever kpis that we can and ignore any that have missing dependencies
+                    kpiTypes = e.Types.Where(t => t != null && type.IsAssignableFrom(t) && !t.IsInterfaceOrAbstract() && t != typeof(Kpi)).ToArray();
+
+                    foreach (var loaderException in e.LoaderExceptions)
+                    {
+                        _logger.Error("AB Testing: ", loaderException);
+                    }
+                }
+
+                types.AddRange(kpiTypes);
+            }
+
+            return types;
         }
 
         /// <inheritdoc />
@@ -124,31 +155,39 @@ namespace EPiServer.Marketing.KPI.Manager
         }
 
         /// <summary>
-        /// Serialize the kpi to a Json string and save it in the properties field.
+        /// Serialize the KPI to a JSON string and save it in the properties field.
         /// </summary>
-        /// <param name="kpi">Kpi to save to the db (i.e. contentcomparatorkpi, timeonpagekpi, etc.</param>
-        /// <returns>EF Kpi object to save in the db.</returns>
-        private IDalKpi ConvertToDalKpi(IKpi kpi)
+        /// <param name="kpis">List of KPIs to save to the DB (i.e. contentcomparatorkpi, timeonpagekpi, etc.)</param>
+        /// <returns>EF KPI object to save in the DB.</returns>
+        private List<IDalKpi> ConvertToDalKpis(IList<IKpi> kpis)
         {
-            if (Guid.Empty == kpi.Id)
-            {   // if the kpi.id is null, its because we are creating a new one.
-                kpi.Id = Guid.NewGuid();
-                kpi.CreatedDate = DateTime.UtcNow;
-                kpi.ModifiedDate = DateTime.UtcNow;
+            var dalKpis = new List<IDalKpi>();
+
+            foreach (var kpi in kpis)
+            {
+                if (Guid.Empty == kpi.Id)
+                {
+                    // if the kpi.id is null, its because we are creating a new one.
+                    kpi.Id = Guid.NewGuid();
+                    kpi.CreatedDate = DateTime.UtcNow;
+                    kpi.ModifiedDate = DateTime.UtcNow;
+                }
+
+                var serializedKpi = JsonConvert.SerializeObject(kpi);
+
+                var dalKpi = new DalKpi()
+                {
+                    Id = kpi.Id,
+                    ClassName = kpi.GetType().AssemblyQualifiedName,
+                    Properties = serializedKpi,
+                    CreatedDate = kpi.CreatedDate,
+                    ModifiedDate = kpi.ModifiedDate
+                };
+
+                dalKpis.Add(dalKpi);
             }
 
-            var serializedKpi = JsonConvert.SerializeObject(kpi);
-
-            var dalKpi = new DalKpi()
-            {
-                Id = kpi.Id,
-                ClassName = kpi.GetType().AssemblyQualifiedName,
-                Properties = serializedKpi,
-                CreatedDate = kpi.CreatedDate,
-                ModifiedDate = kpi.ModifiedDate
-            };
-
-            return dalKpi;
+            return dalKpis;
         }
 
         /// <summary>

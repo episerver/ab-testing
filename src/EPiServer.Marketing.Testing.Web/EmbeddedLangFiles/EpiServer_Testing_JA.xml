@@ -17,6 +17,7 @@
         <confidence_level_description>信頼水準は、許容されるエラーの量を決定します。 高い割合は、テスト結果の精度に直接関係します。 これは、コントロールページおよびバリアントページ間の測定差が偶然 によるものでない (すなわち重要である) かどうかを示します。</confidence_level_description>
         <confidence_level_header>信頼水準</confidence_level_header>
         <control>A / コントロール</control>
+        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
         <conversion_header>コンバージョン目標は何ですか?</conversion_header>
         <conversion_label>訪問者がページに移動します</conversion_label>
         <days_text> 日 (間)。</days_text>
@@ -31,11 +32,17 @@
         <error_test_not_schedulded_or_started>はスケジュールされていません。テストのスケジュールを設定するには開始日/時刻エラーを解決してください</error_test_not_schedulded_or_started>
         <goals_default_text>例: 第一項目のコピーを微調整して「時間の問題」に直に対処することで、より多くの訪問者にこのebookをダウンロードしたいと思ってもらえます。</goals_default_text>
         <goals_header>このテストの全体的な目標は何ですか?</goals_header>
-        <goals_selectlist_default>目的を選択</goals_selectlist_default>
+        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>Add a goal</goals_selectlist_default>
+        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
+        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
+        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
+        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
         <notscheduled_text>はスケジュールされていません。今すぐ開始します</notscheduled_text>
         <participant_percentage_tip>参加率が高くなると、勝者の選出に十分な統計情報を収集するのに必要な時間が短縮されます。</participant_percentage_tip>
         <participation_header>何パーセントの訪問者がこのA/Bテストに参加する必要がありますか?</participation_header>
         <published_prefix>公開者名:</published_prefix>
+        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
         <schedule_header>A/Bテストをいつ開始しますか?</schedule_header>
         <schedule_selector_delay>後でスケジュール</schedule_selector_delay>
         <schedule_selector_start>今すぐ開始</schedule_selector_start>
@@ -77,10 +84,12 @@
         <draft_prefix>ドラフト - 作成者名: </draft_prefix>
         <from>開始:</from>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <losing_version_label>バージョンで保存済み</losing_version_label>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> 開始済み </started>
         <test_duration_header>A/Bテストの期間</test_duration_header>
         <test_percent_to_participations_divider> / 現在の参加者数は </test_percent_to_participations_divider>
@@ -117,9 +126,11 @@
         <description_heading>このテストの全体的目標</description_heading>
         <draft_prefix>ドラフト - 作成者名: </draft_prefix>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
+        <show_summary>Show Details</show_summary>
         <started> 開始済み </started>
         <test_duration_completed>期間満了後に完了</test_duration_completed>
         <test_duration_header>A/Bテストの期間</test_duration_header>
@@ -134,6 +145,11 @@
         <view_control_content>コントロールコンテンツを表示</view_control_content>
         <views>ビュー</views>
       </detailsview>
+      <kpisummarywidget>
+        <conversions>Conversions</conversions>
+        <performance>Performance</performance>
+        <weight>Weight</weight>
+      </kpisummarywidget>
       <notificationbar>
         <completed_test>A/Bテストはこのコンテンツのバージョンで完了しました。 </completed_test>
         <details_link_text>テストを表示</details_link_text>
@@ -143,6 +159,10 @@
         <winner_link_text>勝者を選出</winner_link_text>
         <winner_link_tooltip>テストの詳細を表示して勝者を選出 </winner_link_tooltip>
       </notificationbar>
+      <percentagetemplate>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <views>Views</views>
+      </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>信頼水準</advanced_options_confidence_level>
         <advanced_options_header>詳細オプション</advanced_options_header>
@@ -163,12 +183,14 @@
           このテストは完了していませんが、勝者を選出できます。 勝者を選出するとテストはこれで終了し、選択されたコンテンツが公開されます。
         </early_pick_winner_message>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
+        <hide_summary>Hide Details</hide_summary>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <pick_a_winner_text>勝者を選出してください!</pick_a_winner_text>
         <pick_winner_option_text>勝者を選出してください</pick_winner_option_text>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
         <result_is_not_significant>このテストの結果は重要ではありません。</result_is_not_significant>
+        <show_summary>Show Details</show_summary>
         <started> 開始済み </started>
         <test_duration_completed>期間満了後に完了</test_duration_completed>
         <test_duration_header>テスト期間</test_duration_header>
@@ -190,6 +212,11 @@
         <displayname>マーケティングテストモニター</displayname>
         <message>開始 [{0}] 停止 [{1}] アクティブ [{2}] 非アクティブ [{3}] 完了 [{4}]</message>
       </scheduler_plugin>
+      <summary_widget>
+        <conversion_rate>Conversion Rate</conversion_rate>
+        <conversions>Conversions</conversions>
+        <views>Views</views>
+      </summary_widget>
       <tasks>
         <activetests>アクティブなA/Bテスト</activetests>
         <archivedtests>アーカイブ済みのA/Bテスト</archivedtests>

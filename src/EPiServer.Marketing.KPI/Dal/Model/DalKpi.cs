@@ -3,7 +3,7 @@
 namespace EPiServer.Marketing.KPI.Dal.Model
 {
     /// <summary>
-    /// KeyPerformanceIndicator object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
+    /// KPI object that is used to define a test characteristic(i.e. page scroll, page click, etc.)
     /// </summary>
     internal class DalKpi : IDalKpi
     {
@@ -14,17 +14,17 @@ namespace EPiServer.Marketing.KPI.Dal.Model
         }
 
         /// <summary>
-        /// Id of DalKpi.
+        /// ID of DalKpi.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// The AssemblyFullyQaulified info for a Kpi object.  This is parsed out to create a new instance of said kpi from the db.
+        /// The AssemblyFullyQaulified info for a KPI object.  This is parsed out to create a new instance of said KPI from the DB.
         /// </summary>
         public string ClassName { get; set; }
 
         /// <summary>
-        /// Json serialized string storing all necessary properties of a Kpi.
+        /// Json serialized string storing all necessary properties of a KPI.
         /// </summary>
         public string Properties { get; set; }
 
