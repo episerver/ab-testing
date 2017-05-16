@@ -31,7 +31,6 @@
     "epi-cms/component/command/DeleteVersion",
     "epi-cms/component/command/DeleteLanguageBranch",
     "epi-cms/component/command/SetCommonDraft",
-    "epi-cms/command/ShowAllLanguages",
     "epi-cms/contentediting/ContentActionSupport",
     "epi-cms/widget/_GridWidgetBase",
 
@@ -71,7 +70,6 @@
     DeleteVersion,
     DeleteLanguageBranch,
     SetCommonDraft,
-    ShowAllLanguagesCommand,
     ContentActionSupport,
     _GridWidgetBase,
 
@@ -85,10 +83,6 @@
         //
         // tags:
         //      internal
-
-        // showAllLanguages: [readonly] Boolean
-        //		Flag which indicates whether to show all languages. Value is true if all languages should be shown; otherwise false.
-        showAllLanguages: true,
 
         // isMultilingual:  Boolean
         //		Flag which indicates whether the Show All Languages command should be enabled or disabled, based on Read access right and the number of available languages.
@@ -109,8 +103,6 @@
             this.inherited(arguments);
 
             this._currentContentLanguage = ApplicationSettings.currentContentLanguage;
-
-            this._showAllLanguagesCommand = new ShowAllLanguagesCommand({ model: this });
 
             var registry = dependency.resolve("epi.storeregistry");
             this._contentStore = registry.get("epi.cms.contentdata");
@@ -149,7 +141,6 @@
         postCreate: function () {
             this.inherited(arguments);
 
-            this.add("commands", this._showAllLanguagesCommand);
             this._commonDraftCommand = new SetCommonDraft();
             this._deleteVersionCommand = new DeleteVersion();
             this._deleteLanguageBranchCommand = new DeleteLanguageBranch();
@@ -193,14 +184,7 @@
 
             this.own(aspect.around(this.grid, "renderRow", lang.hitch(this, this._aroundRenderRow)));
 
-            this._toggleLanguage();
             this.fetchData();
-        },
-
-        _setShowAllLanguagesAttr: function (newValue) {
-            this._set("showAllLanguages", newValue);
-            this._showAllLanguagesCommand.set("active", !newValue);
-            this._toggleFilterByLanguage(newValue);
         },
 
         contextChanged: function (context, callerData) {
@@ -226,7 +210,7 @@
                     return;
                 }
 
-                this._setQuery(item.contentLink, this.showAllLanguages);
+                this._setQuery(item.contentLink, true);
 
                 // enable Show All Language command
                 this.set("isMultilingual", true);
@@ -400,36 +384,10 @@
             }
         },
 
-        _toggleFilterByLanguage: function (showAll) {
-            // summary:
-            //      handles filterByLanguage event.
-            // tags:
-            //      private
-            // sender:
-            //      the page version widget that triggers the filterByLanguage event
-
-            return when(this.getCurrentContext()).then(function (currentContext) {
-                if (!this._isContentContext(currentContext)) {
-                    this.grid.set("store", null);
-                } else {
-                    this._setQuery(currentContext.id, showAll);
-                    this._toggleLanguage();
-                }
-            }.bind(this));
-        },
-
-        _setQuery: function (contentLink, showAllLanguages) {
-            // summary:
-            //      Create a new query from the contentLink and showAllLanguages and set it on the grid
-            // tags:
-            //      private
-
+        _setQuery: function (contentLink ) {
             var query = {
                 contentLink: new ContentReference(contentLink).createVersionUnspecificReference().toString()
             };
-            if (!showAllLanguages) {
-                query.language = this._currentContentLanguage;
-            }
 
             this.grid.set("query", query);
 
@@ -439,17 +397,6 @@
             }
 
             this._versionsByLanguage = {};
-        },
-
-        _toggleLanguage: function () {
-            // summary:
-            //		Toggles the visibility of the language column.
-            // tags:
-            //		private
-
-            var value = this.showAllLanguages ? "table-cell" : "none";
-
-            this.grid.styleColumn("language", string.substitute("display:${0};", [value]));
         }
     });
 });
