@@ -26,10 +26,8 @@
 
 // EPi CMS
     "epi-cms/_MultilingualMixin",
-    "epi-cms/ApplicationSettings",
     "epi-cms/core/ContentReference",
     "epi-cms/component/command/DeleteVersion",
-    "epi-cms/component/command/DeleteLanguageBranch",
     "epi-cms/component/command/SetCommonDraft",
     "epi-cms/contentediting/ContentActionSupport",
     "epi-cms/widget/_GridWidgetBase",
@@ -65,10 +63,8 @@
 
 // EPi CMS
     _MultilingualMixin,
-    ApplicationSettings,
     ContentReference,
     DeleteVersion,
-    DeleteLanguageBranch,
     SetCommonDraft,
     ContentActionSupport,
     _GridWidgetBase,
@@ -78,15 +74,6 @@
 ) {
 
     return declare([_GridWidgetBase, _WidgetCommandProviderMixin, _FocusableMixin, _MultilingualMixin], {
-        // summary:
-        //      This component will list all versions of a content item.
-        //
-        // tags:
-        //      internal
-
-        // isMultilingual:  Boolean
-        //		Flag which indicates whether the Show All Languages command should be enabled or disabled, based on Read access right and the number of available languages.
-        isMultilingual: false,
 
         postMixInProperties: function () {
             // summary:
@@ -97,12 +84,9 @@
             this._commonDrafts = {};
 
             this.storeKeyName = "epi.cms.contentversion";
-            this.ignoreVersionWhenComparingLinks = false;
             this.forceContextReload = true;
 
             this.inherited(arguments);
-
-            this._currentContentLanguage = ApplicationSettings.currentContentLanguage;
 
             var registry = dependency.resolve("epi.storeregistry");
             this._contentStore = registry.get("epi.cms.contentdata");
@@ -143,7 +127,6 @@
 
             this._commonDraftCommand = new SetCommonDraft();
             this._deleteVersionCommand = new DeleteVersion();
-            this._deleteLanguageBranchCommand = new DeleteLanguageBranch();
 
             this.own(
                 aspect.after(this._commonDraftCommand, "execute", lang.hitch(this, function (deferred) {
@@ -153,9 +136,6 @@
                 // Refresh after delete successfully
                 aspect.after(this._deleteVersionCommand, "execute", lang.hitch(this, function (deferred) {
                     deferred.then(lang.hitch(this, this._onDeleteVersionSuccess), lang.hitch(this, this._onDeleteVersionFailure));
-                })),
-                aspect.after(this._deleteLanguageBranchCommand, "execute", lang.hitch(this, function (deferred) {
-                    deferred.then(lang.hitch(this, this._onDeleteLanguageBranchSuccess), lang.hitch(this, this._onDeleteVersionFailure));
                 }))
             );
 
@@ -165,12 +145,6 @@
                 heading: 'NL  note',
                 description: 'NL Description'
             }));
-
-            this._deleteLanguageBranchSettings = {
-                cancelActionText: epi.resources.action.cancel,
-                setFocusOnConfirmButton: false
-            };
-            this.add("commands", withConfirmation(this._deleteLanguageBranchCommand, null, this._deleteLanguageBranchSettings));
         },
 
         startup: function () {
@@ -211,9 +185,6 @@
                 }
 
                 this._setQuery(item.contentLink, true);
-
-                // enable Show All Language command
-                this.set("isMultilingual", true);
             }));
         },
 
@@ -259,7 +230,6 @@
             if (e.error && e.error.status === 403) {
                 when(this.getCurrentContent(), lang.hitch(this, function (item) {
                     this._showErrorMessage(epi.resources.messages.nopermissiontoviewdata);
-                    this.set("isMultilingual", false); // disable Show All Language command since user does not have access right to view data
                     this._updateMenu(item);
                 }));
             } else {
@@ -278,22 +248,6 @@
         _updateMenu: function (item) {
             this._commonDraftCommand.set("model", item);
             this._deleteVersionCommand.set("model", item);
-
-            when(this._contentStore.get(item.contentLink), lang.hitch(this, function (content) {
-                if (content && content.currentLanguageBranch) {
-                    var heading = lang.replace('nl resources.deletelanguagebranch.label', [content.currentLanguageBranch.name]),
-                        description = TypeDescriptorManager.getResourceValue(content.typeIdentifier, "deletelanguagebranchdescription");
-
-                    lang.mixin(this._deleteLanguageBranchSettings, {
-                        confirmActionText: heading,
-                        description: lang.replace(description, [entities.encode(content.name), content.currentLanguageBranch.name]),
-                        title: heading
-                    });
-                    this._deleteLanguageBranchCommand.set("label", heading);
-                }
-
-                this._deleteLanguageBranchCommand.set("model", content);
-            }));
         },
 
         _showNotificationMessage: function (notification) {
@@ -322,16 +276,6 @@
             }
 
             topic.publish("/epi/shell/context/request", { uri: uri }, callerData);
-        },
-
-        _onDeleteLanguageBranchSuccess: function () {
-            return when(this._onDeleteVersionSuccess(arguments), lang.hitch(this, function () {
-                var language = this._deleteLanguageBranchCommand.model.currentLanguageBranch.languageId;
-
-                array.forEach(this._versionsByLanguage[language], lang.hitch(this, function (ver) {
-                    this.store.notify(undefined, new ContentReference(ver));
-                }));
-            }));
         },
 
         _onDeleteVersionSuccess: function () {
