@@ -36,7 +36,7 @@
     "epi-cms/widget/_GridWidgetBase",
 
 // Resources
-    "epi/i18n!epi/cms/nls/episerver.cms.components.versions"
+    "epi/i18n!marketing-testing/nls/abtesting/"
 
 ], function (
 // Dojo
@@ -127,19 +127,18 @@
             var customGridClass = declare([OnDemandGrid, Selection]);
             this.grid = new customGridClass({
                 columns: {
-                    language: { label: epi.resources.header.language },
-                    status: {
-                        label: epi.resources.header.status,
-                        renderCell: formatters.commonDraft
-                    },
                     savedDate: {
-                        label: epi.resources.header.saved,
+                        label: resources.archivedtestcomponent.header.archiveddate,
                         formatter: this._localizeDate
                     },
                     savedBy: {
-                        label: epi.resources.header.by,
+                        label: resources.archivedtestcomponent.header.by,
                         formatter: this._createUserFriendlyUsername
-                    }
+                    },
+                    winner: {
+                        label: resources.archivedtestcomponent.header.winner,
+                        formatter: this._createUserFriendlyUsername
+                    },
                 },
                 selectionMode: "single",
                 selectionEvents: "click,dgrid-cellfocusin",
@@ -172,8 +171,8 @@
             this.add("commands", this._commonDraftCommand);
             this.add("commands", withConfirmation(this._deleteVersionCommand, null, {
                 title: resources.deletemenuitemtitle,
-                heading: resources.deleteversion.note,
-                description: resources.deleteversion.confirmquestion
+                heading: 'NL  note',
+                description: 'NL Description'
             }));
 
             this._deleteLanguageBranchSettings = {
@@ -298,7 +297,7 @@
 
             when(this._contentStore.get(item.contentLink), lang.hitch(this, function (content) {
                 if (content && content.currentLanguageBranch) {
-                    var heading = lang.replace(resources.deletelanguagebranch.label, [content.currentLanguageBranch.name]),
+                    var heading = lang.replace('nl resources.deletelanguagebranch.label', [content.currentLanguageBranch.name]),
                         description = TypeDescriptorManager.getResourceValue(content.typeIdentifier, "deletelanguagebranchdescription");
 
                     lang.mixin(this._deleteLanguageBranchSettings, {

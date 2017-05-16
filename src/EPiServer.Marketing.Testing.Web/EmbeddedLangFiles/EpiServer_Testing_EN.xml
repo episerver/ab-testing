@@ -70,6 +70,15 @@
       <archivedtestcomponent>
         <title>Archived Tests</title>
         <description>Shows archived tests for the select content.</description>
+        <header>
+          <status>Status</status>
+          <by>By</by>
+          <archiveddate>Date</archiveddate>
+          <winner>Winner</winner>
+        </header>
+        <menuitems>
+          <deletemenuitemtitle>Delete</deletemenuitemtitle>
+        </menuitems>
       </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
