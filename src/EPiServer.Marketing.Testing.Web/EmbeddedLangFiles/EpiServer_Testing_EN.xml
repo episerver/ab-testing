@@ -69,7 +69,7 @@
       </admin>
       <archivedtestcomponent>
         <title>Archived Tests</title>
-        <description>Shows archived tests for the select content.</description>
+        <description>Shows archived tests for the selected content.</description>
         <header>
           <archiveddate>Date</archiveddate>
           <by>By</by>
