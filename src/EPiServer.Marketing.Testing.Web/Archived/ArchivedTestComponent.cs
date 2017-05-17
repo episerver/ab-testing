@@ -10,8 +10,8 @@ namespace EPiServer.Marketing.Testing.Web.Archived
         WidgetType = "marketing-testing/cmsuicomponents/ArchivedTestComponent",
         //Define language path to translate Title/Description.
         LanguagePath = "/abtesting/archivedtestcomponent",
-        Title = "asdf",
-        Description = "asdf")]
+        Title = "Archived Tests",
+        Description = "Shows archived tests for the select content")]
     public class ArchivedTestComponent
     {
     }
