@@ -71,14 +71,19 @@
         <title>Archived Tests</title>
         <description>Shows archived tests for the select content.</description>
         <header>
-          <status>Status</status>
-          <by>By</by>
           <archiveddate>Date</archiveddate>
+          <by>By</by>
+          <status>Status</status>
           <winner>Winner</winner>
         </header>
         <menuitems>
           <deletemenuitemtitle>Delete</deletemenuitemtitle>
         </menuitems>
+        <deleteconfirm>
+          <title>Delete archived A/B test</title>
+          <note>Deleting the archived test will not allow you to review the results any longer.</note>
+          <description>Are you sure you want to delete the archived test?</description>
+        </deleteconfirm>
       </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
