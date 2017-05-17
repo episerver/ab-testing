@@ -17,7 +17,7 @@ namespace EPiServer.Marketing.KPI.Common
 {
 
     /// <summary>
-    /// Common KPI class that can be used to compare IContent Guid values
+    /// Common KPI class that can be used to compare IContent Guid values.
     /// </summary>
     [DataContract]
     [UIMarkup(configmarkup = "EPiServer.Marketing.KPI.Markup.ContentComparatorConfigMarkup.html",
@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.KPI.Common
     public class ContentComparatorKPI : Kpi
     {
         /// <summary>
-        /// Id of the content to be tested.
+        /// ID of the content to be tested.
         /// </summary>
         [DataMember]
         public Guid ContentGuid;
@@ -39,9 +39,9 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         /// <summary>
-        /// Id of the content to be tested.
+        /// ID of the content to be tested.
         /// </summary>
-        /// <param name="contentGuid">Id of the content to be tested.</param>
+        /// <param name="contentGuid">ID of the content to be tested.</param>
         public ContentComparatorKPI(Guid contentGuid)
         {
             ContentGuid = contentGuid;

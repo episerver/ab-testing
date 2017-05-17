@@ -9,7 +9,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     public class IncrementCountCriteria
     {
         /// <summary>
-        /// Id of a test to save the result to
+        /// ID of a test to save the result to.
         /// </summary>
         public Guid testId { get; set; }
         /// <summary>
@@ -17,11 +17,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         public int itemVersion { get; set; }
         /// <summary>
-        /// Saves a kpi result.  The result is appended to the list of results for a given variant version for a test for both historical and statistical calculations.
+        /// Saves a KPI result.  The result is appended to the list of results for a given variant version for a test for both historical and statistical calculations.
         /// </summary>
         public CountType resultType { get; set; } = CountType.View;
         /// <summary>
-        /// Id of the kpi count to increment.
+        /// ID of the KPI count to increment.
         /// </summary>
         public Guid kpiId { get; set; } = default(Guid);
         /// <summary>

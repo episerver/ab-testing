@@ -7,7 +7,7 @@ using EPiServer.Security;
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
-    /// Used with testmanager IMarketing Test events as well as a base for Kpi events.
+    /// Used with testmanager IMarketing Test events as well as a base for KPI events.
     /// </summary>
     public class TestEventArgs : EventArgs
     {

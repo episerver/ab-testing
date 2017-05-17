@@ -7,12 +7,12 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Id of the test this conversion is associated with.
+        /// ID of the test this conversion is associated with.
         /// </summary>
         public Guid? TestId { get; set; }
 
         /// <summary>
-        /// Id of the kpi.
+        /// ID of the KPI.
         /// </summary>
         public Guid KeyPerformanceIndicatorId { get; set; }
 

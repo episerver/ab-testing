@@ -36,7 +36,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
         }
 
         /// <summary>
-        /// Determines if a conversion has happened.  Each kpi will decide this differently based on the sender, event args, and the purpose of the kpi.
+        /// Determines if a conversion has happened.  Each KPI will decide this differently based on the sender, event args, and the purpose of the KPI.
         /// </summary>
         /// <param name="sender">Sender of the event.</param>
         /// <param name="e">The expected Event Argument which contains the necessary info used to decide if a conversion has occured.</param>

@@ -18,9 +18,9 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     /// <summary>
-    /// Provides a web interface for getting tests, getting a single test, 
-    /// updateing views and conversions. Note this is provided as a rest end point
-    /// for customers to use via jscript on thier site. do not delete
+    /// Provides a web interface for retrieving a single test, retrieving all tests, and 
+    /// updating views and conversions. Note this is provided as a rest end point
+    /// for customers to use via jscript on thier site.
     /// </summary>
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
@@ -65,7 +65,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             });
         }
 
-        // Get api/episerver/testing/GetAllTests
+        /// <summary>
+        /// Retreives all A/B tests.
+        /// Get api/episerver/testing/GetAllTests
+        /// </summary>
+        /// <returns>List of tests.</returns>
         [HttpGet]
         public HttpResponseMessage GetAllTests()
         {
@@ -81,7 +85,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 }));
         }
 
-        // Get api/episerver/testing/GetTest?id=2a74262e-ec1c-4aaf-bef9-0654721239d6
+        /// <summary>
+        /// Retrieves a test based given an ID.
+        /// Get api/episerver/testing/GetTest?id=2a74262e-ec1c-4aaf-bef9-0654721239d6
+        /// </summary>
+        /// <param name="id">ID of a test.</param>
+        /// <returns>A test.</returns>
         [HttpGet]
         public HttpResponseMessage GetTest(string id)
         {
@@ -106,7 +115,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
         }
 
-        // Post url: api/episerver/testing/updateview, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
+        /// <summary>
+        /// Updates the view count for a given variant.
+        /// Post url: api/episerver/testing/updateview, 
+        /// data: { testId: testId, itemVersion: itemVersion },  
+        /// contentType: 'application/x-www-form-urlencoded'
+        /// </summary>
+        /// <param name="data">{ testId: testId, itemVersion: itemVersion }</param>
+        /// <returns>HttpStatusCode.OK or HttpStatusCode.BadRequest</returns>
         [HttpPost]
         public HttpResponseMessage UpdateView(FormDataCollection data)
         {
@@ -123,7 +139,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
-        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
+        /// <summary>
+        /// Updates the conversion count for a given variant and KPI.
+        /// Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId },  contentType: 'application/x-www-form-urlencoded'
+        /// </summary>
+        /// <param name="data">{ testId: testId, itemVersion: itemVersion, kpiId: kpiId }</param>
+        /// <returns>HttpStatusCode.OK or HttpStatusCode.BadRequest</returns>
         [HttpPost]
         public HttpResponseMessage UpdateConversion(FormDataCollection data)
         {
@@ -144,8 +165,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
         }
 
-        // Used for updating client side KPIs.  Leverages UpdateConversion and modifies the cookie accordingly.
-        // Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion },  contentType: 'application/x-www-form-urlencoded'
+        /// <summary>
+        /// Used for updating client side KPIs.  Leverages UpdateConversion and modifies the cookie accordingly.
+        /// Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId },  contentType: 'application/x-www-form-urlencoded'
+        /// </summary>
+        /// <param name="data">{ testId: testId, itemVersion: itemVersion, kpiId: kpiId }</param>
+        /// <returns>HttpStatusCode.OK or HttpStatusCode.BadRequest</returns>
         [HttpPost]
         public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
         {
@@ -182,7 +207,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
         }
 
-        // Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
+        /// <summary>
+        /// Saves a KPI result for a given KPI and variant.
+        /// Post url: api/episerver/testing/savekpiresult, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total },  contentType: 'application/x-www-form-urlencoded'
+        /// </summary>
+        /// <param name="data">{ testId: testId, itemVersion: itemVersion, kpiId: kpiId, keyResultType: keyResultType, total: total }</param>
+        /// <returns>HttpStatusCode.OK or HttpStatusCode.BadRequest</returns>
         [HttpPost]
         public HttpResponseMessage SaveKpiResult(FormDataCollection data)
         {
