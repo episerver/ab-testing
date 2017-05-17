@@ -1,44 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
-  <language name="español" id="es">
-    <commercekpi>
-      <addtocart>
-        <description path="/commercekpi/addtocart/description/">Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
-        <name path="/commercekpi/addtocart/name/">Add To Cart</name>
-      </addtocart>
-      <admin>
-        <cancel path="/commercekpi/admin/cancel/">Cancel</cancel>
-        <description path="/commercekpi/admin/description/">These settings are the default values used for Commerce conversion goals when added to a test.</description>
-        <displayname path="/commercekpi/admin/displayname/">Commerce Conversion Goals Configuration</displayname>
-        <financialculturepreference path="/commercekpi/admin/financialculturepreference/">Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save path="/commercekpi/admin/save/">Save</save>
-      </admin>
-      <averageorder>
-        <config_markup>
-          <conversion_label path="/commercekpi/averageorder/config_markup/conversion_label/">Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined path="/commercekpi/averageorder/config_markup/error_defaultmarketundefined/">A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket path="/commercekpi/averageorder/config_markup/error_undefinedmarket/">The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
-        </config_markup>
-        <description path="/commercekpi/averageorder/description/">Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
-        <name path="/commercekpi/averageorder/name/">Average Order</name>
-        <readonly_markup>
-          <conversion_description path="/commercekpi/averageorder/readonly_markup/conversion_description/">Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header path="/commercekpi/averageorder/readonly_markup/conversion_header/">Conversion Goal</conversion_header>
-        </readonly_markup>
-      </averageorder>
-      <purchaseitem>
-        <config_markup>
-          <conversion_label path="/commercekpi/purchaseitem/config_markup/conversion_label/">Visitor purchases product</conversion_label>
-          <error_conversionproduct path="/commercekpi/purchaseitem/config_markup/error_conversionproduct/">You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product path="/commercekpi/purchaseitem/config_markup/error_not_published_product/">You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
-        </config_markup>
-        <description path="/commercekpi/purchaseitem/description/">Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name path="/commercekpi/purchaseitem/name/">Purchase Product</name>
-        <readonly_markup>
-          <conversion_header path="/commercekpi/purchaseitem/readonly_markup/conversion_header/">Conversion Goal</conversion_header>
-          <conversion_selector_description path="/commercekpi/purchaseitem/readonly_markup/conversion_selector_description/">Visitor purchases the product</conversion_selector_description>
-        </readonly_markup>
-      </purchaseitem>
-    </commercekpi>
-  </language>
+  <language name="español" id="es" />
 </languages>

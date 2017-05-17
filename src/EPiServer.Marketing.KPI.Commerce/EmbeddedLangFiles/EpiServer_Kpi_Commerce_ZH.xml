@@ -8,44 +8,44 @@
           <error_conversionproduct>您必须选择一个商品方可保存 A/B 测试。</error_conversionproduct>
           <error_not_published_product>您必须选择一个已发布的商品或商品变型方可保存 A/B 测试。</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
-        <name>Add To Cart</name>
+        <description>选择要转换的产品。 结果： 查看次数与查看产品的访问者相关，而转化则表示访问者将该产品添加到购物车的情况。</description>
+        <name>添加到购物车</name>
         <readonly_markup>
           <conversion_header>添加商品至购物车</conversion_header>
           <conversion_selector_description>访客添加商品至购物车</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
-        <cancel>Cancel</cancel>
-        <description>These settings are the default values used for Commerce conversion goals when added to a test.</description>
-        <displayname>Commerce Conversion Goals Configuration</displayname>
-        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save>Save</save>
+        <cancel>取消</cancel>
+        <description>这些设置是添加到测试中时用于商务转换目标的默认值。</description>
+        <displayname>商务转换目标配置</displayname>
+        <financialculturepreference>选择在保存和查看财务结果时要使用的环境</financialculturepreference>
+        <save>保存</save>
       </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+          <conversion_label>跟踪完成订单并计算测试期间处理的平均订单总数。</conversion_label>
+          <error_defaultmarketundefined>首选市场尚未确定，也没有定义默认市场。</error_defaultmarketundefined>
+          <error_undefinedmarket>当前的首选市场尚未被正确定义或已被删除。</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
-        <name>Average Order</name>
+        <description>查看次数： 测试项目的查看人数。  转换： 总数代表所有参与测试的访问者已结账的平均购物车总数。</description>
+        <name>平均订单</name>
         <readonly_markup>
-          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_description>跟踪完成订单并计算测试期间处理的平均订单总数。</conversion_description>
+          <conversion_header>转换目标</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
         <config_markup>
-          <conversion_label>Visitor purchases product</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>访客购买产品</conversion_label>
+          <error_conversionproduct>您必须选择一个商品方可保存 A/B 测试。</error_conversionproduct>
+          <error_not_published_product>您必须选择一个已发布的商品或商品变型方可保存 A/B 测试。</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name>Purchase Product</name>
+        <description>选择要转换的产品。 结果： 查看次数与查看产品的访问者相关，而转化则代表购买商品。</description>
+        <name>购买产品</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+          <conversion_header>转换目标</conversion_header>
+          <conversion_selector_description>访客购买产品</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>
     </commercekpi>

@@ -8,44 +8,44 @@
           <error_conversionproduct>A/Bテストを保存する前に、商品を選択する必要があります。</error_conversionproduct>
           <error_not_published_product>A/Bテストを保存する前に、公開済みの商品または商品バリエーションを選択する必要があります。</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
-        <name>Add To Cart</name>
+        <description>コンバージョン用の製品を選択します。 結果: 表示画面は製品を閲覧した訪問者と相関している一方、コンバージョンは訪問者が当該の製品をショッピングカートに追加した時を表します。</description>
+        <name>カートに追加</name>
         <readonly_markup>
           <conversion_header>カートに商品を追加</conversion_header>
           <conversion_selector_description>訪問者がカートに商品を追加します</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
-        <cancel>Cancel</cancel>
-        <description>These settings are the default values used for Commerce conversion goals when added to a test.</description>
-        <displayname>Commerce Conversion Goals Configuration</displayname>
-        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save>Save</save>
+        <cancel>キャンセル</cancel>
+        <description>これらの設定はテストに追加した時に、コマースコンバージョンの目標として使用されるデフォルト値です。</description>
+        <displayname>コマースコンバージョンの目標設定</displayname>
+        <financialculturepreference>決算報告書を保存・表示する時に使用するカルチャを選択します</financialculturepreference>
+        <save>保存</save>
       </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+          <conversion_label>完了した注文を追跡し、テスト中に処理された注文の平均合計額を計算します。</conversion_label>
+          <error_defaultmarketundefined>優先市場が設定されておらず、デフォルト市場が定義されていません。</error_defaultmarketundefined>
+          <error_undefinedmarket>現在の優先市場が適切に定義されていない、または削除されています。</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
-        <name>Average Order</name>
+        <description>表示画面: テストアイテムを閲覧した訪問者数。  コンバージョン: 合計は、テストに参加したすべての訪問者の購入カートの平均合計額を表します。</description>
+        <name>平均注文額</name>
         <readonly_markup>
-          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_description>完了した注文を追跡し、テスト中に処理された注文の平均合計額を計算します。</conversion_description>
+          <conversion_header>コンバージョン目標</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
         <config_markup>
-          <conversion_label>Visitor purchases product</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>訪問者が製品を購入します</conversion_label>
+          <error_conversionproduct>A/Bテストを保存する前に、商品を選択する必要があります。</error_conversionproduct>
+          <error_not_published_product>A/Bテストを保存する前に、公開済みの商品または商品バリエーションを選択する必要があります。</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name>Purchase Product</name>
+        <description>コンバージョン用の製品を選択します。 結果: 表示画面は製品を閲覧した訪問者と相関している一方、コンバージョンは当該の製品の購入を表します。</description>
+        <name>製品の購入</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+          <conversion_header>コンバージョン目標</conversion_header>
+          <conversion_selector_description>訪問者が製品を購入します</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>
     </commercekpi>

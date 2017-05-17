@@ -8,44 +8,44 @@
           <error_conversionproduct>U moet een product selecteren voordat u de A / B-test kunt opslaan.</error_conversionproduct>
           <error_not_published_product>U moet een gepubliceerd product of productvariatie selecteren voordat u de A / B-test. kunt opslaan.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
-        <name>Add To Cart</name>
+        <description>Kies een product voor conversie. Resultaten: Weergaven houden verband met bezoekers die het product hebben bekeken, terwijl conversies weergeven wanneer een bezoeker het product in zijn/haar winkelwagen heeft gedaan.</description>
+        <name>Aan winkelwagen toevoegen</name>
         <readonly_markup>
           <conversion_header>Product aan winkelwagen toevoegen</conversion_header>
           <conversion_selector_description>Bezoeker voegt het product toe aan de winkelwagen</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
-        <cancel>Cancel</cancel>
-        <description>These settings are the default values used for Commerce conversion goals when added to a test.</description>
-        <displayname>Commerce Conversion Goals Configuration</displayname>
-        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save>Save</save>
+        <cancel>Annuleren</cancel>
+        <description>Deze instellingen zijn de standaardwaarden die worden gebruikt voor Commerce-conversiedoelen als ze worden toegevoegd aan een test.</description>
+        <displayname>Configuratie Commerce-conversiedoelen</displayname>
+        <financialculturepreference>Selecteer welke cultuur moet worden gebruikt bij het opslaan en weergeven van de financiële resultaten</financialculturepreference>
+        <save>Opslaan</save>
       </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+          <conversion_label>Traceert voltooide bestellingen en berekent de gemiddelde bestellingstotalen die worden verwerkt tijdens de test.</conversion_label>
+          <error_defaultmarketundefined>Er is geen voorkeursmarkt ingesteld en ook geen standaardmarkt gedefinieerd.</error_defaultmarketundefined>
+          <error_undefinedmarket>De huidige voorkeursmarkt is niet goed gedefinieerd of is verwijderd.</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
-        <name>Average Order</name>
+        <description>Weergaven: Het aantal bezoekers dat het testartikel heeft bekeken.  Conversies: Het totaal vertegenwoordigt het gemiddelde gekochte winkelwagentotaal over alle bezoekers die deelnamen aan de test.</description>
+        <name>Gemiddelde bestelling</name>
         <readonly_markup>
-          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_description>Traceert voltooide bestellingen en berekent de gemiddelde bestellingstotalen die worden verwerkt tijdens de test.</conversion_description>
+          <conversion_header>Conversiedoel</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
         <config_markup>
-          <conversion_label>Visitor purchases product</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>Bezoeker koopt product</conversion_label>
+          <error_conversionproduct>U moet een product selecteren voordat u de A / B-test kunt opslaan.</error_conversionproduct>
+          <error_not_published_product>U moet een gepubliceerd product of productvariatie selecteren voordat u de A / B-test. kunt opslaan.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name>Purchase Product</name>
+        <description>Kies een product voor conversie. Resultaten: Weergaven houden verband met bezoekers die het product hebben bekeken, terwijl conversies de aankoop van dat product weergeven.</description>
+        <name>Aankoop product</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+          <conversion_header>Conversiedoel</conversion_header>
+          <conversion_selector_description>Bezoeker koopt het product</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>
     </commercekpi>

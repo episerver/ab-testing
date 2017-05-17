@@ -17,7 +17,7 @@
         <confidence_level_description>Het betrouwbaarheidsniveau bepaalt het aantal toegestane fouten. Een hoger percentage houdt direct verband met de nauwkeurigheid van de testresultaten. Dit geeft aan of het verschil gemeten tussen de controlepagina en variantpagina geen toeval is (d.w.z. significant).</confidence_level_description>
         <confidence_level_header>Betrouwbaarheidsniveau</confidence_level_header>
         <control>A / Controle</control>
-        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <conversion_description>Standaard hebben alle doelen een gelijk gewicht. U kunt een individueel gewicht voor elk doel instellen in </conversion_description>
         <conversion_header>Wat is het conversiedoel?</conversion_header>
         <conversion_label>Bezoeker navigeert naar pagina</conversion_label>
         <days_text> dag(en).</days_text>
@@ -26,24 +26,24 @@
         <duration_header>Hoe lang wilt u de A / B-test uitvoeren?</duration_header>
         <error_conversiongoal>U moet een conversiedoel selecteren voordat u de A / B-test kunt opslaan.</error_conversiongoal>
         <error_date_in_the_past>De startdatum/-tijd van de test kan niet in het verleden zijn.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Dubbele doelstellingen kunnen niet dezelfde waarden delen</error_duplicate_kpi_values>
         <error_duration>De duur moet een geldig geheel getal zijn tussen 1 en 365</error_duration>
         <error_invalid_date_time_value>De ingevoerde gegevens zijn geen geldige datum-/tijdwaarde</error_invalid_date_time_value>
         <error_participation_percentage>Het deelnamepercentage moet tussen 1 en 100 zijn</error_participation_percentage>
         <error_test_not_schedulded_or_started>niet gepland, fouten begindatum/-tijd oplossen om een test te plannen</error_test_not_schedulded_or_started>
         <goals_default_text>Bijv. Door de kopie in het eerste aandachtspunt zo aan te passen dat het ‘tijdprobleem’ direct wordt aangepakt, kan ik meer bezoekers motiveren om het e-book te downloaden.</goals_default_text>
         <goals_header>Wat is het algemene doel van deze test?</goals_header>
-        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals is more important than the others when measuring a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
-        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
-        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <goals_selectlist_additional_kpi>Voeg een ander doel toe</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>Voeg een doel toe</goals_selectlist_default>
+        <goals_weight_description>Hier kunt u bepalen of een van de doelen belangrijker is dan de andere bij het meten van een winnaar.</goals_weight_description>
+        <goals_weight_equal_description>Als u alle doelen dezelfde belangrijkheid geeft, worden conversies naar alle doelen op dezelfde manier gemeten.</goals_weight_equal_description>
+        <goals_weight_heading>Houd de belangrijkheid van de testdoelen in evenwicht:</goals_weight_heading>
+        <goals_weight_higher_description>Als u een doel een hogere belangrijkheid geeft, tellen conversies naar dat doel zwaarder dan conversies naar de doelen met een lagere instelling.</goals_weight_higher_description>
         <notscheduled_text>niet gepland en begint nu</notscheduled_text>
         <participant_percentage_tip>Een hoger deelnamepercentage vermindert de tijd die nodig is voor het verzamelen van voldoende statistische gegevens om een winnaar te kunnen kiezen.</participant_percentage_tip>
         <participation_header>Welk percentage bezoekers moet deelnemen aan deze A / B-test?</participation_header>
         <published_prefix>Gepubliceerd door</published_prefix>
-        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
+        <remove_kpi_tooltip>Dit doel verwijderen</remove_kpi_tooltip>
         <schedule_header>Wanneer moet de A / B-test worden gestart?</schedule_header>
         <schedule_selector_delay>Plannen voor later</schedule_selector_delay>
         <schedule_selector_start>Onmiddellijk beginnen</schedule_selector_start>
@@ -54,7 +54,7 @@
         <test_description>Controleren of elke nieuwe toevoeging of wijziging van content daadwerkelijk het conversiepercentage zal verbeteren.</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are statistically significant?</autopublishwinner>
+        <autopublishwinner>De winnaar van de test automatisch publiceren als de resultaten significant zijn?</autopublishwinner>
         <cancel>Annuleren</cancel>
         <confidencelevel>Betrouwbaarheidsniveau:</confidencelevel>
         <description>Deze instellingen zijn de standaardwaarden die worden gebruikt  bij het maken van AB-tests.</description>
@@ -85,12 +85,12 @@
         <draft_prefix>Concept - Bewerkt door</draft_prefix>
         <from>vanaf</from>
         <goal_not_specified>Er is geen doel opgegeven.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Details verbergen</hide_summary>
         <losing_version_label>Opgeslagen in versies</losing_version_label>
         <percent_participation_header>Percentage bezoekers dat deelneemt aan deze A / B-test</percent_participation_header>
         <published_prefix>Gepubliceerd door</published_prefix>
         <remaining_increment>Dagen</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Details weergeven</show_summary>
         <started> Gestart </started>
         <test_duration_header>Duur van de A / B-test</test_duration_header>
         <test_percent_to_participations_divider> / Huidige aantal deelnemers is </test_percent_to_participations_divider>
@@ -104,12 +104,12 @@
         <winning_version_label>Winnaar (gepubliceerd)</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>Weet u zeker dat u deze test wilt afbreken?</abort_confirmation_message>
         <label_text>A/B-test annuleren en pagina bewerken</label_text>
         <tooltip_text>A/B-test annuleren en pagina bewerken</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>Weet u zeker dat u deze test wilt afbreken?</abort_confirmation_message>
         <advanced_options_confidence_level>Betrouwbaarheidsniveau</advanced_options_confidence_level>
         <advanced_options_header>Geavanceerde opties</advanced_options_header>
         <button_abort_option>A/B-test afbreken</button_abort_option>
@@ -127,11 +127,11 @@
         <description_heading>Algemeen doel van deze test</description_heading>
         <draft_prefix>Concept - Bewerkt door</draft_prefix>
         <goal_not_specified>Er is geen doel opgegeven.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Details verbergen</hide_summary>
         <percent_participation_header>Percentage bezoekers dat deelneemt aan deze A / B-test</percent_participation_header>
         <published_prefix>Gepubliceerd door</published_prefix>
         <remaining_increment>Dagen</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Details weergeven</show_summary>
         <started> Gestart </started>
         <test_duration_completed>Voltooid na volledige duur</test_duration_completed>
         <test_duration_header>Duur van de A / B-test</test_duration_header>
@@ -147,9 +147,9 @@
         <views>weergaven</views>
       </detailsview>
       <kpisummarywidget>
-        <conversions>Conversions</conversions>
-        <performance>Performance</performance>
-        <weight>Weight</weight>
+        <conversions>Conversies</conversions>
+        <performance>Prestaties</performance>
+        <weight>Gewicht</weight>
       </kpisummarywidget>
       <notificationbar>
         <completed_test>Er is een A/B-test voltooid op een versie van deze content. </completed_test>
@@ -161,8 +161,8 @@
         <winner_link_tooltip>De testgegevens weergeven en een winnaar kiezen </winner_link_tooltip>
       </notificationbar>
       <percentagetemplate>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <views>Views</views>
+        <conversion_rate>Conversiepercentage</conversion_rate>
+        <views>Weergaven</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Betrouwbaarheidsniveau</advanced_options_confidence_level>
@@ -184,14 +184,14 @@
           Deze test is niet voltooid, maar u kunt wel een winnaar kiezen. Als u nu een winnaar kiest, wordt de test beëindigd en de gekozen content gepubliceerd.
         </early_pick_winner_message>
         <goal_not_specified>Er is geen doel opgegeven.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Details verbergen</hide_summary>
         <percent_participation_header>Percentage bezoekers dat deelneemt aan deze A / B-test</percent_participation_header>
         <pick_a_winner_text>Kies een winnaar!</pick_a_winner_text>
         <pick_winner_option_text>Kies een winnaar</pick_winner_option_text>
         <published_prefix>Gepubliceerd door</published_prefix>
         <remaining_increment>Dagen</remaining_increment>
         <result_is_not_significant>De resultaten van deze test zijn NIET significant.</result_is_not_significant>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Details weergeven</show_summary>
         <started> Gestart </started>
         <test_duration_completed>Voltooid na volledige duur</test_duration_completed>
         <test_duration_header>Testduur</test_duration_header>
@@ -214,14 +214,14 @@
         <message>Gestart [{0}] Gestopt [{1}] Actief [{2}] Inactief [{3}] Voltooid [{4}]</message>
       </scheduler_plugin>
       <summary_widget>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <conversions>Conversions</conversions>
-        <views>Views</views>
+        <conversion_rate>Conversiepercentage</conversion_rate>
+        <conversions>Conversies</conversions>
+        <views>Weergaven</views>
       </summary_widget>
       <tasks>
         <activetests>Actieve A/B-tests</activetests>
         <archivedtests>Gearchiveerde A/B-tests</archivedtests>
-        <category>A/B Tests</category>
+        <category>A/B-test</category>
         <completedtests>Voltooide A/B-tests</completedtests>
         <inactivetests>Geplande A/B-tests</inactivetests>
       </tasks>

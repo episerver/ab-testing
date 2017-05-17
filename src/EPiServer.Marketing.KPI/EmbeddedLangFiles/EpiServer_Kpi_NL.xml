@@ -9,8 +9,8 @@
           <error_selected_notpublished>U kunt geen niet-gepubliceerde pagina selecteren als uw conversiedoelpagina.</error_selected_notpublished>
           <error_selected_samepage>U kunt de pagina die u test niet selecteren als conversiedoelpagina.</error_selected_samepage>
         </config_markup>
-        <description>The selected page is the one that a visitor must click through to in order to count as a conversion.  Results: Views are the number of visitors that visited the test page. Conversions are the number of visitors that clicked through to the selected landing page while the test was running.</description>
-        <name>Landing Page</name>
+        <description>De geselecteerde pagina is de pagina waar een bezoeker naar moet doorklikken om te tellen als een conversie.  Resultaten: Weergaven zijn het aantal bezoekers dat de testpagina heeft bezocht. Conversies zijn het aantal bezoekers dat heeft doorgeklikt naar de geselecteerde landingspagina terwijl de test werd uitgevoerd.</description>
+        <name>Landingspagina</name>
         <readonly_markup>
           <conversion_header>Conversiedoel</conversion_header>
           <conversion_selector_description>Bezoeker navigeert naar pagina</conversion_selector_description>
@@ -18,33 +18,33 @@
       </content_comparator_kpi>
       <kpi_messaging>
         <failed_to_load>Laden mislukt</failed_to_load>
-        <missing_client>Client Script Wrapper resource could not be found</missing_client>
+        <missing_client>Client Script Wrapper-bron kan niet worden gevonden</missing_client>
         <uimarkup_not_defined>UIMarkupAttribute-kenmerk van de klasse niet gedefinieerd.</uimarkup_not_defined>
       </kpi_messaging>
       <stickysite_kpi>
         <config_markup>
-          <conversion_label>Number of minutes until another page is visited</conversion_label>
-          <error_internal>Internal error : {0}</error_internal>
-          <error_invalid_timeoutvalue>Number of minutes must be a value between 1 and 60</error_invalid_timeoutvalue>
+          <conversion_label>Aantal minuten totdat een andere pagina wordt bezocht</conversion_label>
+          <error_internal>Interne fout: {0}</error_internal>
+          <error_invalid_timeoutvalue>Aantal minuten moet een waarde zijn tussen 1 en 60</error_invalid_timeoutvalue>
         </config_markup>
-        <description>Converts when a visitor views the test page and then visits any other page on the website within the same browser session.  Results: Views are the number of visitors that visited the web page.  Conversions are the number of visitors that clicked through to any other page on the website within the specified time.</description>
+        <description>Converteert wanneer een bezoeker de testpagina bekijkt en dan een andere pagina op de website bezoekt binnen dezelfde browsersessie.  Resultaten: Weergaven zijn het aantal bezoekers dat de webpagina heeft bezocht.  Conversies zijn het aantal bezoekers dat heeft doorgeklikt naar een andere pagina op de website binnen de aangegeven tijd.</description>
         <name>Site Stickiness</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
+          <conversion_header>Conversiedoel</conversion_header>
+          <conversion_selector_description>Bezoeker navigeert naar een willekeurige andere pagina binnen {0} minu(u)te(n).</conversion_selector_description>
         </readonly_markup>
       </stickysite_kpi>
       <timeonpage_kpi>
         <config_markup>
-          <conversionlabel>Number of seconds visitor remains on the page.</conversionlabel>
-          <emptyfield>Field may not be empty.</emptyfield>
-          <notpositiveinteger>Value must be a whole number ranging from 1 to 1800.</notpositiveinteger>
+          <conversionlabel>Aantal seconden dat bezoeker op de pagina blijft.</conversionlabel>
+          <emptyfield>Veld mag niet leeg zijn.</emptyfield>
+          <notpositiveinteger>Waarde moet een geheel getal zijn tussen 1 en 1800.</notpositiveinteger>
         </config_markup>
-        <description>Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
-        <name>Time on Page</name>
+        <description>Monitort hoe lang een bezoeker op een pagina blijft en converteert na een bepaalde hoeveelheid tijd.  Weergaven: Het aantal bezoekers dat de geteste pagina heeft bekeken.  Conversies: Het aantal bezoekers dat de bepaalde minimumtijd op de pagina is gebleven.</description>
+        <name>Tijd op pagina</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Number of seconds visitor remains on the page:</conversion_selector_description>
+          <conversion_header>Conversiedoel</conversion_header>
+          <conversion_selector_description>Aantal seconden dat bezoeker op de pagina blijft:</conversion_selector_description>
         </readonly_markup>
       </timeonpage_kpi>
     </kpi>

@@ -8,44 +8,44 @@
           <error_conversionproduct>Tuote on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversionproduct>
           <error_not_published_product>Julkaistu tuote tai tuotevariantti on valittava ennen kuin A/B-testi voidaan tallentaa.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
-        <name>Add To Cart</name>
+        <description>Valitse tuote muuntoa varten. Tulokset: Tarkastelukerrat vastaavat kävijöitä, jotka ovat katsoneet tuotetta. Muunnot tarkoittavat, että kävijä on lisännyt kyseisen tuotteen ostoskoriinsa.</description>
+        <name>Lisää koriin</name>
         <readonly_markup>
           <conversion_header>Lisää tuote ostoskoriin</conversion_header>
           <conversion_selector_description>Vierailija lisää tuotteen ostoskoriin</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
-        <cancel>Cancel</cancel>
-        <description>These settings are the default values used for Commerce conversion goals when added to a test.</description>
-        <displayname>Commerce Conversion Goals Configuration</displayname>
-        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save>Save</save>
+        <cancel>Peruuta</cancel>
+        <description>Nämä asetukset ovat oletusarvoja, joita käytetään Commercen muuntotavoitteissa testiin lisättäessä.</description>
+        <displayname>Commercen muuntotavoitteiden määritys</displayname>
+        <financialculturepreference>Valitse, mitä kulttuuria käytetään tallennettaessa ja tarkasteltaessa taloudellisia tuloksia</financialculturepreference>
+        <save>Tallenna</save>
       </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+          <conversion_label>Seuraa tehtyjä tilauksia ja laskee testin aikana käsiteltyjen tilausten kokonaissummien keskiarvon.</conversion_label>
+          <error_defaultmarketundefined>Ensisijaisia markkinoita ei ole asetettu eikä oletusmarkkinoita ole määritelty.</error_defaultmarketundefined>
+          <error_undefinedmarket>Nykyisiä ensisijaisia markkinoita ei ole määritelty oikein tai ne on poistettu.</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
-        <name>Average Order</name>
+        <description>Tarkastelukerrat: Testattavaa tuotetta katsoneiden kävijöiden määrä.  Muunnot: Kokonaissumma vastaa ostoskorin kokonaissummien keskiarvoa kaikilta kävijöiltä, jotka osallistuivat testiin.</description>
+        <name>Keskimääräinen tilaus</name>
         <readonly_markup>
-          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_description>Seuraa tehtyjä tilauksia ja laskee testin aikana käsiteltyjen tilausten kokonaissummien keskiarvon.</conversion_description>
+          <conversion_header>Muuntotavoite</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
         <config_markup>
-          <conversion_label>Visitor purchases product</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>Kävijä ostaa tuotteen</conversion_label>
+          <error_conversionproduct>Tuote on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversionproduct>
+          <error_not_published_product>Julkaistu tuote tai tuotevariantti on valittava ennen kuin A/B-testi voidaan tallentaa.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name>Purchase Product</name>
+        <description>Valitse tuote muuntoa varten. Tulokset: Tarkastelukerrat vastaavat kävijöitä, jotka ovat katsoneet tuotetta. Muunnot tarkoittavat, että kävijä on ostanut kyseisen tuotteen.</description>
+        <name>Osta tuote</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+          <conversion_header>Muuntotavoite</conversion_header>
+          <conversion_selector_description>Kävijä ostaa tuotteen</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>
     </commercekpi>

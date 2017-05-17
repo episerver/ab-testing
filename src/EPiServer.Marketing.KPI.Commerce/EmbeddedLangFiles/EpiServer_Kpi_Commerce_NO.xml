@@ -8,44 +8,44 @@
           <error_conversionproduct>Du må velge et produkt før du kan lagre A/B-testen.</error_conversionproduct>
           <error_not_published_product>Du må velge et publiser produkt eller produktvariant før du kan lagre A/B-testen.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor added the product to their shopping cart.</description>
-        <name>Add To Cart</name>
+        <description>Velg et produkt for konvertering. Resultater: Visninger gjelder besøkende som viste produktet, mens konverteringer gjelder når en besøkende legger produktet i handlekurven.</description>
+        <name>Legg i handlevognen</name>
         <readonly_markup>
           <conversion_header>Legg produkt i handlekurv</conversion_header>
           <conversion_selector_description>Gjest legger produktet i handlekurven</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
-        <cancel>Cancel</cancel>
-        <description>These settings are the default values used for Commerce conversion goals when added to a test.</description>
-        <displayname>Commerce Conversion Goals Configuration</displayname>
-        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save>Save</save>
+        <cancel>Avbryt</cancel>
+        <description>Disse innstillingene er standardverdiene som brukes for Commerce konverteringsmål når de legges til en test.</description>
+        <displayname>Konfigurering av Commerce konverteringsmål</displayname>
+        <financialculturepreference>Velg hvilken kultur som skal brukes ved lagring og visning av økonomiske resultater</financialculturepreference>
+        <save>Lagre</save>
       </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+          <conversion_label>Sporer fullførte bestillinger og beregner total gjennomsnittsverdi for bestillinger som har blitt behandlet i løpet av testen.</conversion_label>
+          <error_defaultmarketundefined>Foretrukket marked er ikke angitt, og standardmarked er ikke definert.</error_defaultmarketundefined>
+          <error_undefinedmarket>Aktivt foretrukket marked er ikke korrekt definert eller har blitt fjernet.</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the test item.  Conversions: The total represents the average purchased cart total across all visitors that participated in the test.</description>
-        <name>Average Order</name>
+        <description>Visninger: Antall besøkende som viste testartikkelen.  Konverteringer: Representerer gjennomsnittlig totalsum for handlekurven til alle besøkende som deltok på testen.</description>
+        <name>Gjennomsnitt bestilling</name>
         <readonly_markup>
-          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_description>Sporer fullførte bestillinger og beregner total gjennomsnittsverdi for bestillinger som har blitt behandlet i løpet av testen.</conversion_description>
+          <conversion_header>Konverteringsmål</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
         <config_markup>
-          <conversion_label>Visitor purchases product</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>Besøkende kjøper produkt</conversion_label>
+          <error_conversionproduct>Du må velge et produkt før du kan lagre A/B-testen.</error_conversionproduct>
+          <error_not_published_product>Du må velge et publiser produkt eller produktvariant før du kan lagre A/B-testen.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name>Purchase Product</name>
+        <description>Velg et produkt for konvertering. Resultater: Visninger knyttet til besøkende som viste produktet, mens konverteringer viser kjøp av det aktuelle produktet.</description>
+        <name>Kjøp produkt</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+          <conversion_header>Konverteringsmål</conversion_header>
+          <conversion_selector_description>Besøkende kjøper produktet</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>
     </commercekpi>

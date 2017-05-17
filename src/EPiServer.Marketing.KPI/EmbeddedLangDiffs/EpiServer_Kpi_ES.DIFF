@@ -1,40 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
-  <language name="español" id="es">
-    <kpi>
-      <content_comparator_kpi>
-        <description path="/kpi/content_comparator_kpi/description/">The selected page is the one that a visitor must click through to in order to count as a conversion.  Results: Views are the number of visitors that visited the test page. Conversions are the number of visitors that clicked through to the selected landing page while the test was running.</description>
-        <name path="/kpi/content_comparator_kpi/name/">Landing Page</name>
-      </content_comparator_kpi>
-      <kpi_messaging>
-        <missing_client path="/kpi/kpi_messaging/missing_client/">Client Script Wrapper resource could not be found</missing_client>
-      </kpi_messaging>
-      <stickysite_kpi>
-        <config_markup>
-          <conversion_label path="/kpi/stickysite_kpi/config_markup/conversion_label/">Number of minutes until another page is visited</conversion_label>
-          <error_internal path="/kpi/stickysite_kpi/config_markup/error_internal/">Internal error : {0}</error_internal>
-          <error_invalid_timeoutvalue path="/kpi/stickysite_kpi/config_markup/error_invalid_timeoutvalue/">Number of minutes must be a value between 1 and 60</error_invalid_timeoutvalue>
-        </config_markup>
-        <description path="/kpi/stickysite_kpi/description/">Converts when a visitor views the test page and then visits any other page on the website within the same browser session.  Results: Views are the number of visitors that visited the web page.  Conversions are the number of visitors that clicked through to any other page on the website within the specified time.</description>
-        <name path="/kpi/stickysite_kpi/name/">Site Stickiness</name>
-        <readonly_markup>
-          <conversion_header path="/kpi/stickysite_kpi/readonly_markup/conversion_header/">Conversion goal</conversion_header>
-          <conversion_selector_description path="/kpi/stickysite_kpi/readonly_markup/conversion_selector_description/">Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
-        </readonly_markup>
-      </stickysite_kpi>
-      <timeonpage_kpi>
-        <config_markup>
-          <conversionlabel path="/kpi/timeonpage_kpi/config_markup/conversionlabel/">Number of seconds visitor remains on the page.</conversionlabel>
-          <emptyfield path="/kpi/timeonpage_kpi/config_markup/emptyfield/">Field may not be empty.</emptyfield>
-          <notpositiveinteger path="/kpi/timeonpage_kpi/config_markup/notpositiveinteger/">Value must be a whole number ranging from 1 to 1800.</notpositiveinteger>
-        </config_markup>
-        <description path="/kpi/timeonpage_kpi/description/">Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
-        <name path="/kpi/timeonpage_kpi/name/">Time on Page</name>
-        <readonly_markup>
-          <conversion_header path="/kpi/timeonpage_kpi/readonly_markup/conversion_header/">Conversion goal</conversion_header>
-          <conversion_selector_description path="/kpi/timeonpage_kpi/readonly_markup/conversion_selector_description/">Number of seconds visitor remains on the page:</conversion_selector_description>
-        </readonly_markup>
-      </timeonpage_kpi>
-    </kpi>
-  </language>
+  <language name="español" id="es" />
 </languages>
