@@ -17,7 +17,7 @@
         <confidence_level_description>Tillidsniveauet angiver det antal fejl, der er tilladt. En højere procentværdi har en direkte sammenhæng med nøjagtigheden af testresultaterne. Den angiver, om den målte forskel mellem kontrolsiden og variantsiden ikke er tilfældig (dvs. væsentlig).</confidence_level_description>
         <confidence_level_header>Tillidsniveau</confidence_level_header>
         <control>A/Kontrol</control>
-        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <conversion_description>Alle mål har som standard samme vægt. Du kan indstille en individuel vægt for hvert mål i </conversion_description>
         <conversion_header>Hvad er konverteringsmålet?</conversion_header>
         <conversion_label>Den besøgende navigerer til siden</conversion_label>
         <days_text> dag(e).</days_text>
@@ -26,23 +26,24 @@
         <duration_header>Hvor længe du vil køre A/B-testen?</duration_header>
         <error_conversiongoal>Du skal vælge et konverteringsmål, før du kan gemme A/B-testen.</error_conversiongoal>
         <error_date_in_the_past>Startdato/-klokkeslæt for testen må ikke være før dags dato.</error_date_in_the_past>
+        <error_duplicate_kpi_values>Identiske mål må ikke have samme værdier</error_duplicate_kpi_values>
         <error_duration>Varigheden skal være et gyldigt heltal mellem 1 og 365</error_duration>
         <error_invalid_date_time_value>De indtastede oplysninger er ikke en gyldig dato-/klokkeslætværdi.</error_invalid_date_time_value>
         <error_participation_percentage>Deltagelsesprocenten skal være mellem 1 og 100</error_participation_percentage>
         <error_test_not_schedulded_or_started>ikke planlagt, løs fejl ved startdato/-klokkeslæt for at planlægge en test</error_test_not_schedulded_or_started>
         <goals_default_text>F.eks. Ved at tilpasse teksten i det første punkt på listen, så den takler "tidsproblemet", kan jeg motivere flere brugere til at hente e-bogen.</goals_default_text>
         <goals_header>Hvad er det overordnede mål for denne test?</goals_header>
-        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
-        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
-        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <goals_selectlist_additional_kpi>Tilføj et andet mål</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>Tilføj et mål</goals_selectlist_default>
+        <goals_weight_description>Her kan du bestemme, om et af målene har større betydning end de andre, når du måler en vinder.</goals_weight_description>
+        <goals_weight_equal_description>Hvis du tillægger alle mål samme betydning, måles konverteringer mod alle mål på samme måde.</goals_weight_equal_description>
+        <goals_weight_heading>Balancer vigtigheden af testmålene:</goals_weight_heading>
+        <goals_weight_higher_description>Hvis du tillægger et mål en højere betydning, vil konverteringer mod dette mål tælle højere end konverteringer mod mål med en lavere værdi.</goals_weight_higher_description>
         <notscheduled_text>ikke planlagt, og starter nu</notscheduled_text>
         <participant_percentage_tip>En højere deltagelsesprocent reducerer den tid, det tager at indsamle nok data til at kunne vælge en vinder.</participant_percentage_tip>
         <participation_header>Hvilken procentdel af de besøgende skal deltage i denne A/B-test?</participation_header>
         <published_prefix>Publiceret af</published_prefix>
-        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
+        <remove_kpi_tooltip>Fjern dette mål</remove_kpi_tooltip>
         <schedule_header>Hvornår skal A/B-testen starte?</schedule_header>
         <schedule_selector_delay>Planlæg til senere</schedule_selector_delay>
         <schedule_selector_start>Start med det samme</schedule_selector_start>
@@ -53,7 +54,7 @@
         <test_description>Valider, om en ny tilføjelse til eller ændring af indholdet faktisk forbedrer konverteringsraten.</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>Publicer automatisk vinderen af testen, hvis resultaterne viser en statistisk væsentlig forskel?</autopublishwinner>
         <cancel>Annuller</cancel>
         <confidencelevel>Tillidsniveau:</confidencelevel>
         <description>Disse indstillinger er standardværdierne, som bruges, når du opretter A/B-test.</description>
@@ -84,12 +85,12 @@
         <draft_prefix>Kladde – redigeret af</draft_prefix>
         <from>fra</from>
         <goal_not_specified>Der er ikke angivet et mål.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Skjul detaljer</hide_summary>
         <losing_version_label>Gemt i Versioner</losing_version_label>
         <percent_participation_header>Procentdel af de besøgende, som deltager i denne A/B-test</percent_participation_header>
         <published_prefix>Publiceret af</published_prefix>
         <remaining_increment>Dage</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Vis oplysninger</show_summary>
         <started> Startet </started>
         <test_duration_header>A/B-testens varighed</test_duration_header>
         <test_percent_to_participations_divider> / Det aktuelle antal deltagere er </test_percent_to_participations_divider>
@@ -103,12 +104,12 @@
         <winning_version_label>Vinder (publiceret)</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>Er du sikker på, at du vil afbryde denne test?</abort_confirmation_message>
         <label_text>Annuller A/B-test, og rediger siden</label_text>
         <tooltip_text>Annuller A/B-test, og rediger siden</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>Er du sikker på, at du vil afbryde denne test?</abort_confirmation_message>
         <advanced_options_confidence_level>Tillidsniveau</advanced_options_confidence_level>
         <advanced_options_header>Avancerede indstillinger</advanced_options_header>
         <button_abort_option>Afbryd A/B-test</button_abort_option>
@@ -126,11 +127,11 @@
         <description_heading>Overordnet mål for denne test</description_heading>
         <draft_prefix>Kladde – redigeret af</draft_prefix>
         <goal_not_specified>Der er ikke angivet et mål.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Skjul detaljer</hide_summary>
         <percent_participation_header>Procentdel af de besøgende, som deltager i denne A/B-test</percent_participation_header>
         <published_prefix>Publiceret af</published_prefix>
         <remaining_increment>Dage</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Vis oplysninger</show_summary>
         <started> Startet </started>
         <test_duration_completed>Afsluttet efter fuld tid</test_duration_completed>
         <test_duration_header>A/B-testens varighed</test_duration_header>
@@ -146,9 +147,9 @@
         <views>visninger</views>
       </detailsview>
       <kpisummarywidget>
-        <conversions>Conversions</conversions>
-        <performance>Performance</performance>
-        <weight>Weight</weight>
+        <conversions>Konverteringer</conversions>
+        <performance>Ydelse</performance>
+        <weight>Vægt</weight>
       </kpisummarywidget>
       <notificationbar>
         <completed_test>Der blev udført en A/B-test på en version af dette indhold. </completed_test>
@@ -160,8 +161,8 @@
         <winner_link_tooltip>Vis testdetaljerne, og vælg en vinder </winner_link_tooltip>
       </notificationbar>
       <percentagetemplate>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <views>Views</views>
+        <conversion_rate>Konverteringsrate</conversion_rate>
+        <views>Visninger</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Tillidsniveau</advanced_options_confidence_level>
@@ -181,14 +182,14 @@
         <draft_prefix>Kladde – redigeret af</draft_prefix>
         <early_pick_winner_message>Denne test er ikke fuldført, men du kan vælge en vinder. Hvis du vælger en vinder nu, afsluttes testen, og det valgte indhold publiceres.</early_pick_winner_message>
         <goal_not_specified>Der er ikke angivet et mål.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Skjul detaljer</hide_summary>
         <percent_participation_header>Procentdel af de besøgende, som deltager i denne A/B-test</percent_participation_header>
         <pick_a_winner_text>Vælg en vinder!</pick_a_winner_text>
         <pick_winner_option_text>Vælg en vinder</pick_winner_option_text>
         <published_prefix>Publiceret af</published_prefix>
         <remaining_increment>Dage</remaining_increment>
         <result_is_not_significant>Resultaterne af denne test er IKKE væsentlige.</result_is_not_significant>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Vis oplysninger</show_summary>
         <started> Startet </started>
         <test_duration_completed>Afsluttet efter fuld tid</test_duration_completed>
         <test_duration_header>Testens varighed</test_duration_header>
@@ -211,14 +212,14 @@
         <message>Startet [{0}] Stoppet [{1}] Aktiv [{2}] Inaktiv [{3}] Fuldført [{4}]</message>
       </scheduler_plugin>
       <summary_widget>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <conversions>Conversions</conversions>
-        <views>Views</views>
+        <conversion_rate>Konverteringsrate</conversion_rate>
+        <conversions>Konverteringer</conversions>
+        <views>Visninger</views>
       </summary_widget>
       <tasks>
         <activetests>Aktive A/B-test</activetests>
         <archivedtests>Arkiverede A/B-test</archivedtests>
-        <category>A/B Tests</category>
+        <category>A/B-test</category>
         <completedtests>Fuldførte A/B-test</completedtests>
         <inactivetests>Planlagte A/B-test</inactivetests>
       </tasks>
