@@ -47,6 +47,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 ZScore = theDalTest.ZScore,
                 ConfidenceLevel = theDalTest.ConfidenceLevel,
                 LastModifiedBy = theDalTest.LastModifiedBy,
+                SiteLanguage = theDalTest.SiteLanguage,
                 CreatedDate = DateTime.SpecifyKind(theDalTest.CreatedDate, DateTimeKind.Utc),
                 ModifiedDate = DateTime.SpecifyKind(theDalTest.ModifiedDate, DateTimeKind.Utc),
                 Variants = AdaptToManagerVariant(theDalTest.Variants),
@@ -78,6 +79,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 IsSignificant = theManagerTest.IsSignificant,
                 ZScore = theManagerTest.ZScore,
                 LastModifiedBy = theManagerTest.LastModifiedBy,
+                SiteLanguage = theManagerTest.SiteLanguage,
                 Variants = AdaptToDalVariant(theManagerTest.Variants),
                 KeyPerformanceIndicators = AdaptToDalKPI(theManagerTest.Id, theManagerTest.KpiInstances),
             };
