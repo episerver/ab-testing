@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// Language of the site for the content being tested.
         /// </summary>
-        string SiteLanguage { get; set; }
+        string ContentLanguage { get; set; }
 
         /// <summary>
         /// Date and time the test was created.

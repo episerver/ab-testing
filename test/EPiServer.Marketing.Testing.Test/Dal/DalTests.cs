@@ -60,7 +60,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
                 ParticipationPercentage = 100,
-                SiteLanguage = "en",
+                ContentLanguage = "en",
                 ExpectedVisitorCount = 100,
                 ActualVisitorCount = 50,
                 IsSignificant = false,
@@ -96,7 +96,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 State = DalTestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
-                SiteLanguage = "en",
+                ContentLanguage = "en",
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
                 Variants = new List<DalVariant>()
@@ -137,7 +137,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                 State = DalTestState.Active,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.Now,
-                SiteLanguage = "en",
+                ContentLanguage = "en",
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
                 KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()

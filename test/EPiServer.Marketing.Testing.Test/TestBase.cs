@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Test
                     OriginalItemId = Guid.NewGuid(),
                     State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
-                    SiteLanguage = "en",
+                    ContentLanguage = "en",
                     Variants = new List<DalVariant>(),
                     KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
                 });
@@ -62,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Test
                     ModifiedDate = DateTime.UtcNow,
                     State = DalTestState.Inactive,
                     ParticipationPercentage = 100,
-                    SiteLanguage = "en",
+                    ContentLanguage = "en",
                     LastModifiedBy = "me",
                     OriginalItemId = Guid.NewGuid(),
                     Owner = "Bert" + i,

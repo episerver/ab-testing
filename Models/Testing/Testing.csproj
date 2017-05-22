@@ -137,9 +137,9 @@
     <Compile Include="Migrations\201704051826523_AddPerformanceToConversionResult.Designer.cs">
       <DependentUpon>201704051826523_AddPerformanceToConversionResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705221805364_AddSiteLanguage.cs" />
-    <Compile Include="Migrations\201705221805364_AddSiteLanguage.Designer.cs">
-      <DependentUpon>201705221805364_AddSiteLanguage.cs</DependentUpon>
+    <Compile Include="Migrations\201705222044071_AddContentLanguageToTest.cs" />
+    <Compile Include="Migrations\201705222044071_AddContentLanguageToTest.Designer.cs">
+      <DependentUpon>201705222044071_AddContentLanguageToTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,8 +167,8 @@
     <EmbeddedResource Include="Migrations\201704051826523_AddPerformanceToConversionResult.resx">
       <DependentUpon>201704051826523_AddPerformanceToConversionResult.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705221805364_AddSiteLanguage.resx">
-      <DependentUpon>201705221805364_AddSiteLanguage.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201705222044071_AddContentLanguageToTest.resx">
+      <DependentUpon>201705222044071_AddContentLanguageToTest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,13 +7,13 @@ namespace Testing.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class AddSiteLanguage : IMigrationMetadata
+    public sealed partial class AddContentLanguageToTest : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddSiteLanguage));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddContentLanguageToTest));
         
         string IMigrationMetadata.Id
         {
-            get { return "201705221805364_AddSiteLanguage"; }
+            get { return "201705222044071_AddContentLanguageToTest"; }
         }
         
         string IMigrationMetadata.Source

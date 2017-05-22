@@ -88,7 +88,7 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         /// <summary>
         /// Language of the site for the content being tested.
         /// </summary>
-        public string SiteLanguage { get; set; }
+        public string ContentLanguage { get; set; }
 
         /// <summary>
         /// List of variant items for the test.  These replace the OriginalItem during the test.
