@@ -86,6 +86,11 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         public bool IsSignificant { get; set; }
 
         /// <summary>
+        /// Language of the site for the content being tested.
+        /// </summary>
+        public string ContentLanguage { get; set; }
+
+        /// <summary>
         /// List of variant items for the test.  These replace the OriginalItem during the test.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
