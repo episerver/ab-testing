@@ -4,6 +4,9 @@
     <abtesting>
       <addtestview>
         <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
+        <high path="/abtesting/addtestview/high/">High</high>
+        <low path="/abtesting/addtestview/low/">Low</low>
+        <medium path="/abtesting/addtestview/medium/">Medium</medium>
       </addtestview>
       <archiveview>
         <content_challenger_header path="/abtesting/archiveview/content_challenger_header/">B / Challenger</content_challenger_header>
@@ -12,6 +15,7 @@
       <detailsview>
         <button_options path="/abtesting/detailsview/button_options/">Options</button_options>
         <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
+        <conversion_header path="/abtesting/detailsview/conversion_header/">Conversion goal(s)</conversion_header>
         <conversions path="/abtesting/detailsview/conversions/">conversions</conversions>
       </detailsview>
       <kpisummarywidget>

@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Se dai la stessa importanza a tutti gli obiettivi , le conversioni verso tutti gli obiettivi saranno misurate allo stesso modo.</goals_weight_equal_description>
         <goals_weight_heading>Bilancia l'importanza degli obiettivi del test:</goals_weight_heading>
         <goals_weight_higher_description>se dai ad un obiettivo una maggiore importanza, le conversioni verso quell'obiettivo conteranno di più rispetto a quelle con un'impostazione più bassa.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>non programmato e inizierà ora</notscheduled_text>
         <participant_percentage_tip>Una percentuale di partecipazione più elevata riduce il tempo necessario per raccogliere dati statistici sufficienti per essere in grado di scegliere un vincitore.</participant_percentage_tip>
         <participation_header>Qual è la percentuale di visitatori che dovrebbe partecipare a questo A / B test?</participation_header>
@@ -76,7 +79,7 @@
         <content_chosen>, e il contenuto è stato selezionato da pubblicare</content_chosen>
         <content_control_header>A / Controllo</content_control_header>
         <content_selected>Questa versione è stato scelto come il vincitore</content_selected>
-        <conversion_header>Obiettivo di conversione</conversion_header>
+        <conversion_header>Obiettivo di conversione(s)</conversion_header>
         <conversion_rate>tasso di conversione</conversion_rate>
         <conversion_selector_description>Visitatore accede alla pagina</conversion_selector_description>
         <conversions>conversioni</conversions>
@@ -120,6 +123,7 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Controllo</content_control_header>
         <content_winning_tooltip>Questa versione ha prestazioni migliori</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>tasso di conversione</conversion_rate>
         <conversions>conversioni</conversions>
         <days_divider> giorno(i) / </days_divider>

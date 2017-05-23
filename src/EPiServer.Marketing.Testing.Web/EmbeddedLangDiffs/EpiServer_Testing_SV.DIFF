@@ -1,4 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
-  <language name="svenska" id="sv" />
+  <language name="svenska" id="sv">
+    <abtesting>
+      <addtestview>
+        <high path="/abtesting/addtestview/high/">High</high>
+        <low path="/abtesting/addtestview/low/">Low</low>
+        <medium path="/abtesting/addtestview/medium/">Medium</medium>
+      </addtestview>
+      <detailsview>
+        <conversion_header path="/abtesting/detailsview/conversion_header/">Conversion goal(s)</conversion_header>
+      </detailsview>
+    </abtesting>
+  </language>
 </languages>
