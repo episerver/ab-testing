@@ -4,6 +4,9 @@
     <abtesting>
       <addtestview>
         <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
+        <high path="/abtesting/addtestview/high/">High</high>
+        <low path="/abtesting/addtestview/low/">Low</low>
+        <medium path="/abtesting/addtestview/medium/">Medium</medium>
       </addtestview>
       <archiveview>
         <content_challenger_header path="/abtesting/archiveview/content_challenger_header/">B / Challenger</content_challenger_header>

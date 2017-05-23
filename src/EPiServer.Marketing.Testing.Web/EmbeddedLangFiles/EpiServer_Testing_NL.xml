@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Als u alle doelen dezelfde belangrijkheid geeft, worden conversies naar alle doelen op dezelfde manier gemeten.</goals_weight_equal_description>
         <goals_weight_heading>Houd de belangrijkheid van de testdoelen in evenwicht:</goals_weight_heading>
         <goals_weight_higher_description>Als u een doel een hogere belangrijkheid geeft, tellen conversies naar dat doel zwaarder dan conversies naar de doelen met een lagere instelling.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>niet gepland en begint nu</notscheduled_text>
         <participant_percentage_tip>Een hoger deelnamepercentage vermindert de tijd die nodig is voor het verzamelen van voldoende statistische gegevens om een winnaar te kunnen kiezen.</participant_percentage_tip>
         <participation_header>Welk percentage bezoekers moet deelnemen aan deze A / B-test?</participation_header>

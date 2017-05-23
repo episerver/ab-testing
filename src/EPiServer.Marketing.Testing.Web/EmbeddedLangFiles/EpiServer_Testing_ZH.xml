@@ -39,6 +39,9 @@
         <goals_weight_equal_description>如果您给所有目标同样重要性，那么所有目标的转化会以相同的方式衡量。</goals_weight_equal_description>
         <goals_weight_heading>平衡测试目标的重要性：</goals_weight_heading>
         <goals_weight_higher_description>如果您给予某个目标更高的重要性，那么针对该目标的转化将高于具有较低设置的转化。</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>尚未计划，并将立即开始</notscheduled_text>
         <participant_percentage_tip>较高的参与百分比会降低挑选优胜者所需的数据统计收集时间。</participant_percentage_tip>
         <participation_header>访客参加此 A/B 测试的百分比是多少？</participation_header>

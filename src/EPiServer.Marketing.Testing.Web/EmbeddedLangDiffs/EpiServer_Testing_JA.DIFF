@@ -1,4 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <languages>
-  <language name="日本語 (Japanese)" id="ja" />
+  <language name="日本語 (Japanese)" id="ja">
+    <abtesting>
+      <addtestview>
+        <high path="/abtesting/addtestview/high/">High</high>
+        <low path="/abtesting/addtestview/low/">Low</low>
+        <medium path="/abtesting/addtestview/medium/">Medium</medium>
+      </addtestview>
+    </abtesting>
+  </language>
 </languages>

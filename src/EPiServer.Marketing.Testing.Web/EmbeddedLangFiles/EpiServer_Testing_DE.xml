@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Wenn Sie allen Zielen dieselbe Bedeutung beimessen, werden Konvertierungen auf alle Ziele hin auf dieselbe Weise gemessen.</goals_weight_equal_description>
         <goals_weight_heading>Wägen Sie die Wichtigkeit der Testziele ab:</goals_weight_heading>
         <goals_weight_higher_description>Wenn Sie einem Ziel eine höhere Bedeutung beimessen, zählen Konvertierungen auf dieses Ziel hin mehr als Konvertierungen auf ein Ziel mit einer niedrigeren Bedeutung.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>nicht geplant, startet jetzt</notscheduled_text>
         <participant_percentage_tip>Ein höherer Beteiligungsprozentsatz verkürzt die erforderliche Zeit, um ausreichende Statistiken für die Gewinnerermittlung zu erfassen.</participant_percentage_tip>
         <participation_header>Wie viel Prozent der Besucher sollten an diesem A/B-Test teilnehmen?</participation_header>

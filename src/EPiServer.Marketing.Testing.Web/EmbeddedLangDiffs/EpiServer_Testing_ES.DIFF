@@ -4,6 +4,9 @@
     <abtesting>
       <addtestview>
         <control path="/abtesting/addtestview/control/">A / Control</control>
+        <high path="/abtesting/addtestview/high/">High</high>
+        <low path="/abtesting/addtestview/low/">Low</low>
+        <medium path="/abtesting/addtestview/medium/">Medium</medium>
       </addtestview>
       <archiveview>
         <content_control_header path="/abtesting/archiveview/content_control_header/">A / Control</content_control_header>

@@ -39,6 +39,9 @@
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
         <participant_percentage_tip>More participation reduces time to gather statistics and pick a winner.</participant_percentage_tip>
         <participation_header>Participation percentage</participation_header>

@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Si otorga a todos los objetivos la misma importancia, las conversiones hacia todos los objetivos se medirán de la misma manera.</goals_weight_equal_description>
         <goals_weight_heading>Equilibre la importancia de los objetivos de la prueba:</goals_weight_heading>
         <goals_weight_higher_description>Si otorga a un objetivo una mayor importancia, las conversiones hacia ese objetivo contarán más que las conversiones hacia los que tienen una configuración más baja.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>no está programada y comenzará ahora</notscheduled_text>
         <participant_percentage_tip>Un porcentaje de participación más alto reduce el tiempo necesario para recopilar estadísticas suficientes que permitan elegir un ganador.</participant_percentage_tip>
         <participation_header>¿Qué porcentaje de visitantes debería participar en esta prueba A/B?</participation_header>
