@@ -15,6 +15,7 @@
       <detailsview>
         <button_options path="/abtesting/detailsview/button_options/">Options</button_options>
         <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
+        <conversion_header path="/abtesting/detailsview/conversion_header/">Conversion goal(s)</conversion_header>
         <conversions path="/abtesting/detailsview/conversions/">conversions</conversions>
       </detailsview>
       <kpisummarywidget>

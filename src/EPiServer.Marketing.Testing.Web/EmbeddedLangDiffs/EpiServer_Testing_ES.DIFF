@@ -13,6 +13,7 @@
       </archiveview>
       <detailsview>
         <content_control_header path="/abtesting/detailsview/content_control_header/">A / Control</content_control_header>
+        <conversion_header path="/abtesting/detailsview/conversion_header/">Conversion goal(s)</conversion_header>
       </detailsview>
       <pickwinnerview>
         <content_control_header path="/abtesting/pickwinnerview/content_control_header/">A / Control</content_control_header>

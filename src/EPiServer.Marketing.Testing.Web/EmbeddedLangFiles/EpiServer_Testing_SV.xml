@@ -79,7 +79,7 @@
         <content_chosen>, och innehållet har blivit valt för publicering</content_chosen>
         <content_control_header>A / Original</content_control_header>
         <content_selected>Den här versionen är vald som vinnare</content_selected>
-        <conversion_header>Konverteringsmål</conversion_header>
+        <conversion_header>Konverteringsmål(s)</conversion_header>
         <conversion_rate>konverteringsgrad</conversion_rate>
         <conversion_selector_description>Besökare går till sida</conversion_selector_description>
         <conversions>konverteringar</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B / Utmanare</content_challenger_header>
         <content_control_header>A / Original</content_control_header>
         <content_winning_tooltip>Den här versionen fungerar bättre</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>konverteringsgrad</conversion_rate>
         <conversions>konverteringar</conversions>
         <days_divider> dag(ar) / </days_divider>

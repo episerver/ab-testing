@@ -7,6 +7,9 @@
         <low path="/abtesting/addtestview/low/">Low</low>
         <medium path="/abtesting/addtestview/medium/">Medium</medium>
       </addtestview>
+      <detailsview>
+        <conversion_header path="/abtesting/detailsview/conversion_header/">Conversion goal(s)</conversion_header>
+      </detailsview>
     </abtesting>
   </language>
 </languages>

@@ -79,7 +79,7 @@
         <content_chosen>, en content is gekozen voor publicatie</content_chosen>
         <content_control_header>A / Controle</content_control_header>
         <content_selected>Deze versie is uitgekozen als winnaar</content_selected>
-        <conversion_header>Conversiedoel</conversion_header>
+        <conversion_header>Conversiedoel(s)</conversion_header>
         <conversion_rate>conversiepercentage</conversion_rate>
         <conversion_selector_description>Bezoeker navigeert naar pagina</conversion_selector_description>
         <conversions>conversies</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B / Concurrent</content_challenger_header>
         <content_control_header>A / Controle</content_control_header>
         <content_winning_tooltip>Deze versie presteert beter</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>conversiepercentage</conversion_rate>
         <conversions>conversies</conversions>
         <days_divider> dag(en) / </days_divider>

@@ -79,7 +79,7 @@
         <content_chosen>、公開に向けたコンテンツが選択されました</content_chosen>
         <content_control_header>A / コントロール</content_control_header>
         <content_selected>このバージョンは勝者として選ばれました</content_selected>
-        <conversion_header>コンバージョン目標</conversion_header>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>コンバージョン率</conversion_rate>
         <conversion_selector_description>訪問者がページに移動します</conversion_selector_description>
         <conversions>コンバージョン</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B / チャレンジャー</content_challenger_header>
         <content_control_header>A / コントロール</content_control_header>
         <content_winning_tooltip>このバージョンの方がパフォーマンスに優れています</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>コンバージョン率</conversion_rate>
         <conversions>コンバージョン</conversions>
         <days_divider> 日 (間) / </days_divider>

@@ -79,7 +79,7 @@
         <content_chosen>, Inhalt wurde zur Veröffentlichung ausgewählt</content_chosen>
         <content_control_header>A/Referenz</content_control_header>
         <content_selected>Diese Version wurde als Gewinner ausgewählt.</content_selected>
-        <conversion_header>Konversionsziel</conversion_header>
+        <conversion_header>Konversionsziel(s)</conversion_header>
         <conversion_rate>Konversionsrate</conversion_rate>
         <conversion_selector_description>Besucher ruft die Seite auf</conversion_selector_description>
         <conversions>Konversionen</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B/Alternative</content_challenger_header>
         <content_control_header>A/Referenz</content_control_header>
         <content_winning_tooltip>Diese Version weist eine höhere Leistung auf.</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>Konversionsrate</conversion_rate>
         <conversions>Konversionen</conversions>
         <days_divider> Tag(e)/ </days_divider>

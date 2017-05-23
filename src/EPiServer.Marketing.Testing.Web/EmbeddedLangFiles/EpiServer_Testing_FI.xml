@@ -79,7 +79,7 @@
         <content_chosen>, ja sisältö on valittu julkaisuun</content_chosen>
         <content_control_header>A / Kontrolli</content_control_header>
         <content_selected>Tämä versio valittiin voittajaksi</content_selected>
-        <conversion_header>Muuntotavoite</conversion_header>
+        <conversion_header>Muuntotavoite(s)</conversion_header>
         <conversion_rate>muuntonopeus</conversion_rate>
         <conversion_selector_description>Vierailija siirtyy sivulle</conversion_selector_description>
         <conversions>muuntoa</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B / Haastaja</content_challenger_header>
         <content_control_header>A / Kontrolli</content_control_header>
         <content_winning_tooltip>Tämä versio toimii paremmin</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>muuntonopeus</conversion_rate>
         <conversions>muuntoa</conversions>
         <days_divider> päivä(ä) / </days_divider>

@@ -13,6 +13,7 @@
       </archiveview>
       <detailsview>
         <content_challenger_header path="/abtesting/detailsview/content_challenger_header/">B / Challenger</content_challenger_header>
+        <conversion_header path="/abtesting/detailsview/conversion_header/">Conversion goal(s)</conversion_header>
       </detailsview>
       <pickwinnerview>
         <content_challenger_header path="/abtesting/pickwinnerview/content_challenger_header/">B / Challenger</content_challenger_header>

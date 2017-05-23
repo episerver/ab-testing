@@ -79,7 +79,7 @@
         <content_chosen>, y el contenido se ha elegido para su publicación</content_chosen>
         <content_control_header>A / Control</content_control_header>
         <content_selected>Esta versión ha sido elegida como la ganadora</content_selected>
-        <conversion_header>Objetivo de conversión</conversion_header>
+        <conversion_header>Objetivo de conversión(s)</conversion_header>
         <conversion_rate>tasa de conversión</conversion_rate>
         <conversion_selector_description>El visitante entra en la página</conversion_selector_description>
         <conversions>conversiones</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B / Contendiente</content_challenger_header>
         <content_control_header>A / Control</content_control_header>
         <content_winning_tooltip>Esta versión funciona mejor</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>tasa de conversión</conversion_rate>
         <conversions>conversiones</conversions>
         <days_divider> día(s) / </days_divider>

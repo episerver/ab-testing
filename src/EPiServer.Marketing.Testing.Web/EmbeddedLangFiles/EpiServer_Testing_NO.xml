@@ -79,7 +79,7 @@
         <content_chosen>, og innhold har blitt valgt til publisering</content_chosen>
         <content_control_header>A/kontroll</content_control_header>
         <content_selected>Denne versjonen ble valgt som vinner</content_selected>
-        <conversion_header>Konverteringsmål</conversion_header>
+        <conversion_header>Konverteringsmål(s)</conversion_header>
         <conversion_rate>konverteringsrate</conversion_rate>
         <conversion_selector_description>Gjest navigerer til side</conversion_selector_description>
         <conversions>konverteringer</conversions>
@@ -123,6 +123,7 @@
         <content_challenger_header>B/utfordrer</content_challenger_header>
         <content_control_header>A/kontroll</content_control_header>
         <content_winning_tooltip>Denne versjonen gir bedre resultater</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>konverteringsrate</conversion_rate>
         <conversions>konverteringer</conversions>
         <days_divider> dag(er) / </days_divider>
