@@ -8,6 +8,7 @@
     font-weight: bold;
     display: block;
     vertical-align: middle;
+    float:right;
 }
 
 .epi-weightSelector-kpiweight {
