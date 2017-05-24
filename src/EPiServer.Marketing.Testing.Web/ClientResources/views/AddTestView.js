@@ -506,6 +506,8 @@
                 } else {
                     this.startDatePicker.reset();
                     dateSelector.style.visibility = "hidden";
+                    this.startDatePicker.reset();
+                    this._setError(null, dom.byId("datePickerErrorIcon"), dom.byId("datePickerErrorText"))
                 }
             },
 
