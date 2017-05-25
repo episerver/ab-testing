@@ -10,6 +10,8 @@ using System;
 using System.Net;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using Xunit;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -17,12 +19,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
+        Mock<IEpiserverHelper> _episerverHelper = new Mock<IEpiserverHelper>();
+
         Mock<ILogger> _logger = new Mock<ILogger>();
 
         private ABTestStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
+            _locator.Setup(sl => sl.GetInstance<IEpiserverHelper>()).Returns(_episerverHelper.Object);
 
             ABTestStore testStore = new ABTestStore(_locator.Object);
             return testStore;
@@ -111,7 +116,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void Post_Returns_Valid_Response()
+        public void Post_Returns_Valid_Response_WithValidCultureName()
         {
             var testClass = GetUnitUnderTest();
 
@@ -119,7 +124,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid returnGuid = Guid.NewGuid();
 
             _webRepo.Setup(m => m.CreateMarketingTest(It.Is<TestingStoreModel>(arg => arg.Equals(testData)))).Returns(returnGuid);
+            _episerverHelper.Setup(m => m.GetContentCultureinfo()).Returns(new System.Globalization.CultureInfo("zh-CHT"));
+            RestStatusCodeResult result = testClass.Post(testData) as RestStatusCodeResult;
+            // soft type cast will make result null if its not a RestStatusCodeResult
+            Assert.True(result != null, "Expected a RestStatusCodeResult indicating success.");
+            // make sure return status code is correct.
+            Assert.True(result.StatusCode == (int)HttpStatusCode.Created, "Expected Created status code but got something else.");
+        }
 
+        [Fact]
+        public void Post_Returns_Valid_Response_WithUnspecifiedCulture()
+        {
+            var testClass = GetUnitUnderTest();
+
+            TestingStoreModel testData = new TestingStoreModel();
+            Guid returnGuid = Guid.NewGuid();
+
+            _webRepo.Setup(m => m.CreateMarketingTest(It.Is<TestingStoreModel>(arg => arg.Equals(testData)))).Returns(returnGuid);
+            _episerverHelper.Setup(m => m.GetContentCultureinfo()).Returns((CultureInfo)null);
             RestStatusCodeResult result = testClass.Post(testData) as RestStatusCodeResult;
             // soft type cast will make result null if its not a RestStatusCodeResult
             Assert.True(result != null, "Expected a RestStatusCodeResult indicating success.");

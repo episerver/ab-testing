@@ -155,6 +155,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
 
+            // get the name of the culture for the current loaded content. If none exists or not available we set it to en empty string.
+            var contentCultureName = testData.ContentCulture != null ? testData.ContentCulture.Name : string.Empty;
+            
             var kpiData = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(testData.KpiId);
             var kpis = kpiData.Select(kpi => _kpiManager.Get(kpi.Key)).ToList();
 
@@ -173,6 +176,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var test = new ABTest
             {
                 OriginalItemId = testData.TestContentId,
+                ContentLanguage = contentCultureName,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
