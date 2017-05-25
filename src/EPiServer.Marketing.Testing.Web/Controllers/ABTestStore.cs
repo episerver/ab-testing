@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Get(string id)
         {
             ActionResult result;
-            CultureInfo currentCultureInfo = ContentLanguage.PreferredCulture;
+            CultureInfo currentCultureInfo = _episerverHelper.GetContentCultureinfo();
             try
             {
                 var cGuid = Guid.Parse(id);
