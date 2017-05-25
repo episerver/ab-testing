@@ -77,6 +77,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
         }
 
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture)
+        {
+            return _testManager.GetActiveTestsByOriginalItemId(originalItemId, contentCulture);
+        }
+
         public IMarketingTest GetTestById(Guid testGuid)
         {
             return _testManager.Get(testGuid);

@@ -22,6 +22,8 @@ using EPiServer.Marketing.KPI.Manager;
 using Newtonsoft.Json;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Globalization;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -37,6 +39,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Used to keep track of how many times for the same service/event we add the proxy event handler
         private readonly IReferenceCounter _ReferenceCounter = new ReferenceCounter();
         private IHttpContextHelper _httpContextHelper;
+        private IEpiserverHelper _episerverHelper;
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -55,7 +58,7 @@ namespace EPiServer.Marketing.Testing.Web
             _httpContextHelper = new HttpContextHelper();
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
-
+            _episerverHelper = _serviceLocator.GetInstance<IEpiserverHelper>();
             // Setup our content events
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;
@@ -73,7 +76,8 @@ namespace EPiServer.Marketing.Testing.Web
             _testDataCookieHelper = serviceLocator.GetInstance<ITestDataCookieHelper>();
             _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
             _logger = serviceLocator.GetInstance<ILogger>();
-            _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
             _httpContextHelper = httpContextHelper;
             _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
             IReferenceCounter rc = serviceLocator.GetInstance<IReferenceCounter>();
@@ -172,6 +176,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 Boolean modified = false;
                 IList<IContent> childList = new List<IContent>();
+                CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
 
                 EvaluateCookies();
 
@@ -183,7 +188,7 @@ namespace EPiServer.Marketing.Testing.Web
                     try
                     {
                         // get the test from the cache
-                        var activeTest = _testRepo.GetActiveTestsByOriginalItemId(content.ContentGuid).FirstOrDefault();
+                        var activeTest = _testRepo.GetActiveTestsByOriginalItemId(content.ContentGuid, currentContentCulture).FirstOrDefault();
                         if (activeTest != null)
                         {
                             var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
@@ -236,10 +241,11 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 try
                 {
+                    CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
                     EvaluateCookies();
 
                     // get the test from the cache
-                    var activeTest = _testRepo.GetActiveTestsByOriginalItemId(e.Content.ContentGuid).FirstOrDefault();
+                    var activeTest = _testRepo.GetActiveTestsByOriginalItemId(e.Content.ContentGuid, currentContentCulture).FirstOrDefault();
                     if (activeTest != null)
                     {
                         var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());

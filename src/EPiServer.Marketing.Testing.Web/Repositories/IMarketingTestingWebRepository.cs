@@ -6,6 +6,7 @@ using EPiServer.Core;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -13,6 +14,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         IMarketingTest GetTestById(Guid testGuid);
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
+        List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo currentCulture);
         List<IMarketingTest> GetTestList(TestCriteria criteria);
         Guid CreateMarketingTest(TestingStoreModel testData);
         void DeleteMarketingTest(Guid testGuid);
