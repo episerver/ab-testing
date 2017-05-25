@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.Exceptions;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -123,6 +124,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             var cachedTests = ActiveCachedTests;
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
+
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId,CultureInfo contentCulture)
+        {
+            var cachedTests = ActiveCachedTests;
+            return cachedTests.Where(test => test.OriginalItemId == originalItemId && test.ContentLanguage == contentCulture.Name).ToList();
+        }
+
 
         /// <inheritdoc />
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)

@@ -6,6 +6,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -28,6 +29,17 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="originalItemId">ID of the item under test.</param>
         /// <returns>List of tests.</returns>
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
+
+
+        /// <summary>
+        /// Retrieves all active tests that have the supplied OriginalItemId and ContentCulture name. The associated data for each
+        /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
+        /// </summary>
+        /// <param name="originalItemId">ID of the item under test.</param>
+        /// <param name="contentCulture">Content Culture of the current loaded content</param>
+        /// <returns></returns>
+        List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture);
+
 
         /// <summary>
         /// Retrieves all tests, regardless of test state, that have the supplied OriginalItemId.
