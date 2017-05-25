@@ -12,7 +12,6 @@ using EPiServer.ServiceLocation;
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     [ServiceConfiguration(ServiceType = typeof(IEpiserverHelper), Lifecycle = ServiceInstanceScope.Singleton)]
-
     internal class EpiserverHelper : IEpiserverHelper
     {
         public string GetRootPath()
