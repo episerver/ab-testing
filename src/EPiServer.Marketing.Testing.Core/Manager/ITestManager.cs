@@ -40,7 +40,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <returns></returns>
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture);
 
-
         /// <summary>
         /// Retrieves all tests, regardless of test state, that have the supplied OriginalItemId.
         /// </summary>

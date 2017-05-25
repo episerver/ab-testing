@@ -131,7 +131,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return cachedTests.Where(test => test.OriginalItemId == originalItemId && test.ContentLanguage == contentCulture.Name).ToList();
         }
 
-
         /// <inheritdoc />
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
