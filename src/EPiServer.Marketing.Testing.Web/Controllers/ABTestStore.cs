@@ -10,6 +10,7 @@ using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Globalization;
 using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -48,6 +49,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Get(string id)
         {
             ActionResult result;
+            CultureInfo currentCultureInfo = ContentLanguage.PreferredCulture;
             try
             {
                 var cGuid = Guid.Parse(id);
