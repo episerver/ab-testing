@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Models
  {
@@ -33,6 +34,8 @@ namespace EPiServer.Marketing.Testing.Web.Models
         public double ConfidenceLevel { get; set; }
 
         public bool AutoPublishWinner { get; set; }
+
+        public CultureInfo ContentCulture { get; set; }
 
     }
 }

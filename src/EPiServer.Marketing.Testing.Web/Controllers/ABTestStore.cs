@@ -8,6 +8,8 @@ using EPiServer.Shell.Services.Rest;
 using System.Net;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Globalization;
+using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -19,11 +21,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         private IMarketingTestingWebRepository _webRepo;
         private ILogger _logger;
+        private IEpiserverHelper _episerverHelper;
 
         [ExcludeFromCodeCoverage]
         public ABTestStore()
         {
             _webRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             _logger = LogManager.GetLogger();
         }
 
@@ -31,6 +35,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         internal ABTestStore(IServiceLocator serviceLocator)
         {
             _webRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
             _logger = serviceLocator.GetInstance<ILogger>();
         }
 
@@ -92,6 +97,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Post(TestingStoreModel testData)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            testData.ContentCulture = _episerverHelper.GetContentCultureinfo();
 
             try
             {
