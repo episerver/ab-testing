@@ -184,6 +184,15 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
                 if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
+                     if (data.Get("resultValue") != null)
+                    {
+                        var saveResult = SaveKpiResult(data);
+                        if(!saveResult.IsSuccessStatusCode)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, saveResult.Content.ReadAsAsync<HttpError>().Result);                            
+                        }
+                    }
+
                     // update cookie dectioary so we can handle mulitple kpi conversions
                     testCookie.KpiConversionDictionary.Remove(kpiId);
                     testCookie.KpiConversionDictionary.Add(kpiId, true);
@@ -193,15 +202,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                     // only update cookie if all kpi's have converted
                     testCookie.Converted = testCookie.KpiConversionDictionary.All(x => x.Value);
-                    cookieHelper.UpdateTestDataCookie(testCookie);
-                    if (data.Get("resultValue") != null)
-                    {
-                        var saveResult = SaveKpiResult(data);
-                        if(!saveResult.IsSuccessStatusCode)
-                        {
-                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, saveResult.Content.ReadAsAsync<HttpError>().Result);                            
-                        }
-                    }
+                    cookieHelper.UpdateTestDataCookie(testCookie);                   
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
             }
