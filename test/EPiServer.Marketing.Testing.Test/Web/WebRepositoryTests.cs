@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Messaging;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -161,6 +162,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aRepo = GetUnitUnderTest();
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active } });
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
+            Assert.True(aReturnValue != null);
+        }
+
+        [Fact]
+        public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content_and_language()
+        {
+            var aRepo = GetUnitUnderTest();
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active, ContentLanguage="en-GB" } });
+            var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
             Assert.True(aReturnValue != null);
         }
 

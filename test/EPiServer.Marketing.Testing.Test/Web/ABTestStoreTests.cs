@@ -40,17 +40,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
             Guid testGuid = Guid.NewGuid();
 
+            CultureInfo currentCulture = new CultureInfo("en-GB");
+
             ABTest test = new ABTest()
             {
-                Id = testGuid
+                Id = testGuid,
+                ContentLanguage = "en-GB"
             };
 
             _webRepo.Setup(m => m.GetActiveTestForContent(
-                It.Is<Guid>(arg => arg.Equals(contentGuid)))).Returns(test);
-
+               It.Is<Guid>(arg=>arg.Equals(contentGuid)), It.Is<CultureInfo>(arg=>arg.Equals(currentCulture)))).Returns(test);
+            _episerverHelper.Setup(call => call.GetContentCultureinfo()).Returns(currentCulture);
             RestResult result = testClass.Get(contentGuid.ToString()) as RestResult;
 
-            _webRepo.Verify(m => m.GetActiveTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid))),
+            _webRepo.Verify(m => m.GetActiveTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)), It.Is<CultureInfo>(arg => arg.Equals(currentCulture))),
                 "Guid passed to web repo did not match what was passed in to ABTestStore");
 
             Assert.True(result.Data is IMarketingTest, "Data in result is not IMarketingTest instance.");
@@ -64,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
 
             _webRepo.Setup(m => m.GetActiveTestForContent(
-                It.IsAny<Guid>())).Throws(new NotImplementedException());
+                It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Throws(new NotImplementedException());
 
             RestStatusCodeResult result = testClass.Get(contentGuid.ToString()) as RestStatusCodeResult;
 

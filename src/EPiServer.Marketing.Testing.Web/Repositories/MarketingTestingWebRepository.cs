@@ -72,6 +72,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return aTest;
         }
 
+        public IMarketingTest GetActiveTestForContent(Guid aContentGuid, CultureInfo contentCulture)
+        {
+            var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived && abTest.ContentLanguage == contentCulture.Name);
+
+            if (aTest == null)
+                aTest = new ABTest();
+
+            return aTest;
+        }
+
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
