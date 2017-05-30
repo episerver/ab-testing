@@ -196,7 +196,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     cookieHelper.UpdateTestDataCookie(testCookie);
                     if (data.Get("resultValue") != null)
                     {
-                        SaveKpiResult(data);
+                        var saveResult = SaveKpiResult(data);
+                        if(!saveResult.IsSuccessStatusCode)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, saveResult.Content.ReadAsAsync<HttpError>().Result);                            
+                        }
                     }
                 }
                 return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
@@ -223,40 +227,45 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var itemVersion = data.Get("itemVersion");
             var kpiId = data.Get("kpiId");
             var value = data.Get("resultValue");
-            
+
             var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
 
             IKeyResult keyResult;
             KeyResultType resultType;
-
-            if (kpi.KpiResultType == "KpiFinancialResult")
-            {
-                resultType = KeyResultType.Financial;
-                keyResult = new KeyFinancialResult()
+            try {
+                if (kpi.KpiResultType == "KpiFinancialResult")
                 {
-                    KpiId = Guid.Parse(kpiId),
-                    Total = Convert.ToDecimal(value)
-                };
-            }
-            else
-            {
-                resultType = KeyResultType.Value;
-
-                keyResult = new KeyValueResult()
+                    resultType = KeyResultType.Financial;
+                    keyResult = new KeyFinancialResult()
+                    {
+                        KpiId = Guid.Parse(kpiId),
+                        Total = Convert.ToDecimal(value)
+                    };
+                }
+                else
                 {
-                    KpiId = Guid.Parse(kpiId),
-                    Value = Convert.ToDouble(value)
-                };
-            }
+                    resultType = KeyResultType.Value;
 
-            if (!string.IsNullOrWhiteSpace(testId))
+                    keyResult = new KeyValueResult()
+                    {
+                        KpiId = Guid.Parse(kpiId),
+                        Value = Convert.ToDouble(value)
+                    };
+                }
+
+                if (!string.IsNullOrWhiteSpace(testId))
+                {
+                    _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, "KpiResult Saved");
+                }
+                else
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
+            }
+            catch (Exception ex)
             {
-                _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
-
-                return Request.CreateResponse(HttpStatusCode.OK, "KpiResult Saved");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
             }
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
-        }
+            }
     }    
 }
