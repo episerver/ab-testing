@@ -81,16 +81,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
             Guid testGuid = Guid.NewGuid();
 
+            CultureInfo currentCulture = new CultureInfo("en-GB");
+
             ABTest test = new ABTest()
             {
-                Id = testGuid
+                Id = testGuid,
+                ContentLanguage = "en-GB"
             };
 
-            _webRepo.Setup(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)))).Verifiable();
+            _webRepo.Setup(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)), It.Is<CultureInfo>(arg => arg.Equals(currentCulture)))).Verifiable();
+            _episerverHelper.Setup(call => call.GetContentCultureinfo()).Returns(currentCulture);
 
             RestStatusCodeResult result = testClass.Delete(contentGuid.ToString()) as RestStatusCodeResult;
 
-            _webRepo.Verify(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid))),
+            _webRepo.Verify(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)), It.Is<CultureInfo>(arg => arg.Equals(currentCulture))),
                 "Guid passed to web repo did not match what was passed in to ABTestStore for Delete");
 
             // soft type cast will make result null if its not a RestStatusCodeResult
@@ -105,7 +109,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testClass = GetUnitUnderTest();
             Guid contentGuid = Guid.NewGuid();
 
-            _webRepo.Setup(m => m.DeleteTestForContent(It.IsAny<Guid>())).Throws(new NotImplementedException());
+            _webRepo.Setup(m => m.DeleteTestForContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Throws(new NotImplementedException());
 
             RestStatusCodeResult result = testClass.Delete(contentGuid.ToString()) as RestStatusCodeResult;
 
