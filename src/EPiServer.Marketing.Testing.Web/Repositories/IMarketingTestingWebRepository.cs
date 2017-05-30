@@ -25,6 +25,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         IMarketingTest GetActiveTestForContent(Guid contentGuid);
         IMarketingTest GetActiveTestForContent(Guid contentGuid, CultureInfo currentCulture);
         void DeleteTestForContent(Guid contentGuid);
+        void DeleteTestForContent(Guid contentGuid, CultureInfo currentCulture);
         string PublishWinningVariant(TestResultStoreModel testResult);
         Variant ReturnLandingPage(Guid testId);
         IContent GetVariantContent(Guid contentGuid);

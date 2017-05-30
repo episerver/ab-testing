@@ -78,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             try
             {
                 var cGuid = Guid.Parse(id);
-                _webRepo.DeleteTestForContent(cGuid);
+                _webRepo.DeleteTestForContent(cGuid, _episerverHelper.GetContentCultureinfo());
                 result = new RestStatusCodeResult((int)HttpStatusCode.OK);
             }
             catch(Exception e)

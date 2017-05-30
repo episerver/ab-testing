@@ -112,6 +112,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
         }
 
+        public void DeleteTestForContent(Guid aContentGuid, CultureInfo cultureInfo)
+        {
+            var testList = _testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived && abtest.ContentLanguage == cultureInfo.Name);
+
+            foreach (var test in testList)
+            {
+                _testManager.Delete(test.Id);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
