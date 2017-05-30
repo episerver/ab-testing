@@ -14,22 +14,28 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     {
         private IMarketingTestingWebRepository _testRepo;
         private IHttpContextHelper _httpContextHelper;
+        private IEpiserverHelper _episerverHelper;
+
         internal readonly string COOKIE_PREFIX = "EPI-MAR-";
+        internal readonly string COOKIE_DELIMETER = ":";
+
 
         [ExcludeFromCodeCoverage]
         public TestDataCookieHelper()
         {
             _testRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             _httpContextHelper = new HttpContextHelper();
         }
 
         /// <summary>
         /// unit tests should use this contructor and add needed services to the service locator as needed
         /// </summary>
-        internal TestDataCookieHelper(IMarketingTestingWebRepository testRepo, IHttpContextHelper contextHelper)
+        internal TestDataCookieHelper(IMarketingTestingWebRepository testRepo, IHttpContextHelper contextHelper, IEpiserverHelper epiHelper)
         {
             _testRepo = testRepo;
             _httpContextHelper = contextHelper;
+            _episerverHelper = epiHelper;
         }
 
         /// <summary>
@@ -59,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
             var aTest = _testRepo.GetTestById(testData.TestId);
-            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString())
+            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo())
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
@@ -86,7 +92,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void UpdateTestDataCookie(TestDataCookie testData)
         {
-            _httpContextHelper.RemoveCookie(COOKIE_PREFIX + testData.TestContentId.ToString());
+            _httpContextHelper.RemoveCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo());
             SaveTestDataToCookie(testData);
         }
 
@@ -100,13 +106,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var retCookie = new TestDataCookie();
             HttpCookie cookie;
             
-            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId))
+            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo()))
             {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId);
+                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo());
             }
             else
             {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId);
+                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo());
             }
            
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
@@ -143,9 +149,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void ExpireTestDataCookie(TestDataCookie testData)
         {
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString();
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo();
             _httpContextHelper.RemoveCookie(cookieKey);
-            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId);
+            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo());
             expiredCookie.HttpOnly = true;
             expiredCookie.Expires = DateTime.Now.AddDays(-1d);
             _httpContextHelper.AddCookie(expiredCookie);
@@ -158,9 +164,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public TestDataCookie ResetTestDataCookie(TestDataCookie testData)
         {
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString();
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo();
             _httpContextHelper.RemoveCookie(cookieKey);
-            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId) {HttpOnly = true};
+            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo()) {HttpOnly = true};
             _httpContextHelper.AddCookie(resetCookie);
             return new TestDataCookie();
         }

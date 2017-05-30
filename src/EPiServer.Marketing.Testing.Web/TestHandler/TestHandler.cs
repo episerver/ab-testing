@@ -9,20 +9,14 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
-using System.Web;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
-using System.IO;
-using System.Text;
-using EPiServer.Marketing.KPI.Manager;
-using Newtonsoft.Json;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
-using EPiServer.Globalization;
 using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web
