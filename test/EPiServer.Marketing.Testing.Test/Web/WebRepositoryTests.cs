@@ -3,6 +3,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Helpers;
@@ -28,6 +29,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
         private Mock<IKpiManager> _mockKpiManager;
         private Mock<IHttpContextHelper> _mockHttpHelper;
+        private Mock<IEpiserverHelper> _mockEpiserverHelper;
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -58,6 +60,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockHttpHelper = new Mock<IHttpContextHelper>();
             _mockServiceLocator.Setup(call => call.GetInstance<IHttpContextHelper>())
                 .Returns(_mockHttpHelper.Object);
+
+            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
+            _mockServiceLocator.Setup(call => call.GetInstance<IEpiserverHelper>())
+                .Returns(_mockEpiserverHelper.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
@@ -179,6 +185,23 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid());
+
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+        }
+
+        [Fact]
+        public void DeleteTestForContent_calls_delete_for_every_test_associated_with_the_content_guid_and_matching_culture()
+        {
+            var aRepo = GetUnitUnderTest();
+            //_mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            var testList = new List<IMarketingTest>();
+
+            testList.Add(new ABTest() { Id = Guid.NewGuid(), ContentLanguage = "en-GB" });
+            testList.Add(new ABTest() { Id = Guid.NewGuid(), ContentLanguage = "en-GB" });
+            testList.Add(new ABTest() { Id = Guid.NewGuid(), ContentLanguage = "en-GB" });
+
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            aRepo.DeleteTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
 
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
         }
