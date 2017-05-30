@@ -18,7 +18,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         List<IMarketingTest> GetTestList(TestCriteria criteria);
         Guid CreateMarketingTest(TestingStoreModel testData);
         void DeleteMarketingTest(Guid testGuid);
-        //void DeleteMarketingTest(Guid testGuid, CultureInfo currentCulture);
         void StartMarketingTest(Guid testGuid);
         void StopMarketingTest(Guid testGuid);
         void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId);
