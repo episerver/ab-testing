@@ -53,7 +53,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             try
             {
                 var cGuid = Guid.Parse(id);
-                var aTest = _webRepo.GetActiveTestForContent(cGuid);
+                var aTest = _webRepo.GetActiveTestForContent(cGuid, currentCultureInfo);
                 result = Rest(aTest);
             }
             catch(Exception e)

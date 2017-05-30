@@ -23,6 +23,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId);
         Guid SaveMarketingTest(IMarketingTest testData);
         IMarketingTest GetActiveTestForContent(Guid contentGuid);
+        IMarketingTest GetActiveTestForContent(Guid contentGuid, CultureInfo currentCulture);
         void DeleteTestForContent(Guid contentGuid);
         string PublishWinningVariant(TestResultStoreModel testResult);
         Variant ReturnLandingPage(Guid testId);
