@@ -248,42 +248,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
-
-        [Fact]
-        public void UpdateClientConversion_Returns_OK_Request()
-        {
-            var pairs = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
-                new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString())
-            };
-
-            var data = new FormDataCollection(pairs);
-
-            var controller = GetUnitUnderTest();
-
-            var result = controller.UpdateClientConversion(data);
-
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
-        }
-
-        [Fact]
-        public void UpdateClientConversion_Returns_Bad_Request()
-        {
-            var pairs = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("testId", "")
-            };
-
-            var data = new FormDataCollection(pairs);
-
-            var controller = GetUnitUnderTest();
-
-            var result = controller.UpdateClientConversion(data);
-
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
-        }
     }
+
     class testFinancialKpi : IKpi
     {
         public DateTime CreatedDate { get; set; }
