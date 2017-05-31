@@ -105,7 +105,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var retCookie = new TestDataCookie();
             HttpCookie cookie;
-            var cultureName = _episerverHelper.GetContentCultureinfo().Name;
+            var currentCulture = _episerverHelper.GetContentCultureinfo();
+            var cultureName = currentCulture.Name;
 
             if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName))
             {
@@ -129,7 +130,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.Converted = bool.TryParse(cookie["Converted"], out outval) ? outval : false;
                 retCookie.AlwaysEval = bool.TryParse(cookie["AlwaysEval"], out outval) ? outval : false;
 
-                var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
+                var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId, currentCulture).FirstOrDefault();
                 if (test != null)
                 {
                     foreach (var kpi in test.KpiInstances)
