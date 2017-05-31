@@ -5,6 +5,8 @@ using EPiServer.Marketing.Testing.Web.Evaluator;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using Moq;
 using Xunit;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -12,13 +14,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         private Mock<IMarketingTestingWebRepository> _mockWebRepo;
         private Mock<IContentRepository> _mockContentRepo;
+        private Mock<IEpiserverHelper> _mockEpiHelper;
         
         private ABTestLockEvaluator GetUnitUnderTest()
         {
             _mockWebRepo = new Mock<IMarketingTestingWebRepository>();
             _mockContentRepo = new Mock<IContentRepository>();
+            _mockEpiHelper = new Mock<IEpiserverHelper>();
 
-            return new ABTestLockEvaluator(_mockWebRepo.Object, _mockContentRepo.Object);
+            return new ABTestLockEvaluator(_mockWebRepo.Object, _mockContentRepo.Object, _mockEpiHelper.Object);
         }
 
         [Fact]
@@ -29,10 +33,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var mockTest = new ABTest() {
                 Id = Guid.NewGuid(),
                 Owner = "Some Guy",
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                ContentLanguage = "en-GB"
             };
+
+            _mockEpiHelper.Setup(epiHelper => epiHelper.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
             _mockContentRepo.Setup(contentRepo => contentRepo.Get<IContent>(It.IsAny<ContentReference>())).Returns(testContent);
-            _mockWebRepo.Setup(webRepo => webRepo.GetActiveTestForContent(It.IsAny<Guid>())).Returns(mockTest);
+            _mockWebRepo.Setup(webRepo => webRepo.GetActiveTestForContent(It.IsAny<Guid>(),It.IsAny<CultureInfo>())).Returns(mockTest);
 
             var retLock = aAbLockEvaluator.IsLocked(new ContentReference() { ID = 1, WorkID = 1 });
 
