@@ -301,6 +301,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
+            _epiHelper.Setup(call=>call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
 
             mockTestDataCookiehelper.SaveTestDataToCookie(tdCookie);
 
@@ -320,6 +321,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var cookieKey = kpiId.ToString() + "-Flag";
 
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
+            _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
 
             var tdCookie = new TestDataCookie()
             {
@@ -365,9 +367,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             };
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
+            _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
 
             mockTestDataCookiehelper.UpdateTestDataCookie(updatedCookie);
-            var cookieKey = mockTestDataCookiehelper.COOKIE_PREFIX + originalCookie.TestContentId.ToString();
+            var cookieKey = mockTestDataCookiehelper.COOKIE_PREFIX + originalCookie.TestContentId.ToString() + mockTestDataCookiehelper.COOKIE_DELIMETER + "en-GB";
             //Removed the old cookie
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(cid => cid == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == updatedCookie.TestId)));
@@ -435,7 +438,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 TestContentId = Guid.NewGuid()
             };
 
-            var aCookieName = cookieHelper.COOKIE_PREFIX + aCookieData.TestContentId.ToString();
+            var aCookieName = cookieHelper.COOKIE_PREFIX + aCookieData.TestContentId.ToString() + cookieHelper.COOKIE_DELIMETER + "en-GB";
+            _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
             var result = cookieHelper.ResetTestDataCookie(aCookieData);
 
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(c => c == aCookieName)), Times.Once(), "did not remove the old cookie");
