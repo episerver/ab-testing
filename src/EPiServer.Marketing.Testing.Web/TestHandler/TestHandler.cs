@@ -9,20 +9,14 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Logging;
-using System.Web;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Web.Routing;
-using System.IO;
-using System.Text;
-using EPiServer.Marketing.KPI.Manager;
-using Newtonsoft.Json;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
-using EPiServer.Globalization;
 using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web
@@ -134,7 +128,7 @@ namespace EPiServer.Marketing.Testing.Web
         internal int CheckForActiveTests(Guid contentGuid, int contentVersion)
         {
             var testsDeleted = 0;
-            var tests = _testRepo.GetActiveTestsByOriginalItemId(contentGuid);
+            var tests = _testRepo.GetActiveTestsByOriginalItemId(contentGuid, _episerverHelper.GetContentCultureinfo());
 
             // no tests found for the deleted content
             if (tests.IsNullOrEmpty())
@@ -178,7 +172,7 @@ namespace EPiServer.Marketing.Testing.Web
                 IList<IContent> childList = new List<IContent>();
                 CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
 
-                EvaluateCookies();
+                EvaluateCookies(currentContentCulture);
 
                 // its possible that something in the children changed, so we need to replace it with a variant 
                 // if its in test. This method gets called once after the main page is loaded. (i.e. this is how
@@ -242,7 +236,7 @@ namespace EPiServer.Marketing.Testing.Web
                 try
                 {
                     CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
-                    EvaluateCookies();
+                    EvaluateCookies(currentContentCulture);
 
                     // get the test from the cache
                     var activeTest = _testRepo.GetActiveTestsByOriginalItemId(e.Content.ContentGuid, currentContentCulture).FirstOrDefault();
@@ -352,7 +346,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// Analyzes existing cookies and expires / updates any depending on what tests are in the cache.
         /// It is assumed that only tests in the cache are active.
         /// </summary>
-        private void EvaluateCookies()
+        private void EvaluateCookies(CultureInfo currentContentCulture)
         {
             if (!DbReadWrite())
             {
@@ -362,7 +356,7 @@ namespace EPiServer.Marketing.Testing.Web
             var testCookieList = _testDataCookieHelper.GetTestDataFromCookies();
             foreach (var testCookie in testCookieList)
             {
-                var activeTest = _testRepo.GetActiveTestsByOriginalItemId(testCookie.TestContentId).FirstOrDefault();
+                var activeTest = _testRepo.GetActiveTestsByOriginalItemId(testCookie.TestContentId, currentContentCulture).FirstOrDefault();
                 if (activeTest == null)
                 {
                     // if cookie exists but there is no associated test, expire it 
@@ -424,7 +418,7 @@ namespace EPiServer.Marketing.Testing.Web
                     continue;
                 }
 
-                var test = _testRepo.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
+                var test = _testRepo.GetActiveTestsByOriginalItemId(tdcookie.TestContentId,_episerverHelper.GetContentCultureinfo()).FirstOrDefault();
                 if (test == null)
                 {
                     continue;

@@ -92,13 +92,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockEpiserverHelper = new Mock<IEpiserverHelper>();
 
-            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
-                .Returns(new List<IMarketingTest>()
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(),It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>()
                 {
                     new ABTest()
                     {
                         OriginalItemId = _originalItemId,
                         State = TestState.Active,
+                        ContentLanguage = "en-GB",
                         Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } }
                     }
                 });
@@ -199,7 +199,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testHandler = GetUnitUnderTest();
 
-            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(),It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>());
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie { Converted = false, ShowVariant = true, Viewed = false });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
@@ -208,6 +208,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContextHelper.Setup(call => call.GetCurrentPage()).Returns(new BasicContent());
             _mockContextHelper.Setup(call => call.IsRequestedContent(It.IsAny<IContent>()))
                 .Returns(true);
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
 
             ContentEventArgs args = new ContentEventArgs(content);
             testHandler.LoadedContent(new object(), args);
@@ -569,14 +570,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testHandler = GetUnitUnderTest();
 
-            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>()))
                 .Returns(new List<IMarketingTest>() { test });
             _mockMarketingTestingWebRepository.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(test);
             _mockMarketingTestingWebRepository.Setup(call => call.EvaluateKPIs(It.IsAny<List<IKpi>>(), It.IsAny<object>(), It.IsAny<EventArgs>()))
                 .Returns(new List<IKpiResult> { new KpiConversionResult() { HasConverted = true, KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
                 Content = content,
@@ -592,7 +593,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest();
-
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+        
             // find test for published page
             Assert.Equal(1, testHandler.CheckForActiveTests(_originalItemId, 0));
 
@@ -672,6 +674,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
+
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
 
             var t = new ContentReference(1, 3);
             var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent() });
