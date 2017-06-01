@@ -19,7 +19,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         internal readonly string COOKIE_PREFIX = "EPI-MAR-";
         internal readonly string COOKIE_DELIMETER = ":";
 
-
         [ExcludeFromCodeCoverage]
         public TestDataCookieHelper()
         {

@@ -594,8 +594,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testHandler = GetUnitUnderTest();
             _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
-            
-
+        
             // find test for published page
             Assert.Equal(1, testHandler.CheckForActiveTests(_originalItemId, 0));
 
