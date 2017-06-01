@@ -128,7 +128,7 @@ namespace EPiServer.Marketing.Testing.Web
         internal int CheckForActiveTests(Guid contentGuid, int contentVersion)
         {
             var testsDeleted = 0;
-            var tests = _testRepo.GetActiveTestsByOriginalItemId(contentGuid);
+            var tests = _testRepo.GetActiveTestsByOriginalItemId(contentGuid, _episerverHelper.GetContentCultureinfo());
 
             // no tests found for the deleted content
             if (tests.IsNullOrEmpty())
@@ -418,7 +418,7 @@ namespace EPiServer.Marketing.Testing.Web
                     continue;
                 }
 
-                var test = _testRepo.GetActiveTestsByOriginalItemId(tdcookie.TestContentId).FirstOrDefault();
+                var test = _testRepo.GetActiveTestsByOriginalItemId(tdcookie.TestContentId,_episerverHelper.GetContentCultureinfo()).FirstOrDefault();
                 if (test == null)
                 {
                     continue;

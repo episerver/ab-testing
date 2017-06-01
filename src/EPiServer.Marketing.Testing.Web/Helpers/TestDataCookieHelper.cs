@@ -188,13 +188,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var aResponseCookieKeys = _httpContextHelper.GetResponseCookieKeys();
             List<TestDataCookie> tdcList = (from name in aResponseCookieKeys
                                             where name.Contains(COOKIE_PREFIX)
-                                            select GetTestDataFromCookie(name.Substring(COOKIE_PREFIX.Length))).ToList();
+                                            select GetTestDataFromCookie(name.Split(':')[0].Substring(COOKIE_PREFIX.Length))).ToList();
 
             //Get cookie data from cookies not recently updated.
             tdcList.AddRange(from name in _httpContextHelper.GetRequestCookieKeys()
                              where name.Contains(COOKIE_PREFIX) &&
                              !aResponseCookieKeys.Contains(name)
-                             select GetTestDataFromCookie(name.Substring(COOKIE_PREFIX.Length)));
+                             select GetTestDataFromCookie(name.Split(':')[0].Substring(COOKIE_PREFIX.Length)));
 
             return tdcList;
         }
