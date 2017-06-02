@@ -98,6 +98,8 @@
 
             var registry = dependency.resolve("epi.storeregistry");
             this._contentStore = registry.get("epi.cms.contentdata");
+            this._abTestStore = this._abTestStore ||
+                dependency.resolve("epi.storeregistry").get("marketing.abarchives");
         },
 
         buildRendering: function () {
@@ -254,8 +256,13 @@
         _updateMenu: function (item) {
             this._deleteVersionCommand.set("model", item);
 
-            when(this._contentStore.get(item.contentLink), lang.hitch(this, function (content) {
+            when(this._abTestStore.get(item.contentLink), lang.hitch(this, function (content) {
+                var x = 1;
             }));
+            
+
+//            when(this._contentStore.get(item.contentLink), lang.hitch(this, function (content) {
+//            }));
         },
 
         _showNotificationMessage: function (notification) {
