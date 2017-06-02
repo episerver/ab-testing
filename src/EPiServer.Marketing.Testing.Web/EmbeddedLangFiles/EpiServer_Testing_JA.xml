@@ -17,7 +17,7 @@
         <confidence_level_description>信頼水準は、許容されるエラーの量を決定します。 高い割合は、テスト結果の精度に直接関係します。 これは、コントロールページおよびバリアントページ間の測定差が偶然 によるものでない (すなわち重要である) かどうかを示します。</confidence_level_description>
         <confidence_level_header>信頼水準</confidence_level_header>
         <control>A / コントロール</control>
-        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <conversion_description>デフォルトで、すべての目標の重要性は同じです。 各目標の個々の重要性を設定できます </conversion_description>
         <conversion_header>コンバージョン目標は何ですか?</conversion_header>
         <conversion_label>訪問者がページに移動します</conversion_label>
         <days_text> 日 (間)。</days_text>
@@ -26,23 +26,27 @@
         <duration_header>どのくらいの期間、A/Bテストを実施したいですか?</duration_header>
         <error_conversiongoal>A/Bテストを保存する前に、コンバージョン目標を選択する必要があります。</error_conversiongoal>
         <error_date_in_the_past>テストの開始日/時刻を過去にすることはできません。</error_date_in_the_past>
+        <error_duplicate_kpi_values>重複した目標は同じ値を共有できません</error_duplicate_kpi_values>
         <error_duration>期間は1から365までの有効な整数でなければなりません</error_duration>
         <error_invalid_date_time_value>入力された情報は、有効な日付/時刻値ではありません</error_invalid_date_time_value>
         <error_participation_percentage>参加割合は1から100の間でなければなりません</error_participation_percentage>
         <error_test_not_schedulded_or_started>はスケジュールされていません。テストのスケジュールを設定するには開始日/時刻エラーを解決してください</error_test_not_schedulded_or_started>
         <goals_default_text>例: 第一項目のコピーを微調整して「時間の問題」に直に対処することで、より多くの訪問者にこのebookをダウンロードしたいと思ってもらえます。</goals_default_text>
         <goals_header>このテストの全体的な目標は何ですか?</goals_header>
-        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
-        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
-        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <goals_selectlist_additional_kpi>別の目標を追加</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>目標を追加</goals_selectlist_default>
+        <goals_weight_description>ここでは、勝者を測定する時に、目標の1つが他よりもより重要かどうかを決めることができます。</goals_weight_description>
+        <goals_weight_equal_description>すべての目標に同じ重要度を与えた場合、すべての目標のコンバージョンは同じ方法で測定されます。</goals_weight_equal_description>
+        <goals_weight_heading>テスト目標の重要度のバランスをとる:</goals_weight_heading>
+        <goals_weight_higher_description>目標により高い重要度を与えた場合、その目標のコンバージョンは、設定が低い目標のコンバージョンよりも高くカウントされます。</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>はスケジュールされていません。今すぐ開始します</notscheduled_text>
         <participant_percentage_tip>参加率が高くなると、勝者の選出に十分な統計情報を収集するのに必要な時間が短縮されます。</participant_percentage_tip>
         <participation_header>何パーセントの訪問者がこのA/Bテストに参加する必要がありますか?</participation_header>
         <published_prefix>公開者名:</published_prefix>
-        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
+        <remove_kpi_tooltip>この目標を削除します</remove_kpi_tooltip>
         <schedule_header>A/Bテストをいつ開始しますか?</schedule_header>
         <schedule_selector_delay>後でスケジュール</schedule_selector_delay>
         <schedule_selector_start>今すぐ開始</schedule_selector_start>
@@ -53,7 +57,7 @@
         <test_description>コンテンツへの新規追加または変更が、実際にコンバージョン率を向上させるかどうか検証します。</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>結果が統計上重要である場合、テストの勝者を自動的に公開しますか?</autopublishwinner>
         <cancel>キャンセル</cancel>
         <confidencelevel>信頼水準:</confidencelevel>
         <description>これらの設定は、ABテストの作成時に使用されるデフォルト値です。</description>
@@ -75,7 +79,7 @@
         <content_chosen>、公開に向けたコンテンツが選択されました</content_chosen>
         <content_control_header>A / コントロール</content_control_header>
         <content_selected>このバージョンは勝者として選ばれました</content_selected>
-        <conversion_header>コンバージョン目標</conversion_header>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>コンバージョン率</conversion_rate>
         <conversion_selector_description>訪問者がページに移動します</conversion_selector_description>
         <conversions>コンバージョン</conversions>
@@ -84,12 +88,12 @@
         <draft_prefix>ドラフト - 作成者名: </draft_prefix>
         <from>開始:</from>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>詳細の非表示</hide_summary>
         <losing_version_label>バージョンで保存済み</losing_version_label>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>詳細の表示</show_summary>
         <started> 開始済み </started>
         <test_duration_header>A/Bテストの期間</test_duration_header>
         <test_percent_to_participations_divider> / 現在の参加者数は </test_percent_to_participations_divider>
@@ -103,12 +107,12 @@
         <winning_version_label>勝者 (公開済み)</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>このテストを中止しますか?</abort_confirmation_message>
         <label_text>A/Bテストをキャンセルしてページを編集</label_text>
         <tooltip_text>A/Bテストをキャンセルしてページを編集</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>このテストを中止しますか?</abort_confirmation_message>
         <advanced_options_confidence_level>信頼水準</advanced_options_confidence_level>
         <advanced_options_header>詳細オプション</advanced_options_header>
         <button_abort_option>A/Bテストを中断</button_abort_option>
@@ -119,6 +123,7 @@
         <content_challenger_header>B / チャレンジャー</content_challenger_header>
         <content_control_header>A / コントロール</content_control_header>
         <content_winning_tooltip>このバージョンの方がパフォーマンスに優れています</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>コンバージョン率</conversion_rate>
         <conversions>コンバージョン</conversions>
         <days_divider> 日 (間) / </days_divider>
@@ -126,11 +131,11 @@
         <description_heading>このテストの全体的目標</description_heading>
         <draft_prefix>ドラフト - 作成者名: </draft_prefix>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>詳細の非表示</hide_summary>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>詳細の表示</show_summary>
         <started> 開始済み </started>
         <test_duration_completed>期間満了後に完了</test_duration_completed>
         <test_duration_header>A/Bテストの期間</test_duration_header>
@@ -146,9 +151,9 @@
         <views>ビュー</views>
       </detailsview>
       <kpisummarywidget>
-        <conversions>Conversions</conversions>
-        <performance>Performance</performance>
-        <weight>Weight</weight>
+        <conversions>コンバージョン</conversions>
+        <performance>パフォーマンス</performance>
+        <weight>重量</weight>
       </kpisummarywidget>
       <notificationbar>
         <completed_test>A/Bテストはこのコンテンツのバージョンで完了しました。 </completed_test>
@@ -160,8 +165,8 @@
         <winner_link_tooltip>テストの詳細を表示して勝者を選出 </winner_link_tooltip>
       </notificationbar>
       <percentagetemplate>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <views>Views</views>
+        <conversion_rate>コンバージョン率</conversion_rate>
+        <views>表示画面</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>信頼水準</advanced_options_confidence_level>
@@ -183,14 +188,14 @@
           このテストは完了していませんが、勝者を選出できます。 勝者を選出するとテストはこれで終了し、選択されたコンテンツが公開されます。
         </early_pick_winner_message>
         <goal_not_specified>目標が指定されていません。</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>詳細の非表示</hide_summary>
         <percent_participation_header>このA/Bテストに参加している訪問者の割合</percent_participation_header>
         <pick_a_winner_text>勝者を選出してください!</pick_a_winner_text>
         <pick_winner_option_text>勝者を選出してください</pick_winner_option_text>
         <published_prefix>公開者名:</published_prefix>
         <remaining_increment>日間</remaining_increment>
         <result_is_not_significant>このテストの結果は重要ではありません。</result_is_not_significant>
-        <show_summary>Show Details</show_summary>
+        <show_summary>詳細の表示</show_summary>
         <started> 開始済み </started>
         <test_duration_completed>期間満了後に完了</test_duration_completed>
         <test_duration_header>テスト期間</test_duration_header>
@@ -213,14 +218,14 @@
         <message>開始 [{0}] 停止 [{1}] アクティブ [{2}] 非アクティブ [{3}] 完了 [{4}]</message>
       </scheduler_plugin>
       <summary_widget>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <conversions>Conversions</conversions>
-        <views>Views</views>
+        <conversion_rate>コンバージョン率</conversion_rate>
+        <conversions>コンバージョン</conversions>
+        <views>表示画面</views>
       </summary_widget>
       <tasks>
         <activetests>アクティブなA/Bテスト</activetests>
         <archivedtests>アーカイブ済みのA/Bテスト</archivedtests>
-        <category>A/B Tests</category>
+        <category>A/B テスト</category>
         <completedtests>完了したA/Bテスト</completedtests>
         <inactivetests>スケジュール済みのA/Bテスト</inactivetests>
       </tasks>

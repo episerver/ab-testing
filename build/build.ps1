@@ -44,9 +44,15 @@ if ($lastexitcode -eq 1) {
     exit $lastexitcode
 }
 
-# Get the latest msbuild version
-Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
-    $msbuild = "$_\bin\MSBuild.exe"
+# Get the latest msbuild version, check if vs2017 is installed as they moved the location of msbuild
+if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\*\MSBuild\15.0\Bin\") {
+	$msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\*\MSBuild\15.0\Bin\MSBuild.exe"
+}
+else
+{
+	Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
+		$msbuild = "$_\bin\MSBuild.exe"
+	}
 }
 
 # Build msbuild projects

@@ -28,6 +28,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         private IServiceLocator _serviceLocator;
         private IHttpContextHelper _httpContextHelper;
+        private IMarketingTestingWebRepository _webRepo;
+        private IKpiWebRepository _kpiWebRepo;
 
         [ExcludeFromCodeCoverage]
         public TestingController()
@@ -157,48 +159,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
 
                 mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId), sessionid);
 
-                return Request.CreateResponse(HttpStatusCode.OK,"Conversion Successful");
+                return Request.CreateResponse(HttpStatusCode.OK, "Conversion Successful");
             }
             else
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and VariantId are not available in the collection of parameters"));
-        }
-
-        /// <summary>
-        /// Used for updating client side KPIs.  Leverages UpdateConversion and modifies the cookie accordingly.
-        /// Post url: api/episerver/testing/updateconversion, data: { testId: testId, itemVersion: itemVersion, kpiId: kpiId },  contentType: 'application/x-www-form-urlencoded'
-        /// </summary>
-        /// <param name="data">{ testId: testId, itemVersion: itemVersion, kpiId: kpiId }</param>
-        /// <returns>HttpStatusCode.OK or HttpStatusCode.BadRequest</returns>
-        [HttpPost]
-        public HttpResponseMessage UpdateClientConversion(FormDataCollection data)
-        {
-            try
-            { 
-                var webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-                var activeTest = webRepo.GetTestById(Guid.Parse(data.Get("testId")));
-                var kpiId = Guid.Parse(data.Get("kpiId"));
-                var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
-
-                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
-                if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
-                {
-                    // update cookie dectioary so we cna handle mulitple kpi conversions
-                    testCookie.KpiConversionDictionary.Remove(kpiId);
-                    testCookie.KpiConversionDictionary.Add(kpiId, true);
-
-                    // update conversion for specific kpi
-                    UpdateConversion(data);
-
-                    // only update cookie if all kpi's have converted
-                    testCookie.Converted = testCookie.KpiConversionDictionary.All(x => x.Value);
-                    cookieHelper.UpdateTestDataCookie(testCookie);
-                }
-                return Request.CreateResponse(HttpStatusCode.OK, "Client Conversion Successful");
-            }
-            catch(Exception ex)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception(ex.Message));
-            }
         }
 
         /// <summary>
@@ -210,42 +174,92 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpPost]
         public HttpResponseMessage SaveKpiResult(FormDataCollection data)
         {
+            _kpiWebRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
+            _webRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            HttpResponseMessage responseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+
             var testId = data.Get("testId");
             var itemVersion = data.Get("itemVersion");
-            var keyResultType = data.Get("keyResultType");
             var kpiId = data.Get("kpiId");
-            var total = data.Get("total");
-
-            var resultType = (KeyResultType) Convert.ToInt32(keyResultType);
-
-            IKeyResult keyResult;
-
-            if (resultType == KeyResultType.Financial)
+            var value = data.Get("resultValue");
+            try
             {
-                keyResult = new KeyFinancialResult()
+                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
+                var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
+                var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
+                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+                
+                if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
-                    KpiId = Guid.Parse(kpiId),
-                    Total = Convert.ToDecimal(total)
-                };
-            }
-            else
-            {
-                keyResult = new KeyValueResult()
-                {
-                    KpiId = Guid.Parse(kpiId),
-                    Value = Convert.ToDouble(total)
-                };
-            }
+                    IKeyResult keyResult;
+                    KeyResultType resultType;
+                    if (data.Get("resultValue") != null)
+                    {
+                        if (kpi.KpiResultType == "KpiFinancialResult")
+                        {
+                            resultType = KeyResultType.Financial;
+                            decimal decimalValue;
+                            bool isDecimal = decimal.TryParse(value, out decimalValue);
+                            if (isDecimal)
+                            {
+                                keyResult = new KeyFinancialResult()
+                                {
+                                    KpiId = Guid.Parse(kpiId),
+                                    Total = Convert.ToDecimal(decimalValue)
+                                };
+                            }
+                            else
+                            {
+                                throw new FormatException("Conversion Failed: Kpi Type requires a value of type 'Decimal'");
+                            }
+                        }
+                        else
+                        {
+                            resultType = KeyResultType.Value;
+                            double doubleValue;
+                            bool isDouble = double.TryParse(value, out doubleValue);
+                            if (isDouble)
+                            {
+                                keyResult = new KeyValueResult()
+                                {
+                                    KpiId = Guid.Parse(kpiId),
+                                    Value = Convert.ToDouble(doubleValue)
+                                };
+                            }
+                            else
+                            {
+                                throw new FormatException("Conversion Failed: Kpi Type requires a value of type 'Double'");
+                            }
+                        }
+                        _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                    }
 
-            if (!string.IsNullOrWhiteSpace(testId))
-            {
-                var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                    if (!string.IsNullOrWhiteSpace(testId))
+                    {
+                        // update cookie dectioary so we can handle mulitple kpi conversions
+                        testCookie.KpiConversionDictionary.Remove(Guid.Parse(kpiId));
+                        testCookie.KpiConversionDictionary.Add(Guid.Parse(kpiId), true);
 
-                return Request.CreateResponse(HttpStatusCode.OK,"KpiResult Saved");
+                        // update conversion for specific kpi
+                        UpdateConversion(data);
+
+                        // only update cookie if all kpi's have converted
+                        testCookie.Converted = testCookie.KpiConversionDictionary.All(x => x.Value);
+                        cookieHelper.UpdateTestDataCookie(testCookie);
+                        responseMessage = Request.CreateResponse(HttpStatusCode.OK, "Conversion Successful");
+                    }
+                    else
+                    {
+                        responseMessage = Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
+                    }
+                }
+
             }
-            else
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, new Exception("TestId and item version are not available in the collection of parameters"));
+            catch (Exception ex)
+            {
+                responseMessage = Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            return responseMessage;
         }
     }
 }

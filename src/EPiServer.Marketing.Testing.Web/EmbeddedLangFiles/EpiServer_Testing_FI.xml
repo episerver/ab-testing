@@ -17,7 +17,7 @@
         <confidence_level_description>Luottamustaso määrittää virheiden sallitun määrän. Korkeampi prosentti korreloi suoraan testitulosten tarkkuuteen. Tällä ilmaistaan, onko kontrollisivun ja varianttisivun välinen mitattu ero ei-sattumanvarainen (eli merkittävä).</confidence_level_description>
         <confidence_level_header>Luottamustaso</confidence_level_header>
         <control>A / Kontrolli</control>
-        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <conversion_description>Kaikilla tavoitteilla on oletuksena sama painotus. Voit määrittää yksilöllisen painotuksen kullekin tavoitteelle kohteessa </conversion_description>
         <conversion_header>Mikä on muuntotavoite?</conversion_header>
         <conversion_label>Vierailija siirtyy sivulle</conversion_label>
         <days_text> päivä(ä).</days_text>
@@ -26,23 +26,27 @@
         <duration_header>Kuinka pitkään haluat suorittaa A/B-testiä?</duration_header>
         <error_conversiongoal>Muuntotavoite on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversiongoal>
         <error_date_in_the_past>Testin aloitusaika/-päivämäärä ei voi olla menneisyydessä.</error_date_in_the_past>
+        <error_duplicate_kpi_values>Samanlaisilla tavoitteilla ei saa olla samoja arvoja</error_duplicate_kpi_values>
         <error_duration>Keston on oltava kelvollinen kokonaisluku 1–365</error_duration>
         <error_invalid_date_time_value>Annettu tieto ei ole kelvollinen päivämäärän/ajan arvo</error_invalid_date_time_value>
         <error_participation_percentage>Osallistumisprosentin on oltava 1–100</error_participation_percentage>
         <error_test_not_schedulded_or_started>ei ajoitettu, ajoita testi korjaamalla aloitusajan/-päivämäärän virheet</error_test_not_schedulded_or_started>
         <goals_default_text>Esimerkiksi: Voin saada enemmän vierailijoita lataamaan e-kirjan muokkaamalla ensimmäisen kohdan tekstiä niin, että siinä käsitellään suoraan ”aikaongelmaa”.</goals_default_text>
         <goals_header>Mikä on tämän testin kokonaistavoite?</goals_header>
-        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
-        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
-        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <goals_selectlist_additional_kpi>Lisää toinen tavoite</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>Lisää tavoite</goals_selectlist_default>
+        <goals_weight_description>Tässä voit päättää, onko jokin tavoitteista muita tärkeämpi voittajaa mitattaessa.</goals_weight_description>
+        <goals_weight_equal_description>Jos annat kaikille tavoitteille yhtä suuren merkityksen, kaikkiin tavoitteisiin tähtäävät muunnot mitataan samalla tavalla.</goals_weight_equal_description>
+        <goals_weight_heading>Tasapainota testin tavoitteiden merkitystä:</goals_weight_heading>
+        <goals_weight_higher_description>Jos annat jollekin tavoitteelle suuremman merkityksen, tähän tavoitteeseen tähtäävät muunnot lasketaan suuremmalla kertoimella verrattuna alemmaksi asetettuihin muuntoihin.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>ei ajoitettu, alkaa nyt</notscheduled_text>
         <participant_percentage_tip>Korkeampi osallistumisprosentti vähentää aikaa, jota tarvitaan keräämään tarvittavat tilastot voittajan valitsemista varten.</participant_percentage_tip>
         <participation_header>Millainen tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuuden tulee olla?</participation_header>
         <published_prefix>Julkaissut</published_prefix>
-        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
+        <remove_kpi_tooltip>Poista tämä tavoite</remove_kpi_tooltip>
         <schedule_header>Milloin A/B-testin pitää alkaa?</schedule_header>
         <schedule_selector_delay>Ajoita myöhemmäksi</schedule_selector_delay>
         <schedule_selector_start>Aloita heti</schedule_selector_start>
@@ -53,7 +57,7 @@
         <test_description>Vahvista, jos uusi lisäys tai muutos sisältöön parantaa muuntonopeutta.</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>Julkaistaanko testin voittaja automaattisesti, jos tulokset ovat tilastollisesti merkitseviä?</autopublishwinner>
         <cancel>Peruuta</cancel>
         <confidencelevel>Luottamustaso:</confidencelevel>
         <description>Nämä asetukset ovat oletusarvoja, joita käytetään AB-testien luomiseen.</description>
@@ -75,7 +79,7 @@
         <content_chosen>, ja sisältö on valittu julkaisuun</content_chosen>
         <content_control_header>A / Kontrolli</content_control_header>
         <content_selected>Tämä versio valittiin voittajaksi</content_selected>
-        <conversion_header>Muuntotavoite</conversion_header>
+        <conversion_header>Muuntotavoite(s)</conversion_header>
         <conversion_rate>muuntonopeus</conversion_rate>
         <conversion_selector_description>Vierailija siirtyy sivulle</conversion_selector_description>
         <conversions>muuntoa</conversions>
@@ -84,12 +88,12 @@
         <draft_prefix>Luonnos – Muokannut</draft_prefix>
         <from>alkaen</from>
         <goal_not_specified>Tavoitetta ei ole määritetty.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Piilota tiedot</hide_summary>
         <losing_version_label>Tallennettu versioina</losing_version_label>
         <percent_participation_header>Tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuus</percent_participation_header>
         <published_prefix>Julkaissut</published_prefix>
         <remaining_increment>Päivät</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Näytä tiedot</show_summary>
         <started> Aloitettu </started>
         <test_duration_header>A/B-testin kesto</test_duration_header>
         <test_percent_to_participations_divider> / Osallistujien nykyinen määrä on </test_percent_to_participations_divider>
@@ -103,12 +107,12 @@
         <winning_version_label>Voittaja (julkaistu)</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>Haluatko varmasti keskeyttää tämän testin?</abort_confirmation_message>
         <label_text>Peruuta A/B-testi ja muokkaa sivua</label_text>
         <tooltip_text>Peruuta A/B-testi ja muokkaa sivua</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>Haluatko varmasti keskeyttää tämän testin?</abort_confirmation_message>
         <advanced_options_confidence_level>Luottamustaso</advanced_options_confidence_level>
         <advanced_options_header>Lisäasetukset</advanced_options_header>
         <button_abort_option>Keskeytä A/B-testi</button_abort_option>
@@ -119,6 +123,7 @@
         <content_challenger_header>B / Haastaja</content_challenger_header>
         <content_control_header>A / Kontrolli</content_control_header>
         <content_winning_tooltip>Tämä versio toimii paremmin</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>muuntonopeus</conversion_rate>
         <conversions>muuntoa</conversions>
         <days_divider> päivä(ä) / </days_divider>
@@ -126,11 +131,11 @@
         <description_heading>Tämän testin kokonaistavoite</description_heading>
         <draft_prefix>Luonnos – Muokannut</draft_prefix>
         <goal_not_specified>Tavoitetta ei ole määritetty.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Piilota tiedot</hide_summary>
         <percent_participation_header>Tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuus</percent_participation_header>
         <published_prefix>Julkaissut</published_prefix>
         <remaining_increment>Päivät</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Näytä tiedot</show_summary>
         <started> Aloitettu </started>
         <test_duration_completed>Valmistui täyden keston jälkeen</test_duration_completed>
         <test_duration_header>A/B-testin kesto</test_duration_header>
@@ -146,9 +151,9 @@
         <views>tarkastelukertaa</views>
       </detailsview>
       <kpisummarywidget>
-        <conversions>Conversions</conversions>
-        <performance>Performance</performance>
-        <weight>Weight</weight>
+        <conversions>Muunnot</conversions>
+        <performance>Suoritus</performance>
+        <weight>Paino</weight>
       </kpisummarywidget>
       <notificationbar>
         <completed_test>A/B-testi valmistui tämän sisällön versiosta. </completed_test>
@@ -160,8 +165,8 @@
         <winner_link_tooltip>Näytä testitiedot ja valitse voittaja </winner_link_tooltip>
       </notificationbar>
       <percentagetemplate>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <views>Views</views>
+        <conversion_rate>Muuntonopeus</conversion_rate>
+        <views>Näkymät</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>Luottamustaso</advanced_options_confidence_level>
@@ -183,14 +188,14 @@
           Tätä testiä ei ole suoritettu, mutta voit valita voittajan. Voittajan valitseminen nyt päättää testin ja valittu sisältö julkaistaan.
         </early_pick_winner_message>
         <goal_not_specified>Tavoitetta ei ole määritetty.</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>Piilota tiedot</hide_summary>
         <percent_participation_header>Tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuus</percent_participation_header>
         <pick_a_winner_text>Valitse voittaja!</pick_a_winner_text>
         <pick_winner_option_text>Valitse voittaja</pick_winner_option_text>
         <published_prefix>Julkaissut</published_prefix>
         <remaining_increment>Päivät</remaining_increment>
         <result_is_not_significant>Tämän testin tulokset EIVÄT ole merkittäviä.</result_is_not_significant>
-        <show_summary>Show Details</show_summary>
+        <show_summary>Näytä tiedot</show_summary>
         <started> Aloitettu </started>
         <test_duration_completed>Valmistui täyden keston jälkeen</test_duration_completed>
         <test_duration_header>Testin kesto</test_duration_header>
@@ -213,14 +218,14 @@
         <message>Alkoi [{0}] Pysähtyi [{1}] Aktiivinen [{2}] Ei-aktiivinen [{3}] Valmis [{4}]</message>
       </scheduler_plugin>
       <summary_widget>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <conversions>Conversions</conversions>
-        <views>Views</views>
+        <conversion_rate>Muuntonopeus</conversion_rate>
+        <conversions>Muunnot</conversions>
+        <views>Näkymät</views>
       </summary_widget>
       <tasks>
         <activetests>Aktiiviset A/B-testit</activetests>
         <archivedtests>Arkistoidut A/B-testit</archivedtests>
-        <category>A/B Tests</category>
+        <category>A/B-testit</category>
         <completedtests>Valmiit A/B-testit</completedtests>
         <inactivetests>Ajoitetut A/B-testit</inactivetests>
       </tasks>

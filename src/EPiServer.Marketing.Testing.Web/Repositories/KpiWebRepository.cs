@@ -87,5 +87,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             return kpiInstance;
         }
+
+        public IKpi GetKpiInstance(Guid kpiId)
+        {
+           return kpiManager.Get(kpiId);
+        }
     }
 }

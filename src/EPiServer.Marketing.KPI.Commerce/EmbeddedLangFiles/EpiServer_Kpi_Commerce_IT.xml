@@ -8,44 +8,44 @@
           <error_conversionproduct>È necessario selezionare un prodotto prima di poter salvare la A / B test.</error_conversionproduct>
           <error_not_published_product>È necessario selezionare un prodotto pubblicato o variazione del prodotto prima di poter salvare la A / B test.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent when a visitor adds said product to their shopping cart.</description>
-        <name>Add To Cart</name>
+        <description>Scegli un prodotto per la conversione. Risultati: visualizzazioni in base ai visitatori che hanno visto il prodotto, mentre le conversioni indicano quando un visitatore aggiunge il prodotto indicato nel carrello.</description>
+        <name>Aggiungi al carrello</name>
         <readonly_markup>
           <conversion_header>Aggiungi il prodotto al carrello</conversion_header>
           <conversion_selector_description>Il visitatore aggiunge il prodotto al carrello</conversion_selector_description>
         </readonly_markup>
       </addtocart>
       <admin>
-        <cancel>Cancel</cancel>
-        <description>These settings are the defaults values used for Commerce KPIs when added to a test.</description>
-        <displayname>Commerce Kpi Configuration</displayname>
-        <financialculturepreference>Select which culture to use when saving and viewing financial results</financialculturepreference>
-        <save>Save</save>
+        <cancel>Annulla</cancel>
+        <description>Queste impostazioni sono predefinite e vengono utilizzate come obiettivi di conversione commerciali quando sono aggiunti a un test.</description>
+        <displayname>Configurazione obiettivi di conversione commerciale</displayname>
+        <financialculturepreference>Seleziona quali impostazioni cultura utilizzare quando salvi e visualizzi i risultati finanziari</financialculturepreference>
+        <save>Salva</save>
       </admin>
       <averageorder>
         <config_markup>
-          <conversion_label>Tracks completed orders and calculates the average order totals processed during the test.</conversion_label>
-          <error_defaultmarketundefined>A preferred market has not been set nor has a default market been defined.</error_defaultmarketundefined>
-          <error_undefinedmarket>The current preferred market has not been properly defined or has been removed.</error_undefinedmarket>
+          <conversion_label>Traccia gli ordini evasi e calcola la media dei totali degli ordini evasi durante il test.</conversion_label>
+          <error_defaultmarketundefined>Non è stato impostato un mercato preferito, né è stato definito un mercato predefinito.</error_defaultmarketundefined>
+          <error_undefinedmarket>L'attuale mercato preferito non è stato definito correttamente o è stato rimosso.</error_undefinedmarket>
         </config_markup>
-        <description>Views: The number of visitors that viewed the item under test.  Conversions: The total represents the average cart total across all visitors that checked out as part of the test.</description>
-        <name>Average Order</name>
+        <description>Schermate: numero di visitatori che hanno visualizzato l'elemento sottoposto a test.  Conversioni: il totale rappresenta il carrello medio totale acquistato sulla base di tutti i visitatori che hanno fatto il check out durante il test.</description>
+        <name>Ordine medio</name>
         <readonly_markup>
-          <conversion_description>Tracks completed orders and calculates the average order totals processed during the test.</conversion_description>
-          <conversion_header>Conversion Goal</conversion_header>
+          <conversion_description>Traccia gli ordini evasi e calcola la media dei totali degli ordini evasi durante il test.</conversion_description>
+          <conversion_header>Obiettivo di conversione</conversion_header>
         </readonly_markup>
       </averageorder>
       <purchaseitem>
         <config_markup>
-          <conversion_label>Visitor purchases product</conversion_label>
-          <error_conversionproduct>You must select a product before you can save the A/B test.</error_conversionproduct>
-          <error_not_published_product>You must select a published product or product variation before you can save the A/B test.</error_not_published_product>
+          <conversion_label>Visitatore acquista prodotto</conversion_label>
+          <error_conversionproduct>È necessario selezionare un prodotto prima di poter salvare la A / B test.</error_conversionproduct>
+          <error_not_published_product>È necessario selezionare un prodotto pubblicato o variazione del prodotto prima di poter salvare la A / B test.</error_not_published_product>
         </config_markup>
-        <description>Choose a product for conversion. Results: Views correlate to visitors that viewed the product, while conversions represent purchasing of said product.</description>
-        <name>Purchase Product</name>
+        <description>Scegli un prodotto per la conversione. Risultati: visualizzazioni in rapporto ai visitatori che hanno visto il prodotto, mentre le conversioni indicano quando un visitatore aggiunge il prodotto indicato nel carrello.</description>
+        <name>Acquisto prodotto</name>
         <readonly_markup>
-          <conversion_header>Conversion Goal</conversion_header>
-          <conversion_selector_description>Visitor purchases the product</conversion_selector_description>
+          <conversion_header>Obiettivo di conversione</conversion_header>
+          <conversion_selector_description>Visitatore acquista il prodotto</conversion_selector_description>
         </readonly_markup>
       </purchaseitem>
     </commercekpi>

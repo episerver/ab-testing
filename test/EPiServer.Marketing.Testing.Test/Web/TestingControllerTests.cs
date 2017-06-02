@@ -14,6 +14,10 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Moq;
 using Xunit;
+using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using EPiServer.Marketing.KPI.Results;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -24,6 +28,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IMessagingManager> _messagingManagerMock;
         private Mock<ITestDataCookieHelper> _testDataCookieHelperMock;
         private Mock<ITestManager> _testManagerMock;
+        private Mock<IKpiWebRepository> _kpiWebRepoMock = new Mock<IKpiWebRepository>();
 
         private TestingController GetUnitUnderTest()
         {
@@ -31,7 +36,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _marketingTestingRepoMock = new Mock<IMarketingTestingWebRepository>();
             _marketingTestingRepoMock.Setup(call => call.GetTestList(It.IsAny<TestCriteria>()))
-                .Returns(new List<IMarketingTest>() {new ABTest()});
+                .Returns(new List<IMarketingTest>() { new ABTest() });
             _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(new ABTest());
             _mockServiceLocator.Setup(s1 => s1.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_marketingTestingRepoMock.Object);
@@ -53,6 +58,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testManagerMock = new Mock<ITestManager>();
             _testManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new ABTest());
             _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestManager>()).Returns(_testManagerMock.Object);
+
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -108,10 +115,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
                 new KeyValuePair<string, string>("itemVersion", "1"),
-                new KeyValuePair<string, string>("keyResultType", "0"),
                 new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
+
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new testFinancialKpi());
 
             var data = new FormDataCollection(pairs);
 
@@ -129,10 +137,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
                 new KeyValuePair<string, string>("itemVersion", "1"),
-                new KeyValuePair<string, string>("keyResultType", "1"),
                 new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
+
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
 
             var data = new FormDataCollection(pairs);
 
@@ -154,6 +163,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
+
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
 
             var data = new FormDataCollection(pairs);
 
@@ -237,40 +248,55 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
         }
+    }
 
-        [Fact]
-        public void UpdateClientConversion_Returns_OK_Request()
+    class testFinancialKpi : IKpi
+    {
+        public DateTime CreatedDate { get; set; }
+
+        public string Description { get; }
+
+        public string FriendlyName { get; set; }
+
+        public Guid Id { get; set; }
+
+        public virtual string KpiResultType
         {
-            var pairs = new List<KeyValuePair<string, string>>
+            get
             {
-                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
-                new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString())
-            };
-
-            var data = new FormDataCollection(pairs);
-
-            var controller = GetUnitUnderTest();
-
-            var result = controller.UpdateClientConversion(data);
-
-            Assert.Equal(HttpStatusCode.OK, result.StatusCode);
+                return typeof(KpiFinancialResult).Name.ToString();
+            }
         }
 
-        [Fact]
-        public void UpdateClientConversion_Returns_Bad_Request()
+        public DateTime ModifiedDate { get; set; }
+
+        public ResultComparison ResultComparison { get; set; }
+
+        public string UiMarkup { get; set; }
+
+        public string UiReadOnlyMarkup { get; set; }
+
+        ResultComparison IKpi.ResultComparison
         {
-            var pairs = new List<KeyValuePair<string, string>>
+            get
             {
-                new KeyValuePair<string, string>("testId", "")
-            };
+                throw new NotImplementedException();
+            }
+        }
 
-            var data = new FormDataCollection(pairs);
+        public event EventHandler EvaluateProxyEvent;
 
-            var controller = GetUnitUnderTest();
+        public IKpiResult Evaluate(object sender, EventArgs e) { return null; }
 
-            var result = controller.UpdateClientConversion(data);
+        public void Initialize() { }
 
-            Assert.Equal(HttpStatusCode.BadRequest, result.StatusCode);
+        public void Uninitialize() { }
+
+        public void Validate(Dictionary<string, string> kpiData) { }
+
+        IKpiResult IKpi.Evaluate(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -17,7 +17,7 @@
         <confidence_level_description>可信度决定了允许的错误数量。 较高的比例与测试结果的准确性直接相关。 这可说明在对照页面和变型页面之间测得的差异是否不是意外（即，显著）。</confidence_level_description>
         <confidence_level_header>可信度</confidence_level_header>
         <control>A/对照</control>
-        <conversion_description>By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <conversion_description>默认情况下，所有目标都具有相同的权重。 您可以为每个目标设定一个单独的体重 </conversion_description>
         <conversion_header>什么是转换目标？</conversion_header>
         <conversion_label>访客导航至页面</conversion_label>
         <days_text> 天。</days_text>
@@ -26,23 +26,27 @@
         <duration_header>您希望 A/B 测试进行多久？</duration_header>
         <error_conversiongoal>您必须选择一个转换目标方可保存 A/B 测试。</error_conversiongoal>
         <error_date_in_the_past>测试的开始日期/时间不可为过去的日期/时间。</error_date_in_the_past>
+        <error_duplicate_kpi_values>重复的目标无法共享相同的值</error_duplicate_kpi_values>
         <error_duration>持续时间必须为 1 和 365 之间的一个有效整数</error_duration>
         <error_invalid_date_time_value>输入的信息为无效日期/时间值</error_invalid_date_time_value>
         <error_participation_percentage>参与百分比必须在 1 到 100 之间</error_participation_percentage>
         <error_test_not_schedulded_or_started>尚未计划，请解决开始日期/时间错误以计划测试</error_test_not_schedulded_or_started>
         <goals_default_text>例如 通过微调第一个项目点号中的副本以直接解决“时间问题”，我可以动员更多访客下载电子书。</goals_default_text>
         <goals_header>此测试的总体目标是什么？</goals_header>
-        <goals_selectlist_additional_kpi>Add another goal</goals_selectlist_additional_kpi>
-        <goals_selectlist_default>Add a goal</goals_selectlist_default>
-        <goals_weight_description>Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
-        <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals will be measured the same way.</goals_weight_equal_description>
-        <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
-        <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <goals_selectlist_additional_kpi>添加另一个目标</goals_selectlist_additional_kpi>
+        <goals_selectlist_default>添加一个目标</goals_selectlist_default>
+        <goals_weight_description>您可以在此决定当评估获胜者时，某个或多个目标是否比其他目标更重要。</goals_weight_description>
+        <goals_weight_equal_description>如果您给所有目标同样重要性，那么所有目标的转化会以相同的方式衡量。</goals_weight_equal_description>
+        <goals_weight_heading>平衡测试目标的重要性：</goals_weight_heading>
+        <goals_weight_higher_description>如果您给予某个目标更高的重要性，那么针对该目标的转化将高于具有较低设置的转化。</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>尚未计划，并将立即开始</notscheduled_text>
         <participant_percentage_tip>较高的参与百分比会降低挑选优胜者所需的数据统计收集时间。</participant_percentage_tip>
         <participation_header>访客参加此 A/B 测试的百分比是多少？</participation_header>
         <published_prefix>发布人</published_prefix>
-        <remove_kpi_tooltip>Remove this goal</remove_kpi_tooltip>
+        <remove_kpi_tooltip>删除此目标</remove_kpi_tooltip>
         <schedule_header>A/B 测试应何时开始？</schedule_header>
         <schedule_selector_delay>计划后续进行</schedule_selector_delay>
         <schedule_selector_start>立即开始</schedule_selector_start>
@@ -53,7 +57,7 @@
         <test_description>验证是否有任何新的内容添加或变更将切实提高转换率。</test_description>
       </addtestview>
       <admin>
-        <autopublishwinner>Automatically publish the winner of the test if the results are significant?</autopublishwinner>
+        <autopublishwinner>如果从统计角度而言结果数量充足，自动发布测试的优胜者？</autopublishwinner>
         <cancel>取消</cancel>
         <confidencelevel>可信度：</confidencelevel>
         <description>这些设置为默认值，在创建 AB 测试时使用。</description>
@@ -75,7 +79,7 @@
         <content_chosen>且内容已被选用于发布</content_chosen>
         <content_control_header>A/对照</content_control_header>
         <content_selected>此版本已被选为优胜者</content_selected>
-        <conversion_header>转换目标</conversion_header>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>转换率</conversion_rate>
         <conversion_selector_description>访客导航至页面</conversion_selector_description>
         <conversions>转换</conversions>
@@ -84,12 +88,12 @@
         <draft_prefix>草稿 - 编辑者</draft_prefix>
         <from>自</from>
         <goal_not_specified>目标尚未指定。</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>隐藏详细信息</hide_summary>
         <losing_version_label>已保存的版本</losing_version_label>
         <percent_participation_header>参加此 A/B 测试的访客比例</percent_participation_header>
         <published_prefix>发布人</published_prefix>
         <remaining_increment>天</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>显示详细资料</show_summary>
         <started> 已开始 </started>
         <test_duration_header>A/B 测试持续时间</test_duration_header>
         <test_percent_to_participations_divider> /当前参与人数为 </test_percent_to_participations_divider>
@@ -103,12 +107,12 @@
         <winning_version_label>优胜者（已发布）</winning_version_label>
       </archiveview>
       <canceltestcommand>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>你确定你要取消这一测试？</abort_confirmation_message>
         <label_text>取消 A/B 测试并编辑页面</label_text>
         <tooltip_text>取消 A/B 测试并编辑页面</tooltip_text>
       </canceltestcommand>
       <detailsview>
-        <abort_confirmation_message>Are you sure you want to abort this test?</abort_confirmation_message>
+        <abort_confirmation_message>你确定你要取消这一测试？</abort_confirmation_message>
         <advanced_options_confidence_level>可信度</advanced_options_confidence_level>
         <advanced_options_header>高级选项</advanced_options_header>
         <button_abort_option>放弃 A/B 测试</button_abort_option>
@@ -119,6 +123,7 @@
         <content_challenger_header>B / 挑战者</content_challenger_header>
         <content_control_header>A/对照</content_control_header>
         <content_winning_tooltip>此版本性能更佳</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>转换率</conversion_rate>
         <conversions>转换</conversions>
         <days_divider> 天/ </days_divider>
@@ -126,11 +131,11 @@
         <description_heading>此测试的总体目标</description_heading>
         <draft_prefix>草稿 - 编辑者</draft_prefix>
         <goal_not_specified>目标尚未指定。</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>隐藏详细信息</hide_summary>
         <percent_participation_header>参加此 A/B 测试的访客比例</percent_participation_header>
         <published_prefix>发布人</published_prefix>
         <remaining_increment>天</remaining_increment>
-        <show_summary>Show Details</show_summary>
+        <show_summary>显示详细资料</show_summary>
         <started> 已开始 </started>
         <test_duration_completed>从头到尾全部完成</test_duration_completed>
         <test_duration_header>A/B 测试持续时间</test_duration_header>
@@ -146,9 +151,9 @@
         <views>查看次数</views>
       </detailsview>
       <kpisummarywidget>
-        <conversions>Conversions</conversions>
-        <performance>Performance</performance>
-        <weight>Weight</weight>
+        <conversions>转换</conversions>
+        <performance>性能</performance>
+        <weight>权重</weight>
       </kpisummarywidget>
       <notificationbar>
         <completed_test>已在此内容的一个版本上完成一项 A/B 测试。 </completed_test>
@@ -160,8 +165,8 @@
         <winner_link_tooltip>查看测试详情并挑选优胜者 </winner_link_tooltip>
       </notificationbar>
       <percentagetemplate>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <views>Views</views>
+        <conversion_rate>转换率</conversion_rate>
+        <views>视图</views>
       </percentagetemplate>
       <pickwinnerview>
         <advanced_options_confidence_level>可信度</advanced_options_confidence_level>
@@ -183,14 +188,14 @@
           此测试尚未完成，但您可以挑选优胜者。 现在挑选优胜者将结束测试并发布选定的内容。
         </early_pick_winner_message>
         <goal_not_specified>目标尚未指定。</goal_not_specified>
-        <hide_summary>Hide Details</hide_summary>
+        <hide_summary>隐藏详细信息</hide_summary>
         <percent_participation_header>参加此 A/B 测试的访客比例</percent_participation_header>
         <pick_a_winner_text>挑选优胜者！</pick_a_winner_text>
         <pick_winner_option_text>挑选优胜者</pick_winner_option_text>
         <published_prefix>发布人</published_prefix>
         <remaining_increment>天</remaining_increment>
         <result_is_not_significant>此测试的结果不显著。</result_is_not_significant>
-        <show_summary>Show Details</show_summary>
+        <show_summary>显示详细资料</show_summary>
         <started> 已开始 </started>
         <test_duration_completed>从头到尾全部完成</test_duration_completed>
         <test_duration_header>测试持续时间</test_duration_header>
@@ -213,14 +218,14 @@
         <message>已开始 [{0}] 已停止 [{1}] 正在进行 [{2}] 未在进行 [{3}] 已完成 [{4}]</message>
       </scheduler_plugin>
       <summary_widget>
-        <conversion_rate>Conversion Rate</conversion_rate>
-        <conversions>Conversions</conversions>
-        <views>Views</views>
+        <conversion_rate>转换率</conversion_rate>
+        <conversions>转换</conversions>
+        <views>视图</views>
       </summary_widget>
       <tasks>
         <activetests>正在进行的 A/B 测试</activetests>
         <archivedtests>已归档的 A/B 测试</archivedtests>
-        <category>A/B Tests</category>
+        <category>A/B 测试</category>
         <completedtests>已完成的 A/B测试</completedtests>
         <inactivetests>已计划的 A/B 测试</inactivetests>
       </tasks>

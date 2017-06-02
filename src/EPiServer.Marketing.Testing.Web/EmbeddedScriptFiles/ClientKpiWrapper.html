@@ -2,9 +2,7 @@
 <script>
 
     var ActiveKpis = new Array();
-    var testId;
-    var itemVersion;
-    var kpiId;
+    var testId, itemVersion, kpiId, resultValue;
 
     var ClientKpiConverted = document.createEvent("Event");
     ClientKpiConverted.initEvent("ConvertClientKpi", true, false);
@@ -13,8 +11,8 @@
         convert();
     });
 
-    function addKpiData(kId, tId, itemVersion) {
-        var data = { kpiId: kId, testId: tId, itemVersion: itemVersion }
+    function addKpiData(kId, tId, itemVersion, value) {
+        var data = { kpiId: kId, testId: tId, itemVersion: itemVersion, resultValue: value }
         ActiveKpis.push(data);
     }
 
@@ -26,6 +24,7 @@
         testId = result.testId;
         itemVersion = result.itemVersion;
         kpiId = result.kpiId;
+        resultValue = result.resultValue;
     }
 
     function search(id, arrayObj) {
@@ -39,7 +38,8 @@
     function convert() {
         {
             var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "http://" + window.location.host + "/api/episerver/testing/UpdateClientConversion", true);
+            var xhttpData;
+            xhttp.open("POST", window.location.protocol + "//" + window.location.host + "/api/episerver/testing/SaveKpiResult", true);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.onreadystatechange = function () {
                 {
@@ -54,7 +54,11 @@
                     }
                 }
             }
-            xhttp.send("testId=" + testId + "&itemVersion=" + itemVersion + "&kpiId=" + kpiId);
+            xhttpData = "testId=" + testId + "&itemVersion=" + itemVersion + "&kpiId=" + kpiId;
+            if (resultValue) {
+                xhttpData += "&resultValue=" + resultValue
+            }
+            xhttp.send(xhttpData);
         }
     };
 </script>

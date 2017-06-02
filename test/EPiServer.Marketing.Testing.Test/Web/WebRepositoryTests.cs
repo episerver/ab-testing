@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
