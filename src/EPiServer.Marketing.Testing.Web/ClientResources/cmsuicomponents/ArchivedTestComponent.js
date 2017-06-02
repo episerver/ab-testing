@@ -186,7 +186,14 @@
             //		Updates the grid with the new data.
             // tags:
             //		private
+            var tests;
+            var contentLink;
+            this.getCurrentContent()
+                .then(function(currentContent) {
+                    contentLink = new ContentReference(currentContent.contentLink);
+                });
 
+            this._abTestStore.get(contentLink).then(function (archived) { console.log(archived); tests = archived; });
             when(this.getCurrentContent(), lang.hitch(this, function (item) {
                 if (!item) {
                     return;
