@@ -121,10 +121,10 @@
                         label: resources.archivedtestcomponent.header.by,
                         formatter: this._createUserFriendlyUsername
                     },
-//                    status: {
-//                        label: resources.archivedtestcomponent.header.status,
-//                        formatter: this._createUserFriendlyUsername
-//                    },
+                    //                    status: {
+                    //                        label: resources.archivedtestcomponent.header.status,
+                    //                        formatter: this._createUserFriendlyUsername
+                    //                    },
                     winner: {
                         label: resources.archivedtestcomponent.header.winner,
                         formatter: this._createUserFriendlyUsername
@@ -186,20 +186,22 @@
             //		Updates the grid with the new data.
             // tags:
             //		private
-            var tests;
-            var contentLink;
-            this.getCurrentContent()
-                .then(function(currentContent) {
-                    contentLink = new ContentReference(currentContent.contentLink);
-                });
-
-            this._abTestStore.get(contentLink).then(function (archived) { console.log(archived); tests = archived; });
+            
             when(this.getCurrentContent(), lang.hitch(this, function (item) {
                 if (!item) {
                     return;
                 }
 
-                this._setQuery(item.contentLink, true);
+                var tests;
+                var contentLink;
+                this.getCurrentContent()
+                    .then(function (currentContent) {
+                        contentLink = new ContentReference(currentContent.contentLink);
+                    });
+
+                this._abTestStore.get(contentLink).then(function (archived) { console.log(archived); tests = archived; });
+
+                this._setQuery(item.contentLink, tests, true);
             }));
         },
 
@@ -341,10 +343,10 @@
             }
         },
 
-        _setQuery: function (contentLink ) {
+        _setQuery: function (contentLink, tests ) {
             var query = {
                 contentLink: new ContentReference(contentLink).createVersionUnspecificReference().toString()
-            };
+        };
 
             this.grid.set("query", query);
 
