@@ -197,7 +197,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
-            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), new CultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
         }
 
         [Fact]
@@ -214,7 +214,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
 
-            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), new CultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
         }
 
         [Fact]
