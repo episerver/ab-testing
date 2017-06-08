@@ -26,6 +26,7 @@
         <duration_header>Hvor lenge vil du kjøre A/B-testen?</duration_header>
         <error_conversiongoal>Du må velge et konverteringsmål før du kan lagre A/B-testen.</error_conversiongoal>
         <error_date_in_the_past>Testens startdato/-klokkeslett kan ikke være i fortiden.</error_date_in_the_past>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Varigheten må være et gyldig heltall mellom 1 og 365</error_duration>
         <error_invalid_date_time_value>Informasjonen som er angitt, er ikke en gyldig dato-/ klokkeslettverdi</error_invalid_date_time_value>
         <error_participation_percentage>Deltakelsesprosent må være mellom 1 og 100</error_participation_percentage>
@@ -66,6 +67,14 @@
         <success>Innstillingene er lagret.</success>
         <testduration>Testens varighet:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
         <advanced_options_header>Avanserte alternativer</advanced_options_header>

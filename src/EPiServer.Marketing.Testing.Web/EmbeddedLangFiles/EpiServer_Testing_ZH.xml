@@ -26,6 +26,7 @@
         <duration_header>您希望 A/B 测试进行多久？</duration_header>
         <error_conversiongoal>您必须选择一个转换目标方可保存 A/B 测试。</error_conversiongoal>
         <error_date_in_the_past>测试的开始日期/时间不可为过去的日期/时间。</error_date_in_the_past>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>持续时间必须为 1 和 365 之间的一个有效整数</error_duration>
         <error_invalid_date_time_value>输入的信息为无效日期/时间值</error_invalid_date_time_value>
         <error_participation_percentage>参与百分比必须在 1 到 100 之间</error_participation_percentage>
@@ -66,6 +67,14 @@
         <success>配置设施保存成功。</success>
         <testduration>测试时长：</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>可信度</advanced_options_confidence_level>
         <advanced_options_header>高级选项</advanced_options_header>
