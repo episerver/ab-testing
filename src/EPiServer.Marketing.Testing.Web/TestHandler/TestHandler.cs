@@ -127,8 +127,9 @@ namespace EPiServer.Marketing.Testing.Web
         /// <returns>Number of active tests that were deleted from the system.</returns>
         internal int CheckForActiveTests(Guid contentGuid, int contentVersion)
         {
+            var contentCulture = _episerverHelper.GetContentCultureinfo();
             var testsDeleted = 0;
-            var tests = _testRepo.GetActiveTestsByOriginalItemId(contentGuid, _episerverHelper.GetContentCultureinfo());
+            var tests = _testRepo.GetActiveTestsByOriginalItemId(contentGuid, contentCulture);
 
             // no tests found for the deleted content
             if (tests.IsNullOrEmpty())
@@ -141,7 +142,7 @@ namespace EPiServer.Marketing.Testing.Web
                 // the published page is being deleted
                 if (contentVersion == 0)
                 {
-                    _testRepo.StopMarketingTest(test.Id);
+                    _testRepo.StopMarketingTest(test.Id, contentCulture);
                     _testRepo.DeleteMarketingTest(test.Id);
                     testsDeleted++;
                     continue;
@@ -151,7 +152,7 @@ namespace EPiServer.Marketing.Testing.Web
                 if (test.Variants.All(v => v.ItemVersion != contentVersion))
                     continue;
 
-                _testRepo.StopMarketingTest(test.Id);
+                _testRepo.StopMarketingTest(test.Id, contentCulture);
                 _testRepo.DeleteMarketingTest(test.Id);
                 testsDeleted++;
             }
@@ -199,7 +200,7 @@ namespace EPiServer.Marketing.Testing.Web
                             if (testCookieData.ShowVariant && _testDataCookieHelper.IsTestParticipant(testCookieData))
                             {
                                 modified = true;
-                                childList.Add(_testRepo.GetVariantContent(content.ContentGuid));
+                                childList.Add(_testRepo.GetVariantContent(content.ContentGuid, currentContentCulture));
                             }
                             else
                             {
@@ -249,14 +250,14 @@ namespace EPiServer.Marketing.Testing.Web
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
                         _httpContextHelper.SetItemValue(ABTestHandlerSkipFlag, true);
-                        _testRepo.GetVariantContent(e.Content.ContentGuid);
+                        _testRepo.GetVariantContent(e.Content.ContentGuid, currentContentCulture);
                         if (!hasData && DbReadWrite())
                         {
                             // Make sure the cookie has data in it.
                             SetTestData(e.Content, activeTest, testCookieData, out testCookieData);
                         }
 
-                        Swap(testCookieData, activeTest, e);
+                        Swap(testCookieData, activeTest, e, currentContentCulture);
                         EvaluateViews(testCookieData, originalContent);
                         _httpContextHelper.RemoveItem(ABTestHandlerSkipFlag);
                     }
@@ -292,11 +293,11 @@ namespace EPiServer.Marketing.Testing.Web
             retCookieData = testCookieData;
         }
         //Handles the swapping of content data
-        private void Swap(TestDataCookie cookie, IMarketingTest activeTest, ContentEventArgs activeContent)
+        private void Swap(TestDataCookie cookie, IMarketingTest activeTest, ContentEventArgs activeContent, CultureInfo cultureInfo)
         {
             if (cookie.ShowVariant && _testDataCookieHelper.IsTestParticipant(cookie))
             {
-                var variant = _testRepo.GetVariantContent(activeContent.Content.ContentGuid);
+                var variant = _testRepo.GetVariantContent(activeContent.Content.ContentGuid, cultureInfo);
                 //swap it with the cached version
                 if (variant != null)
                 {
