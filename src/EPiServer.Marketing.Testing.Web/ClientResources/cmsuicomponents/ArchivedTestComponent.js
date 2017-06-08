@@ -1,115 +1,34 @@
 ﻿define([
-// Dojo
-    "dojo/_base/array",
     "dojo/_base/declare",
-    "dojo/_base/lang",
-    "dojo/aspect",
-    "dojo/dom-class",
-    "dojo/string",
     "dojo/topic",
-    "dojo/when",
-    "dojox/html/entities",
-
-// DGrid
     "dgrid/OnDemandGrid",
     "dgrid/Selection",
     "epi-cms/dgrid/formatters",
-
-// EPi Framework
     "epi",
     "epi/dependency",
-    "epi/shell/TypeDescriptorManager",
-    "epi/shell/command/_WidgetCommandProviderMixin",
-    "epi/shell/command/withConfirmation",
-    "epi/shell/widget/_FocusableMixin",
-    "epi/shell/widget/dialog/Alert",
-
-// EPi CMS
-    "epi-cms/_MultilingualMixin",
-    "epi-cms/ApplicationSettings",
-    "epi-cms/core/ContentReference",
-    "epi-cms/component/command/DeleteVersion",
-    "epi-cms/contentediting/ContentActionSupport",
     "epi-cms/widget/_GridWidgetBase",
-
-// Resources
     "epi/i18n!marketing-testing/nls/abtesting/"
 
 ], function (
-// Dojo
-    array,
     declare,
-    lang,
-    aspect,
-    domClass,
-    string,
     topic,
-    when,
-    entities,
-
-// DGrid
     OnDemandGrid,
     Selection,
     formatters,
-
-// EPi Framework
     epi,
     dependency,
-    TypeDescriptorManager,
-    _WidgetCommandProviderMixin,
-    withConfirmation,
-    _FocusableMixin,
-    Alert,
-
-// EPi CMS
-    _MultilingualMixin,
-    ApplicationSettings,
-    ContentReference,
-    DeleteVersion,
-    ContentActionSupport,
     _GridWidgetBase,
-
-// Resources
     resources
 ) {
-
-    return declare([_GridWidgetBase, _WidgetCommandProviderMixin, _FocusableMixin, _MultilingualMixin], {
-        // summary:
-        //      This component will list all versions of a content item.
-        //
-        // tags:
-        //      internal
+    return declare([_GridWidgetBase], {
 
         dataGrid: null,
         gridData: [],
 
-        postScript: function () {
-            this._abTestStore = this._abTestStore ||
-                dependency.resolve("epi.storeregistry").get("marketing.abarchives");
-        },
-
-        postMixInProperties: function () {
-
-            this._commonDrafts = {};
-
-            this.storeKeyName = "epi.cms.contentversion";
-            this.ignoreVersionWhenComparingLinks = false;
-            this.forceContextReload = true;
-
-            this.inherited(arguments);
-
-            this._currentContentLanguage = ApplicationSettings.currentContentLanguage;
-
-            var registry = dependency.resolve("epi.storeregistry");
-            this._contentStore = registry.get("epi.cms.contentdata");
-            this._abTestStore = this._abTestStore ||
-                dependency.resolve("epi.storeregistry").get("marketing.abarchives");
-        },
-
         buildRendering: function () {
-
             this.inherited(arguments);
 
+            //Setup the grid node used to display archived test information
             var customGridClass = declare([OnDemandGrid, Selection]);
 
             dataGrid = new customGridClass({
@@ -119,68 +38,72 @@
                          label: resources.archivedtestcomponent.header.archiveddate,
                          formatter: this._localizeDate
                      },
-                    {
-                        field: "owner",
-                        label: resources.archivedtestcomponent.header.by,
-                        formatter: this._createUserFriendlyUsername
-                    },
-                    {
-                        field: "id",
-                        label: resources.archivedtestcomponent.header.winner,
-                        get: function (object) { return object.title; }
-                    }
+                     {
+                         field: "startDate",
+                         label: resources.archivedtestcomponent.header.startdate,
+                         formatter: this._localizeDate
+                     },
+                     {
+                         field: "owner",
+                         label: resources.archivedtestcomponent.header.owner,
+                         formatter: this._createUserFriendlyUsername
+                     }
                 ]
             }, this.domNode);
         },
 
         startup: function () {
-            var data = [];
             var me = this;
-            var tests;
-            var contentLink;
 
+            //Define the abteststore
+            this._abTestStore = this._abTestStore ||
+                           dependency.resolve("epi.storeregistry").get("marketing.abarchives");
+
+            //Connect click event handler to show archive view when a test is selected
             dataGrid.on('.dgrid-content .dgrid-cell:click', function (event) {
                 var cell = dataGrid.cell(event);
-                me.viewTest(cell.row.data.id);
+                me._viewArchivedTest(cell.row.data.id);
             });
+
+            //Set initial data for the grid based on current content
             this.getCurrentContent()
                 .then(function (currentContent) {
-                    me.setGridData(currentContent.contentLink);
+                    me._setGridData(currentContent.contentLink);
                 });
-
-            dataGrid.styleColumn("testId", "display:none;");
         },
 
-        contextChanged: function (context, callerData) {
+        contextChanged: function (context) {
             var me = this;
-            var tests;
-            var contentLink;
-            var x = context;
+            //Update grid data when context is changed
             if (context.type === "epi.cms.contentdata") {
                 this.getCurrentContent()
                     .then(function (currentContent) {
-                        me.setGridData(currentContent.contentLink);
+                        me._setGridData(currentContent.contentLink);
                     });
             }
         },
 
-        viewTest(testId) {
+        _viewArchivedTest(testId) {
+            //Shows the archive view for the selected test
             topic.publish("/epi/shell/context/request", {
                 uri: "epi.marketing.testing:///testid=" + testId + "/archive"
             });
         },
 
-        setGridData: function (contentLink) {
-            var data = [];
+        _setGridData: function (contentLink) {
             var me = this;
+            var data = [];
+            //Get archived tests for the current content and populate the data to be used by the grid
             this._abTestStore.get(contentLink).then(function (tests) {
                 for (var x = 0; x < tests.length; x++) {
-                    var dataPoint = tests[x];
-                    data.push(dataPoint);
+                    data.push(tests[x]);
                 }
-
+                //reset the grid data
                 dataGrid.refresh();
-                dataGrid.renderArray(data);
+                //render the new grid data
+                dataGrid.renderArray(data.sort(function (a, b) {
+                    return new Date(b.endDate) - new Date(a.endDate);
+                }));
             });
         },
     });

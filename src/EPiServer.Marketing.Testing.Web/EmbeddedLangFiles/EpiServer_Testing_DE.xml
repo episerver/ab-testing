@@ -26,6 +26,7 @@
         <duration_header>Wie lange soll der A/B-Test durchgeführt werden?</duration_header>
         <error_conversiongoal>Sie müssen ein Konversionsziel auswählen, bevor Sie den A/B-Test speichern können.</error_conversiongoal>
         <error_date_in_the_past>Das Startdatum bzw. die Startzeit des Tests kann nicht in der Vergangenheit liegen.</error_date_in_the_past>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Als Dauer muss eine gültige Ganzzahl zwischen 1 und 365 angegeben werden.</error_duration>
         <error_invalid_date_time_value>Die eingegebenen Informationen sind kein gültiger Datums-/Zeitwert.</error_invalid_date_time_value>
         <error_participation_percentage>Der Teilnahmeprozentsatz muss zwischen 1 und 100 liegen.</error_participation_percentage>
@@ -66,6 +67,14 @@
         <success>Konfigurationseinstellungen erfolgreich gespeichert.</success>
         <testduration>Testdauer:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Konfidenzniveau</advanced_options_confidence_level>
         <advanced_options_header>Erweiterte Optionen</advanced_options_header>

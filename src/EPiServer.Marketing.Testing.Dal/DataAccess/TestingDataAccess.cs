@@ -402,7 +402,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
             if (DateTime.UtcNow < test.EndDate)
             {
-                test.EndDate = DateTime.Now;
+                test.EndDate = DateTime.UtcNow;
             }
 
             repo.SaveChanges();

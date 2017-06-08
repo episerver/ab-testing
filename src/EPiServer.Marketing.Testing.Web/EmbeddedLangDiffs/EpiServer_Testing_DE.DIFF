@@ -4,6 +4,7 @@
     <abtesting>
       <addtestview>
         <conversion_description path="/abtesting/addtestview/conversion_description/">By default, all goals have equal weight. You can set an individual weight for each goal in </conversion_description>
+        <error_duplicate_kpi_values path="/abtesting/addtestview/error_duplicate_kpi_values/">Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <goals_selectlist_additional_kpi path="/abtesting/addtestview/goals_selectlist_additional_kpi/">Add another goal</goals_selectlist_additional_kpi>
         <goals_selectlist_default path="/abtesting/addtestview/goals_selectlist_default/">Add a goal</goals_selectlist_default>
         <goals_weight_description path="/abtesting/addtestview/goals_weight_description/">Here you can decide if one of the goals are more important to the way you will measure a winner.</goals_weight_description>
@@ -15,6 +16,14 @@
       <admin>
         <autopublishwinner path="/abtesting/admin/autopublishwinner/">Automatically publish the winner of the test if the results are significant?</autopublishwinner>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate path="/abtesting/archivedtestcomponent/header/archiveddate/">End</archiveddate>
+          <owner path="/abtesting/archivedtestcomponent/header/owner/">Owner</owner>
+          <startdate path="/abtesting/archivedtestcomponent/header/startdate/">Start</startdate>
+        </header>
+        <title path="/abtesting/archivedtestcomponent/title/">Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <hide_summary path="/abtesting/archiveview/hide_summary/">Hide Details</hide_summary>
         <show_summary path="/abtesting/archiveview/show_summary/">Show Details</show_summary>

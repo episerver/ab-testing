@@ -26,6 +26,7 @@
         <duration_header>Sur quelle durée souhaitez-vous prolonger le test A/B ?</duration_header>
         <error_conversiongoal>Vous devez sélectionner un objectif de conversion avant de pouvoir enregistrer le test A/B.</error_conversiongoal>
         <error_date_in_the_past>La date/l’heure de départ du test ne peut pas être antérieure.</error_date_in_the_past>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>La durée indiquée doit être un entier valide compris entre 1 et 365</error_duration>
         <error_invalid_date_time_value>L'information saisie n'est pas une valeur de date/heure valide</error_invalid_date_time_value>
         <error_participation_percentage>Le pourcentage de participation doit être compris entre 1 et 100</error_participation_percentage>
@@ -66,6 +67,14 @@
         <success>Paramètres de configuration enregistrés avec succès.</success>
         <testduration>Durée du test :</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Niveau de confiance</advanced_options_confidence_level>
         <advanced_options_header>Options avancées</advanced_options_header>
