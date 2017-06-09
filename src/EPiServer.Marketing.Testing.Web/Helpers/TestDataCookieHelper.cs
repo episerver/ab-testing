@@ -39,7 +39,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public bool HasTestData(TestDataCookie testDataCookie)
         {
-            return testDataCookie.TestContentId != Guid.Empty;
+            return testDataCookie.TestId != Guid.Empty;
         }
 
         /// <summary>
@@ -63,7 +63,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
-                ["TestContentId"] = testData.TestContentId.ToString(),
                 ["TestVariantId"] = testData.TestVariantId.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
@@ -113,7 +112,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 Guid outguid;
                 retCookie.TestId = Guid.TryParse(cookie["TestId"], out outguid) ? outguid : Guid.Empty;
-                retCookie.TestContentId = Guid.TryParse(cookie["TestContentId"], out outguid) ? outguid : Guid.Empty;
+                retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length), out outguid) ? outguid : Guid.Empty;
                 retCookie.TestVariantId = Guid.TryParse(cookie["TestVariantId"], out outguid) ? outguid : Guid.Empty;
 
                 bool outval;

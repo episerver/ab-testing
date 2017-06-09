@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private IMarketingTest _activeTest;
         private IMarketingTest _inactiveTest;
 
-        private TestDataCookieHelper GetUnitUnderTest()
+                private TestDataCookieHelper GetUnitUnderTest()
         {
             _testRepo = new Mock<IMarketingTestingWebRepository>();
 
@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void HasTestData_Returns_True_If_TestContentId_Is_Not_Empty()
         {
             var testDataCookieHelper = GetUnitUnderTest();
-            var testData = new TestDataCookie {TestContentId = Guid.NewGuid()};
+            var testData = new TestDataCookie {TestId = Guid.NewGuid()};
             var hasTestData = testDataCookieHelper.HasTestData(testData);
             Assert.True(hasTestData);
         }
@@ -291,8 +291,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
 
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == mockTesteDataCookiehelper.COOKIE_PREFIX + tdCookie.TestContentId)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == tdCookie.TestId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestContentId"]) == tdCookie.TestContentId)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestVariantId"]) == tdCookie.TestVariantId)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["ShowVariant"]) == tdCookie.ShowVariant)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Viewed"]) == tdCookie.Viewed)));
@@ -357,8 +357,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var cookieKey = mockTesteDataCookiehelper.COOKIE_PREFIX + originalCookie.TestContentId.ToString();
             //Removed the old cookie
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(cid => cid == cookieKey)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == updatedCookie.TestId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestContentId"]) == updatedCookie.TestContentId)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestVariantId"]) == updatedCookie.TestVariantId)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["ShowVariant"]) == updatedCookie.ShowVariant)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Viewed"]) == updatedCookie.Viewed)));
@@ -403,7 +403,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var returnCookieData = cookieHelper.GetTestDataFromCookie(testContentId.ToString());
 
             Assert.True(returnCookieData.TestId == Guid.Empty);
-            Assert.True(returnCookieData.TestContentId == Guid.Empty);
+            Assert.True(returnCookieData.TestContentId == testContentId);
             Assert.True(returnCookieData.TestVariantId == Guid.Empty);
             Assert.False(returnCookieData.ShowVariant);
             Assert.False(returnCookieData.Viewed);
