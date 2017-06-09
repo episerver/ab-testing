@@ -17,7 +17,7 @@ using System.Web;
 namespace EPiServer.Marketing.Testing.Web.ClientKPI
 {
     /// <summary>
-    /// Handles client side kpi markup.
+    /// Handles client side KPI markup.
     /// </summary>
     [ServiceConfiguration(ServiceType = typeof(IClientKpiInjector), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ClientKpiInjector : IClientKpiInjector
@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         }
 
         /// <summary>
-        /// Checks for any client kpis which may be assigned to the test and injects the provided
+        /// Checks for any client KPIs which may be assigned to the test and injects the provided
         /// markup via the current response.
         /// </summary>
         /// <param name="kpiInstances">List of KPIs.</param>
@@ -79,7 +79,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         }
 
         /// <summary>
-        /// Gets the associated script for a client kpi and appends it.
+        /// Gets the associated script for a client KPI and appends it.
         /// </summary>
         public void AppendClientKpiScript()
         {

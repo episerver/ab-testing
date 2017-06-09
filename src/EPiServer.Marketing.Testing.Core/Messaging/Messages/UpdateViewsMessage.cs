@@ -8,7 +8,7 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
     public class UpdateViewsMessage
     {
         /// <summary>
-        /// Id of the test.
+        /// ID of the test.
         /// </summary>
         public Guid TestId { get; set; }
 

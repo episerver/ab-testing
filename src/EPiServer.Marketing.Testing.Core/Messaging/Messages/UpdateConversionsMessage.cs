@@ -8,7 +8,7 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
     public class UpdateConversionsMessage
     {
         /// <summary>
-        /// Id of a test.
+        /// ID of a test.
         /// </summary>
         public Guid TestId { get; set; }
 
@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
         public Guid KpiId { get; set; }
 
         /// <summary>
-        /// Set this property to a unique value that is client specific to prevent aggressive clients from triggering multiple conversions
+        /// Set this property to a unique value that is client specific to prevent aggressive clients from triggering multiple conversions.
         /// </summary>
         public string ClientIdentifier { get; set; }
     }

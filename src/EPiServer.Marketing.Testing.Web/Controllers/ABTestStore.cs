@@ -12,7 +12,7 @@ using EPiServer.Marketing.Testing.Web.Models;
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     /// <summary>
-    /// This is the main RestSTore the UI compontents use to manage IMarketingTestObjects 
+    /// This is the main RestStore the UI components use to manage IMarketingTestObjects.
     /// </summary>
     [RestStore("ABTestStore")]
     public class ABTestStore : RestControllerBase
@@ -35,10 +35,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         /// <summary>
-        /// Given the CMS content Guid, returns JSON encoded test object
+        /// Given the CMS content Guid, returns JSON encoded test object.
         /// </summary>
-        /// <param name="id">Guid of the cms content</param>
-        /// <returns>IMarketingTest object in a Rest result or InternalServerError</returns>
+        /// <param name="id">Guid of the CMS content.</param>
+        /// <returns>IMarketingTest object in a Rest result or InternalServerError.</returns>
         [HttpGet]
         public ActionResult Get(string id)
         {
@@ -60,9 +60,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         /// <summary>
-        /// Given the CMS content Guid, deletes the specified IMarketingTest (if Found) 
+        /// Given the CMS content Guid, deletes the specified IMarketingTest (if found).
         /// </summary>
-        /// <param name="id">Guid of the cms content</param>
+        /// <param name="id">Guid of the CMS content.</param>
         /// <returns>HttpStatusCode.OK or InternalServerError</returns>
         [HttpDelete]
         public ActionResult Delete(string id)
@@ -84,7 +84,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         /// <summary>
-        /// Creates a new test using the TestingStoreModel supplied
+        /// Creates a new test using the supplied TestingStoreModel.
         /// </summary>
         /// <param name="testData"></param>
         /// <returns>HttpStatusCode.Created or HttpStatusCode.InternalServerError</returns>
@@ -114,7 +114,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         /// <summary>
-        /// Given a TestResultStoreModel, publishes the winning variant
+        /// Given a TestResultStoreModel, publishes the winning variant.
         /// </summary>
         /// <param name="testResult"></param>
         /// <returns>publishedVersionContentLink or InternalServerError</returns>

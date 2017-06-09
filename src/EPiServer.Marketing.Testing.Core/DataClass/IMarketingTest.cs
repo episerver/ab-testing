@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     public interface IMarketingTest
     {
         /// <summary>
-        /// Test Id.
+        /// Test ID.
         /// </summary>
         Guid Id { get; set; }
 
@@ -62,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         double ConfidenceLevel { get; set; }
 
         /// <summary>
-        /// Calculated z-score to determine statistical significance.
+        /// Calculated Z-Score to determine statistical significance.
         /// </summary>
         double ZScore { get; set; }
 
@@ -92,7 +92,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         List<Variant> Variants { get; set; }
 
         /// <summary>
-        /// List of key performance indicators.  These can be time on a page, form submission, etc.
+        /// List of KPIs.  These can be time on a page, form submission, etc.
         /// </summary>
         List<IKpi> KpiInstances { get; set; }
     }

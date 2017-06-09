@@ -9,8 +9,8 @@
           <error_selected_notpublished>Non è possibile selezionare una pagina inedita come tua pagina di obiettivo di conversione.</error_selected_notpublished>
           <error_selected_samepage>Non è possibile selezionare la pagina che si sta verificando come la pagina obiettivo di conversione.</error_selected_samepage>
         </config_markup>
-        <description>The chosen page is the one that a user must click on in order to count as a conversion.  Results: Views are the number of visitors that visit the page under test.  Conversions are the number of visitors that clicked through to the landing page at any point in the future while the test was running.</description>
-        <name>Landing Page</name>
+        <description>La pagina selezionata è quella che un utente deve selezionare per conteggiare come una conversione.  Risultati: visualizzazioni sono il numero di visitatori che hanno visitato la pagina web. Le conversioni sono il numero di visitatori che hanno cliccato in qualsiasi momento nella pagina di destinazione mentre il test è stato in corso.</description>
+        <name>Pagina di destinazione</name>
         <readonly_markup>
           <conversion_header>Obiettivo di conversione</conversion_header>
           <conversion_selector_description>Visitatore accede alla pagina</conversion_selector_description>
@@ -18,33 +18,33 @@
       </content_comparator_kpi>
       <kpi_messaging>
         <failed_to_load>Impossibile caricare</failed_to_load>
-        <missing_client>Client Script Wrapper resource could not be found</missing_client>
+        <missing_client>Risorsa Client Script Wrapper non è stato trovata</missing_client>
         <uimarkup_not_defined>Attributo della classe UIMarkupAttribute non definito.</uimarkup_not_defined>
       </kpi_messaging>
       <stickysite_kpi>
         <config_markup>
-          <conversion_label>Number of minutes until another page is visited</conversion_label>
-          <error_internal>Internal error : {0}</error_internal>
-          <error_invalid_timeoutvalue>Number of minutes must be a value between 1 and 60</error_invalid_timeoutvalue>
+          <conversion_label>Numero di minuti fino a quando si visita un'altra pagina</conversion_label>
+          <error_internal>Errore interno: {0}</error_internal>
+          <error_invalid_timeoutvalue>il numero di minuti deve essere un valore compreso tra 1 e 60</error_invalid_timeoutvalue>
         </config_markup>
-        <description>Converts when a user visits the content under test and then visits any other page within the same browser session.  Results: Views are the number of visitors that visited the web page.  Conversions are the number of visitors that clicked through to any other page within the specified time.</description>
-        <name>Site Stickiness</name>
+        <description>Converte quando un utente visualizza la pagina sottoposta a test e qualsiasi altra pagina all'interno della stessa sessione del browser.  Risultati: visualizzazioni sono il numero di visitatori che visitano la pagina web.  Le conversioni sono il numero di visitatori che hanno cliccato in un’altra pagina entro il tempo specificato.</description>
+        <name>Appiccicosità del sito</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
+          <conversion_header>Obiettivo di conversione</conversion_header>
+          <conversion_selector_description>Visitatore naviga in un’altra pagina entro {0} minuto(i).</conversion_selector_description>
         </readonly_markup>
       </stickysite_kpi>
       <timeonpage_kpi>
         <config_markup>
-          <conversionlabel>Number of seconds visitor remains on the page.</conversionlabel>
-          <emptyfield>Field may not be empty.</emptyfield>
-          <notpositiveinteger>Value must be a whole number ranging from 1 to 1800.</notpositiveinteger>
+          <conversionlabel>Numero di secondi durante i quali il visitatore rimane sulla pagina.</conversionlabel>
+          <emptyfield>Il campo non può essere vuoto.</emptyfield>
+          <notpositiveinteger>Valore deve essere un numero intero compreso tra 1 a 1800.</notpositiveinteger>
         </config_markup>
-        <description>Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
-        <name>Time on Page</name>
+        <description>Monitora quanto tempo un visitatore trascorre su una pagina e converte dopo un periodo di tempo specificato.  Schermate: numero di visitatori che hanno visto la pagina sottoposta a test.  Conversioni: numero di visitatori che è rimasto nella pagina per il tempo minimo specificato.</description>
+        <name>Tempo sulla pagina</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Number of seconds visitor remains on the page:</conversion_selector_description>
+          <conversion_header>Obiettivo di conversione</conversion_header>
+          <conversion_selector_description>Numero di secondi durante i quali il visitatore rimane sulla pagina:</conversion_selector_description>
         </readonly_markup>
       </timeonpage_kpi>
     </kpi>

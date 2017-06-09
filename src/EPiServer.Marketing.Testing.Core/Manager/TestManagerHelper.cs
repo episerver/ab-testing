@@ -25,9 +25,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return contentToCache;
         }
 
-        // TODO: generate randomness better!
-        // This is only a placeholder. This will be replaced by a method which uses a more structured algorithm/formula
-        // to determine what page to display to the user.
         internal static int GetRandomNumber()
         {
             return _r.Next(1, 3);
@@ -159,6 +156,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 KeyConversionResults = AdaptToManagerKeyConversionResult(theDalVariant.DalKeyConversionResults)
             };
 
+            if (retVariant.Conversions != 0)
+            {
+                foreach (var conversionResult in retVariant.KeyConversionResults)
+                {
+                    conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / retVariant.Conversions * 100);
+                }
+            }
+            
             return retVariant;
         }
 

@@ -7,8 +7,12 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Globalization;
+using System.IO;
+using System.Web;
+using System.Web.SessionState;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
@@ -51,6 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 State = TestState.Active,
                 ZScore = 2.4,
                 ConfidenceLevel = 95,
+                Owner = "me",
                 Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50 }, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60, IsWinner = true }}} ;
 
             _webRepo.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(testToPublish);
@@ -153,6 +158,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void ExcuteStopsTestAndAutoPublishes()
         {
+            HttpContext.Current = FakeHttpContext.FakeContext("http://localhost:48594/alloy-plan/");
+
             var unit = GetUnitUnderTest();
             _config.AutoPublishWinner = true;
 
@@ -165,6 +172,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _webRepo.Verify(m => m.PublishWinningVariant(It.IsAny<TestResultStoreModel>()), Times.Exactly(2),
                 "Failed to auto publish results");
         }
+
 
         public class MyLS : LocalizationService
         {

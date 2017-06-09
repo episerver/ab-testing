@@ -46,7 +46,7 @@
                             <span data-dojo-attach-point="datePublished"></span>
                         </p>
                         <div class="abPickWinnerAction" data-dojo-attach-point="controlPickWinnerBtn">
-                            <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onPublishedVersionClick">${resources.detailsview.button_pick_winner_option}</button>
+                            <button data-dojo-attach-point="controlPickButton" type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onPublishedVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
                         <!-- Multi KPI Conv % -->
@@ -72,7 +72,7 @@
                             <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
                         </p>
                         <div class="abPickWinnerAction" data-dojo-attach-point="challengerPickWinnerBtn">
-                            <button type="button" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
+                            <button type="button" data-dojo-attach-point="challengerPickButton" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
                         </div>
                         <hr class="epi-abtest-hr" />
                         <!-- Multi KPI Conv % -->

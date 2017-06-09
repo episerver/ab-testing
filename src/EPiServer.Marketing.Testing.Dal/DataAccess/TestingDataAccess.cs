@@ -334,7 +334,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
 
             return results.ToList<IABTest>();
         }
-
+        
         private void IncrementCountHelper(IRepository repo, Guid testId, int itemVersion, DalCountType resultType, Guid kpiId)
         {
             var test = repo.GetById(testId);
@@ -352,12 +352,6 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                     var result = variant.DalKeyConversionResults.First(r => r.KpiId == kpiId);
                     result.Conversions++;
                     variant.Conversions += result.Weight;
-
-                    // need to update all kpi result perforamnces because the total number of conversions has changed
-                    foreach (var conversionResult in variant.DalKeyConversionResults)
-                    {
-                        conversionResult.Performance = Convert.ToInt32(conversionResult.Conversions * conversionResult.Weight / variant.Conversions * 100);
-                    }
                 }
                 else  // single kpi
                 {

@@ -152,7 +152,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Saves a test to the database.
         /// </summary>
         /// <param name="multivariateTest">A test.</param>
-        /// <returns>Id of the test.</returns>
+        /// <returns>ID of the test.</returns>
         public Guid Save(IMarketingTest multivariateTest)
         {
             // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
@@ -181,7 +181,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public void Delete(Guid testObjectId)
         {
-            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
+            var testToDelete = Get(testObjectId);
+            RemoveCachedVariant(testToDelete.OriginalItemId);
+
+            foreach (var kpi in testToDelete.KpiInstances)
+            {
+                _kpiManager.Delete(kpi.Id);
+            }
 
             _dataAccess.Delete(testObjectId);
 

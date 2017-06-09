@@ -14,7 +14,7 @@ using System.Runtime.Serialization;
 namespace EPiServer.Marketing.KPI.Commerce.Kpis
 {
     /// <summary>
-    /// Base class that contains some common functionality between commerce kpi instances.
+    /// Base class that contains some common functionality between commerce KPI instances.
     /// Note that it is abstract specifically so that it doesn't show up in the picker.
     /// </summary>
     [DataContract]

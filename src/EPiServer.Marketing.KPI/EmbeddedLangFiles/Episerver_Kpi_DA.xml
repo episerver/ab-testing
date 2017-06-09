@@ -9,8 +9,8 @@
           <error_selected_notpublished>Du kan ikke vælge en ikke-publiceret side som konverteringsmålside.</error_selected_notpublished>
           <error_selected_samepage>Du kan ikke vælge den side, du tester, som konverteringsmålside.</error_selected_samepage>
         </config_markup>
-        <description>The chosen page is the one that a user must click on in order to count as a conversion.  Results: Views are the number of visitors that visit the page under test.  Conversions are the number of visitors that clicked through to the landing page at any point in the future while the test was running.</description>
-        <name>Landing Page</name>
+        <description>Den valgte side er den, som en besøgende skal klikke sig videre til, for at det tæller som en konvertering.  Resultater: Visninger er antallet af besøgende, der besøgte testsiden. Konverteringer er antallet af besøgende, som klikkede sig videre til den valgte landingsside, mens testen kørte.</description>
+        <name>Landingsside</name>
         <readonly_markup>
           <conversion_header>Konverteringsmål</conversion_header>
           <conversion_selector_description>Den besøgende navigerer til siden</conversion_selector_description>
@@ -18,33 +18,33 @@
       </content_comparator_kpi>
       <kpi_messaging>
         <failed_to_load>Indlæsning er ikke muligt</failed_to_load>
-        <missing_client>Client Script Wrapper resource could not be found</missing_client>
+        <missing_client>Ressourcen Client Script Wrapper blev ikke fundet</missing_client>
         <uimarkup_not_defined>Klasseattributten UIMarkupAttribute er ikke defineret.</uimarkup_not_defined>
       </kpi_messaging>
       <stickysite_kpi>
         <config_markup>
-          <conversion_label>Number of minutes until another page is visited</conversion_label>
-          <error_internal>Internal error : {0}</error_internal>
-          <error_invalid_timeoutvalue>Number of minutes must be a value between 1 and 60</error_invalid_timeoutvalue>
+          <conversion_label>Antal minutter der går, indtil en anden side besøges</conversion_label>
+          <error_internal>Intern fejl: {0}</error_internal>
+          <error_invalid_timeoutvalue>Antallet af minutter skal være en værdi mellem 1 og 60</error_invalid_timeoutvalue>
         </config_markup>
-        <description>Converts when a user visits the content under test and then visits any other page within the same browser session.  Results: Views are the number of visitors that visited the web page.  Conversions are the number of visitors that clicked through to any other page within the specified time.</description>
-        <name>Site Stickiness</name>
+        <description>Konverterer, når en besøgende ser testsiden og derefter besøger en vilkårlig anden side på webstedet i samme browsersession.  Resultater: Visninger er antallet af besøgende, der besøgte websiden.  Konverteringer er antallet af besøgende, som klikkede sig videre til en vilkårlig anden side på webstedet inden for det angivne tidsrum.</description>
+        <name>Webstedets stickiness</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Visitor navigates to any other page within {0} minute(s).</conversion_selector_description>
+          <conversion_header>Konverteringsmål</conversion_header>
+          <conversion_selector_description>Den besøgende navigerer til en vilkårlig anden side efter {0} minut(ter).</conversion_selector_description>
         </readonly_markup>
       </stickysite_kpi>
       <timeonpage_kpi>
         <config_markup>
-          <conversionlabel>Number of seconds visitor remains on the page.</conversionlabel>
-          <emptyfield>Field may not be empty.</emptyfield>
-          <notpositiveinteger>Value must be a whole number ranging from 1 to 1800.</notpositiveinteger>
+          <conversionlabel>Antallet af sekunder en besøgende bliver på siden.</conversionlabel>
+          <emptyfield>Feltet må ikke være tomt.</emptyfield>
+          <notpositiveinteger>Værdien skal være et heltal mellem 1 og 1800.</notpositiveinteger>
         </config_markup>
-        <description>Monitors how long a visitor spends on a page and converts after a specified amount of time.  Views: Number of visitors that viewed the page under test.  Conversions: The number of visitors that remained on the page for the minimum time specified.</description>
-        <name>Time on Page</name>
+        <description>Måler, hvor lang tid en besøgende tilbringer på en side, og konverterer efter et angivet tidsrum.  Visninger: Antallet af besøgende, der har set siden under testen.  Konverteringer: Antallet af besøgende, der blev på siden i det angivne minimumtidsrum.</description>
+        <name>Tid på siden</name>
         <readonly_markup>
-          <conversion_header>Conversion goal</conversion_header>
-          <conversion_selector_description>Number of seconds visitor remains on the page:</conversion_selector_description>
+          <conversion_header>Konverteringsmål</conversion_header>
+          <conversion_selector_description>Antallet af sekunder en besøgende bliver på siden:</conversion_selector_description>
         </readonly_markup>
       </timeonpage_kpi>
     </kpi>
