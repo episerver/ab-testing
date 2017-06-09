@@ -26,7 +26,7 @@
         <duration_header>Hoe lang wilt u de A / B-test uitvoeren?</duration_header>
         <error_conversiongoal>U moet een conversiedoel selecteren voordat u de A / B-test kunt opslaan.</error_conversiongoal>
         <error_date_in_the_past>De startdatum/-tijd van de test kan niet in het verleden zijn.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Dubbele doelstellingen kunnen niet dezelfde waarden delen</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>De duur moet een geldig geheel getal zijn tussen 1 en 365</error_duration>
         <error_invalid_date_time_value>De ingevoerde gegevens zijn geen geldige datum-/tijdwaarde</error_invalid_date_time_value>
         <error_participation_percentage>Het deelnamepercentage moet tussen 1 en 100 zijn</error_participation_percentage>
@@ -67,6 +67,14 @@
         <success>Configuratie-instellingen succesvol opgeslagen.</success>
         <testduration>Testduur:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Betrouwbaarheidsniveau</advanced_options_confidence_level>
         <advanced_options_header>Geavanceerde opties</advanced_options_header>

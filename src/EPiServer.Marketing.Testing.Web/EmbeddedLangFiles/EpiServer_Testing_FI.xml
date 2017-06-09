@@ -26,7 +26,7 @@
         <duration_header>Kuinka pitkään haluat suorittaa A/B-testiä?</duration_header>
         <error_conversiongoal>Muuntotavoite on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversiongoal>
         <error_date_in_the_past>Testin aloitusaika/-päivämäärä ei voi olla menneisyydessä.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Samanlaisilla tavoitteilla ei saa olla samoja arvoja</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Keston on oltava kelvollinen kokonaisluku 1–365</error_duration>
         <error_invalid_date_time_value>Annettu tieto ei ole kelvollinen päivämäärän/ajan arvo</error_invalid_date_time_value>
         <error_participation_percentage>Osallistumisprosentin on oltava 1–100</error_participation_percentage>
@@ -67,6 +67,14 @@
         <success>Määritysasetusten tallennus onnistui.</success>
         <testduration>Testin kesto:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Luottamustaso</advanced_options_confidence_level>
         <advanced_options_header>Lisäasetukset</advanced_options_header>

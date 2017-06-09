@@ -26,7 +26,7 @@
         <duration_header>Hur länge vill du köra A/B-testet?</duration_header>
         <error_conversiongoal>Du måste välja ett konverteringsmål innan du kan spara A/B-testet.</error_conversiongoal>
         <error_date_in_the_past>Testets startdag/starttid måste vara i framtiden.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Samma sorts mål kan inte ha samma värde</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Testtiden måste vara ett heltal mellan 1 och 365</error_duration>
         <error_invalid_date_time_value>Den angivna informationen är inte ett godkänt värde för dag/tid</error_invalid_date_time_value>
         <error_participation_percentage>Deltagandet (i procent) måste vara mellan 1 och 100</error_participation_percentage>
@@ -67,6 +67,14 @@
         <success>Konfigurationsinställningarna sparades.</success>
         <testduration>Testtid:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Konfidensnivå</advanced_options_confidence_level>
         <advanced_options_header>Avancerade inställningar</advanced_options_header>

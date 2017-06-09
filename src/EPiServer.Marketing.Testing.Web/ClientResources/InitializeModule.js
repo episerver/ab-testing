@@ -25,14 +25,17 @@
             //define our stores
             var commandRegistry = dependency.resolve("epi.globalcommandregistry"),
             abTestingStorePath = routes.getRestPath({ moduleArea: "EPiServer.Marketing.Testing", storeName: "ABTestStore" });
+            abArchivesPath = routes.getRestPath({ moduleArea: "EPiServer.Marketing.Testing", storeName: "ABArchivedTestStore" });
             kpiStorePath = routes.getRestPath({ moduleArea: "EPiServer.Marketing.Testing", storeName: "KpiStore" });
 
             //create our store
             var abTestStore = new JsonRest({ target: abTestingStorePath });
+            var abArchives= new JsonRest({ target: abArchivesPath });
             var kpiStore = new JsonRest({ target: kpiStorePath });
 
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.abtesting", abTestStore);
+            registry.add("marketing.abarchives", abArchives);
             registry.add("marketing.kpistore", kpiStore);
 
             // config store for default values
