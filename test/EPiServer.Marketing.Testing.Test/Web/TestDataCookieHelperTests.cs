@@ -103,7 +103,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestVariantId"] = testVariantId.ToString(),
                 ["Viewed"] = "false",
                 ["Converted"] = "false",
-                ["AlwaysEval"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -139,7 +138,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestVariantId"] = testVariantId.ToString(),
                 ["Viewed"] = "false",
                 ["Converted"] = "false",
-                ["AlwaysEval"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -209,7 +207,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestVariantId"] = Guid.NewGuid().ToString(),
                 ["Viewed"] = "True",
                 ["Converted"] = "True",
-                ["AlwaysEval"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -222,7 +219,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestVariantId"] = Guid.NewGuid().ToString(),
                 ["Viewed"] = "True",
                 ["Converted"] = "False",
-                ["AlwaysEval"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -235,7 +231,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["TestVariantId"] = Guid.NewGuid().ToString(),
                 ["Viewed"] = "True",
                 ["Converted"] = "False",
-                ["AlwaysEval"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };

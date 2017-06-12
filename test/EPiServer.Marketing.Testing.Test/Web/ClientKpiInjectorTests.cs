@@ -250,7 +250,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private string FakeClientCookie()
         {
-            var cookieString = "{\"41b24d0e-5e38-4214-b889-fbd9491312b8\":{\"TestId\":\"3f183552-4549-4d80-90e6-6fcbbb339909\",\"TestContentId\":\"39186dbe-598c-4576-a468-e054d374edd8\",\"TestVariantId\":\"69dac1a5-1751-4265-9f85-26c041ba2d63\",\"ShowVariant\":false,\"Viewed\":true,\"Converted\":false,\"AlwaysEval\":false,\"KpiConversionDictionary\":{\"41b24d0e-5e38-4214-b889-fbd9491312b8\":false}}}";
+            var cookieString = "{\"41b24d0e-5e38-4214-b889-fbd9491312b8\":{\"TestId\":\"3f183552-4549-4d80-90e6-6fcbbb339909\",\"TestContentId\":\"39186dbe-598c-4576-a468-e054d374edd8\",\"TestVariantId\":\"69dac1a5-1751-4265-9f85-26c041ba2d63\",\"ShowVariant\":false,\"Viewed\":true,\"Converted\":false,\"KpiConversionDictionary\":{\"41b24d0e-5e38-4214-b889-fbd9491312b8\":false}}}";
             return cookieString;
         }
 

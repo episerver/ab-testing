@@ -6,6 +6,7 @@ using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.KPI.Common.Attributes;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -66,7 +67,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 ["TestVariantId"] = testData.TestVariantId.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
-                ["AlwaysEval"] = testData.AlwaysEval.ToString(),
                 Expires = aTest.EndDate,
                 HttpOnly = true
 
@@ -119,7 +119,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.ShowVariant = bool.TryParse(cookie["ShowVariant"], out outval) ? outval : false;
                 retCookie.Viewed = bool.TryParse(cookie["Viewed"], out outval) ? outval : false;
                 retCookie.Converted = bool.TryParse(cookie["Converted"], out outval) ? outval : false;
-                retCookie.AlwaysEval = bool.TryParse(cookie["AlwaysEval"], out outval) ? outval : false;
 
                 var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
                 if (test != null)
@@ -129,6 +128,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                         bool converted = false;
                         bool.TryParse(cookie[kpi.Id + "-Flag"], out converted);
                         retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
+                        retCookie.AlwaysEval = Attribute.IsDefined(kpi.GetType(), typeof(AlwaysEvaluateAttribute));
+
                     }
                 }
             }
