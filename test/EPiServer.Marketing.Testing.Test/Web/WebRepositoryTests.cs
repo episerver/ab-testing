@@ -3,6 +3,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Helpers;
@@ -16,6 +17,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Messaging;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -28,6 +30,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
         private Mock<IKpiManager> _mockKpiManager;
         private Mock<IHttpContextHelper> _mockHttpHelper;
+        private Mock<IEpiserverHelper> _mockEpiserverHelper;
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -58,6 +61,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockHttpHelper = new Mock<IHttpContextHelper>();
             _mockServiceLocator.Setup(call => call.GetInstance<IHttpContextHelper>())
                 .Returns(_mockHttpHelper.Object);
+
+            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
+            _mockServiceLocator.Setup(call => call.GetInstance<IEpiserverHelper>())
+                .Returns(_mockEpiserverHelper.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
@@ -159,6 +166,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content_and_language()
+        {
+            var aRepo = GetUnitUnderTest();
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active, ContentLanguage="en-GB" } });
+            var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
+            Assert.True(aReturnValue != null);
+        }
+
+        [Fact]
         public void GetActiveTestForContent_returns_empty_test_when_a_test_does_not_exist_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
@@ -180,7 +197,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
-            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+        }
+
+        [Fact]
+        public void DeleteTestForContent_calls_delete_for_every_test_associated_with_the_content_guid_and_matching_culture()
+        {
+            var aRepo = GetUnitUnderTest();
+            //_mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            var testList = new List<IMarketingTest>();
+
+            testList.Add(new ABTest() { Id = Guid.NewGuid(), ContentLanguage = "en-GB" });
+            testList.Add(new ABTest() { Id = Guid.NewGuid(), ContentLanguage = "en-GB" });
+            testList.Add(new ABTest() { Id = Guid.NewGuid(), ContentLanguage = "en-GB" });
+
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            aRepo.DeleteTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
+
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), new CultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
         }
 
         [Fact]
@@ -192,7 +226,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
-            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>()), Times.Never, "Delete was called when it should not have been");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Never, "Delete was called when it should not have been");
         }
 
         [Fact]
@@ -222,9 +256,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(
-                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
+                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
             _mockTestManager.Setup(
-                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
+                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
 
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
                             reference => reference == ContentReference.Parse(testResultmodel.DraftContentLink))))
@@ -272,9 +306,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
             _mockTestManager.Setup(
-                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
+                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
             _mockTestManager.Setup(
-                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>()));
+                call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
 
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
                             reference => reference == ContentReference.Parse(testResultmodel.DraftContentLink))))

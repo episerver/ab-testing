@@ -72,6 +72,11 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         bool IsSignificant { get; set; }
 
         /// <summary>
+        /// Language of the site for the content being tested.
+        /// </summary>
+        string ContentLanguage { get; set; }
+
+        /// <summary>
         /// The person that last changed the test.
         /// </summary>
         string LastModifiedBy { get; set; }
