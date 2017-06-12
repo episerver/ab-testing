@@ -132,6 +132,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
 
+            testResult.ContentCulture = _episerverHelper.GetContentCultureinfo();
+
             try
             {
                 string publishedVersionContentLink = _webRepo.PublishWinningVariant(testResult);

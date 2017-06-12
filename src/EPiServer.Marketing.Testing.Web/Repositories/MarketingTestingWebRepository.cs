@@ -118,7 +118,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             foreach (var test in testList)
             {
-                _testManager.Delete(test.Id);
+                _testManager.Delete(test.Id, cultureInfo);
             }
         }
 
@@ -163,9 +163,27 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="testGuid"></param>
+        /// /// <param name="cultureInfo"></param>
+        public void StopMarketingTest(Guid testGuid, CultureInfo cultureInfo)
+        {
+            _testManager.Stop(testGuid, cultureInfo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId)
         {
             _testManager.Archive(testObjectId, winningVariantId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo)
+        {
+            _testManager.Archive(testObjectId, winningVariantId, cultureInfo);
         }
 
         public Guid SaveMarketingTest(IMarketingTest testData)
@@ -285,7 +303,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     }
 
                     // only want to archive the test if publishing the winning variant succeeds.
-                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId, testResult.ContentCulture);
                 }
                 catch (Exception ex)
                 {
@@ -309,6 +327,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public IContent GetVariantContent(Guid contentGuid)
         {
             return _testManager.GetVariantContent(contentGuid);
+        }
+
+        public IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo)
+        {
+            return _testManager.GetVariantContent(contentGuid, cultureInfo);
         }
 
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)

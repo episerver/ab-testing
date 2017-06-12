@@ -20,7 +20,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void DeleteMarketingTest(Guid testGuid);
         void StartMarketingTest(Guid testGuid);
         void StopMarketingTest(Guid testGuid);
+        void StopMarketingTest(Guid testGuid, CultureInfo cultureInfo);
         void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId);
+        void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo);
         Guid SaveMarketingTest(IMarketingTest testData);
         IMarketingTest GetActiveTestForContent(Guid contentGuid);
         IMarketingTest GetActiveTestForContent(Guid contentGuid, CultureInfo currentCulture);
@@ -29,6 +31,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         string PublishWinningVariant(TestResultStoreModel testResult);
         Variant ReturnLandingPage(Guid testId);
         IContent GetVariantContent(Guid contentGuid);
+        IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo);
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true);
         void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true);
         List<IMarketingTest> GetActiveCachedTests();
