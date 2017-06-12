@@ -303,7 +303,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     }
 
                     // only want to archive the test if publishing the winning variant succeeds.
-                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId, testResult.ContentCulture);
                 }
                 catch (Exception ex)
                 {
