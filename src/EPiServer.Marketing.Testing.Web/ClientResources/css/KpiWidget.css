@@ -26,13 +26,13 @@
 }
 
 .epi-kpiWidget-weightWidget-body {
-    max-width: 30%;
+    max-width: 50%;
     margin-bottom: 10px;
 }
 
 .epi-kpiWidget-weightWidget-label-row {
     float: left;
-    min-width: 50%;
+    min-width: 55%;
     text-align: left;
     vertical-align: middle;
 }
