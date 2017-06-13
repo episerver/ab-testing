@@ -39,6 +39,9 @@
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
         <participant_percentage_tip>More participation reduces time to gather statistics and pick a winner.</participant_percentage_tip>
         <participation_header>Participation percentage</participation_header>
@@ -84,7 +87,7 @@
         <content_chosen> A winner was selected.</content_chosen>
         <content_control_header>A / Control</content_control_header>
         <content_selected>This version was picked as the winner</content_selected>
-        <conversion_header>Conversion goal</conversion_header>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <conversions>conversions</conversions>
@@ -128,6 +131,7 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Control</content_control_header>
         <content_winning_tooltip>This version is performing better</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversions>conversions</conversions>
         <days_divider> day(s) / </days_divider>
