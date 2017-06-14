@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Om du ger alla mål samma viktning kommer konverteringar mot alla mål att mätas på samma sätt.</goals_weight_equal_description>
         <goals_weight_heading>Vikta konverteringsmålen:</goals_weight_heading>
         <goals_weight_higher_description>Om du ger ökad vikt till ett mål kommer konverteringar mot det målet att räknas mer än mål med en lägre viktning.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>inte schemalagt, kommer att starta nu</notscheduled_text>
         <participant_percentage_tip>Ett högre deltagandeantal minskar tiden som krävs för att samla tillräckligt med data för att kunna peka ut en vinnare.</participant_percentage_tip>
         <participation_header>Hur stor del av besökarantalet, i procent, ska delta i testet?</participation_header>
@@ -84,7 +87,7 @@
         <content_chosen>, och innehållet har blivit valt för publicering</content_chosen>
         <content_control_header>A / Original</content_control_header>
         <content_selected>Den här versionen är vald som vinnare</content_selected>
-        <conversion_header>Konverteringsmål</conversion_header>
+        <conversion_header>Konverteringsmål(s)</conversion_header>
         <conversion_rate>konverteringsgrad</conversion_rate>
         <conversion_selector_description>Besökare går till sida</conversion_selector_description>
         <conversions>konverteringar</conversions>
@@ -128,6 +131,7 @@
         <content_challenger_header>B / Utmanare</content_challenger_header>
         <content_control_header>A / Original</content_control_header>
         <content_winning_tooltip>Den här versionen fungerar bättre</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>konverteringsgrad</conversion_rate>
         <conversions>konverteringar</conversions>
         <days_divider> dag(ar) / </days_divider>
