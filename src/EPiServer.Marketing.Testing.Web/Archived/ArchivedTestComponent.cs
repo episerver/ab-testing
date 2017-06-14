@@ -11,7 +11,8 @@ namespace EPiServer.Marketing.Testing.Web.Archived
         //Define language path to translate Title/Description.
         LanguagePath = "/abtesting/archivedtestcomponent",
         Title = "Archived Tests",
-        Description = "Shows archived tests for the select content")]
+        Description = "Shows archived tests for the select content",
+        SortOrder = 1000)]
     public class ArchivedTestComponent
     {
     }
