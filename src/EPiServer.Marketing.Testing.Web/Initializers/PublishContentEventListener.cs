@@ -26,19 +26,16 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         private IServiceLocator _locator;
         private static IList<IContent> _contentList = new List<IContent>();
         private static readonly Object _listLock = new Object();
-        private IEpiserverHelper _episerverHelper;
 
         [ExcludeFromCodeCoverage]
         public PublishContentEventListener()
         {
-            //_episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
         }
 
         internal PublishContentEventListener(IServiceLocator locator, IList<IContent> contentList)
         {
             _locator = locator;
             _contentList = contentList;
-            _episerverHelper = locator.GetInstance<IEpiserverHelper>();
         }
 
         [ExcludeFromCodeCoverage]
@@ -74,9 +71,8 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 
         public void _checkingInContentEventHandler(object sender, ContentEventArgs e)
         {
-            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
-            var test = repo.GetActiveTestForContent(e.Content.ContentGuid, _episerverHelper.GetContentCultureinfo());
+            var test = repo.GetActiveTestForContent(e.Content.ContentGuid);
             if (test.Id != Guid.Empty)
             {
                 var c = e.Content as IVersionable;
@@ -91,9 +87,10 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 
         public void _publishingContentEventHandler(object sender, ContentEventArgs e)
         {
-            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
+            
+            var episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
-            var test = repo.GetActiveTestForContent(e.Content.ContentGuid, _episerverHelper.GetContentCultureinfo());
+            var test = repo.GetActiveTestForContent(e.Content.ContentGuid, episerverHelper.GetContentCultureinfo());
             if( test.Id != Guid.Empty)
             {
                 if( _contentList.Contains(e.Content) )
