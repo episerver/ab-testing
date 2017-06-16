@@ -10,10 +10,12 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Queries;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.ContentQuery;
 using Moq;
 using Xunit;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -24,6 +26,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IContentRepository> _contentRepository;
         private Mock<IMarketingTestingWebRepository> _webRepository;
         private Mock<ITestManager> _testManager;
+        private Mock<IEpiserverHelper> _mockEpiserverHelper;
         private string[] _editor = new string[] {KnownContentQueryPlugInArea.EditorTasks};
 
         IContent someContent = new BasicContent() { Name = "thisone" };
@@ -35,14 +38,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _localizationService = new FakeLocalizationService("test");
             _contentRepository = new Mock<IContentRepository>();
             _contentRepository.Setup(call => call.TryGet<IContent>(It.IsAny<Guid>(), out someContent)).Returns(true);
+            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
 
             _webRepository = new Mock<IMarketingTestingWebRepository>();
-
 
             _serviceLocator.Setup(call => call.GetInstance<LocalizationService>()).Returns(_localizationService);
             _serviceLocator.Setup(call => call.GetInstance<IContentRepository>()).Returns(_contentRepository.Object);
             _serviceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepository.Object);
-
+            _serviceLocator.Setup(sl => sl.GetInstance<IEpiserverHelper>()).Returns(_mockEpiserverHelper.Object);
 
             return _serviceLocator.Object;
         }
@@ -61,10 +64,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     OriginalItemId = Guid.NewGuid(),
                     Variants = new List<Variant>(),
                     KpiInstances = new List<IKpi>(),
+                    ContentLanguage = "en-US"
                 }
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
 
             var query = new ActiveTestsQuery(serviceLocator);
             
@@ -92,10 +97,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     OriginalItemId = Guid.NewGuid(),
                     Variants = new List<Variant>(),
                     KpiInstances = new List<IKpi>(),
+                    ContentLanguage = "en-US"
                 }
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
 
             var query = new InactiveTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
@@ -122,11 +129,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     OriginalItemId = Guid.NewGuid(),
                     Variants = new List<Variant>(),
                     KpiInstances = new List<IKpi>(),
+                    ContentLanguage = "en-US",
                 }
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
-
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
             var query = new ArchivedTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
@@ -155,6 +163,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     EndDate = DateTime.Now.AddDays(-1),
                     Variants = new List<Variant>(),
                     KpiInstances = new List<IKpi>(),
+                    ContentLanguage = "en-US"
                 },
                 new ABTest
                 {
@@ -164,10 +173,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                     EndDate = DateTime.Now,
                     Variants = new List<Variant>(),
                     KpiInstances = new List<IKpi>(),
+                    ContentLanguage = "en-US"
                 }
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
+
 
             var query = new CompletedTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
