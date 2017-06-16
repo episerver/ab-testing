@@ -7,7 +7,9 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Web.Helpers;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -17,11 +19,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
         Mock<IList<IContent>> _list = new Mock<IList<IContent>>();
+        Mock<IEpiserverHelper> _mockEpiserverHelper;
 
         private PublishContentEventListener GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
             _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(new FakeLocalizationService("whatever"));
+            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _locator.Setup(s1 => s1.GetInstance<IEpiserverHelper>()).Returns(_mockEpiserverHelper.Object);
 
             return new PublishContentEventListener(_locator.Object, _list.Object);
         }
@@ -30,8 +36,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void EventListener_DoesNothing_IfTestIDIsEmpty()
         {
             var testUnit = GetUnitUnderTest();
-            IMarketingTest abTest = new ABTest() { Id = Guid.Empty };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+            IMarketingTest abTest = new ABTest() { Id = Guid.Empty, ContentLanguage = "en-GB"};
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
             var eventArg = new ContentEventArgs(new ContentReference(111))
             {
                 CancelAction = false,
@@ -41,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             testUnit._publishingContentEventHandler(this, eventArg);
 
-            _webRepo.Verify(tm => tm.GetActiveTestForContent(It.IsAny<Guid>()), Times.Once, "Event Listener did not call GetActiveTestForContent");
+            _webRepo.Verify(tm => tm.GetActiveTestForContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Once, "Event Listener did not call GetActiveTestForContent");
             Assert.True(eventArg.CancelAction == false, "Event listener is attempting to cancel the publish event when it should not.");
         }
 
@@ -50,7 +56,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
 
             // make sure its not in the list, since its not in the listener the publish will be cancled
             // I.e. publish triggered for content that is part of a test but winner not selected.
@@ -72,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
 
             // make sure its not in the list, since its not in the listener the publish will be cancled
             // I.e. publish triggered for content that is part of a test but winner not selected.
@@ -137,7 +143,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
 
             var c = new FakeContentData() { ContentGuid = Guid.Empty };
             (c as IVersionable).StartPublish = DateTime.MaxValue;

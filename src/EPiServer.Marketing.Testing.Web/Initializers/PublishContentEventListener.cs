@@ -88,7 +88,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         public void _publishingContentEventHandler(object sender, ContentEventArgs e)
         {
             
-            var episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
+            var episerverHelper = _locator.GetInstance<IEpiserverHelper>();
             var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
             var test = repo.GetActiveTestForContent(e.Content.ContentGuid, episerverHelper.GetContentCultureinfo());
             if( test.Id != Guid.Empty)
