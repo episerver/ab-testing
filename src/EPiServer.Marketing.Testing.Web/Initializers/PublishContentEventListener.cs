@@ -71,8 +71,9 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 
         public void _checkingInContentEventHandler(object sender, ContentEventArgs e)
         {
+            var episerverHelper = _locator.GetInstance<IEpiserverHelper>();
             var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
-            var test = repo.GetActiveTestForContent(e.Content.ContentGuid);
+            var test = repo.GetActiveTestForContent(e.Content.ContentGuid, episerverHelper.GetContentCultureinfo());
             if (test.Id != Guid.Empty)
             {
                 var c = e.Content as IVersionable;
