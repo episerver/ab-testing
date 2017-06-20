@@ -37,10 +37,14 @@ namespace EPiServer.Marketing.Testing.Web.Evaluator
 
             if (content == null)
                 return null;
+            
+            // MAR-1080 - need to check if the content in the current language before checking to see if a test is running against it
+            if (content.LanguageBranch() != contentCulture.Name)
+                return null;
 
             var test = _webRepo.GetActiveTestForContent(content.ContentGuid, contentCulture);
 
-            if (test == null || test.Id == null || test.Id == Guid.Empty || content.LanguageBranch() != contentCulture.Name)
+            if (test == null || test.Id == null || test.Id == Guid.Empty)
                 return null;
             
             return new ContentLock(contentLink, test.Owner, _abLockId, test.CreatedDate);

@@ -100,7 +100,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.Empty };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(abTest);
             var eventArg = new ContentEventArgs(new ContentReference(111))
             {
                 CancelAction = false,
@@ -110,7 +110,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             testUnit._checkingInContentEventHandler(this, eventArg);
 
-            _webRepo.Verify(tm => tm.GetActiveTestForContent(It.IsAny<Guid>()), Times.Once, "Event Listener did not call GetActiveTestForContent");
+            _webRepo.Verify(tm => tm.GetActiveTestForContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Once, "Event Listener did not call GetActiveTestForContent");
             Assert.True(eventArg.CancelAction == false, "Event listener is attempting to cancel the checkin event when it should not.");
         }
 
@@ -120,7 +120,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testUnit = GetUnitUnderTest();
             var cancelReason = "test reason";
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>())).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(abTest);
 
             var aEventContent = new MediaData();
             aEventContent.StartPublish = DateTime.Now.AddDays(1);
