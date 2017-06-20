@@ -60,11 +60,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
             var aTest = _testRepo.GetTestById(testData.TestId);
+            int varIndex = -1;
+            if(testData.TestVariantId != Guid.NewGuid())
+            {
+                varIndex = aTest.Variants.FindIndex(i => i.Id == testData.TestVariantId);
+            }
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString())
             {
                 ["TestId"] = testData.TestId.ToString(),
-                ["ShowVariant"] = testData.ShowVariant.ToString(),
-                ["TestVariantId"] = testData.TestVariantId.ToString(),
+                ["VarIndex"] = varIndex.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
                 Expires = aTest.EndDate,
@@ -111,9 +115,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
                 Guid outguid;
+                int outint = 0;
                 retCookie.TestId = Guid.TryParse(cookie["TestId"], out outguid) ? outguid : Guid.Empty;
                 retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length), out outguid) ? outguid : Guid.Empty;
-                retCookie.TestVariantId = Guid.TryParse(cookie["TestVariantId"], out outguid) ? outguid : Guid.Empty;
 
                 bool outval;
                 retCookie.ShowVariant = bool.TryParse(cookie["ShowVariant"], out outval) ? outval : false;
@@ -123,6 +127,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
                 if (test != null)
                 {
+                    var index = int.TryParse(cookie["VarIndex"], out outint) ? outint : -1;
+                    retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
+                    retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
+
+
                     foreach (var kpi in test.KpiInstances)
                     {
                         bool converted = false;

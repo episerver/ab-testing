@@ -67,24 +67,54 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
 
             if (aTest == null)
+            {
                 aTest = new ABTest();
+            }
+            else
+            {
+                var sortedVariants = aTest.Variants.OrderBy(v => v.Id).ToList();
+                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
+                aTest.Variants = sortedVariants2;
+            }  
 
             return aTest;
         }
 
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+            var tests = _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+            for(var x = 0; x < tests.Count; x++){
+                var sortedVariants = tests[x].Variants.OrderBy(v => v.Id).ToList();
+                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
+                tests[x].Variants = sortedVariants2;
+            };
+            
+            return tests;
         }
 
         public IMarketingTest GetTestById(Guid testGuid)
         {
-            return _testManager.Get(testGuid);
+            var test = _testManager.Get(testGuid);
+            if(test != null)
+            {
+                var sortedVariants = test.Variants.OrderBy(v => v.Id).ToList();
+                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
+                test.Variants = sortedVariants2;
+            }
+            return test;
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
-            return _testManager.GetTestList(criteria);
+            var tests = _testManager.GetTestList(criteria);
+            for (var x = 0; x < tests.Count; x++)
+            {
+                var sortedVariants = tests[x].Variants.OrderBy(v => v.Id).ToList();
+                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
+                tests[x].Variants = sortedVariants2;
+            };
+
+            return tests;
         }
 
         public void DeleteTestForContent(Guid aContentGuid)
