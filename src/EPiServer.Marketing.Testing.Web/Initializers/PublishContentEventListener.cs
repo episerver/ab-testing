@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using EPiServer.Framework.Localization;
+using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Initializers
 {
@@ -35,7 +36,6 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         {
             _locator = locator;
             _contentList = contentList;
-
         }
 
         [ExcludeFromCodeCoverage]
@@ -71,8 +71,9 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 
         public void _checkingInContentEventHandler(object sender, ContentEventArgs e)
         {
+            var episerverHelper = _locator.GetInstance<IEpiserverHelper>();
             var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
-            var test = repo.GetActiveTestForContent(e.Content.ContentGuid);
+            var test = repo.GetActiveTestForContent(e.Content.ContentGuid, episerverHelper.GetContentCultureinfo());
             if (test.Id != Guid.Empty)
             {
                 var c = e.Content as IVersionable;
@@ -87,8 +88,10 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 
         public void _publishingContentEventHandler(object sender, ContentEventArgs e)
         {
+            
+            var episerverHelper = _locator.GetInstance<IEpiserverHelper>();
             var repo = _locator.GetInstance<IMarketingTestingWebRepository>();
-            var test = repo.GetActiveTestForContent(e.Content.ContentGuid);
+            var test = repo.GetActiveTestForContent(e.Content.ContentGuid, episerverHelper.GetContentCultureinfo());
             if( test.Id != Guid.Empty)
             {
                 if( _contentList.Contains(e.Content) )
