@@ -436,39 +436,5 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .33 && w.Weight < .34));
             Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .66 && w.Weight < .68));
         }
-
-        [Fact]
-        public void Get_TestList_WithCriteria_and_Language_Returns_Correct_Tests()
-        {
-            ABTest test1 = new ABTest()
-            {
-                Title = "Test 1",
-                State = TestState.Archived,
-                ContentLanguage = "en-GB"
-            };
-            ABTest test2 = new ABTest()
-            {
-                Title = "Test 2",
-                State = TestState.Archived,
-                ContentLanguage = "en-US"
-            };           
-
-            List<IMarketingTest> testList = new List<IMarketingTest>() { test1, test2 };
-
-            var criteria = new TestCriteria();
-            criteria.AddFilter(new ABTestFilter()
-            {
-                Property = ABTestProperty.State,
-                Operator = FilterOperator.And,
-                Value = TestState.Archived
-            });
-
-            var webRepo = GetUnitUnderTest();
-            _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
-            var results = webRepo.GetTestList(criteria, new CultureInfo("en-US"));
-            Assert.True(results.Count == 1);
-            Assert.True(results[0].Title == "Test 2");
-           
-        }
     }
 }

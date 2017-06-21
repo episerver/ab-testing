@@ -11,7 +11,6 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Core;
-using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -22,16 +21,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class ABArchivedTestStore : RestControllerBase
     {
         private IMarketingTestingWebRepository _webRepo;
-        private IEpiserverHelper _episerverHelper;
-        private IContentRepository _contentRepo;
         private ILogger _logger;
 
         [ExcludeFromCodeCoverage]
         public ABArchivedTestStore()
         {
             _webRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
-            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
-            _contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
             _logger = LogManager.GetLogger();
         }
 
@@ -39,8 +34,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         internal ABArchivedTestStore(IServiceLocator serviceLocator)
         {
             _webRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-            _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
-            _contentRepo = serviceLocator.GetInstance<IContentRepository>();
             _logger = serviceLocator.GetInstance<ILogger>();
         }
 
@@ -55,7 +48,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             ActionResult result;
             try
             {
-                IContent content = _contentRepo.Get<IContent>(new ContentReference(id));
+                var repo = ServiceLocator.Current.GetInstance<IContentRepository>();
+                IContent content = repo.Get<IContent>(new ContentReference(id));
                 
                 var cGuid = content.ContentGuid;
                 var criteria = new TestCriteria();
@@ -71,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         Value = cGuid
                     }
                 );
-                var tests = _webRepo.GetTestList(criteria, _episerverHelper.GetContentCultureinfo());
+                var tests = _webRepo.GetTestList(criteria);
 
                 result = Rest(tests);
             }

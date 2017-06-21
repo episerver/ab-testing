@@ -102,12 +102,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetTestList(criteria);
         }
 
-        public List<IMarketingTest> GetTestList(TestCriteria criteria, CultureInfo contentCulture)
-        {
-            var testList = _testManager.GetTestList(criteria);
-            return testList.Where(x => x.ContentLanguage == contentCulture.Name).ToList();
-        }
-
         public void DeleteTestForContent(Guid aContentGuid)
         {
             var testList = _testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived);
