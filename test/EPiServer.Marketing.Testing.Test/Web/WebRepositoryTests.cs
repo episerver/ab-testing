@@ -43,7 +43,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.Save(It.IsAny<IMarketingTest>())).Returns(new Guid());
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
 
-            var kpi = new ContentComparatorKPI() {ContentGuid = Guid.NewGuid()};
+            var kpi = new ContentComparatorKPI() { ContentGuid = Guid.NewGuid() };
 
             _mockKpiManager = new Mock<IKpiManager>();
             _mockKpiManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(kpi);
@@ -124,7 +124,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             KeyFinancialResult result = new KeyFinancialResult();
-            aRepo.SaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial,false);
+            aRepo.SaveKpiResultData(_testGuid, 1, result, KeyResultType.Financial, false);
             _mockTestManager.Verify(called => called.SaveKpiResultData(It.Is<Guid>(value => value == _testGuid), It.Is<int>(value => value == 1), It.IsAny<IKeyResult>(), It.Is<KeyResultType>(value => value == KeyResultType.Financial), It.Is<bool>(value => value == false)), Times.Once);
         }
 
@@ -134,7 +134,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             List<IMarketingTest> testList = new List<IMarketingTest>();
             testList.Add(new ABTest() { Title = "Test 1" });
             testList.Add(new ABTest() { Title = "Test 2" });
-            
+
             var aRepo = GetUnitUnderTest();
             _mockTestManager.SetupGet(prop => prop.ActiveCachedTests).Returns(testList);
             var activeTests = aRepo.GetActiveCachedTests();
@@ -170,7 +170,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var aRepo = GetUnitUnderTest();
             _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
-            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active, ContentLanguage="en-GB" } });
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active, ContentLanguage = "en-GB" } });
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
             Assert.True(aReturnValue != null);
         }
@@ -435,6 +435,39 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .33 && w.Weight < .34));
             Assert.Equal(1, test.Variants.First().KeyConversionResults.Count(w => w.Weight > .66 && w.Weight < .68));
+        }
+
+        [Fact]
+        public void Get_TestList_WithCriteria_and_Language_Returns_Correct_Tests()
+        {
+            ABTest test1 = new ABTest()
+            {
+                Title = "Test 1",
+                State = TestState.Archived,
+                ContentLanguage = "en-GB"
+            };
+            ABTest test2 = new ABTest()
+            {
+                Title = "Test 2",
+                State = TestState.Archived,
+                ContentLanguage = "en-US"
+            };
+
+            List<IMarketingTest> testList = new List<IMarketingTest>() { test1, test2 };
+
+            var criteria = new TestCriteria();
+            criteria.AddFilter(new ABTestFilter()
+            {
+                Property = ABTestProperty.State,
+                Operator = FilterOperator.And,
+                Value = TestState.Archived
+            });
+
+            var webRepo = GetUnitUnderTest();
+            _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
+            var results = webRepo.GetTestList(criteria, new CultureInfo("en-US"));
+            Assert.True(results.Count == 1);
+            Assert.True(results[0].Title == "Test 2");
         }
     }
 }
