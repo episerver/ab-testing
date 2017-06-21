@@ -69,11 +69,15 @@
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
             }
-            this._renderData();
-
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible";
+            } else {
+                this.summaryToggle.style.visibility = "hidden";
+            }
         },
 
-        _setToggleAnimations: function () {
+        _setToggleAnimations: function() {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlArchiveSummaryNode,
@@ -100,6 +104,7 @@
 
         _contextChanged: function (newContext) {
             var me = this;
+            this.kpiSummaryWidgets = new Array();
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
             }
@@ -117,10 +122,8 @@
 
         _renderData: function () {
             var me = this;
-            this.kpiSummaryWidgets = new Array();
-            this.controlArchiveSummaryNode.style.display = "block";
-            this.challengerArchiveSummaryNode.style.display = "block";
-            me.summaryToggle.innerHTML = me.resources.archiveview.hide_summary
+            this.store = dependency.resolve("epi.storeregistry").get("marketing.abtesting");
+            this.topic = this.topic || topic;
             me._renderStatusIndicatorStyles();
             textHelper.renderTitle(this.title);
             textHelper.renderConfidence(this.confidence);
@@ -138,12 +141,6 @@
                 me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
-                }
-                if (me.context.data.test.kpiInstances.length > 1) {
-                    me._setToggleAnimations();
-                    me.summaryToggle.style.visibility = "visible";
-                } else {
-                    me.summaryToggle.style.visibility = "hidden";
                 }
             });
         },
