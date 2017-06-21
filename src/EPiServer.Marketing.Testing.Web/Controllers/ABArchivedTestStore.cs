@@ -11,6 +11,7 @@ using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Core;
+using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -21,12 +22,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class ABArchivedTestStore : RestControllerBase
     {
         private IMarketingTestingWebRepository _webRepo;
+        private IEpiserverHelper _episerverHelper;
+        private IContentRepository _contentRepo;
         private ILogger _logger;
 
         [ExcludeFromCodeCoverage]
         public ABArchivedTestStore()
         {
             _webRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
+            _contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
             _logger = LogManager.GetLogger();
         }
 
@@ -34,6 +39,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         internal ABArchivedTestStore(IServiceLocator serviceLocator)
         {
             _webRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
+            _contentRepo = serviceLocator.GetInstance<IContentRepository>();
             _logger = serviceLocator.GetInstance<ILogger>();
         }
 
@@ -48,34 +55,34 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             ActionResult result;
             try
             {
-                var repo = ServiceLocator.Current.GetInstance<IContentRepository>();
-                IContent content = repo.Get<IContent>(new ContentReference(id));
-                
+                IContent content = _contentRepo.Get<IContent>(new ContentReference(id));
+
                 var cGuid = content.ContentGuid;
                 var criteria = new TestCriteria();
-                criteria.AddFilter(new ABTestFilter() {
-                        Property = ABTestProperty.State,
-                        Operator = FilterOperator.And,
-                        Value = TestState.Archived
-                    }
+                criteria.AddFilter(new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Archived
+                }
                 );
-                criteria.AddFilter(new ABTestFilter() {
-                        Property = ABTestProperty.OriginalItemId,
-                        Operator = FilterOperator.And,
-                        Value = cGuid
-                    }
+                criteria.AddFilter(new ABTestFilter()
+                {
+                    Property = ABTestProperty.OriginalItemId,
+                    Operator = FilterOperator.And,
+                    Value = cGuid
+                }
                 );
-                var tests = _webRepo.GetTestList(criteria);
+                var tests = _webRepo.GetTestList(criteria, _episerverHelper.GetContentCultureinfo());
 
                 result = Rest(tests);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.Error("Internal error getting test using content Guid : " 
+                _logger.Error("Internal error getting test using content Guid : "
                     + id, e);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
-
             return result;
         }
     }
