@@ -81,7 +81,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                     + id, e);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
-
             return result;
         }
     }
