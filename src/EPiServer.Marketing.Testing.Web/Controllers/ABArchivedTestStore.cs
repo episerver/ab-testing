@@ -56,32 +56,33 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             try
             {
                 IContent content = _contentRepo.Get<IContent>(new ContentReference(id));
-                
+
                 var cGuid = content.ContentGuid;
                 var criteria = new TestCriteria();
-                criteria.AddFilter(new ABTestFilter() {
-                        Property = ABTestProperty.State,
-                        Operator = FilterOperator.And,
-                        Value = TestState.Archived
-                    }
+                criteria.AddFilter(new ABTestFilter()
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Archived
+                }
                 );
-                criteria.AddFilter(new ABTestFilter() {
-                        Property = ABTestProperty.OriginalItemId,
-                        Operator = FilterOperator.And,
-                        Value = cGuid
-                    }
+                criteria.AddFilter(new ABTestFilter()
+                {
+                    Property = ABTestProperty.OriginalItemId,
+                    Operator = FilterOperator.And,
+                    Value = cGuid
+                }
                 );
                 var tests = _webRepo.GetTestList(criteria, _episerverHelper.GetContentCultureinfo());
 
                 result = Rest(tests);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.Error("Internal error getting test using content Guid : " 
+                _logger.Error("Internal error getting test using content Guid : "
                     + id, e);
                 result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
-
             return result;
         }
     }

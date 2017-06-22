@@ -16,7 +16,6 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
-using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {

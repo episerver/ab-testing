@@ -7,7 +7,6 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Globalization;
-
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     public interface IMarketingTestingWebRepository
