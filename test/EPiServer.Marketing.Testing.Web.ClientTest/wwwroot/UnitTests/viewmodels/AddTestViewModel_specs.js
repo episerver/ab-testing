@@ -11,11 +11,18 @@
 
                 aContentResult = {
                     contentLink: aPrefixString + "_" + aPublishedVersionString,
-                    contentGuid: aGuidString
+                    contentGuid: aGuidString,
+                    currentLanguageBranch: {
+                        languageId: "en"
+                    }
                 },
                 aContentData = {
                     contentLink: aPrefixString + "_" + aDraftVersionString,
-                    contentGuid: aGuidString
+                    contentGuid: aGuidString,
+                    currentLanguageBranch: {
+                        languageId: "en"
+                    }
+
                 },
                 aConfigResult = {
 
@@ -72,11 +79,17 @@
 
                 aContentResult = {
                     contentLink: aPrefixString + "_" + aPublishedVersionString,
-                    contentGuid: aGuidString
+                    contentGuid: aGuidString,
+                    currentLanguageBranch: {
+                        languageId: "en"
+                    }
                 },
                 aContentData = {
                     contentLink: aPrefixString + "_" + aDraftVersionString,
-                    contentGuid: aGuidString
+                    contentGuid: aGuidString,
+                    currentLanguageBranch: {
+                        languageId: "en"
+                    }
                 },
                 aConfigResult = {
                     testDuration: 30,
@@ -174,7 +187,10 @@
                 aContentData = {
                     contentLink: aPrefixString + "_" + aDraftVersionString,
                     contentGuid: aGuidString,
-                    contentLink: aPrefixString
+                    contentLink: aPrefixString,
+                    currentLanguageBranch: {
+                        languageId: "en"
+                    }
                 },
                 aConfigResult = {
 

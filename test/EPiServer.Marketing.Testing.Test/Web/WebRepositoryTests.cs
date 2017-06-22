@@ -467,7 +467,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
             var results = webRepo.GetTestList(criteria, new CultureInfo("en-US"));
             Assert.True(results.Count == 1);
-            Assert.True(results[0].Title == "Test 2");
+            Assert.True(results[0].Title == "Test 2");           
         }
     }
 }
