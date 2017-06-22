@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
             _testDataCookieHelperMock = new Mock<ITestDataCookieHelper>();
-            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>())).Returns(new TestDataCookie());
+            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(new TestDataCookie());
             _testDataCookieHelperMock.Setup(call => call.UpdateTestDataCookie(It.IsAny<TestDataCookie>()));
             _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestDataCookieHelper>())
                 .Returns(_testDataCookieHelperMock.Object);

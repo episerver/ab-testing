@@ -30,7 +30,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <param name="testContentId"></param>
         /// <returns></returns>
-        TestDataCookie GetTestDataFromCookie(string testContentId);
+        TestDataCookie GetTestDataFromCookie(string testContentId, string cultureName = null);
 
         /// <summary>
         /// Finds and returns a list of all testing cookies objects

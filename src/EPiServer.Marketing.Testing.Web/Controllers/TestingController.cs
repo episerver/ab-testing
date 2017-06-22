@@ -187,7 +187,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
-                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
+                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString(), activeTest.ContentLanguage);
                 
                 if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
