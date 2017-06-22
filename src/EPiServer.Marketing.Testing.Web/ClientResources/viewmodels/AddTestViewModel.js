@@ -69,7 +69,7 @@
             //get published version
             this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
             this._contentVersionStore
-                .query({ contentLink: this.contentData.contentLink, language: this.languageContext ? this.languageContext.language : "", query: "getpublishedversion" })
+                .query({ contentLink: this.contentData.contentLink, language: this.contentData.currentLanguageBranch.languageId ? this.contentData.currentLanguageBranch.languageId : "", query: "getpublishedversion" })
                 .then(function (result) {
                     var publishedVersion = result;
                     this.set("publishedVersion", publishedVersion);
