@@ -93,6 +93,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var testContentId = Guid.NewGuid();
+            var startDate = DateTime.Now.AddDays(-2);
             var expireDate = DateTime.Now.AddDays(2);
             var variant1 = new Variant()
             {
@@ -107,8 +108,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
-                ["tId"] = _activeTestId.ToString(),
-                ["TestContentId"] = testContentId.ToString(),
+                ["start"] = startDate.ToString(),
                 ["vId"] = "0",
                 ["viewed"] = "false",
                 ["converted"] = "false",
@@ -119,6 +119,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var test = new ABTest()
             {
                 Id = _activeTestId,
+                StartDate = startDate,
                 OriginalItemId = testContentId,
                 Variants = new List<Variant>() { variant1, variant2 },
                 KpiInstances = new List<IKpi>()
@@ -128,7 +129,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>() { test });
+            _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>() { test });
 
             var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
             Assert.True(returnCookieData.TestId == _activeTestId);
@@ -144,6 +145,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var testContentId = Guid.NewGuid();
+            var startDate = DateTime.Now.AddDays(-2);
             var expireDate = DateTime.Now.AddDays(2);
             var variant1 = new Variant()
             {
@@ -158,8 +160,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
-                ["tId"] = _activeTestId.ToString(),
-                ["TestContentId"] = testContentId.ToString(),
+                ["start"] = startDate.ToString(),
                 ["vId"] = "1",
                 ["viewed"] = "false",
                 ["converted"] = "false",
@@ -170,6 +171,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var test = new ABTest()
             {
                 Id = _activeTestId,
+                StartDate = startDate,
                 OriginalItemId = testContentId,
                 Variants = new List<Variant>() { variant1, variant2 },
                 KpiInstances = new List<IKpi>()
@@ -179,7 +181,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(false);
             _httpContextHelper.Setup(hch => hch.GetRequestCookie(It.IsAny<string>())).Returns(testCookie);
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>() { test });
+            _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>() { test });
 
             var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
             Assert.True(returnCookieData.TestId == _activeTestId);
@@ -195,6 +197,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var testContentId = Guid.NewGuid();
+            var startDate = DateTime.Now.AddDays(-2);
             var expireDate = DateTime.Now.AddDays(2);
 
             var testVariantId = Guid.NewGuid();
@@ -204,19 +207,21 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
             var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
-                ["TestContentId"] = testContentId.ToString(),
+                ["start"] = startDate.ToString(),
                 Expires = expireDate,
                 [kpiInstance.Id.ToString() + "-Flag"] = true.ToString()
             };
 
             var aTest = new ABTest()
             {
+                OriginalItemId = testContentId,
+                StartDate = startDate,
                 KpiInstances = new List<IKpi>() { kpiInstance }
             };
 
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>() { aTest });
+            _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>() { aTest });
 
             var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
             Assert.True(returnCookieData.KpiConversionDictionary.ContainsKey(kpiInstance.Id), "expected the kpi instance info to be added to the conversion dictionary");
@@ -230,13 +235,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var responseContentCookie1 = Guid.Parse("997636c1-fec2-43ff-8dd8-fa7f6b3ffa91");
             var requestContentCookie1 = Guid.Parse("997636c1-fec2-43ff-8dd8-fa7f6b3ffa91");
             var requestContentCookie2 = Guid.Parse("f222c926-999b-43f9-80dc-667f05e08260");
-
+            var startDate = DateTime.Now.AddDays(-2);
             var expireDate = DateTime.Now.AddDays(2);
 
             var responseCookie1 = new HttpCookie("EPI-MAR-" + responseContentCookie1.ToString())
             {
-                ["tId"] = _activeTestId.ToString(),
-                ["TestContentId"] = responseContentCookie1.ToString(),
+                ["start"] = startDate.ToString(),
                 ["vId"] = "0",
                 ["viewed"] = "True",
                 ["converted"] = "True",
@@ -246,8 +250,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var requestCookie1 = new HttpCookie("EPI-MAR-" + requestContentCookie1.ToString())
             {
-                ["tId"] = _activeTestId.ToString(),
-                ["TestContentId"] = requestContentCookie1.ToString(),
+                ["start"] = startDate.ToString(),
                 ["vId"] = "1",
                 ["viewed"] = "True",
                 ["converted"] = "False",
@@ -257,8 +260,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var requestCookie2 = new HttpCookie("EPI-MAR-" + requestContentCookie2.ToString())
             {
-                ["tId"] = _activeTestId.ToString(),
-                ["TestContentId"] = requestContentCookie2.ToString(),
+                ["start"] = startDate.ToString(),
                 ["vId"] = "1",
                 ["viewed"] = "True",
                 ["converted"] = "False",
@@ -274,7 +276,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.Is<string>(c => c == responseCookie1.Name))).Returns(responseCookie1);
             _httpContextHelper.Setup(hch => hch.GetRequestCookie(It.Is<string>(c => c == responseCookie1.Name))).Returns(responseCookie1);
             _httpContextHelper.Setup(hch => hch.GetRequestCookie(It.Is<string>(c => c == requestCookie2.Name))).Returns(requestCookie2);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
+            _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
 
             var returnCookieData = mockTesteDataCookiehelper.GetTestDataFromCookies();
             Assert.True(returnCookieData.Count == 2);
@@ -305,6 +307,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var variant1Guid = Guid.Parse("dee37c30-973b-4e48-9b59-148a6a730ed9");
             var variant2Guid = Guid.Parse("a19221d7-b977-4f90-b256-2e6b3cfd8216");
+            var startDate = DateTime.Now.AddDays(-2);
             var tdCookie = new TestDataCookie()
             {
                 TestId = _activeTest.Id,
@@ -320,13 +323,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new Variant() {Id = variant1Guid },
                 new Variant() {Id = variant2Guid }
             };
+            _activeTest.StartDate = startDate;
 
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
 
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
 
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == mockTesteDataCookiehelper.COOKIE_PREFIX + tdCookie.TestContentId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["tId"]) == tdCookie.TestId)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c["start"] == startDate.ToString())));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vId"]) == 0)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["viewed"]) == tdCookie.Viewed)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["converted"]) == tdCookie.Converted)));
@@ -366,6 +370,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var mockTesteDataCookiehelper = GetUnitUnderTest();
             var variant1Guid = Guid.Parse("dee37c30-973b-4e48-9b59-148a6a730ed9");
             var variant2Guid = Guid.Parse("a19221d7-b977-4f90-b256-2e6b3cfd8216");
+            var startDate = DateTime.Now.AddDays(-2);
 
             var originalCookie = new TestDataCookie()
             {
@@ -392,6 +397,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new Variant() { Id = variant1Guid },
                 new Variant() { Id = variant2Guid }
             };
+            _activeTest.StartDate = startDate;
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
 
             mockTesteDataCookiehelper.UpdateTestDataCookie(updatedCookie);
@@ -399,7 +405,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //Removed the old cookie
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(cid => cid == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == cookieKey)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["tId"]) == updatedCookie.TestId)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c["start"] == startDate.ToString())));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vId"]) == 1)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["viewed"]) == updatedCookie.Viewed)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["converted"]) == updatedCookie.Converted)));
@@ -427,19 +433,21 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var cookieHelper = GetUnitUnderTest();
             var testContentId = Guid.NewGuid();
+            var startDate = DateTime.Now.AddDays(-2);
             var expireDate = DateTime.Now.AddDays(2);
 
             var testVariantId = Guid.NewGuid();
 
             var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             { // purposely empty properties...
+                ["start"] = startDate.ToString(),
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
 
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>());
+            _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
             var returnCookieData = cookieHelper.GetTestDataFromCookie(testContentId.ToString());
 
             Assert.True(returnCookieData.TestId == Guid.Empty);

@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString())
             {
-                ["tId"] = testData.TestId.ToString(),
+                ["start"] = aTest.StartDate.ToString(),
                 ["vId"] = varIndex.ToString(),
                 ["viewed"] = testData.Viewed.ToString(),
                 ["converted"] = testData.Converted.ToString(),
@@ -111,7 +111,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId);
             }
-           
+
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
                 Guid outguid;
@@ -123,12 +123,24 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                 retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
-                var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
+                ABTestFilter filter = new ABTestFilter()
+                {
+                    Operator = FilterOperator.And,
+                    Property = ABTestProperty.OriginalItemId,
+                    Value = retCookie.TestContentId
+                };
+
+                TestCriteria criteria = new TestCriteria();
+                criteria.AddFilter(filter);
+
+
+                var test = _testRepo.GetTestList(criteria).Where(d=>d.StartDate.ToString() == cookie["start"]).FirstOrDefault();
                 if (test != null)
                 {
                     var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
                     retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
                     retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
+                    retCookie.TestId = test.Id;
 
                     foreach (var kpi in test.KpiInstances)
                     {
