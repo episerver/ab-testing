@@ -231,7 +231,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                                 throw new FormatException("Conversion Failed: Kpi Type requires a value of type 'Double'");
                             }
                         }
-                        _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                        _webRepo.SaveKpiResultData(Guid.Parse(testId), int.Parse(itemVersion), keyResult, resultType);
                     }
 
                     if (!string.IsNullOrWhiteSpace(testId))
