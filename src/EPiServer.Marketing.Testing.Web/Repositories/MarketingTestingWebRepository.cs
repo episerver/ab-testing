@@ -16,7 +16,6 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
-using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -75,7 +74,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
                 aTest.Variants = sortedVariants;
             }  
-
             return aTest;
         }
 
@@ -85,8 +83,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             for(var x = 0; x < tests.Count; x++){
                 var sortedVariants = tests[x].Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
                 tests[x].Variants = sortedVariants;
-            };
-            
+            };            
             return tests;
         }
 
@@ -110,7 +107,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
                 tests[x].Variants = sortedVariants2;
             };
-
             return tests;
         }
 
@@ -235,7 +231,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 test.State = TestState.Active;
             }
-
             return test;
         }
 

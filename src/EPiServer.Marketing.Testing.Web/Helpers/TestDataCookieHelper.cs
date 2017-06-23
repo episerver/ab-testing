@@ -130,18 +130,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
                     retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
 
-
                     foreach (var kpi in test.KpiInstances)
                     {
                         bool converted = false;
                         bool.TryParse(cookie[kpi.Id + "-Flag"], out converted);
                         retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
                         retCookie.AlwaysEval = Attribute.IsDefined(kpi.GetType(), typeof(AlwaysEvaluateAttribute));
-
                     }
                 }
             }
-
             return retCookie;
         }
 
