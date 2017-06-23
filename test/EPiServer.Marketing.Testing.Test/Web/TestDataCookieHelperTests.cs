@@ -107,11 +107,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
-                ["TestId"] = _activeTestId.ToString(),
+                ["tId"] = _activeTestId.ToString(),
                 ["TestContentId"] = testContentId.ToString(),
-                ["vid"] = "0",
-                ["Viewed"] = "false",
-                ["Converted"] = "false",
+                ["vId"] = "0",
+                ["viewed"] = "false",
+                ["converted"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -158,11 +158,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testCookie = new HttpCookie("EPI-MAR-" + testContentId.ToString())
             {
-                ["TestId"] = _activeTestId.ToString(),
+                ["tId"] = _activeTestId.ToString(),
                 ["TestContentId"] = testContentId.ToString(),
-                ["vid"] = "1",
-                ["Viewed"] = "false",
-                ["Converted"] = "false",
+                ["vId"] = "1",
+                ["viewed"] = "false",
+                ["converted"] = "false",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -235,36 +235,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var responseCookie1 = new HttpCookie("EPI-MAR-" + responseContentCookie1.ToString())
             {
-                ["TestId"] = _activeTestId.ToString(),
-                ["ShowVariant"] = "True",
+                ["tId"] = _activeTestId.ToString(),
                 ["TestContentId"] = responseContentCookie1.ToString(),
-                ["TestVariantId"] = Guid.NewGuid().ToString(),
-                ["Viewed"] = "True",
-                ["Converted"] = "True",
+                ["vId"] = "0",
+                ["viewed"] = "True",
+                ["converted"] = "True",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
 
             var requestCookie1 = new HttpCookie("EPI-MAR-" + requestContentCookie1.ToString())
             {
-                ["TestId"] = _activeTestId.ToString(),
-                ["ShowVariant"] = "True",
+                ["tId"] = _activeTestId.ToString(),
                 ["TestContentId"] = requestContentCookie1.ToString(),
-                ["TestVariantId"] = Guid.NewGuid().ToString(),
-                ["Viewed"] = "True",
-                ["Converted"] = "False",
+                ["vId"] = "1",
+                ["viewed"] = "True",
+                ["converted"] = "False",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
 
             var requestCookie2 = new HttpCookie("EPI-MAR-" + requestContentCookie2.ToString())
             {
-                ["TestId"] = _activeTestId.ToString(),
-                ["ShowVariant"] = "True",
+                ["tId"] = _activeTestId.ToString(),
                 ["TestContentId"] = requestContentCookie2.ToString(),
-                ["TestVariantId"] = Guid.NewGuid().ToString(),
-                ["Viewed"] = "True",
-                ["Converted"] = "False",
+                ["vId"] = "1",
+                ["viewed"] = "True",
+                ["converted"] = "False",
                 Expires = expireDate,
                 [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
             };
@@ -329,10 +326,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTesteDataCookiehelper.SaveTestDataToCookie(tdCookie);
 
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == mockTesteDataCookiehelper.COOKIE_PREFIX + tdCookie.TestContentId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == tdCookie.TestId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vid"]) == 0)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Viewed"]) == tdCookie.Viewed)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Converted"]) == tdCookie.Converted)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["tId"]) == tdCookie.TestId)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vId"]) == 0)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["viewed"]) == tdCookie.Viewed)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["converted"]) == tdCookie.Converted)));
         }
 
         [Fact]
@@ -402,10 +399,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //Removed the old cookie
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(cid => cid == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == cookieKey)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == updatedCookie.TestId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vid"]) == 1)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Viewed"]) == updatedCookie.Viewed)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Converted"]) == updatedCookie.Converted)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["tId"]) == updatedCookie.TestId)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vId"]) == 1)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["viewed"]) == updatedCookie.Viewed)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["converted"]) == updatedCookie.Converted)));
         }
 
         [Fact]
