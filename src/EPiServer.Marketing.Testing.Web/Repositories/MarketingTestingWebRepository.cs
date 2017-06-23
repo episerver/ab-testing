@@ -72,9 +72,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
             else
             {
-                var sortedVariants = aTest.Variants.OrderBy(v => v.Id).ToList();
-                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
-                aTest.Variants = sortedVariants2;
+                var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                aTest.Variants = sortedVariants;
             }  
 
             return aTest;
@@ -84,9 +83,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             var tests = _testManager.GetActiveTestsByOriginalItemId(originalItemId);
             for(var x = 0; x < tests.Count; x++){
-                var sortedVariants = tests[x].Variants.OrderBy(v => v.Id).ToList();
-                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
-                tests[x].Variants = sortedVariants2;
+                var sortedVariants = tests[x].Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                tests[x].Variants = sortedVariants;
             };
             
             return tests;
@@ -94,14 +92,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public IMarketingTest GetTestById(Guid testGuid)
         {
-            var test = _testManager.Get(testGuid);
-            if(test != null)
+            var aTest = _testManager.Get(testGuid);
+            if(aTest != null)
             {
-                var sortedVariants = test.Variants.OrderBy(v => v.Id).ToList();
-                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
-                test.Variants = sortedVariants2;
+                var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                aTest.Variants = sortedVariants;
             }
-            return test;
+            return aTest;
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)

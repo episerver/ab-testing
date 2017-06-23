@@ -120,7 +120,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length), out outguid) ? outguid : Guid.Empty;
 
                 bool outval;
-                retCookie.ShowVariant = bool.TryParse(cookie["ShowVariant"], out outval) ? outval : false;
                 retCookie.Viewed = bool.TryParse(cookie["Viewed"], out outval) ? outval : false;
                 retCookie.Converted = bool.TryParse(cookie["Converted"], out outval) ? outval : false;
 
