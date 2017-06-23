@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString())
             {
                 ["TestId"] = testData.TestId.ToString(),
-                ["VarIndex"] = varIndex.ToString(),
+                ["vid"] = varIndex.ToString(),
                 ["Viewed"] = testData.Viewed.ToString(),
                 ["Converted"] = testData.Converted.ToString(),
                 Expires = aTest.EndDate,
@@ -126,7 +126,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
                 if (test != null)
                 {
-                    var index = int.TryParse(cookie["VarIndex"], out outint) ? outint : -1;
+                    var index = int.TryParse(cookie["vid"], out outint) ? outint : -1;
                     retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
                     retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
 

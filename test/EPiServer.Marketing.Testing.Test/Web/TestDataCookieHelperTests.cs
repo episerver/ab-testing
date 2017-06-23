@@ -109,7 +109,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 ["TestId"] = _activeTestId.ToString(),
                 ["TestContentId"] = testContentId.ToString(),
-                ["VarIndex"] = "0",
+                ["vid"] = "0",
                 ["Viewed"] = "false",
                 ["Converted"] = "false",
                 Expires = expireDate,
@@ -160,7 +160,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 ["TestId"] = _activeTestId.ToString(),
                 ["TestContentId"] = testContentId.ToString(),
-                ["VarIndex"] = "1",
+                ["vid"] = "1",
                 ["Viewed"] = "false",
                 ["Converted"] = "false",
                 Expires = expireDate,
@@ -330,7 +330,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == mockTesteDataCookiehelper.COOKIE_PREFIX + tdCookie.TestContentId)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == tdCookie.TestId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["VarIndex"]) == 0)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vid"]) == 0)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Viewed"]) == tdCookie.Viewed)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Converted"]) == tdCookie.Converted)));
         }
@@ -403,7 +403,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(cid => cid == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => Guid.Parse(c["TestId"]) == updatedCookie.TestId)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["VarIndex"]) == 1)));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vid"]) == 1)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Viewed"]) == updatedCookie.Viewed)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["Converted"]) == updatedCookie.Converted)));
         }
