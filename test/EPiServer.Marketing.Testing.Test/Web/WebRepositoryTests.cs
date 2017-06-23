@@ -83,6 +83,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void GetActiveTestsByOriginalItemId_Calls_TestManager_GetActiveTestsByOriginalItemId()
         {
             var aRepo = GetUnitUnderTest();
+            _mockTestManager.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest>() { new ABTest() { Variants = new List<Variant>() } });
             aRepo.GetActiveTestsByOriginalItemId(_testGuid);
             _mockTestManager.Verify(called => called.GetActiveTestsByOriginalItemId(It.Is<Guid>(value => value == _testGuid)), Times.Once);
         }
@@ -153,7 +154,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content()
         {
             var aRepo = GetUnitUnderTest();
-            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active } });
+            _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active, Variants = new List<Variant>() } });
             var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid());
             Assert.True(aReturnValue != null);
         }

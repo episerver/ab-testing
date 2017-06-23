@@ -16,7 +16,6 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
-using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -67,24 +66,48 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
 
             if (aTest == null)
+            {
                 aTest = new ABTest();
-
+            }
+            else
+            {
+                var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                aTest.Variants = sortedVariants;
+            }  
             return aTest;
         }
 
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+            var tests = _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+            for(var x = 0; x < tests.Count; x++){
+                var sortedVariants = tests[x].Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                tests[x].Variants = sortedVariants;
+            };            
+            return tests;
         }
 
         public IMarketingTest GetTestById(Guid testGuid)
         {
-            return _testManager.Get(testGuid);
+            var aTest = _testManager.Get(testGuid);
+            if(aTest != null)
+            {
+                var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                aTest.Variants = sortedVariants;
+            }
+            return aTest;
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
-            return _testManager.GetTestList(criteria);
+            var tests = _testManager.GetTestList(criteria);
+            for (var x = 0; x < tests.Count; x++)
+            {
+                var sortedVariants = tests[x].Variants.OrderBy(v => v.Id).ToList();
+                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
+                tests[x].Variants = sortedVariants2;
+            };
+            return tests;
         }
 
         public void DeleteTestForContent(Guid aContentGuid)
@@ -208,7 +231,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 test.State = TestState.Active;
             }
-
             return test;
         }
 

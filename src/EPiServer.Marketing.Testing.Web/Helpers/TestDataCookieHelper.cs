@@ -60,13 +60,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
             var aTest = _testRepo.GetTestById(testData.TestId);
+            int varIndex = -1;
+            if(testData.TestVariantId != Guid.NewGuid())
+            {
+                varIndex = aTest.Variants.FindIndex(i => i.Id == testData.TestVariantId);
+            }
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString())
             {
-                ["TestId"] = testData.TestId.ToString(),
-                ["ShowVariant"] = testData.ShowVariant.ToString(),
-                ["TestVariantId"] = testData.TestVariantId.ToString(),
-                ["Viewed"] = testData.Viewed.ToString(),
-                ["Converted"] = testData.Converted.ToString(),
+                ["tId"] = testData.TestId.ToString(),
+                ["vId"] = varIndex.ToString(),
+                ["viewed"] = testData.Viewed.ToString(),
+                ["converted"] = testData.Converted.ToString(),
                 Expires = aTest.EndDate,
                 HttpOnly = true
 
@@ -111,29 +115,30 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
                 Guid outguid;
-                retCookie.TestId = Guid.TryParse(cookie["TestId"], out outguid) ? outguid : Guid.Empty;
+                int outint = 0;
+                retCookie.TestId = Guid.TryParse(cookie["tId"], out outguid) ? outguid : Guid.Empty;
                 retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length), out outguid) ? outguid : Guid.Empty;
-                retCookie.TestVariantId = Guid.TryParse(cookie["TestVariantId"], out outguid) ? outguid : Guid.Empty;
 
                 bool outval;
-                retCookie.ShowVariant = bool.TryParse(cookie["ShowVariant"], out outval) ? outval : false;
-                retCookie.Viewed = bool.TryParse(cookie["Viewed"], out outval) ? outval : false;
-                retCookie.Converted = bool.TryParse(cookie["Converted"], out outval) ? outval : false;
+                retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
+                retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
                 var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId).FirstOrDefault();
                 if (test != null)
                 {
+                    var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
+                    retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
+                    retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
+
                     foreach (var kpi in test.KpiInstances)
                     {
                         bool converted = false;
                         bool.TryParse(cookie[kpi.Id + "-Flag"], out converted);
                         retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
                         retCookie.AlwaysEval = Attribute.IsDefined(kpi.GetType(), typeof(AlwaysEvaluateAttribute));
-
                     }
                 }
             }
-
             return retCookie;
         }
 
