@@ -188,8 +188,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
                 var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString(), activeTest.ContentLanguage);
-                
-                if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
+
+                if (testCookie.KpiConversionDictionary[Guid.Parse(kpiId)] == false || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
                     IKeyResult keyResult;
                     KeyResultType resultType;
@@ -231,7 +231,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                                 throw new FormatException("Conversion Failed: Kpi Type requires a value of type 'Double'");
                             }
                         }
-                        _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                        _webRepo.SaveKpiResultData(Guid.Parse(testId), int.Parse(itemVersion), keyResult, resultType);
                     }
 
                     if (!string.IsNullOrWhiteSpace(testId))
