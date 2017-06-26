@@ -206,7 +206,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 ["TestContentId"] = testContentId.ToString(),
                 Expires = expireDate,
-                [kpiInstance.Id.ToString() + "-Flag"] = true.ToString()
+                [0 + "-Flag"] = true.ToString()
             };
 
             var aTest = new ABTest()
@@ -337,7 +337,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var cookieHelper = GetUnitUnderTest();
             var kpiId = Guid.NewGuid();
-            var cookieKey = kpiId.ToString() + "-Flag";
+            var cookieKey = 0 + "-Flag";
 
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
 
