@@ -116,7 +116,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["viewed"] = "false",
                 ["converted"] = "false",
                 Expires = expireDate,
-                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             var test = new ABTest()
@@ -170,7 +170,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["viewed"] = "false",
                 ["converted"] = "false",
                 Expires = expireDate,
-                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             var test = new ABTest()
@@ -216,7 +216,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 ["start"] = startDate.ToString(),
                 Expires = expireDate,
-                [kpiInstance.Id.ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             var aTest = new ABTest()
@@ -255,7 +255,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["viewed"] = "True",
                 ["converted"] = "True",
                 Expires = expireDate,
-                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             var requestCookie1 = new HttpCookie(mockTestDataCookiehelper.COOKIE_PREFIX + requestContentCookie1.ToString()
@@ -266,7 +266,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["viewed"] = "True",
                 ["converted"] = "False",
                 Expires = expireDate,
-                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             var requestCookie2 = new HttpCookie(mockTestDataCookiehelper.COOKIE_PREFIX + requestContentCookie2.ToString()
@@ -277,7 +277,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ["viewed"] = "True",
                 ["converted"] = "False",
                 Expires = expireDate,
-                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             _httpContextHelper.Setup(hch => hch.GetResponseCookieKeys()).Returns(new string[1] { responseCookie1.Name });
@@ -359,7 +359,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var cookieHelper = GetUnitUnderTest();
             var kpiId = Guid.NewGuid();
-            var cookieKey = kpiId.ToString() + "-Flag";
+            var cookieKey = "k0";
 
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
@@ -463,7 +463,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             { // purposely empty properties...
                 ["start"] = startDate.ToString(),
                 Expires = expireDate,
-                [Guid.NewGuid().ToString() + "-Flag"] = true.ToString()
+                ["k0"] = true.ToString()
             };
 
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);

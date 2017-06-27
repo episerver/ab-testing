@@ -80,9 +80,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 HttpOnly = true
 
             };
-            foreach (var kpi in testData.KpiConversionDictionary)
+            testData.KpiConversionDictionary.OrderBy(x => x.Key);
+            for(var x=0; x<testData.KpiConversionDictionary.Count;x++)
             {
-                cookieData[kpi.Key.ToString() + "-Flag"] = kpi.Value.ToString();
+                cookieData["k"+x] = testData.KpiConversionDictionary.ToList()[x].Value.ToString();
             }
 
             _httpContextHelper.AddCookie(cookieData);
@@ -149,12 +150,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
                     retCookie.TestId = test.Id;
 
-                    foreach (var kpi in test.KpiInstances)
+                    var orderedKpiInstances = test.KpiInstances.OrderBy(x => x.Id).ToList();
+                    test.KpiInstances = orderedKpiInstances;
+
+                    for(var x=0; x<test.KpiInstances.Count; x++)
                     {
                         bool converted = false;
-                        bool.TryParse(cookie[kpi.Id + "-Flag"], out converted);
-                        retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
-                        retCookie.AlwaysEval = Attribute.IsDefined(kpi.GetType(), typeof(AlwaysEvaluateAttribute));
+                        bool.TryParse(cookie["k"+x], out converted);
+                        retCookie.KpiConversionDictionary.Add(test.KpiInstances[x].Id, converted);
+                        retCookie.AlwaysEval = Attribute.IsDefined(test.KpiInstances[x].GetType(), typeof(AlwaysEvaluateAttribute));
                     }
                 }
             }
