@@ -83,7 +83,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             testData.KpiConversionDictionary.OrderBy(x => x.Key);
             for(var x=0; x<testData.KpiConversionDictionary.Count;x++)
             {
-                cookieData[x + "-Flag"] = testData.KpiConversionDictionary.ToList()[x].Value.ToString();
+                cookieData["k"+x] = testData.KpiConversionDictionary.ToList()[x].Value.ToString();
             }
 
             _httpContextHelper.AddCookie(cookieData);
@@ -156,7 +156,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     for(var x=0; x<test.KpiInstances.Count; x++)
                     {
                         bool converted = false;
-                        bool.TryParse(cookie[x + "-Flag"], out converted);
+                        bool.TryParse(cookie["k"+x], out converted);
                         retCookie.KpiConversionDictionary.Add(test.KpiInstances[x].Id, converted);
                         retCookie.AlwaysEval = Attribute.IsDefined(test.KpiInstances[x].GetType(), typeof(AlwaysEvaluateAttribute));
                     }
