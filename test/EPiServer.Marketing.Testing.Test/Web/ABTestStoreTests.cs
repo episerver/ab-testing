@@ -10,6 +10,8 @@ using System;
 using System.Net;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using Xunit;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -17,12 +19,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
     {
         Mock<IServiceLocator> _locator = new Mock<IServiceLocator>();
         Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
+        Mock<IEpiserverHelper> _episerverHelper = new Mock<IEpiserverHelper>();
+
         Mock<ILogger> _logger = new Mock<ILogger>();
 
         private ABTestStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
+            _locator.Setup(sl => sl.GetInstance<IEpiserverHelper>()).Returns(_episerverHelper.Object);
 
             ABTestStore testStore = new ABTestStore(_locator.Object);
             return testStore;
@@ -35,17 +40,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
             Guid testGuid = Guid.NewGuid();
 
+            CultureInfo currentCulture = new CultureInfo("en-GB");
+
             ABTest test = new ABTest()
             {
-                Id = testGuid
+                Id = testGuid,
+                ContentLanguage = "en-GB"
             };
 
             _webRepo.Setup(m => m.GetActiveTestForContent(
-                It.Is<Guid>(arg => arg.Equals(contentGuid)))).Returns(test);
-
+               It.Is<Guid>(arg=>arg.Equals(contentGuid)), It.Is<CultureInfo>(arg=>arg.Equals(currentCulture)))).Returns(test);
+            _episerverHelper.Setup(call => call.GetContentCultureinfo()).Returns(currentCulture);
             RestResult result = testClass.Get(contentGuid.ToString()) as RestResult;
 
-            _webRepo.Verify(m => m.GetActiveTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid))),
+            _webRepo.Verify(m => m.GetActiveTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)), It.Is<CultureInfo>(arg => arg.Equals(currentCulture))),
                 "Guid passed to web repo did not match what was passed in to ABTestStore");
 
             Assert.True(result.Data is IMarketingTest, "Data in result is not IMarketingTest instance.");
@@ -59,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
 
             _webRepo.Setup(m => m.GetActiveTestForContent(
-                It.IsAny<Guid>())).Throws(new NotImplementedException());
+                It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Throws(new NotImplementedException());
 
             RestStatusCodeResult result = testClass.Get(contentGuid.ToString()) as RestStatusCodeResult;
 
@@ -76,16 +84,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
             Guid testGuid = Guid.NewGuid();
 
+            CultureInfo currentCulture = new CultureInfo("en-GB");
+
             ABTest test = new ABTest()
             {
-                Id = testGuid
+                Id = testGuid,
+                ContentLanguage = "en-GB"
             };
 
-            _webRepo.Setup(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)))).Verifiable();
+            _webRepo.Setup(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)), It.Is<CultureInfo>(arg => arg.Equals(currentCulture)))).Verifiable();
+            _episerverHelper.Setup(call => call.GetContentCultureinfo()).Returns(currentCulture);
 
             RestStatusCodeResult result = testClass.Delete(contentGuid.ToString()) as RestStatusCodeResult;
 
-            _webRepo.Verify(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid))),
+            _webRepo.Verify(m => m.DeleteTestForContent(It.Is<Guid>(arg => arg.Equals(contentGuid)), It.Is<CultureInfo>(arg => arg.Equals(currentCulture))),
                 "Guid passed to web repo did not match what was passed in to ABTestStore for Delete");
 
             // soft type cast will make result null if its not a RestStatusCodeResult
@@ -100,7 +112,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var testClass = GetUnitUnderTest();
             Guid contentGuid = Guid.NewGuid();
 
-            _webRepo.Setup(m => m.DeleteTestForContent(It.IsAny<Guid>())).Throws(new NotImplementedException());
+            _webRepo.Setup(m => m.DeleteTestForContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Throws(new NotImplementedException());
 
             RestStatusCodeResult result = testClass.Delete(contentGuid.ToString()) as RestStatusCodeResult;
 
@@ -111,7 +123,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void Post_Returns_Valid_Response()
+        public void Post_Returns_Valid_Response_WithValidCultureName()
         {
             var testClass = GetUnitUnderTest();
 
@@ -119,7 +131,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid returnGuid = Guid.NewGuid();
 
             _webRepo.Setup(m => m.CreateMarketingTest(It.Is<TestingStoreModel>(arg => arg.Equals(testData)))).Returns(returnGuid);
+            _episerverHelper.Setup(m => m.GetContentCultureinfo()).Returns(new System.Globalization.CultureInfo("zh-CHT"));
+            RestStatusCodeResult result = testClass.Post(testData) as RestStatusCodeResult;
+            // soft type cast will make result null if its not a RestStatusCodeResult
+            Assert.True(result != null, "Expected a RestStatusCodeResult indicating success.");
+            // make sure return status code is correct.
+            Assert.True(result.StatusCode == (int)HttpStatusCode.Created, "Expected Created status code but got something else.");
+        }
 
+        [Fact]
+        public void Post_Returns_Valid_Response_WithUnspecifiedCulture()
+        {
+            var testClass = GetUnitUnderTest();
+
+            TestingStoreModel testData = new TestingStoreModel();
+            Guid returnGuid = Guid.NewGuid();
+
+            _webRepo.Setup(m => m.CreateMarketingTest(It.Is<TestingStoreModel>(arg => arg.Equals(testData)))).Returns(returnGuid);
+            _episerverHelper.Setup(m => m.GetContentCultureinfo()).Returns((CultureInfo)null);
             RestStatusCodeResult result = testClass.Post(testData) as RestStatusCodeResult;
             // soft type cast will make result null if its not a RestStatusCodeResult
             Assert.True(result != null, "Expected a RestStatusCodeResult indicating success.");

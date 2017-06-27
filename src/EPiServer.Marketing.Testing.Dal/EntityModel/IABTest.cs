@@ -67,6 +67,11 @@ namespace EPiServer.Marketing.Testing.Dal.EntityModel
         string LastModifiedBy { get; set; }
 
         /// <summary>
+        /// Language of the site for the content being tested.
+        /// </summary>
+        string ContentLanguage { get; set; }
+
+        /// <summary>
         /// Date and time the test was created.
         /// </summary>
         DateTime CreatedDate { get; set; }

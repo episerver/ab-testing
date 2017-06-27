@@ -8,6 +8,9 @@ using EPiServer.Shell.Services.Rest;
 using System.Net;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.Models;
+using EPiServer.Globalization;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -19,11 +22,13 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     {
         private IMarketingTestingWebRepository _webRepo;
         private ILogger _logger;
+        private IEpiserverHelper _episerverHelper;
 
         [ExcludeFromCodeCoverage]
         public ABTestStore()
         {
             _webRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             _logger = LogManager.GetLogger();
         }
 
@@ -31,6 +36,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         internal ABTestStore(IServiceLocator serviceLocator)
         {
             _webRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
             _logger = serviceLocator.GetInstance<ILogger>();
         }
 
@@ -43,10 +49,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Get(string id)
         {
             ActionResult result;
+            CultureInfo currentCultureInfo = _episerverHelper.GetContentCultureinfo();
             try
             {
                 var cGuid = Guid.Parse(id);
-                var aTest = _webRepo.GetActiveTestForContent(cGuid);
+                var aTest = _webRepo.GetActiveTestForContent(cGuid, currentCultureInfo);
                 result = Rest(aTest);
             }
             catch(Exception e)
@@ -71,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             try
             {
                 var cGuid = Guid.Parse(id);
-                _webRepo.DeleteTestForContent(cGuid);
+                _webRepo.DeleteTestForContent(cGuid, _episerverHelper.GetContentCultureinfo());
                 result = new RestStatusCodeResult((int)HttpStatusCode.OK);
             }
             catch(Exception e)
@@ -92,6 +99,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Post(TestingStoreModel testData)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            testData.ContentCulture = _episerverHelper.GetContentCultureinfo();
 
             try
             {
@@ -122,6 +131,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         public ActionResult Put(TestResultStoreModel testResult)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            testResult.ContentCulture = _episerverHelper.GetContentCultureinfo();
 
             try
             {

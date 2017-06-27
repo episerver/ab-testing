@@ -26,7 +26,7 @@
         <duration_header>Kuinka pitkään haluat suorittaa A/B-testiä?</duration_header>
         <error_conversiongoal>Muuntotavoite on valittava ennen kuin A/B-testi voidaan tallentaa.</error_conversiongoal>
         <error_date_in_the_past>Testin aloitusaika/-päivämäärä ei voi olla menneisyydessä.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Samanlaisilla tavoitteilla ei saa olla samoja arvoja</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Keston on oltava kelvollinen kokonaisluku 1–365</error_duration>
         <error_invalid_date_time_value>Annettu tieto ei ole kelvollinen päivämäärän/ajan arvo</error_invalid_date_time_value>
         <error_participation_percentage>Osallistumisprosentin on oltava 1–100</error_participation_percentage>
@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Jos annat kaikille tavoitteille yhtä suuren merkityksen, kaikkiin tavoitteisiin tähtäävät muunnot mitataan samalla tavalla.</goals_weight_equal_description>
         <goals_weight_heading>Tasapainota testin tavoitteiden merkitystä:</goals_weight_heading>
         <goals_weight_higher_description>Jos annat jollekin tavoitteelle suuremman merkityksen, tähän tavoitteeseen tähtäävät muunnot lasketaan suuremmalla kertoimella verrattuna alemmaksi asetettuihin muuntoihin.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>ei ajoitettu, alkaa nyt</notscheduled_text>
         <participant_percentage_tip>Korkeampi osallistumisprosentti vähentää aikaa, jota tarvitaan keräämään tarvittavat tilastot voittajan valitsemista varten.</participant_percentage_tip>
         <participation_header>Millainen tähän A/B-testiin osallistuvien vierailijoiden prosenttiosuuden tulee olla?</participation_header>
@@ -67,6 +70,14 @@
         <success>Määritysasetusten tallennus onnistui.</success>
         <testduration>Testin kesto:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Luottamustaso</advanced_options_confidence_level>
         <advanced_options_header>Lisäasetukset</advanced_options_header>
@@ -76,7 +87,7 @@
         <content_chosen>, ja sisältö on valittu julkaisuun</content_chosen>
         <content_control_header>A / Kontrolli</content_control_header>
         <content_selected>Tämä versio valittiin voittajaksi</content_selected>
-        <conversion_header>Muuntotavoite</conversion_header>
+        <conversion_header>Muuntotavoite(s)</conversion_header>
         <conversion_rate>muuntonopeus</conversion_rate>
         <conversion_selector_description>Vierailija siirtyy sivulle</conversion_selector_description>
         <conversions>muuntoa</conversions>
@@ -120,6 +131,7 @@
         <content_challenger_header>B / Haastaja</content_challenger_header>
         <content_control_header>A / Kontrolli</content_control_header>
         <content_winning_tooltip>Tämä versio toimii paremmin</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>muuntonopeus</conversion_rate>
         <conversions>muuntoa</conversions>
         <days_divider> päivä(ä) / </days_divider>

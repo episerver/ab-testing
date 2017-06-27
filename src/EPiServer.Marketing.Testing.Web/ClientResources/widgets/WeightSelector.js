@@ -4,13 +4,16 @@
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/WeightSelector.html",
+    "epi/i18n!marketing-testing/nls/abtesting",
     "dojo/dom-class",
     "dojo/on",
     "xstyle/css!marketing-testing/css/WeightSelector.css"
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, domClass, on) {
+], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template, resources, domClass, on) {
     return declare("WeightSelector", [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
 
         templateString: template,
+
+        resources: resources,
 
         value: null,
 
@@ -54,7 +57,21 @@
 
             if (weight) {
                 if (this.value != weight) {
-                    this._setValueAttr(weight);
+                    var localizedWeight = "";
+                    // need to localize Low, Medium, High from the db
+                    switch (weight) {
+                        case "Low":
+                            localizedWeight = resources.addtestview.low;
+                            break;
+                        case "Medium":
+                            localizedWeight = resources.addtestview.medium;
+                            break;
+                        case "High":
+                            localizedWeight = resources.addtestview.high;
+                            break;
+                    };
+
+                    this._setValueAttr(localizedWeight);
                 }
                 switch (weight) {
                     case "Low":

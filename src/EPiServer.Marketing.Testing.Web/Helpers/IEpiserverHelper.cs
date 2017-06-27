@@ -1,5 +1,6 @@
 ﻿using EPiServer.Core;
 using EPiServer.Web.Routing;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -22,5 +23,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="args"></param>
         /// <returns></returns>
         string GetPreviewUrl(ContentReference cr, string language, VirtualPathArguments args);
+
+        /// <summary>
+        /// Returns culture info for the current loaded content
+        /// </summary>
+        /// <returns></returns>
+        CultureInfo GetContentCultureinfo();
     }
 }

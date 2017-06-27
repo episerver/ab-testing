@@ -26,7 +26,7 @@
         <duration_header>Sur quelle durée souhaitez-vous prolonger le test A/B ?</duration_header>
         <error_conversiongoal>Vous devez sélectionner un objectif de conversion avant de pouvoir enregistrer le test A/B.</error_conversiongoal>
         <error_date_in_the_past>La date/l’heure de départ du test ne peut pas être antérieure.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Les objectifs en double ne peuvent pas partager les mêmes valeurs</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>La durée indiquée doit être un entier valide compris entre 1 et 365</error_duration>
         <error_invalid_date_time_value>L'information saisie n'est pas une valeur de date/heure valide</error_invalid_date_time_value>
         <error_participation_percentage>Le pourcentage de participation doit être compris entre 1 et 100</error_participation_percentage>
@@ -39,6 +39,9 @@
         <goals_weight_equal_description>Si vous donnez la même importance à tous les objectifs, les conversions vers tous les objectifs sont mesurées de la même manière.</goals_weight_equal_description>
         <goals_weight_heading>Équilibrer l’importance des objectifs du test :</goals_weight_heading>
         <goals_weight_higher_description>Si vous donnez une plus grande importance à un objectif, les conversions vers cet objectif compteront plus que les conversions vers ceux dont le paramètre est inférieur.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>non planifié, va commencer maintenant</notscheduled_text>
         <participant_percentage_tip>Un pourcentage de participation élevé réduit le temps nécessaire pour collecter suffisamment de statistiques pour pouvoir choisir un vainqueur.</participant_percentage_tip>
         <participation_header>Quel pourcentage des visiteurs devrait participer à ce test A/B ?</participation_header>
@@ -67,6 +70,14 @@
         <success>Paramètres de configuration enregistrés avec succès.</success>
         <testduration>Durée du test :</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Niveau de confiance</advanced_options_confidence_level>
         <advanced_options_header>Options avancées</advanced_options_header>
@@ -76,7 +87,7 @@
         <content_chosen>, et le contenu a été choisi pour publication</content_chosen>
         <content_control_header>A / Contrôle</content_control_header>
         <content_selected>Cette version est le vainqueur</content_selected>
-        <conversion_header>Objectif de conversion</conversion_header>
+        <conversion_header>Objectif de conversion(s)</conversion_header>
         <conversion_rate>taux de conversion</conversion_rate>
         <conversion_selector_description>Un visiteur arrive sur la page</conversion_selector_description>
         <conversions>conversions</conversions>
@@ -120,6 +131,7 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Contrôle</content_control_header>
         <content_winning_tooltip>Cette version fonctionne mieux</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>taux de conversion</conversion_rate>
         <conversions>conversions</conversions>
         <days_divider> jour(s) / </days_divider>

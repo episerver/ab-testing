@@ -6,6 +6,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -28,6 +29,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="originalItemId">ID of the item under test.</param>
         /// <returns>List of tests.</returns>
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
+
+
+        /// <summary>
+        /// Retrieves all active tests that have the supplied OriginalItemId and ContentCulture name. The associated data for each
+        /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
+        /// </summary>
+        /// <param name="originalItemId">ID of the item under test.</param>
+        /// <param name="contentCulture">Content Culture of the current loaded content.</param>
+        /// <returns></returns>
+        List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture);
 
         /// <summary>
         /// Retrieves all tests, regardless of test state, that have the supplied OriginalItemId.
@@ -55,7 +66,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Removes a test from the database.
         /// </summary>
         /// <param name="testObjectId">ID of a test.</param>
-        void Delete(Guid testObjectId);
+        /// <param name="cultureInfo">Content Culture of the current loaded content.</param>
+        void Delete(Guid testObjectId, CultureInfo cultureInfo = null);
 
         /// <summary>
         /// Starts a test.
@@ -67,14 +79,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Stops a test.
         /// </summary>
         /// <param name="testObjectId">ID of a test.</param>
-        void Stop(Guid testObjectId);
+        /// <param name="cultureInfo">Content Culture of the current loaded content.</param>
+        void Stop(Guid testObjectId, CultureInfo cultureInfo = null);
 
         /// <summary>
         /// Archives a test.
         /// </summary>
         /// <param name="testObjectId">ID of a test.</param>
         /// <param name="winningVariantId">ID of the variant that was declared the winner.</param>
-        void Archive(Guid testObjectId, Guid winningVariantId);
+        /// <param name="cultureInfo">Content Culture of the current loaded content.</param>
+        void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null);
 
         /// <summary>
         /// Saves a KPI result.  The result is appended to the list of results for a given variant version for a test for both historical and statistical calculations.
@@ -115,6 +129,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="contentGuid">ID of the content to retrieve.</param>
         /// <returns>A content item.</returns>
         IContent GetVariantContent(Guid contentGuid);
+
+        IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo);
 
         /// <summary>
         /// Given a list of KPIs and an EventArg object, each KPI will be evaluated and a list of KPI instances 
