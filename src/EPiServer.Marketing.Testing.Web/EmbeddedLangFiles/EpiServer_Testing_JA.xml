@@ -26,7 +26,7 @@
         <duration_header>どのくらいの期間、A/Bテストを実施したいですか?</duration_header>
         <error_conversiongoal>A/Bテストを保存する前に、コンバージョン目標を選択する必要があります。</error_conversiongoal>
         <error_date_in_the_past>テストの開始日/時刻を過去にすることはできません。</error_date_in_the_past>
-        <error_duplicate_kpi_values>重複した目標は同じ値を共有できません</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>期間は1から365までの有効な整数でなければなりません</error_duration>
         <error_invalid_date_time_value>入力された情報は、有効な日付/時刻値ではありません</error_invalid_date_time_value>
         <error_participation_percentage>参加割合は1から100の間でなければなりません</error_participation_percentage>
@@ -39,6 +39,9 @@
         <goals_weight_equal_description>すべての目標に同じ重要度を与えた場合、すべての目標のコンバージョンは同じ方法で測定されます。</goals_weight_equal_description>
         <goals_weight_heading>テスト目標の重要度のバランスをとる:</goals_weight_heading>
         <goals_weight_higher_description>目標により高い重要度を与えた場合、その目標のコンバージョンは、設定が低い目標のコンバージョンよりも高くカウントされます。</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>はスケジュールされていません。今すぐ開始します</notscheduled_text>
         <participant_percentage_tip>参加率が高くなると、勝者の選出に十分な統計情報を収集するのに必要な時間が短縮されます。</participant_percentage_tip>
         <participation_header>何パーセントの訪問者がこのA/Bテストに参加する必要がありますか?</participation_header>
@@ -67,6 +70,14 @@
         <success>構成設定が正常に保存されました。</success>
         <testduration>テスト期間:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>信頼水準</advanced_options_confidence_level>
         <advanced_options_header>詳細オプション</advanced_options_header>
@@ -76,7 +87,7 @@
         <content_chosen>、公開に向けたコンテンツが選択されました</content_chosen>
         <content_control_header>A / コントロール</content_control_header>
         <content_selected>このバージョンは勝者として選ばれました</content_selected>
-        <conversion_header>コンバージョン目標</conversion_header>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>コンバージョン率</conversion_rate>
         <conversion_selector_description>訪問者がページに移動します</conversion_selector_description>
         <conversions>コンバージョン</conversions>
@@ -120,6 +131,7 @@
         <content_challenger_header>B / チャレンジャー</content_challenger_header>
         <content_control_header>A / コントロール</content_control_header>
         <content_winning_tooltip>このバージョンの方がパフォーマンスに優れています</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>コンバージョン率</conversion_rate>
         <conversions>コンバージョン</conversions>
         <days_divider> 日 (間) / </days_divider>

@@ -15,6 +15,7 @@ using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.Exceptions;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -124,6 +125,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId,CultureInfo contentCulture)
+        {
+            var cachedTests = ActiveCachedTests;
+            return cachedTests.Where(test => test.OriginalItemId == originalItemId && test.ContentLanguage == contentCulture.Name).ToList();
+        }
+
         /// <inheritdoc />
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
@@ -179,10 +186,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
-        public void Delete(Guid testObjectId)
+        public void Delete(Guid testObjectId, CultureInfo cultureInfo = null)
         {
             var testToDelete = Get(testObjectId);
-            RemoveCachedVariant(testToDelete.OriginalItemId);
+            RemoveCachedVariant(testToDelete.OriginalItemId, cultureInfo);
 
             foreach (var kpi in testToDelete.KpiInstances)
             {
@@ -203,7 +210,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestDeletedEvent, new TestEventArgs(test));
 
         }
-
+       
         /// <inheritdoc />
         public void Start(Guid testObjectId)
         {
@@ -219,11 +226,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
-        public void Stop(Guid testObjectId)
+        public void Stop(Guid testObjectId, CultureInfo cultureInfo = null)
         {
             _dataAccess.Stop(testObjectId);
 
-            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
+            RemoveCachedVariant(Get(testObjectId).OriginalItemId, cultureInfo);
 
             var cachedTests = ActiveCachedTests;
 
@@ -238,10 +245,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
-        public void Archive(Guid testObjectId, Guid winningVariantId)
+        public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
-            RemoveCachedVariant(Get(testObjectId).OriginalItemId);
+            RemoveCachedVariant(Get(testObjectId).OriginalItemId, cultureInfo);
             var cachedTests = ActiveCachedTests;
             var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
             if (test != null)
@@ -313,7 +320,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid);
 
-            return retData ?? UpdateVariantContentCache(contentGuid);
+            return retData ?? UpdateVariantContentCache(contentGuid, new CultureInfo("en-GB"));
+        }
+
+        public IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo)
+        {
+            var retData = (IContent)_variantCache.Get("epi" + contentGuid + ":" + cultureInfo.Name);
+
+            return retData ?? UpdateVariantContentCache(contentGuid, cultureInfo);
         }
 
         private Object _incrementLock = new Object();
@@ -400,20 +414,30 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
-        internal void RemoveCachedVariant(Guid contentGuid)
+        internal void RemoveCachedVariant(Guid contentGuid, CultureInfo cultureInfo)
         {
-            if (_variantCache.Contains("epi" + contentGuid))
+            if (null != cultureInfo)
             {
-                _variantCache.Remove("epi" + contentGuid);
+                if (_variantCache.Contains("epi" + contentGuid + ":" + cultureInfo.Name))
+                {
+                    _variantCache.Remove("epi" + contentGuid + ":" + cultureInfo.Name);
+                }
+            }
+            else
+            {
+                if (_variantCache.Contains("epi" + contentGuid))
+                {
+                    _variantCache.Remove("epi" + contentGuid);
+                }
             }
         }
 
-        internal IContent UpdateVariantContentCache(Guid contentGuid)
+        internal IContent UpdateVariantContentCache(Guid contentGuid, CultureInfo cultureInfo)
         {
             IVersionable versionableContent = null;
 
             var test =
-                GetActiveTestsByOriginalItemId(contentGuid).FirstOrDefault(x => x.State.Equals(TestState.Active));
+                GetActiveTestsByOriginalItemId(contentGuid, cultureInfo).FirstOrDefault(x => x.State.Equals(TestState.Active));
 
             if (test != null)
             {
@@ -438,7 +462,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                                 AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
                             };
 
-                            _variantCache.Add("epi" + contentGuid, (IContent)versionableContent, cacheItemPolicy);
+                            _variantCache.Add("epi" + contentGuid + ":" + cultureInfo.Name, (IContent)versionableContent, cacheItemPolicy);
                         }
                     }
                 }

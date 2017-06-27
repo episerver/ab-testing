@@ -26,7 +26,7 @@
         <duration_header>Test duration</duration_header>
         <error_conversiongoal>You must select a conversion goal before you can start the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
         <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
@@ -39,6 +39,9 @@
         <goals_weight_equal_description>If you give all goals the same importance, conversions towards all goals are measured the same way.</goals_weight_equal_description>
         <goals_weight_heading>Balance the importance of the test goals:</goals_weight_heading>
         <goals_weight_higher_description>If you give a goal a higher importance, conversions towards that goal will count higher than conversions towards the ones with a lower setting.</goals_weight_higher_description>
+        <high>High</high>
+        <low>Low</low>
+        <medium>Medium</medium>
         <notscheduled_text>not scheduled, and will start now</notscheduled_text>
         <participant_percentage_tip>More participation reduces time to gather statistics and pick a winner.</participant_percentage_tip>
         <participation_header>Participation percentage</participation_header>
@@ -67,6 +70,14 @@
         <success>Configuration settings saved successfully.</success>
         <testduration>Test Duration:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>
@@ -76,7 +87,7 @@
         <content_chosen> A winner was selected.</content_chosen>
         <content_control_header>A / Control</content_control_header>
         <content_selected>This version was picked as the winner</content_selected>
-        <conversion_header>Conversion goal</conversion_header>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversion_selector_description>Visitor navigates to page</conversion_selector_description>
         <conversions>conversions</conversions>
@@ -120,6 +131,7 @@
         <content_challenger_header>B / Challenger</content_challenger_header>
         <content_control_header>A / Control</content_control_header>
         <content_winning_tooltip>This version is performing better</content_winning_tooltip>
+        <conversion_header>Conversion goal(s)</conversion_header>
         <conversion_rate>conversion rate</conversion_rate>
         <conversions>conversions</conversions>
         <days_divider> day(s) / </days_divider>
