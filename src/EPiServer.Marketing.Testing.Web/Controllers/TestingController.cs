@@ -131,7 +131,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                mm.EmitUpdateViews(Guid.Parse(testId), Convert.ToInt16(itemVersion));
+                mm.EmitUpdateViews(Guid.Parse(testId), int.Parse(itemVersion));
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
@@ -157,7 +157,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
                 var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
 
-                mm.EmitUpdateConversion(Guid.Parse(testId), Convert.ToInt16(itemVersion), Guid.Parse(kpiId), sessionid);
+                mm.EmitUpdateConversion(Guid.Parse(testId), int.Parse(itemVersion), Guid.Parse(kpiId), sessionid);
 
                 return Request.CreateResponse(HttpStatusCode.OK, "Conversion Successful");
             }
@@ -187,9 +187,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                 var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
                 var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
-                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString());
-                
-                if (!testCookie.Converted || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
+                var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString(), activeTest.ContentLanguage);
+
+                if (testCookie.KpiConversionDictionary[Guid.Parse(kpiId)] == false || testCookie.AlwaysEval) // MAR-903 - if we already converted dont convert again.
                 {
                     IKeyResult keyResult;
                     KeyResultType resultType;
@@ -231,7 +231,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                                 throw new FormatException("Conversion Failed: Kpi Type requires a value of type 'Double'");
                             }
                         }
-                        _webRepo.SaveKpiResultData(Guid.Parse(testId), Convert.ToInt16(itemVersion), keyResult, resultType);
+                        _webRepo.SaveKpiResultData(Guid.Parse(testId), int.Parse(itemVersion), keyResult, resultType);
                     }
 
                     if (!string.IsNullOrWhiteSpace(testId))

@@ -4,6 +4,8 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Linq;
 
 namespace EPiServer.Marketing.Testing.Web.Queries
 {
@@ -13,12 +15,13 @@ namespace EPiServer.Marketing.Testing.Web.Queries
         {
             var contentRepository = serviceLocator.GetInstance<IContentRepository>();
             var webRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
+            var _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
             var filter = new ABTestFilter() { Operator = FilterOperator.And, Property = ABTestProperty.State, Value = state };
             var activeCriteria = new TestCriteria();
             activeCriteria.AddFilter(filter);
 
             // get tests using active filter
-            var activeTests = webRepository.GetTestList(activeCriteria);
+            var activeTests = webRepository.GetTestList(activeCriteria).Where(x=>x.ContentLanguage == _episerverHelper.GetContentCultureinfo().Name).ToList();
 
             // filter out all but latest tests for each originalItem if TestState is Done
             if (state == TestState.Done)
@@ -46,7 +49,8 @@ namespace EPiServer.Marketing.Testing.Web.Queries
                 //Get the icontent item if it exists, if not found returns a BasicContent instance with 
                 // name set to ContentNotFound
                 IContent content;
-                if( contentRepository.TryGet<IContent>(marketingTest.OriginalItemId, out content) ) 
+               
+                if( contentRepository.TryGet<IContent>(marketingTest.OriginalItemId, out content)  )
                 {
                     contents.Add(content);
                 }

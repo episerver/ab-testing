@@ -4,10 +4,20 @@
     <abtesting>
       <addtestview>
         <challenger path="/abtesting/addtestview/challenger/">B / Challenger</challenger>
+        <error_duplicate_kpi_values path="/abtesting/addtestview/error_duplicate_kpi_values/">Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <high path="/abtesting/addtestview/high/">High</high>
         <low path="/abtesting/addtestview/low/">Low</low>
         <medium path="/abtesting/addtestview/medium/">Medium</medium>
       </addtestview>
+      <archivedtestcomponent>
+        <description path="/abtesting/archivedtestcomponent/description/">Shows archived tests for the selected content.</description>
+        <header>
+          <archiveddate path="/abtesting/archivedtestcomponent/header/archiveddate/">End</archiveddate>
+          <owner path="/abtesting/archivedtestcomponent/header/owner/">Owner</owner>
+          <startdate path="/abtesting/archivedtestcomponent/header/startdate/">Start</startdate>
+        </header>
+        <title path="/abtesting/archivedtestcomponent/title/">Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <content_challenger_header path="/abtesting/archiveview/content_challenger_header/">B / Challenger</content_challenger_header>
         <conversions path="/abtesting/archiveview/conversions/">conversions</conversions>

@@ -16,7 +16,6 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
-using EPiServer.Marketing.Testing.Messaging;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -72,9 +71,24 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return aTest;
         }
 
+        public IMarketingTest GetActiveTestForContent(Guid aContentGuid, CultureInfo contentCulture)
+        {
+            var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived && abTest.ContentLanguage == contentCulture.Name);
+
+            if (aTest == null)
+                aTest = new ABTest();
+
+            return aTest;
+        }
+
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+        }
+
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture)
+        {
+            return _testManager.GetActiveTestsByOriginalItemId(originalItemId, contentCulture);
         }
 
         public IMarketingTest GetTestById(Guid testGuid)
@@ -87,6 +101,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetTestList(criteria);
         }
 
+        public List<IMarketingTest> GetTestList(TestCriteria criteria, CultureInfo contentCulture)
+        {
+            var testList = _testManager.GetTestList(criteria);
+            return testList.Where(x => x.ContentLanguage == contentCulture.Name).ToList();
+        }
+
         public void DeleteTestForContent(Guid aContentGuid)
         {
             var testList = _testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived);
@@ -94,6 +114,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             foreach (var test in testList)
             {
                 _testManager.Delete(test.Id);
+            }
+        }
+
+        public void DeleteTestForContent(Guid aContentGuid, CultureInfo cultureInfo)
+        {
+            var testList = _testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived && abtest.ContentLanguage == cultureInfo.Name);
+
+            foreach (var test in testList)
+            {
+                _testManager.Delete(test.Id, cultureInfo);
             }
         }
 
@@ -138,9 +168,27 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="testGuid"></param>
+        /// /// <param name="cultureInfo"></param>
+        public void StopMarketingTest(Guid testGuid, CultureInfo cultureInfo)
+        {
+            _testManager.Stop(testGuid, cultureInfo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId)
         {
             _testManager.Archive(testObjectId, winningVariantId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo)
+        {
+            _testManager.Archive(testObjectId, winningVariantId, cultureInfo);
         }
 
         public Guid SaveMarketingTest(IMarketingTest testData)
@@ -154,6 +202,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 testData.StartDate = DateTime.UtcNow.ToString(CultureInfo.CurrentCulture);
             }
+
+            // get the name of the culture for the current loaded content. If none exists or not available we set it to en empty string.
+            var contentCultureName = testData.ContentCulture != null ? testData.ContentCulture.Name : string.Empty;
 
             var kpiData = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(testData.KpiId);
             var kpis = kpiData.Select(kpi => _kpiManager.Get(kpi.Key)).ToList();
@@ -173,6 +224,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var test = new ABTest
             {
                 OriginalItemId = testData.TestContentId,
+                ContentLanguage = contentCultureName,
                 Owner = GetCurrentUser(),
                 Description = testData.TestDescription,
                 Title = testData.TestTitle,
@@ -256,7 +308,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     }
 
                     // only want to archive the test if publishing the winning variant succeeds.
-                    ArchiveMarketingTest(currentTest.Id, workingVariantId);
+                    ArchiveMarketingTest(currentTest.Id, workingVariantId, testResult.ContentCulture);
                 }
                 catch (Exception ex)
                 {
@@ -280,6 +332,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public IContent GetVariantContent(Guid contentGuid)
         {
             return _testManager.GetVariantContent(contentGuid);
+        }
+
+        public IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo)
+        {
+            return _testManager.GetVariantContent(contentGuid, cultureInfo);
         }
 
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)

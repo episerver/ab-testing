@@ -26,7 +26,7 @@
         <duration_header>Test duration</duration_header>
         <error_conversiongoal>You must select a conversion goal before you can start the A/B test.</error_conversiongoal>
         <error_date_in_the_past>The starting date/time of the test cannot be in the past.</error_date_in_the_past>
-        <error_duplicate_kpi_values>Duplicate goals cannot share the same values</error_duplicate_kpi_values>
+        <error_duplicate_kpi_values>Duplicate goals may not share the same values</error_duplicate_kpi_values>
         <error_duration>Duration must be a valid integer between 1 and 365</error_duration>
         <error_invalid_date_time_value>The information entered is not a valid date/time value</error_invalid_date_time_value>
         <error_participation_percentage>Participation percentage must be between 1 and 100</error_participation_percentage>
@@ -70,6 +70,15 @@
         <success>Configuration settings saved successfully.</success>
         <testduration>Test Duration:</testduration>
       </admin>
+      <archivedtestcomponent>
+        <description>Shows archived tests for the selected content.</description>
+        <header>
+          <archiveddate>End</archiveddate>
+          <owner>Owner</owner>
+          <startdate>Start</startdate>
+        </header>
+        <title>Archived Tests</title>
+      </archivedtestcomponent>
       <archiveview>
         <advanced_options_confidence_level>Confidence Level</advanced_options_confidence_level>
         <advanced_options_header>Advanced Options</advanced_options_header>

@@ -185,6 +185,7 @@ function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSumm
                 var kpiResultType = context.data.kpiResultType;
                 var hasChart = true;
                 var kpiConversions;
+                var kpiConversionRate = 0;
                 if (kpiResultType === "KpiFinancialResult") {
                     hasChart = false;
                     kpiConversions = this.publishedVariant.keyFinancialResults.length;
@@ -230,6 +231,7 @@ function (dom, registry, datetime, username, domClass, KpiSummaryWidget, KpiSumm
                 var kpiResultType = context.data.kpiResultType;
                 var hasChart = true;
                 var kpiConversions;
+                var kpiConversionRate = 0;
                 if (kpiResultType === "KpiFinancialResult") {
                     hasChart = false;
                     kpiConversions = this.draftVariant.keyFinancialResults.length;
