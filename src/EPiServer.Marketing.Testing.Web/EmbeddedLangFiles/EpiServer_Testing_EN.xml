@@ -71,6 +71,7 @@
         <testduration>Test Duration:</testduration>
       </admin>
       <archivedtestcomponent>
+        <description>Shows archived tests for the selected content.</description>
         <header>
           <archiveddate>End</archiveddate>
           <owner>Owner</owner>

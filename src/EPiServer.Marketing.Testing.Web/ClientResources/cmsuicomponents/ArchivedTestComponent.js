@@ -85,9 +85,8 @@
 
         _viewArchivedTest(testId) {
             //Shows the archive view for the selected test
-            topic.publish("/epi/shell/context/request", {
-                uri: "epi.marketing.testing:///testid=" + testId + "/archive"
-            });
+            var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
+            topic.publish("/epi/shell/context/request", contextParameters);
         },
 
         _setGridData: function (contentLink) {

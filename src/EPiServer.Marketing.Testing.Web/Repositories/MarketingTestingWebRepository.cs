@@ -125,6 +125,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return tests;
         }
 
+        public List<IMarketingTest> GetTestList(TestCriteria criteria, CultureInfo contentCulture)
+        {
+            var testList = _testManager.GetTestList(criteria);
+            return testList.Where(x => x.ContentLanguage == contentCulture.Name).ToList();
+        }
+
         public void DeleteTestForContent(Guid aContentGuid)
         {
             var testList = _testManager.GetTestByItemId(aContentGuid).FindAll(abtest => abtest.State != TestState.Archived);
@@ -223,7 +229,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             // get the name of the culture for the current loaded content. If none exists or not available we set it to en empty string.
             var contentCultureName = testData.ContentCulture != null ? testData.ContentCulture.Name : string.Empty;
-            
+
             var kpiData = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(testData.KpiId);
             var kpis = kpiData.Select(kpi => _kpiManager.Get(kpi.Key)).ToList();
 

@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 varIndex = aTest.Variants.FindIndex(i => i.Id == testData.TestVariantId);
             }
-            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo().Name)
+            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + aTest.ContentLanguage)
             {
                 ["start"] = aTest.StartDate.ToString(),
                 ["vId"] = varIndex.ToString(),
@@ -105,20 +105,22 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <param name="testContentId"></param>
         /// <returns></returns>
-        public TestDataCookie GetTestDataFromCookie(string testContentId)
+        public TestDataCookie GetTestDataFromCookie(string testContentId, string cultureName = null)
         {
             var retCookie = new TestDataCookie();
             HttpCookie cookie;
-            var currentCulture = _episerverHelper.GetContentCultureinfo();
-            var cultureName = currentCulture.Name;
+            var currentCulture = cultureName != null ? new CultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
+            var currentCulturename = cultureName != null ? cultureName : _episerverHelper.GetContentCultureinfo().Name;
 
-            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName))
+            //var cultureName = currentCulture.Name;
+
+            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename))
             {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName);
+                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename);
             }
             else
             {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName);
+                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename);
             }
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))

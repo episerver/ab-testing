@@ -7,6 +7,9 @@ using Moq;
 using Xunit;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using System.Globalization;
+using EPiServer.Cms.Shell;
+using EPiServer.Marketing.Testing.Test.Fakes;
+using EPiServer.SpecializedProperties;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -29,7 +32,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void IsLocked_Returns_A_Lock_When_The_Content_Has_An_Active_Test_Against_It()
         {
             var aAbLockEvaluator = GetUnitUnderTest();
-            var testContent = new BasicContent() { ContentGuid = new Guid() };
+            var testContent = new FakeLocalizableContent() {Language = new CultureInfo("en-GB"), MasterLanguage = new CultureInfo("en-GB")};
+            //testContent.Property.Add(new PropertyLanguage() {Name = "en-GB"});
+            //testContent.Property.LanguageBranch = "en-GB";
+
             var mockTest = new ABTest() {
                 Id = Guid.NewGuid(),
                 Owner = "Some Guy",
@@ -38,9 +44,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _mockEpiHelper.Setup(epiHelper => epiHelper.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
-            _mockContentRepo.Setup(contentRepo => contentRepo.Get<IContent>(It.IsAny<ContentReference>())).Returns(testContent);
+            _mockContentRepo.Setup(contentRepo => contentRepo.Get<IContent>(It.IsAny<ContentReference>(), It.IsAny<CultureInfo>())).Returns(testContent);
             _mockWebRepo.Setup(webRepo => webRepo.GetActiveTestForContent(It.IsAny<Guid>(),It.IsAny<CultureInfo>())).Returns(mockTest);
-
+            
             var retLock = aAbLockEvaluator.IsLocked(new ContentReference() { ID = 1, WorkID = 1 });
 
             Assert.NotNull(retLock);

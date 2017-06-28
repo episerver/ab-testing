@@ -59,6 +59,7 @@ function (declare, topic, resources, _ContentCommandBase, ContentActionSupport, 
             var isAvailable = ((status === versionStatus.CheckedOut) ||
                 (status === versionStatus.Rejected) ||
                 ((status === versionStatus.Published || status === versionStatus.Expired) && contentData.isCommonDraft)) &&
+                (contentData.currentLanguageBranch.languageId === me.model.currentContentLanguage) &&   // MAR-1079
                 !activeTest;
             me.set("isAvailable", isAvailable);
             me._setCanExecute(me);
