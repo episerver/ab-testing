@@ -6,6 +6,7 @@ using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -64,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
             var aTest = _testRepo.GetTestById(testData.TestId);
-            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo().Name)
+            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + aTest.ContentLanguage)
             {
                 ["TestId"] = testData.TestId.ToString(),
                 ["ShowVariant"] = testData.ShowVariant.ToString(),
@@ -100,22 +101,24 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <param name="testContentId"></param>
         /// <returns></returns>
-        public TestDataCookie GetTestDataFromCookie(string testContentId)
+        public TestDataCookie GetTestDataFromCookie(string testContentId, string cultureName = null)
         {
             var retCookie = new TestDataCookie();
             HttpCookie cookie;
-            var currentCulture = _episerverHelper.GetContentCultureinfo();
-            var cultureName = currentCulture.Name;
+            var currentCulture = cultureName != null ? new CultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
+            var currentCulturename = cultureName != null ? cultureName : _episerverHelper.GetContentCultureinfo().Name;
 
-            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName))
+            //var cultureName = currentCulture.Name;
+
+            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename))
             {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName);
+                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename);
             }
             else
             {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + cultureName);
+                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename);
             }
-           
+
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
                 Guid outguid;
@@ -169,7 +172,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
             var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + cultureName) {HttpOnly = true};
+            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + cultureName) { HttpOnly = true };
             _httpContextHelper.AddCookie(resetCookie);
             return new TestDataCookie();
         }

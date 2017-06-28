@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using EPiServer.Cms.Shell;
 using EPiServer.Core;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
@@ -31,16 +32,21 @@ namespace EPiServer.Marketing.Testing.Web.Evaluator
 
         public ContentLock IsLocked(ContentReference contentLink)
         {
-            var content = _contentRepo.Get<IContent>(contentLink);
+            var contentCulture = _episerverHelper.GetContentCultureinfo();
+            var content = _contentRepo.Get<IContent>(contentLink, contentCulture);
 
             if (content == null)
                 return null;
+            
+            // MAR-1080 - need to check if the content in the current language before checking to see if a test is running against it
+            if (content.LanguageBranch() != contentCulture.Name)
+                return null;
 
-            var test = _webRepo.GetActiveTestForContent(content.ContentGuid, _episerverHelper.GetContentCultureinfo());
+            var test = _webRepo.GetActiveTestForContent(content.ContentGuid, contentCulture);
 
             if (test == null || test.Id == null || test.Id == Guid.Empty)
                 return null;
-
+            
             return new ContentLock(contentLink, test.Owner, _abLockId, test.CreatedDate);
         }
     }
