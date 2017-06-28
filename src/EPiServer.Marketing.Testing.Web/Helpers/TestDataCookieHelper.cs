@@ -7,6 +7,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.KPI.Common.Attributes;
+using System.Globalization;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -66,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var aTest = _testRepo.GetTestById(testData.TestId);
             int varIndex = -1;
-            if(testData.TestVariantId != Guid.NewGuid())
+            if (testData.TestVariantId != Guid.NewGuid())
             {
                 varIndex = aTest.Variants.FindIndex(i => i.Id == testData.TestVariantId);
             }
@@ -81,9 +82,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             };
             testData.KpiConversionDictionary.OrderBy(x => x.Key);
-            for(var x=0; x<testData.KpiConversionDictionary.Count;x++)
+            for (var x = 0; x < testData.KpiConversionDictionary.Count; x++)
             {
-                cookieData["k"+x] = testData.KpiConversionDictionary.ToList()[x].Value.ToString();
+                cookieData["k" + x] = testData.KpiConversionDictionary.ToList()[x].Value.ToString();
             }
 
             _httpContextHelper.AddCookie(cookieData);
@@ -122,46 +123,91 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
-                Guid outguid;
-                int outint = 0;
-                retCookie.TestId = Guid.TryParse(cookie["tId"], out outguid) ? outguid : Guid.Empty;
-                retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
-
-                bool outval;
-                retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
-                retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
-
-                ABTestFilter filter = new ABTestFilter()
+                if (!cookie.Values.Keys.ToString().Contains("tld"))
                 {
-                    Operator = FilterOperator.And,
-                    Property = ABTestProperty.OriginalItemId,
-                    Value = retCookie.TestContentId
-                };
+                    Guid outguid;
+                    int outint = 0;
+                    retCookie.TestId = Guid.TryParse(cookie["tId"], out outguid) ? outguid : Guid.Empty;
+                    retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
 
-                TestCriteria criteria = new TestCriteria();
-                criteria.AddFilter(filter);
+                    bool outval;
+                    retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
+                    retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
-
-                var test = _testRepo.GetTestList(criteria).Where(d=>d.StartDate.ToString() == cookie["start"]).FirstOrDefault();
-                if (test != null)
-                {
-                    var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
-                    retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
-                    retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
-                    retCookie.TestId = test.Id;
-
-                    var orderedKpiInstances = test.KpiInstances.OrderBy(x => x.Id).ToList();
-                    test.KpiInstances = orderedKpiInstances;
-
-                    for(var x=0; x<test.KpiInstances.Count; x++)
+                    ABTestFilter filter = new ABTestFilter()
                     {
-                        bool converted = false;
-                        bool.TryParse(cookie["k"+x], out converted);
-                        retCookie.KpiConversionDictionary.Add(test.KpiInstances[x].Id, converted);
-                        retCookie.AlwaysEval = Attribute.IsDefined(test.KpiInstances[x].GetType(), typeof(AlwaysEvaluateAttribute));
+                        Operator = FilterOperator.And,
+                        Property = ABTestProperty.OriginalItemId,
+                        Value = retCookie.TestContentId
+                    };
+
+                    TestCriteria criteria = new TestCriteria();
+                    criteria.AddFilter(filter);
+
+
+                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == cookie["start"]).FirstOrDefault();
+                    if (test != null)
+                    {
+                        var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
+                        retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
+                        retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
+                        retCookie.TestId = test.Id;
+
+                        var orderedKpiInstances = test.KpiInstances.OrderBy(x => x.Id).ToList();
+                        test.KpiInstances = orderedKpiInstances;
+
+                        for (var x = 0; x < test.KpiInstances.Count; x++)
+                        {
+                            bool converted = false;
+                            bool.TryParse(cookie["k" + x], out converted);
+                            retCookie.KpiConversionDictionary.Add(test.KpiInstances[x].Id, converted);
+                            retCookie.AlwaysEval = Attribute.IsDefined(test.KpiInstances[x].GetType(), typeof(AlwaysEvaluateAttribute));
+                        }
                     }
                 }
+                else
+                {
+                    retCookie = GetTestDataFromOldCookie(cookie);
+                }
             }
+            return retCookie;
+        }
+
+        /// <summary>
+        /// This method converts cookies which contain a language indicator but are in the long key format to the shorthand format.
+        /// This is to support installs which may be using the long hand key format so as not to inturrupt or break their tests.
+        /// We can remove this after a couple of revs once it is no longer a concern.
+        /// </summary>
+        /// <param name="testContentId"></param>
+        /// <param name="cultureName"></param>
+        /// <returns></returns>
+        internal TestDataCookie GetTestDataFromOldCookie(HttpCookie cookieToConvert)
+        {
+            var retCookie = new TestDataCookie();
+
+            Guid outguid;
+            CultureInfo culture = new CultureInfo(cookieToConvert.Name.Split(':')[1]);
+            retCookie.TestId = Guid.TryParse(cookieToConvert["TestId"], out outguid) ? outguid : Guid.Empty;
+            retCookie.TestContentId = Guid.TryParse(cookieToConvert["TestContentId"], out outguid) ? outguid : Guid.Empty;
+            retCookie.TestVariantId = Guid.TryParse(cookieToConvert["TestVariantId"], out outguid) ? outguid : Guid.Empty;
+
+            bool outval;
+            retCookie.ShowVariant = bool.TryParse(cookieToConvert["ShowVariant"], out outval) ? outval : false;
+            retCookie.Viewed = bool.TryParse(cookieToConvert["Viewed"], out outval) ? outval : false;
+            retCookie.Converted = bool.TryParse(cookieToConvert["Converted"], out outval) ? outval : false;
+            retCookie.AlwaysEval = bool.TryParse(cookieToConvert["AlwaysEval"], out outval) ? outval : false;
+
+            var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId, culture).FirstOrDefault();
+            if (test != null)
+            {
+                foreach (var kpi in test.KpiInstances)
+                {
+                    bool converted = false;
+                    bool.TryParse(cookieToConvert[kpi.Id + "-Flag"], out converted);
+                    retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
+                }
+            }
+            UpdateTestDataCookie(retCookie);
             return retCookie;
         }
 
@@ -190,7 +236,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
             var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + cultureName) {HttpOnly = true};
+            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + cultureName) { HttpOnly = true };
             _httpContextHelper.AddCookie(resetCookie);
             return new TestDataCookie();
         }
