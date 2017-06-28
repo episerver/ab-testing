@@ -341,6 +341,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new Variant() {Id = variant2Guid }
             };
             _activeTest.StartDate = startDate;
+            _activeTest.ContentLanguage = "en-GB";
 
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
             _epiHelper.Setup(call=>call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
@@ -417,6 +418,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new Variant() { Id = variant2Guid }
             };
             _activeTest.StartDate = startDate;
+            _activeTest.ContentLanguage = "en-GB";
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
 

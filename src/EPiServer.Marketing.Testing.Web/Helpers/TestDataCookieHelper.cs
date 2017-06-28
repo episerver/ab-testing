@@ -125,11 +125,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
-                if (!cookie.Values.Keys.ToString().Contains("tld"))
+                if (cookie.Value.Contains("start"))
                 {
                     Guid outguid;
                     int outint = 0;
-                    retCookie.TestId = Guid.TryParse(cookie["tId"], out outguid) ? outguid : Guid.Empty;
                     retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
 
                     bool outval;
@@ -147,7 +146,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     criteria.AddFilter(filter);
 
 
-                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == cookie["start"]).FirstOrDefault();
+                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == cookie["start"] && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).First();
                     if (test != null)
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
@@ -208,8 +207,14 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     bool.TryParse(cookieToConvert[kpi.Id + "-Flag"], out converted);
                     retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
                 }
+                UpdateTestDataCookie(retCookie);
             }
-            UpdateTestDataCookie(retCookie);
+            else
+            {
+                ExpireTestDataCookie(retCookie);
+                retCookie = new TestDataCookie();
+            }
+            
             return retCookie;
         }
 
