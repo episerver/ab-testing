@@ -147,8 +147,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     TestCriteria criteria = new TestCriteria();
                     criteria.AddFilter(filter);
 
-                    
-                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate == DateTime.Parse(cookie["start"]) && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).FirstOrDefault();
+                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == DateTime.Parse(cookie["start"]).ToString() && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).FirstOrDefault();
                     
                     
                     if (test != null)
