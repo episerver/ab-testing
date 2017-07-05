@@ -10,6 +10,8 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
     {
         private IDictionary<Guid, bool> kpis = new Dictionary<Guid, bool>();
 
+
+        public DateTime TestStart { get; set; }
         /// <summary>
         /// Test ID.
         /// </summary>

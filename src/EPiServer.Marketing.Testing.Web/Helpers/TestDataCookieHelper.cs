@@ -132,6 +132,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
 
                     bool outval;
+                    
+                    retCookie.TestStart = DateTime.Parse(cookie["start"]);
                     retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                     retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
@@ -145,8 +147,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     TestCriteria criteria = new TestCriteria();
                     criteria.AddFilter(filter);
 
-
-                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == cookie["start"] && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).First();
+                    
+                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate == DateTime.Parse(cookie["start"]) && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).FirstOrDefault();
+                    
+                    
                     if (test != null)
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
@@ -201,6 +205,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId, culture).FirstOrDefault();
             if (test != null)
             {
+                retCookie.TestStart = test.StartDate;
                 foreach (var kpi in test.KpiInstances)
                 {
                     bool converted = false;
