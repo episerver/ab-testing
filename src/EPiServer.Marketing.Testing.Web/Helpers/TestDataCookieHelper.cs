@@ -125,14 +125,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
-                if (!cookie.Values.Keys.ToString().Contains("tld"))
+                if (cookie.Value.Contains("start"))
                 {
                     Guid outguid;
                     int outint = 0;
-                    retCookie.TestId = Guid.TryParse(cookie["tId"], out outguid) ? outguid : Guid.Empty;
                     retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
 
                     bool outval;
+                    
+                    retCookie.TestStart = DateTime.Parse(cookie["start"]);
                     retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                     retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
@@ -146,8 +147,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     TestCriteria criteria = new TestCriteria();
                     criteria.AddFilter(filter);
 
-
-                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == cookie["start"]).FirstOrDefault();
+                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == DateTime.Parse(cookie["start"]).ToString() && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).FirstOrDefault();
+                    
                     if (test != null)
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
@@ -202,14 +203,20 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId, culture).FirstOrDefault();
             if (test != null)
             {
+                retCookie.TestStart = test.StartDate;
                 foreach (var kpi in test.KpiInstances)
                 {
                     bool converted = false;
                     bool.TryParse(cookieToConvert[kpi.Id + "-Flag"], out converted);
                     retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
                 }
+                UpdateTestDataCookie(retCookie);
             }
-            UpdateTestDataCookie(retCookie);
+            else
+            {
+                ExpireTestDataCookie(retCookie);
+                retCookie = new TestDataCookie();
+            }            
             return retCookie;
         }
 

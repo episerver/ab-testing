@@ -186,7 +186,7 @@ namespace EPiServer.Marketing.Testing.Web
                         var activeTest = _testRepo.GetActiveTestsByOriginalItemId(content.ContentGuid, currentContentCulture).FirstOrDefault();
                         if (activeTest != null)
                         {
-                            var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString());
+                            var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString(),activeTest.ContentLanguage);
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
 
                             if (!hasData && DbReadWrite())
@@ -243,7 +243,7 @@ namespace EPiServer.Marketing.Testing.Web
                     var activeTest = _testRepo.GetActiveTestsByOriginalItemId(e.Content.ContentGuid, currentContentCulture).FirstOrDefault();
                     if (activeTest != null)
                     {
-                        var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString());
+                        var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString(),activeTest.ContentLanguage);
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
 
@@ -359,14 +359,10 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 var activeTest = _testRepo.GetActiveTestsByOriginalItemId(testCookie.TestContentId, currentContentCulture).FirstOrDefault();
                 if (activeTest == null)
-                {
-                    // if cookie exists but there is no associated test, expire it 
-                    if (_testDataCookieHelper.HasTestData(testCookie))
-                    {
-                        _testDataCookieHelper.ExpireTestDataCookie(testCookie);
-                    }
+                {                    
+                        _testDataCookieHelper.ExpireTestDataCookie(testCookie);                    
                 }
-                else if (activeTest.Id != testCookie.TestId)
+                else if (activeTest.StartDate != testCookie.TestStart)
                 {
                     // else we have a valid test but the cookie test id doesnt match because user created a new test 
                     // on the same content.

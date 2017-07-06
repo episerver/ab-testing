@@ -125,7 +125,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 StartDate = startDate,
                 OriginalItemId = testContentId,
                 Variants = new List<Variant>() { variant1, variant2 },
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                ContentLanguage = "en-GB"
 
             };
 
@@ -179,7 +180,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 StartDate = startDate,
                 OriginalItemId = testContentId,
                 Variants = new List<Variant>() { variant1, variant2 },
-                KpiInstances = new List<IKpi>()
+                KpiInstances = new List<IKpi>(),
+                ContentLanguage = "en-GB"
 
             };
 
@@ -223,7 +225,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 OriginalItemId = testContentId,
                 StartDate = startDate,
-                KpiInstances = new List<IKpi>() { kpiInstance }
+                KpiInstances = new List<IKpi>() { kpiInstance },
+                ContentLanguage = "en-GB"
             };
 
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
@@ -410,7 +413,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ShowVariant = true,
                 Viewed = false,
                 Converted = true
-
             };
 
             _activeTest.Variants = new List<Variant>() {
@@ -533,19 +535,28 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 [kpiId+"-flag"] = true.ToString()
             };
 
+            var kpiInstance = new Kpi()
+            {
+                Id = Guid.NewGuid(),                
+            };
+
             var test = new ABTest()
             {
                 Id = _activeTestId,
                 StartDate = startDate,
                 OriginalItemId = testContentId,
-                Variants = new List<Variant>() { variant1, variant2 },      
-
+                Variants = new List<Variant>() { variant1, variant2 },  
+                ContentLanguage = "en-GB" ,
+                KpiInstances = new List<IKpi>()
+                {
+                    kpiInstance
+                }  
             };
 
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(false);
             _httpContextHelper.Setup(hch => hch.GetRequestCookie(It.IsAny<string>())).Returns(testCookie);
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>())).Returns(_activeTest);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>());
+            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { test });
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
             _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>() { test });
 
