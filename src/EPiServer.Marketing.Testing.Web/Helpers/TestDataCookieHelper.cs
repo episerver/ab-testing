@@ -149,7 +149,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
                     var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == DateTime.Parse(cookie["start"]).ToString() && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).FirstOrDefault();
                     
-                    
                     if (test != null)
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
@@ -217,8 +216,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 ExpireTestDataCookie(retCookie);
                 retCookie = new TestDataCookie();
-            }
-            
+            }            
             return retCookie;
         }
 

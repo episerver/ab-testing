@@ -413,7 +413,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 ShowVariant = true,
                 Viewed = false,
                 Converted = true
-
             };
 
             _activeTest.Variants = new List<Variant>() {
