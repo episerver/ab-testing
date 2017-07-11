@@ -322,7 +322,7 @@ namespace EPiServer.Marketing.Testing.Web
         //Handles the incrementing of view counts on a version
         private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
         {
-            var currentTest = _testRepo.GetTestById(cookie.TestId);
+            var currentTest = _testRepo.GetTestById(cookie.TestId, true);
             var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
 
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))

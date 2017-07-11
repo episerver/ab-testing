@@ -254,7 +254,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent draftContent = new BasicContent();
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
+            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(test);
             _mockTestManager.Setup(
                 call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
             _mockTestManager.Setup(
@@ -304,7 +304,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent draftContent = new BasicContent();
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(test);
+            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(test);
             _mockTestManager.Setup(
                 call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
             _mockTestManager.Setup(
@@ -345,7 +345,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent draftContent = new BasicContent();
 
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
-            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns((IMarketingTest)null);
+            _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>(), It.IsAny<bool>())).Returns((IMarketingTest)null);
 
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
                             reference => reference == ContentReference.Parse(testResultmodel.DraftContentLink))))

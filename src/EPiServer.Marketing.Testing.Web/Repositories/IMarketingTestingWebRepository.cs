@@ -11,7 +11,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     public interface IMarketingTestingWebRepository
     {
-        IMarketingTest GetTestById(Guid testGuid);
+        IMarketingTest GetTestById(Guid testGuid, bool fromCache = false);
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId);
         List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo currentCulture);
         List<IMarketingTest> GetTestList(TestCriteria criteria);

@@ -107,17 +107,33 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc />
-        public IMarketingTest Get(Guid testObjectId)
+        public IMarketingTest Get(Guid testObjectId, bool fromCachedTests = false)
         {
-            var dbTest = _dataAccess.Get(testObjectId);
-            if (dbTest == null)
+            IMarketingTest rTest = null;
+
+            if (!fromCachedTests)
             {
-                throw new TestNotFoundException();
+                rTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, _dataAccess.Get(testObjectId));
+                if (rTest == null)
+                {
+                    throw new TestNotFoundException();
+                }
+            }
+            else
+            {
+                //Will attempt to retrieve a test from the cache.  If unsuccessful will then
+                //retrieve the test from the db
+                var cachedTests = ActiveCachedTests;
+                rTest = cachedTests.Where(test => test.Id == testObjectId).FirstOrDefault();
+                if(rTest == null)
+                {
+                    Get(testObjectId, false);
+                }
             }
 
-            return TestManagerHelper.ConvertToManagerTest(_kpiManager, dbTest);
+            return rTest;
         }
-
+        
         /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
