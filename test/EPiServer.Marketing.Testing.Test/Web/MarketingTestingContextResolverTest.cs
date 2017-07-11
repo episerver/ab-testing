@@ -78,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
     .Returns(_activeTestData);
             _mockTestingRespository.Setup(call => call.GetActiveTestForContent(It.Is<Guid>(g => g == _inactiveTestGuid)))
     .Returns((ABTest)null);
-            _mockTestingRespository.Setup(call => call.GetTestById(It.Is<Guid>(g => g == _activeTestGuid))).Returns(_test);
+            _mockTestingRespository.Setup(call => call.GetTestById(It.Is<Guid>(g => g == _activeTestGuid), It.IsAny<bool>())).Returns(_test);
 
             _serviceLocator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_mockTestingRespository.Object);
 

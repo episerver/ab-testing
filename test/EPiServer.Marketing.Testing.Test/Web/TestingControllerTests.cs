@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _marketingTestingRepoMock = new Mock<IMarketingTestingWebRepository>();
             _marketingTestingRepoMock.Setup(call => call.GetTestList(It.IsAny<TestCriteria>()))
                 .Returns(new List<IMarketingTest>() { new ABTest() });
-            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(new ABTest());
+            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(new ABTest());
             _mockServiceLocator.Setup(s1 => s1.GetInstance<IMarketingTestingWebRepository>())
                 .Returns(_marketingTestingRepoMock.Object);
 
@@ -53,7 +53,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(_testDataCookieHelperMock.Object);
 
             _testManagerMock = new Mock<ITestManager>();
-            _testManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new ABTest());
+            _testManagerMock.Setup(call => call.Get(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(new ABTest());
             _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestManager>()).Returns(_testManagerMock.Object);
 
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
@@ -96,7 +96,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ABTest test = null;
 
             var controller = GetUnitUnderTest();
-            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.Is<Guid>(g => g == id))).Returns(test);
+            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.Is<Guid>(g => g == id), It.IsAny<bool>())).Returns(test);
 
             var result = controller.GetTest(id.ToString());
             var response = result.Content.ReadAsStringAsync();
