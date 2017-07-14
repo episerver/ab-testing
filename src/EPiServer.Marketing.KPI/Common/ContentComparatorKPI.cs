@@ -36,13 +36,13 @@ namespace EPiServer.Marketing.KPI.Common
         public IContent _content;
         public string   _startpagepath;
         private ObjectCache _cache;
-        private IKpiEpiserverHelper _epiHelper;
+        private IKpiHelper _epiHelper;
 
 
         public ContentComparatorKPI()
         {
             _cache = MemoryCache.Default;
-            _epiHelper = _servicelocator.GetInstance<IKpiEpiserverHelper>();
+            _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
 
             if (_cache.Contains("SiteStart"))
             {
@@ -62,6 +62,17 @@ namespace EPiServer.Marketing.KPI.Common
         public ContentComparatorKPI(Guid contentGuid) : this()
         {
             ContentGuid = contentGuid;
+        }
+
+        internal ContentComparatorKPI(IServiceLocator serviceLocator)
+        {
+            _servicelocator = serviceLocator;
+        }
+
+        internal ContentComparatorKPI(Guid contentGuid,IServiceLocator serviceLocator)
+        {
+            ContentGuid = contentGuid;
+            _servicelocator = serviceLocator;
         }
 
         /// <inheritdoc />

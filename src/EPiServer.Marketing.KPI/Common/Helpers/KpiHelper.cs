@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using EPiServer.Core;
+using EPiServer.Web.Routing;
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 
 namespace EPiServer.Marketing.KPI.Common.Helpers
@@ -24,6 +26,11 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
             }
 
             return inSystemFolder;
+        }
+
+        public string GetUrl(ContentReference contentReference)
+        {
+            return UrlResolver.Current.GetUrl(contentReference);
         }
     }
 }
