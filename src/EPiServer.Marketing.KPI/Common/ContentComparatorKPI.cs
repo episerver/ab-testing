@@ -12,6 +12,8 @@ using EPiServer.Web.Mvc.Html;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Web.Routing;
 using System.Web;
+using System.Runtime.Caching;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -33,18 +35,44 @@ namespace EPiServer.Marketing.KPI.Common
         public Guid ContentGuid;
         public IContent _content;
         public string   _startpagepath;
+        private ObjectCache _cache;
+        private IKpiHelper _epiHelper;
+
 
         public ContentComparatorKPI()
         {
+            _cache = MemoryCache.Default;
+            _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
+
+            if (_cache.Contains("SiteStart"))
+            {
+                _startpagepath = _cache.Get("SiteStart") as string;
+            }
+            else
+            {
+                _startpagepath = _epiHelper.GetUrl(ContentReference.StartPage);
+                _cache.Add("SiteStart", _startpagepath, DateTimeOffset.MaxValue);
+            }
         }
 
         /// <summary>
         /// ID of the content to be tested.
         /// </summary>
         /// <param name="contentGuid">ID of the content to be tested.</param>
-        public ContentComparatorKPI(Guid contentGuid)
+        public ContentComparatorKPI(Guid contentGuid) : this()
         {
             ContentGuid = contentGuid;
+        }
+
+        internal ContentComparatorKPI(IServiceLocator serviceLocator)
+        {
+            _servicelocator = serviceLocator;
+        }
+
+        internal ContentComparatorKPI(Guid contentGuid,IServiceLocator serviceLocator)
+        {
+            ContentGuid = contentGuid;
+            _servicelocator = serviceLocator;
         }
 
         /// <inheritdoc />
@@ -111,10 +139,19 @@ namespace EPiServer.Marketing.KPI.Common
             if (ea != null)
             {
                 if (_content == null)
-                {   
+                {
                     var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
                     _content = contentRepo.Get<IContent>(ContentGuid);
-                    _startpagepath = UrlResolver.Current.GetUrl(ContentReference.StartPage);
+                    if (_cache.Contains("SiteStart"))
+                    {
+                        _startpagepath = _cache.Get("SiteStart") as string;
+                    }
+                    else
+                    {
+                        _startpagepath = _epiHelper.GetUrl(ContentReference.StartPage);
+                        _cache.Add("SiteStart", _startpagepath , DateTimeOffset.MaxValue);
+                    }
+
                 }
 
                 if ( ContentReference.StartPage.ID == _content.ContentLink.ID )

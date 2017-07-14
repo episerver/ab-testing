@@ -15,6 +15,8 @@ using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using Xunit;
 using EPiServer.ServiceLocation;
 using Moq;
+using EPiServer.Marketing.KPI.Common.Helpers;
+using EPiServer.Core;
 
 namespace EPiServer.Marketing.Testing.Test.Dal
 {
@@ -26,9 +28,10 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         private TestingDataAccess _dataAccess;
         private TestingDataAccess _historyDataAccess;
         private TestManager _tm;
-        private Mock<IServiceLocator> _serviceLocator;
+        private Mock<IServiceLocator> _serviceLocator = new Mock<IServiceLocator>();
         private Mock<IKpiManager> _kpiManager;
         private DefaultMarketingTestingEvents _marketingEvents;
+        private Mock<IKpiHelper> _kpiHelper = new Mock<IKpiHelper>();
 
         public MultiVariantDataAccessTests()
         {
@@ -46,6 +49,9 @@ namespace EPiServer.Marketing.Testing.Test.Dal
              _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccess);
              _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
              _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents);
+
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("teststring");
+            _serviceLocator.Setup(call => call.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);          
 
             _tm = new TestManager(_serviceLocator.Object);
         }
@@ -467,7 +473,8 @@ namespace EPiServer.Marketing.Testing.Test.Dal
         public void TestManagerSaveDone()
         {
             //var tm = GetUnitUnderTest();
-
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("teststring");
+            _serviceLocator.Setup(call => call.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
             var id = Guid.NewGuid();
             var itemId = Guid.NewGuid();
 
@@ -483,7 +490,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100, KeyFinancialResults = new List<KeyFinancialResult>(),
                             KeyValueResults = new List<KeyValueResult>(), KeyConversionResults = new List<KeyConversionResult>()}
                     },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI() { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
+                KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_serviceLocator.Object) { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
                 Title = "test",
                 Description = "description",
                 CreatedDate = DateTime.UtcNow,

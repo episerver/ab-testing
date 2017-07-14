@@ -18,6 +18,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Messaging;
 using System.Globalization;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -31,6 +32,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IKpiManager> _mockKpiManager;
         private Mock<IHttpContextHelper> _mockHttpHelper;
         private Mock<IEpiserverHelper> _mockEpiserverHelper;
+        private Mock<IKpiHelper> _mockKpiHelper = new Mock<IKpiHelper>();
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -43,7 +45,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestManager.Setup(call => call.Save(It.IsAny<IMarketingTest>())).Returns(new Guid());
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
 
-            var kpi = new ContentComparatorKPI() { ContentGuid = Guid.NewGuid() };
+            _mockKpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("teststring");
+            _mockServiceLocator.Setup(sl=>sl.GetInstance<IKpiHelper>()).Returns(_mockKpiHelper.Object);
+            
+            var kpi = new ContentComparatorKPI(_mockServiceLocator.Object) { ContentGuid = Guid.NewGuid() };
 
             _mockKpiManager = new Mock<IKpiManager>();
             _mockKpiManager.Setup(call => call.Get(It.IsAny<Guid>())).Returns(kpi);
