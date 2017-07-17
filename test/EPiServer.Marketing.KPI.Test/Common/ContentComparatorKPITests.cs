@@ -99,6 +99,9 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _urlResolver.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
             _serviceLocator.Setup(s1 => s1.GetInstance<UrlResolver>()).Returns(_urlResolver.Object);
 
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
+
             ServiceLocator.SetLocator(_serviceLocator.Object);
 
             return new ContentComparatorKPI(LandingPageGuid);
