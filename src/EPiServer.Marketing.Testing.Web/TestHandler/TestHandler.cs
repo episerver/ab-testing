@@ -173,8 +173,6 @@ namespace EPiServer.Marketing.Testing.Web
                 IList<IContent> childList = new List<IContent>();
                 CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
 
-                //EvaluateCookies(currentContentCulture);
-
                 // its possible that something in the children changed, so we need to replace it with a variant 
                 // if its in test. This method gets called once after the main page is loaded. (i.e. this is how
                 // the links at the top of alloy get created)
@@ -237,7 +235,6 @@ namespace EPiServer.Marketing.Testing.Web
                 try
                 {
                     CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
-                    //EvaluateCookies(currentContentCulture);
 
                     // get the test from the cache
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString(), currentContentCulture.Name);
@@ -342,35 +339,7 @@ namespace EPiServer.Marketing.Testing.Web
                 }
             }
         }
-
-        /// <summary>
-        /// Analyzes existing cookies and expires / updates any depending on what tests are in the cache.
-        /// It is assumed that only tests in the cache are active.
-        /// </summary>
-        private void EvaluateCookies(CultureInfo currentContentCulture)
-        {
-            if (!DbReadWrite())
-            {
-                return;
-            }
-
-            var testCookieList = _testDataCookieHelper.GetTestDataFromCookies();
-            foreach (var testCookie in testCookieList)
-            {
-                var activeTest = _testRepo.GetActiveTestsByOriginalItemId(testCookie.TestContentId, currentContentCulture).FirstOrDefault();
-                if (activeTest == null)
-                {                    
-                        _testDataCookieHelper.ExpireTestDataCookie(testCookie);                    
-                }
-                else if (activeTest.StartDate != testCookie.TestStart)
-                {
-                    // else we have a valid test but the cookie test id doesnt match because user created a new test 
-                    // on the same content.
-                    _testDataCookieHelper.ExpireTestDataCookie(testCookie);
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Processes the Kpis, determining conversions and handling incrementing conversion counts.
         /// </summary>
