@@ -102,7 +102,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetActiveTestsByOriginalItemId(originalItemId, contentCulture);
         }
 
-        public IMarketingTest GetTestById(Guid testGuid)
+        public IMarketingTest GetTestById(Guid testGuid, bool fromCache = false)
         {
             var aTest = _testManager.Get(testGuid);
             if(aTest != null)
@@ -304,7 +304,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 int winningVersion;
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
-                IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
+                IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId),true);
                 var initialTestState = currentTest;
                 try
                 {

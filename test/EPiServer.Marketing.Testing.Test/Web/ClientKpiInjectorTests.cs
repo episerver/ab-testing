@@ -176,7 +176,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(mockKpiManager.Object);
             mockHttpContextHelper.Setup(hch => hch.GetCookieValue(It.IsAny<string>())).Returns(aFakeCookie);
             mockKpiManager.Setup(km => km.Get(It.IsAny<Guid>())).Returns(aClientKpi);
-            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>())).Returns(aFakeTest);
+            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(aFakeTest);
             mockHttpContextHelper.Setup(hch => hch.HasItem(It.IsAny<string>())).Returns(true);
             mockHttpContextHelper.Setup(hch => hch.CanWriteToResponse()).Returns(true);
             aClientKpiInjector.AppendClientKpiScript();
@@ -211,7 +211,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(mockKpiManager.Object);
             mockHttpContextHelper.Setup(hch => hch.GetCookieValue(It.IsAny<string>())).Returns(aFakeCookie);
             mockKpiManager.Setup(km => km.Get(It.IsAny<Guid>())).Returns(aClientKpi);
-            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>())).Returns(aFakeTest);
+            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(aFakeTest);
             mockHttpContextHelper.Setup(hch => hch.CanWriteToResponse()).Returns(true);
 
             //Force HasItem call to be false to test behavior
@@ -236,7 +236,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(mockKpiManager.Object);
             mockHttpContextHelper.Setup(hch => hch.GetCookieValue(It.IsAny<string>())).Returns(aFakeCookie);
             mockKpiManager.Setup(km => km.Get(It.IsAny<Guid>())).Returns(aClientKpi);
-            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>())).Returns(aFakeTest);
+            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(aFakeTest);
             mockHttpContextHelper.Setup(hch => hch.HasItem(It.IsAny<string>())).Returns(true);
 
             //Force CanWriteToResponse call to be false to test behavior
