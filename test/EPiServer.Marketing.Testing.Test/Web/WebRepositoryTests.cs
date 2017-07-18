@@ -391,7 +391,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void ConvertToMarketingTest_Converts_Test_And_Calculates_EndDate()
         {
             var webRepo = GetUnitUnderTest();
-            var startDate = DateTime.Parse("1/1/2000");
+            var startDate = DateTime.Now;
 
             var testResultModel = new TestingStoreModel()
             {
@@ -411,7 +411,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var test = webRepo.ConvertToMarketingTest(testResultModel);
 
-            Assert.Equal(startDate.AddDays(30).Day, test.EndDate.Day);
+            Assert.Equal(startDate.ToUniversalTime().AddDays(30).Day, test.EndDate.Day);
         }
 
         [Fact]
