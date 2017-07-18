@@ -411,7 +411,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var test = webRepo.ConvertToMarketingTest(testResultModel);
 
-            Assert.Equal(startDate.AddDays(30).Day, test.EndDate.Day);
+            Assert.Equal(startDate.ToUniversalTime().AddDays(30).Day, test.EndDate.Day);
         }
 
         [Fact]
