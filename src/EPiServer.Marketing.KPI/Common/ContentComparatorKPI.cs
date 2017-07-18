@@ -40,26 +40,14 @@ namespace EPiServer.Marketing.KPI.Common
 
 
         public ContentComparatorKPI()
-        {
-            _cache = MemoryCache.Default;
-            _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
-
-            if (_cache.Contains("SiteStart"))
-            {
-                _startpagepath = _cache.Get("SiteStart") as string;
-            }
-            else
-            {
-                _startpagepath = _epiHelper.GetUrl(ContentReference.StartPage);
-                _cache.Add("SiteStart", _startpagepath, DateTimeOffset.MaxValue);
-            }
+        {           
         }
 
         /// <summary>
         /// ID of the content to be tested.
         /// </summary>
         /// <param name="contentGuid">ID of the content to be tested.</param>
-        public ContentComparatorKPI(Guid contentGuid) : this()
+        public ContentComparatorKPI(Guid contentGuid)
         {
             ContentGuid = contentGuid;
         }
@@ -134,7 +122,9 @@ namespace EPiServer.Marketing.KPI.Common
         /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
+            _cache = MemoryCache.Default;
             var retval = false;
+            _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
             var ea = e as ContentEventArgs;
             if (ea != null)
             {
@@ -142,7 +132,7 @@ namespace EPiServer.Marketing.KPI.Common
                 {
                     var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
                     _content = contentRepo.Get<IContent>(ContentGuid);
-                    if (_cache.Contains("SiteStart"))
+                    if (_cache.Contains("SiteStart") && _cache.Get("SiteStart") != null)
                     {
                         _startpagepath = _cache.Get("SiteStart") as string;
                     }
