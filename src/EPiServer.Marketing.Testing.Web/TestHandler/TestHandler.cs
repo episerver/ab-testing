@@ -173,7 +173,7 @@ namespace EPiServer.Marketing.Testing.Web
                 IList<IContent> childList = new List<IContent>();
                 CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
 
-                EvaluateCookies(currentContentCulture);
+                //EvaluateCookies(currentContentCulture);
 
                 // its possible that something in the children changed, so we need to replace it with a variant 
                 // if its in test. This method gets called once after the main page is loaded. (i.e. this is how
@@ -183,10 +183,10 @@ namespace EPiServer.Marketing.Testing.Web
                     try
                     {
                         // get the test from the cache
+                        var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString(), currentContentCulture.Name);
                         var activeTest = _testRepo.GetActiveTestsByOriginalItemId(content.ContentGuid, currentContentCulture).FirstOrDefault();
                         if (activeTest != null)
                         {
-                            var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(content.ContentGuid.ToString(),activeTest.ContentLanguage);
                             var hasData = _testDataCookieHelper.HasTestData(testCookieData);
 
                             if (!hasData && DbReadWrite())
@@ -237,13 +237,13 @@ namespace EPiServer.Marketing.Testing.Web
                 try
                 {
                     CultureInfo currentContentCulture = _episerverHelper.GetContentCultureinfo();
-                    EvaluateCookies(currentContentCulture);
+                    //EvaluateCookies(currentContentCulture);
 
                     // get the test from the cache
+                    var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString(), currentContentCulture.Name);
                     var activeTest = _testRepo.GetActiveTestsByOriginalItemId(e.Content.ContentGuid, currentContentCulture).FirstOrDefault();
                     if (activeTest != null)
                     {
-                        var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString(),activeTest.ContentLanguage);
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
                         var originalContent = e.Content;
 
@@ -322,7 +322,7 @@ namespace EPiServer.Marketing.Testing.Web
         //Handles the incrementing of view counts on a version
         private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
         {
-            var currentTest = _testRepo.GetTestById(cookie.TestId, true);
+            var currentTest = _testRepo.GetTestById(cookie.TestId,true);
             var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
 
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))

@@ -104,7 +104,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public IMarketingTest GetTestById(Guid testGuid, bool fromCache = false)
         {
-            var aTest = _testManager.Get(testGuid);
+            var aTest = _testManager.Get(testGuid,fromCache);
             if(aTest != null)
             {
                 var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
@@ -304,7 +304,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 int winningVersion;
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
-                IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId),true);
+                IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
                 var initialTestState = currentTest;
                 try
                 {
