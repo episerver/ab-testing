@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     var _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
                     var tempKpi = _kpiManager.Get(data.Key) as IKpi;
                     var aClientKpi = tempKpi as IClientKpi;
-                    var test = _testRepo.GetTestById(data.Value.TestId);
+                    var test = _testRepo.GetTestById(data.Value.TestId,true);
                     var itemVersion = test.Variants.FirstOrDefault(v => v.Id.ToString() == data.Value.TestVariantId.ToString()).ItemVersion;
                     var clientScript = BuildClientScript(tempKpi.Id, test.Id, itemVersion, aClientKpi.ClientEvaluationScript);
                     script += clientScript;

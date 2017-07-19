@@ -184,7 +184,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var value = data.Get("resultValue");
             try
             {
-                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")));
+                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")),true);
                 var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
                 var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString(), activeTest.ContentLanguage);

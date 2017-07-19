@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         /// <param name="testObjectId">ID of the test to retrieve.</param>
         /// <returns>IMarketing Test</returns>
-        IMarketingTest Get(Guid testObjectId);
+        IMarketingTest Get(Guid testObjectId, bool fromCache = false);
 
         /// <summary>
         /// Retrieves all active tests that have the supplied OriginalItemId from the cache.  The associated data for each 

@@ -65,7 +65,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-            var aTest = _testRepo.GetTestById(testData.TestId);
+            var aTest = _testRepo.GetTestById(testData.TestId,true);
             int varIndex = -1;
             if (testData.TestVariantId != Guid.NewGuid())
             {
@@ -137,19 +137,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                     retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
-                    ABTestFilter filter = new ABTestFilter()
-                    {
-                        Operator = FilterOperator.And,
-                        Property = ABTestProperty.OriginalItemId,
-                        Value = retCookie.TestContentId
-                    };
-
-                    TestCriteria criteria = new TestCriteria();
-                    criteria.AddFilter(filter);
-
-                    var test = _testRepo.GetTestList(criteria).Where(d => d.StartDate.ToString() == DateTime.Parse(cookie["start"]).ToString() && d.ContentLanguage == cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[1]).FirstOrDefault();
+                    var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId,currentCulture).FirstOrDefault();
                     
-                    if (test != null)
+                    if (test != null && retCookie.TestStart.ToString() == test.StartDate.ToString())
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
                         retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
@@ -166,6 +156,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                             retCookie.KpiConversionDictionary.Add(test.KpiInstances[x].Id, converted);
                             retCookie.AlwaysEval = Attribute.IsDefined(test.KpiInstances[x].GetType(), typeof(AlwaysEvaluateAttribute));
                         }
+                    }
+                    else
+                    {
+                        ExpireTestDataCookie(retCookie);
+                        retCookie = new TestDataCookie();
                     }
                 }
                 else

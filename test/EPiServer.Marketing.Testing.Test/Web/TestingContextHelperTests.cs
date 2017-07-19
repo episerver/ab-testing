@@ -19,18 +19,20 @@ using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class TestingContextHelperTests
     {
-        private Mock<IServiceLocator> _mockServiceLocator;
+        private Mock<IServiceLocator> _mockServiceLocator = new Mock<IServiceLocator>();
         private Mock<IContentRepository> _mockContentRepository;
         private Mock<IContentVersionRepository> _mockContentVersionRepository;
         private Mock<IUIHelper> _mockUIHelper;
         private Mock<IKpiManager> _mockKpiManager;
         private Mock<IHttpContextHelper> _mockContextHelper;
         private Mock<IEpiserverHelper> _mockEpiserverHelper;
+        private Mock<IKpiHelper> _mockKpiHelper = new Mock<IKpiHelper>();
 
 
         LocalizationService _localizationService = new FakeLocalizationService("test");
@@ -74,6 +76,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(_mockContentVersionRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IUIHelper>()).Returns(_mockUIHelper.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
+
+            _mockKpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("teststring");
+            _mockServiceLocator.Setup(call => call.GetInstance<IKpiHelper>()).Returns(_mockKpiHelper.Object);
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en");
             ContentLanguage.PreferredCulture = new CultureInfo("en");
@@ -282,7 +287,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -355,7 +360,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -438,7 +443,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -512,9 +517,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyFinancialResults = new List<KeyFinancialResult>(),
                 KeyValueResults = new List<KeyValueResult>()
             };
+            
+           
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            var testContextHelper = GetUnitUnderTest();
+
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"), _mockServiceLocator.Object)
             {
+
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
@@ -524,7 +534,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
             test.KpiInstances = new List<IKpi>() { kpi };
 
-            var testContextHelper = GetUnitUnderTest();
             MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.True(testResult.DaysElapsed == 2.ToString());
@@ -581,7 +590,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
