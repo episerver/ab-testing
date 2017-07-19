@@ -490,7 +490,7 @@ namespace EPiServer.Marketing.Testing.Test.Dal
                         new Variant() {Id = Guid.NewGuid(), ItemVersion = 1, ItemId = itemId, Views = 5000, Conversions = 100, KeyFinancialResults = new List<KeyFinancialResult>(),
                             KeyValueResults = new List<KeyValueResult>(), KeyConversionResults = new List<KeyConversionResult>()}
                     },
-                KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_serviceLocator.Object) { Id = Guid.NewGuid(), ContentGuid = Guid.NewGuid() } },
+                KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_serviceLocator.Object, Guid.NewGuid()) },
                 Title = "test",
                 Description = "description",
                 CreatedDate = DateTime.UtcNow,

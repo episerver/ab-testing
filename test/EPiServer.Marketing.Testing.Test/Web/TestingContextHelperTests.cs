@@ -287,7 +287,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
+            var kpi = new ContentComparatorKPI(_mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -360,7 +360,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
+            var kpi = new ContentComparatorKPI(_mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -443,7 +443,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
+            var kpi = new ContentComparatorKPI(_mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
@@ -522,13 +522,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testContextHelper = GetUnitUnderTest();
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"), _mockServiceLocator.Object)
+            var kpi = new ContentComparatorKPI( _mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
             {
-
-                Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
-                //PreferredCulture = "en-GB"
             };
 
             test.Variants = new List<Variant>() { publishedVariant, draftVariant };
@@ -590,7 +587,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyValueResults = new List<KeyValueResult>()
             };
 
-            var kpi = new ContentComparatorKPI(Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"),_mockServiceLocator.Object)
+            var kpi = new ContentComparatorKPI(_mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
             {
                 Id = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,

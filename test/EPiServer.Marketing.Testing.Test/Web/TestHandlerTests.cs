@@ -605,7 +605,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                         OriginalItemId = _originalItemId,
                         State = TestState.Active,
                         Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                        KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object) { Id = Guid.NewGuid() } }
+                        KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object,Guid.NewGuid()) }
                     }
                 });
 

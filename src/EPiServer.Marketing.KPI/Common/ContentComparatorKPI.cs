@@ -52,14 +52,8 @@ namespace EPiServer.Marketing.KPI.Common
             ContentGuid = contentGuid;
         }
 
-        internal ContentComparatorKPI(IServiceLocator serviceLocator)
+        internal ContentComparatorKPI(IServiceLocator serviceLocator, Guid contentGuid) : this(contentGuid)
         {
-            _servicelocator = serviceLocator;
-        }
-
-        internal ContentComparatorKPI(Guid contentGuid,IServiceLocator serviceLocator)
-        {
-            ContentGuid = contentGuid;
             _servicelocator = serviceLocator;
         }
 
