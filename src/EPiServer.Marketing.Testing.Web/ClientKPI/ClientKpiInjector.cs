@@ -39,13 +39,13 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             _httpContextHelper = new HttpContextHelper();
         }
 
-        internal ClientKpiInjector(ITestingContextHelper theTestingContextHelper, IMarketingTestingWebRepository theWebRepo, IServiceLocator theServiceLocator, ILogger theLogger, IHttpContextHelper theHttpcontextHelper)
+        internal ClientKpiInjector(IServiceLocator serviceLocator)
         {
-            _contextHelper = theTestingContextHelper;
-            _testRepo = theWebRepo;
-            _serviceLocator = theServiceLocator;
-            _logger = theLogger;
-            _httpContextHelper = theHttpcontextHelper;
+            _serviceLocator = serviceLocator;
+            _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
+            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();            
+            _logger = serviceLocator.GetInstance<ILogger>();
+            _httpContextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
         }
 
         /// <summary>
