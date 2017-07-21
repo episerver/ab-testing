@@ -64,7 +64,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-            var aTest = _testRepo.GetTestById(testData.TestId);
+            var aTest = _testRepo.GetTestById(testData.TestId,true);
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + aTest.ContentLanguage)
             {
                 ["TestId"] = testData.TestId.ToString(),

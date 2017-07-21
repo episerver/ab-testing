@@ -1,4 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using EPiServer.Core;
+using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 
 namespace EPiServer.Marketing.KPI.Common.Helpers
@@ -7,6 +10,7 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
     /// This exists to allow us to mock the request for unit testing purposes.
     /// </summary>
     [ExcludeFromCodeCoverage]
+    [ServiceConfiguration(ServiceType = typeof(IKpiHelper), Lifecycle = ServiceInstanceScope.Singleton)]
     internal class KpiHelper : IKpiHelper
     {
         /// <summary>
@@ -24,6 +28,11 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
             }
 
             return inSystemFolder;
+        }
+
+        public string GetUrl(ContentReference contentReference)
+        {
+            return UrlResolver.Current.GetUrl(contentReference);
         }
     }
 }

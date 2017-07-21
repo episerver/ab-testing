@@ -13,6 +13,7 @@ using EPiServer.Marketing.KPI.Test.Fakes;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using Xunit;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.KPI.Test.Common
 {
@@ -25,6 +26,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         private Mock<IContentVersionRepository> _contentVersionRepo;
         private Mock<IContentEvents> _contentEvents;
         private Mock<UrlResolver> _urlResolver;
+        private Mock<IKpiHelper> _kpiHelper = new Mock<IKpiHelper>();
 
         private IContent _content;
         private IContent _content2;
@@ -59,6 +61,9 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _urlResolver = new Mock<UrlResolver>();
             _urlResolver.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
             _serviceLocator.Setup(s1 => s1.GetInstance<UrlResolver>()).Returns(_urlResolver.Object);
+
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
             
             ServiceLocator.SetLocator(_serviceLocator.Object);
 
@@ -93,6 +98,9 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _urlResolver = new Mock<UrlResolver>();
             _urlResolver.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
             _serviceLocator.Setup(s1 => s1.GetInstance<UrlResolver>()).Returns(_urlResolver.Object);
+
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
 
             ServiceLocator.SetLocator(_serviceLocator.Object);
 
@@ -138,11 +146,8 @@ namespace EPiServer.Marketing.KPI.Test.Common
         [Fact]
         public void VerifyGetDefaultConstructor()
         {
-            var kpi = new ContentComparatorKPI()
-            {
-                ContentGuid = LandingPageGuid
-            };
-
+            var kpi = GetUnitUnderTest();
+            
             Assert.True(kpi.ContentGuid.Equals(LandingPageGuid), "Evaluate should have returned true");
         }
 

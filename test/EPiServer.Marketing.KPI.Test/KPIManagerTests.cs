@@ -16,6 +16,7 @@ using EPiServer.Data.Dynamic.Internal;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.KPI.Test
 {
@@ -23,6 +24,7 @@ namespace EPiServer.Marketing.KPI.Test
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<IKpiDataAccess> _kpiDataAccess;
+        private Mock<IKpiHelper> _kpiHelper = new Mock<IKpiHelper>();
         LocalizationService _localizationservice = LocalizationService.Current;
         private DalKpi _testKpi = new DalKpi()
         {
@@ -45,8 +47,11 @@ namespace EPiServer.Marketing.KPI.Test
             _kpiDataAccess = new Mock<IKpiDataAccess>();
             _kpiDataAccess.Setup(call => call.GetKpiList()).Returns(new List<IDalKpi>() { _testKpi });
             _kpiDataAccess.Setup(dal => dal.GetDatabaseVersion(It.IsAny<DbConnection>(), It.IsAny<string>(), It.IsAny<string>())).Returns(1);
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("teststring");
+
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationservice);
+            _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
 
             // Set our mocked service locator so calls like ServiceLocator.Current work properly. 
             ServiceLocator.SetLocator(_serviceLocator.Object);
