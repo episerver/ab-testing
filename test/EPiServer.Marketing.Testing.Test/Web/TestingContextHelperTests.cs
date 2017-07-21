@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
 using EPiServer.Core;
 using EPiServer.DataAbstraction;
 using EPiServer.Marketing.KPI.Common;
@@ -17,7 +16,6 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Manager;
-using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.KPI.Common.Helpers;
 
@@ -33,7 +31,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IHttpContextHelper> _mockContextHelper;
         private Mock<IEpiserverHelper> _mockEpiserverHelper;
         private Mock<IKpiHelper> _mockKpiHelper = new Mock<IKpiHelper>();
-
+        private Mock<IContent> testPublishedData = new Mock<IContent>();
+        private Mock<IContent> testVariantData = new Mock<IContent>();
+        private Mock<IContent> testConversionContent = new Mock<IContent>();
 
         LocalizationService _localizationService = new FakeLocalizationService("test");
 
@@ -43,48 +43,30 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         private TestingContextHelper GetUnitUnderTest()
         {
-            Mock<IContent> testPublishedData = new Mock<IContent>();
-            testPublishedData.Setup(call => call.ContentLink).Returns(new ContentReference(1, 5));
-            Mock<IContent> testVariantData = new Mock<IContent>();
-            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
-            Mock<IContent> testConversionContent = new Mock<IContent>();
-            testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
-            testConversionContent.Setup(call => call.Name).Returns("Conversion Content");
-            
             _mockServiceLocator = new Mock<IServiceLocator>();
             _mockContentRepository = new Mock<IContentRepository>();
             _mockKpiManager = new Mock<IKpiManager>();
-            _mockContentRepository.Setup(call => call.Get<IContent>(It.Is<Guid>(g => g == Guid.Parse("92de6b63-1dce-4669-bfa5-725e9aea1664")))).Returns(testPublishedData.Object);
-            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testPublishedData.Object);
-            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
-            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
-
             _mockContentVersionRepository = new Mock<IContentVersionRepository>();
-            _mockContentVersionRepository.Setup(
-               call => call.Load(It.IsAny<ContentReference>()))
-               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
-
             _mockUIHelper = new Mock<IUIHelper>();
-            _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
-
-            _mockKpiManager.Setup(call => call.GetCommerceSettings()).Returns(commerceData);
-
-            _mockServiceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationService);
-            _mockServiceLocator.Setup(call => call.GetInstance<IContentRepository>())
-               .Returns(_mockContentRepository.Object);
-            _mockServiceLocator.Setup(call => call.GetInstance<IContentVersionRepository>())
-                .Returns(_mockContentVersionRepository.Object);
-            _mockServiceLocator.Setup(call => call.GetInstance<IUIHelper>()).Returns(_mockUIHelper.Object);
-            _mockServiceLocator.Setup(call => call.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
-
-            _mockKpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("teststring");
-            _mockServiceLocator.Setup(call => call.GetInstance<IKpiHelper>()).Returns(_mockKpiHelper.Object);
+            _mockContextHelper = new Mock<IHttpContextHelper>();
+            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
+            testPublishedData = new Mock<IContent>();
+            testVariantData = new Mock<IContent>();
+            testConversionContent = new Mock<IContent>();           
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en");
             ContentLanguage.PreferredCulture = new CultureInfo("en");
 
-            _mockContextHelper = new Mock<IHttpContextHelper>();
-            _mockEpiserverHelper = new Mock<IEpiserverHelper>();
+            _mockServiceLocator.Setup(call => call.GetInstance<IContentRepository>())
+              .Returns(_mockContentRepository.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<IContentVersionRepository>())
+                .Returns(_mockContentVersionRepository.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<IKpiHelper>()).Returns(_mockKpiHelper.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<IUIHelper>()).Returns(_mockUIHelper.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationService);
+
+
             return new TestingContextHelper(_mockContextHelper.Object, _mockServiceLocator.Object, _mockEpiserverHelper.Object);
         }
 
@@ -93,6 +75,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(false);
+
             var swapDisabled = testContextHelper.IsInSystemFolder();
 
             Assert.True(swapDisabled);
@@ -101,10 +84,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_returns_false_when_we_are_able_to_swap()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ContentEventArgs(new ContentReference(1));
             contentArgs.Content = new PageData();
 
+            var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
@@ -120,7 +103,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void SwapDisabled_returns_false_if_args_are_not_the_correct_type()
         {
             var testContextHelper = GetUnitUnderTest();
-
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
@@ -135,9 +117,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_returns_true_if_there_is_no_content_to_check()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ContentEventArgs(new ContentReference(1));
 
+            var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
@@ -152,10 +134,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_returns_true_if_we_should_skip_the_request()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ContentEventArgs(new ContentReference(1));
             contentArgs.Content = new PageData();
 
+            var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(true);
@@ -170,9 +152,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_returns_true_if_useragent_is_null()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ContentEventArgs(new ContentReference(1));
             contentArgs.Content = new PageData();
+
+            var testContextHelper = GetUnitUnderTest();
 
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(false);
@@ -188,9 +171,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_with_ChildrenEventArgs_returns_false_when_we_are_able_to_swap()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
 
+            var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
@@ -205,10 +188,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_with_ChildrenEventArgs_returns_true_when_there_is_no_content_in_agruments()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
             contentArgs.ContentLink = null;
 
+            var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
@@ -223,10 +206,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_with_ChildrenEventArgs_returns_true_when_there_is_no_children_in_argument()
         {
-            var testContextHelper = GetUnitUnderTest();
             var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
             contentArgs.ChildrenItems = null;
 
+            var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
@@ -246,7 +229,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 preferredFormat = new NumberFormatInfo(),
                 CommerceCulture = "USD"
             };
-            
+
             test = new ABTest()
             {
                 CreatedDate = DateTime.Parse("5/5/2016"),
@@ -298,6 +281,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.KpiInstances = new List<IKpi>() { kpi };
 
             var testContextHelper = GetUnitUnderTest();
+            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
+            testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
+            _mockContentVersionRepository.Setup(
+               call => call.Load(It.IsAny<ContentReference>()))
+               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+
             MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.NotNull(testResult);
@@ -372,6 +363,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.KpiInstances = new List<IKpi>() { kpi };
 
             var testContextHelper = GetUnitUnderTest();
+            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
+            testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
+            _mockContentVersionRepository.Setup(
+               call => call.Load(It.IsAny<ContentReference>()))
+               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+           
             MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.NotNull(testResult);
@@ -455,6 +454,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.KpiInstances = new List<IKpi>() { kpi };
 
             var testContextHelper = GetUnitUnderTest();
+            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
+            testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
+            _mockContentVersionRepository.Setup(
+               call => call.Load(It.IsAny<ContentReference>()))
+               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
             MarketingTestingContextModel testResult = testContextHelper.GenerateContextData(test);
 
             Assert.NotNull(testResult);
@@ -517,12 +523,19 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KeyFinancialResults = new List<KeyFinancialResult>(),
                 KeyValueResults = new List<KeyValueResult>()
             };
-            
-           
 
             var testContextHelper = GetUnitUnderTest();
 
-            var kpi = new ContentComparatorKPI( _mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
+            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
+            testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
+             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
+            _mockContentVersionRepository.Setup(
+               call => call.Load(It.IsAny<ContentReference>()))
+               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
+            _mockUIHelper.Setup(call => call.getEpiUrlFromLink(It.IsAny<ContentReference>())).Returns("TestLink");
+           
+            var kpi = new ContentComparatorKPI(_mockServiceLocator.Object, Guid.Parse("10acbb11-693a-4f20-8602-b766152bf3bb"))
             {
                 CreatedDate = DateTime.UtcNow,
                 ModifiedDate = DateTime.UtcNow,
@@ -599,6 +612,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             test.KpiInstances = new List<IKpi>() { kpi };
 
             var testContextHelper = GetUnitUnderTest();
+            testVariantData.Setup(call => call.ContentLink).Returns(new ContentReference(5, 197));
+            testConversionContent.Setup(call => call.ContentLink).Returns(new ContentReference(8, 89));
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(testVariantData.Object);
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<Guid>())).Returns(testConversionContent.Object);
+            _mockContentVersionRepository.Setup(
+               call => call.Load(It.IsAny<ContentReference>()))
+               .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
             _mockEpiserverHelper.Setup(pub => pub.GetPreviewUrl(It.IsAny<ContentReference>(), It.IsAny<string>(), It.IsAny<VirtualPathArguments>())).Returns("previewUrl");
 
             var result = testContextHelper.GenerateContextData(test);
@@ -609,8 +629,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void IsRequestedContent_is_true_when_the_loaded_page_matches_the_one_in_the_request()
         {
-            var testContextHelper = GetUnitUnderTest();
             var aPage = new PageData(new PageReference(1));
+
+            var testContextHelper = GetUnitUnderTest();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IPageRouteHelper>()).Returns(new FakePageRouteHelper(aPage));
 
             var result = testContextHelper.IsRequestedContent(aPage);
@@ -621,9 +642,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void IsRequestedContent_is_false_when_the_loaded_page_is_not_the_requested_page()
         {
-            var testContextHelper = GetUnitUnderTest();
             var aPage = new PageData(new PageReference(1));
             var aPage2 = new PageData(new PageReference(2));
+
+            var testContextHelper = GetUnitUnderTest();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IPageRouteHelper>()).Returns(new FakePageRouteHelper(aPage));
 
             var result = testContextHelper.IsRequestedContent(aPage2);
@@ -634,8 +656,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void IsRequestedContent_is_true_when_the_loaded_content_is_not_a_page()
         {
-            var testContextHelper = GetUnitUnderTest();
             var aBlock = new MediaData();
+
+            var testContextHelper = GetUnitUnderTest();
 
             var result = testContextHelper.IsRequestedContent(aBlock);
 
@@ -645,8 +668,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void IsRequestedContent_is_false_when_the_we_cant_determine_the_requested_page()
         {
-            var testContextHelper = GetUnitUnderTest();
             var aPage = new PageData(new PageReference(1));
+
+            var testContextHelper = GetUnitUnderTest();
 
             var result = testContextHelper.IsRequestedContent(aPage);
 
