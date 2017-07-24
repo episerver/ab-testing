@@ -102,9 +102,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return _testManager.GetActiveTestsByOriginalItemId(originalItemId, contentCulture);
         }
 
-        public IMarketingTest GetTestById(Guid testGuid)
+        public IMarketingTest GetTestById(Guid testGuid, bool fromCache = false)
         {
-            var aTest = _testManager.Get(testGuid);
+            var aTest = _testManager.Get(testGuid,fromCache);
             if(aTest != null)
             {
                 var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();

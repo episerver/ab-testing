@@ -27,10 +27,10 @@ namespace EPiServer.Marketing.Testing.Web.Context
             _testingContextHelper = new TestingContextHelper();
         }
 
-        internal MarketingTestingContextResolver(IServiceLocator mockServiceLocatorserviceLocator, ITestingContextHelper mockTestingContextHelper)
+        internal MarketingTestingContextResolver(IServiceLocator mockServiceLocatorserviceLocator)
         {
             _marketingTestRepository = mockServiceLocatorserviceLocator.GetInstance<IMarketingTestingWebRepository>();
-            _testingContextHelper = mockTestingContextHelper;
+            _testingContextHelper = mockServiceLocatorserviceLocator.GetInstance<ITestingContextHelper>();
 
         }
 

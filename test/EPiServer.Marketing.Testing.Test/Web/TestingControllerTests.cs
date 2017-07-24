@@ -26,47 +26,36 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IServiceLocator> _mockServiceLocator;
         private Mock<IMarketingTestingWebRepository> _marketingTestingRepoMock;
         private Mock<IMessagingManager> _messagingManagerMock;
-        private Mock<ITestDataCookieHelper> _testDataCookieHelperMock = new Mock<ITestDataCookieHelper>();
+        private Mock<ITestDataCookieHelper> _testDataCookieHelperMock;
         private Mock<ITestManager> _testManagerMock;
-        private Mock<IKpiWebRepository> _kpiWebRepoMock = new Mock<IKpiWebRepository>();
+        private Mock<IKpiWebRepository> _kpiWebRepoMock;
+        Mock<IHttpContextHelper> contextHelper;
 
         private TestingController GetUnitUnderTest()
         {
             _mockServiceLocator = new Mock<IServiceLocator>();
-
             _marketingTestingRepoMock = new Mock<IMarketingTestingWebRepository>();
-            _marketingTestingRepoMock.Setup(call => call.GetTestList(It.IsAny<TestCriteria>()))
-                .Returns(new List<IMarketingTest>() { new ABTest() });
-            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(new ABTest());
-            _mockServiceLocator.Setup(s1 => s1.GetInstance<IMarketingTestingWebRepository>())
-                .Returns(_marketingTestingRepoMock.Object);
-
-            _messagingManagerMock = new Mock<IMessagingManager>();
-            _messagingManagerMock.Setup(
-                call =>
-                    call.EmitKpiResultData(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<IKeyResult>(),
-                        It.IsAny<KeyResultType>()));
-            _mockServiceLocator.Setup(s1 => s1.GetInstance<IMessagingManager>()).Returns(_messagingManagerMock.Object);
-
-           
-            _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestDataCookieHelper>())
-                .Returns(_testDataCookieHelperMock.Object);
-
             _testManagerMock = new Mock<ITestManager>();
-            _testManagerMock.Setup(call => call.Get(It.IsAny<Guid>())).Returns(new ABTest());
+            _messagingManagerMock = new Mock<IMessagingManager>();
+            contextHelper = new Mock<IHttpContextHelper>();
+            _testDataCookieHelperMock = new Mock<ITestDataCookieHelper>();
+            _kpiWebRepoMock = new Mock<IKpiWebRepository>();
+            contextHelper = new Mock<IHttpContextHelper>();
+            
+            _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestDataCookieHelper>()).Returns(_testDataCookieHelperMock.Object);
+            _mockServiceLocator.Setup(s1 => s1.GetInstance<IMarketingTestingWebRepository>()).Returns(_marketingTestingRepoMock.Object);
+            _mockServiceLocator.Setup(s1 => s1.GetInstance<IMessagingManager>()).Returns(_messagingManagerMock.Object);
+            _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestDataCookieHelper>()).Returns(_testDataCookieHelperMock.Object);
             _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestManager>()).Returns(_testManagerMock.Object);
-
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
-
+            
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
-            Mock<IHttpContextHelper> contextHelper = new Mock<IHttpContextHelper>();
             return new TestingController(contextHelper.Object)
             {
                 Request = new System.Net.Http.HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
-            };
-            ;
+            };            
         }
 
         [Fact]
@@ -96,7 +85,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ABTest test = null;
 
             var controller = GetUnitUnderTest();
-            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.Is<Guid>(g => g == id))).Returns(test);
+            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.Is<Guid>(g => g == id), It.IsAny<bool>())).Returns(test);
 
             var result = controller.GetTest(id.ToString());
             var response = result.Content.ReadAsStringAsync();
@@ -115,16 +104,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("kpiId", Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f").ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
-
+            var data = new FormDataCollection(pairs);
             var cookie = new TestDataCookie();
             cookie.KpiConversionDictionary.Add(Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f"), false);
 
-            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new testFinancialKpi());
-            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(cookie);
-
-            var data = new FormDataCollection(pairs);
-
             var controller = GetUnitUnderTest();
+            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(cookie);
+            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(new ABTest());
 
             var result = controller.SaveKpiResult(data);
 
@@ -141,16 +127,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("kpiId", Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f").ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
-
+            var data = new FormDataCollection(pairs);
             var cookie = new TestDataCookie();
             cookie.KpiConversionDictionary.Add(Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f"), false);
 
-            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
-            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(cookie);
-
-            var data = new FormDataCollection(pairs);
-
             var controller = GetUnitUnderTest();
+            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(cookie);
+            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(new ABTest());
 
             var result = controller.SaveKpiResult(data);
 
@@ -168,12 +151,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("kpiId", Guid.NewGuid().ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
-
-            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
-
             var data = new FormDataCollection(pairs);
 
             var controller = GetUnitUnderTest();
+            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
 
             var result = controller.SaveKpiResult(data);
 
@@ -191,16 +172,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new KeyValuePair<string, string>("kpiId", Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f").ToString()),
                 new KeyValuePair<string, string>("total", "3")
             };
-
+            var data = new FormDataCollection(pairs);
             var cookie = new TestDataCookie();
             cookie.KpiConversionDictionary.Add(Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f"), false);
 
-            _kpiWebRepoMock.Setup(call => call.GetKpiInstance(It.IsAny<Guid>())).Returns(new Kpi());
-            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(cookie);
-
-            var data = new FormDataCollection(pairs);
-
             var controller = GetUnitUnderTest();
+            _testDataCookieHelperMock.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(cookie);
+            _marketingTestingRepoMock.Setup(call => call.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(new ABTest());
 
             var result = controller.SaveKpiResult(data);
 

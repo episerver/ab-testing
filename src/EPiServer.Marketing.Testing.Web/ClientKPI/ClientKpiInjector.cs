@@ -39,13 +39,13 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             _httpContextHelper = new HttpContextHelper();
         }
 
-        internal ClientKpiInjector(ITestingContextHelper theTestingContextHelper, IMarketingTestingWebRepository theWebRepo, IServiceLocator theServiceLocator, ILogger theLogger, IHttpContextHelper theHttpcontextHelper)
+        internal ClientKpiInjector(IServiceLocator serviceLocator)
         {
-            _contextHelper = theTestingContextHelper;
-            _testRepo = theWebRepo;
-            _serviceLocator = theServiceLocator;
-            _logger = theLogger;
-            _httpContextHelper = theHttpcontextHelper;
+            _serviceLocator = serviceLocator;
+            _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
+            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();            
+            _logger = serviceLocator.GetInstance<ILogger>();
+            _httpContextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     var _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
                     var tempKpi = _kpiManager.Get(data.Key) as IKpi;
                     var aClientKpi = tempKpi as IClientKpi;
-                    var test = _testRepo.GetTestById(data.Value.TestId);
+                    var test = _testRepo.GetTestById(data.Value.TestId,true);
                     var itemVersion = test.Variants.FirstOrDefault(v => v.Id.ToString() == data.Value.TestVariantId.ToString()).ItemVersion;
                     var clientScript = BuildClientScript(tempKpi.Id, test.Id, itemVersion, aClientKpi.ClientEvaluationScript);
                     script += clientScript;

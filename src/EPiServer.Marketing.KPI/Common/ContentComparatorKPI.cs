@@ -12,6 +12,8 @@ using EPiServer.Web.Mvc.Html;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Web.Routing;
 using System.Web;
+using System.Runtime.Caching;
+using EPiServer.Marketing.KPI.Common.Helpers;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -33,9 +35,12 @@ namespace EPiServer.Marketing.KPI.Common
         public Guid ContentGuid;
         public IContent _content;
         public string   _startpagepath;
+        private ObjectCache _cache;
+        private IKpiHelper _epiHelper;
+
 
         public ContentComparatorKPI()
-        {
+        {           
         }
 
         /// <summary>
@@ -45,6 +50,11 @@ namespace EPiServer.Marketing.KPI.Common
         public ContentComparatorKPI(Guid contentGuid)
         {
             ContentGuid = contentGuid;
+        }
+
+        internal ContentComparatorKPI(IServiceLocator serviceLocator, Guid contentGuid) : this(contentGuid)
+        {
+            _servicelocator = serviceLocator;
         }
 
         /// <inheritdoc />
@@ -106,15 +116,26 @@ namespace EPiServer.Marketing.KPI.Common
         /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
+            _cache = MemoryCache.Default;
             var retval = false;
+            _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
             var ea = e as ContentEventArgs;
             if (ea != null)
             {
                 if (_content == null)
-                {   
+                {
                     var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
                     _content = contentRepo.Get<IContent>(ContentGuid);
-                    _startpagepath = UrlResolver.Current.GetUrl(ContentReference.StartPage);
+                    if (_cache.Contains("SiteStart") && _cache.Get("SiteStart") != null)
+                    {
+                        _startpagepath = _cache.Get("SiteStart") as string;
+                    }
+                    else
+                    {
+                        _startpagepath = _epiHelper.GetUrl(ContentReference.StartPage);
+                        _cache.Add("SiteStart", _startpagepath , DateTimeOffset.MaxValue);
+                    }
+
                 }
 
                 if ( ContentReference.StartPage.ID == _content.ContentLink.ID )

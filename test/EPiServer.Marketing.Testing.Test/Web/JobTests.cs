@@ -58,7 +58,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Owner = "me",
                 Variants = new List<Variant>() { new Variant() { Id = Guid.NewGuid(), Views = 100, Conversions = 50 }, new Variant() { Id = Guid.NewGuid(), Views = 70, Conversions = 60, IsWinner = true }}} ;
 
-            _webRepo.Setup(call => call.GetTestById(It.IsAny<Guid>())).Returns(testToPublish);
+            _webRepo.Setup(call => call.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(testToPublish);
             _webRepo.Setup(call => call.PublishWinningVariant(It.IsAny<TestResultStoreModel>())).Returns(TestToAutoPublish.ToString);
 
             _jobRepo.Setup(g => g.Get(It.IsAny<Guid>())).Returns( new ScheduledJob(
