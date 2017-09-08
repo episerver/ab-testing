@@ -117,7 +117,6 @@ namespace EPiServer.Marketing.KPI.Common
         {
             _cache = MemoryCache.Default;
             var retval = false;
-
             _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
             var ea = e as ContentEventArgs;
             if (ea != null)
