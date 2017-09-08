@@ -34,13 +34,12 @@ namespace EPiServer.Marketing.KPI.Common
         [DataMember]
         public Guid ContentGuid;
         public IContent _content;
-        public string   _startpagepath;
+        public List<string>  _startpagepaths = new List<string>();
         private ObjectCache _cache;
         private IKpiHelper _epiHelper;
 
-
         public ContentComparatorKPI()
-        {           
+        {
         }
 
         /// <summary>
@@ -104,9 +103,9 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 throw new KpiValidationException(_servicelocator.GetInstance<LocalizationService>().GetString("/kpi/content_comparator_kpi/config_markup/error_conversionpage"));
             }
-
             var conversionContent = contentRepo.Get<IContent>(new ContentReference(responseData["ConversionPage"]));
             var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
+
             if (IsContentPublished(conversionContent) && !IsCurrentContent(conversionContent, currentContent))
             {
                 ContentGuid = conversionContent.ContentGuid;
@@ -118,6 +117,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             _cache = MemoryCache.Default;
             var retval = false;
+
             _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
             var ea = e as ContentEventArgs;
             if (ea != null)
@@ -126,16 +126,22 @@ namespace EPiServer.Marketing.KPI.Common
                 {
                     var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
                     _content = contentRepo.Get<IContent>(ContentGuid);
-                    if (_cache.Contains("SiteStart") && _cache.Get("SiteStart") != null)
+
+                    if (_cache.Contains("StartPagePaths") && _cache.Get("StartPagePaths") != null)
                     {
-                        _startpagepath = _cache.Get("SiteStart") as string;
+                        _startpagepaths = _cache.Get("StartPagePaths") as List<string>;
+                        if (!_startpagepaths.Contains(_epiHelper.GetUrl(ContentReference.StartPage)))
+                        {
+                            _startpagepaths.Add(_epiHelper.GetUrl(ContentReference.StartPage));
+                            _cache.Remove("StartPagePaths");
+                            _cache.Add("SiteStart", _startpagepaths, DateTimeOffset.MaxValue);
+                        }
                     }
                     else
                     {
-                        _startpagepath = _epiHelper.GetUrl(ContentReference.StartPage);
-                        _cache.Add("SiteStart", _startpagepath , DateTimeOffset.MaxValue);
+                        _startpagepaths.Add(_epiHelper.GetUrl(ContentReference.StartPage));
+                        _cache.Add("SiteStart", _startpagepaths, DateTimeOffset.MaxValue);
                     }
-
                 }
 
                 if ( ContentReference.StartPage.ID == _content.ContentLink.ID )
@@ -143,7 +149,7 @@ namespace EPiServer.Marketing.KPI.Common
                     // if the target content is the start page, we also need to check 
                     // the path to make sure its not just a request for some other static
                     // resources such as css or jscript
-                    retval = (_startpagepath == HttpContext.Current.Request.Path 
+                    retval = (_startpagepaths.Contains(HttpContext.Current.Request.Path) 
                         && ContentGuid.Equals(ea.Content.ContentGuid));
                 }
                 else
