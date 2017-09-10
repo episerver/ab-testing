@@ -83,7 +83,7 @@
             }
         },
 
-        _viewArchivedTest(testId) {
+        _viewArchivedTest: function(testId) {
             //Shows the archive view for the selected test
             var contextParameters = { uri: "epi.marketing.testing:///testid=" + testId + "/Archive" };
             topic.publish("/epi/shell/context/request", contextParameters);
