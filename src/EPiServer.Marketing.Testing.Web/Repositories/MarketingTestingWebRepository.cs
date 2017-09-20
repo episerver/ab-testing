@@ -66,8 +66,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived);
 
             if (aTest == null)
+            {
                 aTest = new ABTest();
-
+            }
+            else
+            {
+                var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                aTest.Variants = sortedVariants;
+            }  
             return aTest;
         }
 
@@ -83,7 +89,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            return _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+            var tests = _testManager.GetActiveTestsByOriginalItemId(originalItemId);
+            for(var x = 0; x < tests.Count; x++){
+                var sortedVariants = tests[x].Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                tests[x].Variants = sortedVariants;
+            };            
+            return tests;
         }
 
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture)
@@ -93,12 +104,25 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public IMarketingTest GetTestById(Guid testGuid, bool fromCache = false)
         {
-            return _testManager.Get(testGuid, fromCache);
+            var aTest = _testManager.Get(testGuid,fromCache);
+            if(aTest != null)
+            {
+                var sortedVariants = aTest.Variants.OrderByDescending(p => p.IsPublished).ThenBy(v => v.Id).ToList();
+                aTest.Variants = sortedVariants;
+            }
+            return aTest;
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
-            return _testManager.GetTestList(criteria);
+            var tests = _testManager.GetTestList(criteria);
+            for (var x = 0; x < tests.Count; x++)
+            {
+                var sortedVariants = tests[x].Variants.OrderBy(v => v.Id).ToList();
+                var sortedVariants2 = sortedVariants.OrderByDescending(p => p.IsPublished.ToString()).ToList();
+                tests[x].Variants = sortedVariants2;
+            };
+            return tests;
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria, CultureInfo contentCulture)
@@ -260,7 +284,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 test.State = TestState.Active;
             }
-
             return test;
         }
 
@@ -281,7 +304,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 int winningVersion;
                 int.TryParse(testResult.WinningContentLink.Split('_')[1], out winningVersion);
 
-                IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId),true);
+                IMarketingTest currentTest = GetTestById(Guid.Parse(testResult.TestId));
                 var initialTestState = currentTest;
                 try
                 {
