@@ -4,6 +4,7 @@ using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
@@ -79,10 +80,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public IMarketingTest GetActiveTestForContent(Guid aContentGuid, CultureInfo contentCulture)
         {
-            var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived && abTest.ContentLanguage == contentCulture.Name);
+            var aTest = _testManager.GetTestByItemId(aContentGuid).Find(abTest => abTest.State != TestState.Archived && (abTest.ContentLanguage == contentCulture.Name || abTest.ContentLanguage == string.Empty));
 
             if (aTest == null)
+            {
                 aTest = new ABTest();
+            }
+            else if (aTest.ContentLanguage == string.Empty)
+            {
+                aTest.ContentLanguage = contentCulture.Name;
+                _testManager.Save(aTest);
+            }
 
             return aTest;
         }
