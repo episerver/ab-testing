@@ -462,6 +462,7 @@ namespace EPiServer.Marketing.Testing.Dal.DataAccess
                         UpdateVariants(repo, test, testObject);
                         break;
                     case DalTestState.Active:
+                        test.ContentLanguage = test.ContentLanguage == string.Empty ? testObject.ContentLanguage : test.ContentLanguage;
                         test.State = testObject.State;
                         test.ModifiedDate = DateTime.UtcNow;
                         break;
