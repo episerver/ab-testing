@@ -15,7 +15,7 @@
         <dependencies>
           <dependency id="EPiServer.Marketing.KPI" version="[$EPiServerMarketingKPIMinVersion$, $EPiServerMarketingKPIMaxLimit$)" />
           <dependency id="EPiServer.CMS.Core" version="[$EPiServerCMSCoreMinVersion$, $EPiServerCMSCoreMaxLimit$)" />
-          <dependency id="EPiServer.Commerce" version="[$EPiServerCommerceMinVersion$, $EPiServerCommerceMaxLimit$)" />
+          <dependency id="EPiServer.Commerce" version="[9.24.1, 12)" />
         </dependencies>
     </metadata>
 </package>
