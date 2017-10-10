@@ -49,6 +49,10 @@ del /q "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\*.*
 xcopy "%PackagePath%\temp\*.zip" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\"  /I /F /R /Y
 rd "%PackagePath%\temp" /s /q
 
+md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\abcapture"
+xcopy "%ProjectPath%\ClientResources\abcapture\*.*" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ABCapture\"  /I /F /R /Y
+
+
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%" "%Dependencies%"
 
 xcopy "%PackagePath%\*.nupkg" "..\artifacts" /I /F /R /Y
