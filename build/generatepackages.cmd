@@ -50,7 +50,7 @@ xcopy "%PackagePath%\temp\*.zip" "%PackagePath%\content\modules\_protected\EPiSe
 rd "%PackagePath%\temp" /s /q
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\abcapture"
-xcopy "%ProjectPath%\abcapture\*.*" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ABCapture\"  /I /F /R /Y
+xcopy "%ProjectPath%\ClientResources\abcapture\*.*" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ABCapture\"  /I /F /R /Y
 
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%" "%Dependencies%"
