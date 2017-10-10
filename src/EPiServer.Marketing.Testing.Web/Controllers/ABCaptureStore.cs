@@ -70,5 +70,4 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             return p;
         }
     }
-
 }
