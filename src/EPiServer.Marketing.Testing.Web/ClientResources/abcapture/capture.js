@@ -20,6 +20,6 @@ page.onLoadFinished = function () {
             page.render(pageImage);
             phantom.exit();
 
-        }, 1000);
-    }, 1000);
+        }, 500);
+    }, 500);
 };
