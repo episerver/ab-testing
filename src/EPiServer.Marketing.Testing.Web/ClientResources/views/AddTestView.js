@@ -20,7 +20,7 @@
      'dojo/query',
      'dijit/registry',
      'epi/dependency',
-     'marketing-testing/scripts/rasterizeHTML',
+     'marketing-testing/scripts/thumbnails',
      'dojo/dom-form',
      'dojo/json',
      'dojox/layout/ContentPane',
@@ -60,7 +60,7 @@
     query,
     registry,
     dependency,
-   rasterizehtml,
+   thumbnails,
    domForm,
    JSON,
    ContentPane,
@@ -163,19 +163,18 @@
                 var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
+                    pubThumb.height = 768;
+                    pubThumb.width = 1024;
+                    var erase_image = new Image();
                     var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1; // Check if the content is a product page
 
                     //Hack to build published versions preview link below
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                       previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
-                        previewUrlStart = this.contentData.previewUrl.split('_'),
-                        previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
+                    previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
+                    previewUrlStart = this.contentData.previewUrl.split('_'),
+                    previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
 
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versiona').addClass('hide-bg');
-                    });
+                    thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
 
@@ -190,13 +189,11 @@
                 var pubThumb = document.getElementById("draftThumbnail");
 
                 if (pubThumb) {
-                    var previewUrl = this.model.contentData.previewUrl;
-
                     pubThumb.height = 768;
                     pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versionb').addClass('hide-bg');
-                    });
+                    var previewUrl = this.model.contentData.previewUrl;
+
+                    thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
 
