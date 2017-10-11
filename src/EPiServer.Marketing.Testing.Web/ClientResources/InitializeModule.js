@@ -34,7 +34,7 @@
             var abTestStore = new JsonRest({ target: abTestingStorePath, preventCache: true });
             var abArchives = new JsonRest({ target: abArchivesPath, preventCache: true });
             var kpiStore = new JsonRest({ target: kpiStorePath, preventCache: true });
-            var thumbnailStore = new JsonRest({ target: thumbnailStorePath, preventCahce: true });
+            var thumbnailStore = new JsonRest({ target: thumbnailStorePath, preventCache: true });
 
             //add our store to the registry to be consumed by the UI
             registry.add("marketing.abtesting", abTestStore);
