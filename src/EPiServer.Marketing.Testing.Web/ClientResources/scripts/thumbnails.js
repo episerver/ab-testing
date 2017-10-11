@@ -1,7 +1,6 @@
 ﻿define([
     "epi/dependency",
 ],
-
 function (dependency) {
     return {
         _setThumbnail: function (canvasId, url) {
@@ -16,7 +15,6 @@ function (dependency) {
                     me.thumbstore.remove(result);
                 }
             });
-
         }
     }
 });
