@@ -163,9 +163,6 @@
                 var pubThumb = document.getElementById("publishThumbnail");
 
                 if (pubThumb) {
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
-                    var erase_image = new Image();
                     var isCatalogContent = this.contentData.previewUrl.toLowerCase().indexOf('catalogcontent') !== -1; // Check if the content is a product page
 
                     //Hack to build published versions preview link below
@@ -189,8 +186,6 @@
                 var pubThumb = document.getElementById("draftThumbnail");
 
                 if (pubThumb) {
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
                     var previewUrl = this.model.contentData.previewUrl;
 
                     thumbnails._setThumbnail(pubThumb, previewUrl);
