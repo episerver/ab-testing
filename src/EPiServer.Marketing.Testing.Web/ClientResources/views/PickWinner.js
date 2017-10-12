@@ -16,7 +16,7 @@
  "dojo/dom-class",
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
- "marketing-testing/scripts/rasterizeHTML",
+ "marketing-testing/scripts/thumbnails",
  "dojox/layout/ContentPane",
  "dojo/fx",
  "dojo/dom-construct",
@@ -44,7 +44,7 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml,
+    thumbnails,
     ContentPane,
     CoreFX,
     DomConstruct
@@ -81,7 +81,7 @@
             }
         },
 
-        _setToggleAnimations: function() {
+        _setToggleAnimations: function () {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlPickWinnerSummaryNode,
@@ -144,8 +144,12 @@
             this._renderSignificance();
 
             ready(function () {
-                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailpickwinner', 'versiona');
-                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailpickwinner', 'versionb');
+                pubThumb = document.getElementById("publishThumbnailpickwinner");
+                draftThumb = document.getElementById("draftThumbnailpickwinner");
+
+                thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
+                thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
+
                 me._renderStatusIndicatorStyles();
                 me._renderKpiMarkup("pw_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
@@ -241,8 +245,7 @@
                 });
         },
 
-        disablePickButtons: function(isDisabled)
-        {
+        disablePickButtons: function (isDisabled) {
             this.controlPickButton.set("disabled", isDisabled);
             this.challengerPickButton.set("disabled", isDisabled);
         },
@@ -303,18 +306,6 @@
                 domClass.replace(this.challengerPickWinnerBtn, "abPickWinnerAction");
                 query("#publishThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
                 query("#draftThumbnailpickwinner").removeClass("epi-abtest-thumbnail--losing");
-            }
-        },
-        _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
-            var pubThumb = dom.byId(canvasId);
-
-            if (pubThumb) {
-                pubThumb.height = 768;
-                pubThumb.width = 1024;
-                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(
-                    function success(renderResult) {
-                        query('.' + parentContainerClass).addClass('hide-bg');
-                    });
             }
         },
 
