@@ -30,7 +30,10 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var user = "phan";
             var pass = "ph4nt0m!";
             var fileName = _thumbRepo.getRandomFileName();
-            var siteToCapture = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
+            var pageLink = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
+            var pageHost = HttpContext.Request.Url.Host;
+            var siteToCapture = string.Format("http://{0}{1}", pageHost, pageLink);
+
 
             Process captureProcess = _thumbRepo.getCaptureProcess(siteToCapture, fileName, user, pass);
             captureProcess.Start();

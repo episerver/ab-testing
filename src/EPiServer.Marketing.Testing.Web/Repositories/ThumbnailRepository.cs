@@ -22,13 +22,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public Process getCaptureProcess(string id, string fileName, string user, string pass)
         {
-            var currentSite = EPiServer.Web.SiteDefinition.Current.SiteUrl.ToString();
             var exe = HttpContext.Current.Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/phantomjs");
 
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"captureSite.js " + currentSite.TrimEnd('/') + id + " " + fileName + " " + user + " " + pass),
+                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + user + " " + pass),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
