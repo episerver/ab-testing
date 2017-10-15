@@ -33,9 +33,11 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var pageLink = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
             var pageHost = HttpContext.Request.Url.Host;
             var targetPage = string.Format("http://{0}{1}", pageHost, pageLink);
+            var sessionCookie = HttpContext.Request.Cookies["ASP.NET_SessionId"].Value;
+            var applicationCookie = HttpContext.Request.Cookies[".AspNet.ApplicationCookie"].Value;
 
 
-            Process captureProcess = _thumbRepo.getCaptureProcess(targetPage, fileName, user, pass);
+            Process captureProcess = _thumbRepo.getCaptureProcess(targetPage, fileName, sessionCookie, applicationCookie, pageHost);
             captureProcess.Start();
             captureProcess.WaitForExit();            
 
