@@ -16,7 +16,7 @@
  "dojo/dom-class",
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
- "marketing-testing/scripts/rasterizeHTML",
+ "marketing-testing/scripts/thumbnails",
  "dojox/layout/ContentPane",
  "dojo/fx",
  "dojo/dom-construct",
@@ -42,7 +42,7 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml,
+    thumbnails,
     ContentPane,
     CoreFX,
     DomConstruct
@@ -132,9 +132,14 @@
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             this._renderStatus();
             this._renderTestDuration();
+
             ready(function () {
-                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnailarchive', 'versiona');
-                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnailarchive', 'versionb');
+                pubThumb = document.getElementById("publishThumbnailarchive");
+                draftThumb = document.getElementById("draftThumbnailarchive");
+
+                thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
+                thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
+
                 me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
@@ -204,51 +209,37 @@
 
         _renderStatusIndicatorStyles: function () {
             var draftVersion = this.context.data.draftVersionContentLink.split("_")[1];
-            var winningVersion = textHelper._findInArray(this.context.data.test.variants, "isWinner", true);
+            var winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner });
+
             this.controlHeader.innerText = resources.archiveview.content_control_header;
             this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
 
-            if (winningVersion != null) {
-                if (draftVersion == winningVersion.itemVersion) {
-                    this.controlVersionTestResult.innerText = resources.archiveview.losing_version_label;
-                    this.challengerVersionTestResult.innerText = resources.archiveview.winning_version_label;
-                    this.challengerStatusIcon.title = resources.archiveview.content_selected;
-                    this.controlStatusIcon.title = "";
-                    domClass.replace(this.challengerVersionTestResult, "abWinnerStatusText");
-                    domClass.replace(this.controlVersionTestResult, "abLoserStatusText");
-                    domClass.replace(this.controlStatusIcon, "noIndicator");
-                    domClass.replace(this.challengerStatusIcon, "winningContent");
-                    domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlTrailingBody");
-                    domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerPublishedBody");
-                    query("#publishThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
-                    query("#draftThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
-                } else {
-                    this.controlVersionTestResult.innerText = resources.archiveview.winning_version_label;
-                    this.challengerVersionTestResult.innerText = resources.archiveview.losing_version_label;
-                    this.controlStatusIcon.title = resources.archiveview.content_selected;
-                    this.challengerStatusIcon.title = ""
-                    domClass.replace(this.challengerVersionTestResult, "abLoserStatusText");
-                    domClass.replace(this.controlVersionTestResult, "abWinnerStatusText");
-                    domClass.replace(this.controlStatusIcon, "winningContent");
-                    domClass.replace(this.challengerStatusIcon, "noIndicator");
-                    domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlPublishedBody");
-                    domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerDefaultBody");
-                    query("#publishThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
-                    query("#draftThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
-                }
-            }
-        },
-
-        _generateThumbnail: function (previewUrl, canvasId, parentContainerClass) {
-            var pubThumb = dom.byId(canvasId);
-
-            if (pubThumb) {
-                pubThumb.height = 768;
-                pubThumb.width = 1024;
-                rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(
-                    function success(renderResult) {
-                        query('.' + parentContainerClass).addClass('hide-bg');
-                    });
+            if (draftVersion == winningVersion.itemVersion) {
+                this.controlVersionTestResult.innerText = resources.archiveview.losing_version_label;
+                this.challengerVersionTestResult.innerText = resources.archiveview.winning_version_label;
+                this.challengerStatusIcon.title = resources.archiveview.content_selected;
+                this.controlStatusIcon.title = "";
+                domClass.replace(this.challengerVersionTestResult, "abWinnerStatusText");
+                domClass.replace(this.controlVersionTestResult, "abLoserStatusText");
+                domClass.replace(this.controlStatusIcon, "noIndicator");
+                domClass.replace(this.challengerStatusIcon, "winningContent");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlTrailingBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerPublishedBody");
+                query("#publishThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
+            } else {
+                this.controlVersionTestResult.innerText = resources.archiveview.winning_version_label;
+                this.challengerVersionTestResult.innerText = resources.archiveview.losing_version_label;
+                this.controlStatusIcon.title = resources.archiveview.content_selected;
+                this.challengerStatusIcon.title = ""
+                domClass.replace(this.challengerVersionTestResult, "abLoserStatusText");
+                domClass.replace(this.controlVersionTestResult, "abWinnerStatusText");
+                domClass.replace(this.controlStatusIcon, "winningContent");
+                domClass.replace(this.challengerStatusIcon, "noIndicator");
+                domClass.replace(this.controlWrapper, "cardWrapper 2column epi-abtest-preview-left-side controlPublishedBody");
+                domClass.replace(this.challengerWrapper, "cardWrapper 2column epi-abtest-preview-right-side challengerDefaultBody");
+                query("#publishThumbnailarchive").removeClass("epi-abtest-thumbnail--losing");
+                query("#draftThumbnailarchive").addClass("epi-abtest-thumbnail--losing");
             }
         },
 

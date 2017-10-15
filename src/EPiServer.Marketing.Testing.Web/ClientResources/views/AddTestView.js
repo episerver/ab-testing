@@ -20,7 +20,7 @@
      'dojo/query',
      'dijit/registry',
      'epi/dependency',
-     'marketing-testing/scripts/rasterizeHTML',
+     'marketing-testing/scripts/thumbnails',
      'dojo/dom-form',
      'dojo/json',
      'dojox/layout/ContentPane',
@@ -60,7 +60,7 @@
     query,
     registry,
     dependency,
-   rasterizehtml,
+   thumbnails,
    domForm,
    JSON,
    ContentPane,
@@ -167,15 +167,11 @@
 
                     //Hack to build published versions preview link below
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                       previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
-                        previewUrlStart = this.contentData.previewUrl.split('_'),
-                        previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
+                    previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
+                    previewUrlStart = this.contentData.previewUrl.split('_'),
+                    previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
 
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versiona').addClass('hide-bg');
-                    });
+                    thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
 
@@ -192,11 +188,7 @@
                 if (pubThumb) {
                     var previewUrl = this.model.contentData.previewUrl;
 
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versionb').addClass('hide-bg');
-                    });
+                    thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
 
