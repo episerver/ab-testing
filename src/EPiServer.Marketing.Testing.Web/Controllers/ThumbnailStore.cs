@@ -27,12 +27,15 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public ActionResult Get(string id)
         {
-            var user = "phan";
-            var pass = "ph4nt0m!";
             var fileName = _thumbRepo.getRandomFileName();
-            var siteToCapture = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
+            var path = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
+            var pagePrefix = HttpContext.Request.Url.GetLeftPart(System.UriPartial.Authority);
+            var host = HttpContext.Request.Url.Host;
+            var targetPage = string.Format("{0}{1}", pagePrefix, path);
+            var sessionCookie = HttpContext.Request.Cookies["ASP.NET_SessionId"].Value;
+            var applicationCookie = HttpContext.Request.Cookies[".AspNet.ApplicationCookie"].Value;
 
-            Process captureProcess = _thumbRepo.getCaptureProcess(siteToCapture, fileName, user, pass);
+            Process captureProcess = _thumbRepo.getCaptureProcess(targetPage, fileName, sessionCookie, applicationCookie, host);
             captureProcess.Start();
             captureProcess.WaitForExit();            
 

@@ -20,15 +20,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return string.Format("{0}.png", Guid.NewGuid());
         }
 
-        public Process getCaptureProcess(string id, string fileName, string user, string pass)
+        public Process getCaptureProcess(string id, string fileName, string sessionCookieValue, string appliationCookieValue, string domain)
         {
-            var currentSite = EPiServer.Web.SiteDefinition.Current.SiteUrl.ToString();
             var exe = HttpContext.Current.Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/phantomjs");
 
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"captureSite.js " + currentSite.TrimEnd('/') + id + " " + fileName + " " + user + " " + pass),
+                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + sessionCookieValue + " "+ appliationCookieValue+" "+ domain),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
