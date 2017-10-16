@@ -116,16 +116,19 @@
             },
 
             _onContextChange: function (context, caller) {
-                this.contentData = caller.contentData;
-                this.kpiEntries = 0;
-                this._adjustKpiSelectorCombo();
-                this.reset();
+                if (this.contentData != caller.contentData) {
+                    this.contentData = caller.contentData;
+                    this.kpiEntries = 0;
+                    this._adjustKpiSelectorCombo();
+                    this._setViewPublishedVersionAttr(true);
+                    this._setViewCurrentVersionAttr();
+                    this.reset();
+                }
             },
 
             //sets default values once everything is loaded
             postCreate: function () {
                 var me = this;
-                me.reset();
                 me.inherited(arguments);
                 document.addEventListener('destroyed', function () {
                     me.decrementKpiEntries();
@@ -148,6 +151,7 @@
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
+
                 this._resetView();
             },
 
@@ -421,8 +425,7 @@
                 }
 
                 this._setViewConfidenceLevelAttr();
-                this._setViewPublishedVersionAttr(true);
-                this._setViewCurrentVersionAttr();
+
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();

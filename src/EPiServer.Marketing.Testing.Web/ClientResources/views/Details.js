@@ -16,7 +16,7 @@
  "dojo/dom-class",
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
- "marketing-testing/scripts/rasterizeHTML",
+ "marketing-testing/scripts/thumbnails",
  "dojox/layout/ContentPane",
  "dojo/fx",
  "dojo/dom-construct",
@@ -44,7 +44,7 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml,
+    thumbnails,
     ContentPane,
     CoreFX,
     DomConstruct
@@ -61,25 +61,16 @@
             me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
 
-        postCreate: function () {
+        startup: function () {
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
+            this.context = contextService.currentContext;
             textHelper.initializeHelper(this.context, resources.detailsview);
+            this._displayOptionsButton(this.context.data.userHasPublishRights);
+            this._resetView();
             this._renderData();
         },
 
-        startup: function () {
-            this._displayOptionsButton(this.context.data.userHasPublishRights);
-            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
-                this.kpiSummaryWidgets[x].startup();
-            }
-            if (this.context.data.test.kpiInstances.length > 1) {
-                this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible"
-            } else {
-                this.summaryToggle.style.visibility = "hidden"
-            }
-        },
-
-        _setToggleAnimations: function() {
+        _setToggleAnimations: function () {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
@@ -113,9 +104,7 @@
             }
             me.context = newContext;
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            textHelper.initializeHelper(me.context, resources.detailsview);
 
-            me._renderData();
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
             }
@@ -186,8 +175,12 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
-                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
-                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
+                pubThumb = document.getElementById("publishThumbnaildetail");
+                draftThumb = document.getElementById("draftThumbnaildetail");
+                if (me.context.customViewType == "marketing-testing/views/details") {
+                    thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
+                    thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
+                };
                 me._renderKpiMarkup("details_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
@@ -313,6 +306,15 @@
                 this.controlSummaryIn.play();
                 this.challengerSummaryIn.play();
             }
-        }
+        },
+
+        _resetView: function () {
+            var abTestBody = dom.byId("abTestBody");
+            var toolbarGroup = dom.byId("toolbarGroup");
+            if (abTestBody) {
+                abTestBody.scrollIntoView(true);
+                toolbarGroup.scrollIntoView(true);
+            }
+        },
     });
 });
