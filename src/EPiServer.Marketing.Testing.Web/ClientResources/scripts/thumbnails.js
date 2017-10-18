@@ -16,8 +16,13 @@ function (dependency) {
                     context.drawImage(thumbnail, 0, 0);
                     me.thumbstore.remove(result);
                     document.getElementById(canvasId.id + "-spinner").style.display = "none";
+                    document.getElementById(canvasId.id + "-error").style.display = "none";
                     canvasId.style.display = "block";
                 }
+            }).otherwise(function () {
+                document.getElementById(canvasId.id + "-spinner").style.display = "none";
+                document.getElementById(canvasId.id + "-error").style.display = "block";
+                canvasId.style.display = "none";
             });
         },
     }
