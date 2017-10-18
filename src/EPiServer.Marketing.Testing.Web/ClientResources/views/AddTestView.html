@@ -54,7 +54,14 @@
                     ${resources.addtestview.control}
                 </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versiona"><canvas id="publishThumbnail" class="epi-abtest-thumbnail" /></div>
+                    <div class="versiona">
+                        <div class="epi-spinnerOverlay" id="publishThumbnail-spinner">
+                            <div style="width:100%;height:100%" class="lds-rolling">
+                                <div></div>
+                            </div>
+                        </div>
+                        <canvas id="publishThumbnail" class="epi-abtest-thumbnail" />
+                    </div>
                     <p class="versionData">
                         <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
@@ -68,7 +75,13 @@
                     ${resources.addtestview.challenger}
                 </h3>
                 <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versionb"><canvas id="draftThumbnail" class="epi-abtest-thumbnail" /></div>
+                    <div class="versionb">
+                        <div class="epi-spinnerOverlay" id="draftThumbnail-spinner">
+                            <div style="width:100%;height:100%" class="lds-rolling">
+                                <div></div>
+                            </div>
+                        </div><canvas id="draftThumbnail" class="epi-abtest-thumbnail" />
+                    </div>
                     <p class="versionData">
                         <span class="draftIcon">${resources.addtestview.draft_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="savedBy"></span>,

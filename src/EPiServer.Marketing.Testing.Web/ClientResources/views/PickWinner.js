@@ -79,6 +79,13 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden";
             }
+
+            if (document.getElementById("draftThumbnailpickwinner")) {
+                document.getElementById("publishThumbnailpickwinner-spinner").style.display = "block";
+                document.getElementById("draftThumbnailpickwinner-spinner").style.display = "block";
+                document.getElementById("publishThumbnailpickwinner").style.display = "none";
+                document.getElementById("draftThumbnailpickwinner").style.display = "none";
+            }
         },
 
         _setToggleAnimations: function () {

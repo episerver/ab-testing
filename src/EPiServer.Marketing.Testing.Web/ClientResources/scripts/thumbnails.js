@@ -15,8 +15,10 @@ function (dependency) {
                     var context = canvasId.getContext('2d');
                     context.drawImage(thumbnail, 0, 0);
                     me.thumbstore.remove(result);
+                    document.getElementById(canvasId.id + "-spinner").style.display = "none";
+                    canvasId.style.display = "block";
                 }
             });
-        }
+        },
     }
 });
