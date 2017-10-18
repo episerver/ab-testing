@@ -76,8 +76,8 @@
                 document.getElementById("publishThumbnaildetail").style.display = "none";
                 document.getElementById("draftThumbnaildetail").style.display = "none";
             }
-            this._renderData();
 
+            this._renderData();
         },
 
         _setToggleAnimations: function () {

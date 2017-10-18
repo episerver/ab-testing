@@ -60,7 +60,12 @@
                                 <div></div>
                             </div>
                         </div>
-                        <canvas id="publishThumbnail" class="epi-abtest-thumbnail" />
+                        <div id="publishThumbnail-error" class="epi-abtest-thumbnail-hidden">
+                            <div style="width:100%;height:100%">
+                                <div><img src="../../images/pageicon.png" /></div>
+                            </div>
+                        </div>
+                        <canvas id="publishThumbnail" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" />
                     </div>
                     <p class="versionData">
                         <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
@@ -80,7 +85,13 @@
                             <div style="width:100%;height:100%" class="lds-rolling">
                                 <div></div>
                             </div>
-                        </div><canvas id="draftThumbnail" class="epi-abtest-thumbnail" />
+                        </div>
+                        <div id="draftThumbnail-error" class="epi-abtest-thumbnail-hidden">
+                            <div style="width:100%;height:100%">
+                                <div><img src="../../images/pageicon.png" /></div>
+                            </div>
+                        </div>
+                        <canvas id="draftThumbnail" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" />
                     </div>
                     <p class="versionData">
                         <span class="draftIcon">${resources.addtestview.draft_prefix}</span>

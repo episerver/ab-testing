@@ -39,7 +39,12 @@
                                 <div></div>
                             </div>
                         </div>
-                        <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer;display:none" />
+                        <div id="publishThumbnailarchive-error" class="epi-abtest-thumbnail-hidden">
+                            <div style="width:100%;height:100%">
+                                <div><img src="../../images/pageicon.png" /></div>
+                            </div>
+                        </div>
+                        <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
                     </div>
                     <p class="contentInfo">
                         <span class="publishedIcon" style="padding-top: 2px">
@@ -74,7 +79,12 @@
                                 <div></div>
                             </div>
                         </div>
-                        <canvas title="${resources.archiveview.view_challenger_content}" id="draftThumbnailarchive" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer;display:none" />/>
+                        <div id="draftThumbnailarchive-error" class="epi-abtest-thumbnail-hidden">
+                            <div style="width:100%;height:100%">
+                                <div><img src="../../images/pageicon.png" /></div>
+                            </div>
+                        </div>
+                        <canvas title="${resources.archiveview.view_challenger_content}" id="draftThumbnailarchive" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />/>
                     </div>
                     <p class="contentInfo">
                         <span class="draftIcon" style="padding-top: 2px">${resources.archiveview.draft_prefix}</span>

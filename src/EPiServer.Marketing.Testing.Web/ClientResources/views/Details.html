@@ -48,7 +48,12 @@
                                     <div></div>
                                 </div>
                             </div>
-                            <canvas title="${resources.detailsview.view_control_content}" id="publishThumbnaildetail" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer;display: none" />
+                            <div id="publishThumbnaildetail-error" class="epi-abtest-thumbnail-hidden">
+                                <div style="width:100%;height:100%">
+                                    <div><img src="../../images/pageicon.png" /></div>
+                                </div>
+                            </div>
+                            <canvas title="${resources.detailsview.view_control_content}" id="publishThumbnaildetail" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
                         </div>
                         <p class="contentInfo">
                             <span class="publishedIcon">
@@ -80,7 +85,12 @@
                                     <div></div>
                                 </div>
                             </div>
-                            <canvas title="${resources.detailsview.view_challenger_content}" id="draftThumbnaildetail" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer; display: none" />
+                            <div id="draftThumbnaildetail-error" class="epi-abtest-thumbnail-hidden">
+                                <div style="width:100%;height:100%">
+                                    <div><img src="../../images/pageicon.png" /></div>
+                                </div>
+                            </div>
+                            <canvas title="${resources.detailsview.view_challenger_content}" id="draftThumbnaildetail" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />
                         </div>
                         <p class="contentInfo">
                             <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
