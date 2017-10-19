@@ -16,7 +16,7 @@
  "dojo/dom-class",
  "dojo/query",
  "marketing-testing/scripts/abTestTextHelper",
- "marketing-testing/scripts/rasterizeHTML",
+ "marketing-testing/scripts/thumbnails",
  "dojox/layout/ContentPane",
  "dojo/fx",
  "dojo/dom-construct",
@@ -44,7 +44,7 @@
     domClass,
     query,
     textHelper,
-    rasterizehtml,
+    thumbnails,
     ContentPane,
     CoreFX,
     DomConstruct
@@ -77,9 +77,18 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
+
+            if (document.getElementById("draftThumbnaildetail")) {
+                document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                document.getElementById("draftThumbnaildetail-error").style.display = "none";
+                document.getElementById("publishThumbnaildetail").style.display = "none";
+                document.getElementById("draftThumbnaildetail").style.display = "none";
+            }
         },
 
-        _setToggleAnimations: function() {
+        _setToggleAnimations: function () {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
                 node: me.controlDetailsSummaryNode,
@@ -186,8 +195,12 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
-                me._generateThumbnail(me.context.data.publishPreviewUrl, 'publishThumbnaildetail', 'versiona');
-                me._generateThumbnail(me.context.data.draftPreviewUrl, 'draftThumbnaildetail', 'versionb');
+                pubThumb = document.getElementById("publishThumbnaildetail");
+                draftThumb = document.getElementById("draftThumbnaildetail");
+                if (me.context.customViewType == "marketing-testing/views/details") {
+                    thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
+                    thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
+                };
                 me._renderKpiMarkup("details_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();

@@ -69,8 +69,15 @@
             for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
                 this.kpiSummaryWidgets[x].startup();
             }
-            this._renderData();
 
+            if (document.getElementById("draftThumbnaildetail")) {
+                document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("publishThumbnaildetail").style.display = "none";
+                document.getElementById("draftThumbnaildetail").style.display = "none";
+            }
+
+            this._renderData();
         },
 
         _setToggleAnimations: function () {

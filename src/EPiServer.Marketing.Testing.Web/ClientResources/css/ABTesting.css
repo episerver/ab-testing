@@ -65,6 +65,10 @@
         font-weight: bold;
     }
 
+    .cardBody-bottom {
+        padding-bottom: 0px;
+    }
+
 .contentInfo {
     text-align: center;
     padding: 16px 32px;
@@ -302,18 +306,6 @@
     padding-top: 2px;
 }
 
-.versiona,
-.versionb {
-    background-image: url('../../Images/pageIcon.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-}
-
-    .versiona.hide-bg, .versionb.hide-bg {
-        background-image: none;
-    }
-
 .leadingContent,
 .winningContent,
 .pickedContent {
@@ -334,12 +326,21 @@
     display: block;
 }
 
-.epi-abTest-weightSelectors-margin {
-    margin-left: 25px;
+.epi-abtest-hidden {
+    display: none;
+}
+
+.epi-abtest-thumbnail-container {
+    width:100%;
+    height:100%;
 }
 
 .epi-abtest-thumbnail--losing {
     opacity: .4;
+}
+
+.epi-abTest-weightSelectors-margin {
+    margin-left: 25px;
 }
 
 .epi-abTest-summaryToggle {
@@ -431,8 +432,63 @@
     font-weight: bold;
 }
 
-.epi-abtest-spacing-narrow {
-    margin-bottom: 2px;
+.epi-abtest-clear{
+    clear:both;
+}
+
+.epi-abtest-pointer{
+    cursor: pointer;
+}
+
+.epi-abtest-buttonRow {
+    float: left; 
+    padding-right: 20px; 
+    vertical-align: text-bottom;
+}
+
+.epi-abtest-middle {
+    vertical-align: middle;
+}
+
+.epi-abtest-narrow-btm {
+    margin-bottom:2px;
+}
+
+.epi-abtest-narrow-top {
+    margin-top:2px;
+}
+
+.epi-abtest-moderate-top {
+    margin-top:4px;
+}
+
+.epi-abtest-fontLarge {
+    font-size:18px;
+}
+
+.epi-abtest-progress {
+    width:35%;
+}
+
+.epi-abtest-bottom-fill{
+    margin-bottom: 114px;
+}
+
+.epi-abtest-button-advanced {
+  background-color: #ffffff; 
+  font-size: 18px; 
+  margin: 8px 0 0 0; 
+  font-family: arial; 
+  font-weight: bold;
+}
+
+.epi-padding-top-medium {
+    padding-top: 10px;
+}
+
+.epi-abtest-status {
+    color: #777; 
+    font-weight: normal;
 }
 
 @media screen and (max-width: 900px) {
@@ -447,3 +503,78 @@
         width: auto;
     }
 }
+
+/* Throbber classes */
+@keyframes lds-rolling {
+    0% {
+        -webkit-transform: translate(-50%, -50%) rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: translate(-50%, -50%) rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@-webkit-keyframes lds-rolling {
+    0% {
+        -webkit-transform: translate(-50%, -50%) rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: translate(-50%, -50%) rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.lds-rolling {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .lds-rolling div,
+    .lds-rolling div:after {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border: 20px solid #1ba4fa;
+        border-top-color: transparent;
+        border-radius: 50%;
+    }
+
+    .lds-rolling div {
+        -webkit-animation: lds-rolling 1s linear infinite;
+        animation: lds-rolling 1s linear infinite;
+        top: 100px;
+        left: 100px;
+    }
+
+        .lds-rolling div:after {
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+
+.lds-rolling {
+    width: 200px !important;
+    height: 200px !important;
+    -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+    transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
+    top: 30%;
+}
+
+.epi-spinnerOverlay {
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+/* end Throbber classes*/
