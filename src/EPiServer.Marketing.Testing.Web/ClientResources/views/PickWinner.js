@@ -65,6 +65,26 @@
             this._renderData();
         },
 
+        startup: function () {
+            this.disablePickButtons(false);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
+            }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible";
+            } else {
+                this.summaryToggle.style.visibility = "hidden";
+            }
+
+            if (document.getElementById("draftThumbnailpickwinner")) {
+                document.getElementById("publishThumbnailpickwinner-spinner").style.display = "block";
+                document.getElementById("draftThumbnailpickwinner-spinner").style.display = "block";
+                document.getElementById("publishThumbnailpickwinner").style.display = "none";
+                document.getElementById("draftThumbnailpickwinner").style.display = "none";
+            }
+        },
+
         _setToggleAnimations: function () {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({

@@ -30,7 +30,7 @@
                     <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
                     <h2>
                         <span data-dojo-attach-point="testStatus"></span>
-                        <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStarted"></span>
+                        <span class="epi-abtest-status" data-dojo-attach-point="testStarted"></span>
                     </h2>
                 </div>
             </div>
@@ -41,9 +41,19 @@
                     <h3>
                         ${resources.detailsview.content_control_header}
                     </h3>
-                    <div class="cardBody" style="padding-bottom: 0;">
-                        <div class="versiona">
-                            <canvas title="${resources.detailsview.view_control_content}" id="publishThumbnaildetail" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
+                    <div class="cardBody epi-abtest-narrow-btm">
+                        <div>
+                            <div class="epi-spinnerOverlay" id="publishThumbnaildetail-spinner">
+                                <div class="lds-rolling epi-abtest-thumbnail">
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div id="publishThumbnaildetail-error" class="epi-abtest-thumbnail-hidden">
+                                <div class="epi-abtest-thumbnail">
+                                    <div><img src="../../images/pageIcon.png" /></div>
+                                </div>
+                            </div>
+                            <canvas title="${resources.detailsview.view_control_content}" id="publishThumbnaildetail" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden epi-abtest-pointer" data-dojo-attach-event="onclick: _onControlViewClick" />
                         </div>
                         <p class="contentInfo">
                             <span class="publishedIcon">
@@ -68,14 +78,24 @@
                     <h3>
                         ${resources.detailsview.content_challenger_header}
                     </h3>
-                    <div class="cardBody" style="padding-bottom: 0;">
-                        <div class="versionb">
-                            <canvas title="${resources.detailsview.view_challenger_content}" id="draftThumbnaildetail" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />
+                    <div class="cardBody epi-abtest-narrow-btm">
+                        <div>
+                            <div class="epi-spinnerOverlay" id="draftThumbnaildetail-spinner">
+                                <div class="lds-rolling epi-abtest-thumbnail">
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div id="draftThumbnaildetail-error" class="epi-abtest-thumbnail-hidden">
+                                <div class="epi-abtest-thumbnail">
+                                    <div><img src="../../images/pageIcon.png" /></div>
+                                </div>
+                            </div>
+                            <canvas title="${resources.detailsview.view_challenger_content}" id="draftThumbnaildetail" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden epi-abtest-pointer" data-dojo-attach-event="onclick: _onChallengerViewClick" />
                         </div>
                         <p class="contentInfo">
                             <span class="draftIcon">${resources.detailsview.draft_prefix}</span>
                             <span class="epi-username" data-dojo-attach-point="changedBy"></span>,
-                            <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
+                            <span class="epi-abtest-middle" data-dojo-attach-point="dateChanged"></span>
                         </p>
                         <!-- Multi KPI Conv % -->
                         <div data-dojo-attach-point="challengerConversionPercent"></div>
@@ -86,11 +106,11 @@
                 </div>
             </div>
             <!-- Test Information -->
-            <div class="cardWrapper" style="clear: both">
+            <div class="cardWrapper epi-abtest-clear">
                 <div class="cardBody">
                     <div class="formsRow">
                         <h4>${resources.detailsview.description_heading}</h4>
-                        <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
+                        <p class="epi-abtest-fontLarge" data-dojo-attach-point="testDescription"></p>
                     </div>
                     <div class="formsRow">
                         <h4>
@@ -115,11 +135,11 @@
                         </p>
                         <div data-dojo-type="dijit/ProgressBar"
                              data-dojo-id="durationProgressBarDetails"
-                             style="width: 35%"></div>
+                             class="epi-abtest-progress"></div>
                     </div>
                 </div>
             </div>
-            <div class="cardWrapper" style="margin-bottom: 114px">
+            <div class="cardWrapper epi-abtest-bottom-fill">
                 <h3 class="epi-abtest-advanced-header">${resources.detailsview.advanced_options_header}</h3>
                 <div class="cardBody">
                     <h4>${resources.detailsview.advanced_options_confidence_level}</h4>

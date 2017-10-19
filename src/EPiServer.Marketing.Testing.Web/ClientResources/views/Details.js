@@ -70,6 +70,28 @@
             this._renderData();
         },
 
+        startup: function () {
+            this._displayOptionsButton(this.context.data.userHasPublishRights);
+            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
+                this.kpiSummaryWidgets[x].startup();
+            }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+
+            if (document.getElementById("draftThumbnaildetail")) {
+                document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                document.getElementById("draftThumbnaildetail-error").style.display = "none";
+                document.getElementById("publishThumbnaildetail").style.display = "none";
+                document.getElementById("draftThumbnaildetail").style.display = "none";
+            }
+        },
+
         _setToggleAnimations: function () {
             var me = this;
             this.controlSummaryOut = CoreFX.wipeOut({
