@@ -80,7 +80,6 @@
             this._displayOptionsButton(this.context.data.userHasPublishRights);
             this._resetView();
             this._renderData();
-
         },
 
         _setToggleAnimations: function () {
@@ -106,8 +105,8 @@
                 node: me.challengerDetailsSummaryNode,
                 rate: 15
             });
+        },
 
-        },       
         _onPickWinnerOptionClicked: function () {
             var me = this;
             this.kpiSummaryWidgets = new Array();

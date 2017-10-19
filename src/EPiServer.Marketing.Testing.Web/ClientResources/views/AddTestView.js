@@ -184,7 +184,6 @@
                     previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                     previewUrlStart = this.contentData.previewUrl.split('_'),
                     previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-                    console.log("Calling fort thumbnail - _setViewPublishedVersionAttr -- " + previewUrl);
                     thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },

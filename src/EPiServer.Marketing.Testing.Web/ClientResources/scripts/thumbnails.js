@@ -8,7 +8,6 @@ function (dependency) {
             this._setThumbState(canvasId, "block", "none", "none");
             this.thumbstore = this.thumbstore || dependency.resolve("epi.storeregistry").get("marketing.thumbnailstore");
             this.thumbstore.get(url.replace(/\//g, "$")).then(function (result) {
-                console.log("called: " + url);
                 var thumbnail = new Image();
                 canvasId.height = 768;
                 canvasId.width = 1024;
@@ -18,7 +17,6 @@ function (dependency) {
                     context.drawImage(thumbnail, 0, 0);
                     me.thumbstore.remove(result);
                     me._setThumbState(canvasId, "none", "block", "none");
-
                 }
             }).otherwise(function () {
                 me._setThumbState(canvasId, "none", "none", "block");
