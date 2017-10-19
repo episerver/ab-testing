@@ -81,7 +81,7 @@
             if (document.getElementById("draftThumbnaildetail")) {
                 document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
                 document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("publishThumbnaildetail-error").style.display = "block";
+                document.getElementById("publishThumbnaildetail-error").style.display = "none";
                 document.getElementById("draftThumbnaildetail-error").style.display = "none";
                 document.getElementById("publishThumbnaildetail").style.display = "none";
                 document.getElementById("draftThumbnaildetail").style.display = "none";

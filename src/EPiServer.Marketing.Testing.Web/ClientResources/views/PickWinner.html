@@ -22,7 +22,7 @@
                     <h1 class="objectIcon" data-dojo-attach-point="title"></h1>
                     <h2>
                         <span data-dojo-attach-point="testStatus"></span>
-                        <span style="color: #777; font-weight: normal;" data-dojo-attach-point="testStarted"></span>
+                        <span class="epi-abtest-status" data-dojo-attach-point="testStarted"></span>
                     </h2><br />
                     <span class="media-list__object dijitHidden dijitIcon epi-iconWarning epi-icon--colored epi-icon--large" data-dojo-attach-point="pickWinnerWarningIcon"></span>
                     <span class="pickWinnerMessage" data-dojo-attach-point="pickAWinnerMessage"></span>
@@ -36,22 +36,22 @@
                     <h3>
                         ${resources.detailsview.content_control_header}
                     </h3>
-                    <div class="cardBody" style="padding-bottom: 0;">
+                    <div class="cardBody cardBody-bottom">
                         <div>
                             <div class="epi-spinnerOverlay" id="publishThumbnailpickwinner-spinner">
-                                <div style="width:100%;height:100%" class="lds-rolling">
+                                <div class="lds-rolling epi-abtest-thumbnail">
                                     <div></div>
                                 </div>
                             </div>
-                            <div id="publishThumbnailpickwinner-error" class="epi-abtest-thumbnail-hidden">
-                                <div style="width:100%;height:100%">
-                                    <div><img src="../../images/pageicon.png" /></div>
+                            <div id="publishThumbnailpickwinner-error" class="epi-abtest-hidden">
+                                <div class="epi-abtest-thumbnail">
+                                    <div><img src="../../images/pageIcon.png" /></div>
                                 </div>
                             </div>
-                            <canvas id="publishThumbnailpickwinner" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" />
+                            <canvas id="publishThumbnailpickwinner" class="epi-abtest-thumbnail epi-abtest-hidden" />
                         </div>
                         <p class="contentInfo">
-                            <span class="publishedIcon" style="padding-top: 2px">
+                            <span class="publishedIcon epi-abtest-narrow-top">
                                 ${resources.detailsview.published_prefix}
                             </span>
                             <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
@@ -76,23 +76,23 @@
                     <h3>
                         ${resources.detailsview.content_challenger_header}
                     </h3>
-                    <div class="cardBody" style="padding-bottom: 0;">
+                    <div class="cardBody cardBody-bottom">
                         <div>
                             <div class="epi-spinnerOverlay" id="draftThumbnailpickwinner-spinner">
-                                <div style="width:100%;height:100%" class="lds-rolling">
+                                <div class="lds-rolling epi-abtest-thumbnail">
                                     <div></div>
                                 </div>
-                                <div id="draftThumbnailpickwinner-error" class="epi-abtest-thumbnail-hidden">
-                                    <div style="width:100%;height:100%">
-                                        <div><img src="../../images/pageicon.png" /></div>
+                                <div id="draftThumbnailpickwinner-error" class="epi-abtest-hidden">
+                                    <div class="epi-abtest-thumbnail">
+                                        <div><img src="../../images/pageIcon.png" /></div>
                                     </div>
                                 </div>
-                            </div><canvas id="draftThumbnailpickwinner" class="epi-abtest-thumbnail epi-abtest-thumbnail-hidden" />
+                            </div><canvas id="draftThumbnailpickwinner" class="epi-abtest-thumbnail epi-abtest-hidden" />
                         </div>
                         <p class="contentInfo">
-                            <span class="draftIcon" style="padding-top: 2px">${resources.detailsview.draft_prefix}</span>
-                            <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
-                            <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
+                            <span class="draftIcon epi-abtest-narrow-top">${resources.detailsview.draft_prefix}</span>
+                            <span class="epi-username epi-abtest-middle" data-dojo-attach-point="changedBy"></span>,
+                            <span class="epi-abtest-middle" data-dojo-attach-point="dateChanged"></span>
                         </p>
                         <div class="abPickWinnerAction" data-dojo-attach-point="challengerPickWinnerBtn">
                             <button type="button" data-dojo-attach-point="challengerPickButton" data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick: _onVariantVersionClick">${resources.detailsview.button_pick_winner_option}</button>
@@ -107,11 +107,11 @@
                 </div>
             </div>
             <!-- Test Information -->
-            <div class="cardWrapper" style="clear: both">
+            <div class="cardWrapper epi-abtest-clear">
                 <div class="cardBody">
                     <div class="formsRow">
                         <h4>${resources.detailsview.description_heading}</h4>
-                        <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
+                        <p class="epi-abtest-fontLarge" data-dojo-attach-point="testDescription"></p>
                     </div>
                     <div class="formsRow">
                         <h4>
@@ -136,14 +136,14 @@
                         </p>
                         <div data-dojo-type="dijit/ProgressBar"
                              data-dojo-id="durationProgressBar"
-                             style="width: 35%"></div>
+                             class="epi-abtest-progress"></div>
                     </div>
                 </div>
             </div>
-            <div class="cardWrapper" style="margin-bottom: 80px">
+            <div class="cardWrapper epi-abtest-bottom-fill">
                 <h3>${resources.detailsview.advanced_options_header}</h3>
                 <hr class="epi-abtest-hr" />
-                <div class="cardBody" style="padding-top: 4px;">
+                <div class="cardBody epi-abtest-moderate-top">
                     <h4>${resources.detailsview.advanced_options_confidence_level}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="confidence"></span></strong>
