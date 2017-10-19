@@ -58,38 +58,29 @@
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
-            me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
+
+
 
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
-            this.context = contextService.currentContext;
-            textHelper.initializeHelper(this.context, resources.detailsview);
-            this._displayOptionsButton(this.context.data.userHasPublishRights);
-            this._resetView();
-            this._renderData();
-        },
 
-        startup: function () {
+            this.context = contextService.currentContext;
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
-                this.kpiSummaryWidgets[x].startup();
-            }
-            if (this.context.data.test.kpiInstances.length > 1) {
-                this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible"
-            } else {
-                this.summaryToggle.style.visibility = "hidden"
-            }
+
 
             if (document.getElementById("draftThumbnaildetail")) {
                 document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
                 document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("publishThumbnaildetail-error").style.display = "none";
-                document.getElementById("draftThumbnaildetail-error").style.display = "none";
                 document.getElementById("publishThumbnaildetail").style.display = "none";
                 document.getElementById("draftThumbnaildetail").style.display = "none";
             }
+
+            textHelper.initializeHelper(this.context, resources.detailsview);
+            this._displayOptionsButton(this.context.data.userHasPublishRights);
+            this._resetView();
+            this._renderData();
+
         },
 
         _setToggleAnimations: function () {
@@ -116,29 +107,7 @@
                 rate: 15
             });
 
-        },
-
-        _contextChanged: function (newContext) {
-            var me = this;
-            this.kpiSummaryWidgets = new Array();
-            if (!newContext || newContext.type !== 'epi.marketing.testing') {
-                return;
-            }
-            me.context = newContext;
-            this._displayOptionsButton(this.context.data.userHasPublishRights);
-
-            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
-                this.kpiSummaryWidgets[x].startup();
-            }
-
-            if (this.context.data.test.kpiInstances.length > 1) {
-                this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible"
-            } else {
-                this.summaryToggle.style.visibility = "hidden"
-            }
-        },
-
+        },       
         _onPickWinnerOptionClicked: function () {
             var me = this;
             this.kpiSummaryWidgets = new Array();
@@ -197,6 +166,7 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
+
                 pubThumb = document.getElementById("publishThumbnaildetail");
                 draftThumb = document.getElementById("draftThumbnaildetail");
                 if (me.context.customViewType == "marketing-testing/views/details") {
