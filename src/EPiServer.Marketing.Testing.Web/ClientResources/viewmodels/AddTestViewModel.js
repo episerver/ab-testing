@@ -60,9 +60,11 @@
 
         _onContextChange: function (context, caller) {
             // Widget will update itself using the new context.
-            this.contentData = caller.contentData;
-            this.contentData.contentLink = caller.contentData.contentLink;
-            this.setupContentData();
+            if (this.contentData && this.contentData.contentLink != caller.contentData.contentLink) {
+                this.contentData = caller.contentData;
+                this.contentData.contentLink = caller.contentData.contentLink;
+                this.setupContentData();
+            }
         },
 
         setupContentData: function () {
