@@ -58,34 +58,28 @@
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
-            me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
 
-        postCreate: function () {
-            textHelper.initializeHelper(this.context, resources.detailsview);
-            this._renderData();
-        },
+
 
         startup: function () {
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
+
+            this.context = contextService.currentContext;
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
-                this.kpiSummaryWidgets[x].startup();
-            }
-            if (this.context.data.test.kpiInstances.length > 1) {
-                this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible"
-            } else {
-                this.summaryToggle.style.visibility = "hidden"
-            }
+
 
             if (document.getElementById("draftThumbnaildetail")) {
                 document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
                 document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("publishThumbnaildetail-error").style.display = "none";
-                document.getElementById("draftThumbnaildetail-error").style.display = "none";
                 document.getElementById("publishThumbnaildetail").style.display = "none";
                 document.getElementById("draftThumbnaildetail").style.display = "none";
             }
+
+            textHelper.initializeHelper(this.context, resources.detailsview);
+            this._displayOptionsButton(this.context.data.userHasPublishRights);
+            this._resetView();
+            this._renderData();
         },
 
         _setToggleAnimations: function () {
@@ -111,30 +105,6 @@
                 node: me.challengerDetailsSummaryNode,
                 rate: 15
             });
-
-        },
-
-        _contextChanged: function (newContext) {
-            var me = this;
-            this.kpiSummaryWidgets = new Array();
-            if (!newContext || newContext.type !== 'epi.marketing.testing') {
-                return;
-            }
-            me.context = newContext;
-            this._displayOptionsButton(this.context.data.userHasPublishRights);
-            textHelper.initializeHelper(me.context, resources.detailsview);
-
-            me._renderData();
-            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
-                this.kpiSummaryWidgets[x].startup();
-            }
-
-            if (this.context.data.test.kpiInstances.length > 1) {
-                this._setToggleAnimations();
-                this.summaryToggle.style.visibility = "visible"
-            } else {
-                this.summaryToggle.style.visibility = "hidden"
-            }
         },
 
         _onPickWinnerOptionClicked: function () {
@@ -195,6 +165,7 @@
             textHelper.renderDescription(this.testDescription);
             textHelper.renderVisitorStats(this.participationPercentage, this.totalParticipants);
             ready(function () {
+
                 pubThumb = document.getElementById("publishThumbnaildetail");
                 draftThumb = document.getElementById("draftThumbnaildetail");
                 if (me.context.customViewType == "marketing-testing/views/details") {
@@ -326,6 +297,15 @@
                 this.controlSummaryIn.play();
                 this.challengerSummaryIn.play();
             }
-        }
+        },
+
+        _resetView: function () {
+            var abTestBody = dom.byId("abTestBody");
+            var toolbarGroup = dom.byId("toolbarGroup");
+            if (abTestBody) {
+                abTestBody.scrollIntoView(true);
+                toolbarGroup.scrollIntoView(true);
+            }
+        },
     });
 });

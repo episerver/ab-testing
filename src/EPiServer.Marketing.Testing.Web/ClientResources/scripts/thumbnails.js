@@ -5,6 +5,7 @@ function (dependency) {
     return {
         _setThumbnail: function (canvasId, url) {
             var me = this;
+            this._setThumbState(canvasId, "block", "none", "none");
             this.thumbstore = this.thumbstore || dependency.resolve("epi.storeregistry").get("marketing.thumbnailstore");
             this.thumbstore.get(url.replace(/\//g, "$")).then(function (result) {
                 var thumbnail = new Image();
@@ -15,15 +16,17 @@ function (dependency) {
                     var context = canvasId.getContext('2d');
                     context.drawImage(thumbnail, 0, 0);
                     me.thumbstore.remove(result);
-                    document.getElementById(canvasId.id + "-spinner").style.display = "none";
-                    document.getElementById(canvasId.id + "-error").style.display = "none";
-                    canvasId.style.display = "block";
+                    me._setThumbState(canvasId, "none", "block", "none");
                 }
             }).otherwise(function () {
-                document.getElementById(canvasId.id + "-spinner").style.display = "none";
-                document.getElementById(canvasId.id + "-error").style.display = "block";
-                canvasId.style.display = "none";
+                me._setThumbState(canvasId, "none", "none", "block");
             });
         },
+
+        _setThumbState(canvasId, spinnerState, previewState, errorState) {
+            document.getElementById(canvasId.id + "-spinner").style.display = spinnerState;
+            canvasId.style.display = previewState;
+            document.getElementById(canvasId.id + "-error").style.display = errorState;
+        }
     }
 });

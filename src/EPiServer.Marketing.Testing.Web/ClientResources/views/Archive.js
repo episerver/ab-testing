@@ -54,29 +54,17 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
-        constructor: function () {
-            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
-            me.context = contextService.currentContext;
-            me.subscribe("/epi/shell/context/changed", me._contextChanged);
-        },
-
-        postCreate: function () {
-            textHelper.initializeHelper(this.context, resources.archiveview);
-            this._renderData();
-        },
-
         startup: function () {
-            for (var x = 0; x < this.kpiSummaryWidgets.length; x++) {
-                this.kpiSummaryWidgets[x].startup();
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
+            this.context = contextService.currentContext;
+            textHelper.initializeHelper(this.context, resources.archiveview);
+            if (document.getElementById("draftThumbnailarchive")) {
+                document.getElementById("publishThumbnailarchive-spinner").style.display = "block";
+                document.getElementById("draftThumbnailarchive-spinner").style.display = "block";
+                document.getElementById("publishThumbnailarchive").style.display = "none";
+                document.getElementById("draftThumbnailarchive").style.display = "none";
             }
-
-            if (document.getElementById("draftThumbnaildetail")) {
-                document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("publishThumbnaildetail").style.display = "none";
-                document.getElementById("draftThumbnaildetail").style.display = "none";
-            }
-
+            this._resetView();
             this._renderData();
         },
 
@@ -103,16 +91,6 @@
                 node: me.challengerArchiveSummaryNode,
                 rate: 15
             });
-        },
-
-        _contextChanged: function (newContext) {
-            var me = this;
-            if (!newContext || newContext.type !== 'epi.marketing.testing') {
-                return;
-            }
-            me.context = newContext;
-            textHelper.initializeHelper(this.context, resources.archiveview);
-            me._renderData();
         },
 
         _onCloseClick: function () {
@@ -143,9 +121,11 @@
             ready(function () {
                 pubThumb = document.getElementById("publishThumbnailarchive");
                 draftThumb = document.getElementById("draftThumbnailarchive");
+                if (me.context.customViewType == "marketing-testing/views/Archive") {
+                    thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
+                    thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
+                };
 
-                thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
-                thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
 
                 me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
@@ -271,6 +251,15 @@
                 this.controlSummaryIn.play();
                 this.challengerSummaryIn.play();
             }
-        }
+        },
+
+        _resetView: function () {
+            var abTestBody = dom.byId("abTestBody");
+            var toolbarGroup = dom.byId("toolbarGroup");
+            if (abTestBody) {
+                abTestBody.scrollIntoView(true);
+                toolbarGroup.scrollIntoView(true);
+            }
+        },
     });
 });

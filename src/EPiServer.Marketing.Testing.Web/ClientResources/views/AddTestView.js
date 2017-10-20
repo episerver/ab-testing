@@ -119,6 +119,12 @@
                 this.contentData = caller.contentData;
                 this.kpiEntries = 0;
                 this._adjustKpiSelectorCombo();
+                document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                document.getElementById("draftThumbnaildetail-error").style.display = "none";
+                document.getElementById("publishThumbnaildetail").style.display = "none";
+                document.getElementById("draftThumbnaildetail").style.display = "none";
                 this.reset();
             },
 
@@ -145,6 +151,8 @@
                 if (document.getElementById("draftThumbnaildetail")) {
                     document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
                     document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                    document.getElementById("draftThumbnaildetail-error").style.display = "none";
                     document.getElementById("publishThumbnaildetail").style.display = "none";
                     document.getElementById("draftThumbnaildetail").style.display = "none";
                 }
@@ -176,7 +184,6 @@
                     previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
                     previewUrlStart = this.contentData.previewUrl.split('_'),
                     previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-
                     thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
@@ -193,7 +200,6 @@
 
                 if (pubThumb) {
                     var previewUrl = this.model.contentData.previewUrl;
-
                     thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
@@ -427,8 +433,6 @@
                 }
 
                 this._setViewConfidenceLevelAttr();
-                this._setViewPublishedVersionAttr(true);
-                this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
