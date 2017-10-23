@@ -15,19 +15,19 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         private string root = HttpContext.Current.Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/");
 
-        public string getRandomFileName()
+        public string GetRandomFileName()
         {
             return string.Format("{0}.png", Guid.NewGuid());
         }
 
-        public Process getCaptureProcess(string id, string fileName, string sessionCookieValue, string appliationCookieValue, string domain)
+        public Process GetCaptureProcess(string id, string fileName, ContextThumbData thumbData)
         {
             var exe = HttpContext.Current.Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/phantomjs");
 
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + sessionCookieValue + " "+ appliationCookieValue+" "+ domain),
+                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + thumbData.sessionCookie + " "+ thumbData.applicationCookie + " "+ thumbData.host),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return p;
         }
 
-        public ActionResult deleteCaptureFile(string fileName)
+        public ActionResult DeleteCaptureFile(string fileName)
         {
             if (File.Exists(root + fileName))
             {
@@ -50,5 +50,24 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             return new RestStatusCodeResult((int)HttpStatusCode.OK);
         }
+
+        public ContextThumbData GetContextThumbData()
+        {
+            return new ContextThumbData()
+            {
+                pagePrefix = HttpContext.Current.Request.Url.GetLeftPart(System.UriPartial.Authority),
+                host = HttpContext.Current.Request.Url.Host,
+                sessionCookie = HttpContext.Current.Request.Cookies["ASP.NET_SessionId"].Value,
+                applicationCookie = HttpContext.Current.Request.Cookies[".AspNet.ApplicationCookie"].Value
+            };
+        }
+    }
+    public class ContextThumbData
+    {
+        public string pagePrefix { get; set; }
+        public string host { get; set; }
+        public string sessionCookie { get; set; }
+        public string applicationCookie { get; set; }
+
     }
 }

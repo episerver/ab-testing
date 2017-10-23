@@ -1,8 +1,11 @@
-﻿using EPiServer.Marketing.Testing.Web.Repositories;
+﻿using EPiServer.Marketing.Testing.Web.Helpers;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Web;
 using System.Web.Mvc;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
@@ -11,33 +14,33 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class ThumbnailStore : RestControllerBase
     {
         private IThumbnailRepository _thumbRepo;
+        private IProcessHelper _processHelper;
 
         [ExcludeFromCodeCoverage]
         public ThumbnailStore()
         {
-            _thumbRepo = ServiceLocator.Current.GetInstance<IThumbnailRepository>();           
+            _thumbRepo = ServiceLocator.Current.GetInstance<IThumbnailRepository>();
+            _processHelper = ServiceLocator.Current.GetInstance<IProcessHelper>();         
         }
 
         // For unit test support.
         internal ThumbnailStore(IServiceLocator serviceLocator)
         {
             _thumbRepo = serviceLocator.GetInstance<IThumbnailRepository>();
+            _processHelper = serviceLocator.GetInstance<IProcessHelper>();
         }
 
         [HttpGet]
         public ActionResult Get(string id)
         {
-            var fileName = _thumbRepo.getRandomFileName();
-            var path = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
-            var pagePrefix = HttpContext.Request.Url.GetLeftPart(System.UriPartial.Authority);
-            var host = HttpContext.Request.Url.Host;
-            var targetPage = string.Format("{0}{1}", pagePrefix, path);
-            var sessionCookie = HttpContext.Request.Cookies["ASP.NET_SessionId"].Value;
-            var applicationCookie = HttpContext.Request.Cookies[".AspNet.ApplicationCookie"].Value;
+            var fileName = _thumbRepo.GetRandomFileName();            
 
-            Process captureProcess = _thumbRepo.getCaptureProcess(targetPage, fileName, sessionCookie, applicationCookie, host);
-            captureProcess.Start();
-            captureProcess.WaitForExit();            
+            var contextThumbData = _thumbRepo.GetContextThumbData();
+            var path = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
+            var targetPage = string.Format("{0}{1}",contextThumbData.pagePrefix, path);
+
+            Process captureProcess = _thumbRepo.GetCaptureProcess(targetPage, fileName, contextThumbData);
+            _processHelper.startProcess(captureProcess);       
 
             return Rest(string.Format(fileName));
         }
@@ -45,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpDelete]
         public ActionResult Delete(string id)
         {
-            return _thumbRepo.deleteCaptureFile(id);
+            return _thumbRepo.DeleteCaptureFile(id);
         }
     }
 }
