@@ -7,6 +7,7 @@ using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+
     public interface IHttpContextHelper
     {
         /// <summary>
@@ -123,6 +124,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <returns>The url string.</returns>
         string RequestedUrl();
+
+        HttpContext GetCurrentContext();
 
     }
 }

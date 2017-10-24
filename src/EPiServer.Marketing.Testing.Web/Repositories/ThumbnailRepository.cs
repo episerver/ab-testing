@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using EPiServer.Shell.Services.Rest;
 using System.Web;
 using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Web.Helpers;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -13,7 +14,21 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
     public class ThumbnailRepository : IThumbnailRepository
     {
-        private string root = HttpContext.Current.Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/");
+        IServiceLocator serviceLocator;
+        IHttpContextHelper contextHelper;
+        
+        public ThumbnailRepository()
+        {
+            serviceLocator = ServiceLocator.Current;
+            contextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
+        }
+
+        internal ThumbnailRepository(IServiceLocator _serviceLocator)
+        {
+            serviceLocator = _serviceLocator;
+            contextHelper = _serviceLocator.GetInstance<IHttpContextHelper>();
+        }
+
 
         public string GetRandomFileName()
         {
@@ -22,7 +37,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public Process GetCaptureProcess(string id, string fileName, ContextThumbData thumbData)
         {
-            var exe = HttpContext.Current.Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/phantomjs");
+            var root = contextHelper.GetCurrentContext().Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/");
+            var exe = contextHelper.GetCurrentContext().Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/phantomjs");
 
             var startInfo = new ProcessStartInfo()
             {
@@ -43,6 +59,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public ActionResult DeleteCaptureFile(string fileName)
         {
+            var root = contextHelper.GetCurrentContext().Server.MapPath("~/modules/_protected/EPiServer.Marketing.Testing/ABCapture/");
+
             if (File.Exists(root + fileName))
             {
                 File.Delete(root + fileName);
