@@ -4,8 +4,6 @@ using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
@@ -40,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var targetPage = string.Format("{0}{1}",contextThumbData.pagePrefix, path);
 
             Process captureProcess = _thumbRepo.GetCaptureProcess(targetPage, fileName, contextThumbData);
-            _processHelper.startProcess(captureProcess);       
+            _processHelper.StartProcess(captureProcess);       
 
             return Rest(string.Format(fileName));
         }

@@ -4,14 +4,7 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -45,7 +38,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var tStore = GetUnitUnderTest();
 
             RestResult x = (RestResult)tStore.Get("testId");
-            _mockProcessHelper.Verify(call => call.startProcess(It.IsAny<Process>()), Times.Once, "Expected process helper startProcess to be called at least once");
+            _mockProcessHelper.Verify(call => call.StartProcess(It.IsAny<Process>()), Times.Once, "Expected process helper startProcess to be called at least once");
+
             Assert.Equal(x.Data, "RandomFileName");
         }
 
@@ -56,7 +50,5 @@ namespace EPiServer.Marketing.Testing.Test.Web
             tStore.Delete("fakeId");
             _mockThumbRepo.Verify(call => call.DeleteCaptureFile(It.Is<string>(str => str == "fakeId")), Times.Once, "Expected Delete Caputure File to be called");
         }
-
-
     }
 }
