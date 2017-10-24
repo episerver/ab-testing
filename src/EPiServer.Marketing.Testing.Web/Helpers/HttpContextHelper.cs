@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPiServer.ServiceLocation;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -11,6 +12,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     /// <summary>
     /// interacts with the httpcontext for reading and manipulating the objects therein
     /// </summary>
+    [ServiceConfiguration(ServiceType = typeof(IHttpContextHelper), Lifecycle = ServiceInstanceScope.Singleton)]
+
     [ExcludeFromCodeCoverage]
     internal class HttpContextHelper : IHttpContextHelper
     {
@@ -103,6 +106,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public string RequestedUrl()
         {
             return HttpContext.Current.Request.RawUrl;
+        }
+
+        public HttpContext GetCurrentContext()
+        {
+            return HttpContext.Current;
         }
     }
 }

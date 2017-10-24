@@ -1,12 +1,14 @@
 ﻿using System.Diagnostics;
+using System.Web;
 using System.Web.Mvc;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     interface IThumbnailRepository
     {
-        string getRandomFileName();
-        Process getCaptureProcess(string page, string fileName, string sessionCookieValue, string applicationCookieValue, string domain);
-        ActionResult deleteCaptureFile(string fileName);
+        string GetRandomFileName();
+        Process GetCaptureProcess(string page, string fileName, ContextThumbData thumbData);
+        ActionResult DeleteCaptureFile(string fileName);
+        ContextThumbData GetContextThumbData();
     }
 }
