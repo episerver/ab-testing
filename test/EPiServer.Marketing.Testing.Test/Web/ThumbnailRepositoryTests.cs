@@ -71,7 +71,5 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
     }
-}
-
-   
+} 
  
