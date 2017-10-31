@@ -58,9 +58,21 @@
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
+            me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
 
-
+        _contextChanged: function (newContext) {
+            var me = this;
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
+                return;
+            };
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+        },
 
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -74,6 +86,13 @@
                 document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
                 document.getElementById("publishThumbnaildetail").style.display = "none";
                 document.getElementById("draftThumbnaildetail").style.display = "none";
+            }
+
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
             }
 
             textHelper.initializeHelper(this.context, resources.detailsview);
