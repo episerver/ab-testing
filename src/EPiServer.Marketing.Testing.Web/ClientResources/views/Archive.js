@@ -196,7 +196,7 @@
 
         _renderStatusIndicatorStyles: function () {
             var draftVersion = this.context.data.draftVersionContentLink.split("_")[1];
-            var winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner });
+            var winningVersion = textHelper._findInArray(this.context.data.test.variants, "isWinner", true);
 
             this.controlHeader.innerText = resources.archiveview.content_control_header;
             this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
