@@ -57,6 +57,29 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
+        constructor: function () {
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
+            me.context = contextService.currentContext;
+            me.subscribe("/epi/shell/context/changed", me._contextChanged);
+        },
+
+        _contextChanged: function (newContext) {
+            var me = this;
+            this.kpiSummaryWidgets = new Array();
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
+                return;
+            }
+            me.context = newContext;
+            textHelper.initializeHelper(this.context, resources.pickwinnerview);
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+            me._renderData();
+        },
+
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
@@ -67,6 +90,12 @@
                 document.getElementById("draftThumbnailpickwinner-spinner").style.display = "block";
                 document.getElementById("publishThumbnailpickwinner").style.display = "none";
                 document.getElementById("draftThumbnailpickwinner").style.display = "none";
+            }
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
             }
             this._resetView();
             this._renderData();
@@ -97,16 +126,7 @@
             });
         },
 
-        _contextChanged: function (newContext) {
-            var me = this;
-            this.kpiSummaryWidgets = new Array();
-            if (!newContext || newContext.type !== 'epi.marketing.testing') {
-                return;
-            }
-            me.context = newContext;
-            textHelper.initializeHelper(this.context, resources.pickwinnerview);
-            me._renderData();
-        },
+
 
         _onCancelClick: function () {
             var me = this;
