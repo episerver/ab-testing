@@ -77,7 +77,8 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
-            me._renderData();
+            this._renderData();
+            this._resetView();
         },
 
         startup: function () {
@@ -126,8 +127,6 @@
             });
         },
 
-
-
         _onCancelClick: function () {
             var me = this;
             this.kpiSummaryWidgets = new Array();
@@ -167,6 +166,7 @@
                     me.kpiSummaryWidgets[x].startup();
                 }
             });
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {

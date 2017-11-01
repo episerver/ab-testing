@@ -72,6 +72,7 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
+            this._resetView();
         },
 
         startup: function () {
@@ -197,6 +198,7 @@
                 }
             });
             this.renderStatusIndicatorStyles();
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
