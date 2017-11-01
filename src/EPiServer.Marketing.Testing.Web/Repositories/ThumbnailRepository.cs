@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using EPiServer.Shell.Services.Rest;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Helpers;
+using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -43,7 +44,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + thumbData.sessionCookie + " "+ thumbData.applicationCookie + " "+ thumbData.host),
+                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + thumbData.sessionCookie + " "+ thumbData.authCookie + " "+ thumbData.host),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -71,13 +72,25 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public ContextThumbData GetContextThumbData()
         {
-            return new ContextThumbData()
+            KeyValuePair<string,string> authCookieValue; ;
+            if(contextHelper.GetCurrentContext().Request.Cookies[".AspNet.ApplicationCookie"] != null)
+            {
+                authCookieValue = new KeyValuePair<string,string>(".AspNet.ApplicationCookie", contextHelper.GetCurrentContext().Request.Cookies[".AspNet.ApplicationCookie"].Value); 
+            }
+            else
+            {
+                authCookieValue = new KeyValuePair<string, string>(".EPiServerLogin", contextHelper.GetCurrentContext().Request.Cookies[".EPiServerLogin"].Value);
+            }
+
+            var thumbData = new ContextThumbData()
             {
                 pagePrefix = contextHelper.GetCurrentContext().Request.Url.GetLeftPart(System.UriPartial.Authority),
                 host = contextHelper.GetCurrentContext().Request.Url.Host,
                 sessionCookie = contextHelper.GetCurrentContext().Request.Cookies["ASP.NET_SessionId"].Value,
-                applicationCookie = contextHelper.GetCurrentContext().Request.Cookies[".AspNet.ApplicationCookie"].Value
+                authCookie = authCookieValue.Key + "|" + authCookieValue.Value
             };
+
+            return thumbData;
         }
     }
 
@@ -86,6 +99,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public string pagePrefix { get; set; }
         public string host { get; set; }
         public string sessionCookie { get; set; }
-        public string applicationCookie { get; set; }
+        public string authCookie { get; set; }
     }
 }
