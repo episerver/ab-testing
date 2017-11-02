@@ -64,7 +64,6 @@
                 document.getElementById("publishThumbnailarchive").style.display = "none";
                 document.getElementById("draftThumbnailarchive").style.display = "none";
             }
-            this._resetView();
             this._renderData();
         },
 
@@ -126,7 +125,6 @@
                     thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
                 };
 
-
                 me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
@@ -138,6 +136,7 @@
                     me.summaryToggle.style.visibility = "hidden";
                 }
             });
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {

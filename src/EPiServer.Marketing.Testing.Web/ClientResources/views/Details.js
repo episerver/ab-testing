@@ -72,6 +72,7 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
+            this._resetView();
         },
 
         startup: function () {
@@ -97,7 +98,6 @@
 
             textHelper.initializeHelper(this.context, resources.detailsview);
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            this._resetView();
             this._renderData();
         },
 
@@ -197,6 +197,7 @@
                 }
             });
             this.renderStatusIndicatorStyles();
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
