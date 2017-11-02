@@ -125,7 +125,6 @@
                     thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
                 };
 
-                this._resetView();
                 me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
