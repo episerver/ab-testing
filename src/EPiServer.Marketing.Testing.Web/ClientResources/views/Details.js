@@ -98,7 +98,6 @@
 
             textHelper.initializeHelper(this.context, resources.detailsview);
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            this._resetView();
             this._renderData();
         },
 

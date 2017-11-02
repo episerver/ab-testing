@@ -64,7 +64,6 @@
                 document.getElementById("publishThumbnailarchive").style.display = "none";
                 document.getElementById("draftThumbnailarchive").style.display = "none";
             }
-            this._resetView();
             this._renderData();
         },
 
@@ -138,6 +137,7 @@
                     me.summaryToggle.style.visibility = "hidden";
                 }
             });
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
