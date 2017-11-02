@@ -77,7 +77,7 @@
             } else {
                 this.summaryToggle.style.visibility = "hidden"
             }
-            this._renderData();
+            this._resetView();
         },
 
         startup: function () {
