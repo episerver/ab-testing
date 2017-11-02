@@ -34,7 +34,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var fileName = _thumbRepo.GetRandomFileName();            
 
             var contextThumbData = _thumbRepo.GetContextThumbData();
-            var path = id.Replace('$', '/') + "?epimode=false"; //required to rebuild site URL
+            var path = id.Replace('$', '/') + "?epieditmode=true"; //required to rebuild site URL
             var targetPage = string.Format("{0}{1}",contextThumbData.pagePrefix, path);
 
             Process captureProcess = _thumbRepo.GetCaptureProcess(targetPage, fileName, contextThumbData);
