@@ -54,6 +54,14 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
+        _contextChanged: function (newContext) {
+            var me = this;
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
+                return;
+            };           
+            this._resetView();
+        },
+
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             this.context = contextService.currentContext;
