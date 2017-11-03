@@ -62,7 +62,6 @@
             this._resetView();
         },
 
-
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             this.context = contextService.currentContext;
