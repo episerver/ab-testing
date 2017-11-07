@@ -58,7 +58,7 @@
             var me = this;
             if (!newContext || newContext.type !== 'epi.marketing.testing') {
                 return;
-            };           
+            };
             this._resetView();
         },
 
@@ -261,12 +261,12 @@
         },
 
         _resetView: function () {
-            var abTestBody = dom.byId("abTestBody");
-            var toolbarGroup = dom.byId("toolbarGroup");
+            var abTestBody = dom.byId("archiveAbTestBody");
+            var abToolBar = dom.byId("archiveToolbarGroup");
             if (abTestBody) {
                 abTestBody.scrollIntoView(true);
-                toolbarGroup.scrollIntoView(true);
+                abToolBar.scrollIntoView(true);
             }
-        },
+        }
     });
 });

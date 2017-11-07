@@ -150,6 +150,7 @@
         _onCancelClick: function () {
             var me = this;
             this.kpiSummaryWidgets = new Array();
+            this._resetView();
             me.contextParameters = {
                 uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink
             };
@@ -320,12 +321,12 @@
         },
 
         _resetView: function () {
-            var abTestBody = dom.byId("abTestBody");
-            var toolbarGroup = dom.byId("toolbarGroup");
+            var abTestBody = dom.byId("detailsAbTestBody");
+            var abToolBar = dom.byId("detailsToolbarGroup");
             if (abTestBody) {
                 abTestBody.scrollIntoView(true);
-                toolbarGroup.scrollIntoView(true);
+                abToolBar.scrollIntoView(true);
             }
-        },
+        }
     });
 });
