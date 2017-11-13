@@ -1,7 +1,7 @@
 ﻿<div data-dojo-type="dijit/layout/BorderContainer" id="epi-ab-archive-bordercontainer" class="sleek epi-form-container epi-grid-form dijitContainer">
     <!-- button bar -->
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top', splitter:false" class="epi-localToolbar" role="toolbar">
-        <div class="epi-toolbarGroupContainer">
+        <div class="epi-toolbarGroupContainer" id="archiveToolbarGroup">
             <!-- Empty Leading Toolbar Group -->
             <div class="epi-toolbarGroup epi-toolbarLeading"></div>
             <!-- Empty Center Toolbar Group -->
@@ -15,7 +15,7 @@
         </div>
     </div>
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:false" class="epi-abtest-body-container">
-        <div class="epi-abtest-body">
+        <div class="epi-abtest-body" id="archiveAbTestBody">
             <!-- Header Test Title and Running Time / Status -->
             <div class="cardWrapper">
                 <div class="cardBody">
@@ -32,12 +32,22 @@
                 <h3 data-dojo-attach-point="controlHeader">
                     ${resources.archiveview.content_control_header}
                 </h3>
-                <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versiona">
-                        <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onControlViewClick" style="cursor: pointer" />
+                <div class="cardBody cardBody-bottom">
+                    <div>
+                        <div class="epi-spinnerOverlay" id="publishThumbnailarchive-spinner">
+                            <div class="lds-rolling epi-abtest-thumbnail">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div id="publishThumbnailarchive-error" class="epi-abtest-hidden">
+                            <div class="epi-abtest-thumbnail-container">
+                                <div class="objectIcon"></div>
+                            </div>
+                        </div>
+                        <canvas title="${resources.archiveview.view_control_content}" id="publishThumbnailarchive" class="epi-abtest-thumbnail epi-abtest-hidden epi-abtest-pointer" data-dojo-attach-event="onclick: _onControlViewClick" />
                     </div>
                     <p class="contentInfo">
-                        <span class="publishedIcon" style="padding-top: 2px">
+                        <span class="publishedIcon epi-abtest-narrow-top">
                             ${resources.archiveview.published_prefix}
                         </span>
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
@@ -62,14 +72,24 @@
                 <h3 data-dojo-attach-point="challengerHeader">
                     ${resources.archiveview.content_challenger_header}
                 </h3>
-                <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versionb">
-                        <canvas title="${resources.archiveview.view_challenger_content}" id="draftThumbnailarchive" class="epi-abtest-thumbnail" data-dojo-attach-event="onclick: _onChallengerViewClick" style="cursor: pointer" />/>
+                <div class="cardBody cardBody-bottom">
+                    <div>
+                        <div class="epi-spinnerOverlay" id="draftThumbnailarchive-spinner">
+                            <div class="lds-rolling epi-abtest-thumbnail">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div id="draftThumbnailarchive-error" class="epi-abtest-hidden">
+                            <div class="epi-abtest-thumbnail">
+                                <div class="objectIcon"></div>
+                            </div>
+                        </div>
+                        <canvas title="${resources.archiveview.view_challenger_content}" id="draftThumbnailarchive" class="epi-abtest-thumbnail epi-abtest-hidden epi-pointer" data-dojo-attach-event="onclick: _onChallengerViewClick" />
                     </div>
                     <p class="contentInfo">
-                        <span class="draftIcon" style="padding-top: 2px">${resources.archiveview.draft_prefix}</span>
-                        <span class="epi-username" style="vertical-align: middle" data-dojo-attach-point="changedBy"></span>,
-                        <span style="vertical-align: middle" data-dojo-attach-point="dateChanged"></span>
+                        <span class="draftIcon epi-abtest-narrow-top">${resources.archiveview.draft_prefix}</span>
+                        <span class="epi-username epi-abtest-middle" data-dojo-attach-point="changedBy"></span>,
+                        <span class="epi-abtest-middle" data-dojo-attach-point="dateChanged"></span>
                     </p>
                     <div class="abTestResult">
                         <h2 data-dojo-attach-point="challengerVersionTestResult"></h2>
@@ -83,11 +103,11 @@
                 </div>
             </div>
             <!-- Test Information -->
-            <div class="cardWrapper" style="clear: both">
+            <div class="cardWrapper epi-abtest-clear">
                 <div class="cardBody">
                     <div class="formsRow">
                         <h4>${resources.archiveview.description_heading}</h4>
-                        <p style="font-size: 18px;" data-dojo-attach-point="testDescription"></p>
+                        <p class="epi-abtest-fontLarge" data-dojo-attach-point="testDescription"></p>
                     </div>
                     <div class="formsRow">
                         <h4>
@@ -119,7 +139,7 @@
             </div>
             <div class="cardWrapper">
                 <h3 class="epi-abtest-advanced-header">${resources.archiveview.advanced_options_header}</h3>
-                <div class="cardBody" style="padding-top: 4px;">
+                <div class="cardBody epi-abtest-moderate-top">
                     <h4>${resources.archiveview.advanced_options_confidence_level}</h4>
                     <p>
                         <strong><span data-dojo-attach-point="confidence"></span></strong>

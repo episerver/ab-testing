@@ -1,13 +1,13 @@
 ﻿define([
-    "dojo/_base/declare",
-    "epi/dependency",
-    "dojo/Stateful",
-    "dojo/topic"
+   "dojo/_base/declare",
+   "epi/dependency",
+   "dojo/Stateful",
+   "dojo/topic"
 ], function (
-    declare,
-    dependency,
-    stateful,
-    topic
+   declare,
+   dependency,
+   stateful,
+   topic
 ) {
     return declare([stateful], {
 
@@ -60,12 +60,27 @@
 
         _onContextChange: function (context, caller) {
             // Widget will update itself using the new context.
-            this.contentData = caller.contentData;
-            this.contentData.contentLink = caller.contentData.contentLink;
-            this.setupContentData();
+            if (this.contentData && this.contentData.contentLink != caller.contentData.contentLink) {
+                this.contentData = caller.contentData;
+                this.contentData.contentLink = caller.contentData.contentLink;
+                this.setupContentData();
+            } else {
+                this.getDefaultTestValues();
+            }
+        },
+
+        getDefaultTestValues: function () {
+            this.configStore.get().then(function (config) {
+                console.log(config);
+                this.set("testDuration", config.testDuration);
+                this.set("participationPercent", config.participationPercent);
+                this.set("confidenceLevel", config.confidenceLevel);
+                this.set("kpiLimit", config.kpiLimit);
+            }.bind(this));
         },
 
         setupContentData: function () {
+            var me = this;
             //get published version
             this._contentVersionStore = this._contentVersionStore || dependency.resolve("epi.storeregistry").get("epi.cms.contentversion");
             this._contentVersionStore
@@ -74,16 +89,7 @@
                     var publishedVersion = result;
                     this.set("publishedVersion", publishedVersion);
                     this.set("currentVersion", this.contentData);
-
-                    this.configStore.get()
-                        .then(function (config) {
-                            console.log(config);
-                            this.set("testDuration", config.testDuration);
-                            this.set("participationPercent", config.participationPercent);
-                            this.set("confidenceLevel", config.confidenceLevel);
-                            this.set("kpiLimit", config.kpiLimit);
-                        }.bind(this));
-
+                    me.getDefaultTestValues();
                     console.log(result);
                     console.log(this.contentData);
                 }.bind(this))

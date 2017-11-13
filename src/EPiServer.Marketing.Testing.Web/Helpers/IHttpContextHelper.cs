@@ -124,5 +124,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns>The url string.</returns>
         string RequestedUrl();
 
+        /// <summary>
+        /// Returns the current context
+        /// </summary>
+        /// <returns>The current context</returns>
+        HttpContext GetCurrentContext();
     }
 }

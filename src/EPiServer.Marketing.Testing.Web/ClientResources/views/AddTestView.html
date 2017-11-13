@@ -53,8 +53,20 @@
                 <h3>
                     ${resources.addtestview.control}
                 </h3>
-                <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versiona"><canvas id="publishThumbnail" class="epi-abtest-thumbnail" /></div>
+                <div class="cardBody cardBody-bottom">
+                    <div>
+                        <div class="epi-spinnerOverlay" id="publishThumbnail-spinner">
+                            <div class="lds-rolling epi-abtest-thumbnail">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div id="publishThumbnail-error" class="epi-abtest-hidden">
+                            <div class="epi-abtest-thumbnail">
+                                <div class="objectIcon"></div>
+                            </div>
+                        </div>
+                        <canvas id="publishThumbnail" class="epi-abtest-thumbnail epi-abtest-hidden" />
+                    </div>
                     <p class="versionData">
                         <span class="publishedIcon">${resources.addtestview.published_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="publishedBy"></span>,
@@ -67,8 +79,20 @@
                 <h3>
                     ${resources.addtestview.challenger}
                 </h3>
-                <div class="cardBody" style="padding-bottom: 0;">
-                    <div class="versionb"><canvas id="draftThumbnail" class="epi-abtest-thumbnail" /></div>
+                <div class="cardBody cardBody-bottom">
+                    <div class="versionb">
+                        <div class="epi-spinnerOverlay" id="draftThumbnail-spinner">
+                            <div class="lds-rolling epi-abtest-thumbnail">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div id="draftThumbnail-error" class="epi-abtest-hidden">
+                            <div class="epi-abtest-thumbnail">
+                                <div class="objectIcon"></div>
+                            </div>
+                        </div>
+                        <canvas id="draftThumbnail" class="epi-abtest-thumbnail epi-abtest-hidden" />
+                    </div>
                     <p class="versionData">
                         <span class="draftIcon">${resources.addtestview.draft_prefix}</span>
                         <span class="epi-username" data-dojo-attach-point="savedBy"></span>,
@@ -77,7 +101,7 @@
                 </div>
             </div>
             <!-- Test Settings Section -->
-            <div class="cardWrapper" style="clear: both">
+            <div class="cardWrapper epi-abtest-clear">
                 <div class="cardBody">
                     <!-- Test Goals -->
                     <div class="formsRow">
@@ -154,9 +178,9 @@
                         <h4>
                             ${resources.addtestview.schedule_header}
                         </h4>
-                        <div class="formsRow" style="float: left; padding-right: 20px; vertical-align: text-bottom">
+                        <div class="formsRow epi-abtest-buttonRow">
                             <input data-dojo-attach-point="start" type="radio" name="startOption" id="startNowOption"
-                                   value="hide" style="vertical-align: middle" checked
+                                   value="hide" class="epi-middle" checked
                                    data-dojo-type="dijit/form/RadioButton"
                                    data-dojo-attach-event="onClick: _toggleTimeSelector">
                             <label class="scheduleLabel">
@@ -164,7 +188,7 @@
                             </label>
                             <br>
                             <input data-dojo-attach-point="delay" type="radio" name="startOption" id="delayStartOption"
-                                   value="show" style="padding-top: 10px; vertical-align: middle"
+                                   value="show" class="epi-padding-top-medium epi-abtest-middle"
                                    data-dojo-type="dijit/form/RadioButton"
                                    data-dojo-attach-event="onClick: _toggleTimeSelector">
                             <label class="scheduleLabel">
@@ -173,7 +197,7 @@
                         </div>
                         <div class="formsRow" id="dateSelector" data-dojo-attach-point="scheduleDiv">
                             <div>
-                                <span id="datePickerErrorIcon" style="margin-bottom: 2px" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger"></span>
+                                <span id="datePickerErrorIcon" class="epi-element--hidden media-list__object  dijitInline dijitReset dijitIcon  epi-icon--colored  epi-iconDanger epi-abtest-narrow-btm"></span>
                                 <span id="datePickerErrorText" class="epi-ab-errorText"></span>
                             </div>
                             <div id="StartDateTimeSelector" data-dojo-attach-point="startDatePicker"
@@ -192,17 +216,16 @@
             <div class="cardWrapper">
                 <!-- Header / Toggle-->
                 <div class="cardBody">
-                    <button id=advancedOptionsButton data-dojo-attach-point=advancedOptions data-dojo-type="dijit/form/ToggleButton" data-dojo-attach-event="onClick: _showAdvancedOptions" class="epi-chromeless epi-flat"
-                            style="background-color: #ffffff; font-size: 18px; margin: 8px 0 0 0; font-family: arial; font-weight: bold"
+                    <button id=advancedOptionsButton data-dojo-attach-point=advancedOptions data-dojo-type="dijit/form/ToggleButton" data-dojo-attach-event="onClick: _showAdvancedOptions" class="epi-chromeless epi-flat epi-abtest-button-advanced"
                             data-dojo-props="iconClass:'epi-iconSettings', checked: false">
                         ${resources.addtestview.advanced_options}
                     </button>
-                    <div id="advancedOptions" class="advanced-options__content cardBody" style="display: none;">
+                    <div id="advancedOptions" class="advanced-options__content cardBody epi-abtest-hidden">
                         <!-- Kpi Weights -->
-                        <div id="kpiWeightAdvancedSection" class="cardBody" style="display: none;">
+                        <div id="kpiWeightAdvancedSection" class="cardBody epi-hidden">
                             <h4>${resources.addtestview.goals_weight_heading}</h4>
-                            <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_description}</p>
-                            <p class="epi-abtest-spacing-narrow">${resources.addtestview.goals_weight_higher_description}</p>
+                            <p class="epi-abtest-narrow-btm">${resources.addtestview.goals_weight_description}</p>
+                            <p class="epi-abtest-narrow-btm">${resources.addtestview.goals_weight_higher_description}</p>
                             <p>${resources.addtestview.goals_weight_equal_description}</p>
                             <div id="kpiWeightSelectors" class="epi-abTest-weightSelectors-margin">
                                 <!-- Kpi weight selectors will beinjected here-->

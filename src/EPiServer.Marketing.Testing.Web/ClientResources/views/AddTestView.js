@@ -20,7 +20,7 @@
      'dojo/query',
      'dijit/registry',
      'epi/dependency',
-     'marketing-testing/scripts/rasterizeHTML',
+     'marketing-testing/scripts/thumbnails',
      'dojo/dom-form',
      'dojo/json',
      'dojox/layout/ContentPane',
@@ -60,7 +60,7 @@
     query,
     registry,
     dependency,
-   rasterizehtml,
+   thumbnails,
    domForm,
    JSON,
    ContentPane,
@@ -119,6 +119,14 @@
                 this.contentData = caller.contentData;
                 this.kpiEntries = 0;
                 this._adjustKpiSelectorCombo();
+                if (document.getElementById("publishThumbnaildetail-spinner")) {
+                    document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                    document.getElementById("draftThumbnaildetail-error").style.display = "none";
+                    document.getElementById("publishThumbnaildetail").style.display = "none";
+                    document.getElementById("draftThumbnaildetail").style.display = "none";
+                }
                 this.reset();
             },
 
@@ -142,6 +150,14 @@
             },
 
             startup: function () {
+                if (document.getElementById("draftThumbnaildetail")) {
+                    document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                    document.getElementById("draftThumbnaildetail-error").style.display = "none";
+                    document.getElementById("publishThumbnaildetail").style.display = "none";
+                    document.getElementById("draftThumbnaildetail").style.display = "none";
+                }
                 if (this.breadcrumbWidget) {
                     this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
                     this.contentNameNode.innerText = this.contentData.name;
@@ -167,15 +183,10 @@
 
                     //Hack to build published versions preview link below
                     var publishContentVersion = this.model.publishedVersion.contentLink.split('_'),
-                       previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
-                        previewUrlStart = this.contentData.previewUrl.split('_'),
-                        previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
-
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versiona').addClass('hide-bg');
-                    });
+                    previewUrlEnd = isCatalogContent ? publishContentVersion[1] + '_CatalogContent' + '/?epieditmode=False' : publishContentVersion[1] + '/?epieditmode=False',
+                    previewUrlStart = this.contentData.previewUrl.split('_'),
+                    previewUrl = previewUrlStart[0] + '_' + previewUrlEnd;
+                    thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
 
@@ -191,12 +202,7 @@
 
                 if (pubThumb) {
                     var previewUrl = this.model.contentData.previewUrl;
-
-                    pubThumb.height = 768;
-                    pubThumb.width = 1024;
-                    rasterizehtml.drawURL(previewUrl, pubThumb, { height: 768, width: 1024 }).then(function success(renderResult) {
-                        query('.versionb').addClass('hide-bg');
-                    });
+                    thumbnails._setThumbnail(pubThumb, previewUrl);
                 }
             },
 
@@ -425,12 +431,11 @@
 
                 var advancedOptionsElement = dom.byId("advancedOptions");
                 if (advancedOptionsElement) {
+                    this.advancedOptions.reset();
                     dojo.style(advancedOptionsElement, "display", "none");
                 }
 
                 this._setViewConfidenceLevelAttr();
-                this._setViewPublishedVersionAttr(true);
-                this._setViewCurrentVersionAttr();
                 this._clearConversionErrors();
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
@@ -602,6 +607,7 @@
                 if (advancedOptionsElement) {
                     dojo.style(advancedOptionsElement, "display", "none");
                 }
+                this.reset();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };
