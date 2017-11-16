@@ -23,7 +23,7 @@ function (dependency) {
             });
         },
 
-        _setThumbState(canvasId, spinnerState, previewState, errorState) {
+        _setThumbState: function (canvasId, spinnerState, previewState, errorState) {
             document.getElementById(canvasId.id + "-spinner").style.display = spinnerState;
             canvasId.style.display = previewState;
             document.getElementById(canvasId.id + "-error").style.display = errorState;

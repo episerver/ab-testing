@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockProcessHelper.Setup(call => call.GetThumbnailExecutablePath()).Returns("EXECUTABLE");
 
             var thumbRepo = GetUnitUnderTest();
-            var proc = thumbRepo.GetCaptureProcess("ID", "FILENAME", new ContextThumbData() { host = "host", pagePrefix = "http://", applicationCookie = "APPCOOKIE", sessionCookie = "SESSONCOOKIE" });
+            var proc = thumbRepo.GetCaptureProcess("ID", "FILENAME", new ContextThumbData() { host = "host", pagePrefix = "http://", authCookie = "APPCOOKIE", sessionCookie = "SESSONCOOKIE" });
             Assert.True(proc.StartInfo.FileName == "EXECUTABLE");
             Assert.True(proc.StartInfo.WorkingDirectory == "ROOTPATH");
             Assert.False(proc.StartInfo.UseShellExecute);
@@ -48,7 +48,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void GetContextThumbData_ReturnsPopulatedContextThumbDatObject()
+        public void GetContextThumbData_ReturnsPopulatedContextThumbDatObject_whenAspAppCookieSet()
         {
             HttpRequest mockRequest = new HttpRequest("", "http://mock.url/path", "");
             HttpResponse mockResponse = new HttpResponse(new StringWriter());
@@ -64,7 +64,30 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var thumbRepo = GetUnitUnderTest();
             ContextThumbData testData = thumbRepo.GetContextThumbData();
-            Assert.True(testData.applicationCookie == mockApplicationCookie.Value);
+            Assert.True(testData.authCookie == mockApplicationCookie.Name+"|"+mockApplicationCookie.Value);
+            Assert.True(testData.sessionCookie == mockSessionCookie.Value);
+            Assert.True(testData.host == "mock.url");
+            Assert.True(testData.pagePrefix == "http://mock.url");
+        }
+
+        [Fact]
+        public void GetContextThumbData_ReturnsPopulatedContextThumbDatObject_whenEpiAppCookieSet()
+        {
+            HttpRequest mockRequest = new HttpRequest("", "http://mock.url/path", "");
+            HttpResponse mockResponse = new HttpResponse(new StringWriter());
+            HttpCookie mockSessionCookie = new HttpCookie("ASP.NET_SessionId");
+            HttpCookie mockApplicationCookie = new HttpCookie(".EPiServerLogin");
+            mockSessionCookie.Value = "MOCKSESSIONDATA";
+            mockApplicationCookie.Value = "MOCKAPPLICATOINDATA";
+            mockRequest.Cookies.Add(mockSessionCookie);
+            mockRequest.Cookies.Add(mockApplicationCookie);
+
+            HttpContext mockContext = new HttpContext(mockRequest, mockResponse);
+            _mockContextHelper.Setup(call => call.GetCurrentContext()).Returns(mockContext);
+
+            var thumbRepo = GetUnitUnderTest();
+            ContextThumbData testData = thumbRepo.GetContextThumbData();
+            Assert.True(testData.authCookie == mockApplicationCookie.Name + "|" + mockApplicationCookie.Value);
             Assert.True(testData.sessionCookie == mockSessionCookie.Value);
             Assert.True(testData.host == "mock.url");
             Assert.True(testData.pagePrefix == "http://mock.url");

@@ -58,9 +58,22 @@
         constructor: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
+            me.subscribe("/epi/shell/context/changed", me._contextChanged);
         },
 
-
+        _contextChanged: function (newContext) {
+            var me = this;
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
+                return;
+            };
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+            this._resetView();
+        },
 
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
@@ -76,9 +89,15 @@
                 document.getElementById("draftThumbnaildetail").style.display = "none";
             }
 
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+
             textHelper.initializeHelper(this.context, resources.detailsview);
             this._displayOptionsButton(this.context.data.userHasPublishRights);
-            this._resetView();
             this._renderData();
         },
 
@@ -131,6 +150,7 @@
         _onCancelClick: function () {
             var me = this;
             this.kpiSummaryWidgets = new Array();
+            this._resetView();
             me.contextParameters = {
                 uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink
             };
@@ -178,6 +198,7 @@
                 }
             });
             this.renderStatusIndicatorStyles();
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
@@ -300,12 +321,12 @@
         },
 
         _resetView: function () {
-            var abTestBody = dom.byId("abTestBody");
-            var toolbarGroup = dom.byId("toolbarGroup");
+            var abTestBody = dom.byId("detailsAbTestBody");
+            var abToolBar = dom.byId("detailsToolbarGroup");
             if (abTestBody) {
                 abTestBody.scrollIntoView(true);
-                toolbarGroup.scrollIntoView(true);
+                abToolBar.scrollIntoView(true);
             }
-        },
+        }
     });
 });

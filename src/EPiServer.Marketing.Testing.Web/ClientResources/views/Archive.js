@@ -54,6 +54,14 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
+        _contextChanged: function (newContext) {
+            var me = this;
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
+                return;
+            };
+            this._resetView();
+        },
+
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             this.context = contextService.currentContext;
@@ -64,7 +72,6 @@
                 document.getElementById("publishThumbnailarchive").style.display = "none";
                 document.getElementById("draftThumbnailarchive").style.display = "none";
             }
-            this._resetView();
             this._renderData();
         },
 
@@ -126,7 +133,6 @@
                     thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
                 };
 
-
                 me._renderKpiMarkup("archive_conversionMarkup");
                 for (x = 0; x < me.kpiSummaryWidgets.length; x++) {
                     me.kpiSummaryWidgets[x].startup();
@@ -138,6 +144,7 @@
                     me.summaryToggle.style.visibility = "hidden";
                 }
             });
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
@@ -196,7 +203,7 @@
 
         _renderStatusIndicatorStyles: function () {
             var draftVersion = this.context.data.draftVersionContentLink.split("_")[1];
-            var winningVersion = this.context.data.test.variants.find(function (obj) { return obj.isWinner });
+            var winningVersion = textHelper._findInArray(this.context.data.test.variants, "isWinner", true);
 
             this.controlHeader.innerText = resources.archiveview.content_control_header;
             this.challengerHeader.innerText = resources.archiveview.content_challenger_header;
@@ -254,12 +261,12 @@
         },
 
         _resetView: function () {
-            var abTestBody = dom.byId("abTestBody");
-            var toolbarGroup = dom.byId("toolbarGroup");
+            var abTestBody = dom.byId("archiveAbTestBody");
+            var abToolBar = dom.byId("archiveToolbarGroup");
             if (abTestBody) {
                 abTestBody.scrollIntoView(true);
-                toolbarGroup.scrollIntoView(true);
+                abToolBar.scrollIntoView(true);
             }
-        },
+        }
     });
 });

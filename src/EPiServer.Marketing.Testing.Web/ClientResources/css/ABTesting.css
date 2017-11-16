@@ -10,6 +10,9 @@
     width: 100%;
     position: absolute;
 }
+.epi-abtest-hidden{
+    display: none;
+}
 
 .epi-abtest-hr {
     border-bottom: 1px solid #eee;

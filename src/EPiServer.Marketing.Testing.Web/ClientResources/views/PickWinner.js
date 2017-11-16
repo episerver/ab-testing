@@ -57,6 +57,29 @@
         contextHistory: null,
         kpiSummaryWidgets: new Array(),
 
+        constructor: function () {
+            var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
+            me.context = contextService.currentContext;
+            me.subscribe("/epi/shell/context/changed", me._contextChanged);
+        },
+
+        _contextChanged: function (newContext) {
+            var me = this;
+            this.kpiSummaryWidgets = new Array();
+            if (!newContext || newContext.type !== 'epi.marketing.testing') {
+                return;
+            }
+            me.context = newContext;
+            textHelper.initializeHelper(this.context, resources.pickwinnerview);
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
+            this._resetView();
+        },
+
         startup: function () {
             var contextService = dependency.resolve("epi.shell.ContextService"), me = this;
             me.context = contextService.currentContext;
@@ -68,7 +91,12 @@
                 document.getElementById("publishThumbnailpickwinner").style.display = "none";
                 document.getElementById("draftThumbnailpickwinner").style.display = "none";
             }
-            this._resetView();
+            if (this.context.data.test.kpiInstances.length > 1) {
+                this._setToggleAnimations();
+                this.summaryToggle.style.visibility = "visible"
+            } else {
+                this.summaryToggle.style.visibility = "hidden"
+            }
             this._renderData();
         },
 
@@ -97,20 +125,10 @@
             });
         },
 
-        _contextChanged: function (newContext) {
-            var me = this;
-            this.kpiSummaryWidgets = new Array();
-            if (!newContext || newContext.type !== 'epi.marketing.testing') {
-                return;
-            }
-            me.context = newContext;
-            textHelper.initializeHelper(this.context, resources.pickwinnerview);
-            me._renderData();
-        },
-
         _onCancelClick: function () {
             var me = this;
             this.kpiSummaryWidgets = new Array();
+            this._resetView();
             me.contextParameters = { uri: "epi.cms.contentdata:///" + this.context.data.latestVersionContentLink };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },
@@ -147,6 +165,7 @@
                     me.kpiSummaryWidgets[x].startup();
                 }
             });
+            this._resetView();
         },
 
         _renderKpiMarkup: function (conversionMarkupId) {
@@ -312,12 +331,12 @@
         },
 
         _resetView: function () {
-            var abTestBody = dom.byId("abTestBody");
-            var toolbarGroup = dom.byId("toolbarGroup");
+            var abTestBody = dom.byId("pickwinnerAbTestBody");
+            var abToolBar = dom.byId("pickwinnerToolbarGroup");
             if (abTestBody) {
                 abTestBody.scrollIntoView(true);
-                toolbarGroup.scrollIntoView(true);
+                abToolBar.scrollIntoView(true);
             }
-        },
+        }
     });
 });

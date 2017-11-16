@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockThumbRepo.Setup(call => call.GetRandomFileName()).Returns("RandomFileName");
             _mockThumbRepo.Setup(call => call.GetContextThumbData()).Returns(new ContextThumbData()
             {
-                applicationCookie = "appCookie",
+                authCookie = "appCookie",
                 sessionCookie = "sessionCookie",
                 host = "TestHost",
                 pagePrefix = "Http://testhost.com"

@@ -119,12 +119,14 @@
                 this.contentData = caller.contentData;
                 this.kpiEntries = 0;
                 this._adjustKpiSelectorCombo();
-                document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                document.getElementById("publishThumbnaildetail-error").style.display = "none";
-                document.getElementById("draftThumbnaildetail-error").style.display = "none";
-                document.getElementById("publishThumbnaildetail").style.display = "none";
-                document.getElementById("draftThumbnaildetail").style.display = "none";
+                if (document.getElementById("publishThumbnaildetail-spinner")) {
+                    document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
+                    document.getElementById("publishThumbnaildetail-error").style.display = "none";
+                    document.getElementById("draftThumbnaildetail-error").style.display = "none";
+                    document.getElementById("publishThumbnaildetail").style.display = "none";
+                    document.getElementById("draftThumbnaildetail").style.display = "none";
+                }
                 this.reset();
             },
 
@@ -429,6 +431,7 @@
 
                 var advancedOptionsElement = dom.byId("advancedOptions");
                 if (advancedOptionsElement) {
+                    this.advancedOptions.reset();
                     dojo.style(advancedOptionsElement, "display", "none");
                 }
 
@@ -604,6 +607,7 @@
                 if (advancedOptionsElement) {
                     dojo.style(advancedOptionsElement, "display", "none");
                 }
+                this.reset();
                 me.contextParameters = {
                     uri: "epi.cms.contentdata:///" + this.model.currentVersion.contentLink
                 };

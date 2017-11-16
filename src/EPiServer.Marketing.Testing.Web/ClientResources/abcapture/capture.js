@@ -2,14 +2,17 @@
 system = require('system'),
 pageLink = system.args[1],
 pageImage = system.args[2],
+authCookie = system.args[4].split('|'),
+
 sessionCookie = {
     'name': 'ASP.NET_SessionId',
     'value': system.args[3],
     'domain': system.args[5]
 },
+
 applicationCookie = {
-    'name': '.AspNet.ApplicationCookie',
-    'value': system.args[4],
+    'name': authCookie[0],
+    'value': authCookie[1],
     'domain': system.args[5]
 };
 
