@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
-using System.Web;
 using System.Runtime.Caching;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Exceptions;
@@ -15,6 +14,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.DataAbstraction;
 using System.Linq;
 using EPiServer.Marketing.KPI.Common.Helpers;
+using System.Web;
 
 namespace EPiServer.Marketing.KPI.Common
 {

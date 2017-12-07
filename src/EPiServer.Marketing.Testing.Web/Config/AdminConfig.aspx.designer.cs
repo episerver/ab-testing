@@ -1,4 +1,5 @@
-﻿namespace EPiServer.Marketing.Testing.Web.Config
+﻿using System.Web.UI;
+namespace EPiServer.Marketing.Testing.Web.Config
 {
     public partial class AdminConfig
     {

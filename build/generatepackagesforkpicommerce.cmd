@@ -8,7 +8,7 @@ IF exist "%PackagePath%" ( rd "%PackagePath%" /s /q )
 
 md "%PackagePath%\lib"
 
-xcopy "..\artifacts\%Configuration%\net45\EPiServer.Marketing.KPI.Commerce.dll" "%PackagePath%\lib\"  /I /F /R /Y
+xcopy "%ProjectPath%\bin\Debug\net461\net45\EPiServer.Marketing.KPI.Commerce.dll" "%PackagePath%\lib\"  /I /F /R /Y
 
 xcopy "%ProjectPath%\Package.nuspec" "%PackagePath%\"  /I /F /R /Y
 
