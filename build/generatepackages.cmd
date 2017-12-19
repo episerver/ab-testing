@@ -9,8 +9,8 @@ IF exist "%PackagePath%\" ( rd "%PackagePath%\" /s /q )
 md "%PackagePath%\lib"
 
 xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.Web.dll" "%PackagePath%\lib\"  /I /F /R /Y
-xcopy ""%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.DAL.dll" "%PackagePath%\lib\"  /I /F /R /Y
-xcopy ""%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.Core.dll" "%PackagePath%\lib\"  /I /F /R /Y
+xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.DAL.dll" "%PackagePath%\lib\"  /I /F /R /Y
+xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.Core.dll" "%PackagePath%\lib\"  /I /F /R /Y
 rem xcopy "..\artifacts\Release\net45\EPiServer.Marketing.Testing.Model.dll" "%PackagePath%\lib\"  /I /F /R /Y
 
 xcopy "%ProjectPath%\*.nuspec" "%PackagePath%\"  /I /F /R /Y
@@ -57,4 +57,4 @@ xcopy "%ProjectPath%\ClientResources\abcapture\*.*" "%PackagePath%\content\modul
 
 xcopy "%PackagePath%\*.nupkg" "..\artifacts" /I /F /R /Y
 
-rd "%PackagePath%\" /s /q
+REM rd "%PackagePath%\" /s /qrd "%PackagePath%\" /s /q
