@@ -23,15 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj" />
+    <PackageReference Include="EPiServer.Framework" Version="11.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.2.1" />
-    <PackageReference Include="EPiServer.Commerce" Version="11.5.0" />
+    <ProjectReference Include="..\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
