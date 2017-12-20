@@ -13,8 +13,8 @@ pushd $cwd
 $ENV:Path = "$cwd;" + $ENV:Path
 
 # Install runtime dependencies
-dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
-dnvm use default
+#dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
+#dnvm use default
 
 # Install node dependencies
 pushd ..
@@ -26,37 +26,31 @@ if ($lastexitcode -eq 1) {
 pushd $cwd
 
 # Restore packages
-dnu restore ..\ --quiet
-if ($lastexitcode -eq 1) {
-    Write-Host "RESTORE failed" -foreground "red"
-    exit $lastexitcode
-}
+#dnu restore ..\ --quiet
+#if ($lastexitcode -eq 1) {
+#    Write-Host "RESTORE failed" -foreground "red"
+#    exit $lastexitcode
+#}
 
 &"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
+&"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.sln -PackagesDirectory ..\packages
 
 "Building $configuration"
-# Build all xprojs
-dnu build ..\src\** --quiet --configuration $configuration --out ..\artifacts
-dnu build ..\test\** --quiet --configuration $configuration --out ..\artifacts
-dnu build ..\samples\** --quiet --configuration $configuration --out ..\artifacts
+
+# Get the latest msbuild version, check if vs2017 is installed as they moved the location of msbuild
+$msbuild = (gci -Path "C:\Program Files (x86)\Microsoft Visual Studio" -recurse -filter "msbuild.exe" -file -ErrorAction SilentlyContinue | Where-Object {-not($_.FullName -match "amd64")})[0].FullName
+
+
+# Build msbuild projects
+&"$msbuild" ..\EPiServer.Marketing.Testing.sln /p:OutDir=$cwd\..\artifacts /p:Configuration=$configuration /p:Platform="Any CPU"
+
+&"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
+
 if ($lastexitcode -eq 1) {
     Write-Host "BUILD failed" -foreground "red"
     exit $lastexitcode
 }
 
-# Get the latest msbuild version, check if vs2017 is installed as they moved the location of msbuild
-if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\*\MSBuild\15.0\Bin\") {
-	$msbuild = "C:\Program Files (x86)\Microsoft Visual Studio\2017\*\MSBuild\15.0\Bin\MSBuild.exe"
-}
-else
-{
-	Get-ChildItem "C:\Program Files (x86)\MSBuild\1*" | ForEach-Object {
-		$msbuild = "$_\bin\MSBuild.exe"
-	}
-}
-
-# Build msbuild projects
-&"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
 # Generate Sandcastle Documentation, By default only happens on build machine.
 if([System.Convert]::ToBoolean($generateDoc) -eq $true) {
