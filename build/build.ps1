@@ -17,13 +17,13 @@ $ENV:Path = "$cwd;" + $ENV:Path
 #dnvm use default
 
 # Install node dependencies
-pushd ..
-&"$cwd\npm.cmd" install --silent
-if ($lastexitcode -eq 1) {
-    Write-Host "Node dependencies install failed" -foreground "red"
-    exit $lastexitcode
-}
-pushd $cwd
+#pushd ..
+#&"$cwd\npm.cmd" install --silent
+#if ($lastexitcode -eq 1) {
+#    Write-Host "Node dependencies install failed" -foreground "red"
+#    exit $lastexitcode
+#}
+#pushd $cwd
 
 # Restore packages
 #dnu restore ..\ --quiet
@@ -45,6 +45,11 @@ $msbuild = (gci -Path "C:\Program Files (x86)\Microsoft Visual Studio" -recurse 
 
 # Build msbuild projects
 &"$msbuild" ..\EPiServer.Marketing.Testing.sln /p:OutDir=$cwd\..\artifacts /p:Configuration=$configuration /p:Platform="Any CPU"
+
+if ($lastexitcode -eq 1) {
+    Write-Host "BUILD failed" -foreground "red"
+    exit $lastexitcode
+}
 
 &"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
