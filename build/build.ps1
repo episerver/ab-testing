@@ -32,8 +32,10 @@ pushd $cwd
 #    exit $lastexitcode
 #}
 
+&"dotnet" restore ..\EPiServer.Marketing.Testing.sln --packages ..\packages
+
 &"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
-&"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.sln -PackagesDirectory ..\packages
+
 
 "Building $configuration"
 
