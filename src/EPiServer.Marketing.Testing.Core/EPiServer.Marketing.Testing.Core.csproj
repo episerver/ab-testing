@@ -18,13 +18,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.3.0" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.3.0" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.0" />
-    <PackageReference Include="EPiServer.Framework" Version="11.3.0" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj" />
     <ProjectReference Include="..\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj" />
