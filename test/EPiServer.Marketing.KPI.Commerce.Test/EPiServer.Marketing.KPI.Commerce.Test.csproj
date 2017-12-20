@@ -19,30 +19,30 @@
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="Castle.Windsor" Version="4.1.0" />
-    <PackageReference Include="DotNetZip" Version="1.9.1.8" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.2.1" />
-    <PackageReference Include="EPiServer.CMS.UI" Version="11.1" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.1.0" />
-    <PackageReference Include="EPiServer.Framework" Version="11.2.1" />
-    <PackageReference Include="EPiServer.Logging.Log4Net" Version="2.0.0" />
-    <PackageReference Include="log4net" Version="2.0.3" />
+    <PackageReference Include="DotNetZip" Version="1.10.1" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.3.0" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="11.2.0" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.0" />
+    <PackageReference Include="EPiServer.Framework" Version="11.3.0" />
+    <PackageReference Include="EPiServer.Logging.Log4Net" Version="2.2.0" />
+    <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.3" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="Moq" Version="4.2.1502.0911" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="structuremap.web-signed" Version="3.1.6.186" />
-    <PackageReference Include="structuremap-signed" Version="3.1.9.463" />
-    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
+    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="StructureMap" Version="4.5.3" />
+    <PackageReference Include="structuremap.web" Version="4.0.0.315" />
+    <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.1" />
-    <PackageReference Include="xunit.assert" Version="2.2.0-beta5-build3474" />
-    <PackageReference Include="xunit.core" Version="2.3.0" />
-    <PackageReference Include="xunit.extensibility.core" Version="2.3.0" />
-    <PackageReference Include="xunit.extensibility.execution" Version="2.3.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.1.0" />
+    <PackageReference Include="xunit.assert" Version="2.3.1" />
+    <PackageReference Include="xunit.core" Version="2.3.1" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.3.1" />
+    <PackageReference Include="xunit.extensibility.execution" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.console" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <!--<PackageReference Include="xunit.runner.dnx" Version="2.1.0-rc1-build204" />-->
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
   </ItemGroup>
 
   <!--<ItemGroup Condition=" '$(TargetFramework)' == 'dnx451' ">
