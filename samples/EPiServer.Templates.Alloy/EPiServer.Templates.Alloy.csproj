@@ -133,7 +133,7 @@
     </Reference>
     <Reference Include="EPiServer.Marketing.Testing.Web">
       <HintPath Condition="Exists('..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\$(Configuration)\net45')">..\..\artifacts\bin\EPiServer.Marketing.Testing.Web\$(Configuration)\net45\EPiServer.Marketing.Testing.Web.dll</HintPath>
-      <HintPath Condition="Exists('..\..\artifacts')">..\..\artifacts\EPiServer.Marketing.Testing.Web.KPI.dll</HintPath>
+      <HintPath Condition="Exists('..\..\artifacts')">..\..\artifacts\EPiServer.Marketing.Testing.Web.dll</HintPath>
     </Reference>
     <Reference Include="EPiServer.Packaging, Version=3.4.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EPiServer.Packaging.3.4.0\lib\net461\EPiServer.Packaging.dll</HintPath>
