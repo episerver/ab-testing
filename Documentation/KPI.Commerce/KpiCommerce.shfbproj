@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>aa5e43c8-077b-4785-89f5-7b359dad70ab</ProjectGuid>
-    <SHFBSchemaVersion>2015.6.5.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
     <AssemblyName>KpiCommerce</AssemblyName>
     <RootNamespace>KpiCommerce</RootNamespace>
@@ -45,7 +45,7 @@
     <SyntaxFilters>C#</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>True</RootNamespaceContainer>
-    <PresentationStyle>VS2013</PresentationStyle>
+    <PresentationStyle>VS2005</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>HashedMemberName</NamingMethod>
     <HelpTitle>EPiServer Marketing … SDK Documentation</HelpTitle>
@@ -64,7 +64,7 @@
           <assemblyBinding>
             <dependentAssembly>
               <assemblyIdentity name="EPiServer.UI" />
-              <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.1.0.0" />
+              <bindingRedirect oldVersion="0.0.0.0-11.2.0.0" newVersion="11.2.0.0" />
             </dependentAssembly>
           </assemblyBinding>
           <ignoreIfUnresolved>
@@ -147,16 +147,16 @@
     <Content Include="icons\Help.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EPiServer, Version=9.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.CMS.Core\9.12.0\lib\net45\EPiServer.dll</HintPath>
+    <Reference Include="EPiServer, Version=11.3.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
+      <HintPath>..\References\EPiServer.CMS.Core\11.3.0\lib\net461\EPiServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Data, Version=9.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.Framework\9.12.0\lib\net45\EPiServer.Data.dll</HintPath>
+    <Reference Include="EPiServer.Data, Version=11.3.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
+      <HintPath>..\References\EPiServer.Framework\11.3.0\lib\net461\EPiServer.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EPiServer.Framework, Version=9.12.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
-      <HintPath>..\References\EPiServer.Framework\9.12.0\lib\net45\EPiServer.Framework.dll</HintPath>
+    <Reference Include="EPiServer.Framework, Version=11.3.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7">
+      <HintPath>..\References\EPiServer.Framework\11.3.0\lib\net461\EPiServer.Framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
