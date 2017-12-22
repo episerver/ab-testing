@@ -37,9 +37,11 @@ foreach($packagedependency in $packagereferences){
     $maxVersion = [int]$minVersion.Split('.')[0] + 1
     $newdependency.SetAttribute("version", "[$minVersion,$maxVersion)")
 
-    "Adding dependency $dependency to $nuspecPath"
-
-    $nuspec.package.metadata.dependencies.AppendChild($newdependency)
+    "Adding dependency "
+    $newdependency
+    " to $nuspecPath"
+    
+    $nuspec.SelectSingleNode('/package/metadata/dependencies').AppendChild($newdependency)
 }
 
 ForEach($dep in $nuspec.package.metadata.dependencies.dependency) 
