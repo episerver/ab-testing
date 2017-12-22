@@ -27,16 +27,16 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI.Commerce\Debug\net45\EPiServer.Marketing.KPI.Commerce.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI.Commerce\Debug\net45\EPiServer.Marketing.KPI.Commerce.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.Commerce.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.Commerce.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>

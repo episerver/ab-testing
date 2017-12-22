@@ -7,22 +7,22 @@ $jsonPath = $projectDir + "\project.json"
 $assemblyInfoPath = $projectDir + "\AssemblyVersionAuto.cs"
 
 
-[xml]$csProj = Get-Content -Raw -Path $projectDir\*.csproj
+[xml]$csProj = Get-Content -Path $projectDir\*.csproj | Out-String
 $nugetVersions = ""
 
 $nuspecPath = (get-childitem $deployDir\*.nuspec).FullName
-[xml]$nuspec = Get-Content -Raw -Path $projectDir\*.nuspec
+[xml]$nuspec = Get-Content -Path $projectDir\*.nuspec | Out-String
     
-$projectreferencenames = $csProj.Project.ItemGroup.ProjectReference.Include | ForEach-Object { (split-path $_).Replace("..\", "") }
+$projectreferencenames = $csProj.Project.ItemGroup.ProjectReference.Include | ForEach-Object { if($_ -ne $null) { (split-path $_).Replace("..\", "") }}
 $defaultpackageincludes = $nuspec.package.metadata.dependencies.dependency.id
-$projectreferencenames = $projectreferencenames | Where-Object { -not $defaultpackageincludes.contains($_) }
+$projectreferencenames = $projectreferencenames | Where-Object { if($_ -ne $null) { -not $defaultpackageincludes.contains($_) }}
 
-$allprojectcs = $csProj.Project.ItemGroup.ProjectReference.Include | where-object { -not ((split-path $_).Replace("..\", "")) -in $projectreferencenames } | ForEach-Object {[xml](Get-Content -Raw -Path "$projectDir\$_")}
+$allprojectcs = $csProj.Project.ItemGroup.ProjectReference.Include | where-object { ($_ -ne $null) -and (-not ((split-path $_).Replace("..\", "")) -in $projectreferencenames) } | ForEach-Object {[xml](Get-Content -Raw -Path "$projectDir\$_")}
 $allprojectcs += $csProj
 $packagereferences = $allprojectcs.Project.ItemGroup | select PackageReference 
 $packagereferences = $packagereferences.PackageReference | Sort-Object -Property Include -Unique
 
-$nuspec.package.metadata.dependencies.dependency | Where-Object { -not($_.id.StartsWith("EPiServer.Marketing")) } | ForEach-Object { $_.ParentNode.RemoveChild($_) }
+$nuspec.package.metadata.dependencies.dependency | Where-Object { ($_ -ne $null) -and (-not($_.id.StartsWith("EPiServer.Marketing"))) } | ForEach-Object { $_.ParentNode.RemoveChild($_) }
 
 foreach($packagedependency in $packagereferences){
     $newdependency = $nuspec.CreateElement("dependency")
@@ -37,7 +37,7 @@ foreach($packagedependency in $packagereferences){
     $maxVersion = [int]$minVersion.Split('.')[0] + 1
     $newdependency.SetAttribute("version", "[$minVersion,$maxVersion)")
 
-    $nuspec.package.metadata.dependencies.AppendChild($newdependency)
+    ([xmlnode]$nuspec.package.metadata.dependencies).AppendChild($newdependency)
 }
 
 ForEach($dep in $nuspec.package.metadata.dependencies.dependency) 
