@@ -2,20 +2,17 @@ IF "%1"=="Debug" (set Configuration=Debug) ELSE (set Configuration=Release)
 
 set PackagePath="..\artifacts\%Configuration%\Deployment"
 set ProjectPath="..\src\EPiServer.Marketing.Testing.Web"
-set Dependencies="EPiServer.CMS.UI.Core*EPiServer.Marketing.KPI*EPiServer.Marketing.Messaging"
 
 IF exist "%PackagePath%\" ( rd "%PackagePath%\" /s /q )
 
 md "%PackagePath%\lib"
+md "%PackagePath%\lib\net461"
 
-xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.Web.dll" "%PackagePath%\lib\"  /I /F /R /Y
-xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.DAL.dll" "%PackagePath%\lib\"  /I /F /R /Y
-xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Testing.Core.dll" "%PackagePath%\lib\"  /I /F /R /Y
-rem xcopy "..\artifacts\Release\net45\EPiServer.Marketing.Testing.Model.dll" "%PackagePath%\lib\"  /I /F /R /Y
+xcopy "..\artifacts\EPiServer.Marketing.Testing.Web.dll" "%PackagePath%\lib\net461\"  /I /F /R /Y
+xcopy "..\artifacts\EPiServer.Marketing.Testing.DAL.dll" "%PackagePath%\lib\net461\"  /I /F /R /Y
+xcopy "..\artifacts\EPiServer.Marketing.Testing.Core.dll" "%PackagePath%\lib\net461\"  /I /F /R /Y
 
 xcopy "%ProjectPath%\*.nuspec" "%PackagePath%\"  /I /F /R /Y
-
-xcopy "%ProjectPath%\*.xproj" "%PackagePath%\"  /I /F /R /Y
 
 md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources"
 xcopy "%ProjectPath%\ClientResources"\* "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ClientResources\"  /S /I /F /R /Y
@@ -53,7 +50,7 @@ md "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\abcaptu
 xcopy "%ProjectPath%\ClientResources\abcapture\*.*" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing\ABCapture\"  /I /F /R /Y
 
 
-"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%" "%Dependencies%"
+"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%"
 
 xcopy "%PackagePath%\*.nupkg" "..\artifacts" /I /F /R /Y
 

@@ -6,12 +6,11 @@ set ProjectPath="..\src\EPiServer.Marketing.Messaging"
 IF exist "%PackagePath%" ( rd "%PackagePath%" /s /q )
 
 md "%PackagePath%\lib"
+md "%PackagePath%\lib\net461"
 
-xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Messaging.dll" "%PackagePath%\lib\"  /I /F /R /Y
+xcopy "%ProjectPath%\bin\Debug\net461\EPiServer.Marketing.Messaging.dll" "%PackagePath%\lib\net461\"  /I /F /R /Y
 
 xcopy "%ProjectPath%\Package.nuspec" "%PackagePath%\"  /I /F /R /Y
-
-xcopy "%ProjectPath%\EPiServer.Marketing.Messaging.xproj" "%PackagePath%\"  /I /F /R /Y
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildpackage.ps1" "%PackagePath%" "%ProjectPath%"
 
