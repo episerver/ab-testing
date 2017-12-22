@@ -619,7 +619,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContentVersionRepository.Setup(
                call => call.Load(It.IsAny<ContentReference>()))
                .Returns(new ContentVersion(new ContentReference(10, 100), "testName", VersionStatus.CheckedOut, DateTime.Now, "me", "me", 0, "en", false, false));
-            //_mockEpiserverHelper.Setup(pub => pub.GetPreviewUrl(It.IsAny<ContentReference>(), It.IsAny<string>(), It.IsAny<VirtualPathArguments>())).Returns("previewUrl");
+            _mockEpiserverHelper.Setup(pub => pub.GetPreviewUrl(It.IsAny<ContentReference>(), It.IsAny<string>(), It.IsAny<VirtualPathArguments>())).Returns("previewUrl");
 
             var result = testContextHelper.GenerateContextData(test);
             Assert.False(string.IsNullOrEmpty(result.PublishPreviewUrl));
