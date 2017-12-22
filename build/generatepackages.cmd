@@ -20,6 +20,7 @@ xcopy "%ProjectPath%\ClientResources"\* "%PackagePath%\content\modules\_protecte
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.Testing"  /I /F /R /Y
 
 xcopy "%ProjectPath%\web.config.install.xdt" "%PackagePath%\content"  /I /F /R /Y
+xcopy "%ProjectPath%\web.config.transform" "%PackagePath%\content"  /I /F /R /Y
 
 xcopy "..\src\Database"\Testing\*.sql "%PackagePath%\tools\epiupdates\sql"  /I /F /R 
 
