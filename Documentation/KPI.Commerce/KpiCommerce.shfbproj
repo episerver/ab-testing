@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>aa5e43c8-077b-4785-89f5-7b359dad70ab</ProjectGuid>
-    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2015.6.5.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
     <AssemblyName>KpiCommerce</AssemblyName>
     <RootNamespace>KpiCommerce</RootNamespace>
@@ -45,7 +45,7 @@
     <SyntaxFilters>C#</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>True</RootNamespaceContainer>
-    <PresentationStyle>VS2005</PresentationStyle>
+    <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>HashedMemberName</NamingMethod>
     <HelpTitle>EPiServer Marketing … SDK Documentation</HelpTitle>
