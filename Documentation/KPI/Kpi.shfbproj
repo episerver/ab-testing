@@ -28,7 +28,8 @@
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
       <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.dll" />
-<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.xml" />
+    </DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
@@ -55,7 +56,7 @@
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common" isExposed="True">
   <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI" filterName="ContentComparatorKPI" isExposed="True">
     <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._content" filterName="_content" isExposed="False" />
-    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepath" filterName="_startpagepath" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepaths" filterName="_startpagepaths" isExposed="False" />
     <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI.ContentGuid" filterName="ContentGuid" isExposed="False" />
   </Filter>
   <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi" filterName="StickySiteKpi" isExposed="True">
@@ -104,7 +105,8 @@
     </PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Manager" isDocumented="True" />
-<NamespaceSummaryItem name="EPiServer.Marketing.KPI.Common.Attributes" isDocumented="True" /></NamespaceSummaries>
+      <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Common.Attributes" isDocumented="True" />
+    </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <RootNamespaceTitle>Framework Reference</RootNamespaceTitle>
     <CppCommentsFixup>False</CppCommentsFixup>
