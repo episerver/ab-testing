@@ -27,11 +27,10 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI.Commerce\bin\Debug\net461\EPiServer.Marketing.KPI.Commerce.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI.Commerce\bin\Debug\net461\EPiServer.Marketing.KPI.Commerce.xml" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.xml" /></DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.xml" />
@@ -59,7 +58,27 @@
           </references>
         </configuration>
       </PlugInConfig>
-<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding><dependentAssembly><assemblyIdentity name="EPiServer.UI" /><bindingRedirect oldVersion="0.0.0.0-11.2.0.0" newVersion="11.2.0.0" /></dependentAssembly></assemblyBinding><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer" /><assemblyIdentity name="EPiServer.Cms.AspNet" /><assemblyIdentity name="EPiServer.Data" /><assemblyIdentity name="EPiServer.Framework" /><assemblyIdentity name="EPiServer.UI" /><assemblyIdentity name="Mediachase.Commerce" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
+        <configuration useGAC="false">
+          <assemblyBinding>
+            <dependentAssembly>
+              <assemblyIdentity name="EPiServer.UI" />
+              <bindingRedirect oldVersion="0.0.0.0-11.2.0.0" newVersion="11.2.0.0" />
+            </dependentAssembly>
+          </assemblyBinding>
+          <ignoreIfUnresolved>
+            <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+            <assemblyIdentity name="EPiServer" />
+            <assemblyIdentity name="EPiServer.Cms.AspNet" />
+            <assemblyIdentity name="EPiServer.Data" />
+            <assemblyIdentity name="EPiServer.Framework" />
+            <assemblyIdentity name="EPiServer.UI" />
+            <assemblyIdentity name="Mediachase.Commerce" />
+            <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+          </ignoreIfUnresolved>
+        </configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Config" isExposed="False" />
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Commerce.Initializers" isExposed="False" />

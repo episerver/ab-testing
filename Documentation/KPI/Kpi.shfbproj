@@ -27,9 +27,8 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.xml" /></DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
@@ -54,33 +53,32 @@
     <CleanIntermediates>False</CleanIntermediates>
     <ApiFilter>
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI" filterName="ContentComparatorKPI" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._content" filterName="_content" isExposed="False" />
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepath" filterName="_startpagepath" isExposed="False" />
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI.ContentGuid" filterName="ContentGuid" isExposed="False" />
-        </Filter>
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi" filterName="StickySiteKpi" isExposed="True">
-          <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.AddSessionOnLoadedContent" filterName="AddSessionOnLoadedContent" isExposed="False" />
-          <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.Initialize" filterName="Initialize" isExposed="False" />
-          <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.Uninitialize" filterName="Uninitialize" isExposed="False" />
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.TestContentGuid" filterName="TestContentGuid" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common.Helpers" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Exceptions" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager" isExposed="True">
-        <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Manager.KpiManager" filterName="KpiManager" isExposed="True">
-          <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Manager.KpiManager.DatabaseNeedsConfiguring" filterName="DatabaseNeedsConfiguring" isExposed="False" />
-        </Filter>
-      </Filter>
-      <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
-      <Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" />
-    </ApiFilter>
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI" filterName="ContentComparatorKPI" isExposed="True">
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._content" filterName="_content" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepath" filterName="_startpagepath" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI.ContentGuid" filterName="ContentGuid" isExposed="False" />
+  </Filter>
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi" filterName="StickySiteKpi" isExposed="True">
+    <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.AddSessionOnLoadedContent" filterName="AddSessionOnLoadedContent" isExposed="False" />
+    <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.Initialize" filterName="Initialize" isExposed="False" />
+    <Filter entryType="Method" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.Uninitialize" filterName="Uninitialize" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi.TestContentGuid" filterName="TestContentGuid" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common.Helpers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Dal.Model.Enums" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.DataAccess" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Exceptions" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Initializers" isExposed="False" />
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Manager" isExposed="True">
+  <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Manager.KpiManager" filterName="KpiManager" isExposed="True">
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Manager.KpiManager.DatabaseNeedsConfiguring" filterName="DatabaseNeedsConfiguring" isExposed="False" />
+  </Filter>
+</Filter>
+<Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.SchemaUpdater" isExposed="False" />
+<Filter entryType="Namespace" fullName="KPI.Migrations" isExposed="False" /></ApiFilter>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, ProtectedInternalAsProtected</VisibleItems>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
     <PlugInConfigurations>
@@ -106,7 +104,7 @@
     </PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Manager" isDocumented="True" />
-    </NamespaceSummaries>
+<NamespaceSummaryItem name="EPiServer.Marketing.KPI.Common.Attributes" isDocumented="True" /></NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <RootNamespaceTitle>Framework Reference</RootNamespaceTitle>
     <CppCommentsFixup>False</CppCommentsFixup>

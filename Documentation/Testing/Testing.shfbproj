@@ -27,11 +27,10 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.Testing.Web.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.Testing.Web.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.Testing.Core.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.Testing.Core.xml" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.Testing.Core\bin\Debug\net461\EPiServer.Marketing.Testing.Core.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.Testing.Core\bin\Debug\net461\EPiServer.Marketing.Testing.Core.xml" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.Testing.Web\bin\Debug\net461\EPiServer.Marketing.Testing.Web.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.Testing.Web\bin\Debug\net461\EPiServer.Marketing.Testing.Web.xml" /></DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.Testing.Web.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.Testing.Web.xml" />
@@ -97,7 +96,32 @@
           </references>
         </configuration>
       </PlugInConfig>
-<PlugInConfig id="Assembly Binding Redirection" enabled="True"><configuration useGAC="false"><assemblyBinding><dependentAssembly><assemblyIdentity name="EPiServer.Data" /><bindingRedirect oldVersion="9.0.0.0-11.3.0.0" newVersion="11.3.0.0" /></dependentAssembly><dependentAssembly><assemblyIdentity name="EPiServer.UI" /><bindingRedirect oldVersion="9.0.0.0-11.3.0.0" newVersion="11.3.0.0" /></dependentAssembly></assemblyBinding><ignoreIfUnresolved><assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" /><assemblyIdentity name="EPiServer" /><assemblyIdentity name="EPiServer.Cms.AspNet" /><assemblyIdentity name="EPiServer.Data" /><assemblyIdentity name="EPiServer.Framework" /><assemblyIdentity name="EPiServer.Shell" /><assemblyIdentity name="EPiServer.UI" /><assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" /><assemblyIdentity name="System.Web.Mvc" /></ignoreIfUnresolved></configuration></PlugInConfig></PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
+        <configuration useGAC="false">
+          <assemblyBinding>
+            <dependentAssembly>
+              <assemblyIdentity name="EPiServer.Data" />
+              <bindingRedirect oldVersion="9.0.0.0-11.3.0.0" newVersion="11.3.0.0" />
+            </dependentAssembly>
+            <dependentAssembly>
+              <assemblyIdentity name="EPiServer.UI" />
+              <bindingRedirect oldVersion="9.0.0.0-11.3.0.0" newVersion="11.3.0.0" />
+            </dependentAssembly>
+          </assemblyBinding>
+          <ignoreIfUnresolved>
+            <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+            <assemblyIdentity name="EPiServer" />
+            <assemblyIdentity name="EPiServer.Cms.AspNet" />
+            <assemblyIdentity name="EPiServer.Data" />
+            <assemblyIdentity name="EPiServer.Framework" />
+            <assemblyIdentity name="EPiServer.Shell" />
+            <assemblyIdentity name="EPiServer.UI" />
+            <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+            <assemblyIdentity name="System.Web.Mvc" />
+          </ignoreIfUnresolved>
+        </configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
     <RootNamespaceTitle>Framework Reference</RootNamespaceTitle>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
