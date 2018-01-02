@@ -130,6 +130,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <returns>A content item.</returns>
         IContent GetVariantContent(Guid contentGuid);
 
+        /// <summary>
+        /// Gets the variant content from the variant cache for the specified language.
+        /// </summary>
+        /// <param name="contentGuid">ID of the content to retrieve.</param>
+        /// <param name="cultureInfo">Content Culture of the current loaded content.</param>
+        /// <returns>A content item.</returns>
         IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo);
 
         /// <summary>

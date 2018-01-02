@@ -27,11 +27,10 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.xml" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI.Commerce\bin\Debug\net461\EPiServer.Marketing.KPI.Commerce.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI.Commerce\bin\Debug\net461\EPiServer.Marketing.KPI.Commerce.xml" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.dll" />
+<DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.xml" /></DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.dll" />
       <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.Commerce.xml" />
