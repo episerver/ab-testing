@@ -1,6 +1,6 @@
 ﻿<configuration>
   <episerver.shell>
-    <protectedModules rootPath="~/EPiServer/">
+    <protectedModules>
       <add name="EPiServer.Marketing.Testing" />
     </protectedModules>
   </episerver.shell>
