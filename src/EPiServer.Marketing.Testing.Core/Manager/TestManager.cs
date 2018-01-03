@@ -141,6 +141,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
         }
 
+        /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId,CultureInfo contentCulture)
         {
             var cachedTests = ActiveCachedTests;
@@ -339,6 +340,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return retData ?? UpdateVariantContentCache(contentGuid, new CultureInfo("en-GB"));
         }
 
+        /// <inheritdoc />
         public IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo)
         {
             var retData = (IContent)_variantCache.Get("epi" + contentGuid + ":" + cultureInfo.Name);

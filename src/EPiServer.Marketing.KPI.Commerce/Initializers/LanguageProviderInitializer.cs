@@ -27,7 +27,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Initializers
                     kpiAssembly.GetType().Namespace, kpiAssembly );
                 
                 //Inserts the provider first in the provider list so that it is prioritized over default providers.
-                ls.Providers.Insert(0, xmlProvider);
+                ls.InsertProvider(xmlProvider);
             }
         }
 
@@ -37,12 +37,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Initializers
             Assembly kpiAssembly = this.GetType().Assembly;
 
             //Gets any provider that has the same name as the one initialized.
-            LocalizationProvider lp = localizationService?.Providers.FirstOrDefault(
+            LocalizationProvider lp = localizationService?.ProviderList.FirstOrDefault(
                 p => p.Name.Equals(kpiAssembly.GetType().Namespace, StringComparison.Ordinal));
             if (lp != null)
             {
+
                 //If found, remove it.
-                localizationService.Providers.Remove(lp);
+                localizationService.ProviderList.ToList().Remove(lp);
             }
         }
     }

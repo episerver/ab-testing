@@ -1,0 +1,7 @@
+﻿<configuration>
+  <episerver.shell>
+    <protectedModules>
+      <add name="EPiServer.Marketing.Testing" />
+    </protectedModules>
+  </episerver.shell>
+</configuration>

@@ -20,12 +20,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         private LocalizationService _localizationService;
         private IKpiWebRepository _kpiRepo;
         private IServiceLocator _serviceLocator;
-        private ILogger _logger;
+        private static ILogger _logger;
 
         public KpiStore()
         {
             _serviceLocator = ServiceLocator.Current;
-            _logger = _serviceLocator.GetInstance<ILogger>();
+            _logger = LogManager.GetLogger();
             _localizationService = _serviceLocator.GetInstance<LocalizationService>();
             _kpiRepo = _serviceLocator.GetInstance<IKpiWebRepository>();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
@@ -10,8 +11,8 @@ using EPiServer.ServiceLocation;
 namespace EPiServer.Marketing.KPI.SchemaUpdater
 {
     [ExcludeFromCodeCoverage]
-    [ServiceConfiguration(typeof(IDatabaseSchemaUpdater))]
-    public class DatabaseVersionValidator : IDatabaseSchemaUpdater
+    [ServiceConfiguration(typeof(ISchemaUpdater))]
+    public class DatabaseVersionValidator : ISchemaUpdater
     {
         private const long RequiredDatabaseVersion = 201604051658334;
         private const string Schema = "dbo";
@@ -31,7 +32,7 @@ namespace EPiServer.Marketing.KPI.SchemaUpdater
         }
 
         /// <inheritdoc/>
-        public DatabaseSchemaStatus GetStatus(ConnectionStringsSection connectionStrings)
+        public SchemaStatus GetStatus(IEnumerable<ConnectionStringOptions> connectionStringOptions)
         {
             var dbConnection = new SqlConnection(_databaseHandler.ConnectionSettings.ConnectionString);
             long version = 0;
@@ -43,28 +44,28 @@ namespace EPiServer.Marketing.KPI.SchemaUpdater
             if (version < RequiredDatabaseVersion)
             {
                 // need to upgrade, versions can only be int, so we force it with fake versions based off our real veresions which are longs from EF
-                return new DatabaseSchemaStatus
+                return new SchemaStatus
                 {
-                    ConnectionStringSettings = _databaseHandler.ConnectionSettings,
+                    ConnectionStringOption = _databaseHandler.ConnectionSettings.ConnectionString,
                     ApplicationRequiredVersion = new Version(2, 0),
                     DatabaseVersion = new Version(1, 0)
                 };
             }
 
             // don't need to upgrade
-            return new DatabaseSchemaStatus
+            return new SchemaStatus
             {
-                ConnectionStringSettings = _databaseHandler.ConnectionSettings,
+                ConnectionStringOption = _databaseHandler.ConnectionSettings.ConnectionString,
                 ApplicationRequiredVersion = new Version(1, 0),
                 DatabaseVersion = new Version(1, 0)
             };
         }
+        
 
-        /// <inheritdoc/>
-        public void Update(ConnectionStringSettings connectionStringSettings)
+        public void Update(ConnectionStringOptions connectionStringOptions)
         {
             _scriptExecutor.OrderScriptsByVersion = true;
-            _scriptExecutor.ExecuteEmbeddedZippedScripts(connectionStringSettings.ConnectionString, typeof(DatabaseVersionValidator).Assembly, UpdateDatabaseResource);
+            _scriptExecutor.ExecuteEmbeddedZippedScripts(connectionStringOptions.ConnectionString, typeof(DatabaseVersionValidator).Assembly, UpdateDatabaseResource);
 
             IKpiManager kpiManager;
             ServiceLocator.Current.TryGetExistingInstance<IKpiManager>(out kpiManager);

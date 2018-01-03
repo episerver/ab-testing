@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.KPI.Initializers
                 XmlLocalizationProvider xmlProvider  = localizationProviderInitializer.GetInitializedProvider(PROVIDER_NAME,kpiAssembly);
                 
                 //Inserts the provider first in the provider list so that it is prioritized over default providers.
-                localizationService.Providers.Insert(0, xmlProvider);
+                localizationService.InsertProvider(xmlProvider);
             }
         }
 
@@ -37,11 +37,11 @@ namespace EPiServer.Marketing.KPI.Initializers
         {
             ProviderBasedLocalizationService localizationService = context.Locate.Advanced.GetInstance<LocalizationService>() as ProviderBasedLocalizationService;
             //Gets any provider that has the same name as the one initialized.
-            LocalizationProvider localizationProvider = localizationService?.Providers.FirstOrDefault(p => p.Name.Equals(PROVIDER_NAME, StringComparison.Ordinal));
+            LocalizationProvider localizationProvider = localizationService?.ProviderList.FirstOrDefault(p => p.Name.Equals(PROVIDER_NAME, StringComparison.Ordinal));
             if (localizationProvider != null)
             {
                 //If found, remove it.
-                localizationService.Providers.Remove(localizationProvider);
+                localizationService.ProviderList.ToList().Remove(localizationProvider);
             }
         }
     }
