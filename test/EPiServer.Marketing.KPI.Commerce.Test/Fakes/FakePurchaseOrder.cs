@@ -9,11 +9,11 @@ namespace EPiServer.Marketing.KPI.Commerce.Test.Fakes
     {
         public FakePurchaseOrder()
         {
-            ReturnForms = new List<IOrderForm>();
+            ReturnForms = new List<IReturnOrderForm>();
         }
 
         public string OrderNumber { get; set; }
         public DateTime? ExpirationDate { get; set; }
-        public ICollection<IOrderForm> ReturnForms { get; private set; }
+        public ICollection<IReturnOrderForm> ReturnForms { get; private set; }
     }
 }

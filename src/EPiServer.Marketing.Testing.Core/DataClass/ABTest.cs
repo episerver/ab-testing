@@ -46,6 +46,7 @@ namespace EPiServer.Marketing.Testing.Core.DataClass
         /// <inheritdoc />
         public string LastModifiedBy { get; set; }
 
+        /// <inheritdoc />
         public string ContentLanguage { get; set; }
 
         /// <inheritdoc />

@@ -10,7 +10,6 @@ using EPiServer.Marketing.KPI.Exceptions;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using Newtonsoft.Json;
-using StructureMap.TypeRules;
 using EPiServer.Data.Dynamic;
 using EPiServer.Logging;
 using System.Globalization;
@@ -99,12 +98,12 @@ namespace EPiServer.Marketing.KPI.Manager
                 IEnumerable<Type> kpiTypes;
                 try
                 {
-                    kpiTypes = assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && !p.IsInterfaceOrAbstract() && p != typeof(Kpi));
+                    kpiTypes = assembly.GetTypes().Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract && p != typeof(Kpi));
                 }
                 catch (ReflectionTypeLoadException e)  // This exception gets thrown if any dependencies for an assembly can't be found.
                 {
                     // In this case, we just get whatever kpis that we can and ignore any that have missing dependencies
-                    kpiTypes = e.Types.Where(t => t != null && type.IsAssignableFrom(t) && !t.IsInterfaceOrAbstract() && t != typeof(Kpi)).ToArray();
+                    kpiTypes = e.Types.Where(t => t != null && type.IsAssignableFrom(t) && t != typeof(Kpi)).ToArray();
 
                     foreach (var loaderException in e.LoaderExceptions)
                     {

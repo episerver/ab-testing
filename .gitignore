@@ -202,3 +202,4 @@ ModelManifest.xml
 /build/EPiServer.Marketing.Testing.1.0.0.nupkg
 /.vs/restore.dg
 /buildprocess.cmd
+/.vs

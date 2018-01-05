@@ -95,7 +95,7 @@ namespace EPiServer.Templates.Alloy.Business.ContentProviders
             }
             
             // This is integral to map the cloned page to this content provider
-            clone.LinkURL = ConstructContentUri(originalPage.PageTypeID, clone.ContentLink, clone.ContentGuid).ToString();
+            clone.LinkURL = ConstructContentUri(originalPage.ContentTypeID, clone.ContentLink, clone.ContentGuid).ToString();
 
             return clone;
         }

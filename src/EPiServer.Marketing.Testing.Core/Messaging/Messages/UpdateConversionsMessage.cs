@@ -17,6 +17,9 @@ namespace EPiServer.Marketing.Testing.Core.Messaging.Messages
         /// </summary>
         public int ItemVersion { get; set; }
 
+        /// <summary>
+        /// ID of a KPI.
+        /// </summary>
         public Guid KpiId { get; set; }
 
         /// <summary>

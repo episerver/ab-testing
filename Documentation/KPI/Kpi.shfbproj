@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which assemblies to include from solution and
 				 project documentation sources -->
@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>33088987-87dc-4f89-a94f-37218839a757</ProjectGuid>
-    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2015.6.5.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
     <AssemblyName>Kpi</AssemblyName>
     <RootNamespace>Kpi</RootNamespace>
@@ -27,12 +27,12 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\bin\EPiServer.Marketing.KPI\Debug\net45\EPiServer.Marketing.KPI.xml" />
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.dll" />
+      <DocumentationSource sourceFile="..\..\src\EPiServer.Marketing.KPI\bin\Debug\net461\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
     <DocumentationSources Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.dll" />
-      <DocumentationSource sourceFile="..\..\artifacts\Release\net45\EPiServer.Marketing.KPI.xml" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.dll" />
+      <DocumentationSource sourceFile="..\..\artifacts\EPiServer.Marketing.KPI.xml" />
     </DocumentationSources>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <MaximumGroupParts>2</MaximumGroupParts>
@@ -40,7 +40,7 @@
     <SyntaxFilters>C#</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <RootNamespaceContainer>True</RootNamespaceContainer>
-    <PresentationStyle>VS2005</PresentationStyle>
+    <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>HashedMemberName</NamingMethod>
     <HelpTitle>EPiServer Marketing … SDK Documentation</HelpTitle>
@@ -56,7 +56,7 @@
       <Filter entryType="Namespace" fullName="EPiServer.Marketing.KPI.Common" isExposed="True">
   <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI" filterName="ContentComparatorKPI" isExposed="True">
     <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._content" filterName="_content" isExposed="False" />
-    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepath" filterName="_startpagepath" isExposed="False" />
+    <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI._startpagepaths" filterName="_startpagepaths" isExposed="False" />
     <Filter entryType="Field" fullName="EPiServer.Marketing.KPI.Common.ContentComparatorKPI.ContentGuid" filterName="ContentGuid" isExposed="False" />
   </Filter>
   <Filter entryType="Class" fullName="EPiServer.Marketing.KPI.Common.StickySiteKpi" filterName="StickySiteKpi" isExposed="True">
@@ -105,6 +105,7 @@
     </PlugInConfigurations>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Manager" isDocumented="True" />
+      <NamespaceSummaryItem name="EPiServer.Marketing.KPI.Common.Attributes" isDocumented="True" />
     </NamespaceSummaries>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, TypeParameter, AutoDocumentDispose</MissingTags>
     <RootNamespaceTitle>Framework Reference</RootNamespaceTitle>
