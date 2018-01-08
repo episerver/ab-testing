@@ -48,7 +48,7 @@ if(Test-Path -Path $projectDir\*.csproj){
     {
         $minVersion = "1.0.0"
         if($dep.id.StartsWith("EPiServer.Marketing")){
-            $projectversionfile = Get-Content -Raw -Path ("$projectDir\..\{0}\AssemblyVersionAuto.cs" -f $dep.id)
+            $projectversionfile = Get-Content -Raw -Path ("$projectDir\..\{0}\AssemblyInformationalVersion.cs" -f $dep.id)
             $partialfile = $projectversionfile.Substring($projectversionfile.IndexOf("AssemblyVersion(""") + "AssemblyVersion(""".Length)
             $minVersion = $partialfile.Substring(0, $partialfile.IndexOf(""""))
             $maxVersion = [int]$minVersion.Split('.')[0] + 1
