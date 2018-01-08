@@ -13,7 +13,7 @@
     <tags>EPiServerModulePackage EPiServerAddon EPiServer Marketing Testing</tags>
     <dependencies>
       <dependency id="EPiServer.Marketing.Messaging" version="[1.3, 2)" />
-      <dependency id="EPiServer.Marketing.KPI" version="[2.4.9, 5)" />
+      <dependency id="EPiServer.Marketing.KPI" version="[2.4.9, 3)" />
     </dependencies>
   </metadata>
 </package>
