@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.3.0" />
     <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.3" />
   </ItemGroup>
