@@ -39,7 +39,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EPiServer.Marketing.KPI\EPiServer.Marketing.KPI.csproj" />
-    <ProjectReference Include="..\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj" />
     <ProjectReference Include="..\EPiServer.Marketing.Testing.Core\EPiServer.Marketing.Testing.Core.csproj" />
     <ProjectReference Include="..\EPiServer.Marketing.Testing.Dal\EPiServer.Marketing.Testing.Dal.csproj" />
   </ItemGroup>
