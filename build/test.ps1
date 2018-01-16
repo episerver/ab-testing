@@ -11,23 +11,15 @@ Write-Host $teamcity
 $ENV:Path = "$cwd\;" + $ENV:Path
 
 # Install runtime dependencies
-dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
-dnvm use default
+#dnvm install "1.0.0-rc1-update2" -runtime CLR -arch x86 -alias default
+#dnvm use default
 
-# Install node dependencies
-pushd ..
-&"$cwd\npm.cmd" install --silent
-if ($lastexitcode -eq 1) {
-    Write-Host "Node dependencies install failed" -foreground "red"
-    exit $lastexitcode
-}
-pushd $cwd
 
 # Run xUnit tests for all test projects
 $failBuild = $false
 Get-ChildItem "$cwd\..\test" -Filter "*Test" -Exclude "*ClientTest" | ForEach-Object {
 	pushd "$_"
-    dnx --configuration $configuration test
+    dotnet test
     if ($lastexitcode -eq 1) {
 		$failBuild = $true
         popd
@@ -43,6 +35,15 @@ if ($failBuild -eq $true){
 }
 
 # Run JS tests
+# Install node dependencies
+pushd ..
+&"$cwd\npm.cmd" install --silent
+if ($lastexitcode -eq 1) {
+    Write-Host "Node dependencies install failed" -foreground "red"
+    exit $lastexitcode
+}
+pushd $cwd
+
 &"$cwd\npm.cmd" run test  -- --reporter=$jsreporter
 if ($lastexitcode -eq 1) {
     Write-Host "Running JS tests failed" -foreground "red"

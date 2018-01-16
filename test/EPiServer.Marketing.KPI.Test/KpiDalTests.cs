@@ -4,7 +4,7 @@ using Xunit;
 
 namespace EPiServer.Marketing.KPI.Test
 {
-    internal class KpiDalTests : KpiTestBase
+    public class KpiDalTests : KpiTestBase
     {
         private KpiTestContext _context;
         private DbConnection _dbConnection;

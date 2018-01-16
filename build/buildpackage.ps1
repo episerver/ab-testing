@@ -1,37 +1,62 @@
 $deployDir = $args[0] 
 $projectDir = $args[1]
-$dependency = $args[2]
 
 $artifactsDir = "..\artifacts"
 $srcDir = "..\src\"
 $jsonPath = $projectDir + "\project.json"
 $assemblyInfoPath = $projectDir + "\AssemblyVersionAuto.cs"
 
-# loop over dependencies to get the versions for each one
-if ($dependency)
-{
-	$depends = $dependency.Split("*")
+if(Test-Path -Path $projectDir\*.csproj){
+    [xml]$csProj = Get-Content -Path $projectDir\*.csproj | Out-String
+    $nugetVersions = ""
 
-	$myJson = Get-Content -Raw -Path $jsonPath | ConvertFrom-Json
-	$nugetVersions = ""
+    $nuspecPath = (get-childitem $deployDir\*.nuspec).FullName
+    [xml]$nuspec = Get-Content -Path $projectDir\*.nuspec | Out-String
+    
+    $projectreferencenames = $csProj.Project.ItemGroup.ProjectReference.Include | ForEach-Object { if($_ -ne $null) { (split-path $_).Replace("..\", "") }}
+    $defaultpackageincludes = $nuspec.package.metadata.dependencies.dependency.id
+    $projectreferencenames = $projectreferencenames | Where-Object { if($_ -ne $null) { -not $defaultpackageincludes.contains($_) }}
 
-	ForEach($dep in $depends) 
-	{
-		$minVersion = $myJson.dependencies.$dep
-		$maxVersionLimit = [int]$minVersion.Split('.')[0] + 1
+    $allprojectcs = $csProj.Project.ItemGroup.ProjectReference.Include | where-object { ($_ -ne $null) -and (-not ((split-path $_).Replace("..\", "")) -in $projectreferencenames) } | ForEach-Object {[xml](Get-Content -Raw -Path "$projectDir\$_")}
+    $allprojectcs += $csProj
+    $packagereferences = $allprojectcs.Project.ItemGroup | select PackageReference 
+    $packagereferences = $packagereferences.PackageReference | Sort-Object -Property Include -Unique
 
-		# bit of a hack, since 9.24.1 is the last version before 10, this needs an extra bump
-		if ($dep.equals("EPiServer.Commerce"))
-		{
-			$maxVersionLimit += 1
-		}
-		
-		$dependencyName = $dep.Replace(".", "")
-		$nugetVersions = $nugetVersions + $dependencyName + "MinVersion=" + $minVersion + ";" + $dependencyName + "MaxLimit=" + $maxVersionLimit + ";"
-	}
+    $nuspec.package.metadata.dependencies.dependency | Where-Object { ($_ -ne $null) -and (-not($_.id.StartsWith("EPiServer.Marketing"))) } | ForEach-Object { $_.ParentNode.RemoveChild($_) }
 
-	# need to wrap entire string in quotes for nuget to be happy
-	$nugetVersions = '"' + $nugetVersions + '"'
+    foreach($packagedependency in $packagereferences){
+        $newdependency = $nuspec.CreateElement("dependency")
+        $idattr = $nuspec.CreateAttribute("id")
+        $newdependency.Attributes.Append($idattr)
+        $newdependency.SetAttribute("id", $packagedependency.Include)
+
+        $versionattr = $nuspec.CreateAttribute("version")
+        $newdependency.Attributes.Append($versionattr)
+
+        $minversion = $packagedependency.Version
+        $maxVersion = [int]$minVersion.Split('.')[0] + 1
+        $newdependency.SetAttribute("version", "[$minVersion,$maxVersion)")
+
+        "Adding dependency "
+        $newdependency
+        " to $nuspecPath"
+    
+        $nuspec.SelectSingleNode('/package/metadata/dependencies').AppendChild($newdependency)
+    }
+
+    ForEach($dep in $nuspec.package.metadata.dependencies.dependency) 
+    {
+        $minVersion = "1.0.0"
+        if($dep.id.StartsWith("EPiServer.Marketing")){
+            $projectversionfile = Get-Content -Raw -Path ("$projectDir\..\{0}\AssemblyVersionAuto.cs" -f $dep.id)
+            $partialfile = $projectversionfile.Substring($projectversionfile.IndexOf("AssemblyInformationalVersion(""") + "AssemblyInformationalVersion(""".Length)
+            $minVersion = $partialfile.Substring(0, $partialfile.IndexOf(""""))
+            $maxVersion = [int]$minVersion.Split('.')[0] + 1
+            $dep.version = "[$minVersion,$maxVersion)"
+        }
+    }
+
+    $nuspec.Save($nuspecPath)
 }
 
 $match = (Select-String -Path $assemblyInfoPath -Pattern 'AssemblyInformationalVersion\("(.+)"\)').Matches[0]
@@ -40,12 +65,6 @@ $assemblyVersion = $match.Groups[1].Value
 # go into dir where everything is to run nuget command from there so that a proj or spec file doesn't need to be specified.  Apparently, this is the only way 
 # to pass in multiple versions
 cd $deployDir
-if ($nugetVersions)
-{
-	..\..\..\build\resources\nuget\nuget.exe pack -Build -Properties $nugetVersions -Version $assemblyVersion -Exclude *.xproj
-}
-else # if there are no dependency versions to set, then dont pass in null as it blows nuget up
-{
-	..\..\..\build\resources\nuget\nuget.exe pack -Build -Version $assemblyVersion -Exclude *.xproj
-}
+..\..\..\build\resources\nuget\nuget.exe pack -Build -Version $assemblyVersion
+
 cd "..\..\..\build"
