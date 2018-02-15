@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPiServer.CMS.UI" Version="11.2.0" />
-    <PackageReference Include="EPiServer.Commerce" Version="11.5.1" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="11.2.5" />
+    <PackageReference Include="EPiServer.Commerce" Version="11.8.1" />
   </ItemGroup>
 
   <ItemGroup>
