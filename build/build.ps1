@@ -34,7 +34,7 @@ $ENV:Path = "$cwd;" + $ENV:Path
 
 &"dotnet" restore ..\EPiServer.Marketing.Testing.sln --packages ..\packages
 
-&"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
+#&"$cwd\resources\nuget\NuGet.exe" restore ..\EPiServer.Marketing.Testing.Net45.sln -PackagesDirectory ..\packages
 
 
 "Building $configuration"
@@ -51,7 +51,7 @@ if ($lastexitcode -eq 1) {
     exit $lastexitcode
 }
 
-&"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
+#&"$msbuild" ..\EPiServer.Marketing.Testing.Net45.sln /p:Configuration=$configuration /p:Platform="Any CPU"
 
 if ($lastexitcode -eq 1) {
     Write-Host "BUILD failed" -foreground "red"
