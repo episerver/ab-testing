@@ -32,7 +32,9 @@
 
   <ItemGroup>
     <PackageReference Include="EPiServer.CMS.UI" Version="11.2.5" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.5" />
     <PackageReference Include="EPiServer.Commerce" Version="11.8.1" />
+    <PackageReference Include="EPiServer.Framework" Version="11.3.1" />
   </ItemGroup>
 
   <ItemGroup>
