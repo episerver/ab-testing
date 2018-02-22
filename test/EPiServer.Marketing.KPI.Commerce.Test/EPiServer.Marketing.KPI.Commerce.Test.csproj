@@ -20,11 +20,11 @@
     <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="Castle.Windsor" Version="4.1.0" />
     <PackageReference Include="DotNetZip" Version="1.10.1" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.3.0" />
-    <PackageReference Include="EPiServer.CMS.UI" Version="11.2.0" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.0" />
-    <PackageReference Include="EPiServer.Framework" Version="11.3.0" />
-    <PackageReference Include="EPiServer.Logging.Log4Net" Version="2.2.0" />
+    <PackageReference Include="EPiServer.CMS.Core" Version="11.3.3" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="11.2.5" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.5" />
+    <PackageReference Include="EPiServer.Framework" Version="11.3.3" />
+    <PackageReference Include="EPiServer.Logging.Log4Net" Version="2.2.1" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
