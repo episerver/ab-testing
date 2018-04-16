@@ -49,10 +49,7 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="EPiServer.CMS.AspNet" Version="11.3.0" />
-    <PackageReference Include="EPiServer.CMS.Core" Version="11.3.0" />
-    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.0" />
-    <PackageReference Include="EPiServer.Framework" Version="11.3.0" />
+    <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.5" />
   </ItemGroup>
 
  
