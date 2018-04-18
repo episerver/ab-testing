@@ -436,7 +436,7 @@
                 }
 
                 this._setViewConfidenceLevelAttr();
-                this._clearConversionErrors();
+                this._clearErrors();
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
                 this._resetView();
@@ -453,9 +453,9 @@
             },
 
             //Clears the KPI Error text and icon
-            _clearConversionErrors: function () {
-                var errorTextElements = query("span[id*='kpiErrorText']");
-                var errorIconElements = query("span[id*='kpiErrorIcon']");
+            _clearErrors: function () {
+                var errorTextElements = query("span[id*='ErrorText']");
+                var errorIconElements = query("span[id*='ErrorIcon']");
 
                 if (errorTextElements) {
                     errorTextElements.forEach(function (element) {
@@ -532,7 +532,7 @@
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
-                this._clearConversionErrors();
+                this._clearErrors();
                 if (this.startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 this.startButtonClickCounter++; // Increment click count
                 var me = this;
@@ -556,12 +556,12 @@
             },
 
             createTest: function (kpiIds) {
-                this._clearConversionErrors();
+                this._clearErrors();
                 var jsonKpis = dojo.toJson(kpiIds.obj, true);
                 this.model.kpiId = jsonKpis.replace(/(\r\n|\n|\r|\t)/gm, "");
                 if (this._isValidFormData()) {
                     this.model.createTest();
-                    this._clearConversionErrors();
+                    this._clearErrors();
                     this._setKpiSelectList(this.kpiModel.availableKpis);
                 } else {
                     this.startButtonClickCounter = 0;
@@ -603,6 +603,7 @@
                 this._clearCustomKpiMarkup();
                 this._clearKpiWeightWidgets();
                 this._adjustKpiSelectorCombo();
+                this._clearErrors();
                 var advancedOptionsElement = dom.byId("advancedOptions");
                 if (advancedOptionsElement) {
                     dojo.style(advancedOptionsElement, "display", "none");
