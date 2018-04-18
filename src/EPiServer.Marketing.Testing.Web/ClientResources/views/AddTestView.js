@@ -532,13 +532,9 @@
             //EVENT HANDLERS
             //Start and Cancel Events
             _onStartButtonClick: function () {
-                this._clearErrors();
                 if (this.startButtonClickCounter > 0) { return false; } // Use click counter to prevent double-click
                 this.startButtonClickCounter++; // Increment click count
-                var me = this;
-
-                this.kpiErrorTextNode = dom.byId("kpiErrorText");
-                this.kpiErrorIconNode = dom.byId("kpiErrorIcon");
+                var me = this;               
 
                 this.model.testDescription = dom.byId("testDescription").value;
                 var startDateSelector = dom.byId("StartDateTimeSelector");

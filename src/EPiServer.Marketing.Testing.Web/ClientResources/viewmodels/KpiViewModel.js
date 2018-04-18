@@ -47,6 +47,7 @@
                 })
                     .then(function (ret) {
                         if (ret.status) {
+                            caller._clearErrors();
                             caller.createTest(ret);
                         } else {
                             if (ret.errors) {
