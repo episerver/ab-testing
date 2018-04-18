@@ -17,6 +17,8 @@ xcopy "%ProjectPath%\Config\CommerceKpiConfig.aspx" "%PackagePath%\content\modul
 
 xcopy "%ProjectPath%\module.config" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.KPI.Commerce"  /I /F /R /Y
 
+xcopy "%ProjectPath%\web.config.transform" "%PackagePath%\content"  /I /F /R /Y
+
 md "%PackagePath%\temp"
 
 "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" powershell -ExecutionPolicy ByPass -File "buildzip.ps1" "%PackagePath%\content\modules\_protected\EPiServer.Marketing.KPI.Commerce" "%PackagePath%\temp\EPiServer.Marketing.KPI.Commerce.zip"
