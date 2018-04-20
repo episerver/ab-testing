@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -111,6 +112,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public HttpContext GetCurrentContext()
         {
             return HttpContext.Current;
+        }
+
+        public string GetSessionCookieName()
+        {
+            // returns the default cookie name if its not specified and/or if the key is completely missing from the web.config.
+            return ((SessionStateSection)WebConfigurationManager.GetSection("system.web/sessionState")).CookieName;
         }
     }
 }

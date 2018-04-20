@@ -86,7 +86,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 pagePrefix = contextHelper.GetCurrentContext().Request.Url.GetLeftPart(System.UriPartial.Authority),
                 host = contextHelper.GetCurrentContext().Request.Url.Host,
-                sessionCookie = contextHelper.GetCurrentContext().Request.Cookies["ASP.NET_SessionId"].Value,
+                sessionCookie = contextHelper.GetCurrentContext().Request.Cookies[contextHelper.GetSessionCookieName()].Value,
                 authCookie = authCookieValue.Key + "|" + authCookieValue.Value
             };
 
