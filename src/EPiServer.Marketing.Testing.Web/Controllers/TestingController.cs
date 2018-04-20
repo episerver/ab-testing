@@ -155,7 +155,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             if (!string.IsNullOrWhiteSpace(testId))
             {
                 var mm = _serviceLocator.GetInstance<IMessagingManager>();
-                var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
+                var sessionid = _httpContextHelper.GetRequestParam(_httpContextHelper.GetSessionCookieName());
 
                 mm.EmitUpdateConversion(Guid.Parse(testId), int.Parse(itemVersion), Guid.Parse(kpiId), sessionid);
 

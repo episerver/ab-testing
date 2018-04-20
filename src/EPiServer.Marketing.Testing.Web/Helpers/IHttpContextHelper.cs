@@ -129,5 +129,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <returns>The current context</returns>
         HttpContext GetCurrentContext();
+
+        /// <summary>
+        /// Returns the session cookie name. By default its "ASP.NET_SessionId" however, the value is configurable in the web.xml file.
+        /// </summary>
+        /// <returns></returns>
+        string GetSessionCookieName();
     }
 }
