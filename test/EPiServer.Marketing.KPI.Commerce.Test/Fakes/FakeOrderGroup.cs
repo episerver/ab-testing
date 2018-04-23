@@ -69,6 +69,10 @@ namespace EPiServer.Marketing.Testing.Test.Fakes
 
         public DateTime? Modified => null;
 
+        public MarketId MarketId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string MarketName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool PricesIncludeTax { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public OrderGroupTotals GetTotals()
         {
             return _orderGroupTotals;

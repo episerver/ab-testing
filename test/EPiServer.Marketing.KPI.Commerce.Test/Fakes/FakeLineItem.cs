@@ -92,5 +92,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test.Fakes
                 OrderLevelDiscountAmount = value;
             }
         }
+
+        public int? TaxCategoryId { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }
