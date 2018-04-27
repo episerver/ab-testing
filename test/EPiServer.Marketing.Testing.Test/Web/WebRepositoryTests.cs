@@ -108,6 +108,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void IncrementCount_Gets_Session_CookieName_From_Config()
+        {
+            var aRepo = GetUnitUnderTest();
+
+            aRepo.IncrementCount(_testGuid, 1, CountType.View, default(Guid), false);
+
+            _mockHttpHelper.Verify(called => called.GetSessionCookieName(), "Failed to get session cookie name from configuration.");
+        }
+
+        [Fact]
         public void SaveKpiResult_Calls_TestManager_SaveKpiResult_WithDefault_AsynchFlag()
         {
             KeyFinancialResult result = new KeyFinancialResult();

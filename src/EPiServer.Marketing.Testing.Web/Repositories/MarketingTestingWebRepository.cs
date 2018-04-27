@@ -372,7 +372,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true)
         {
-            var sessionid = _httpContextHelper.GetRequestParam("ASP.NET_SessionId");
+            var sessionid = _httpContextHelper.GetRequestParam(_httpContextHelper.GetSessionCookieName());
             var c = new IncrementCountCriteria()
             {
                 testId = testId,

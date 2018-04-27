@@ -59,6 +59,59 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void UpdateConversion_Uses_ConfigurationSpecified_SessionID_Name()
+        {
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("testId", Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("itemVersion", "1"),
+                new KeyValuePair<string, string>("kpiId", Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f").ToString()),
+            };
+            var data = new FormDataCollection(pairs);
+
+            var controller = GetUnitUnderTest();
+            var result = controller.UpdateConversion(data);
+
+            contextHelper.Verify(m => m.GetSessionCookieName(), "Failed to use the method that gets the session cookie name from the config");
+        }
+
+        [Fact]
+        public void UpdateConversion_Returns_BadRequest_If_TestID_Is_Null()
+        {
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("itemVersion", "1"),
+                new KeyValuePair<string, string>("kpiId", Guid.Parse("bb53bed8-978a-456d-9fd7-6a2bea1bf66f").ToString()),
+            };
+            var data = new FormDataCollection(pairs);
+
+            var controller = GetUnitUnderTest();
+            var result = controller.UpdateConversion(data);
+            Assert.True(result.StatusCode == HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public void UpdateConversion_Returns_OK_And_Calls_EmitUpdateConversion_With_Form_Data()
+        {
+            var TestGuid = Guid.NewGuid();
+            var KpiGuid = Guid.NewGuid();
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("testId", TestGuid.ToString()),
+                new KeyValuePair<string, string>("itemVersion", "1"),
+                new KeyValuePair<string, string>("kpiId", KpiGuid.ToString()),
+            };
+            var data = new FormDataCollection(pairs);
+
+            var controller = GetUnitUnderTest();
+            var result = controller.UpdateConversion(data);
+
+            Assert.True(result.StatusCode == HttpStatusCode.OK);
+            _messagingManagerMock.Verify(m => m.EmitUpdateConversion(It.Is<Guid>(g => g.Equals(TestGuid)), It.Is<int>(v => v == 1), It.Is<Guid>(g => g.Equals(KpiGuid)), It.IsAny<string>()), "Did not emit message with proper arguments");
+        }
+
+
+        [Fact]
         public void GetAllTests_Returns_OK_Status_Result()
         {
             var controller = GetUnitUnderTest();
