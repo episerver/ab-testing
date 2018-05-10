@@ -15,7 +15,6 @@ function (dependency) {
                 thumbnail.onload = function () {
                     var context = canvasId.getContext('2d');
                     context.drawImage(thumbnail, 0, 0);
-                    me.thumbstore.remove(result);
                     me._setThumbState(canvasId, "none", "block", "none");
                 }
             }).otherwise(function () {

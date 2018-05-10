@@ -5,6 +5,7 @@ using EPiServer.Shell.Services.Rest;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -31,7 +32,8 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public ActionResult Get(string id)
         {
-            var fileName = _thumbRepo.GetRandomFileName();            
+            var fileName =$"{ id.Split(',').Last().TrimEnd('$')}.png";
+            
 
             var contextThumbData = _thumbRepo.GetContextThumbData();
             var path = id.Replace('$', '/') + "?epieditmode=true"; //required to rebuild site URL
