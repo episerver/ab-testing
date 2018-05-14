@@ -10,5 +10,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         Process GetCaptureProcess(string page, string fileName, ContextThumbData thumbData);
         ActionResult DeleteCaptureFile(string fileName);
         ContextThumbData GetContextThumbData();
+        string GetCaptureString(string id);
     }
 }

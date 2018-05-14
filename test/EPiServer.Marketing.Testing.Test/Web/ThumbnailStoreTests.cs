@@ -43,12 +43,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(x.Data, "RandomFileName");
         }
 
-        [Fact]
-        public void DeleteCallsThumbRepoDeleteCaptureFile()
-        {
-            var tStore = GetUnitUnderTest();
-            tStore.Delete("fakeId");
-            _mockThumbRepo.Verify(call => call.DeleteCaptureFile(It.Is<string>(str => str == "fakeId")), Times.Once, "Expected Delete Caputure File to be called");
-        }
+       
     }
 }

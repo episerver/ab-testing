@@ -7,6 +7,7 @@ using EPiServer.Shell.Services.Rest;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -15,20 +16,20 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
     {
         IServiceLocator serviceLocator;
         IHttpContextHelper contextHelper;
-        IProcessHelper processHelper;
-        
+        IProcessHelper _processHelper;
+
         public ThumbnailRepository()
         {
             serviceLocator = ServiceLocator.Current;
             contextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
-            processHelper = serviceLocator.GetInstance<IProcessHelper>();
+            _processHelper = serviceLocator.GetInstance<IProcessHelper>();
         }
 
         internal ThumbnailRepository(IServiceLocator _serviceLocator)
         {
             serviceLocator = _serviceLocator;
             contextHelper = _serviceLocator.GetInstance<IHttpContextHelper>();
-            processHelper = _serviceLocator.GetInstance<IProcessHelper>();
+            _processHelper = _serviceLocator.GetInstance<IProcessHelper>();
         }
 
         public string GetRandomFileName()
@@ -38,8 +39,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public Process GetCaptureProcess(string id, string fileName, ContextThumbData thumbData)
         {
-            var root = processHelper.GetProcessRootPath();
-            var exe = processHelper.GetThumbnailExecutablePath();
+            var root = _processHelper.GetProcessRootPath();
+            var exe = _processHelper.GetThumbnailExecutablePath();
 
             var startInfo = new ProcessStartInfo()
             {
@@ -58,9 +59,36 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return p;
         }
 
+        public string GetCaptureString(string id)
+        {
+            string result = null;
+            var fileName = GetRandomFileName();
+            var contextThumbData = GetContextThumbData();
+            var path = id.Replace('$', '/') + "?epieditmode=true"; //required to rebuild site URL
+            var targetPage = string.Format("{0}{1}", contextThumbData.pagePrefix, path);
+
+            Process captureProcess = GetCaptureProcess(targetPage, fileName, contextThumbData);
+            _processHelper.StartProcess(captureProcess);
+
+            using (Image image = Image.FromFile($"{_processHelper.GetProcessRootPath()}{fileName}"))
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    image.Save(m, image.RawFormat);
+                    byte[] imageBytes = m.ToArray();
+                    result = Convert.ToBase64String(imageBytes);
+
+                }
+            }
+
+            DeleteCaptureFile(fileName);
+
+            return result;
+        }
+
         public ActionResult DeleteCaptureFile(string fileName)
         {
-            var root = processHelper.GetProcessRootPath();
+            var root = _processHelper.GetProcessRootPath();
 
             if (File.Exists(root + fileName))
             {
