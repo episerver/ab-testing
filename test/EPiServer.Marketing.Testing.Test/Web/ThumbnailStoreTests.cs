@@ -4,7 +4,6 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
-using System.Diagnostics;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web

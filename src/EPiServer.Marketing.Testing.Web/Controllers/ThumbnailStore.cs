@@ -1,12 +1,7 @@
-﻿using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Marketing.Testing.Web.Repositories;
+﻿using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
-using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.IO;
 using System.Net;
 using System.Web.Mvc;
 
