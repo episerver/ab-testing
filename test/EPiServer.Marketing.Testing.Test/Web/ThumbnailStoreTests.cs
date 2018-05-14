@@ -29,7 +29,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var tStore = GetUnitUnderTest();
 
             RestResult x = (RestResult)tStore.Get("testString");
-            //_mockProcessHelper.Verify(call => call.StartProcess(It.IsAny<Process>()), Times.Once, "Expected process helper startProcess to be called at least once");
             Assert.True(x.Data.ToString() == "returnstring");
         }
 
