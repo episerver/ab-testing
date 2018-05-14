@@ -84,19 +84,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             DeleteCaptureFile(fileName);
 
             return result;
-        }
-
-        public ActionResult DeleteCaptureFile(string fileName)
-        {
-            var root = _processHelper.GetProcessRootPath();
-
-            if (File.Exists(root + fileName))
-            {
-                File.Delete(root + fileName);
-            }
-
-            return new RestStatusCodeResult((int)HttpStatusCode.OK);
-        }
+        }       
 
         public ContextThumbData GetContextThumbData()
         {
@@ -119,6 +107,18 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             };
 
             return thumbData;
+        }
+
+         private ActionResult DeleteCaptureFile(string fileName)
+        {
+            var root = _processHelper.GetProcessRootPath();
+
+            if (File.Exists(root + fileName))
+            {
+                File.Delete(root + fileName);
+            }
+
+            return new RestStatusCodeResult((int)HttpStatusCode.OK);
         }
     }
 

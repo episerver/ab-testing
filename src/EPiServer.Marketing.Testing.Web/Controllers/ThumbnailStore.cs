@@ -32,14 +32,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         [HttpGet]
         public ActionResult Get(string id)
         {
-            string result =  _thumbRepo.GetCaptureString(id);
+            string result = _thumbRepo.GetCaptureString(id);
 
             if (!string.IsNullOrEmpty(result))
-            { return Rest(result); }
+            {
+                return Rest(result);
+            }
             else
             {
-                return new RestStatusCodeResult((int)HttpStatusCode.BadRequest, "Error getting capture file");
+                return new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, "Error retrieving content thumbnail");
             }
-        }        
+        }
     }
 }
