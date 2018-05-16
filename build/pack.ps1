@@ -42,8 +42,3 @@ Copy-Item .\resources\AlloyEPiServerDB.mdf ..\samples\EPiServer.Templates.Alloy\
 Copy-Item .\resources\ConnectionString.xmlupdate $artifactsPath
 
 & "$cwd\resources\nuget\nuget.exe" pack "$cwd\resources\DailySite.nuspec" -Prop Configuration=$configuration -Version $packageVersion -Verbosity detailed -NoDefaultExcludes -NoPackageAnalysis -BasePath $artifactsPath -OutputDirectory $artifactsPath
-
-if([System.Convert]::ToBoolean($publishPackages) -eq $true) {
-	Write-Host "Publishing artifacts"
-	Copy-Item "$artifactsPath\*Daily*.nupkg" -destination "\\T3\I$\Nuget"
-}
