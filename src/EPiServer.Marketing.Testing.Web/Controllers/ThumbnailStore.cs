@@ -1,9 +1,8 @@
-﻿using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.Marketing.Testing.Web.Repositories;
+﻿using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Web.Mvc;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
@@ -12,41 +11,32 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     public class ThumbnailStore : RestControllerBase
     {
         private IThumbnailRepository _thumbRepo;
-        private IProcessHelper _processHelper;
 
         [ExcludeFromCodeCoverage]
         public ThumbnailStore()
         {
             _thumbRepo = ServiceLocator.Current.GetInstance<IThumbnailRepository>();
-            _processHelper = ServiceLocator.Current.GetInstance<IProcessHelper>();         
         }
 
         // For unit test support.
         internal ThumbnailStore(IServiceLocator serviceLocator)
         {
             _thumbRepo = serviceLocator.GetInstance<IThumbnailRepository>();
-            _processHelper = serviceLocator.GetInstance<IProcessHelper>();
         }
 
         [HttpGet]
         public ActionResult Get(string id)
         {
-            var fileName = _thumbRepo.GetRandomFileName();            
+            string result = _thumbRepo.GetCaptureString(id);
 
-            var contextThumbData = _thumbRepo.GetContextThumbData();
-            var path = id.Replace('$', '/') + "?epieditmode=true"; //required to rebuild site URL
-            var targetPage = string.Format("{0}{1}",contextThumbData.pagePrefix, path);
-
-            Process captureProcess = _thumbRepo.GetCaptureProcess(targetPage, fileName, contextThumbData);
-            _processHelper.StartProcess(captureProcess);       
-
-            return Rest(string.Format(fileName));
-        }
-
-        [HttpDelete]
-        public ActionResult Delete(string id)
-        {
-            return _thumbRepo.DeleteCaptureFile(id);
+            if (!string.IsNullOrEmpty(result))
+            {
+                return Rest(result);
+            }
+            else
+            {
+                return new RestStatusCodeResult((int)HttpStatusCode.InternalServerError, "Error retrieving content thumbnail");
+            }
         }
     }
 }
