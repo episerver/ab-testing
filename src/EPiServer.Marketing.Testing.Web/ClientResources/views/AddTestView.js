@@ -453,6 +453,25 @@
             },
 
             //Clears the KPI Error text and icon
+            _clearConversionErrors: function () {
+                var errorTextElements = query("span[id*='kpiErrorText']");
+                var errorIconElements = query("span[id*='kpiErrorIcon']");
+
+                if (errorTextElements) {
+                    errorTextElements.forEach(function (element) {
+                        element.innerText = "";
+                        element.style.visibility = "hidden";
+                    });
+                }
+
+                if (errorIconElements) {
+                    errorIconElements.forEach(function (element) {
+                        element.style.visibility = "hidden";
+                    })
+                }
+            },
+
+            //Clears all errors found on the page
             _clearErrors: function () {
                 var errorTextElements = query("span[id*='ErrorText']");
                 var errorIconElements = query("span[id*='ErrorIcon']");
@@ -567,6 +586,8 @@
             setKpiError: function (ret) {
                 var errors = this._isObject(ret);
                 this.kpiFormData = null;
+                this._clearConversionErrors();
+
                 if (errors) {
                     var keys = Object.keys(errors);
                     for (var x = 0; x < keys.length; x++) {
@@ -578,6 +599,8 @@
                     };
                 }
                 else {
+                    var kpiErrorTextNode = dom.byId("kpiErrorText");
+                    var kpiErrorIconNode = dom.byId("kpiErrorIcon");
                     this._setError(ret, this.kpiErrorTextNode, this.kpiErrorIconNode);
                     this.startButtonClickCounter = 0;
                 }
