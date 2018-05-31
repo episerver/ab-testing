@@ -601,7 +601,7 @@
                 else {
                     var kpiErrorTextNode = dom.byId("kpiErrorText");
                     var kpiErrorIconNode = dom.byId("kpiErrorIcon");
-                    this._setError(ret, this.kpiErrorTextNode, this.kpiErrorIconNode);
+                    this._setError(ret, kpiErrorTextNode, kpiErrorIconNode);
                     this.startButtonClickCounter = 0;
                 }
             },
