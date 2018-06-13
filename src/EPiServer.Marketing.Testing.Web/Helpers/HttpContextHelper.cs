@@ -110,7 +110,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public ContentReference GetCurrentContentLink()
         {
-            return HttpContext.Current.Request.RequestContext.GetContentLink();
+            ContentReference retReference = null;
+            if (HttpContext.Current.Request.RequestContext != null)
+            {
+                retReference =  HttpContext.Current.Request.RequestContext.GetContentLink();
+            }
+            return retReference;
         }
 
         public HttpContext GetCurrentContext()
