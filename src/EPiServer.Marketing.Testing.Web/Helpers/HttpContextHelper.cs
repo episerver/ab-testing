@@ -1,10 +1,9 @@
-﻿using EPiServer.ServiceLocation;
-using System;
-using System.Collections.Generic;
+﻿using EPiServer.Core;
+using EPiServer.ServiceLocation;
+using EPiServer.Web.Routing;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 
@@ -107,6 +106,16 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public string RequestedUrl()
         {
             return HttpContext.Current.Request.RawUrl;
+        }
+
+        public ContentReference GetCurrentContentLink()
+        {
+            ContentReference retReference = null;
+            if (HttpContext.Current.Request.RequestContext != null)
+            {
+                retReference =  HttpContext.Current.Request.RequestContext.GetContentLink();
+            }
+            return retReference;
         }
 
         public HttpContext GetCurrentContext()

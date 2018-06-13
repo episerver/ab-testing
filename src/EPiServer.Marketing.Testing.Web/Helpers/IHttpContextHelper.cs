@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPiServer.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -123,6 +124,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <returns>The url string.</returns>
         string RequestedUrl();
+
+        /// <summary>
+        /// Returns the HttpContext's current content link.
+        /// </summary>
+        /// <returns></returns>
+        ContentReference GetCurrentContentLink();
 
         /// <summary>
         /// Returns the current context
