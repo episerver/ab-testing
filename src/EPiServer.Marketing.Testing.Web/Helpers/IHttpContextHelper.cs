@@ -131,7 +131,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         ContentReference GetCurrentContentLink();
 
-
         /// <summary>
         /// Returns the current context
         /// </summary>
