@@ -1,6 +1,5 @@
 ﻿using EPiServer.Commerce.Order;
 using EPiServer.Core;
-using EPiServer.Framework.Localization;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.ServiceLocation;
@@ -9,10 +8,7 @@ using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Markets;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.KPI.Commerce.Test
 {

@@ -4,7 +4,6 @@ using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
-using System.Diagnostics;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -18,37 +17,30 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private ThumbnailStore GetUnitUnderTest()
         {
             _mockServiceLocator.Setup(sl => sl.GetInstance<IThumbnailRepository>()).Returns(_mockThumbRepo.Object);
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IProcessHelper>()).Returns(_mockProcessHelper.Object);
             return new ThumbnailStore(_mockServiceLocator.Object);
 
         }
 
         [Fact]
-        public void GetCallsPhantomAndReturnsFileName()
+        public void Get_ReturnsRestString()
         {
-            _mockThumbRepo.Setup(call => call.GetRandomFileName()).Returns("RandomFileName");
-            _mockThumbRepo.Setup(call => call.GetContextThumbData()).Returns(new ContextThumbData()
-            {
-                authCookie = "appCookie",
-                sessionCookie = "sessionCookie",
-                host = "TestHost",
-                pagePrefix = "Http://testhost.com"
-            });
+            _mockThumbRepo.Setup(call => call.GetCaptureString(It.IsAny<string>())).Returns("returnstring");
 
             var tStore = GetUnitUnderTest();
 
-            RestResult x = (RestResult)tStore.Get("testId");
-            _mockProcessHelper.Verify(call => call.StartProcess(It.IsAny<Process>()), Times.Once, "Expected process helper startProcess to be called at least once");
-
-            Assert.Equal(x.Data, "RandomFileName");
+            RestResult x = (RestResult)tStore.Get("testString");
+            Assert.True(x.Data.ToString() == "returnstring");
         }
 
         [Fact]
-        public void DeleteCallsThumbRepoDeleteCaptureFile()
+        public void Get_RetunsError_WhenResultIsNull()
         {
+            _mockThumbRepo.Setup(call => call.GetCaptureString(It.IsAny<string>())).Returns(string.Empty);
             var tStore = GetUnitUnderTest();
-            tStore.Delete("fakeId");
-            _mockThumbRepo.Verify(call => call.DeleteCaptureFile(It.Is<string>(str => str == "fakeId")), Times.Once, "Expected Delete Caputure File to be called");
+
+            RestStatusCodeResult x = tStore.Get("testString") as RestStatusCodeResult;
+            Assert.True(x.StatusDescription.ToString() == "Error retrieving content thumbnail");
+            Assert.True(x.StatusCode == 500);
         }
     }
 }

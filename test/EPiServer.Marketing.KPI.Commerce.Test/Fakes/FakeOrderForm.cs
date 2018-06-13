@@ -59,6 +59,8 @@ namespace EPiServer.Marketing.KPI.Commerce.Test.Fakes
 
         public Hashtable Properties { get; private set; }
 
+        public bool PricesIncludeTax => throw new System.NotImplementedException();
+
         public static FakeOrderForm CreateOrderForm(Hashtable properties = null)
         {
             return new FakeOrderForm
