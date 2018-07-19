@@ -409,7 +409,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
 
-        internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
+        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {
             var cachedTests = ActiveCachedTests;
 

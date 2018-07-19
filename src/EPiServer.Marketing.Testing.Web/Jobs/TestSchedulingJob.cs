@@ -16,6 +16,7 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Security;
+using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -86,10 +87,21 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                             // set a newer date to run the job again
                             nextExecutionUTC = utcEndDate;
                         }
+                        else
+                        {
+                            // MAR-1180 - in a load balanced env the job is not putting the test in the active cache list. 
+                            var activeTest = webRepo.GetActiveCachedTests().FirstOrDefault(t => t.Id == test.Id);
+                            if (activeTest == null)
+                            {
+                                // Add to the active list since its not there but it is active.
+                                webRepo.UpdateCache(test, CacheOperator.Add);
+                                started++;
+                            }
+                        }
                         break;
                     case TestState.Inactive:
                         var utcStartDate = test.StartDate.ToUniversalTime();
-                        if ( DateTime.UtcNow > utcStartDate) // start it now
+                        if (DateTime.UtcNow > utcStartDate) // start it now
                         {
                             webRepo.StartMarketingTest(test.Id);
                             started++;
@@ -98,6 +110,17 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         {
                             // set a newer date to run the job again
                             nextExecutionUTC = utcStartDate;
+                        }
+                        else
+                        {
+                            // MAR-1180 - in a load balanced env the job is not adding the test to the cache
+                            var inActiveTest = webRepo.GetActiveCachedTests().FirstOrDefault(t => t.Id == test.Id);
+                            if (inActiveTest != null)
+                            {
+                                // Add to the active list since its not there but it is active.
+                                webRepo.UpdateCache(test, CacheOperator.Remove);
+                                stopped++;
+                            }
                         }
                         break;
                 }
