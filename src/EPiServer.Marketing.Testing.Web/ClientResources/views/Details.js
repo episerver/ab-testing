@@ -130,7 +130,7 @@
             var me = this;
             this.kpiSummaryWidgets = new Array();
             me.contextParameters = {
-                uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/PickWinner"
+                uri: "epi.marketing.testing:///testid=" + this.context.data.test.id + "/pickwinner"
             };
             topic.publish("/epi/shell/context/request", me.contextParameters);
         },

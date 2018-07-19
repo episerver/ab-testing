@@ -155,7 +155,7 @@
             ready(function () {
                 pubThumb = document.getElementById("publishThumbnailpickwinner");
                 draftThumb = document.getElementById("draftThumbnailpickwinner");
-                if (me.context.customViewType == "marketing-testing/views/PickWinner") {
+                if (me.context.customViewType == "marketing-testing/views/pickwinner") {
                     thumbnails._setThumbnail(pubThumb, me.context.data.publishPreviewUrl);
                     thumbnails._setThumbnail(draftThumb, me.context.data.draftPreviewUrl);
                 };
