@@ -22,6 +22,7 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Statistics;
+using EPiServer.Framework.Cache;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -34,6 +35,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private Mock<IKpiManager> _kpiManager;
         private Mock<IKpiDataAccess> _kpiDataAccess;
         private Mock<DefaultMarketingTestingEvents> _marketingEvents;
+        private Mock<ISynchronizedObjectInstanceCache> _syncronizedCache;
 
         private TestManager GetUnitUnderTest()
         {
@@ -101,6 +103,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _marketingEvents = new Mock<DefaultMarketingTestingEvents>();
             _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents.Object);
+
+            _syncronizedCache = new Mock<ISynchronizedObjectInstanceCache>();
+            _serviceLocator.Setup(sl => sl.GetInstance<ISynchronizedObjectInstanceCache>()).Returns(_syncronizedCache.Object);
 
             return new TestManager(_serviceLocator.Object);
         }
@@ -671,6 +676,43 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public void Check_DefaultMarketingTestingEvents_Instance_Isnt_Null()
         {
            Assert.NotNull(DefaultMarketingTestingEvents.Instance);
+        }
+
+        [Fact]
+        public void ActiveCachedTests_Checks_testCacheValidFlag()
+        {
+            var testManager = GetUnitUnderTest();
+            _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
+
+            var tests = testManager.ActiveCachedTests;
+
+            _syncronizedCache.Verify(m => m.Get( It.Is<string>( str => str.Equals(TestManager.CacheValidFlag) )), Times.Once, "Failed to check the syncronized cache method.");
+
+        }
+
+        [Fact]
+        public void ActiveCachedTests_InsertsTestFlag()
+        {
+            var testManager = GetUnitUnderTest();
+            _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
+
+            var tests = testManager.ActiveCachedTests;
+
+            _syncronizedCache.Verify(m => m.Insert(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)), It.IsAny<object>(), It.IsAny<CacheEvictionPolicy>()), 
+                Times.Once, "Failed to re-add the CacheValidFlag.");
+        }
+
+        [Fact]
+        public void ActiveCachedTests_DoesNot_RepopulateCash_If_CacheValidFlag_Exists()
+        {
+            var testManager = GetUnitUnderTest();
+            _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns("true");
+
+            var tests = testManager.ActiveCachedTests;
+            tests = testManager.ActiveCachedTests; // call it again to make sure we dont invalidate the cache
+
+            _syncronizedCache.Verify(m => m.Insert(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)), It.IsAny<object>(), It.IsAny<CacheEvictionPolicy>()),
+                Times.Once, "didnt need to update CacheValidFlag.");
         }
     }
 
