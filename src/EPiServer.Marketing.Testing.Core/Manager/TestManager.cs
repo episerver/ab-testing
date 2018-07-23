@@ -16,6 +16,7 @@ using EPiServer.Marketing.Testing.Dal.Exceptions;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using System.Globalization;
+using EPiServer.Framework.Cache;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -35,10 +36,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     public class TestManager : ITestManager
     {
         internal const string TestingCacheName = "TestingCache";
+        internal const string CacheValidFlag = "CacheValidFlag";
+
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private Random _randomParticiaption = new Random();
         private ObjectCache _testCache = MemoryCache.Default;
+        private ISynchronizedObjectInstanceCache _testCacheValidFlag;
         private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
         private DefaultMarketingTestingEvents _marketingTestingEvents;
@@ -59,7 +63,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
+            _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
+            _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
 
             try
             {
@@ -85,24 +90,36 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
+            _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
         }
 
+        Object initCacheLock = new object();
         private void initCache()
         {
-            if (!_testCache.Contains(TestingCacheName))
+            var cacheValidFlag = _testCacheValidFlag.Get( CacheValidFlag );
+            if (!_testCache.Contains(TestingCacheName) || cacheValidFlag == null )
             {
-                var activeTestCriteria = new TestCriteria();
-                var activeTestStateFilter = new ABTestFilter()
+
+                lock (initCacheLock)
                 {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                };
+                    if (!_testCache.Contains(TestingCacheName) || cacheValidFlag == null) 
+                    {
+                        var activeTestCriteria = new TestCriteria();
+                        var activeTestStateFilter = new ABTestFilter()
+                        {
+                            Property = ABTestProperty.State,
+                            Operator = FilterOperator.And,
+                            Value = TestState.Active
+                        };
 
-                activeTestCriteria.AddFilter(activeTestStateFilter);
+                        activeTestCriteria.AddFilter(activeTestStateFilter);
 
-                var tests = GetTestList(activeTestCriteria);
-                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+                        var tests = GetTestList(activeTestCriteria);
+                        _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+
+                        _testCacheValidFlag.Insert(CacheValidFlag, "true", CacheEvictionPolicy.Empty);
+                    }
+                }
             }
         }
 
@@ -420,6 +437,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     {
                         cachedTests.Add(test);
                         _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent,new TestEventArgs(test));
+
+                        _testCacheValidFlag.RemoveRemote(CacheValidFlag);
                     }
                     break;
                 case CacheOperator.Remove:
@@ -427,6 +446,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     {
                         cachedTests.Remove(test);
                         _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,new TestEventArgs(test));
+
+                        _testCacheValidFlag.RemoveRemote(CacheValidFlag);
                     }
                     break;
             }
