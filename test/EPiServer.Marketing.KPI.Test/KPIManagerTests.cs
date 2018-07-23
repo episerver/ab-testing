@@ -54,7 +54,6 @@ namespace EPiServer.Marketing.KPI.Test
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
 
             // Set our mocked service locator so calls like ServiceLocator.Current work properly. 
-            ServiceLocator.SetLocator(_serviceLocator.Object);
             return new KpiManager(_serviceLocator.Object);
         }
 
@@ -75,7 +74,7 @@ namespace EPiServer.Marketing.KPI.Test
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            var kpi = new Kpi()
+            var kpi = new Kpi(_serviceLocator.Object)
             {
                 Id = theGuid
             };
@@ -92,12 +91,12 @@ namespace EPiServer.Marketing.KPI.Test
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
             var tm = GetUnitUnderTest();
-            var kpi = new Kpi()
+            var kpi = new Kpi( _serviceLocator.Object )
             {
-                Id = theGuid
+                Id = theGuid 
             };
 
-            var kpi2 = new Kpi()
+            var kpi2 = new Kpi(_serviceLocator.Object)
             {
                 Id = theGuid
             };

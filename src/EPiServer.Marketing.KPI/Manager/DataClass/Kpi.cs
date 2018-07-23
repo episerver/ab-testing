@@ -19,6 +19,13 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
     {
         protected IServiceLocator _servicelocator;
 
+        internal Kpi(IServiceLocator locator)
+        {
+            CreatedDate = DateTime.UtcNow;
+            ModifiedDate = DateTime.UtcNow;
+            _servicelocator = locator;
+        }
+
         public Kpi()
         {
             CreatedDate = DateTime.UtcNow;

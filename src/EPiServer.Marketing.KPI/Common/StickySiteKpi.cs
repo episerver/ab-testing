@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.KPI.Common
         }
 
         [ExcludeFromCodeCoverage]
-        internal StickySiteKpi(IKpiHelper helper)
+        internal StickySiteKpi(IServiceLocator locator, IKpiHelper helper) : base(locator)
         {
             _stickyHelper = helper;
         }
@@ -235,7 +235,7 @@ namespace EPiServer.Marketing.KPI.Common
                 HttpContext.Current.Items[getCookieKey()] = true;    // we use this flag to keep us from processing more LoadedContent calls. 
                 var contentRepo = _servicelocator.GetInstance<IContentRepository>();
                 var content = contentRepo.Get<IContent>(TestContentGuid);
-                var contentUrl = UrlResolver.Current.GetUrl(content.ContentLink);
+                var contentUrl = _servicelocator.GetInstance<UrlResolver>().GetUrl(content.ContentLink);
                 if (contentUrl != null)
                 {
                     testcontentPaths.Add(contentUrl);

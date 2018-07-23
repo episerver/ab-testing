@@ -65,9 +65,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
             
-            ServiceLocator.SetLocator(_serviceLocator.Object);
-
-            return new ContentComparatorKPI(LandingPageGuid);
+            return new ContentComparatorKPI(_serviceLocator.Object, LandingPageGuid);
         }
 
         private ContentComparatorKPI GetUnitUnderTest2()
@@ -102,9 +100,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("testUrl");
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_kpiHelper.Object);
 
-            ServiceLocator.SetLocator(_serviceLocator.Object);
-
-            return new ContentComparatorKPI(LandingPageGuid);
+            return new ContentComparatorKPI(_serviceLocator.Object, LandingPageGuid);
         }
         /** Removed for now because code is different in mar-455 and tests 
          * will be merged then.
