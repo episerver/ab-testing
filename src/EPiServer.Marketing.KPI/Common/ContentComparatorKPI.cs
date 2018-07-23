@@ -51,13 +51,13 @@ namespace EPiServer.Marketing.KPI.Common
             ContentGuid = contentGuid;
         }
 
-        internal ContentComparatorKPI(IServiceLocator serviceLocator, Guid contentGuid) : this(contentGuid)
+        internal ContentComparatorKPI(IServiceLocator serviceLocator, Guid contentGuid) : base(serviceLocator)
         {
-            _servicelocator = serviceLocator;
+            ContentGuid = contentGuid;
         }
 
-        /// <inheritdoc />
-        [DataMember]
+    /// <inheritdoc />
+    [DataMember]
         public override string UiMarkup
         {
             get
@@ -97,7 +97,7 @@ namespace EPiServer.Marketing.KPI.Common
         /// <inheritdoc />
         public override void Validate(Dictionary<string, string> responseData)
         {
-            var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
 
             if (responseData["ConversionPage"] == "")
             {
@@ -123,7 +123,7 @@ namespace EPiServer.Marketing.KPI.Common
             {
                 if (_content == null)
                 {
-                    var contentRepo = ServiceLocator.Current.GetInstance<IContentRepository>();
+                    var contentRepo = _servicelocator.GetInstance<IContentRepository>();
                     _content = contentRepo.Get<IContent>(ContentGuid);
 
                     if (_cache.Contains("StartPagePaths") && _cache.Get("StartPagePaths") != null)
@@ -162,7 +162,7 @@ namespace EPiServer.Marketing.KPI.Common
 
         private bool IsContentPublished(IContent content)
         {
-            IContentVersionRepository repo = ServiceLocator.Current.GetInstance<IContentVersionRepository>();
+            IContentVersionRepository repo = _servicelocator.GetInstance<IContentVersionRepository>();
             var publishedContent = repo.LoadPublished(content.ContentLink);
             if (publishedContent == null)
             {

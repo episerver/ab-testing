@@ -49,9 +49,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(s1 => s1.GetInstance<ITestManager>()).Returns(_testManagerMock.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiWebRepository>()).Returns(_kpiWebRepoMock.Object);
             
-            ServiceLocator.SetLocator(_mockServiceLocator.Object);
-
-            return new TestingController(contextHelper.Object)
+            return new TestingController(contextHelper.Object, _mockServiceLocator.Object)
             {
                 Request = new System.Net.Http.HttpRequestMessage(),
                 Configuration = new HttpConfiguration()
