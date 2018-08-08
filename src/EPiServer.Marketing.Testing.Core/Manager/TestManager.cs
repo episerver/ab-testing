@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using System.Globalization;
 using EPiServer.Framework.Cache;
+using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -37,6 +38,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     {
         internal const string TestingCacheName = "TestingCache";
         internal const string CacheValidFlag = "CacheValidFlag";
+        private static Object CacheLock = new object();
 
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
@@ -54,7 +56,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             get
             {
-                initCache(); // MAR-904 - make sure that there is always a cache
+                manageCache();  // MAR-904 - make sure that there is always a cache
+                                // MAR-1192 - Load Balanced environments causeing internal exceptions randomly.
                 return _testCache.Get(TestingCacheName) as List<IMarketingTest>;
             }
         }
@@ -93,17 +96,37 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
         }
 
-        Object initCacheLock = new object();
-        private void initCache()
+        /// <summary>
+        /// Responsable for initializing the test cache as well as manage it when content authoring 
+        /// machines signal that the cache is out of date by removing the CacheValidFlag
+        /// </summary>
+        private void manageCache()
         {
-            var cacheValidFlag = _testCacheValidFlag.Get( CacheValidFlag );
-            if (!_testCache.Contains(TestingCacheName) || cacheValidFlag == null )
+            var cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
+            if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
             {
-
-                lock (initCacheLock)
+                // Cache is either out of date or doesnt exist yet.
+                lock (CacheLock)
                 {
-                    if (!_testCache.Contains(TestingCacheName) || cacheValidFlag == null) 
+                    cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
+                    if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
                     {
+                        // Clear the variant cache and the test cache.
+                        var allKeys = _variantCache.Where(o => o.Key.Contains("epi")).Select(k => k.Key);
+                        Parallel.ForEach(allKeys, key => _variantCache.Remove(key));
+
+                        // Clear any tests that are currently in the cache.
+                        if (_testCache.Contains(TestingCacheName))
+                        {
+                            // For every test currently in the cache, fire the remove cache event.
+                            foreach (var test in (List<IMarketingTest>)_testCache.Get(TestingCacheName))
+                            {
+                                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
+                            }
+                            _testCache.Remove(TestingCacheName);
+                        }
+
+                        // Get all the tests that are supposed to be active.
                         var activeTestCriteria = new TestCriteria();
                         var activeTestStateFilter = new ABTestFilter()
                         {
@@ -111,12 +134,18 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                             Operator = FilterOperator.And,
                             Value = TestState.Active
                         };
-
                         activeTestCriteria.AddFilter(activeTestStateFilter);
-
                         var tests = GetTestList(activeTestCriteria);
                         _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
 
+                        // now for every test added, TestAddedToCacheEvent 
+                        foreach (var test in tests)
+                        {
+                            // Fire the event that lets everybody know this test has been added to the cache.
+                            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+                        }
+
+                        // Insert the flag so that we know that we know this server is up to date. 
                         _testCacheValidFlag.Insert(CacheValidFlag, "true", CacheEvictionPolicy.Empty);
                     }
                 }
@@ -419,7 +448,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _dataAccess = new TestingDataAccess();
                 _kpiManager = new KpiManager();
-                initCache();
+                manageCache();
             }
 
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
