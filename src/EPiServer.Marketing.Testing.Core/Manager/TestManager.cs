@@ -38,8 +38,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     {
         internal const string TestingCacheName = "TestingCache";
         internal const string CacheValidFlag = "CacheValidFlag";
-        private static Object CacheLock = new object();
 
+        private static Object _cacheLock = new object();
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private Random _randomParticiaption = new Random();
@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             get
             {
-                manageCache();  // MAR-904 - make sure that there is always a cache
+                ManageCache();  // MAR-904 - make sure that there is always a cache
                                 // MAR-1192 - Load Balanced environments causeing internal exceptions randomly.
                 return _testCache.Get(TestingCacheName) as List<IMarketingTest>;
             }
@@ -97,16 +97,17 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <summary>
-        /// Responsable for initializing the test cache as well as manage it when content authoring 
-        /// machines signal that the cache is out of date by removing the CacheValidFlag
+        /// Responsible for initializing the test cache as well as managing it in load balanced environments. Note that when a content authoring machines
+        /// signal that the cache is out of date (by removing the CacheValidFlag from all content delivery machines this code will reload all the tests
+        /// and add them to the cache.
         /// </summary>
-        private void manageCache()
+        private void ManageCache()
         {
             var cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
             if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
             {
                 // Cache is either out of date or doesnt exist yet.
-                lock (CacheLock)
+                lock (_cacheLock)
                 {
                     cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
                     if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
@@ -115,7 +116,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                         var allKeys = _variantCache.Where(o => o.Key.Contains("epi")).Select(k => k.Key);
                         Parallel.ForEach(allKeys, key => _variantCache.Remove(key));
 
-                        // Clear any tests that are currently in the cache.
+                        // Clear any tests that are currently in the cache. Fire the removed from cache event
+                        // to disable the event proxy for kpis.
                         if (_testCache.Contains(TestingCacheName))
                         {
                             // For every test currently in the cache, fire the remove cache event.
@@ -135,13 +137,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                             Value = TestState.Active
                         };
                         activeTestCriteria.AddFilter(activeTestStateFilter);
+
                         var tests = GetTestList(activeTestCriteria);
                         _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
 
-                        // now for every test added, TestAddedToCacheEvent 
+                        // now for every test added, fire the TestAddedToCacheEvent.
+                        // Note that this event is also used to intialize the event proxy for kpis
                         foreach (var test in tests)
                         {
-                            // Fire the event that lets everybody know this test has been added to the cache.
                             _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
                         }
 
@@ -448,7 +451,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _dataAccess = new TestingDataAccess();
                 _kpiManager = new KpiManager();
-                manageCache();
+                ManageCache();
             }
 
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
