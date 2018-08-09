@@ -23,6 +23,7 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Statistics;
 using EPiServer.Framework.Cache;
+using System.Threading;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
@@ -34,8 +35,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private Guid testId = Guid.NewGuid();
         private Mock<IKpiManager> _kpiManager;
         private Mock<IKpiDataAccess> _kpiDataAccess;
-        private Mock<DefaultMarketingTestingEvents> _marketingEvents;
+        private DefaultMarketingTestingEvents _marketingEvents;
         private Mock<ISynchronizedObjectInstanceCache> _syncronizedCache;
+        private static Object TestLock = new object();
 
         private TestManager GetUnitUnderTest()
         {
@@ -101,8 +103,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _contentLoader.Setup(call => call.Get<ContentData>(It.IsAny<ContentReference>())).Returns(contentData);
             _serviceLocator.Setup(sl => sl.GetInstance<IContentLoader>()).Returns(_contentLoader.Object);
 
-            _marketingEvents = new Mock<DefaultMarketingTestingEvents>();
-            _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents.Object);
+            _marketingEvents = new DefaultMarketingTestingEvents();
+            _serviceLocator.Setup(sl => sl.GetInstance<DefaultMarketingTestingEvents>()).Returns(_marketingEvents);
 
             _syncronizedCache = new Mock<ISynchronizedObjectInstanceCache>();
             _serviceLocator.Setup(sl => sl.GetInstance<ISynchronizedObjectInstanceCache>()).Returns(_syncronizedCache.Object);
@@ -551,14 +553,19 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void TestManager_UpdateCache()
         {
-            var testManager = GetUnitUnderTest();
-            var test = GetManagerTest();
-            testManager.UpdateCache(test, CacheOperator.Add);
+            lock (TestLock)
+            {
+                var testManager = GetUnitUnderTest();
+                var test = GetManagerTest();
+                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns("true");
 
-            Assert.Equal(2, testManager.ActiveCachedTests.Count());
+                testManager.UpdateCache(test, CacheOperator.Add);
 
-            testManager.UpdateCache(test, CacheOperator.Remove);
-            Assert.Equal(1, testManager.ActiveCachedTests.Count());
+                Assert.Equal(2, testManager.ActiveCachedTests.Count());
+
+                testManager.UpdateCache(test, CacheOperator.Remove);
+                Assert.Equal(1, testManager.ActiveCachedTests.Count());
+            }
         }
 
         [Fact]
@@ -681,13 +688,15 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void ActiveCachedTests_Checks_testCacheValidFlag()
         {
-            var testManager = GetUnitUnderTest();
-            _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
+            lock (TestLock)
+            {
+                var testManager = GetUnitUnderTest();
+                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
 
-            var tests = testManager.ActiveCachedTests;
+                var tests = testManager.ActiveCachedTests;
 
-            _syncronizedCache.Verify(m => m.Get( It.Is<string>( str => str.Equals(TestManager.CacheValidFlag) )), Times.Once, "Failed to check the syncronized cache method.");
-
+                _syncronizedCache.Verify(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag))), "Failed to check the syncronized cache method.");
+            }
         }
 
         [Fact]
@@ -713,6 +722,60 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _syncronizedCache.Verify(m => m.Insert(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)), It.IsAny<object>(), It.IsAny<CacheEvictionPolicy>()),
                 Times.Once, "didnt need to update CacheValidFlag.");
+        }
+
+        private bool removedFromCache = false;
+        private bool addedToCache = false;
+        [Fact]
+        public void ActiveCachedTests_Fires_TestAddedToCacheEvent_If_CacheIsBeingBuilt()
+        {
+            lock (TestLock)
+            {
+                removedFromCache = false;
+                addedToCache = false;
+
+                var testManager = GetUnitUnderTest();
+                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(true);
+                _marketingEvents.TestRemovedFromCache += TestRemovedFromCache;
+                _marketingEvents.TestAddedToCache += TestAddedToCache;
+
+                var tests = testManager.ActiveCachedTests;
+                Thread.Sleep(2000);
+                Assert.True(addedToCache);
+                Assert.False(removedFromCache);
+            }
+        }
+
+        [Fact]
+        public void ActiveCachedTests_Fires_TestRemovedFromCacheEvent_If_CacheIsBeingRebuilt()
+        {
+            lock (TestLock)
+            {
+                removedFromCache = false;
+                addedToCache = false;
+
+                var testManager = GetUnitUnderTest();
+                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(true);
+                _marketingEvents.TestRemovedFromCache += TestRemovedFromCache;
+                _marketingEvents.TestAddedToCache += TestAddedToCache;
+
+                var tests = testManager.ActiveCachedTests;
+                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
+                tests = testManager.ActiveCachedTests;
+
+                Thread.Sleep(2000);
+                Assert.True(addedToCache);
+                Assert.True(removedFromCache);
+            }
+        }
+
+        public void TestRemovedFromCache(object sender, TestEventArgs e)
+        {
+            removedFromCache = true;
+        }
+        public void TestAddedToCache(object sender, TestEventArgs e)
+        {
+            addedToCache = true;
         }
     }
 
