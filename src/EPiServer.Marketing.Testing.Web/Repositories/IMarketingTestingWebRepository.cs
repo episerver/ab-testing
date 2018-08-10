@@ -7,6 +7,8 @@ using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Core.Manager;
+
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
     public interface IMarketingTestingWebRepository
@@ -35,6 +37,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true);
         void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true);
         List<IMarketingTest> GetActiveCachedTests();
+        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
     }
 }

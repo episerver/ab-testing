@@ -14,7 +14,6 @@ using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Data;
 using EPiServer.Marketing.Testing.Core.Manager;
-using EPiServer.Web.Routing;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Globalization;
@@ -362,8 +361,9 @@ namespace EPiServer.Marketing.Testing.Web
 
                 try
                 {
-                    var pageHelper = _serviceLocator.GetInstance<IPageRouteHelper>();
-                    if (pageHelper.PageLink.ID == cea.ContentLink.ID)
+                    var contentLink = _httpContextHelper.GetCurrentContentLink();
+                    
+                    if (contentLink != null && contentLink.ID == cea.ContentLink.ID)
                     {
                         _httpContextHelper.SetItemValue(ABTestHandlerSkipKpiEval, true);
                     }
@@ -371,7 +371,7 @@ namespace EPiServer.Marketing.Testing.Web
                 catch (Exception err)
                 {
                     // this should never happen when in view mode and we should never be here in edit mode.
-                    _logger.Warning("EvaluateKpis : pagehelper error - evaluating all kpis", err);
+                    _logger.Debug("EvaluateKpis : pagehelper error - evaluating all kpis", err);
                 }
             }
 

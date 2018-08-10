@@ -16,6 +16,8 @@ using EPiServer.Marketing.Testing.Dal.Exceptions;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
 using System.Globalization;
+using EPiServer.Framework.Cache;
+using System.Threading.Tasks;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -35,10 +37,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     public class TestManager : ITestManager
     {
         internal const string TestingCacheName = "TestingCache";
+        internal const string CacheValidFlag = "CacheValidFlag";
+
+        private static Object _cacheLock = new object();
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private Random _randomParticiaption = new Random();
         private ObjectCache _testCache = MemoryCache.Default;
+        private ISynchronizedObjectInstanceCache _testCacheValidFlag;
         private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
         private DefaultMarketingTestingEvents _marketingTestingEvents;
@@ -50,7 +56,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             get
             {
-                initCache(); // MAR-904 - make sure that there is always a cache
+                ManageCaches(); // MAR-904 - make sure that there is always a cache
+                                // MAR-1192 - Load Balanced environments causeing internal exceptions randomly.
                 return _testCache.Get(TestingCacheName) as List<IMarketingTest>;
             }
         }
@@ -59,7 +66,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public TestManager()
         {
             _serviceLocator = ServiceLocator.Current;
-            _marketingTestingEvents = ServiceLocator.Current.GetInstance<DefaultMarketingTestingEvents>();
+            _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
+            _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
 
             try
             {
@@ -85,24 +93,70 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
+            _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
         }
 
-        private void initCache()
+        /// <summary>
+        /// Responsible for initializing the test cache as well as managing it in load balanced environments. Note that when a content authoring machines
+        /// signal that the cache is out of date (by removing the CacheValidFlag from all content delivery machines this code will reload all the tests
+        /// and add them to the cache.
+        /// </summary>
+        private void ManageCaches()
         {
-            if (!_testCache.Contains(TestingCacheName))
+            var cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
+            if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
             {
-                var activeTestCriteria = new TestCriteria();
-                var activeTestStateFilter = new ABTestFilter()
+                // Cache is either out of date or doesnt exist yet.
+                lock (_cacheLock)
                 {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                };
+                    cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
+                    if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
+                    {
+                        // Clear the variant cache
+                        var allKeys = _variantCache.Where(o => o.Key.Contains("epi")).Select(k => k.Key);
+                        Parallel.ForEach(allKeys, key => _variantCache.Remove(key));
 
-                activeTestCriteria.AddFilter(activeTestStateFilter);
+                        UpdateActiveTestCache();
 
-                var tests = GetTestList(activeTestCriteria);
-                _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+                        // Insert the flag so that we know that we know this server is up to date. 
+                        _testCacheValidFlag.Insert(CacheValidFlag, "true", CacheEvictionPolicy.Empty);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears the current test cache and reloads it.
+        /// </summary>
+        private void UpdateActiveTestCache()
+        {
+            // Clear the test cache, fire the TestRemovedFromCacheEvent to disable the event proxy for kpis.
+            if (_testCache.Contains(TestingCacheName))
+            {
+                foreach (var test in (List<IMarketingTest>)_testCache.Get(TestingCacheName))
+                {
+                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
+                }
+                _testCache.Remove(TestingCacheName);
+            }
+
+            // Get all the tests that are supposed to be active and add to cache.
+            var activeTestCriteria = new TestCriteria();
+            var activeTestStateFilter = new ABTestFilter()
+            {
+                Property = ABTestProperty.State,
+                Operator = FilterOperator.And,
+                Value = TestState.Active
+            };
+            activeTestCriteria.AddFilter(activeTestStateFilter);
+            var tests = GetTestList(activeTestCriteria);
+            _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
+
+            // now for every test added, fire the TestAddedToCacheEvent.
+            // Note that this event is also used to intialize the event proxy for kpis
+            foreach (var test in tests)
+            {
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
             }
         }
 
@@ -402,14 +456,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _dataAccess = new TestingDataAccess();
                 _kpiManager = new KpiManager();
-                initCache();
+                ManageCaches();
             }
 
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
         }
 
 
-        internal void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
+        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {
             var cachedTests = ActiveCachedTests;
 
@@ -420,6 +474,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     {
                         cachedTests.Add(test);
                         _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent,new TestEventArgs(test));
+
+                        _testCacheValidFlag.RemoveRemote(CacheValidFlag);
                     }
                     break;
                 case CacheOperator.Remove:
@@ -427,6 +483,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     {
                         cachedTests.Remove(test);
                         _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,new TestEventArgs(test));
+
+                        _testCacheValidFlag.RemoveRemote(CacheValidFlag);
                     }
                     break;
             }

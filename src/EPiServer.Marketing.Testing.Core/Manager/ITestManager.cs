@@ -162,5 +162,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Cache of all currently active tests.
         /// </summary>
         List<IMarketingTest> ActiveCachedTests { get; }
+
+        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
     }
 }

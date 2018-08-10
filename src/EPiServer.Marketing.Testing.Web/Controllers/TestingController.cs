@@ -39,9 +39,9 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         [ExcludeFromCodeCoverage]
-        internal TestingController(IHttpContextHelper contexthelper)
+        internal TestingController(IHttpContextHelper contexthelper, IServiceLocator locator)
         {
-            _serviceLocator = ServiceLocator.Current;
+            _serviceLocator = locator;
             _httpContextHelper = contexthelper;
         }
 

@@ -60,9 +60,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
             _urlResolver.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/alloy-plan/");
             _serviceLocator.Setup(s1 => s1.GetInstance<UrlResolver>()).Returns(_urlResolver.Object);
 
-            ServiceLocator.SetLocator(_serviceLocator.Object);
-
-            return new StickySiteKpi(_stickyHelperMock.Object);
+            return new StickySiteKpi(_serviceLocator.Object, _stickyHelperMock.Object);
         }
 
         [Fact]
