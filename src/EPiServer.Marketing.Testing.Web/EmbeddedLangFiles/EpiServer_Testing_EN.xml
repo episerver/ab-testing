@@ -69,6 +69,7 @@
         <save>Save</save>
         <success>Configuration settings saved successfully.</success>
         <testduration>Test Duration:</testduration>
+        <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>

@@ -49,6 +49,11 @@
                         <asp:ListItem Value="90"> 90% </asp:ListItem>
                     </asp:DropDownList>
                 </div>
+                <div class="epi-size15">
+                    <asp:Label AssociatedControlID="CookieDelimeter" runat="server"><%# Translate("/abtesting/admin/cookiedelimeter") %></asp:Label>
+                    <asp:TextBox ID="CookieDelimeter" runat="server" MaxLength="255" Text="<%# TestSettings.CookieDelimeter %>" />
+                    
+                </div>
                 <div align="right">
                     <EPiServerUI:ToolButton runat="server" SkinID="Save" Text="<%$ Resources: EPiServer, abtesting.admin.save %>" OnClick="Save_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
                     <EPiServerUI:ToolButton runat="server" SkinID="Cancel" Text="<%$ Resources: EPiServer, abtesting.admin.cancel %>" OnClick="Cancel_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools"/>

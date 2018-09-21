@@ -32,6 +32,9 @@ namespace EPiServer.Marketing.Testing.Web.Config
         [Range(1, 20, ErrorMessage = "Must be a positive number between 1 and 20")]
         public int KpiLimit { get; set; }
 
+        [StringLength(1, ErrorMessage = "Must be a single character.")]
+        public string CookieDelimeter { get; set; }
+
         internal static AdminConfigTestSettings _currentSettings;
 
        [ExcludeFromCodeCoverage]
@@ -59,6 +62,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ConfidenceLevel = 95;
             AutoPublishWinner = false;
             KpiLimit = 5;
+            CookieDelimeter = ":";
         }
 
         [ExcludeFromCodeCoverage]

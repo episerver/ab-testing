@@ -8,6 +8,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -19,7 +20,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private IEpiserverHelper _episerverHelper;
 
         internal readonly string COOKIE_PREFIX = "EPI-MAR-";
-        internal readonly string COOKIE_DELIMETER = ":";
 
         [ExcludeFromCodeCoverage]
         public TestDataCookieHelper()
@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             {
                 varIndex = aTest.Variants.FindIndex(i => i.Id == testData.TestVariantId);
             }
-            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + aTest.ContentLanguage)
+            var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + AdminConfigTestSettings.Current.CookieDelimeter + aTest.ContentLanguage)
             {
                 ["start"] = aTest.StartDate.ToString(),
                 ["vId"] = varIndex.ToString(),
@@ -96,7 +96,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void UpdateTestDataCookie(TestDataCookie testData)
         {
-            _httpContextHelper.RemoveCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + _episerverHelper.GetContentCultureinfo().Name);
+            _httpContextHelper.RemoveCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + AdminConfigTestSettings.Current.CookieDelimeter + _episerverHelper.GetContentCultureinfo().Name);
             SaveTestDataToCookie(testData);
         }
 
@@ -114,13 +114,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //var cultureName = currentCulture.Name;
 
-            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename))
+            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + AdminConfigTestSettings.Current.CookieDelimeter + currentCulturename))
             {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename);
+                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + AdminConfigTestSettings.Current.CookieDelimeter + currentCulturename);
             }
             else
             {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + COOKIE_DELIMETER + currentCulturename);
+                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + AdminConfigTestSettings.Current.CookieDelimeter + currentCulturename);
             }
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
@@ -222,9 +222,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public void ExpireTestDataCookie(TestDataCookie testData)
         {
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + cultureName;
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + AdminConfigTestSettings.Current.CookieDelimeter + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + cultureName);
+            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + AdminConfigTestSettings.Current.CookieDelimeter + cultureName);
             expiredCookie.HttpOnly = true;
             expiredCookie.Expires = DateTime.Now.AddDays(-1d);
             _httpContextHelper.AddCookie(expiredCookie);
@@ -238,9 +238,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public TestDataCookie ResetTestDataCookie(TestDataCookie testData)
         {
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + COOKIE_DELIMETER + cultureName;
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + AdminConfigTestSettings.Current.CookieDelimeter + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + COOKIE_DELIMETER + cultureName) { HttpOnly = true };
+            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + AdminConfigTestSettings.Current.CookieDelimeter + cultureName) { HttpOnly = true };
             _httpContextHelper.AddCookie(resetCookie);
             return new TestDataCookie();
         }
