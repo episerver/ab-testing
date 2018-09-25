@@ -69,7 +69,7 @@
         <save>Save</save>
         <success>Configuration settings saved successfully.</success>
         <testduration>Test Duration:</testduration>
-        <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
+        <cookiedelimeter>Cookie Delimeter (Only to be changed while there are no active tests; otherwise, it could lead to inaccurate test results):</cookiedelimeter>
         <delimetererror>Cookie delimeter must be a single character.</delimetererror>
       </admin>
       <archivedtestcomponent>
