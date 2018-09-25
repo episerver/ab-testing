@@ -57,7 +57,12 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 returnError = true;
             }
 
-            if (!string.IsNullOrEmpty(CookieDelimeter.Text) && CookieDelimeter.Text.Length == 1)
+            if (string.IsNullOrEmpty(CookieDelimeter.Text) || CookieDelimeter.Text.Length != 1)
+            {
+                ShowMessage(string.Format(Translate("/abtesting/admin/delimetererror")), false);
+                returnError = true;
+            }
+            else
             {
                 delimeter = CookieDelimeter.Text;
             }

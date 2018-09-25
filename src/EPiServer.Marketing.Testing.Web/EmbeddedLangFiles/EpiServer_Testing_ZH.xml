@@ -70,6 +70,7 @@
         <success>配置设施保存成功。</success>
         <testduration>测试时长：</testduration>
         <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
+        <delimetererror>Cookie delimeter must be a single character.</delimetererror>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>

@@ -70,6 +70,7 @@
         <success>構成設定が正常に保存されました。</success>
         <testduration>テスト期間:</testduration>
         <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
+        <delimetererror>Cookie delimeter must be a single character.</delimetererror>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>

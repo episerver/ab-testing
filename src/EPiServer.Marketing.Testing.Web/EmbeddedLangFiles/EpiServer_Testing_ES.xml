@@ -70,6 +70,7 @@
         <success>Ajustes de configuración guardados correctamente.</success>
         <testduration>Duración de la prueba:</testduration>
         <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
+        <delimetererror>Cookie delimeter must be a single character.</delimetererror>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>
