@@ -69,6 +69,7 @@
         <save>保存</save>
         <success>構成設定が正常に保存されました。</success>
         <testduration>テスト期間:</testduration>
+        <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>

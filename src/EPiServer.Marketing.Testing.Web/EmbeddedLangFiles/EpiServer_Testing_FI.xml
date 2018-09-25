@@ -69,6 +69,7 @@
         <save>Tallenna</save>
         <success>Määritysasetusten tallennus onnistui.</success>
         <testduration>Testin kesto:</testduration>
+        <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>

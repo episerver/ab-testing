@@ -69,6 +69,7 @@
         <save>Gem</save>
         <success>Konfigurationsindstillingerne blev gemt.</success>
         <testduration>Testens varighed:</testduration>
+        <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>

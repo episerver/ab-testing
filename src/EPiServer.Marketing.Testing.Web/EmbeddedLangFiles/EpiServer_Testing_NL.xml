@@ -69,6 +69,7 @@
         <save>Opslaan</save>
         <success>Configuratie-instellingen succesvol opgeslagen.</success>
         <testduration>Testduur:</testduration>
+        <cookiedelimeter>Cookie Delimeter:</cookiedelimeter>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>
