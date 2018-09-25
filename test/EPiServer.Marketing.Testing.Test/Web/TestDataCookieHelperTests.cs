@@ -19,7 +19,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IMarketingTestingWebRepository> _testRepo;
         private Mock<IHttpContextHelper> _httpContextHelper;
         private Mock<IEpiserverHelper> _epiHelper;
-        private Mock<IServiceLocator> _serviceLocator;
         private Mock<IAdminConfigTestSettingsHelper> _settingsHelper;
 
         private Guid _activeTestId = Guid.Parse("a194bde9-af3c-40fa-9635-338d02f5dea4");
@@ -55,14 +54,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _settingsHelper = new Mock<IAdminConfigTestSettingsHelper>();
             _settingsHelper.Setup(call => call.GetCookieDelimeter()).Returns(":");
 
-            _serviceLocator = new Mock<IServiceLocator>();
-            _serviceLocator.Setup(call => call.GetInstance<IAdminConfigTestSettingsHelper>())
-                .Returns(_settingsHelper.Object);
-
             _httpContextHelper = new Mock<IHttpContextHelper>();
             _epiHelper = new Mock<IEpiserverHelper>();
 
-            return new TestDataCookieHelper(_serviceLocator.Object, _testRepo.Object, _httpContextHelper.Object, _epiHelper.Object, _cookieDelimeter);
+            return new TestDataCookieHelper(_settingsHelper.Object, _testRepo.Object, _httpContextHelper.Object, _epiHelper.Object);
         }
 
         [Fact]
