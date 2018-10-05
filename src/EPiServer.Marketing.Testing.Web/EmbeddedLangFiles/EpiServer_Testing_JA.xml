@@ -69,6 +69,8 @@
         <save>保存</save>
         <success>構成設定が正常に保存されました。</success>
         <testduration>テスト期間:</testduration>
+        <cookiedelimeter>Cookie Delimeter (Only to be changed while there are no active tests; otherwise, it could lead to inaccurate test results):</cookiedelimeter>
+        <delimetererror>Cookie delimeter must be a single character.</delimetererror>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>
