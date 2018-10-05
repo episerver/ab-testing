@@ -59,7 +59,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             {
                 config.Routes.MapHttpRoute(
                 name: "EPiServerContentOptimization",
-                routeTemplate: "api/episerver/{controller}/{action}",
+                routeTemplate: "api/episerver/Testing/{action}",
                 defaults: new { controller = "Testing", action = "GetAllTests" }
                 );
             });
