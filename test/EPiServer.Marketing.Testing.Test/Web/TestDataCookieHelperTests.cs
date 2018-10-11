@@ -171,7 +171,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testCookie = new HttpCookie(mockTestDataCookiehelper.COOKIE_PREFIX + testContentId.ToString() + _cookieDelimeter + "da-DK")
             {
-                ["start"] = "28-09-2018 07:04:41",
+                ["start"] = DateTime.Parse("28-09-2018 07:04:41", new CultureInfo("da-DK")).ToString(CultureInfo.InvariantCulture),
                 ["vId"] = "0",
                 ["viewed"] = "false",
                 ["converted"] = "false",
@@ -431,7 +431,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTestDataCookiehelper.SaveTestDataToCookie(tdCookie);
 
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == mockTestDataCookiehelper.COOKIE_PREFIX + tdCookie.TestContentId + _cookieDelimeter + "en-GB")));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c["start"] == startDate.ToString())));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c["start"] == startDate.ToString(CultureInfo.InvariantCulture))));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vId"]) == 0)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["viewed"]) == tdCookie.Viewed)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["converted"]) == tdCookie.Converted)));
@@ -508,7 +508,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //Removed the old cookie
             _httpContextHelper.Verify(hch => hch.RemoveCookie(It.Is<string>(cid => cid == cookieKey)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c.Name == cookieKey)));
-            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c["start"] == startDate.ToString())));
+            _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => c["start"] == startDate.ToString(CultureInfo.InvariantCulture))));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => int.Parse(c["vId"]) == 1)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["viewed"]) == updatedCookie.Viewed)));
             _httpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(c => bool.Parse(c["converted"]) == updatedCookie.Converted)));

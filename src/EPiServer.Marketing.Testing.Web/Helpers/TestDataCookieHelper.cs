@@ -75,7 +75,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + aTest.ContentLanguage)
             {
-                ["start"] = aTest.StartDate.ToString(),
+                ["start"] = aTest.StartDate.ToString(CultureInfo.InvariantCulture),
                 ["vId"] = varIndex.ToString(),
                 ["viewed"] = testData.Viewed.ToString(),
                 ["converted"] = testData.Converted.ToString(),
@@ -135,13 +135,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
                     bool outval;
                     
-                    retCookie.TestStart = DateTime.Parse(cookie["start"], currentCulture);
+                    retCookie.TestStart = DateTime.Parse(cookie["start"], CultureInfo.InvariantCulture);
                     retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                     retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
                     var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId,currentCulture).FirstOrDefault();
                     
-                    if (test != null && retCookie.TestStart.ToString() == test.StartDate.ToString())
+                    if (test != null && retCookie.TestStart.ToString(CultureInfo.InvariantCulture) == test.StartDate.ToString(CultureInfo.InvariantCulture))
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
                         retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
