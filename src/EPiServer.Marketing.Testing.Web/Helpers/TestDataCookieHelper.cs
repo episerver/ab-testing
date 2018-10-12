@@ -109,6 +109,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public TestDataCookie GetTestDataFromCookie(string testContentId, string cultureName = null)
         {
+            var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var retCookie = new TestDataCookie();
             HttpCookie cookie;
             var currentCulture = cultureName != null ? new CultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
@@ -116,13 +117,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             //var cultureName = currentCulture.Name;
 
-            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + currentCulturename))
+            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename))
             {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + currentCulturename);
+                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename);
             }
             else
             {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + currentCulturename);
+                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename);
             }
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
@@ -131,7 +132,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 {
                     Guid outguid;
                     int outint = 0;
-                    retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
+                    retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(cookieDelimeter[0])[0], out outguid) ? outguid : Guid.Empty;
 
                     bool outval;
                     
@@ -186,7 +187,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var retCookie = new TestDataCookie();
 
             Guid outguid;
-            CultureInfo culture = new CultureInfo(cookieToConvert.Name.Split(':')[1]);
+            CultureInfo culture = new CultureInfo(cookieToConvert.Name.Split(_adminConfigTestSettingsHelper.GetCookieDelimeter()[0])[1]);
             retCookie.TestId = Guid.TryParse(cookieToConvert["TestId"], out outguid) ? outguid : Guid.Empty;
             retCookie.TestContentId = Guid.TryParse(cookieToConvert["TestContentId"], out outguid) ? outguid : Guid.Empty;
             retCookie.TestVariantId = Guid.TryParse(cookieToConvert["TestVariantId"], out outguid) ? outguid : Guid.Empty;
@@ -223,10 +224,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void ExpireTestDataCookie(TestDataCookie testData)
         {
+            var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName;
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + cookieDelimeter + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName);
+            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + cookieDelimeter + cultureName);
             expiredCookie.HttpOnly = true;
             expiredCookie.Expires = DateTime.Now.AddDays(-1d);
             _httpContextHelper.AddCookie(expiredCookie);
@@ -239,10 +241,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public TestDataCookie ResetTestDataCookie(TestDataCookie testData)
         {
+            var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName;
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + cookieDelimeter + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName) { HttpOnly = true };
+            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + cookieDelimeter + cultureName) { HttpOnly = true };
             _httpContextHelper.AddCookie(resetCookie);
             return new TestDataCookie();
         }
@@ -256,17 +259,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public IList<TestDataCookie> GetTestDataFromCookies()
         {
+            var delimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter()[0];
+
             //Get up to date cookies data for cookies which are actively being processed
             var aResponseCookieKeys = _httpContextHelper.GetResponseCookieKeys();
             List<TestDataCookie> tdcList = (from name in aResponseCookieKeys
                                             where name.Contains(COOKIE_PREFIX)
-                                            select GetTestDataFromCookie(name.Split(':')[0].Substring(COOKIE_PREFIX.Length))).ToList();
+                                            select GetTestDataFromCookie(name.Split(delimeter)[0].Substring(COOKIE_PREFIX.Length))).ToList();
 
             //Get cookie data from cookies not recently updated.
             tdcList.AddRange(from name in _httpContextHelper.GetRequestCookieKeys()
                              where name.Contains(COOKIE_PREFIX) &&
                              !aResponseCookieKeys.Contains(name)
-                             select GetTestDataFromCookie(name.Split(':')[0].Substring(COOKIE_PREFIX.Length)));
+                             select GetTestDataFromCookie(name.Split(delimeter)[0].Substring(COOKIE_PREFIX.Length)));
 
             return tdcList;
         }
