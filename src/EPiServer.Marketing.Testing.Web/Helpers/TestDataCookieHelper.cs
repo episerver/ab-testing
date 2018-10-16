@@ -115,15 +115,20 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var currentCulture = cultureName != null ? new CultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
             var currentCulturename = cultureName != null ? cultureName : _episerverHelper.GetContentCultureinfo().Name;
 
-            //var cultureName = currentCulture.Name;
+            // old cookies use : for delimeter, need to update them to use _, we should remove this in a future release.
+            UpdateOldCookie(testContentId, currentCulture, currentCulturename);
 
             if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename))
             {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename);
+                cookie =
+                    _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + cookieDelimeter +
+                                                            currentCulturename);
             }
             else
             {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename);
+                cookie =
+                    _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + cookieDelimeter +
+                                                        currentCulturename);
             }
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
@@ -172,6 +177,77 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 }
             }
             return retCookie;
+        }
+
+        /// <summary>
+        /// previous verions of cookies used a colon : delimeter which causes issues with cookie based authentication
+        /// the colon is also an illegal charagter for cookie names.  this changes it to an underscore _
+        /// </summary>
+        /// <param name="testContentId"></param>
+        /// <param name="currentCulture"></param>
+        /// <param name="currentCulturename"></param>
+        internal void UpdateOldCookie(string testContentId, CultureInfo currentCulture, string currentCulturename)
+        {
+            var oldCookieDelimeter = ":";
+            HttpCookie cookie;
+
+            // old cookies use : for delimeter, need to update them to use _
+            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + oldCookieDelimeter + currentCulturename))
+            {
+                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + oldCookieDelimeter + currentCulturename);
+            }
+            else
+            {
+                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + oldCookieDelimeter + currentCulturename);
+            }
+
+            if (cookie != null)
+            {
+                Guid outguid;
+                var contentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(oldCookieDelimeter[0])[0], out outguid) ? outguid : Guid.Empty;
+                var outint = 0;
+                var startDate = DateTime.Parse(cookie["start"], CultureInfo.InvariantCulture);
+                var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
+                var test = _testRepo.GetActiveTestsByOriginalItemId(contentId, currentCulture).FirstOrDefault();
+                if (test != null &&
+                    startDate.ToString(CultureInfo.InvariantCulture) ==
+                    test.StartDate.ToString(CultureInfo.InvariantCulture))
+                {
+                    bool outval;
+                    var testDataCookie = new TestDataCookie()
+                    {
+                        TestContentId = Guid.Parse(testContentId),
+                        TestId = test.Id,
+                        TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid(),
+                        AlwaysEval = Convert.ToBoolean(cookie[""]),
+                        TestStart = startDate,
+                        ShowVariant = true,
+                        Viewed = bool.TryParse(cookie["viewed"], out outval) && outval,
+                        Converted = bool.TryParse(cookie["converted"], out outval) && outval
+                    };
+
+                    var orderedKpiInstances = test.KpiInstances.OrderBy(x => x.Id).ToList();
+                    test.KpiInstances = orderedKpiInstances;
+
+                    for (var x = 0; x < test.KpiInstances.Count; x++)
+                    {
+                        var converted = false;
+                        bool.TryParse(cookie["k" + x], out converted);
+                        testDataCookie.KpiConversionDictionary.Add(test.KpiInstances[x].Id, converted);
+                        testDataCookie.AlwaysEval = Attribute.IsDefined(test.KpiInstances[x].GetType(), typeof(AlwaysEvaluateAttribute));
+                    }
+                    SaveTestDataToCookie(testDataCookie);
+                    var oldCookieName = cookie.Name;
+                    _httpContextHelper.RemoveCookie(oldCookieName);
+
+                    var expiredCookie = new HttpCookie(oldCookieName)
+                    {
+                        HttpOnly = true,
+                        Expires = DateTime.Now.AddDays(-1d)
+                    };
+                    _httpContextHelper.AddCookie(expiredCookie);
+                }
+            }
         }
 
         /// <summary>

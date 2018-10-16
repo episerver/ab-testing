@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Guid _testContentGuid = Guid.Parse("6d532659-006d-453b-b7f4-62a94b2f3a3c");
         private Guid _testVariantGuid = Guid.Parse("9226a971-605c-4fd7-8a5c-aa7873e1e818");
         private DateTime _testEndDateTime = DateTime.Parse("5/5/2050");
-        private string _cookieDelimeter = ":";
+        private string _cookieDelimeter = "_";
         private IMarketingTest _activeTest;
         private IMarketingTest _inactiveTest;
 
@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 KpiInstances = new List<IKpi>()
             };
             _settingsHelper = new Mock<IAdminConfigTestSettingsHelper>();
-            _settingsHelper.Setup(call => call.GetCookieDelimeter()).Returns(":");
+            _settingsHelper.Setup(call => call.GetCookieDelimeter()).Returns(_cookieDelimeter);
 
             _httpContextHelper = new Mock<IHttpContextHelper>();
             _epiHelper = new Mock<IEpiserverHelper>();
@@ -149,6 +149,82 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(returnCookieData.TestVariantId == variant1.Id);
             Assert.False(returnCookieData.Viewed);
             Assert.False(returnCookieData.Converted);
+        }
+
+        [Fact]
+        public void GetTestDataFromCookie_Updates_Cookie_To_Use_New_Delimeter()
+        {
+            var mockTestDataCookiehelper = GetUnitUnderTest();
+            var testContentId = Guid.NewGuid();
+            var startDate = DateTime.Now.AddDays(-2);
+            var expireDate = DateTime.Now.AddDays(2);
+            var variant1 = new Variant()
+            {
+                Id = Guid.Parse("dee37c30-973b-4e48-9b59-148a6a730ed9"),
+                IsPublished = true
+            };
+
+            var variant2 = new Variant()
+            {
+                Id = Guid.Parse("a19221d7-b977-4f90-b256-2e6b3cfd8216"),
+            };
+
+            var oldcookiekey = mockTestDataCookiehelper.COOKIE_PREFIX + testContentId.ToString() + ":" + "en-US";
+            var testCookie = new HttpCookie(oldcookiekey)
+            {
+                ["start"] = startDate.ToString(),
+                ["vId"] = "0",
+                ["viewed"] = "false",
+                ["converted"] = "false",
+                Expires = expireDate,
+                ["k0"] = true.ToString()
+            };
+
+            var newcookiekey = mockTestDataCookiehelper.COOKIE_PREFIX + testContentId.ToString() + _cookieDelimeter +
+                               "en-US";
+            var updatedTestCookie = new HttpCookie(newcookiekey)
+            {
+                ["start"] = startDate.ToString(),
+                ["vId"] = "0",
+                ["viewed"] = "false",
+                ["converted"] = "false",
+                Expires = expireDate,
+                ["k0"] = true.ToString()
+            };
+
+            var test = new ABTest()
+            {
+                Id = _activeTestId,
+                StartDate = startDate,
+                OriginalItemId = testContentId,
+                Variants = new List<Variant>() { variant1, variant2 },
+                KpiInstances = new List<IKpi>(),
+                ContentLanguage = "en-US"
+
+            };
+
+            _httpContextHelper.Setup(
+                    hch =>
+                        hch.GetResponseCookie(
+                            It.Is<string>(s => s == newcookiekey)))
+                .Returns(updatedTestCookie);
+            _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.Is<string>(s => s == oldcookiekey))).Returns(testCookie);
+            _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(_activeTest);
+            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>());
+            _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
+            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { test });
+            _testRepo.Setup(call => call.GetTestById(It.IsAny<Guid>(), true)).Returns(test);
+
+            var returnCookieData = mockTestDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
+            Assert.True(returnCookieData.TestId == _activeTestId);
+            Assert.True(returnCookieData.TestContentId == testContentId);
+            Assert.False(returnCookieData.ShowVariant);
+            Assert.True(returnCookieData.TestVariantId == variant1.Id);
+            Assert.False(returnCookieData.Viewed);
+            Assert.False(returnCookieData.Converted);
+            _httpContextHelper.Verify(call => call.AddCookie(It.IsAny<HttpCookie>()), Times.Exactly(2));
+            _httpContextHelper.Verify(call => call.RemoveCookie(It.Is<string>(s => s == oldcookiekey)), Times.Once);
         }
 
         [Fact]
@@ -286,14 +362,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 OriginalItemId = testContentId,
                 StartDate = startDate,
                 KpiInstances = new List<IKpi>() { kpiInstance },
-                ContentLanguage = "en-us"
+                ContentLanguage = "en-us",
+                Variants = new List<Variant>() { new Variant() { Id = Guid.Parse("3352e74c-11c9-402f-86f9-7a7f1bfab756") } }
             };
 
+            
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-us"));
             _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { aTest });
             _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>() { aTest });
+            _testRepo.Setup(call => call.GetTestById(It.IsAny<Guid>(), true)).Returns(aTest);
 
             var returnCookieData = mockTestDataCookiehelper.GetTestDataFromCookie(testContentId.ToString());
             Assert.True(returnCookieData.KpiConversionDictionary.ContainsKey(kpiInstance.Id), "expected the kpi instance info to be added to the conversion dictionary");
@@ -373,6 +452,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>());
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
             _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { aTest });
+            _testRepo.Setup(call => call.GetTestById(It.IsAny<Guid>(), true)).Returns(aTest);
 
             var returnCookieData = mockTestDataCookiehelper.GetTestDataFromCookies();
             Assert.True(returnCookieData.Count == 2);

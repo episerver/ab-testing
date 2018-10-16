@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True((result.Data as AdminConfigTestSettings).TestDuration == 30, "AdminConfigTestSettings.TestDuration value does not match");
             Assert.True((result.Data as AdminConfigTestSettings).AutoPublishWinner == false, "AdminConfigTestSettings.AutoPublishWinner value does not match");
             Assert.True((result.Data as AdminConfigTestSettings).KpiLimit == 5, "AdminConfigTestSettings.KpiLimit value does not match");
-            Assert.True((result.Data as AdminConfigTestSettings).CookieDelimeter == ":", "AdminConfigTestSettings.CookieDelimeter value does not match");
+            Assert.True((result.Data as AdminConfigTestSettings).CookieDelimeter == "_", "AdminConfigTestSettings.CookieDelimeter value does not match");
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(30, settings.TestDuration);
             Assert.Equal(10, settings.ParticipationPercent);
             Assert.Equal(id, settings.Id);
-            Assert.Equal(":", settings.CookieDelimeter);
+            Assert.Equal("_", settings.CookieDelimeter);
 
             settings.Reset();
 
