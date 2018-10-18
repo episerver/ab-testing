@@ -35,7 +35,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
         {
             var duration = 0;
             var particiaption = 0;
-            var delimeter = ":";
 
             if (!InputIsValid(TestDuration.Text, out duration) || !InputIsValid(ParticipationPercent.Text, out particiaption))
             {
@@ -57,16 +56,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 returnError = true;
             }
 
-            if (string.IsNullOrEmpty(CookieDelimeter.Text) || CookieDelimeter.Text.Length != 1)
-            {
-                ShowMessage(string.Format(Translate("/abtesting/admin/delimetererror")), false);
-                returnError = true;
-            }
-            else
-            {
-                delimeter = CookieDelimeter.Text;
-            }
-
             if (returnError)
             {
                 return;
@@ -77,8 +66,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 TestDuration = duration,
                 ParticipationPercent = particiaption,
                 ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue),
-                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
-                CookieDelimeter = delimeter
+                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue)
             };
 
             settings.Save();
