@@ -45,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"capture.js " + id + " " + fileName + " " + thumbData.sessionCookie + " "+ thumbData.authCookie + " "+ thumbData.host),
+                Arguments = String.Format("{0}", @"--ignore-ssl-errors=true capture.js " + id + " " + fileName + " " + thumbData.sessionCookie + " " + thumbData.authCookie + " " + thumbData.host),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
