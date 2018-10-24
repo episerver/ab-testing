@@ -66,7 +66,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 TestDuration = duration,
                 ParticipationPercent = particiaption,
                 ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue),
-                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
+                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue)
             };
 
             settings.Save();
@@ -103,6 +103,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
             AutoPublishWinner.SelectedValue = TestSettings.AutoPublishWinner.ToString();
+            CookieDelimeter.Text = TestSettings.CookieDelimeter;
         }
 
         private void ShowMessage(string msg, bool isWarning)
