@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using EPiServer.Data;
 using EPiServer.Data.SchemaUpdates;
+using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Dal.Migrations;
 using EPiServer.ServiceLocation;
@@ -20,14 +21,16 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
         private const string UpgradeScriptResource = "EPiServer.Marketing.Testing.Web.SchemaUpdater.Testing.zip";
         private readonly IDatabaseHandler _databaseHandler;
         private readonly ScriptExecutor _scriptExecutor;
+        private ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SchemaUpdater"/> class.
         /// </summary>
-        public SchemaUpdater(IDatabaseHandler databaseHandler, ScriptExecutor scriptExecutor)
+        public SchemaUpdater(IDatabaseHandler databaseHandler, ScriptExecutor scriptExecutor, ILogger logger)
         {
             _databaseHandler = databaseHandler;
             _scriptExecutor = scriptExecutor;
+            _logger = logger;
         }
 
         /// <inheritdoc/>
@@ -64,6 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             }
             catch (Exception ex)
             {
+                _logger.Error("ABTesting: Unable to retrieve version of scehema.");
                 return null;
             }
 
@@ -79,6 +83,7 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             }
             catch (Exception ex)
             {
+                _logger.Error("ABTesting: Error upgrading schema.");
             }
         }
     }
