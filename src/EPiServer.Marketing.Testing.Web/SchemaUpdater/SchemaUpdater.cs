@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             }
             catch (Exception ex)
             {
-                _logger.Error("ABTesting: Unable to retrieve version of scehema.");
+                _logger.Error("ABTesting: Unable to retrieve version of scehema.", ex);
                 return null;
             }
 
@@ -83,7 +83,7 @@ namespace EPiServer.Marketing.Testing.Web.SchemaUpdater
             }
             catch (Exception ex)
             {
-                _logger.Error("ABTesting: Error upgrading schema.");
+                _logger.Error("ABTesting: Error upgrading schema.", ex);
             }
         }
     }
