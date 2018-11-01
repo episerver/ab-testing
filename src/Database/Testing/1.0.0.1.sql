@@ -1,10 +1,8 @@
 --beginvalidatingquery
-	if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[sp_DatabaseVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-    begin
+		-- mar-1205: we used to check for a core cms stored proc but, there are times when our scripts get run before the core ones do and it would blow everything up
+		-- so now we just let our scripts run.  We use the same connection string as core and have a dependency on it as well, so it's not necessary
+		-- to check.
 		 select 1, 'Upgrading database'
-    end
-    else
-		select -1, 'Not an EPiServer database'
 --endvalidatingquery
 
 -- Create MultivariateTest Tables to Store MultivariateTest Information.
