@@ -18,6 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private IHttpContextHelper _httpContextHelper;
         private IEpiserverHelper _episerverHelper;
         private IAdminConfigTestSettingsHelper _adminConfigTestSettingsHelper;
+        private ITestDataCookieMigrator _testDataCookieMigrator;
 
         internal readonly string COOKIE_PREFIX = "EPI-MAR-";
 
@@ -28,17 +29,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             _testRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
             _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             _httpContextHelper = new HttpContextHelper();
+            _testDataCookieMigrator = new TestDataCookieMigrator();
         }
 
         /// <summary>
         /// unit tests should use this contructor and add needed services to the service locator as needed
         /// </summary>
-        internal TestDataCookieHelper(IAdminConfigTestSettingsHelper adminConfigTestSettingsHelper, IMarketingTestingWebRepository testRepo, IHttpContextHelper contextHelper, IEpiserverHelper epiHelper)
+        internal TestDataCookieHelper(IAdminConfigTestSettingsHelper adminConfigTestSettingsHelper, IMarketingTestingWebRepository testRepo, IHttpContextHelper contextHelper, IEpiserverHelper epiHelper, ITestDataCookieMigrator testDataCookieMigrator)
         {
             _adminConfigTestSettingsHelper = adminConfigTestSettingsHelper;
             _testRepo = testRepo;
             _httpContextHelper = contextHelper;
             _episerverHelper = epiHelper;
+            _testDataCookieMigrator = testDataCookieMigrator;
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + aTest.ContentLanguage)
             {
-                ["start"] = aTest.StartDate.ToString(),
+                ["start"] = aTest.StartDate.ToString(CultureInfo.InvariantCulture),
                 ["vId"] = varIndex.ToString(),
                 ["viewed"] = testData.Viewed.ToString(),
                 ["converted"] = testData.Converted.ToString(),
@@ -109,21 +112,18 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public TestDataCookie GetTestDataFromCookie(string testContentId, string cultureName = null)
         {
+            var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var retCookie = new TestDataCookie();
-            HttpCookie cookie;
             var currentCulture = cultureName != null ? new CultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
             var currentCulturename = cultureName != null ? cultureName : _episerverHelper.GetContentCultureinfo().Name;
 
-            //var cultureName = currentCulture.Name;
+            // old cookies use : for delimeter, need to update them to use new delimeter, we should remove this in a future release.
+            UpdateOldCookie(testContentId, currentCulture, currentCulturename);
 
-            if (_httpContextHelper.HasCookie(COOKIE_PREFIX + testContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + currentCulturename))
-            {
-                cookie = _httpContextHelper.GetResponseCookie(COOKIE_PREFIX + testContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + currentCulturename);
-            }
-            else
-            {
-                cookie = _httpContextHelper.GetRequestCookie(COOKIE_PREFIX + testContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + currentCulturename);
-            }
+            var cookieKey = COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename;
+            var cookie = _httpContextHelper.HasCookie(cookieKey)
+                ? _httpContextHelper.GetResponseCookie(cookieKey)
+                : _httpContextHelper.GetRequestCookie(cookieKey);
 
             if (cookie != null && !string.IsNullOrEmpty(cookie.Value))
             {
@@ -131,17 +131,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 {
                     Guid outguid;
                     int outint = 0;
-                    retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(':')[0], out outguid) ? outguid : Guid.Empty;
+                    retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(cookieDelimeter[0])[0], out outguid) ? outguid : Guid.Empty;
 
                     bool outval;
                     
-                    retCookie.TestStart = DateTime.Parse(cookie["start"]);
+                    retCookie.TestStart = DateTime.Parse(cookie["start"], CultureInfo.InvariantCulture);
                     retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                     retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
                     var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId,currentCulture).FirstOrDefault();
                     
-                    if (test != null && retCookie.TestStart.ToString() == test.StartDate.ToString())
+                    if (test != null && retCookie.TestStart.ToString(CultureInfo.InvariantCulture) == test.StartDate.ToString(CultureInfo.InvariantCulture))
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
                         retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
@@ -174,6 +174,34 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         /// <summary>
+        /// previous verions of cookies used a colon : delimeter which causes issues with cookie based authentication
+        /// the colon is also an illegal charagter for cookie names.  this changes it to an underscore _
+        /// </summary>
+        /// <param name="testContentId"></param>
+        /// <param name="currentCulture"></param>
+        /// <param name="currentCulturename"></param>
+        internal void UpdateOldCookie(string testContentId, CultureInfo currentCulture, string currentCulturename)
+        {
+            var updatedTestDataCookie = _testDataCookieMigrator.UpdateOldCookie(COOKIE_PREFIX, testContentId,
+                currentCulture, currentCulturename);
+
+            if (updatedTestDataCookie != null)
+            {
+                SaveTestDataToCookie(updatedTestDataCookie);
+
+                var oldCookieName = COOKIE_PREFIX + testContentId + ":" + currentCulturename;
+                _httpContextHelper.RemoveCookie(oldCookieName);
+
+                var expiredCookie = new HttpCookie(oldCookieName)
+                {
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddDays(-1d)
+                };
+                _httpContextHelper.AddCookie(expiredCookie);
+            }
+        }
+
+        /// <summary>
         /// This method converts cookies which contain a language indicator but are in the long key format to the shorthand format.
         /// This is to support installs which may be using the long hand key format so as not to inturrupt or break their tests.
         /// We can remove this after a couple of revs once it is no longer a concern.
@@ -186,7 +214,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var retCookie = new TestDataCookie();
 
             Guid outguid;
-            CultureInfo culture = new CultureInfo(cookieToConvert.Name.Split(':')[1]);
+            CultureInfo culture = new CultureInfo(cookieToConvert.Name.Split(_adminConfigTestSettingsHelper.GetCookieDelimeter()[0])[1]);
             retCookie.TestId = Guid.TryParse(cookieToConvert["TestId"], out outguid) ? outguid : Guid.Empty;
             retCookie.TestContentId = Guid.TryParse(cookieToConvert["TestContentId"], out outguid) ? outguid : Guid.Empty;
             retCookie.TestVariantId = Guid.TryParse(cookieToConvert["TestVariantId"], out outguid) ? outguid : Guid.Empty;
@@ -223,10 +251,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void ExpireTestDataCookie(TestDataCookie testData)
         {
+            var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName;
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + cookieDelimeter + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName);
+            HttpCookie expiredCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + cookieDelimeter + cultureName);
             expiredCookie.HttpOnly = true;
             expiredCookie.Expires = DateTime.Now.AddDays(-1d);
             _httpContextHelper.AddCookie(expiredCookie);
@@ -239,10 +268,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public TestDataCookie ResetTestDataCookie(TestDataCookie testData)
         {
+            var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var cultureName = _episerverHelper.GetContentCultureinfo().Name;
-            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName;
+            var cookieKey = COOKIE_PREFIX + testData.TestContentId.ToString() + cookieDelimeter + cultureName;
             _httpContextHelper.RemoveCookie(cookieKey);
-            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + _adminConfigTestSettingsHelper.GetCookieDelimeter() + cultureName) { HttpOnly = true };
+            var resetCookie = new HttpCookie(COOKIE_PREFIX + testData.TestContentId + cookieDelimeter + cultureName) { HttpOnly = true };
             _httpContextHelper.AddCookie(resetCookie);
             return new TestDataCookie();
         }
@@ -256,17 +286,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         public IList<TestDataCookie> GetTestDataFromCookies()
         {
+            var delimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter()[0];
+
             //Get up to date cookies data for cookies which are actively being processed
             var aResponseCookieKeys = _httpContextHelper.GetResponseCookieKeys();
             List<TestDataCookie> tdcList = (from name in aResponseCookieKeys
                                             where name.Contains(COOKIE_PREFIX)
-                                            select GetTestDataFromCookie(name.Split(':')[0].Substring(COOKIE_PREFIX.Length))).ToList();
+                                            select GetTestDataFromCookie(name.Split(delimeter)[0].Substring(COOKIE_PREFIX.Length))).ToList();
 
             //Get cookie data from cookies not recently updated.
             tdcList.AddRange(from name in _httpContextHelper.GetRequestCookieKeys()
                              where name.Contains(COOKIE_PREFIX) &&
                              !aResponseCookieKeys.Contains(name)
-                             select GetTestDataFromCookie(name.Split(':')[0].Substring(COOKIE_PREFIX.Length)));
+                             select GetTestDataFromCookie(name.Split(delimeter)[0].Substring(COOKIE_PREFIX.Length)));
 
             return tdcList;
         }

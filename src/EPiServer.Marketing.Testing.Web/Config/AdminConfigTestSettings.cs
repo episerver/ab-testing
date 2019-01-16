@@ -62,7 +62,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ConfidenceLevel = 95;
             AutoPublishWinner = false;
             KpiLimit = 5;
-            CookieDelimeter = ":";
+            CookieDelimeter = "_";
         }
 
         [ExcludeFromCodeCoverage]
