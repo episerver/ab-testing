@@ -22,9 +22,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     /// updating views and conversions. Note this is provided as a rest end point
     /// for customers to use via jscript on thier site.
     /// </summary>
-    [InitializableModule]
-    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
-    public class TestingController : ApiController, IConfigurableModule
+    public class TestingController : ApiController
     {
         private IServiceLocator _serviceLocator;
         private IHttpContextHelper _httpContextHelper;
@@ -45,25 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             _httpContextHelper = contexthelper;
         }
 
-        [ExcludeFromCodeCoverage]
-        public void ConfigureContainer(ServiceConfigurationContext context) { }
 
-        [ExcludeFromCodeCoverage]
-        public void Uninitialize(InitializationEngine context) { }
-
-        [ExcludeFromCodeCoverage]
-        public void Initialize(InitializationEngine context)
-        {
-            // configure out route
-            GlobalConfiguration.Configure(config =>
-            {
-                config.Routes.MapHttpRoute(
-                name: "EPiServerContentOptimization",
-                routeTemplate: "api/episerver/Testing/{action}",
-                defaults: new { controller = "Testing", action = "GetAllTests" }
-                );
-            });
-        }
 
         /// <summary>
         /// Retreives all A/B tests.
@@ -184,7 +164,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             var value = data.Get("resultValue");
             try
             {
-                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")),true);
+                var activeTest = _webRepo.GetTestById(Guid.Parse(data.Get("testId")), true);
                 var kpi = _kpiWebRepo.GetKpiInstance(Guid.Parse(kpiId));
                 var cookieHelper = _serviceLocator.GetInstance<ITestDataCookieHelper>();
                 var testCookie = cookieHelper.GetTestDataFromCookie(activeTest.OriginalItemId.ToString(), activeTest.ContentLanguage);
