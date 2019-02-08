@@ -18,13 +18,13 @@
             _isBrowserIE: function () {
                 return navigator.appName === 'Microsoft Internet Explorer'
                     || !!(navigator.userAgent.match(/Trident/)
-                        || navigator.userAgent.match(/rv:11/))
+                        || navigator.userAgent.match(/rv:11/)
+                        || navigator.userAgent.match(/Edge/))
                     || (typeof $.browser !== "undefined" && $.browser.msie === 1);
             },
 
             _renderServersideThumbnail: function (canvasId, url) {
                 var me = this;
-                console.log("Generating Thumbnail (S)");
                 this.thumbstore = this.thumbstore || dependency.resolve("epi.storeregistry").get("marketing.thumbnailstore");
                 this.thumbstore.get(url.replace(/\//g, "$")).then(function (result) {
                     canvasId.height = 768;
@@ -43,7 +43,6 @@
 
             _renderClientsideThumbnail: function (canvasId, url) {
                 var me = this;
-                console.log("Generating Thumbnail (C)");
                 canvasId.height = 768;
                 canvasId.width = 1024;
                 rasterizehtml.drawURL(url, canvasId, { height: 768, width: 1024 }).then(function success(renderResult) {
