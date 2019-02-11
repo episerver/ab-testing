@@ -8,14 +8,14 @@
                 var me = this;
                 this._setThumbState(canvasId, "block", "none", "none");
 
-                if (this._isBrowserIE()) {
+                if (this._isMicrosoftBrowser()) {
                     this._renderServersideThumbnail(canvasId, url);
                 } else {
                     this._renderClientsideThumbnail(canvasId, url);
                 }
             },
 
-            _isBrowserIE: function () {
+            _isMicrosoftBrowser: function () {
                 return navigator.appName === 'Microsoft Internet Explorer'
                     || !!(navigator.userAgent.match(/Trident/)
                         || navigator.userAgent.match(/rv:11/)
