@@ -181,7 +181,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 rTest = cachedTests.Where(test => test.Id == testObjectId).FirstOrDefault();
                 if(rTest == null)
                 {
-                    Get(testObjectId, false);
+                    rTest = Get(testObjectId, false);
                 }
             }
 
