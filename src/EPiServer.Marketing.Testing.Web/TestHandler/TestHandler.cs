@@ -318,20 +318,18 @@ namespace EPiServer.Marketing.Testing.Web
         //Handles the incrementing of view counts on a version
         private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
         {
-            var currentTest = _testRepo.GetTestById(cookie.TestId,true);
-            var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
-
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
+                var currentTest = _testRepo.GetTestById(cookie.TestId, true);
                 var clientInjector = _serviceLocator.GetInstance<IClientKpiInjector>();
                 clientInjector.ActivateClientKpis(currentTest.KpiInstances, cookie);
 
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testRepo.IncrementCount(cookie.TestId,
-                        variantVersion,
-                        CountType.View);
+                    var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
+
+                    _testRepo.IncrementCount(cookie.TestId, variantVersion, CountType.View);
                     cookie.Viewed = true;
 
                     _testDataCookieHelper.UpdateTestDataCookie(cookie);
