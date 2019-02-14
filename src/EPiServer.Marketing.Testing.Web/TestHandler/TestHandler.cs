@@ -327,12 +327,14 @@ namespace EPiServer.Marketing.Testing.Web
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
+                    var viewedVariant = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId);
 
-                    _testRepo.IncrementCount(cookie.TestId, variantVersion, CountType.View);
-                    cookie.Viewed = true;
-
-                    _testDataCookieHelper.UpdateTestDataCookie(cookie);
+                    if (viewedVariant != null)
+                    {
+                        _testRepo.IncrementCount(cookie.TestId, viewedVariant.ItemVersion, CountType.View);
+                        cookie.Viewed = true;
+                        _testDataCookieHelper.UpdateTestDataCookie(cookie);
+                    }
                 }
             }
         }
