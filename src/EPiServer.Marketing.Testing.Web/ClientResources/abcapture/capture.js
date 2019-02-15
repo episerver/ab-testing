@@ -29,7 +29,6 @@ page.viewportSize = { width: 1024, height: 768 };
 page.open(pageLink, function () { });
 
 page.onLoadFinished = function () {
-    system.stdout.writeLine("here");
     var me = this;
     setTimeout(function () {
         page.zoomFactor = 0.75;
