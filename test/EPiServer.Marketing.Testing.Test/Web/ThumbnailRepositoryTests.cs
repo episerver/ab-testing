@@ -76,8 +76,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(testData.cookieString == $" {mockCookie1.Name}*{mockCookie1.Value} {mockCookie2.Name}*{mockCookie2.Value} {mockCookie3.Name}*{mockCookie3.Value}");
         }
 
-        
+        [Fact]
+        public void GetContextThumbData_ReturnsPopulatedContextThumbDatObject_withEmptyCookieStringIfCookieCollectionIsNull()
+        {
+            HttpRequest mockRequest = new HttpRequest("", "http://mock.url/path", "");
+            HttpResponse mockResponse = new HttpResponse(new StringWriter());
 
-        
+            HttpContext mockContext = new HttpContext(mockRequest, mockResponse);
+            _mockContextHelper.Setup(call => call.GetCurrentContext()).Returns(mockContext);
+
+            var thumbRepo = GetUnitUnderTest();
+            ContextThumbData testData = thumbRepo.GetContextThumbData();
+            Assert.True(testData.host == "mock.url");
+            Assert.True(testData.pagePrefix == "http://mock.url");
+            Assert.True(testData.cookieString == string.Empty);
+        }
+
+
+
+
     }
 }

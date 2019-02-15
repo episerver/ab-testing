@@ -112,9 +112,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private string BuildCookieString()
         {
             StringBuilder cookieStringBuilder = new StringBuilder();
-            foreach (var cookie in contextHelper.GetCurrentCookieCollection())
+            var currentCookies = contextHelper.GetCurrentCookieCollection();
+            if (currentCookies != null)
             {
-                cookieStringBuilder.Append(" " + cookie);
+                foreach (var cookie in contextHelper.GetCurrentCookieCollection())
+                {
+                    cookieStringBuilder.Append(" " + cookie);
+                }
             }
 
             return cookieStringBuilder.ToString();

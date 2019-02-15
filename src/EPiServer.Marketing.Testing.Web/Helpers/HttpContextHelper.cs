@@ -134,10 +134,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             List<string> cookies = new List<string>();
             var cookieCollection = GetCurrentContext().Request.Cookies.AllKeys;
-            foreach(var cookieKey in cookieCollection)
+            if (cookieCollection != null)
             {
-                cookies.Add(cookieKey +'*' + GetCurrentContext().Request.Cookies[cookieKey].Value);
-                
+                foreach (var cookieKey in cookieCollection)
+                {
+                    cookies.Add(cookieKey + '*' + GetCurrentContext().Request.Cookies[cookieKey].Value);
+
+                }
             }
 
             return cookies;
