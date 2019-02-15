@@ -8,6 +8,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -45,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"--ignore-ssl-errors=true capture.js " + id + " " + fileName + " " + thumbData.sessionCookie + " " + thumbData.authCookie + " " + thumbData.host),
+                Arguments = String.Format("{0}", @"--ignore-ssl-errors=true capture.js " + id + " " + fileName + " " + thumbData.host + thumbData.cookieString),
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -77,7 +78,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                     image.Save(m, image.RawFormat);
                     byte[] imageBytes = m.ToArray();
                     result = Convert.ToBase64String(imageBytes);
-
                 }
             }
 
@@ -88,24 +88,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public ContextThumbData GetContextThumbData()
         {
-            KeyValuePair<string,string> authCookieValue; ;
-            if(contextHelper.GetCurrentContext().Request.Cookies[".AspNet.ApplicationCookie"] != null)
-            {
-                authCookieValue = new KeyValuePair<string,string>(".AspNet.ApplicationCookie", contextHelper.GetCurrentContext().Request.Cookies[".AspNet.ApplicationCookie"].Value); 
-            }
-            else
-            {
-                authCookieValue = new KeyValuePair<string, string>(".EPiServerLogin", contextHelper.GetCurrentContext().Request.Cookies[".EPiServerLogin"].Value);
-            }
-
             var thumbData = new ContextThumbData()
             {
                 pagePrefix = contextHelper.GetCurrentContext().Request.Url.GetLeftPart(System.UriPartial.Authority),
                 host = contextHelper.GetCurrentContext().Request.Url.Host,
-                sessionCookie = contextHelper.GetCurrentContext().Request.Cookies[contextHelper.GetSessionCookieName()].Value,
-                authCookie = authCookieValue.Key + "|" + authCookieValue.Value
+                cookieString = BuildCookieString()
             };
-
             return thumbData;
         }
 
@@ -120,13 +108,23 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             return new RestStatusCodeResult((int)HttpStatusCode.OK);
         }
+
+        private string BuildCookieString()
+        {
+            StringBuilder cookieStringBuilder = new StringBuilder();
+            foreach (var cookie in contextHelper.GetCurrentCookieCollection())
+            {
+                cookieStringBuilder.Append(" " + cookie);
+            }
+
+            return cookieStringBuilder.ToString();
+        }
     }
 
     public class ContextThumbData
     {
         public string pagePrefix { get; set; }
         public string host { get; set; }
-        public string sessionCookie { get; set; }
-        public string authCookie { get; set; }
+        public string cookieString { get; set; }        
     }
 }
