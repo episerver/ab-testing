@@ -143,7 +143,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns></returns>
         string GetSessionCookieName();
 
-        List<string> GetCurrentCookieCollection();
+        Dictionary<string,string> GetCurrentCookieCollection();
 
     }
 }

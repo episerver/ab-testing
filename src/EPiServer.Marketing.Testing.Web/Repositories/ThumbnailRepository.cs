@@ -46,7 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var startInfo = new ProcessStartInfo()
             {
                 FileName = exe,
-                Arguments = String.Format("{0}", @"--ignore-ssl-errors=true capture.js " + id + " " + fileName + " " + thumbData.host + thumbData.cookieString),
+                Arguments = $"--ignore-ssl-errors=true capture.js {id} {fileName} {thumbData.host}{thumbData.cookieString}",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
@@ -117,7 +117,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 foreach (var cookie in contextHelper.GetCurrentCookieCollection())
                 {
-                    cookieStringBuilder.Append(" " + cookie);
+                    cookieStringBuilder.Append($" {cookie.Key};{cookie.Value}");
                 }
             }
 

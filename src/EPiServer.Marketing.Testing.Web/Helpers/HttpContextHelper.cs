@@ -130,15 +130,15 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             return ((SessionStateSection)WebConfigurationManager.GetSection("system.web/sessionState")).CookieName;
         }
 
-        public List<string> GetCurrentCookieCollection()
+        public Dictionary<string, string> GetCurrentCookieCollection()
         {
-            List<string> cookies = new List<string>();
+            Dictionary<string,string> cookies = new Dictionary<string,string>();
             var cookieCollection = GetCurrentContext().Request.Cookies.AllKeys;
             if (cookieCollection != null)
             {
                 foreach (var cookieKey in cookieCollection)
                 {
-                    cookies.Add(cookieKey + '*' + GetCurrentContext().Request.Cookies[cookieKey].Value);
+                    cookies.Add(cookieKey,GetCurrentContext().Request.Cookies[cookieKey].Value);
 
                 }
             }

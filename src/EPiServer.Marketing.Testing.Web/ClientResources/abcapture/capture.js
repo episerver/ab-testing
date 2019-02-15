@@ -12,8 +12,8 @@ if (system.args.length === 1) {
 
     cookieValues.forEach(function (value, i) {
         phantom.addCookie({
-            "name": value.split('*')[0],
-            "value": value.split('*')[1],
+            "name": value.split(';')[0],
+            "value": value.split(';')[1],
             "domain":system.args[3]
         });
     });

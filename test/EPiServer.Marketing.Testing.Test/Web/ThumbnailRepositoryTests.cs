@@ -60,10 +60,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockCookie1.Value = "Mockcookievalue1";
             mockCookie2.Value = "Mockcookievalue2";
             mockCookie3.Value = "Mockcookievalue3";
-            List<string> mockCurrentCookieCollection = new List<string>();
-            mockCurrentCookieCollection.Add(mockCookie1.Name + '*' + mockCookie1.Value);
-            mockCurrentCookieCollection.Add(mockCookie2.Name + '*' + mockCookie2.Value);
-            mockCurrentCookieCollection.Add(mockCookie3.Name + '*' + mockCookie3.Value);
+            Dictionary<string,string> mockCurrentCookieCollection = new Dictionary<string, string>();
+            mockCurrentCookieCollection.Add(mockCookie1.Name,mockCookie1.Value);
+            mockCurrentCookieCollection.Add(mockCookie2.Name,mockCookie2.Value);
+            mockCurrentCookieCollection.Add(mockCookie3.Name,mockCookie3.Value);
            
             HttpContext mockContext = new HttpContext(mockRequest, mockResponse);
             _mockContextHelper.Setup(call => call.GetCurrentContext()).Returns(mockContext);
@@ -73,7 +73,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ContextThumbData testData = thumbRepo.GetContextThumbData();
             Assert.True(testData.host == "mock.url");
             Assert.True(testData.pagePrefix == "http://mock.url");
-            Assert.True(testData.cookieString == $" {mockCookie1.Name}*{mockCookie1.Value} {mockCookie2.Name}*{mockCookie2.Value} {mockCookie3.Name}*{mockCookie3.Value}");
+            Assert.True(testData.cookieString == $" {mockCookie1.Name};{mockCookie1.Value} {mockCookie2.Name};{mockCookie2.Value} {mockCookie3.Name};{mockCookie3.Value}");
         }
 
         [Fact]
