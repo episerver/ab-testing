@@ -115,7 +115,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var currentCookies = contextHelper.GetCurrentCookieCollection();
             if (currentCookies != null)
             {
-                foreach (var cookie in contextHelper.GetCurrentCookieCollection())
+                foreach (var cookie in currentCookies)
                 {
                     cookieStringBuilder.Append($" {cookie.Key};{cookie.Value}");
                 }

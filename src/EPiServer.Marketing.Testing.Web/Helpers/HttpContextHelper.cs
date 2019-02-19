@@ -133,7 +133,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public Dictionary<string, string> GetCurrentCookieCollection()
         {
             Dictionary<string,string> cookies = new Dictionary<string,string>();
-            var cookieCollection = GetCurrentContext().Request.Cookies.AllKeys;
+            var cookieCollection = GetCurrentContext()?.Request.Cookies.AllKeys;
             if (cookieCollection != null)
             {
                 foreach (var cookieKey in cookieCollection)
