@@ -1,28 +1,28 @@
 ﻿var page = require('webpage').create(),
-system = require('system'),
-pageLink = system.args[1],
-pageImage = system.args[2],
-authCookie = system.args[4].split('|'),
+    system = require('system'),
+    pageLink = system.args[1],
+    pageImage = system.args[2],
+    authCookie = system.args[4].split('|'),
+    cookieCount = system.args.length - 4;
 
-sessionCookie = {
-    'name': 'ASP.NET_SessionId',
-    'value': system.args[3],
-    'domain': system.args[5]
-},
+if (system.args.length === 1) {
+    phantom.exit(1);
+} else {
+    var cookieValues = system.args.splice(4, cookieCount);
 
-applicationCookie = {
-    'name': authCookie[0],
-    'value': authCookie[1],
-    'domain': system.args[5]
-};
+    cookieValues.forEach(function (value, i) {
+        phantom.addCookie({
+            "name": value.split(';')[0],
+            "value": value.split(';')[1],
+            "domain":system.args[3]
+        });
+    });
+}
 
 //Force process to exit when encountering an error. Prevents process from freezing.
 phantom.onError = function () {
-    exit(1);
+    phantom.exit(1);
 };
-
-phantom.addCookie(sessionCookie);
-phantom.addCookie(applicationCookie);
 
 page.viewportSize = { width: 1024, height: 768 };
 
