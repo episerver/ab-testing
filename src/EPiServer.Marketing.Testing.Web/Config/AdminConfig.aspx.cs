@@ -103,7 +103,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
             AutoPublishWinner.SelectedValue = TestSettings.AutoPublishWinner.ToString();
-            CookieDelimeter.Text = TestSettings.CookieDelimeter;
+            //CookieDelimeter.Text = TestSettings.CookieDelimeter;
         }
 
         private void ShowMessage(string msg, bool isWarning)
