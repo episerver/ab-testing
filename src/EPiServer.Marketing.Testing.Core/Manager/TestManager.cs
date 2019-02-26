@@ -163,29 +163,31 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public IMarketingTest Get(Guid testObjectId, bool fromCachedTests = false)
         {
-            IMarketingTest rTest = null;
+            IMarketingTest retrievedTest = null;
 
-            if (!fromCachedTests)
+            if (fromCachedTests)
             {
-                rTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, _dataAccess.Get(testObjectId));
-                if (rTest == null)
+                //Will attempt to retrieve a test from the cache.  If unsuccessful will then
+                //retrieve the test from the db
+
+                retrievedTest = ActiveCachedTests.Where(test => test.Id == testObjectId).FirstOrDefault();
+
+                if (retrievedTest == null)
                 {
-                    throw new TestNotFoundException();
+                    retrievedTest = Get(testObjectId, false);
                 }
             }
             else
             {
-                //Will attempt to retrieve a test from the cache.  If unsuccessful will then
-                //retrieve the test from the db
-                var cachedTests = ActiveCachedTests;
-                rTest = cachedTests.Where(test => test.Id == testObjectId).FirstOrDefault();
-                if(rTest == null)
+                retrievedTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, _dataAccess.Get(testObjectId));
+
+                if (retrievedTest == null)
                 {
-                    Get(testObjectId, false);
+                    throw new TestNotFoundException();
                 }
             }
 
-            return rTest;
+            return retrievedTest;
         }
         
         /// <inheritdoc />
