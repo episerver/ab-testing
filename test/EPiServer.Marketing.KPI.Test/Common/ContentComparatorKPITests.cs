@@ -267,6 +267,22 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var retVal = kpi.Evaluate(new object(), arg);
             Assert.False(retVal.HasConverted);
         }
+
+        [Fact]
+        public void Kpi_DoesNotConvert_DoesNotThrowException_IfRequestPathIsEmpty()
+        {
+            var contentGuid = LandingPageGuid;
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(LandingPageGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns(string.Empty);
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.False(retVal.HasConverted);
+        }
     }
 
     public class TestKpi : Kpi

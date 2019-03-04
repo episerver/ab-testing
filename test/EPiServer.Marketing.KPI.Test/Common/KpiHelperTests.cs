@@ -26,5 +26,12 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var kpiHelper = GetUnitUnderTest();
             Assert.True(kpiHelper.GetRequestPath() == "/alloy-plan/");
         }
+
+        [Fact]
+        public void GetRequestPath_ReturnsEmptyStringIfContextIsNull()
+        {
+            var kpiHelper = GetUnitUnderTest();
+            Assert.True(kpiHelper.GetRequestPath() == string.Empty);            
+        }
     }
 }
