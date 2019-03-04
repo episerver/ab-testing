@@ -17,8 +17,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
         private IKpiHelper GetUnitUnderTest()
         {            
             return new KpiHelper();
-        }
-        
+        }        
 
         [Fact]
         public void GetRequestPath_ReturnsCurrentRequestedUrlPath()
@@ -27,6 +26,5 @@ namespace EPiServer.Marketing.KPI.Test.Common
             var kpiHelper = GetUnitUnderTest();
             Assert.True(kpiHelper.GetRequestPath() == "/alloy-plan/");
         }
-
     }
 }
