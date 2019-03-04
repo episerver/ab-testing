@@ -188,19 +188,6 @@ namespace EPiServer.Marketing.KPI.Test.Common
         }
 
         [Fact]
-        public void ContentComparator_Evaluate_Doesnt_Convert()
-        {
-            var kpi = GetUnitUnderTest();
-
-            var content3 = new Mock<IContent>();
-            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
-
-            var retVal = kpi.Evaluate(new object(), arg);
-
-            Assert.False(retVal.HasConverted, "Evaluate should have returned false");
-        }
-
-        [Fact]
         public void Kpi_Doesnt_Implement_Evaluate()
         {
             var kpi = new TestKpi();
