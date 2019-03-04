@@ -148,12 +148,15 @@ namespace EPiServer.Marketing.KPI.Common
                     // if the target content is the start page, we also need to check 
                     // the path to make sure its not just a request for some other static
                     // resources such as css or jscript
-                    retval = (_startpagepaths.Contains(HttpContext.Current.Request.Path) 
+                    retval = (_startpagepaths.Contains(_epiHelper.GetRequestPath()) 
                         && ContentGuid.Equals(ea.Content.ContentGuid));
                 }
                 else
-                {
-                    retval = ContentGuid.Equals(ea.Content.ContentGuid);
+                {   
+                    //We need to make sure the content being evaluated is the actual content being requested
+                    //Addresses MAR-1226
+                    retval = (_epiHelper.GetUrl(_content.ContentLink) == _epiHelper.GetRequestPath()) 
+                        && ContentGuid.Equals(ea.Content.ContentGuid);                    
                 }
             }
 
