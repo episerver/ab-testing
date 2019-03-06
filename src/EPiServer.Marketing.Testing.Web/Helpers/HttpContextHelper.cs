@@ -1,9 +1,11 @@
 ﻿using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
 
@@ -44,7 +46,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
         public string GetCookieValue(string cookieKey)
         {
-            return HttpContext.Current.Response.Cookies[cookieKey].Value;
+            var value = HttpContext.Current.Response.Cookies[cookieKey].Value;
+
+            var pattern = "\\r|\\n|%0d|%0a";
+            var substrings = Regex.Split(value, pattern, RegexOptions.None, TimeSpan.FromSeconds(2));
+            
+            return substrings.FirstOrDefault();
         }
 
         public HttpCookie GetResponseCookie(string cookieKey)
