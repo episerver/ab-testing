@@ -2,6 +2,7 @@
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -134,6 +135,22 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             // returns the default cookie name if its not specified and/or if the key is completely missing from the web.config.
             return ((SessionStateSection)WebConfigurationManager.GetSection("system.web/sessionState")).CookieName;
+        }
+
+        public Dictionary<string, string> GetCurrentCookieCollection()
+        {
+            Dictionary<string,string> cookies = new Dictionary<string,string>();
+            var cookieCollection = GetCurrentContext()?.Request.Cookies.AllKeys;
+            if (cookieCollection != null)
+            {
+                foreach (var cookieKey in cookieCollection)
+                {
+                    cookies.Add(cookieKey,GetCurrentContext().Request.Cookies[cookieKey].Value);
+
+                }
+            }
+
+            return cookies;
         }
     }
 }

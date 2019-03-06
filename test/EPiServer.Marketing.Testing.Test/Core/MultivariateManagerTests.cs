@@ -149,6 +149,18 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void TestManager_DeliversTestFromDalWhenNotFoundInCache()
+        {
+            var testId = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
+            var tm = GetUnitUnderTest();
+            var expectedTest = GetDalTest();
+            var actualTest = tm.Get(testId, true);
+            
+            Assert.NotNull(actualTest);
+            Assert.Equal(expectedTest.Id, actualTest.Id);
+        }
+
+        [Fact]
         public void TestManager_CallsDataAccessGetTestByItemId()
         {
             var theGuid = new Guid("A2AF4481-89AB-4D0A-B042-050FECEA60A3");
