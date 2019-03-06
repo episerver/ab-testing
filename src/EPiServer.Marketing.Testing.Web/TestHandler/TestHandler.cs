@@ -238,6 +238,7 @@ namespace EPiServer.Marketing.Testing.Web
                     // get the test from the cache
                     var testCookieData = _testDataCookieHelper.GetTestDataFromCookie(e.Content.ContentGuid.ToString(), currentContentCulture.Name);
                     var activeTest = _testRepo.GetActiveTestsByOriginalItemId(e.Content.ContentGuid, currentContentCulture).FirstOrDefault();
+
                     if (activeTest != null)
                     {
                         var hasData = _testDataCookieHelper.HasTestData(testCookieData);
@@ -245,17 +246,26 @@ namespace EPiServer.Marketing.Testing.Web
 
                         // Preload the cache if needed. Note that this causes an extra call to loadContent Event
                         // so set the skip flag so we dont try to process the test.
-                        _httpContextHelper.SetItemValue(ABTestHandlerSkipFlag, true);
-                        _testRepo.GetVariantContent(e.Content.ContentGuid, currentContentCulture);
-                        if (!hasData && DbReadWrite())
-                        {
-                            // Make sure the cookie has data in it.
-                            SetTestData(e.Content, activeTest, testCookieData, out testCookieData);
-                        }
 
-                        Swap(testCookieData, activeTest, e, currentContentCulture);
-                        EvaluateViews(testCookieData, originalContent);
-                        _httpContextHelper.RemoveItem(ABTestHandlerSkipFlag);
+                        _httpContextHelper.SetItemValue(ABTestHandlerSkipFlag, true);
+
+                        try
+                        {
+                            _testRepo.GetVariantContent(e.Content.ContentGuid, currentContentCulture);
+
+                            if (!hasData && DbReadWrite())
+                            {
+                                // Make sure the cookie has data in it.
+                                SetTestData(e.Content, activeTest, testCookieData, out testCookieData);
+                            }
+
+                            Swap(testCookieData, activeTest, e, currentContentCulture);
+                            EvaluateViews(testCookieData, originalContent);
+                        }
+                        finally
+                        {
+                            _httpContextHelper.RemoveItem(ABTestHandlerSkipFlag);
+                        }
                     }
                 }
                 catch (Exception err)
@@ -318,23 +328,23 @@ namespace EPiServer.Marketing.Testing.Web
         //Handles the incrementing of view counts on a version
         private void EvaluateViews(TestDataCookie cookie, IContent originalContent)
         {
-            var currentTest = _testRepo.GetTestById(cookie.TestId,true);
-            var variantVersion = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId).ItemVersion;
-
             if (_contextHelper.IsRequestedContent(originalContent) && _testDataCookieHelper.IsTestParticipant(cookie))
             {
+                var currentTest = _testRepo.GetTestById(cookie.TestId, true);
                 var clientInjector = _serviceLocator.GetInstance<IClientKpiInjector>();
                 clientInjector.ActivateClientKpis(currentTest.KpiInstances, cookie);
 
                 //increment view if not already done
                 if (!cookie.Viewed && DbReadWrite())
                 {
-                    _testRepo.IncrementCount(cookie.TestId,
-                        variantVersion,
-                        CountType.View);
-                    cookie.Viewed = true;
+                    var viewedVariant = currentTest.Variants.FirstOrDefault(x => x.Id == cookie.TestVariantId);
 
-                    _testDataCookieHelper.UpdateTestDataCookie(cookie);
+                    if (viewedVariant != null)
+                    {
+                        _testRepo.IncrementCount(cookie.TestId, viewedVariant.ItemVersion, CountType.View);
+                        cookie.Viewed = true;
+                        _testDataCookieHelper.UpdateTestDataCookie(cookie);
+                    }
                 }
             }
         }

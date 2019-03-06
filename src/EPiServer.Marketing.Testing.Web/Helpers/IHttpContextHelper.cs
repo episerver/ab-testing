@@ -142,5 +142,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// </summary>
         /// <returns></returns>
         string GetSessionCookieName();
+
+        Dictionary<string,string> GetCurrentCookieCollection();
+
     }
 }
