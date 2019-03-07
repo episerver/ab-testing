@@ -189,29 +189,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             _cache.Insert(testCacheKey, test, CacheEvictionPolicy.Empty);
 
-            var testContent = _contentLoader.Get<IContent>(test.OriginalItemId);
-
-            if (testContent != null)
-            {
-                var contentVersion = testContent.ContentLink.WorkID == 0
-                    ? test.Variants.First(v => v.IsPublished).ItemVersion
-                    : testContent.ContentLink.WorkID;
-
-                var variant = test.Variants.Where(v => v.ItemVersion != contentVersion).FirstOrDefault();
-
-                if (variant != null)
-                {
-                    var variantContent = (IVersionable)TestManagerHelper.CreateVariantContent(_contentLoader, testContent, variant);
-                    variantContent.Status = VersionStatus.Published;
-                    variantContent.StartPublish = DateTime.Now.AddDays(-1);
-
-                    _cache.Insert(
-                        GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
-                        variantContent,
-                        new CacheEvictionPolicy(new[] { testCacheKey })
-                    );
-                }
-            }
+            _cache.Insert(
+                GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
+                _inner.GetVariantContent(test.OriginalItemId, new CultureInfo(test.ContentLanguage)),
+                new CacheEvictionPolicy(new[] { testCacheKey })
+            );
 
             _cache.Remove(GetCacheKeyForTestsByItem(test.OriginalItemId));
         }

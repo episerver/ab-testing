@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.Caching;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
@@ -15,9 +9,12 @@ using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.Exceptions;
 using EPiServer.Marketing.Testing.Messaging;
 using EPiServer.ServiceLocation;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using EPiServer.Framework.Cache;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -35,17 +32,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     /// </summary>
     [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
-    {
-        internal const string TestingCacheName = "TestingCache";
-        internal const string CacheValidFlag = "CacheValidFlag";
-
-        private static Object _cacheLock = new object();
+    {        
         private ITestingDataAccess _dataAccess;
         private IServiceLocator _serviceLocator;
         private Random _randomParticiaption = new Random();
-        private ObjectCache _testCache = MemoryCache.Default;
-        private ISynchronizedObjectInstanceCache _testCacheValidFlag;
-        private ObjectCache _variantCache = MemoryCache.Default;
         private IKpiManager _kpiManager;
         private DefaultMarketingTestingEvents _marketingTestingEvents;
 
@@ -56,9 +46,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             get
             {
-                ManageCaches(); // MAR-904 - make sure that there is always a cache
-                                // MAR-1192 - Load Balanced environments causeing internal exceptions randomly.
-                return _testCache.Get(TestingCacheName) as List<IMarketingTest>;
+                throw new NotImplementedException();
             }
         }
 
@@ -67,7 +55,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             _serviceLocator = ServiceLocator.Current;
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
-            _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
 
             try
             {
@@ -93,115 +80,25 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _dataAccess = _serviceLocator.GetInstance<ITestingDataAccess>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
-            _testCacheValidFlag = _serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
-        }
-
-        /// <summary>
-        /// Responsible for initializing the test cache as well as managing it in load balanced environments. Note that when a content authoring machines
-        /// signal that the cache is out of date (by removing the CacheValidFlag from all content delivery machines this code will reload all the tests
-        /// and add them to the cache.
-        /// </summary>
-        private void ManageCaches()
-        {
-            var cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
-            if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
-            {
-                // Cache is either out of date or doesnt exist yet.
-                lock (_cacheLock)
-                {
-                    cacheValidFlag = _testCacheValidFlag.Get(CacheValidFlag);
-                    if (cacheValidFlag == null || !_testCache.Contains(TestingCacheName))
-                    {
-                        // Clear the variant cache
-                        var allKeys = _variantCache.Where(o => o.Key.Contains("epi")).Select(k => k.Key);
-                        Parallel.ForEach(allKeys, key => _variantCache.Remove(key));
-
-                        UpdateActiveTestCache();
-
-                        // Insert the flag so that we know that we know this server is up to date. 
-                        _testCacheValidFlag.Insert(CacheValidFlag, "true", CacheEvictionPolicy.Empty);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Clears the current test cache and reloads it.
-        /// </summary>
-        private void UpdateActiveTestCache()
-        {
-            // Clear the test cache, fire the TestRemovedFromCacheEvent to disable the event proxy for kpis.
-            if (_testCache.Contains(TestingCacheName))
-            {
-                foreach (var test in (List<IMarketingTest>)_testCache.Get(TestingCacheName))
-                {
-                    _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
-                }
-                _testCache.Remove(TestingCacheName);
-            }
-
-            // Get all the tests that are supposed to be active and add to cache.
-            var activeTestCriteria = new TestCriteria();
-            var activeTestStateFilter = new ABTestFilter()
-            {
-                Property = ABTestProperty.State,
-                Operator = FilterOperator.And,
-                Value = TestState.Active
-            };
-            activeTestCriteria.AddFilter(activeTestStateFilter);
-            var tests = GetTestList(activeTestCriteria);
-            _testCache.Add(TestingCacheName, tests, DateTimeOffset.MaxValue);
-
-            // now for every test added, fire the TestAddedToCacheEvent.
-            // Note that this event is also used to intialize the event proxy for kpis
-            foreach (var test in tests)
-            {
-                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
-            }
         }
 
         /// <inheritdoc />
         public IMarketingTest Get(Guid testObjectId, bool fromCachedTests = false)
         {
-            IMarketingTest retrievedTest = null;
-
-            if (fromCachedTests)
-            {
-                //Will attempt to retrieve a test from the cache.  If unsuccessful will then
-                //retrieve the test from the db
-
-                retrievedTest = ActiveCachedTests.Where(test => test.Id == testObjectId).FirstOrDefault();
-
-                if (retrievedTest == null)
-                {
-                    retrievedTest = Get(testObjectId, false);
-                }
-            }
-            else
-            {
-                retrievedTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, _dataAccess.Get(testObjectId));
-
-                if (retrievedTest == null)
-                {
-                    throw new TestNotFoundException();
-                }
-            }
-
-            return retrievedTest;
+            return TestManagerHelper.ConvertToManagerTest(_kpiManager, _dataAccess.Get(testObjectId)) 
+                ?? throw new TestNotFoundException();
         }
         
         /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            var cachedTests = ActiveCachedTests;
-            return cachedTests.Where(test => test.OriginalItemId == originalItemId).ToList();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId,CultureInfo contentCulture)
         {
-            var cachedTests = ActiveCachedTests;
-            return cachedTests.Where(test => test.OriginalItemId == originalItemId && test.ContentLanguage == contentCulture.Name).ToList();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc />
@@ -213,6 +110,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
+
             return testList;
         }
 
@@ -225,6 +123,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 testList.Add(TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest));
             }
+
             return testList;
         }
 
@@ -235,7 +134,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <returns>ID of the test.</returns>
         public Guid Save(IMarketingTest multivariateTest)
         {
-            // need to check that the list isn't null before checking for actual kpi's so we don't get a null reference exception
             if (multivariateTest.KpiInstances == null)
             {
                 throw new SaveTestException("Unable to save test due to null list of KPI's.  One or more KPI's are required.");
@@ -247,11 +145,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
 
             var testId = _dataAccess.Save(TestManagerHelper.ConvertToDalTest(multivariateTest));
+
             _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestSavedEvent, new TestEventArgs(multivariateTest));
 
             if (multivariateTest.State == TestState.Active)
             {
-                UpdateCache(multivariateTest, CacheOperator.Add);
                 _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStartedEvent, new TestEventArgs(multivariateTest));
             }
 
@@ -261,8 +159,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public void Delete(Guid testObjectId, CultureInfo cultureInfo = null)
         {
-            var testToDelete = Get(testObjectId);
-            RemoveCachedVariant(testToDelete.OriginalItemId, cultureInfo);
+            var testToDelete = Get(testObjectId);            
 
             foreach (var kpi in testToDelete.KpiInstances)
             {
@@ -271,17 +168,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             _dataAccess.Delete(testObjectId);
 
-            // if the test is in the cache remove it.  This should only happen if someone deletes an Active test - which really shouldn't happen...
-            var cachedTests = ActiveCachedTests;
-            var test = cachedTests.FirstOrDefault(t => t.Id == testObjectId);
-
-            if (test != null)
-            {
-                UpdateCache(test, CacheOperator.Remove);
-            }
-
-            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestDeletedEvent, new TestEventArgs(test));
-
+            _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestDeletedEvent, new TestEventArgs(testToDelete));
         }
        
         /// <inheritdoc />
@@ -290,10 +177,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             var dalTest = _dataAccess.Start(testObjectId);
             var managerTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest);
 
-            // update cache to include new test as long as it was changed to Active
             if (dalTest != null)
             {
-                UpdateCache(managerTest, CacheOperator.Add);
                 _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStartedEvent, new TestEventArgs(managerTest));
             }
 
@@ -305,33 +190,24 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             _dataAccess.Stop(testObjectId);
 
-            RemoveCachedVariant(Get(testObjectId).OriginalItemId, cultureInfo);
-
-            var cachedTests = ActiveCachedTests;
-
-            // remove test from cache
-            var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
-            if (test != null)
-            {
-                UpdateCache(test, CacheOperator.Remove);
-                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStoppedEvent, new TestEventArgs(test));
+            var stoppedTest = Get(testObjectId);            
+            
+            if (stoppedTest != null)
+            {                
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStoppedEvent, new TestEventArgs(stoppedTest));
             }
-
         }
 
         /// <inheritdoc />
         public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
             _dataAccess.Archive(testObjectId, winningVariantId);
-            RemoveCachedVariant(Get(testObjectId).OriginalItemId, cultureInfo);
-            var cachedTests = ActiveCachedTests;
-            var test = cachedTests.FirstOrDefault(x => x.Id == testObjectId);
-            if (test != null)
-            {
-                UpdateCache(test,CacheOperator.Remove);
-                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestArchivedEvent, new TestEventArgs(test));
-            }
 
+            var archivedTest = Get(testObjectId);
+            if (archivedTest != null)
+            {
+                _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestArchivedEvent, new TestEventArgs(archivedTest));
+            }
         }
 
         /// <inheritdoc />
@@ -382,9 +258,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                             activePage = TestManagerHelper.ConvertToManagerVariant(currentTest.Variants[1]);
                             break;
                     }
-                    _marketingTestingEvents.
-                        RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.UserIncludedInTestEvent,
-                        new TestEventArgs(managerTest));
+
+                    _marketingTestingEvents.RaiseMarketingTestingEvent(
+                        DefaultMarketingTestingEvents.UserIncludedInTestEvent, 
+                        new TestEventArgs(managerTest)
+                    );
                 }
             }
             return activePage;
@@ -393,17 +271,39 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public IContent GetVariantContent(Guid contentGuid)
         {
-            var retData = (IContent)_variantCache.Get("epi" + contentGuid);
-
-            return retData ?? UpdateVariantContentCache(contentGuid, new CultureInfo("en-GB"));
+            return GetVariantContent(contentGuid, new CultureInfo("en-GB"));
         }
 
         /// <inheritdoc />
         public IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo)
         {
-            var retData = (IContent)_variantCache.Get("epi" + contentGuid + ":" + cultureInfo.Name);
+            IVersionable variantContent = null;
 
-            return retData ?? UpdateVariantContentCache(contentGuid, cultureInfo);
+            var test = GetActiveTestsByOriginalItemId(contentGuid, cultureInfo).FirstOrDefault(x => x.State.Equals(TestState.Active));
+
+            if (test != null)
+            {
+                var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
+                var testContent = contentLoader.Get<IContent>(contentGuid);
+
+                if (testContent != null)
+                {
+                    var contentVersion = testContent.ContentLink.WorkID == 0
+                        ? test.Variants.First(v => v.IsPublished).ItemVersion
+                        : testContent.ContentLink.WorkID;
+
+                    var variant = test.Variants.Where(v => v.ItemVersion != contentVersion).FirstOrDefault();
+
+                    if (variant != null)
+                    {
+                        variantContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
+                        variantContent.Status = VersionStatus.Published;
+                        variantContent.StartPublish = DateTime.Now.AddDays(-1);
+                    }
+                }
+            }
+
+            return (IContent)variantContent;
         }
 
         private Object _incrementLock = new Object();
@@ -460,7 +360,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _dataAccess = new TestingDataAccess();
                 _kpiManager = new KpiManager();
-                ManageCaches();
             }
 
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
@@ -469,85 +368,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
         {
-            var cachedTests = ActiveCachedTests;
-
-            switch (cacheOperator)
-            {
-                case CacheOperator.Add:
-                    if (!cachedTests.Contains(test))
-                    {
-                        cachedTests.Add(test);
-                        _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent,new TestEventArgs(test));
-
-                        _testCacheValidFlag.RemoveRemote(CacheValidFlag);
-                    }
-                    break;
-                case CacheOperator.Remove:
-                    if (cachedTests.Contains(test))
-                    {
-                        cachedTests.Remove(test);
-                        _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,new TestEventArgs(test));
-
-                        _testCacheValidFlag.RemoveRemote(CacheValidFlag);
-                    }
-                    break;
-            }
-        }
-
-        internal void RemoveCachedVariant(Guid contentGuid, CultureInfo cultureInfo)
-        {
-            if (null != cultureInfo)
-            {
-                if (_variantCache.Contains("epi" + contentGuid + ":" + cultureInfo.Name))
-                {
-                    _variantCache.Remove("epi" + contentGuid + ":" + cultureInfo.Name);
-                }
-            }
-            else
-            {
-                if (_variantCache.Contains("epi" + contentGuid))
-                {
-                    _variantCache.Remove("epi" + contentGuid);
-                }
-            }
-        }
-
-        internal IContent UpdateVariantContentCache(Guid contentGuid, CultureInfo cultureInfo)
-        {
-            IVersionable versionableContent = null;
-
-            var test =
-                GetActiveTestsByOriginalItemId(contentGuid, cultureInfo).FirstOrDefault(x => x.State.Equals(TestState.Active));
-
-            if (test != null)
-            {
-                var contentLoader = _serviceLocator.GetInstance<IContentLoader>();
-                var testContent = contentLoader.Get<IContent>(contentGuid);
-                var contentVersion = testContent.ContentLink.WorkID == 0
-                    ? test.Variants.First(variant => variant.IsPublished).ItemVersion
-                    : testContent.ContentLink.WorkID;
-
-                if (testContent != null)
-                {
-                    foreach (var variant in test.Variants)
-                    {
-                        if (variant.ItemVersion != contentVersion)
-                        {
-                            versionableContent = (IVersionable)TestManagerHelper.CreateVariantContent(contentLoader, testContent, variant);
-                            versionableContent.Status = VersionStatus.Published;
-                            versionableContent.StartPublish = DateTime.Now.AddDays(-1);
-
-                            var cacheItemPolicy = new CacheItemPolicy
-                            {
-                                AbsoluteExpiration = DateTimeOffset.Parse(test.EndDate.ToString())
-                            };
-
-                            _variantCache.Add("epi" + contentGuid + ":" + cultureInfo.Name, (IContent)versionableContent, cacheItemPolicy);
-                        }
-                    }
-                }
-            }
-            return (IContent)versionableContent;
+            throw new NotImplementedException();
         }
     }
 }
