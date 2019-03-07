@@ -285,7 +285,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
        
         /// <inheritdoc />
-        public void Start(Guid testObjectId)
+        public IMarketingTest Start(Guid testObjectId)
         {
             var dalTest = _dataAccess.Start(testObjectId);
             var managerTest = TestManagerHelper.ConvertToManagerTest(_kpiManager, dalTest);
@@ -296,6 +296,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 UpdateCache(managerTest, CacheOperator.Add);
                 _marketingTestingEvents.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestStartedEvent, new TestEventArgs(managerTest));
             }
+
+            return managerTest;
         }
 
         /// <inheritdoc />

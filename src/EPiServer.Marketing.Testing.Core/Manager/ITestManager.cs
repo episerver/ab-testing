@@ -73,7 +73,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Starts a test.
         /// </summary>
         /// <param name="testObjectId">ID of a test.</param>
-        void Start(Guid testObjectId);
+        IMarketingTest Start(Guid testObjectId);
 
         /// <summary>
         /// Stops a test.
