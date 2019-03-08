@@ -1,12 +1,11 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.Framework;
+using EPiServer.Framework.Cache;
 using EPiServer.Framework.Initialization;
-using EPiServer.Shell.ObjectEditing;
-using EPiServer.ServiceLocation;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Evaluator;
+using EPiServer.ServiceLocation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EPiServer.Marketing.Testing.Web.Initializers
 {
@@ -16,6 +15,15 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
     {
         public void ConfigureContainer(ServiceConfigurationContext context) {
             context.Services.AddTransient<IContentLockEvaluator, ABTestLockEvaluator>();
+
+            context.Services.AddSingleton<ITestManager, CachingTestManager>(
+                serviceLocator =>
+                    new CachingTestManager(
+                        serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
+                        serviceLocator.GetInstance<IContentLoader>(),
+                        new TestManager()
+                    )
+            );
         }
 
         public void Initialize(InitializationEngine context){ }

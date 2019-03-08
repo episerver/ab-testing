@@ -21,7 +21,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     /// <summary>
     /// Central point of access for test data and test manipulation.
     /// </summary>
-    [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestManager : ITestManager
     {        
         private ITestingDataAccess _dataAccess;
@@ -29,17 +28,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private Random _randomParticiaption = new Random();
         private IKpiManager _kpiManager;
         private DefaultMarketingTestingEvents _marketingTestingEvents;
-
-        public bool DatabaseNeedsConfiguring;
-
-        /// <inheritdoc />
-        public List<IMarketingTest> ActiveCachedTests
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        private bool _databaseNeedsConfiguring;
 
         [ExcludeFromCodeCoverage]
         public TestManager()
@@ -53,12 +42,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
             catch (DatabaseDoesNotExistException)
             {
-                DatabaseNeedsConfiguring = true;
+                _databaseNeedsConfiguring = true;
                 return;
             }
             catch (DatabaseNeedsUpdating)
             {
-                DatabaseNeedsConfiguring = true;
+                _databaseNeedsConfiguring = true;
                 return;
             }
 
@@ -341,9 +330,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false)
         {
-            if (DatabaseNeedsConfiguring)
+            if (_databaseNeedsConfiguring)
             {
-                DatabaseNeedsConfiguring = false;
+                _databaseNeedsConfiguring = false;
                 return 0;
             }
 
