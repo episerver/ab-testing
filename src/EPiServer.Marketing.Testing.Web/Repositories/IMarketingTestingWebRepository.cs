@@ -1,13 +1,12 @@
-﻿using System;
-using EPiServer.Marketing.Testing.Web.Models;
-using System.Collections.Generic;
-using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Core;
-using EPiServer.Marketing.Testing.Core.DataClass.Enums;
-using EPiServer.Marketing.KPI.Results;
+﻿using EPiServer.Core;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Web.Models;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using EPiServer.Marketing.Testing.Core.Manager;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -36,8 +35,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo);
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true);
         void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true);
-        List<IMarketingTest> GetActiveCachedTests();
-        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
     }
 }

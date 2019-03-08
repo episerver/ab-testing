@@ -596,27 +596,29 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void TestHandler_initProxyEventHandler_checks_ref_and_adds_one()
         {
-            var testHandler = GetUnitUnderTest();
-            _mockMarketingTestingWebRepository.Setup(g => g.GetActiveCachedTests()).Returns(
-                new List<IMarketingTest>()
-                {
-                    new ABTest()
-                    {
-                        OriginalItemId = _originalItemId,
-                        State = TestState.Active,
-                        Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                        KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object,Guid.NewGuid()) }
-                    }
-                });
+            throw new NotImplementedException();
 
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+            //var testHandler = GetUnitUnderTest();
+            //_mockMarketingTestingWebRepository.Setup(g => g.GetActiveCachedTests()).Returns(
+            //    new List<IMarketingTest>()
+            //    {
+            //        new ABTest()
+            //        {
+            //            OriginalItemId = _originalItemId,
+            //            State = TestState.Active,
+            //            Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
+            //            KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object,Guid.NewGuid()) }
+            //        }
+            //    });
 
-            _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(true);
-            testHandler.initProxyEventHandler();
+            //// proxyEventHandler listens for events when tests are added / removed from cache.
+            //Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            //_mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
 
-            _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should have been called once but it wasnt.");
+            //_referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(true);
+            //testHandler.initProxyEventHandler();
+
+            //_referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should have been called once but it wasnt.");
         }
 
         [Fact]

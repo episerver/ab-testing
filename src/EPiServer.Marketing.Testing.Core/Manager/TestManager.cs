@@ -19,15 +19,6 @@ using System.Linq;
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
-    /// Used to say what operation should be done to the cache.
-    /// </summary>
-    public enum CacheOperator
-    {
-        Add,
-        Remove
-    }
-
-    /// <summary>
     /// Central point of access for test data and test manipulation.
     /// </summary>
     [ServiceConfiguration(ServiceType = typeof(ITestManager), Lifecycle = ServiceInstanceScope.Singleton)]
@@ -92,13 +83,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            throw new NotImplementedException();
+            return GetTestByItemId(originalItemId).Where(t => t.State == TestState.Active).ToList();
         }
 
         /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId,CultureInfo contentCulture)
         {
-            throw new NotImplementedException();
+            return GetTestByItemId(originalItemId).Where(t => t.State == TestState.Active && t.ContentLanguage == contentCulture.Name).ToList();
         }
 
         /// <inheritdoc />
@@ -363,12 +354,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
 
             return _dataAccess.GetDatabaseVersion(dbConnection, schema, contextKey);
-        }
-
-
-        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
-        {
-            throw new NotImplementedException();
         }
     }
 }

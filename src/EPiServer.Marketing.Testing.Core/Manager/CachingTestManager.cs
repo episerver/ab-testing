@@ -25,8 +25,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _inner = inner;
         }
 
-        public List<IMarketingTest> ActiveCachedTests => throw new NotImplementedException();
-
         public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
             _inner.Archive(testObjectId, winningVariantId, cultureInfo);
@@ -176,11 +174,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             _inner.Stop(testObjectId, cultureInfo);
             _cache.Remove(GetCacheKeyForTest(testObjectId));
-        }
-
-        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
-        {
-            throw new NotImplementedException();
         }
 
         private void AddToCache(IMarketingTest test)

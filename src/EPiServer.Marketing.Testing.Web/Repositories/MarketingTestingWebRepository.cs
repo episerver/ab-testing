@@ -390,16 +390,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type, async);
         }
 
-        public List<IMarketingTest> GetActiveCachedTests()
-        {
-            return _testManager.ActiveCachedTests;
-        }
-
-        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
-        {
-            _testManager.UpdateCache(test, cacheOperator);
-        }
-
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
         {
             return _testManager.EvaluateKPIs(kpis, sender, e);

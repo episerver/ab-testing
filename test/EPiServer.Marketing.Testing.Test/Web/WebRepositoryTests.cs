@@ -144,18 +144,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void GetActiveCachedTest_Retrieves_TestManager_ActiveCachedTests()
         {
-            List<IMarketingTest> testList = new List<IMarketingTest>();
-            testList.Add(new ABTest() { Title = "Test 1" });
-            testList.Add(new ABTest() { Title = "Test 2" });
+            throw new NotImplementedException();
 
-            var aRepo = GetUnitUnderTest();
-            _mockTestManager.SetupGet(prop => prop.ActiveCachedTests).Returns(testList);
+            //List<IMarketingTest> testList = new List<IMarketingTest>();
+            //testList.Add(new ABTest() { Title = "Test 1" });
+            //testList.Add(new ABTest() { Title = "Test 2" });
 
-            var activeTests = aRepo.GetActiveCachedTests();
+            //var aRepo = GetUnitUnderTest();
+            //_mockTestManager.SetupGet(prop => prop.ActiveCachedTests).Returns(testList);
 
-            Assert.True(activeTests.Count == 2);
-            Assert.True(activeTests[0].Title == "Test 1");
-            Assert.True(activeTests[1].Title == "Test 2");
+            //var activeTests = aRepo.GetActiveCachedTests();
+
+            //Assert.True(activeTests.Count == 2);
+            //Assert.True(activeTests[0].Title == "Test 1");
+            //Assert.True(activeTests[1].Title == "Test 2");
         }
 
         [Fact]

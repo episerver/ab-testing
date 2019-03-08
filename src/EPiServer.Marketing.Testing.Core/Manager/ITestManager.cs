@@ -157,12 +157,5 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="populateCache">If this is run before the site is set up, we want to populate the cache with all active tests.  By default, this is false.</param>
         /// <returns>Database version of the testing schema.</returns>
         long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false);
-
-        /// <summary>
-        /// Cache of all currently active tests.
-        /// </summary>
-        List<IMarketingTest> ActiveCachedTests { get; }
-
-        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
     }
 }
