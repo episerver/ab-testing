@@ -5,7 +5,9 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Evaluator;
 using EPiServer.ServiceLocation;
+using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Caching;
 
 namespace EPiServer.Marketing.Testing.Web.Initializers
 {
@@ -19,8 +21,13 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
             context.Services.AddSingleton<ITestManager, CachingTestManager>(
                 serviceLocator =>
                     new CachingTestManager(
-                        serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
-                        serviceLocator.GetInstance<IContentLoader>(),
+                        new MemoryCache("Episerver.Marketing.Testing"),
+                        new RemoteCacheSignal(
+                            serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
+                            "epi/marketing/testing/cache",
+                            TimeSpan.FromMilliseconds(100)
+                        ),
+                        serviceLocator.GetInstance<DefaultMarketingTestingEvents>(),
                         new TestManager()
                     )
             );

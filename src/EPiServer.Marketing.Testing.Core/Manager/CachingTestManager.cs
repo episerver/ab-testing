@@ -9,32 +9,42 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Caching;
+using System.Threading;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
     public class CachingTestManager : ITestManager
     {
-        private readonly ISynchronizedObjectInstanceCache _cache;
-        private readonly IContentLoader _contentLoader;
+        private const string CacheValidityKey = "epi/marketing/testing/root";
+        
         private readonly ITestManager _inner;
+        private readonly ObjectCache _cache;
+        private readonly ICacheSignal _remoteCacheSignal;
+        private readonly DefaultMarketingTestingEvents _events;
 
-        public CachingTestManager(ISynchronizedObjectInstanceCache cache, IContentLoader contentLoader, ITestManager inner)
+        public CachingTestManager(ObjectCache cache, ICacheSignal remoteCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner)
         {
-            _cache = cache;
-            _contentLoader = contentLoader;
+            _remoteCacheSignal = remoteCacheSignal;
             _inner = inner;
+            _events = events;
+            _cache = cache;
+
+            RefreshCache();
+
+            remoteCacheSignal.Monitor(RefreshCache);
         }
 
         public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
             _inner.Archive(testObjectId, winningVariantId, cultureInfo);
-            _cache.Remove(GetCacheKeyForTest(testObjectId));            
+            RemoveFromCache(testObjectId);
         }
 
         public void Delete(Guid testObjectId, CultureInfo cultureInfo = null)
         {
             _inner.Delete(testObjectId, cultureInfo);
-            _cache.Remove(GetCacheKeyForTest(testObjectId));
+            RemoveFromCache(testObjectId);
         }
 
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
@@ -46,32 +56,29 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             IMarketingTest test = null;
 
-            _cache.TryGet(GetCacheKeyForTest(testObjectId), ReadStrategy.Immediate, out test);
-
-            if (test == null)
+            if (fromCache)
             {
-                test = _inner.Get(testObjectId);
-
-                if(test != null)
-                {
-                    AddToCache(test);
-                }
+                test = (IMarketingTest)_cache.Get(GetCacheKeyForTest(testObjectId));
             }
 
-            return test;
+            return test ?? _inner.Get(testObjectId, false);
         }
 
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
-            return GetTestByItemId(originalItemId)
-                .Where(t => t.State == TestState.Active)
+            return _cache
+                .Where(test => test.Key.StartsWith($"epi/marketing/testing/tests?originalItem={originalItemId}"))
+                .Select(test => test.Value as IMarketingTest)
+                .Where(test => test.State == TestState.Active)
                 .ToList();
         }
 
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture)
         {
-            return GetTestByItemId(originalItemId)
-                .Where(t => t.State == TestState.Active && t.ContentLanguage == contentCulture.Name)
+            return _cache
+                .Where(test => test.Key.StartsWith(GetCacheKeyForTestByItem(originalItemId, contentCulture.Name)))
+                .Select(test => test.Value as IMarketingTest)
+                .Where(test => test.State == TestState.Active)
                 .ToList();
         }
 
@@ -82,24 +89,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
-            var cacheKey = GetCacheKeyForTestsByItem(originalItemId);
-
-            List<IMarketingTest> tests = null;
-
-            _cache.TryGet(cacheKey, ReadStrategy.Immediate, out tests);
-
-            if (tests == null)
-            {
-                tests = _inner.GetTestByItemId(originalItemId);
-
-                if (tests != null && tests.Any())
-                {
-                    tests.ForEach(AddToCache);
-                    _cache.Insert(cacheKey, tests, new CacheEvictionPolicy(tests.Select(t => GetCacheKeyForTest(t.Id))));
-                }
-            }
-
-            return tests ?? new List<IMarketingTest>();
+            return _inner.GetTestByItemId(originalItemId);
         }
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
@@ -116,11 +106,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             IContent variant = null;
 
-            _cache.TryGet(GetCacheKeyForVariant(contentGuid, cultureInfo.Name), ReadStrategy.Immediate, out variant);
+            variant = _cache.Get(GetCacheKeyForVariant(contentGuid, cultureInfo.Name)) as IContent;
 
             if (variant == null)
             {
                 variant = _inner.GetVariantContent(contentGuid, cultureInfo);
+
+                if (variant != null)
+                {
+                    AddToCache(contentGuid, cultureInfo, variant);
+                }
             }
 
             return variant;
@@ -147,7 +142,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if(test.State == TestState.Active)
             {
-                _cache.Insert(GetCacheKeyForTest(testId), test, CacheEvictionPolicy.Empty);
+                lock (_cache)
+                {
+                    AddToCache(test);
+                }
             }
 
             return testId;
@@ -164,7 +162,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if(startedTest?.State == TestState.Active)
             {
-                _cache.Insert(GetCacheKeyForTest(testId), startedTest, CacheEvictionPolicy.Empty);
+                lock (_cache)
+                {
+                    AddToCache(startedTest);
+                }
             }
 
             return startedTest;
@@ -173,22 +174,94 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public void Stop(Guid testObjectId, CultureInfo cultureInfo = null)
         {
             _inner.Stop(testObjectId, cultureInfo);
-            _cache.Remove(GetCacheKeyForTest(testObjectId));
+            RemoveFromCache(testObjectId);
+        }
+
+        public void RefreshCache()
+        {
+            lock (_cache)
+            {
+                var allTestsInCache = _cache
+                    .Where(test => test.Key.StartsWith("epi/marketing/testing/tests?id"))
+                    .Cast<IMarketingTest>()
+                    .Select(test => test.Id)
+                    .ToList();
+
+                allTestsInCache.ForEach(RemoveFromCache);
+
+                var allActiveTests = new TestCriteria();
+                allActiveTests.AddFilter(
+                    new ABTestFilter
+                    {
+                        Property = ABTestProperty.State,
+                        Operator = FilterOperator.And,
+                        Value = TestState.Active
+                    }
+                );
+
+                var allTestsInDatabase = GetTestList(allActiveTests);
+                allTestsInDatabase.ForEach(AddToCache);
+
+                _remoteCacheSignal.Set();
+            }
         }
 
         private void AddToCache(IMarketingTest test)
-        {
+        {            
             var testCacheKey = GetCacheKeyForTest(test.Id);
+            _cache.Add(testCacheKey, test, new CacheItemPolicy());
+            _cache.Add(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, GetCachePolicyForTest(test, testCacheKey));                      
 
-            _cache.Insert(testCacheKey, test, CacheEvictionPolicy.Empty);
+            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-            _cache.Insert(
-                GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
-                _inner.GetVariantContent(test.OriginalItemId, new CultureInfo(test.ContentLanguage)),
-                new CacheEvictionPolicy(new[] { testCacheKey })
-            );
+            _remoteCacheSignal.Reset();
+        }
 
-            _cache.Remove(GetCacheKeyForTestsByItem(test.OriginalItemId));
+        private void AddToCache(Guid originalItemId, CultureInfo culture, IContent variant)
+        {            
+            var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
+            var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
+            var policy = GetCachePolicyForVariant(originalItemId, culture, variant, cacheKeyForAssociatedTest);
+
+            _cache.Add(cacheKeyForVariant, variant, policy);
+        }
+
+        private void RemoveFromCache(Guid testId)
+        {
+            var removedTest = _cache.Remove(GetCacheKeyForTest(testId)) as IMarketingTest;
+
+            if(removedTest != null)
+            {
+                _remoteCacheSignal.Reset();
+            }
+        }
+
+        private CacheItemPolicy GetCachePolicyForTest(IMarketingTest test, params string[] dependencies)
+        {
+            var policy = new CacheItemPolicy()
+            {
+                AbsoluteExpiration = ObjectCache.InfiniteAbsoluteExpiration,
+                RemovedCallback = args => _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test))
+            };
+
+            if (dependencies.Any())
+            {
+                policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(dependencies));
+            }
+
+            return policy;
+        }
+
+        private CacheItemPolicy GetCachePolicyForVariant(Guid originalItemId, CultureInfo culture, IContent variantContent, params string[] dependencies)
+        {
+            var policy = new CacheItemPolicy();
+
+            if (dependencies.Any())
+            {
+                policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(dependencies));
+            }
+
+            return policy;
         }
 
         private static string GetCacheKeyForVariant(Guid contentGuid, string contentLanguage)
@@ -201,9 +274,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return $"epi/marketing/testing/tests?id={id}";
         }
 
-        private static string GetCacheKeyForTestsByItem(Guid originalItemId)
+        private static string GetCacheKeyForTestByItem(Guid originalItemId, string contentCulture)
         {
-            return $"epi/marketing/testing/tests?originalItem={originalItemId}";
+            return $"epi/marketing/testing/tests?originalItem={originalItemId}&culture={contentCulture}";
         }
     }
 }
