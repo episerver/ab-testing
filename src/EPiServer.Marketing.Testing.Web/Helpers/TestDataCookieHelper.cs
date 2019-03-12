@@ -72,10 +72,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var aTest = _testRepo.GetTestById(testData.TestId,true);
             int varIndex = -1;
-            if (testData.TestVariantId != Guid.NewGuid())
+
+            if (testData.TestVariantId != Guid.Empty)
             {
                 varIndex = aTest.Variants.FindIndex(i => i.Id == testData.TestVariantId);
             }
+
             var cookieData = new HttpCookie(COOKIE_PREFIX + testData.TestContentId.ToString() + _adminConfigTestSettingsHelper.GetCookieDelimeter() + aTest.ContentLanguage)
             {
                 ["start"] = aTest.StartDate.ToString(CultureInfo.InvariantCulture),
@@ -144,7 +146,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     if (test != null && retCookie.TestStart.ToString(CultureInfo.InvariantCulture) == test.StartDate.ToString(CultureInfo.InvariantCulture))
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
-                        retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid();
+                        retCookie.TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.Empty;
                         retCookie.ShowVariant = index != -1 ? !test.Variants[outint].IsPublished : false;
                         retCookie.TestId = test.Id;
 

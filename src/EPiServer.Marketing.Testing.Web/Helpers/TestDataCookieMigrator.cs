@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     {
                         TestContentId = Guid.Parse(testContentId),
                         TestId = test.Id,
-                        TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.NewGuid(),
+                        TestVariantId = index != -1 ? test.Variants[outint].Id : Guid.Empty,
                         TestStart = startDate,
                         ShowVariant = index != -1 && !test.Variants[outint].IsPublished,
                         Viewed = bool.TryParse(cookie["viewed"], out outval) && outval,
