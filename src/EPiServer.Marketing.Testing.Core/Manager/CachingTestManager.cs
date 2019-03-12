@@ -196,7 +196,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     .Cast<IMarketingTest>()
                     .Select(test => test.Id)
                     .ToList()
-                    .ForEach(RemoveFromCache);
+                    .ForEach(test => RemoveFromCache(test, false));
 
                 var allActiveTests = new TestCriteria();
                 allActiveTests.AddFilter(
@@ -208,20 +208,24 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     }
                 );
 
-                var allTestsInDatabase = GetTestList(allActiveTests);
-                allTestsInDatabase.ForEach(AddToCache);
+                _inner.GetTestList(allActiveTests).ForEach(test => AddToCache(test, false));
 
                 _remoteCacheSignal.Set();
             }
         }
 
         private void AddToCache(IMarketingTest test)
+        {
+            AddToCache(test, true);
+        }
+
+        private void AddToCache(IMarketingTest test, bool invalidateRemote)
         {            
             // Adds the test and dependent entries to the cache:
             //   test (root)
             //    |
             //     -- test (by original item)
-
+            
             var testCacheKey = GetCacheKeyForTest(test.Id);
             _cache.Add(testCacheKey, test, new CacheItemPolicy());
             _cache.Add(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, GetCachePolicyForTest(test, testCacheKey));
@@ -240,7 +244,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             // Signal other nodes to reset their cache.
 
-            _remoteCacheSignal.Reset();
+            if (invalidateRemote)
+            {
+                _remoteCacheSignal.Reset();
+            }
         }
 
         private void AddToCache(TestCriteria criteria, IEnumerable<IMarketingTest> tests)
@@ -294,11 +301,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _cache.Add(cacheKeyForVariant, variant, policy);
         }
 
-        private void RemoveFromCache(Guid testId)
+        private void RemoveFromCache(Guid testId)            
+        {
+            RemoveFromCache(testId, true);
+        }
+
+        private void RemoveFromCache(Guid testId, bool invalidateRemote)
         {
             var removedTest = _cache.Remove(GetCacheKeyForTest(testId)) as IMarketingTest;
 
-            if(removedTest != null)
+            if(invalidateRemote && removedTest != null)
             {
                 _remoteCacheSignal.Reset();
             }
