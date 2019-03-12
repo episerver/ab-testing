@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using Xunit;
 
-namespace EPiServer.Marketing.Testing.Test
+namespace EPiServer.Marketing.Testing.Test.Core
 {
     public class RemoteCacheSignalTests
     {

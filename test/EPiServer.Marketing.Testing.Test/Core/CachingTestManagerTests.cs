@@ -11,11 +11,9 @@ using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace EPiServer.Marketing.Testing.Test
+namespace EPiServer.Marketing.Testing.Test.Core
 {
     public class CachingTestManagerTests
     {
