@@ -1,5 +1,4 @@
 ﻿using EPiServer.Core;
-using EPiServer.Framework.Cache;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
@@ -10,7 +9,6 @@ using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Threading;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -94,7 +92,20 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
-            return _inner.GetTestList(criteria);
+            var cacheKey = GetCacheKeyForTests(criteria);
+            var tests = _cache.Get(cacheKey) as List<IMarketingTest>;
+
+            if(tests == null)
+            {
+                tests = _inner.GetTestList(criteria);
+
+                if(tests?.Count() > 0)
+                {
+                    AddToCache(criteria, tests);
+                }
+            }
+
+            return tests;
         }
 
         public IContent GetVariantContent(Guid contentGuid)
@@ -181,13 +192,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             lock (_cache)
             {
-                var allTestsInCache = _cache
-                    .Where(test => test.Key.StartsWith("epi/marketing/testing/tests?id"))
+                _cache.Where(test => test.Key.StartsWith("epi/marketing/testing/tests?id"))
                     .Cast<IMarketingTest>()
                     .Select(test => test.Id)
-                    .ToList();
-
-                allTestsInCache.ForEach(RemoveFromCache);
+                    .ToList()
+                    .ForEach(RemoveFromCache);
 
                 var allActiveTests = new TestCriteria();
                 allActiveTests.AddFilter(
@@ -208,17 +217,76 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         private void AddToCache(IMarketingTest test)
         {            
+            // Adds the test and dependent entries to the cache:
+            //   test (root)
+            //    |
+            //     -- test (by original item)
+
             var testCacheKey = GetCacheKeyForTest(test.Id);
             _cache.Add(testCacheKey, test, new CacheItemPolicy());
-            _cache.Add(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, GetCachePolicyForTest(test, testCacheKey));                      
+            _cache.Add(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, GetCachePolicyForTest(test, testCacheKey));
+
+            // Adding a test to the cache potentially invalidates lists of tests
+            // that were previously stored. So, remove them all.
+
+            _cache.Where(t => t.Key.StartsWith($"epi/marketing/testing/tests?filter="))
+                .Select(t => t.Key)
+                .ToList()
+                .ForEach(key => _cache.Remove(key));
+            
+            // Notify interested consumers that a test was added to the cache.
 
             _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+
+            // Signal other nodes to reset their cache.
 
             _remoteCacheSignal.Reset();
         }
 
+        private void AddToCache(TestCriteria criteria, IEnumerable<IMarketingTest> tests)
+        {
+            // Adds a list of tests to the cache. The list is dependent on all tests
+            // it contains so that it will be invalidated if one of those tests should
+            // change.
+            // 
+            //  test    test    test
+            //   |       |       |
+            //    ---------------
+            //           |
+            //          list
+
+            // Add the individual tests to the cache.
+
+            List<string> dependencies = new List<string>();
+            foreach(var test in tests)
+            {
+                AddToCache(test);
+                dependencies.Add(GetCacheKeyForTest(test.Id));
+            }
+
+            // Add the list to the cache and make it dependent on all of its children
+
+            var policy = new CacheItemPolicy();
+
+            if (dependencies.Any())
+            {
+                policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(dependencies));
+            }
+
+            _cache.Add(GetCacheKeyForTests(criteria), tests, policy);
+        }
+
         private void AddToCache(Guid originalItemId, CultureInfo culture, IContent variant)
-        {            
+        {
+            // Adds a variant to the cache. The variant is dependent on its parent test
+            // so that it will be invalidated if its parent should change.
+            //
+            //   test (root)
+            //    |
+            //     -- test (by original item)
+            //         |
+            //          -- variant
+
             var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
             var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
             var policy = GetCachePolicyForVariant(originalItemId, culture, variant, cacheKeyForAssociatedTest);
@@ -272,6 +340,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private static string GetCacheKeyForTest(Guid id)
         {
             return $"epi/marketing/testing/tests?id={id}";
+        }
+
+        private static string GetCacheKeyForTests(TestCriteria criteria)
+        {
+            var query = string.Join(
+                "&", 
+                criteria.GetFilters().Select(f => $"filter={f.Property.ToString()} {f.Operator.ToString()} {f.Value?.ToString() ?? ""}")
+            );
+
+            return $"epi/marketing/testing/tests?{query}";
         }
 
         private static string GetCacheKeyForTestByItem(Guid originalItemId, string contentCulture)
