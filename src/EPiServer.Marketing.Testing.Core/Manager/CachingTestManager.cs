@@ -12,6 +12,10 @@ using System.Runtime.Caching;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
+    /// <summary>
+    /// The CachingTestManager class delivers marketing tests from a cache,
+    /// if possible, prior to deferring to another test manager.
+    /// </summary>
     public class CachingTestManager : ITestManager
     {
         private const string CacheValidityKey = "epi/marketing/testing/root";
@@ -21,6 +25,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private readonly ICacheSignal _remoteCacheSignal;
         private readonly DefaultMarketingTestingEvents _events;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="cache">Cache in which to store tests and related data</param>
+        /// <param name="remoteCacheSignal">Signal for communicating with other nodes maintaining caches</param>
+        /// <param name="events">Marketing event publisher</param>
+        /// <param name="inner">Test manager to defer to when tests are not in the cache</param>
         public CachingTestManager(ObjectCache cache, ICacheSignal remoteCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner)
         {
             _remoteCacheSignal = remoteCacheSignal;
@@ -33,6 +44,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             remoteCacheSignal.Monitor(RefreshCache);
         }
 
+        /// <inheritdoc/>
         public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
             lock (_cache)
@@ -42,6 +54,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <inheritdoc/>
         public void Delete(Guid testObjectId, CultureInfo cultureInfo = null)
         {
             lock (_cache)
@@ -51,11 +64,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <inheritdoc/>
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
         {
             return _inner.EvaluateKPIs(kpis, sender, e);
         }
 
+        /// <inheritdoc/>
         public IMarketingTest Get(Guid testObjectId, bool fromCache = false)
         {
             IMarketingTest test = null;
@@ -68,6 +83,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return test ?? _inner.Get(testObjectId, false);
         }
 
+        /// <inheritdoc/>
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             return _cache
@@ -77,6 +93,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture)
         {
             return _cache
@@ -86,16 +103,19 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false)
         {
             return _inner.GetDatabaseVersion(dbConnection, schema, contextKey, populateCache);
         }
 
+        /// <inheritdoc/>
         public List<IMarketingTest> GetTestByItemId(Guid originalItemId)
         {
             return _inner.GetTestByItemId(originalItemId);
         }
 
+        /// <inheritdoc/>
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
             var cacheKey = GetCacheKeyForTests(criteria);
@@ -114,11 +134,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return tests;
         }
 
+        /// <inheritdoc/>
         public IContent GetVariantContent(Guid contentGuid)
         {
             return GetVariantContent(contentGuid, new CultureInfo("en-GB"));
         }
 
+        /// <inheritdoc/>
         public IContent GetVariantContent(Guid contentGuid, CultureInfo cultureInfo)
         {
             IContent variant = null;
@@ -138,21 +160,25 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return variant;
         }
 
+        /// <inheritdoc/>
         public void IncrementCount(IncrementCountCriteria criteria)
         {
             _inner.IncrementCount(criteria);
         }
 
+        /// <inheritdoc/>
         public void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool asynch = true)
         {
             _inner.IncrementCount(testId, itemVersion, resultType, kpiId, asynch);
         }
 
+        /// <inheritdoc/>
         public Variant ReturnLandingPage(Guid testId)
         {
             return _inner.ReturnLandingPage(testId);
         }
 
+        /// <inheritdoc/>
         public Guid Save(IMarketingTest test)
         {
             lock (_cache)
@@ -168,11 +194,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <inheritdoc/>
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool isAsync = true)
         {
             _inner.SaveKpiResultData(testId, itemVersion, keyResult, type, isAsync);
         }
 
+        /// <inheritdoc/>
         public IMarketingTest Start(Guid testId)
         {
             lock (_cache)
@@ -188,6 +216,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <inheritdoc/>
         public void Stop(Guid testObjectId, CultureInfo cultureInfo = null)
         {
             lock (_cache)
@@ -197,6 +226,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <summary>
+        /// Removes all tests from the cache and repopulates it from the test manager
+        /// that this class decorates.
+        /// </summary>
         public void RefreshCache()
         {
             lock (_cache)
@@ -224,11 +257,21 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <summary>
+        /// Adds the specified test to the cache. Remote nodes maintaining
+        /// a cache will also be signaled.
+        /// </summary>
+        /// <param name="test">Test to cache</param>
         private void AddToCache(IMarketingTest test)
         {
             AddToCache(test, true);
         }
 
+        /// <summary>
+        /// Adds the specified test to the cache.
+        /// </summary>
+        /// <param name="test">Test to cache</param>
+        /// <param name="impactsRemoteNodes">Determines whether remote nodes should be signaled</param>
         private void AddToCache(IMarketingTest test, bool impactsRemoteNodes)
         {
             // Adds the test and dependent entries to the cache:
@@ -260,6 +303,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <summary>
+        /// Adds a list of tests to the cache.
+        /// </summary>
+        /// <param name="criteria">Criteria that produced the list of tests</param>
+        /// <param name="tests">Tests to cache</param>
         private void AddToCache(TestCriteria criteria, IEnumerable<IMarketingTest> tests)
         {
             // Adds a list of tests to the cache. The list is dependent on all tests
@@ -293,6 +341,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _cache.Add(GetCacheKeyForTests(criteria), tests, policy);
         }
 
+        /// <summary>
+        /// Adds a variant to the cache.
+        /// </summary>
+        /// <param name="originalItemId">ID of the original content item</param>
+        /// <param name="culture">Culture of the original content item</param>
+        /// <param name="variant">Variant content to cache</param>
         private void AddToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
             // Adds a variant to the cache. The variant is dependent on its parent test
@@ -311,11 +365,21 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _cache.Add(cacheKeyForVariant, variant, policy);
         }
 
+        /// <summary>
+        /// Removes the specified test from the cache. Remote nodes maintaining
+        /// a cache will also be signaled.
+        /// </summary>
+        /// <param name="testId">ID of test to remove</param>
         private void RemoveFromCache(Guid testId)            
         {
             RemoveFromCache(testId, true);
         }
 
+        /// <summary>
+        /// Removes the specified test from the cache.
+        /// </summary>
+        /// <param name="testId">ID of test to remove</param>
+        /// <param name="impactsRemoteNodes">Determines whether remote nodes should be notified</param>
         private void RemoveFromCache(Guid testId, bool impactsRemoteNodes)
         {
             var removedTest = _cache.Remove(GetCacheKeyForTest(testId)) as IMarketingTest;
@@ -327,6 +391,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
         }
 
+        /// <summary>
+        /// Gets the caching policy for a test.
+        /// </summary>
+        /// <param name="test">Test to be cached</param>
+        /// <param name="dependencies">Keys of objects on which this test is dependent</param>
+        /// <returns>Cache policy</returns>
         private CacheItemPolicy GetCachePolicyForTest(IMarketingTest test, params string[] dependencies)
         {
             var policy = new CacheItemPolicy()
@@ -343,6 +413,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return policy;
         }
 
+        /// <summary>
+        /// Gets the caching policy for a variant
+        /// </summary>
+        /// <param name="originalItemId">ID of the original content item</param>
+        /// <param name="culture">Culture of the original content item</param>
+        /// <param name="variantContent">Variant content to cache</param>
+        /// <param name="dependencies">Keys of objects on which this test is dependent</param>
+        /// <returns>Cache policy</returns>
         private CacheItemPolicy GetCachePolicyForVariant(Guid originalItemId, CultureInfo culture, IContent variantContent, params string[] dependencies)
         {
             var policy = new CacheItemPolicy();
@@ -355,16 +433,32 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return policy;
         }
 
+        /// <summary>
+        /// Gets the cache key for a variant.
+        /// </summary>
+        /// <param name="contentGuid">ID of original content item</param>
+        /// <param name="contentLanguage">Content language of original content item</param>
+        /// <returns>Cache key</returns>
         private static string GetCacheKeyForVariant(Guid contentGuid, string contentLanguage)
         {
             return $"epi/marketing/testing/variants?originalItem={contentGuid}&culture={contentLanguage}";
         }
 
+        /// <summary>
+        /// Gets the cache key for a test.
+        /// </summary>
+        /// <param name="id">ID of the test</param>
+        /// <returns>Cache key</returns>
         private static string GetCacheKeyForTest(Guid id)
         {
             return $"epi/marketing/testing/tests?id={id}";
         }
 
+        /// <summary>
+        /// Gets a cache key for a list of tests.
+        /// </summary>
+        /// <param name="criteria">Criteria that produced the list</param>
+        /// <returns>Cache key</returns>
         private static string GetCacheKeyForTests(TestCriteria criteria)
         {
             var query = string.Join(
@@ -375,6 +469,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return $"epi/marketing/testing/tests?{query}";
         }
 
+        /// <summary>
+        /// Gets a cache key for a test.
+        /// </summary>
+        /// <param name="originalItemId">ID of original content item</param>
+        /// <param name="contentCulture">Culture of original content item</param>
+        /// <returns>Cache key</returns>
         private static string GetCacheKeyForTestByItem(Guid originalItemId, string contentCulture)
         {
             return $"epi/marketing/testing/tests?originalItem={originalItemId}&culture={contentCulture}";
