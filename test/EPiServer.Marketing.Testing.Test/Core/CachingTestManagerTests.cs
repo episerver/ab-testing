@@ -798,12 +798,17 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 .Returns(refreshedTests);
 
             var manager = new CachingTestManager(cache, _mockSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockSignal.ResetCalls();
+
             manager.RefreshCache();
 
             Assert.Equal(refreshedTests.First(), manager.Get(refreshedTests.First().Id, true));
             Assert.Equal(refreshedTests.Last(), manager.Get(refreshedTests.Last().Id, true));
 
             _expectedTests.ForEach(droppedTest => Assert.Null(manager.Get(droppedTest.Id, true)));
+
+            _mockSignal.Verify(s => s.Set(), Times.Once());
         }
 
         [Fact]
