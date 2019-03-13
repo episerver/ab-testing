@@ -95,6 +95,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return aTest;
         }
 
+        public List<IMarketingTest> GetActiveTests()
+        {
+            return _testManager.GetActiveTests();
+        }
+
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             var tests = _testManager.GetActiveTestsByOriginalItemId(originalItemId);

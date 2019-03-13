@@ -68,7 +68,23 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return TestManagerHelper.ConvertToManagerTest(_kpiManager, _dataAccess.Get(testObjectId)) 
                 ?? throw new TestNotFoundException();
         }
-        
+
+        /// <inheritdoc />
+        public List<IMarketingTest> GetActiveTests()
+        {
+            var allActiveTests = new TestCriteria();
+            allActiveTests.AddFilter(
+                new ABTestFilter
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And, 
+                    Value = TestState.Active
+                }
+            );
+
+            return GetTestList(allActiveTests);
+        }
+
         /// <inheritdoc />
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {

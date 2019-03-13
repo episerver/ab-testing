@@ -608,18 +608,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 }
             };
 
-            _mockMarketingTestingWebRepository.Setup(
-                r =>
-                    r.GetTestList(
-                        It.Is<TestCriteria>(
-                            c =>
-                                c.GetFilters().Count == 1
-                                && c.GetFilters()[0].Property == ABTestProperty.State
-                                && c.GetFilters()[0].Operator == FilterOperator.And
-                                && (TestState)c.GetFilters()[0].Value == TestState.Active
-                        )
-                    )
-            ).Returns(expectedTests);
+            _mockMarketingTestingWebRepository.Setup(r => r.GetActiveTests()).Returns(expectedTests);
             
             // proxyEventHandler listens for events when tests are added / removed from cache.
             Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();

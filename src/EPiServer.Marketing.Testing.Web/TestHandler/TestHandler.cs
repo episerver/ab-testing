@@ -592,17 +592,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         internal void initProxyEventHandler()
         {
-            var allActiveTests = new TestCriteria();
-            allActiveTests.AddFilter(
-                new ABTestFilter
-                {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                }
-            );
-
-            foreach (var test in _testRepo.GetTestList(allActiveTests))
+            foreach (var test in _testRepo.GetActiveTests())
             {
                 foreach (var kpi in test.KpiInstances)
                 {

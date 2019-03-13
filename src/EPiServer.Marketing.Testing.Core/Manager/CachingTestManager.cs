@@ -84,23 +84,25 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <inheritdoc/>
-        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
+        public List<IMarketingTest> GetActiveTests()
         {
             return _cache
-                .Where(test => test.Key.StartsWith($"epi/marketing/testing/tests?originalItem={originalItemId}"))
+                .Where(test => test.Key.StartsWith($"epi/marketing/testing/tests?id"))
                 .Select(test => test.Value as IMarketingTest)
                 .Where(test => test.State == TestState.Active)
                 .ToList();
         }
 
         /// <inheritdoc/>
+        public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
+        {
+            return GetActiveTests().Where(test => test.OriginalItemId == originalItemId).ToList();
+        }
+
+        /// <inheritdoc/>
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId, CultureInfo contentCulture)
         {
-            return _cache
-                .Where(test => test.Key.StartsWith(GetCacheKeyForTestByItem(originalItemId, contentCulture.Name)))
-                .Select(test => test.Value as IMarketingTest)
-                .Where(test => test.State == TestState.Active)
-                .ToList();
+            return GetActiveTests().Where(test => test.OriginalItemId == originalItemId && test.ContentLanguage == contentCulture.Name).ToList();                
         }
 
         /// <inheritdoc/>
@@ -118,20 +120,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc/>
         public List<IMarketingTest> GetTestList(TestCriteria criteria)
         {
-            var cacheKey = GetCacheKeyForTests(criteria);
-            var tests = _cache.Get(cacheKey) as List<IMarketingTest>;
-
-            if(tests == null)
-            {
-                tests = _inner.GetTestList(criteria);
-
-                if(tests?.Count() > 0)
-                {                    
-                    AddToCache(criteria, tests);                    
-                }
-            }
-
-            return tests;
+            return _inner.GetTestList(criteria); ;
         }
 
         /// <inheritdoc/>

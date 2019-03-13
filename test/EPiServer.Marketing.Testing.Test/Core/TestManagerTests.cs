@@ -203,6 +203,31 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void TestManager_GetActiveTests_CallsGetTestListWithCriteria()
+        {
+            var manager = GetUnitUnderTest();
+            var expectedTests = new List<IABTest> { GetDalTest() };
+
+            _dataAccessLayer.Setup(
+                dal =>
+                    dal.GetTestList(
+                        It.Is<DalTestCriteria>(
+                            tc =>
+                                tc.GetFilters().Count() == 1
+                                && tc.GetFilters().First().Property == DalABTestProperty.State
+                                && tc.GetFilters().First().Operator == DalFilterOperator.And
+                                && (DalTestState)tc.GetFilters().First().Value == DalTestState.Active
+                        )
+                    )
+            ).Returns(expectedTests);
+
+            var actualTests = manager.GetActiveTests();            
+
+            Assert.Equal(expectedTests.Count, actualTests.Count);
+            Assert.All(actualTests, actualTest => Assert.Contains(expectedTests, expectedTest => expectedTest.Id == actualTest.Id));
+        }
+
+        [Fact]
         public void TestManager_CallsGetTestListWithCritera()
         {
             var critera = new TestCriteria();

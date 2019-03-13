@@ -23,6 +23,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         IMarketingTest Get(Guid testObjectId, bool fromCache = false);
 
         /// <summary>
+        /// Gets a collection of tests that are currently active.
+        /// </summary>        
+        /// <returns>List of tests</returns>
+        List<IMarketingTest> GetActiveTests();
+
+        /// <summary>
         /// Retrieves all active tests that have the supplied OriginalItemId from the cache.  The associated data for each 
         /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
         /// </summary>
