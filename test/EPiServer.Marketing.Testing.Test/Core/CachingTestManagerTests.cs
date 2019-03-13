@@ -11,6 +11,8 @@ using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Core
@@ -778,6 +780,96 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockSignal.Verify(s => s.Reset(), Times.Once());
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+        }
+
+        [Fact]
+        public void CachingTestManager_RefreshCache_RebuildsCache()
+        {
+            var cache = new MemoryCache(nameof(CachingTestManager_CanHandleManyRequestsInParallel));
+
+            var refreshedTests = new List<IMarketingTest>()
+            {
+                new ABTest { Id = Guid.NewGuid(), OriginalItemId = Guid.NewGuid(), ContentLanguage = "es-ES", State = TestState.Active, Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() }  } },
+                new ABTest { Id = Guid.NewGuid(), OriginalItemId = Guid.NewGuid(), ContentLanguage = "es-ES", State = TestState.Active, Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() }  } }
+            };
+
+            _mockTestManager.SetupSequence(tm => tm.GetTestList(It.IsAny<TestCriteria>()))
+                .Returns(_expectedTests)
+                .Returns(refreshedTests);
+
+            var manager = new CachingTestManager(cache, _mockSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            manager.RefreshCache();
+
+            Assert.Equal(refreshedTests.First(), manager.Get(refreshedTests.First().Id, true));
+            Assert.Equal(refreshedTests.Last(), manager.Get(refreshedTests.Last().Id, true));
+
+            _expectedTests.ForEach(droppedTest => Assert.Null(manager.Get(droppedTest.Id, true)));
+        }
+
+        [Fact]
+        public void CachingTestManager_CanHandleManyRequestsInParallel()
+        {
+            var cache = new MemoryCache(nameof(CachingTestManager_CanHandleManyRequestsInParallel));
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            
+            var manager = new CachingTestManager(cache, _mockSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            var iterations = 2000;
+
+            Thread addManyTests = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        var testToAdd = new ABTest
+                        {
+                            Id = Guid.NewGuid(),
+                            OriginalItemId = Guid.NewGuid(),
+                            ContentLanguage = "es-ES",
+                            State = TestState.Active,
+                            Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+                        };
+
+                        manager.Save(testToAdd);
+                    }
+                }
+            );
+
+            Thread deleteManyTests = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        manager.Delete(Guid.NewGuid());
+                    }
+                }
+            );
+
+            Thread refreshManyTimes = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        manager.RefreshCache();
+                    }
+                }
+            );
+
+            _mockTestManager.ResetCalls();
+
+            addManyTests.Start();
+            deleteManyTests.Start();
+            refreshManyTimes.Start();
+
+
+            Assert.True(addManyTests.Join(TimeSpan.FromSeconds(10)), "The test is taking too long. It's possible that the system has deadlocked.");
+            Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(10)), "The test is taking too long. It's possible that the system has deadlocked.");
+            Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(10)), "The test is taking too long. It's possible that the system has deadlocked.");
+
+            _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations));
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
+            _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
         }
     }
 }

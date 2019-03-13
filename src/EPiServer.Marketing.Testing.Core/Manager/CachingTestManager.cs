@@ -35,14 +35,20 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
-            _inner.Archive(testObjectId, winningVariantId, cultureInfo);
-            RemoveFromCache(testObjectId);            
+            lock (_cache)
+            {
+                _inner.Archive(testObjectId, winningVariantId, cultureInfo);
+                RemoveFromCache(testObjectId);
+            }
         }
 
         public void Delete(Guid testObjectId, CultureInfo cultureInfo = null)
         {
-            _inner.Delete(testObjectId, cultureInfo);
-            RemoveFromCache(testObjectId);           
+            lock (_cache)
+            {
+                _inner.Delete(testObjectId, cultureInfo);
+                RemoveFromCache(testObjectId);
+            }
         }
 
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)
@@ -149,14 +155,17 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public Guid Save(IMarketingTest test)
         {
-            var testId = _inner.Save(test);
+            lock (_cache)
+            {
+                var testId = _inner.Save(test);
 
-            if(test.State == TestState.Active)
-            {                
-                AddToCache(test);                
+                if (test.State == TestState.Active)
+                {
+                    AddToCache(test);
+                }
+
+                return testId;
             }
-
-            return testId;
         }
 
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool isAsync = true)
@@ -166,22 +175,24 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         public IMarketingTest Start(Guid testId)
         {
-            var startedTest = _inner.Start(testId);
+            lock (_cache)
+            {
+                var startedTest = _inner.Start(testId);
 
-            if(startedTest?.State == TestState.Active)
-            {                
-                AddToCache(startedTest);                
+                if (startedTest?.State == TestState.Active)
+                {
+                    AddToCache(startedTest);
+                }
+
+                return startedTest;
             }
-
-            return startedTest;
         }
 
         public void Stop(Guid testObjectId, CultureInfo cultureInfo = null)
         {
-            _inner.Stop(testObjectId, cultureInfo);
-
             lock (_cache)
             {
+                _inner.Stop(testObjectId, cultureInfo);
                 RemoveFromCache(testObjectId);
             }
         }
@@ -190,7 +201,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             lock (_cache)
             {
-                _cache.Where(test => test.Key.StartsWith("epi/marketing/testing/tests?id"))
+                _cache.Where(cacheItem => cacheItem.Key.StartsWith("epi/marketing/testing/tests?id"))
+                    .Select(cacheItem => cacheItem.Value)
                     .Cast<IMarketingTest>()
                     .Select(test => test.Id)
                     .ToList()
@@ -219,93 +231,84 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         private void AddToCache(IMarketingTest test, bool impactsRemoteNodes)
         {
-            lock (_cache)
+            // Adds the test and dependent entries to the cache:
+            //   test (root)
+            //    |
+            //     -- test (by original item)
+
+            var testCacheKey = GetCacheKeyForTest(test.Id);
+            _cache.Add(testCacheKey, test, new CacheItemPolicy());
+            _cache.Add(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, GetCachePolicyForTest(test, testCacheKey));
+
+            // Adding a test to the cache potentially invalidates lists of tests
+            // that were previously stored. So, remove them all.
+
+            _cache.Where(t => t.Key.StartsWith($"epi/marketing/testing/tests?filter="))
+                .Select(t => t.Key)
+                .ToList()
+                .ForEach(key => _cache.Remove(key));
+
+            // Notify interested consumers that a test was added to the cache.
+
+            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+
+            // Signal other nodes to reset their cache.
+
+            if (impactsRemoteNodes)
             {
-                // Adds the test and dependent entries to the cache:
-                //   test (root)
-                //    |
-                //     -- test (by original item)
-
-                var testCacheKey = GetCacheKeyForTest(test.Id);
-                _cache.Add(testCacheKey, test, new CacheItemPolicy());
-                _cache.Add(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, GetCachePolicyForTest(test, testCacheKey));
-
-                // Adding a test to the cache potentially invalidates lists of tests
-                // that were previously stored. So, remove them all.
-
-                _cache.Where(t => t.Key.StartsWith($"epi/marketing/testing/tests?filter="))
-                    .Select(t => t.Key)
-                    .ToList()
-                    .ForEach(key => _cache.Remove(key));
-
-                // Notify interested consumers that a test was added to the cache.
-
-                _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
-
-                // Signal other nodes to reset their cache.
-
-                if (impactsRemoteNodes)
-                {
-                    _remoteCacheSignal.Reset();
-                }
+                _remoteCacheSignal.Reset();
             }
         }
 
         private void AddToCache(TestCriteria criteria, IEnumerable<IMarketingTest> tests)
         {
-            lock (_cache)
+            // Adds a list of tests to the cache. The list is dependent on all tests
+            // it contains so that it will be invalidated if one of those tests should
+            // change.
+            // 
+            //  test    test    test
+            //   |       |       |
+            //    ---------------
+            //           |
+            //          list
+
+            // Add the individual tests to the cache.
+
+            List<string> dependencies = new List<string>();
+            foreach (var test in tests)
             {
-                // Adds a list of tests to the cache. The list is dependent on all tests
-                // it contains so that it will be invalidated if one of those tests should
-                // change.
-                // 
-                //  test    test    test
-                //   |       |       |
-                //    ---------------
-                //           |
-                //          list
-
-                // Add the individual tests to the cache.
-
-                List<string> dependencies = new List<string>();
-                foreach (var test in tests)
-                {
-                    AddToCache(test);
-                    dependencies.Add(GetCacheKeyForTest(test.Id));
-                }
-
-                // Add the list to the cache and make it dependent on all of its children
-
-                var policy = new CacheItemPolicy();
-
-                if (dependencies.Any())
-                {
-                    policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(dependencies));
-                }
-
-                _cache.Add(GetCacheKeyForTests(criteria), tests, policy);
+                AddToCache(test);
+                dependencies.Add(GetCacheKeyForTest(test.Id));
             }
+
+            // Add the list to the cache and make it dependent on all of its children
+
+            var policy = new CacheItemPolicy();
+
+            if (dependencies.Any())
+            {
+                policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(dependencies));
+            }
+
+            _cache.Add(GetCacheKeyForTests(criteria), tests, policy);
         }
 
         private void AddToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
-            lock (_cache)
-            {
-                // Adds a variant to the cache. The variant is dependent on its parent test
-                // so that it will be invalidated if its parent should change.
-                //
-                //   test (root)
-                //    |
-                //     -- test (by original item)
-                //         |
-                //          -- variant
+            // Adds a variant to the cache. The variant is dependent on its parent test
+            // so that it will be invalidated if its parent should change.
+            //
+            //   test (root)
+            //    |
+            //     -- test (by original item)
+            //         |
+            //          -- variant
 
-                var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
-                var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
-                var policy = GetCachePolicyForVariant(originalItemId, culture, variant, cacheKeyForAssociatedTest);
+            var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
+            var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
+            var policy = GetCachePolicyForVariant(originalItemId, culture, variant, cacheKeyForAssociatedTest);
 
-                _cache.Add(cacheKeyForVariant, variant, policy);
-            }
+            _cache.Add(cacheKeyForVariant, variant, policy);
         }
 
         private void RemoveFromCache(Guid testId)            
@@ -315,15 +318,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
         private void RemoveFromCache(Guid testId, bool impactsRemoteNodes)
         {
-            lock (_cache)
-            {
-                var removedTest = _cache.Remove(GetCacheKeyForTest(testId)) as IMarketingTest;
-                var shouldSignalRemoteNodes = impactsRemoteNodes && removedTest != null;
+            var removedTest = _cache.Remove(GetCacheKeyForTest(testId)) as IMarketingTest;
+            var shouldSignalRemoteNodes = impactsRemoteNodes && removedTest != null;
 
-                if (shouldSignalRemoteNodes)
-                {
-                    _remoteCacheSignal.Reset();
-                }
+            if (shouldSignalRemoteNodes)
+            {
+                _remoteCacheSignal.Reset();
             }
         }
 
