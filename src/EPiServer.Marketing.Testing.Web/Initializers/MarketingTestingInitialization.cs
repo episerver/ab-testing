@@ -2,6 +2,7 @@
 using EPiServer.Framework;
 using EPiServer.Framework.Cache;
 using EPiServer.Framework.Initialization;
+using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Evaluator;
 using EPiServer.ServiceLocation;
@@ -24,6 +25,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                         new MemoryCache("Episerver.Marketing.Testing"),
                         new RemoteCacheSignal(
                             serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
+                            serviceLocator.GetInstance<ILogger>(),
                             "epi/marketing/testing/cache",
                             TimeSpan.FromMilliseconds(100)
                         ),

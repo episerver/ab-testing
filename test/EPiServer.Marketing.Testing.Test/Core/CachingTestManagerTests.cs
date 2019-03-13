@@ -12,7 +12,6 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Core
@@ -23,8 +22,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private Mock<DefaultMarketingTestingEvents> _mockEvents;
         private Mock<ITestManager> _mockTestManager;
         private List<IMarketingTest> _expectedTests;
-
-        private int signalResetsOnInit = 6;
 
         public CachingTestManagerTests()
         {

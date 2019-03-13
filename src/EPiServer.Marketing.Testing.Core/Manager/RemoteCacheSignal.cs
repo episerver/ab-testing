@@ -1,4 +1,5 @@
 ﻿using EPiServer.Framework.Cache;
+using EPiServer.Logging;
 using System;
 using System.Threading;
 
@@ -12,6 +13,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     public class RemoteCacheSignal : ICacheSignal, IDisposable
     {
         private readonly ISynchronizedObjectInstanceCache _cacheToMonitor;
+        private readonly ILogger _logger;
         private readonly string _keyToMonitor;
         private readonly int _frequencyInMilliseconds;
 
@@ -25,9 +27,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="cacheToMonitor">The cache to monitor for validity</param>
         /// <param name="keyToMonitor">The key whose presence indicates validity</param>
         /// <param name="frequency">The frequency which which the cache should check for validity</param>
-        public RemoteCacheSignal(ISynchronizedObjectInstanceCache cacheToMonitor, string keyToMonitor, TimeSpan frequency)
+        public RemoteCacheSignal(ISynchronizedObjectInstanceCache cacheToMonitor, ILogger logger, string keyToMonitor, TimeSpan frequency)
         {
             _cacheToMonitor = cacheToMonitor;
+            _logger = logger;
             _keyToMonitor = keyToMonitor;
             _frequencyInMilliseconds = Convert.ToInt32(frequency.TotalMilliseconds);
         }
@@ -54,6 +57,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public void Reset()
         {
             _cacheToMonitor.RemoveRemote(_keyToMonitor);
+            _logger.Trace("Signaling remote nodes of cache invalidation.");
         }
 
         /// <summary>
@@ -62,6 +66,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public void Set()
         {
             _cacheToMonitor.Insert(_keyToMonitor, true, CacheEvictionPolicy.Empty);
+            _logger.Trace("Signaling cache validity.");
         }
 
         /// <summary>
@@ -76,12 +81,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 if (IsCacheInvalid())
                 {
+                    _logger.Trace("Remote cache has signalled invalidation.");
                     _onInvalidation();
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                // Log this...
+                _logger.Error("An error occurred while polling cache validity.", ex);
             }
             finally
             {

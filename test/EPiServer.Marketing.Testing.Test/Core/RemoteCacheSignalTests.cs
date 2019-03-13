@@ -1,4 +1,5 @@
 ﻿using EPiServer.Framework.Cache;
+using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Core.Manager;
 using Moq;
 using System;
@@ -19,7 +20,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void RemoteCacheSignal_Set_IndicatesCacheValidity()
         {
-            var signal = new RemoteCacheSignal(_mockCache.Object, "validity-key", TimeSpan.FromMilliseconds(int.MaxValue));
+            var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(int.MaxValue));
             signal.Set();
 
             _mockCache.Verify(c => c.Insert("validity-key", true, CacheEvictionPolicy.Empty), Times.Once());
@@ -28,7 +29,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         [Fact]
         public void RemoteCacheSignal_Reset_IndicatesCacheInvalidity()
         {
-            var signal = new RemoteCacheSignal(_mockCache.Object, "validity-key", TimeSpan.FromMilliseconds(int.MaxValue));
+            var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(int.MaxValue));
             signal.Reset();
 
             _mockCache.Verify(c => c.RemoveRemote("validity-key"), Times.Once());
@@ -46,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var invalidationActionInvocations = 0;
 
-            using (var signal = new RemoteCacheSignal(_mockCache.Object, "validity-key", TimeSpan.FromMilliseconds(75)))
+            using (var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(75)))
             {
                 signal.Monitor(
                     () =>
@@ -64,7 +65,31 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Assert.True(invalidationActionInvocations < 5, $"{invalidationActionInvocations} > 5");
 
             _mockCache.VerifyAll();
+        }
 
+        [Fact]
+        public void RemoteCacheSignal_Monitor_ACallbackErrorDoesNotDestabilizePolling()
+        {
+            _mockCache.SetupSequence(c => c.Get("validity-key"))
+                .Returns(null);
+
+            var invalidationActionInvocations = 0;
+
+            using (var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(50)))
+            {
+                signal.Monitor(
+                    () =>
+                    {
+                        throw new Exception("Callback error!");
+                    }
+                );
+
+                Thread.Sleep(500); // Allow sufficient time for monitor to poll
+            }
+
+            // Assert that validy has been polled a sufficiently acceptable number of times
+
+            _mockCache.VerifyAll();
         }
     }
 }
