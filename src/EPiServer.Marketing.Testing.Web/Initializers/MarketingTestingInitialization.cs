@@ -25,7 +25,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                         new MemoryCache("Episerver.Marketing.Testing"),
                         new RemoteCacheSignal(
                             serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
-                            serviceLocator.GetInstance<ILogger>(),
+                            LogManager.GetLogger(),
                             "epi/marketing/testing/cache",
                             TimeSpan.FromMilliseconds(100)
                         ),
