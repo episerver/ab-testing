@@ -2,7 +2,7 @@
     "epi/dependency",
     'marketing-testing/scripts/html2canvas'
 ],
-    function (dependency, rasterizehtml) {
+    function (dependency, html2canvas) {
         return {
             _setThumbnail: function (canvasId, url) {
                 var me = this;
