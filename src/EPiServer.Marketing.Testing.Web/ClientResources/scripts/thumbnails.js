@@ -23,6 +23,10 @@
 
                 iframeToLoadPreview.onload = function (e) {
                     html2canvas(iframeToLoadPreview.contentDocument.documentElement, { canvas: canvasForThumbnail }).then(function (canvas) {
+                        me._setThumbState(canvasId, "none", "block", "none");
+                    }).catch(function (error) {
+                        me._setThumbState(canvasId, "none", "none", "block");
+                    }).finally(function () {
                         document.body.removeChild(iframeToLoadPreview);
                     });
                 }
