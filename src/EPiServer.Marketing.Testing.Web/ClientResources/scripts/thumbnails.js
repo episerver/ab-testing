@@ -2,42 +2,42 @@
     "epi/dependency",
     'marketing-testing/scripts/html2canvas'
 ],
-    function (dependency, html2canvas) {
-        return {
-            _setThumbnail: function (canvasId, url) {
-                var me = this;
-                this._setThumbState(canvasId, "block", "none", "none");
-                this._renderClientsideThumbnail(canvasId, url);                
-            },
+function (dependency, html2canvas) {
+    return {
+        _setThumbnail: function (canvasForPreviewImage, url) {
+            var me = this;
+            this._setPreviewState(canvasForPreviewImage, "block", "none", "none");
+            this._renderPreview(canvasForPreviewImage, url);                
+        },
             
-            _renderClientsideThumbnail: function (canvasForThumbnail, url) {
-                var me = this;
-                canvasForThumbnail.height = 768;
-                canvasForThumbnail.width = 1024;
+        _renderPreview: function (canvasForPreviewImage, url) {
+            var me = this;
+            canvasForPreviewImage.height = 768;
+            canvasForPreviewImage.width = 1024;
 
-                var iframeToLoadPreview = document.createElement('iframe');
-                iframeToLoadPreview.src = url;
-                iframeToLoadPreview.width = 1024;
-                iframeToLoadPreview.height = 768;                
-                iframeToLoadPreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
+            var iframeToLoadPagePreview = document.createElement('iframe');
+            iframeToLoadPagePreview.src = url;
+            iframeToLoadPagePreview.width = 1024;
+            iframeToLoadPagePreview.height = 768;                
+            iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
 
-                iframeToLoadPreview.onload = function (e) {
-                    html2canvas(iframeToLoadPreview.contentDocument.documentElement, { canvas: canvasForThumbnail }).then(function (canvas) {
-                        me._setThumbState(canvasId, "none", "block", "none");
-                    }).catch(function (error) {
-                        me._setThumbState(canvasId, "none", "none", "block");
-                    }).finally(function () {
-                        document.body.removeChild(iframeToLoadPreview);
-                    });
-                }
-
-                document.body.appendChild(iframeToLoadPreview);
-            },
-
-            _setThumbState: function (canvasId, spinnerState, previewState, errorState) {
-                document.getElementById(canvasId.id + "-spinner").style.display = spinnerState;
-                canvasId.style.display = previewState;
-                document.getElementById(canvasId.id + "-error").style.display = errorState;
+            iframeToLoadPagePreview.onload = function (e) {
+                html2canvas(iframeToLoadPagePreview.contentDocument.documentElement, { canvas: canvasForPreviewImage }).then(function (canvas) {
+                    me._setPreviewState(canvas, "none", "block", "none");
+                }).catch(function (error) {
+                    me._setPreviewState(canvas, "none", "none", "block");
+                }).finally(function () {
+                    document.body.removeChild(iframeToLoadPagePreview);
+                });
             }
-        };
-    });
+
+            document.body.appendChild(iframeToLoadPagePreview);
+        },
+
+        _setPreviewState: function (canvasForPreviewImage, spinnerDisplayState, previewDisplayState, errorDisplayState) {
+            document.getElementById(canvasForPreviewImage.id + "-spinner").style.display = spinnerDisplayState;
+            canvasForPreviewImage.style.display = previewDisplayState;
+            document.getElementById(canvasForPreviewImage.id + "-error").style.display = errorDisplayState;
+        }
+    };
+});
