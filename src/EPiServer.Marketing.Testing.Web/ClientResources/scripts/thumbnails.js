@@ -1,6 +1,7 @@
 ﻿define([
     "epi/dependency",
-    'marketing-testing/scripts/html2canvas'
+    'marketing-testing/scripts/html2canvas',
+    'marketing-testing/scripts/es6-promise.auto.min'
 ],
 function (dependency, html2canvas) {
     return {
