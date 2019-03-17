@@ -20,8 +20,7 @@ function (dependency, html2canvas) {
             iframeToLoadPagePreview.src = url;
 
             var renderingOptions = {
-                canvas: canvasForPreviewImage,
-                windowWidth: 1024
+                canvas: canvasForPreviewImage
             };
 
             iframeToLoadPagePreview.onload = function (e) {
