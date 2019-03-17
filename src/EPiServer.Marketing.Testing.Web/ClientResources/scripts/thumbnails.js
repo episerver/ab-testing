@@ -16,13 +16,23 @@ function (dependency, html2canvas) {
             canvasForPreviewImage.width = 1024;
 
             var iframeToLoadPagePreview = document.createElement('iframe');
-            iframeToLoadPagePreview.src = url;
-            iframeToLoadPagePreview.width = 1024;
-            iframeToLoadPagePreview.height = 768;                
             iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
+            iframeToLoadPagePreview.width = 1024;
+            iframeToLoadPagePreview.height = 768;  
+            iframeToLoadPagePreview.src = url;
+
+            var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
+
+            var renderingOptions = {
+                canvas: canvasForPreviewImage,
+                width: 1024,
+                height: 768,
+                windowWidth: 1024,
+                windowHeight: 768
+            };
 
             iframeToLoadPagePreview.onload = function (e) {
-                html2canvas(iframeToLoadPagePreview.contentDocument.documentElement, { canvas: canvasForPreviewImage }).then(function (canvas) {
+                html2canvas(elementToRender, renderingOptions).then(function (canvas) {
                     me._setPreviewState(canvas, "none", "block", "none");
                 }).catch(function (error) {
                     me._setPreviewState(canvas, "none", "none", "block");
