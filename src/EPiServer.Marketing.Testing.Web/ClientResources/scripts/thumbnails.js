@@ -26,6 +26,8 @@ function (dependency, html2canvas) {
             iframeToLoadPagePreview.onload = function (e) {
                 var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
                 html2canvas(elementToRender, renderingOptions).then(function (canvas) {
+                    canvas.style.width = "100%";
+                    canvas.stlye.height = "100%";
                     me._setPreviewState(canvas, "none", "block", "none");
                 }).catch(function (error) {
                     me._setPreviewState(canvas, "none", "none", "block");
