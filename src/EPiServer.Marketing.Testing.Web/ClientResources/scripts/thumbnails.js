@@ -21,8 +21,6 @@ function (dependency, html2canvas) {
             iframeToLoadPagePreview.height = 768;  
             iframeToLoadPagePreview.src = url;
 
-            var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
-
             var renderingOptions = {
                 canvas: canvasForPreviewImage,
                 width: 1024,
@@ -32,6 +30,7 @@ function (dependency, html2canvas) {
             };
 
             iframeToLoadPagePreview.onload = function (e) {
+                var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
                 html2canvas(elementToRender, renderingOptions).then(function (canvas) {
                     me._setPreviewState(canvas, "none", "block", "none");
                 }).catch(function (error) {
