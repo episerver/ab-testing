@@ -12,13 +12,13 @@ function (dependency, html2canvas) {
             
         _renderPreview: function (canvasForPreviewImage, url) {
             var me = this;
-            canvasForPreviewImage.height = 768;
+            //canvasForPreviewImage.height = 768;
             canvasForPreviewImage.width = 1024;
 
             var iframeToLoadPagePreview = document.createElement('iframe');
-            iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
+            //iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
             iframeToLoadPagePreview.width = 1024;
-            iframeToLoadPagePreview.height = 768;  
+            //iframeToLoadPagePreview.height = 768;  
             iframeToLoadPagePreview.src = url;
 
             var renderingOptions = {
@@ -36,7 +36,7 @@ function (dependency, html2canvas) {
                 }).catch(function (error) {
                     me._setPreviewState(canvas, "none", "none", "block");
                 }).finally(function () {
-                    document.body.removeChild(iframeToLoadPagePreview);
+                    //document.body.removeChild(iframeToLoadPagePreview);
                 });
             }
 
