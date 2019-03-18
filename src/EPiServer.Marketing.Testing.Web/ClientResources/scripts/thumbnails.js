@@ -1,7 +1,7 @@
 ﻿define([
     "epi/dependency",
-    'marketing-testing/scripts/html2canvas',
-    'marketing-testing/scripts/es6-promise.auto.min'
+    'marketing-testing/scripts/html2canvas-1.0.0-alpha.11.min', // Page rendering tool
+    'marketing-testing/scripts/es6-promise-4.2.6.auto.min'      // Polyfill 'Promise' for older browsers
 ],
 function (dependency, html2canvas) {
     return {
@@ -13,29 +13,39 @@ function (dependency, html2canvas) {
             
         _renderPreview: function (canvasForPreviewImage, url) {
             var me = this;
-            
+
+            // Create a hidden iframe with the target aspect ratio.
+
             var iframeToLoadPagePreview = document.createElement('iframe');
             iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
             iframeToLoadPagePreview.width = 1024;
             iframeToLoadPagePreview.height = 768;  
             iframeToLoadPagePreview.src = url;
 
+            // Render the preview to the canvas that was specified
+            // as a parameter to this function.
+
             var renderingOptions = {
                 canvas: canvasForPreviewImage
             };
+            
+            // The content of the iframe is the page that we're attempting to preview. 
+            // Render it to the canvas after it loads.
 
             iframeToLoadPagePreview.onload = function (e) {
                 var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
                 html2canvas(elementToRender, renderingOptions).then(function (canvas) {
-                    canvasForPreviewImage.style.width = "100%";
-                    canvasForPreviewImage.style.height = "100%";
+                    canvasForPreviewImage.style.width = "100%";     // The rendering tool applies it's own aspect ratio to the canvas,
+                    canvasForPreviewImage.style.height = "100%";    // override that to ensure that it fits properly within our UI.
                     me._setPreviewState(canvasForPreviewImage, "none", "block", "none");
                 }).catch(function (error) {
                     me._setPreviewState(canvasForPreviewImage, "none", "none", "block");
                 }).finally(function () {
-                    document.body.removeChild(iframeToLoadPagePreview);
+                    document.body.removeChild(iframeToLoadPagePreview); // Remove the hidden iframe from the DOM.
                 });
             }
+
+            // Append the hidden iframe to the DOM so that the preview loads.
 
             document.body.appendChild(iframeToLoadPagePreview);
         },
