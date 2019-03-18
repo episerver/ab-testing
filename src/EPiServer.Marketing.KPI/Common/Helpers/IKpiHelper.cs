@@ -7,5 +7,7 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
         bool IsInSystemFolder();
 
         string GetUrl(ContentReference contentReference);
+
+        string GetRequestPath();
     }
 }
