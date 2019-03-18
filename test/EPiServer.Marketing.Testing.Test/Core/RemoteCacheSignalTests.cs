@@ -47,17 +47,15 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var invalidationActionInvocations = 0;
 
-            using (var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(75)))
-            {
-                signal.Monitor(
-                    () =>
-                    {
-                        invalidationActionInvocations++;
-                    }
-                );
+            var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(75));
+            signal.Monitor(
+                () =>
+                {
+                    invalidationActionInvocations++;
+                }
+            );
 
-                Thread.Sleep(500); // Allow sufficient time for monitor to poll
-            }
+            Thread.Sleep(500); // Allow sufficient time for monitor to poll            
 
             // Assert that validy has been polled a sufficiently acceptable number of times
 
@@ -73,19 +71,15 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockCache.SetupSequence(c => c.Get("validity-key"))
                 .Returns(null);
 
-            var invalidationActionInvocations = 0;
+            var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(50));            
+            signal.Monitor(
+                () =>
+                {
+                    throw new Exception("Callback error!");
+                }
+            );
 
-            using (var signal = new RemoteCacheSignal(_mockCache.Object, Mock.Of<ILogger>(), "validity-key", TimeSpan.FromMilliseconds(50)))
-            {
-                signal.Monitor(
-                    () =>
-                    {
-                        throw new Exception("Callback error!");
-                    }
-                );
-
-                Thread.Sleep(500); // Allow sufficient time for monitor to poll
-            }
+            Thread.Sleep(500); // Allow sufficient time for monitor to poll            
 
             // Assert that validy has been polled a sufficiently acceptable number of times
 

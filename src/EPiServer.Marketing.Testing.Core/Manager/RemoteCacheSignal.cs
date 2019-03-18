@@ -10,7 +10,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     /// the validity of a cache which must be synchronized with other 
     /// remote nodes.
     /// </summary>
-    public class RemoteCacheSignal : ICacheSignal, IDisposable
+    public class RemoteCacheSignal : ICacheSignal
     {
         private readonly ISynchronizedObjectInstanceCache _cacheToMonitor;
         private readonly ILogger _logger;
@@ -102,15 +102,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private bool IsCacheInvalid()
         {
             return _cacheToMonitor.Get(_keyToMonitor) == null;
-        }
-
-        /// <summary>
-        /// Disposes of this instance's resources.
-        /// </summary>
-        public void Dispose()
-        {
-            _timer?.Change(Timeout.Infinite, Timeout.Infinite);
-            _timer?.Dispose();
         }
     }
 }
