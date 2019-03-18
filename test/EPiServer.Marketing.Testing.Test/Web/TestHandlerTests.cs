@@ -597,18 +597,19 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void TestHandler_initProxyEventHandler_checks_ref_and_adds_one()
         {
             var testHandler = GetUnitUnderTest();
-            _mockMarketingTestingWebRepository.Setup(g => g.GetActiveCachedTests()).Returns(
-                new List<IMarketingTest>()
+            var expectedTests = new List<IMarketingTest>()
+            {
+                new ABTest()
                 {
-                    new ABTest()
-                    {
-                        OriginalItemId = _originalItemId,
-                        State = TestState.Active,
-                        Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
-                        KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object,Guid.NewGuid()) }
-                    }
-                });
+                    OriginalItemId = _originalItemId,
+                    State = TestState.Active,
+                    Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } },
+                    KpiInstances = new List<IKpi>() { new ContentComparatorKPI(_mockServiceLocator.Object,Guid.NewGuid()) }
+                }
+            };
 
+            _mockMarketingTestingWebRepository.Setup(r => r.GetActiveTests()).Returns(expectedTests);
+            
             // proxyEventHandler listens for events when tests are added / removed from cache.
             Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);

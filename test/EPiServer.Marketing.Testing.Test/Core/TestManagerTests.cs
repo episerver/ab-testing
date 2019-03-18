@@ -1,33 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using EPiServer.Core;
+using EPiServer.Framework.Cache;
 using EPiServer.Marketing.KPI.Dal.Model;
+using EPiServer.Marketing.KPI.DataAccess;
+using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
+using EPiServer.Marketing.KPI.Results;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Core.Exceptions;
+using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Dal.DataAccess;
 using EPiServer.Marketing.Testing.Dal.EntityModel;
 using EPiServer.Marketing.Testing.Dal.EntityModel.Enums;
 using EPiServer.Marketing.Testing.Messaging;
+using EPiServer.Marketing.Testing.Web.Statistics;
 using EPiServer.ServiceLocation;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using Xunit;
-using EPiServer.Core;
-using EPiServer.Marketing.KPI.DataAccess;
-using EPiServer.Marketing.KPI.Manager;
-using EPiServer.Marketing.Testing.Core.Exceptions;
-using System.Runtime.Caching;
-using EPiServer.Marketing.KPI.Results;
-using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Core.DataClass.Enums;
-using EPiServer.Marketing.Testing.Core.Manager;
-using EPiServer.Marketing.Testing.Web.Statistics;
-using EPiServer.Framework.Cache;
-using System.Threading;
 
 namespace EPiServer.Marketing.Testing.Test.Core
 {
-    public class MultivariateManagerTests
+    public class TestManagerTests
     {
         private Mock<IServiceLocator> _serviceLocator;
         private Mock<ITestingDataAccess> _dataAccessLayer;
@@ -41,9 +38,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         private TestManager GetUnitUnderTest()
         {
-            // make sure the global mem cache that test manager uses is clean.
-            MemoryCache.Default.Remove(TestManager.TestingCacheName);
-
             var dalList = new List<IABTest>()
             {
                 new DalABTest() {
@@ -87,7 +81,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _dataAccessLayer.Setup(dal => dal.Get(It.IsAny<Guid>())).Returns(GetDalTest());
             _dataAccessLayer.Setup(dal => dal.Start(It.IsAny<Guid>())).Returns(startTest);
             _dataAccessLayer.Setup(dal => dal.GetTestList(It.IsAny<DalTestCriteria>())).Returns(dalList);
-            _dataAccessLayer.Setup(dal => dal.GetDatabaseVersion(It.IsAny<DbConnection>(), It.IsAny<string>(), It.IsAny<string>())).Returns(1);
+            _dataAccessLayer.Setup(dal => dal.GetDatabaseVersion(It.IsAny<DbConnection>(), It.IsAny<string>(), It.IsAny<string>())).Returns(1);            
             _serviceLocator.Setup(sl => sl.GetInstance<ITestingDataAccess>()).Returns(_dataAccessLayer.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiDataAccess>()).Returns(_kpiDataAccess.Object);
             _serviceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_kpiManager.Object);
@@ -120,7 +114,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 {
                     new DalVariant {Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1}
                 },
-                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>()
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                State = DalTestState.Active,
+
             };
         }
 
@@ -204,6 +200,31 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             Assert.True(returnList.All(t => t.OriginalItemId == theGuid),
                 "DataAcessLayer GetTestByItemId was never called or Guid did not match.");
+        }
+
+        [Fact]
+        public void TestManager_GetActiveTests_CallsGetTestListWithCriteria()
+        {
+            var manager = GetUnitUnderTest();
+            var expectedTests = new List<IABTest> { GetDalTest() };
+
+            _dataAccessLayer.Setup(
+                dal =>
+                    dal.GetTestList(
+                        It.Is<DalTestCriteria>(
+                            tc =>
+                                tc.GetFilters().Count() == 1
+                                && tc.GetFilters().First().Property == DalABTestProperty.State
+                                && tc.GetFilters().First().Operator == DalFilterOperator.And
+                                && (DalTestState)tc.GetFilters().First().Value == DalTestState.Active
+                        )
+                    )
+            ).Returns(expectedTests);
+
+            var actualTests = manager.GetActiveTests();            
+
+            Assert.Equal(expectedTests.Count, actualTests.Count);
+            Assert.All(actualTests, actualTest => Assert.Contains(expectedTests, expectedTest => expectedTest.Id == actualTest.Id));
         }
 
         [Fact]
@@ -563,24 +584,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void TestManager_UpdateCache()
-        {
-            lock (TestLock)
-            {
-                var testManager = GetUnitUnderTest();
-                var test = GetManagerTest();
-                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns("true");
-
-                testManager.UpdateCache(test, CacheOperator.Add);
-
-                Assert.Equal(2, testManager.ActiveCachedTests.Count());
-
-                testManager.UpdateCache(test, CacheOperator.Remove);
-                Assert.Equal(1, testManager.ActiveCachedTests.Count());
-            }
-        }
-
-        [Fact]
         public void CalculateSignificance()
         {
             var test = new ABTest()
@@ -674,120 +677,31 @@ namespace EPiServer.Marketing.Testing.Test.Core
         {
             var testManager = GetUnitUnderTest();
 
-            var pageData = testManager.GetVariantContent(testId);
+            var expectedTest = new DalABTest
+            { 
+                Id = Guid.NewGuid(),
+                OriginalItemId = Guid.NewGuid(),
+                ContentLanguage = "en-GB",
+                Variants = new List<DalVariant>
+                {
+                    new DalVariant { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 1, IsPublished = true},
+                    new DalVariant { Id = Guid.NewGuid(), ItemId = Guid.NewGuid(), ItemVersion = 10, IsPublished = false}
+                },
+                KeyPerformanceIndicators = new List<DalKeyPerformanceIndicator>(),
+                State = DalTestState.Active
+            };
 
+            _dataAccessLayer.Setup(dal => dal.GetTestByItemId(expectedTest.OriginalItemId)).Returns(new List<IABTest> { expectedTest });
+
+            var pageData = testManager.GetVariantContent(expectedTest.OriginalItemId);
+            
             Assert.NotNull(pageData);
-        }
-
-        [Fact]
-        public void GetDatabaseVersion_Test()
-        {
-            var testManager = GetUnitUnderTest();
-
-            Assert.Equal(1, testManager.GetDatabaseVersion(new SqlConnection(), "", ""));
-
-            testManager.DatabaseNeedsConfiguring = true;
-            Assert.Equal(0, testManager.GetDatabaseVersion(new SqlConnection(), "", ""));
-
         }
 
         [Fact]
         public void Check_DefaultMarketingTestingEvents_Instance_Isnt_Null()
         {
            Assert.NotNull(DefaultMarketingTestingEvents.Instance);
-        }
-
-        [Fact]
-        public void ActiveCachedTests_Checks_testCacheValidFlag()
-        {
-            lock (TestLock)
-            {
-                var testManager = GetUnitUnderTest();
-                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
-
-                var tests = testManager.ActiveCachedTests;
-
-                _syncronizedCache.Verify(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag))), "Failed to check the syncronized cache method.");
-            }
-        }
-
-        [Fact]
-        public void ActiveCachedTests_InsertsTestFlag()
-        {
-            var testManager = GetUnitUnderTest();
-            _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
-
-            var tests = testManager.ActiveCachedTests;
-
-            _syncronizedCache.Verify(m => m.Insert(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)), It.IsAny<object>(), It.IsAny<CacheEvictionPolicy>()), 
-                Times.Once, "Failed to re-add the CacheValidFlag.");
-        }
-
-        [Fact]
-        public void ActiveCachedTests_DoesNot_RepopulateCash_If_CacheValidFlag_Exists()
-        {
-            var testManager = GetUnitUnderTest();
-            _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns("true");
-
-            var tests = testManager.ActiveCachedTests;
-            tests = testManager.ActiveCachedTests; // call it again to make sure we dont invalidate the cache
-
-            _syncronizedCache.Verify(m => m.Insert(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)), It.IsAny<object>(), It.IsAny<CacheEvictionPolicy>()),
-                Times.Once, "didnt need to update CacheValidFlag.");
-        }
-
-        private bool removedFromCache = false;
-        private bool addedToCache = false;
-        [Fact]
-        public void ActiveCachedTests_Fires_TestAddedToCacheEvent_If_CacheIsBeingBuilt()
-        {
-            lock (TestLock)
-            {
-                removedFromCache = false;
-                addedToCache = false;
-
-                var testManager = GetUnitUnderTest();
-                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(true);
-                _marketingEvents.TestRemovedFromCache += TestRemovedFromCache;
-                _marketingEvents.TestAddedToCache += TestAddedToCache;
-
-                var tests = testManager.ActiveCachedTests;
-                Thread.Sleep(2000);
-                Assert.True(addedToCache);
-                Assert.False(removedFromCache);
-            }
-        }
-
-        [Fact]
-        public void ActiveCachedTests_Fires_TestRemovedFromCacheEvent_If_CacheIsBeingRebuilt()
-        {
-            lock (TestLock)
-            {
-                removedFromCache = false;
-                addedToCache = false;
-
-                var testManager = GetUnitUnderTest();
-                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(true);
-                _marketingEvents.TestRemovedFromCache += TestRemovedFromCache;
-                _marketingEvents.TestAddedToCache += TestAddedToCache;
-
-                var tests = testManager.ActiveCachedTests;
-                _syncronizedCache.Setup(m => m.Get(It.Is<string>(str => str.Equals(TestManager.CacheValidFlag)))).Returns(null);
-                tests = testManager.ActiveCachedTests;
-
-                Thread.Sleep(2000);
-                Assert.True(addedToCache);
-                Assert.True(removedFromCache);
-            }
-        }
-
-        public void TestRemovedFromCache(object sender, TestEventArgs e)
-        {
-            removedFromCache = true;
-        }
-        public void TestAddedToCache(object sender, TestEventArgs e)
-        {
-            addedToCache = true;
         }
     }
 
