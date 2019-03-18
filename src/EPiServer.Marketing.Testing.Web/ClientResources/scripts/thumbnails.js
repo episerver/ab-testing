@@ -12,21 +12,27 @@ function (dependency, html2canvas) {
         },
             
         _renderPreview: function (canvasForPreviewImage, url) {
-            var me = this;
+            var me = this,
+                previewHeight = 768,
+                previewWidth = 1024;
 
             // Create a hidden iframe with the target aspect ratio.
 
             var iframeToLoadPagePreview = document.createElement('iframe');
             iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
-            iframeToLoadPagePreview.width = 1024;
-            iframeToLoadPagePreview.height = 768;  
+            iframeToLoadPagePreview.width = previewWidth;
+            iframeToLoadPagePreview.height = previewHeight;
             iframeToLoadPagePreview.src = url;
 
             // Render the preview to the canvas that was specified
             // as a parameter to this function.
 
             var renderingOptions = {
-                canvas: canvasForPreviewImage
+                canvas: canvasForPreviewImage,
+                height: previewHeight,
+                width: previewWidth,
+                windowHeight: previewHeight,
+                windowWidth: previewWidth
             };
             
             // The content of the iframe is the page that we're attempting to preview. 
