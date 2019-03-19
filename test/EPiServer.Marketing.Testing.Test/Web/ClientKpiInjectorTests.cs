@@ -74,7 +74,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
             //verify the cookie was added only once
-            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == aClientKpiInjector._clientCookieName)),
+            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == ClientKpiInjector.ClientCookieName)),
                 Times.Once(), "the client cookie was not added to the response");
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.Is<string>(item => item == aClientKpi.Id.ToString()), It.IsAny<object>()),
@@ -94,7 +94,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
             //verify the cookie was added only once
-            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == aClientKpiInjector._clientCookieName)),
+            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == ClientKpiInjector.ClientCookieName)),
                 Times.Once(), "only the client kpi cookie should be added");
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.Is<string>(item => item == aClientKpi.Id.ToString()), It.IsAny<object>()),

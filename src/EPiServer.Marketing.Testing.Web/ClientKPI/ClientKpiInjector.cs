@@ -23,14 +23,17 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
     [ServiceConfiguration(ServiceType = typeof(IClientKpiInjector), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ClientKpiInjector : IClientKpiInjector
     {
+        internal const string ClientCookieName = "ClientKpiList";
+
+        private static string _clientKpiWrapperScript;
+        private static string _clientKpiScriptTemplate;
+
         private readonly ITestingContextHelper _contextHelper;
         private readonly IMarketingTestingWebRepository _testRepo;
-        private readonly IKpiManager _kpiManager;        
-        private ILogger _logger;
-        private IHttpContextHelper _httpContextHelper;
-
-        internal readonly string _clientCookieName = "ClientKpiList";
-
+        private readonly IKpiManager _kpiManager;
+        private readonly ILogger _logger;
+        private readonly IHttpContextHelper _httpContextHelper;
+        
         public ClientKpiInjector()
         {
             _contextHelper = new TestingContextHelper();
@@ -38,17 +41,51 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();
             _kpiManager = new KpiManager();
-            
+
         }
 
         internal ClientKpiInjector(IServiceLocator serviceLocator)
         {
             _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
-            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();            
+            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _logger = serviceLocator.GetInstance<ILogger>();
             _httpContextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
             _kpiManager = serviceLocator.GetInstance<IKpiManager>();
         }
+
+        /// <summary>
+        /// Gets the embedded client KPI wrapper script.
+        /// </summary>
+        private static string ClientKpiWrapperScript
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_clientKpiWrapperScript))
+                {                    ;                    
+                    _clientKpiWrapperScript = ReadScriptFromAssembly(
+                        "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html"
+                    );
+                }
+
+                return _clientKpiWrapperScript;
+            }
+        }
+
+        private static string ClientKpiScriptTemplate
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_clientKpiScriptTemplate))
+                {
+                    _clientKpiScriptTemplate = ReadScriptFromAssembly(
+                        "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html"
+                    );
+                }
+
+                return _clientKpiScriptTemplate;
+            }
+        }
+
 
         /// <summary>
         /// Checks for any client KPIs which may be assigned to the test and injects the provided
@@ -66,15 +103,15 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     && (!cookieData.Converted || cookieData.AlwaysEval))
                 {
 
-                    if (_httpContextHelper.HasCookie(_clientCookieName))
+                    if (_httpContextHelper.HasCookie(ClientCookieName))
                     {
-                        ClientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(_clientCookieName));
-                        _httpContextHelper.RemoveCookie(_clientCookieName);
+                        ClientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(ClientCookieName));
+                        _httpContextHelper.RemoveCookie(ClientCookieName);
                     }
 
                     ClientKpiList.Add(kpi.Id, cookieData);
                     var tempKpiList = JsonConvert.SerializeObject(ClientKpiList);
-                    _httpContextHelper.AddCookie(new HttpCookie(_clientCookieName) { Value = tempKpiList });
+                    _httpContextHelper.AddCookie(new HttpCookie(ClientCookieName) { Value = tempKpiList });
                     _httpContextHelper.SetItemValue(kpi.Id.ToString(), true);
                 }
             }
@@ -87,14 +124,14 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         {
             //Check if the current response has client kpis.  This lets us know we are in the correct response
             //so we don't inject scripts into an unrelated response stream.
-            if (_httpContextHelper.HasCookie(_clientCookieName))
+            if (_httpContextHelper.HasCookie(ClientCookieName))
             {
                 var clientKpiScript = new StringBuilder()
                     .Append("<!-- ABT Script -->")
-                    .Append(GetWrapperScript());
+                    .Append(ClientKpiWrapperScript);
                 
                 //Get the current client kpis we are concered with.
-                var clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(_clientCookieName));
+                var clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(ClientCookieName));
 
                 //Add clients custom evaluation scripts
                 foreach (var kpiToTestCookie in clientKpiList)
@@ -131,7 +168,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         private void Inject(string script)
         {
             //Remove the temporary cookie.
-            _httpContextHelper.RemoveCookie(_clientCookieName);
+            _httpContextHelper.RemoveCookie(ClientCookieName);
 
             //Inject our script into the stream.
             if (_httpContextHelper.CanWriteToResponse())
@@ -144,36 +181,22 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             };
         }
 
-        private string GetWrapperScript()
-        {
-            var wrapperScript = "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html";
-            return ReadScriptFromAssembly(wrapperScript);
-        }
-
         private string BuildClientScript(Guid kpiId, Guid testId, int versionId, string clientScript)
         {
-            var clientScriptToken = "{KpiClientScript}";
-            var kpiIdToken = "{KpiGuid}";
-            var testIdToken = "{ABTestGuid}";
-            var versionIdToken = "{VersionId}";
-            var successEventScript = "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html";
-
-            var tokenizedScript = ReadScriptFromAssembly(successEventScript);
-
-            var retScript = tokenizedScript.Replace(clientScriptToken, clientScript)
-                .Replace(kpiIdToken, kpiId.ToString())
-                .Replace(testIdToken, testId.ToString())
-                .Replace(versionIdToken, versionId.ToString());
-
-            return retScript;
+            return ClientKpiScriptTemplate
+                .Replace("{KpiGuid}", kpiId.ToString())
+                .Replace("{ABTestGuid}", testId.ToString())
+                .Replace("{VersionId}", versionId.ToString())
+                .Replace("{KpiClientScript}", clientScript);
         }
 
-        private string ReadScriptFromAssembly(string resourceName)
+        private static string ReadScriptFromAssembly(string resourceName)
         {
             var retString = string.Empty;
             var assembly = Assembly.GetExecutingAssembly();
             var scriptResource = resourceName;
             var resourceNames = assembly.GetManifestResourceNames();
+
             using (Stream resourceStream = assembly.GetManifestResourceStream(scriptResource))
             using (StreamReader reader = new StreamReader(resourceStream))
             {
