@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
     {
         private readonly ITestingContextHelper _contextHelper;
         private readonly IMarketingTestingWebRepository _testRepo;
-        private readonly IServiceLocator _serviceLocator;
+        private readonly IKpiManager _kpiManager;        
         private ILogger _logger;
         private IHttpContextHelper _httpContextHelper;
 
@@ -34,18 +34,19 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         {
             _contextHelper = new TestingContextHelper();
             _testRepo = new MarketingTestingWebRepository();
-            _serviceLocator = ServiceLocator.Current;
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();
+            _kpiManager = new KpiManager();
+            
         }
 
         internal ClientKpiInjector(IServiceLocator serviceLocator)
         {
-            _serviceLocator = serviceLocator;
             _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
             _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();            
             _logger = serviceLocator.GetInstance<ILogger>();
             _httpContextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
+            _kpiManager = serviceLocator.GetInstance<IKpiManager>();
         }
 
         /// <summary>
@@ -99,23 +100,29 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                 var clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(_clientCookieName));
 
                 //Add clients custom evaluation scripts
-                foreach (KeyValuePair<Guid, TestDataCookie> data in clientKpiList)
+                foreach (var kpiToTestCookie in clientKpiList)
                 {
-                    //TODO remove kpi manager reference and move the functionality to the KPI repo
-                    //Get required test information for current client kpi
-                    var _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-                    var tempKpi = _kpiManager.Get(data.Key) as IKpi;
-                    var aClientKpi = tempKpi as IClientKpi;
-                    var test = _testRepo.GetTestById(data.Value.TestId,true);
-                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id.ToString() == data.Value.TestVariantId.ToString()).ItemVersion;
-                    var clientScript = BuildClientScript(tempKpi.Id, test.Id, itemVersion, aClientKpi.ClientEvaluationScript);
-                    script += clientScript;
+                    var kpiId = kpiToTestCookie.Key;
+                    var testCookie = kpiToTestCookie.Value;
+                    var test = _testRepo.GetTestById(testCookie.TestId, true);
+                    var variant = test?.Variants.FirstOrDefault(v => v.Id.ToString() == testCookie.TestVariantId.ToString());
 
-                    _httpContextHelper.SetItemValue(tempKpi.Id.ToString(), true);
+                    if (variant == null)
+                    {
+                        _logger.Debug($"Could not find test {testCookie.TestId} or variant {testCookie.TestVariantId} when preparing client script for KPI {kpiId}.");
+                    }
+                    else
+                    {
+                        var kpi = _kpiManager.Get(kpiId);
+                        var clientKpi = kpi as IClientKpi;
+
+                        script += BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);                        
+                        _httpContextHelper.SetItemValue(kpi.Id.ToString(), true);
+                    }
                 }
 
                 //Check to make sure we have client kpis to inject
-                if (_httpContextHelper.HasItem(clientKpiList.Keys.First().ToString()))
+                if (clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString())))
                 {
                     //Remove the temporary cookie.
                     _httpContextHelper.RemoveCookie(_clientCookieName);
@@ -124,7 +131,8 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     if (_httpContextHelper.CanWriteToResponse())
                     {
                         _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script));
-                    }else
+                    }
+                    else
                     {
                         _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
                     };
