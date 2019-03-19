@@ -1,5 +1,4 @@
-﻿using EPiServer.Framework.Localization;
-using EPiServer.Logging;
+﻿using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass;
@@ -71,6 +70,9 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             }
         }
 
+        /// <summary>
+        /// Gets the embedded template for individual client KPI evaluation scripts.
+        /// </summary>
         private static string ClientKpiScriptTemplate
         {
             get
@@ -91,28 +93,26 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         /// Checks for any client KPIs which may be assigned to the test and injects the provided
         /// markup via the current response.
         /// </summary>
-        /// <param name="kpiInstances">List of KPIs.</param>
+        /// <param name="kpis">List of KPIs.</param>
         /// <param name="cookieData">Cookie data related to the current test and KPIs.</param>
-        public void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
+        public void ActivateClientKpis(List<IKpi> kpis, TestDataCookie cookieData)
         {
-            Dictionary<Guid, TestDataCookie> ClientKpiList = new Dictionary<Guid, TestDataCookie>();
-            foreach (var kpi in kpiInstances.Where(x => x is IClientKpi))
+            if (ShouldActivateKpis(cookieData))
             {
-                if (!_httpContextHelper.HasItem(kpi.Id.ToString())
-                    && !_contextHelper.IsInSystemFolder()
-                    && (!cookieData.Converted || cookieData.AlwaysEval))
+                var kpisToActivate = kpis.Where(kpi => kpi is IClientKpi)
+                    .Where(kpi => !_httpContextHelper.HasItem(kpi.Id.ToString()))
+                    .ToList();
+
+                if (kpisToActivate.Any())
                 {
-
-                    if (_httpContextHelper.HasCookie(ClientCookieName))
-                    {
-                        ClientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(ClientCookieName));
-                        _httpContextHelper.RemoveCookie(ClientCookieName);
-                    }
-
-                    ClientKpiList.Add(kpi.Id, cookieData);
-                    var tempKpiList = JsonConvert.SerializeObject(ClientKpiList);
-                    _httpContextHelper.AddCookie(new HttpCookie(ClientCookieName) { Value = tempKpiList });
-                    _httpContextHelper.SetItemValue(kpi.Id.ToString(), true);
+                    kpisToActivate.ForEach(kpi => _httpContextHelper.SetItemValue(kpi.Id.ToString(), true));
+                    
+                    _httpContextHelper.AddCookie(
+                        new HttpCookie(ClientCookieName)
+                        {
+                            Value = JsonConvert.SerializeObject(kpisToActivate.ToDictionary(kpi => kpi.Id, kpi => cookieData))
+                        }
+                    );
                 }
             }
         }
@@ -165,6 +165,20 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             }
         }
 
+        /// <summary>
+        /// Determines whether or not client KPIs should be activated for the current request.
+        /// </summary>
+        /// <param name="cookieData">Test cookie data</param>
+        /// <returns>True if client KPIs should be activated, false otherwise</returns>
+        private bool ShouldActivateKpis(TestDataCookie cookieData)
+        {
+            return !_contextHelper.IsInSystemFolder() && (!cookieData.Converted || cookieData.AlwaysEval);
+        }
+
+        /// <summary>
+        /// Injects the specified script into the response stream.
+        /// </summary>
+        /// <param name="script">Script to inject</param>
         private void Inject(string script)
         {
             //Remove the temporary cookie.
@@ -180,7 +194,15 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                 _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
             };
         }
-
+        
+        /// <summary>
+        /// Renders the template script for an individual client KPI with the given parameters.
+        /// </summary>
+        /// <param name="kpiId">ID of KPI</param>
+        /// <param name="testId">ID of test</param>
+        /// <param name="versionId">Variant item version</param>
+        /// <param name="clientScript">KPI evaluation script</param>
+        /// <returns>Script rendered from the template</returns>
         private string BuildClientScript(Guid kpiId, Guid testId, int versionId, string clientScript)
         {
             return ClientKpiScriptTemplate
@@ -190,6 +212,11 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                 .Replace("{KpiClientScript}", clientScript);
         }
 
+        /// <summary>
+        /// Reads the specified resource from the current assembly.
+        /// </summary>
+        /// <param name="resourceName">Name of resource</param>
+        /// <returns>Resource that was loaded</returns>
         private static string ReadScriptFromAssembly(string resourceName)
         {
             var retString = string.Empty;
