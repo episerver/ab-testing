@@ -241,6 +241,42 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()),
                 Times.Never(), "setup a filter when there was no client kpi");
-        }       
+        }
+
+        [Fact]
+        public void AppendClientKpiScript_Does_Not_Set_Filter_When_Test_Not_Found()
+        {
+            var fakeCookie = FakeClientCookie();
+            var aClientKpiInjector = GetUnitUnderTest();
+
+            mockHttpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            mockHttpContextHelper.Setup(call => call.GetCookieValue(It.IsAny<string>())).Returns(fakeCookie);
+            mockWebRepo.Setup(repo => repo.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns((IMarketingTest)null);
+
+            aClientKpiInjector.AppendClientKpiScript();
+
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()), Times.Never());
+        }
+
+        [Fact]
+        public void AppendClientKpiScript_Does_Not_Set_Filter_When_Variant_Not_Found()
+        {
+            var fakeCookie = FakeClientCookie();
+            var testMissingTheExpectedVariant = new ABTest()
+            {
+                Id = new Guid("3f183552-4549-4d80-90e6-6fcbbb339909"),
+                Variants = new List<Variant> { new Variant() { Id = Guid.NewGuid(), ItemVersion = 10 } }
+            };
+
+            var aClientKpiInjector = GetUnitUnderTest();
+
+            mockHttpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            mockHttpContextHelper.Setup(call => call.GetCookieValue(It.IsAny<string>())).Returns(fakeCookie);
+            mockWebRepo.Setup(repo => repo.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(testMissingTheExpectedVariant);
+
+            aClientKpiInjector.AppendClientKpiScript();
+
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()), Times.Never());
+        }
     }
 }

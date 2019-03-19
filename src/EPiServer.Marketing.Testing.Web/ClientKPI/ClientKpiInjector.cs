@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web.ClientKPI
@@ -88,13 +89,9 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             //so we don't inject scripts into an unrelated response stream.
             if (_httpContextHelper.HasCookie(_clientCookieName))
             {
-                var wrapperScript = GetWrapperScript();
-                if (string.IsNullOrEmpty(wrapperScript))
-                    return;
-
-                //Marker to identify our injected code
-                string script = "<!-- ABT Script -->";
-                script += wrapperScript;
+                var clientKpiScript = new StringBuilder()
+                    .Append("<!-- ABT Script -->")
+                    .Append(GetWrapperScript());
                 
                 //Get the current client kpis we are concered with.
                 var clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(_clientCookieName));
@@ -115,8 +112,10 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                     {
                         var kpi = _kpiManager.Get(kpiId);
                         var clientKpi = kpi as IClientKpi;
+                        var individualKpiScript = BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);
 
-                        script += BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);                        
+                        clientKpiScript.Append(individualKpiScript);
+
                         _httpContextHelper.SetItemValue(kpi.Id.ToString(), true);
                     }
                 }
@@ -124,20 +123,25 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                 //Check to make sure we have client kpis to inject
                 if (clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString())))
                 {
-                    //Remove the temporary cookie.
-                    _httpContextHelper.RemoveCookie(_clientCookieName);
-
-                    //Inject our script into the stream.
-                    if (_httpContextHelper.CanWriteToResponse())
-                    {
-                        _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script));
-                    }
-                    else
-                    {
-                        _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
-                    };
+                    Inject(clientKpiScript.ToString());
                 }
             }
+        }
+
+        private void Inject(string script)
+        {
+            //Remove the temporary cookie.
+            _httpContextHelper.RemoveCookie(_clientCookieName);
+
+            //Inject our script into the stream.
+            if (_httpContextHelper.CanWriteToResponse())
+            {
+                _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script));
+            }
+            else
+            {
+                _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
+            };
         }
 
         private string GetWrapperScript()
@@ -155,10 +159,11 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             var successEventScript = "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html";
 
             var tokenizedScript = ReadScriptFromAssembly(successEventScript);
-            var retScript = tokenizedScript.Replace(clientScriptToken, clientScript);
-            retScript = retScript.Replace(kpiIdToken, kpiId.ToString());
-            retScript = retScript.Replace(testIdToken, testId.ToString());
-            retScript = retScript.Replace(versionIdToken, versionId.ToString());
+
+            var retScript = tokenizedScript.Replace(clientScriptToken, clientScript)
+                .Replace(kpiIdToken, kpiId.ToString())
+                .Replace(testIdToken, testId.ToString())
+                .Replace(versionIdToken, versionId.ToString());
 
             return retScript;
         }
