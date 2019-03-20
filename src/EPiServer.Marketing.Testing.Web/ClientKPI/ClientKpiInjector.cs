@@ -67,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             get
             {
                 if (string.IsNullOrWhiteSpace(_clientKpiWrapperScript))
-                {                    ;                    
+                {
                     _clientKpiWrapperScript = ReadScriptFromAssembly(
                         "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html"
                     );
