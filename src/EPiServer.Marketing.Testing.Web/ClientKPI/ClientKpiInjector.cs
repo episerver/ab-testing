@@ -33,6 +33,9 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         private readonly ILogger _logger;
         private readonly IHttpContextHelper _httpContextHelper;
         
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ClientKpiInjector()
         {
             _contextHelper = new TestingContextHelper();
@@ -43,6 +46,10 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
 
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="serviceLocator">Dependency container</param>
         internal ClientKpiInjector(IServiceLocator serviceLocator)
         {
             _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
@@ -99,14 +106,13 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         {
             if (ShouldActivateKpis(cookieData))
             {
-                var kpisToActivate = kpis.Where(kpi => kpi is IClientKpi)
-                    .Where(kpi => !_httpContextHelper.HasItem(kpi.Id.ToString()))
-                    .ToList();
+                var kpisToActivate = kpis.Where(kpi => kpi is IClientKpi).ToList();
 
-                if (kpisToActivate.Any())
+                if (kpisToActivate.Any(kpi => !_httpContextHelper.HasItem(kpi.Id.ToString())))
                 {
                     kpisToActivate.ForEach(kpi => _httpContextHelper.SetItemValue(kpi.Id.ToString(), true));
-                    
+
+                    _httpContextHelper.RemoveCookie(ClientCookieName);
                     _httpContextHelper.AddCookie(
                         new HttpCookie(ClientCookieName)
                         {
@@ -126,43 +132,50 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             //so we don't inject scripts into an unrelated response stream.
             if (_httpContextHelper.HasCookie(ClientCookieName))
             {
-                var clientKpiScript = new StringBuilder()
-                    .Append("<!-- ABT Script -->")
-                    .Append(ClientKpiWrapperScript);
-                
-                //Get the current client kpis we are concered with.
-                var clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(ClientCookieName));
-
-                //Add clients custom evaluation scripts
-                foreach (var kpiToTestCookie in clientKpiList)
-                {
-                    var kpiId = kpiToTestCookie.Key;
-                    var testCookie = kpiToTestCookie.Value;
-                    var test = _testRepo.GetTestById(testCookie.TestId, true);
-                    var variant = test?.Variants.FirstOrDefault(v => v.Id.ToString() == testCookie.TestVariantId.ToString());
-
-                    if (variant == null)
-                    {
-                        _logger.Debug($"Could not find test {testCookie.TestId} or variant {testCookie.TestVariantId} when preparing client script for KPI {kpiId}.");
-                    }
-                    else
-                    {
-                        var kpi = _kpiManager.Get(kpiId);
-                        var clientKpi = kpi as IClientKpi;
-                        var individualKpiScript = BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);
-
-                        clientKpiScript.Append(individualKpiScript);
-
-                        _httpContextHelper.SetItemValue(kpi.Id.ToString(), true);
-                    }
-                }
+                var clientKpis = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(ClientCookieName));
 
                 //Check to make sure we have client kpis to inject
-                if (clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString())))
+                if (ShouldInjectKpiScript(clientKpis))
                 {
+                    var clientKpiScript = new StringBuilder()
+                        .Append("<!-- ABT Script -->")
+                        .Append(ClientKpiWrapperScript);
+
+                    //Add clients custom evaluation scripts
+                    foreach (var kpiToTestCookie in clientKpis)
+                    {
+                        var kpiId = kpiToTestCookie.Key;
+                        var testCookie = kpiToTestCookie.Value;
+                        var test = _testRepo.GetTestById(testCookie.TestId, true);
+                        var variant = test?.Variants.FirstOrDefault(v => v.Id.ToString() == testCookie.TestVariantId.ToString());
+
+                        if (variant == null)
+                        {
+                            _logger.Debug($"Could not find test {testCookie.TestId} or variant {testCookie.TestVariantId} when preparing client script for KPI {kpiId}.");
+                        }
+                        else
+                        {
+                            var kpi = _kpiManager.Get(kpiId);
+                            var clientKpi = kpi as IClientKpi;
+                            var individualKpiScript = BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);
+
+                            clientKpiScript.Append(individualKpiScript);
+                        }
+                    }
+
                     Inject(clientKpiScript.ToString());
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines whether or not client-side KPI scripts need to be injected into the response.
+        /// </summary>
+        /// <param name="clientKpiList">Collection of client KPIs</param>
+        /// <returns>True if the script needs to be injected, false otherwise</returns>
+        private bool ShouldInjectKpiScript(Dictionary<Guid, TestDataCookie> clientKpiList)
+        {
+            return clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString()));
         }
 
         /// <summary>
