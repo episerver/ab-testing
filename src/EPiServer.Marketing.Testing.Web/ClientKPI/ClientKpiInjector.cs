@@ -24,8 +24,8 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
     {
         internal const string ClientCookieName = "ClientKpiList";
 
-        private static string _clientKpiWrapperScript;
-        private static string _clientKpiScriptTemplate;
+        private static readonly string _clientKpiWrapperScript;
+        private static readonly string _clientKpiScriptTemplate;
 
         private readonly ITestingContextHelper _contextHelper;
         private readonly IMarketingTestingWebRepository _testRepo;
@@ -33,6 +33,20 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         private readonly ILogger _logger;
         private readonly IHttpContextHelper _httpContextHelper;
         
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        static ClientKpiInjector()
+        {
+            _clientKpiWrapperScript = ReadScriptFromAssembly(
+                "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html"
+            );
+
+            _clientKpiScriptTemplate = ReadScriptFromAssembly(
+                "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html"
+            );
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -58,43 +72,6 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             _httpContextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
             _kpiManager = serviceLocator.GetInstance<IKpiManager>();
         }
-
-        /// <summary>
-        /// Gets the embedded client KPI wrapper script.
-        /// </summary>
-        private static string ClientKpiWrapperScript
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_clientKpiWrapperScript))
-                {
-                    _clientKpiWrapperScript = ReadScriptFromAssembly(
-                        "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html"
-                    );
-                }
-
-                return _clientKpiWrapperScript;
-            }
-        }
-
-        /// <summary>
-        /// Gets the embedded template for individual client KPI evaluation scripts.
-        /// </summary>
-        private static string ClientKpiScriptTemplate
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_clientKpiScriptTemplate))
-                {
-                    _clientKpiScriptTemplate = ReadScriptFromAssembly(
-                        "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html"
-                    );
-                }
-
-                return _clientKpiScriptTemplate;
-            }
-        }
-
 
         /// <summary>
         /// Checks for any client KPIs which may be assigned to the test and injects the provided
@@ -139,7 +116,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                 {
                     var clientKpiScript = new StringBuilder()
                         .Append("<!-- ABT Script -->")
-                        .Append(ClientKpiWrapperScript);
+                        .Append(_clientKpiWrapperScript);
 
                     //Add clients custom evaluation scripts
                     foreach (var kpiToTestCookie in clientKpis)
@@ -218,7 +195,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         /// <returns>Script rendered from the template</returns>
         private string BuildClientScript(Guid kpiId, Guid testId, int versionId, string clientScript)
         {
-            return ClientKpiScriptTemplate
+            return _clientKpiScriptTemplate
                 .Replace("{KpiGuid}", kpiId.ToString())
                 .Replace("{ABTestGuid}", testId.ToString())
                 .Replace("{VersionId}", versionId.ToString())
