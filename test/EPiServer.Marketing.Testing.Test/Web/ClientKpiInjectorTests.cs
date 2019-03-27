@@ -74,7 +74,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
             //verify the cookie was added only once
-            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == aClientKpiInjector._clientCookieName)),
+            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == ClientKpiInjector.ClientCookieName)),
                 Times.Once(), "the client cookie was not added to the response");
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.Is<string>(item => item == aClientKpi.Id.ToString()), It.IsAny<object>()),
@@ -94,7 +94,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
             //verify the cookie was added only once
-            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == aClientKpiInjector._clientCookieName)),
+            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.Is<HttpCookie>(cookie => cookie.Name == ClientKpiInjector.ClientCookieName)),
                 Times.Once(), "only the client kpi cookie should be added");
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.Is<string>(item => item == aClientKpi.Id.ToString()), It.IsAny<object>()),
@@ -241,6 +241,42 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()),
                 Times.Never(), "setup a filter when there was no client kpi");
-        }       
+        }
+
+        [Fact]
+        public void AppendClientKpiScript_Does_Not_Set_Filter_When_Test_Not_Found()
+        {
+            var fakeCookie = FakeClientCookie();
+            var aClientKpiInjector = GetUnitUnderTest();
+
+            mockHttpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            mockHttpContextHelper.Setup(call => call.GetCookieValue(It.IsAny<string>())).Returns(fakeCookie);
+            mockWebRepo.Setup(repo => repo.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns((IMarketingTest)null);
+
+            aClientKpiInjector.AppendClientKpiScript();
+
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()), Times.Never());
+        }
+
+        [Fact]
+        public void AppendClientKpiScript_Does_Not_Set_Filter_When_Variant_Not_Found()
+        {
+            var fakeCookie = FakeClientCookie();
+            var testMissingTheExpectedVariant = new ABTest()
+            {
+                Id = new Guid("3f183552-4549-4d80-90e6-6fcbbb339909"),
+                Variants = new List<Variant> { new Variant() { Id = Guid.NewGuid(), ItemVersion = 10 } }
+            };
+
+            var aClientKpiInjector = GetUnitUnderTest();
+
+            mockHttpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            mockHttpContextHelper.Setup(call => call.GetCookieValue(It.IsAny<string>())).Returns(fakeCookie);
+            mockWebRepo.Setup(repo => repo.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(testMissingTheExpectedVariant);
+
+            aClientKpiInjector.AppendClientKpiScript();
+
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()), Times.Never());
+        }
     }
 }

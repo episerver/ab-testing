@@ -447,7 +447,7 @@ namespace EPiServer.Marketing.Testing.TestPages.Controllers
         {
             ITestManager tm = ServiceLocator.Current.GetInstance<ITestManager>();
             CacheTestingViewModel cacheTestingViewModel = new CacheTestingViewModel();
-            cacheTestingViewModel.ActiveTestCache = (tm as TestManager).ActiveCachedTests;
+            cacheTestingViewModel.ActiveTestCache = tm.GetActiveTests();
             cacheTestingViewModel.CachedVersionPageData = new List<IContent>();
             MemoryCache memCache = MemoryCache.Default;
             List<string> cachedKeys =

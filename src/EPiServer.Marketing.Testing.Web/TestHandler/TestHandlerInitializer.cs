@@ -3,8 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
-using EPiServer.Marketing.Testing.Web.Helpers;
-using EPiServer.ServiceLocation;
+using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 
 namespace EPiServer.Marketing.Testing.Web
@@ -15,10 +14,12 @@ namespace EPiServer.Marketing.Testing.Web
     {
         private TestHandler _testHandler;
         private IClientKpiInjector _clientKpiInjector;
+        private ILogger _logger;
 
         [ExcludeFromCodeCoverage]
         public TestHandlerInitializer()
         {
+            _logger = LogManager.GetLogger();
         }
 
         [ExcludeFromCodeCoverage]
@@ -26,6 +27,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             _testHandler = new TestHandler();
             _clientKpiInjector = new ClientKpiInjector();
+            _logger = LogManager.GetLogger();
         }
 
         [ExcludeFromCodeCoverage]
@@ -40,7 +42,14 @@ namespace EPiServer.Marketing.Testing.Web
 
         private void onPostReleaseRequestState(object sender, EventArgs e)
         {
-            _clientKpiInjector.AppendClientKpiScript();
+            try
+            {
+                _clientKpiInjector.AppendClientKpiScript();
+            }
+            catch(Exception ex)
+            {
+                _logger.Error("An error occurred while injecting client KPI script.", ex);
+            }
         }
 
         //Interface Requirement but not used.
