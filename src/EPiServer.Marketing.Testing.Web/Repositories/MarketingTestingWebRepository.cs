@@ -95,6 +95,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return aTest;
         }
 
+        public List<IMarketingTest> GetActiveTests()
+        {
+            return _testManager.GetActiveTests();
+        }
+
         public List<IMarketingTest> GetActiveTestsByOriginalItemId(Guid originalItemId)
         {
             var tests = _testManager.GetActiveTestsByOriginalItemId(originalItemId);
@@ -388,16 +393,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true)
         {
             _testManager.SaveKpiResultData(testId, itemVersion, keyResult, type, async);
-        }
-
-        public List<IMarketingTest> GetActiveCachedTests()
-        {
-            return _testManager.ActiveCachedTests;
-        }
-
-        public void UpdateCache(IMarketingTest test, CacheOperator cacheOperator)
-        {
-            _testManager.UpdateCache(test, cacheOperator);
         }
 
         public IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e)

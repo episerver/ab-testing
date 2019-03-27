@@ -592,7 +592,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         internal void initProxyEventHandler()
         {
-            foreach (var test in _testRepo.GetActiveCachedTests())
+            foreach (var test in _testRepo.GetActiveTests())
             {
                 foreach (var kpi in test.KpiInstances)
                 {

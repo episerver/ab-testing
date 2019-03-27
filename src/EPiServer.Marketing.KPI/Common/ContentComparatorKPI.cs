@@ -14,6 +14,7 @@ using EPiServer.Web.Routing;
 using System.Web;
 using System.Runtime.Caching;
 using EPiServer.Marketing.KPI.Common.Helpers;
+using System.Linq;
 
 namespace EPiServer.Marketing.KPI.Common
 {
@@ -36,7 +37,7 @@ namespace EPiServer.Marketing.KPI.Common
         public IContent _content;
         public List<string>  _startpagepaths = new List<string>();
         private ObjectCache _cache;
-        private IKpiHelper _epiHelper;
+        private IKpiHelper kpiHelper;
 
         public ContentComparatorKPI()
         {
@@ -117,7 +118,7 @@ namespace EPiServer.Marketing.KPI.Common
         {
             _cache = MemoryCache.Default;
             var retval = false;
-            _epiHelper = _servicelocator.GetInstance<IKpiHelper>();
+            kpiHelper = _servicelocator.GetInstance<IKpiHelper>();
             var ea = e as ContentEventArgs;
             if (ea != null)
             {
@@ -129,16 +130,16 @@ namespace EPiServer.Marketing.KPI.Common
                     if (_cache.Contains("StartPagePaths") && _cache.Get("StartPagePaths") != null)
                     {
                         _startpagepaths = _cache.Get("StartPagePaths") as List<string>;
-                        if (!_startpagepaths.Contains(_epiHelper.GetUrl(ContentReference.StartPage)))
+                        if (!_startpagepaths.Contains(kpiHelper.GetUrl(ContentReference.StartPage)))
                         {
-                            _startpagepaths.Add(_epiHelper.GetUrl(ContentReference.StartPage));
+                            _startpagepaths.Add(kpiHelper.GetUrl(ContentReference.StartPage));
                             _cache.Remove("StartPagePaths");
                             _cache.Add("SiteStart", _startpagepaths, DateTimeOffset.MaxValue);
                         }
                     }
                     else
                     {
-                        _startpagepaths.Add(_epiHelper.GetUrl(ContentReference.StartPage));
+                        _startpagepaths.Add(kpiHelper.GetUrl(ContentReference.StartPage));
                         _cache.Add("SiteStart", _startpagepaths, DateTimeOffset.MaxValue);
                     }
                 }
@@ -148,12 +149,15 @@ namespace EPiServer.Marketing.KPI.Common
                     // if the target content is the start page, we also need to check 
                     // the path to make sure its not just a request for some other static
                     // resources such as css or jscript
-                    retval = (_startpagepaths.Contains(HttpContext.Current.Request.Path) 
+                    retval = (_startpagepaths.Contains(kpiHelper.GetRequestPath(), StringComparer.OrdinalIgnoreCase) 
                         && ContentGuid.Equals(ea.Content.ContentGuid));
                 }
                 else
-                {
-                    retval = ContentGuid.Equals(ea.Content.ContentGuid);
+                {   
+                    //We need to make sure the content being evaluated is the actual content being requested
+                    //Addresses MAR-1226
+                    retval = (kpiHelper.GetUrl(_content.ContentLink).ToLower() == kpiHelper.GetRequestPath().ToLower()) 
+                        && ContentGuid.Equals(ea.Content.ContentGuid);                    
                 }
             }
 

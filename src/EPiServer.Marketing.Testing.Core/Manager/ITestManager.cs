@@ -23,6 +23,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         IMarketingTest Get(Guid testObjectId, bool fromCache = false);
 
         /// <summary>
+        /// Gets a collection of tests that are currently active.
+        /// </summary>        
+        /// <returns>List of tests</returns>
+        List<IMarketingTest> GetActiveTests();
+
+        /// <summary>
         /// Retrieves all active tests that have the supplied OriginalItemId from the cache.  The associated data for each 
         /// test returned may not be current.  If the most current data is required 'Get' should be used instead.
         /// </summary>
@@ -73,7 +79,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// Starts a test.
         /// </summary>
         /// <param name="testObjectId">ID of a test.</param>
-        void Start(Guid testObjectId);
+        IMarketingTest Start(Guid testObjectId);
 
         /// <summary>
         /// Stops a test.
@@ -157,12 +163,5 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="populateCache">If this is run before the site is set up, we want to populate the cache with all active tests.  By default, this is false.</param>
         /// <returns>Database version of the testing schema.</returns>
         long GetDatabaseVersion(DbConnection dbConnection, string schema, string contextKey, bool populateCache = false);
-
-        /// <summary>
-        /// Cache of all currently active tests.
-        /// </summary>
-        List<IMarketingTest> ActiveCachedTests { get; }
-
-        void UpdateCache(IMarketingTest test, CacheOperator cacheOperator);
     }
 }
