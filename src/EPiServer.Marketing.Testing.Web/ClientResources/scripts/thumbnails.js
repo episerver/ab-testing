@@ -1,59 +1,65 @@
 ﻿define([
     "epi/dependency",
-    'marketing-testing/scripts/rasterizeHTML'
+    'marketing-testing/scripts/html2canvas-1.0.0-alpha.11.min', // Page rendering tool
+    'marketing-testing/scripts/es6-promise-4.2.6.auto.min'      // Polyfill 'Promise' for older browsers
 ],
-    function (dependency, rasterizehtml) {
-        return {
-            _setThumbnail: function (canvasId, url) {
-                var me = this;
-                this._setThumbState(canvasId, "block", "none", "none");
+function (dependency, html2canvas) {
+    return {
+        _setThumbnail: function (canvasForPreviewImage, url) {
+            var me = this;
+            this._setPreviewState(canvasForPreviewImage, "block", "none", "none");
+            this._renderPreview(canvasForPreviewImage, url);                
+        },
+            
+        _renderPreview: function (canvasForPreviewImage, url) {
+            var me = this,
+                previewHeight = 768,
+                previewWidth = 1024;
 
-                if (this._isMicrosoftBrowser()) {
-                    this._renderServersideThumbnail(canvasId, url);
-                } else {
-                    this._renderClientsideThumbnail(canvasId, url);
-                }
-            },
+            // Create a hidden iframe with the target aspect ratio.
 
-            _isMicrosoftBrowser: function () {
-                return navigator.appName === 'Microsoft Internet Explorer'
-                    || !!(navigator.userAgent.match(/Trident/)
-                        || navigator.userAgent.match(/rv:11/)
-                        || navigator.userAgent.match(/Edge/))
-                    || (typeof $.browser !== "undefined" && $.browser.msie === 1);
-            },
+            var iframeToLoadPagePreview = document.createElement('iframe');
+            iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
+            iframeToLoadPagePreview.width = previewWidth;
+            iframeToLoadPagePreview.height = previewHeight;
+            iframeToLoadPagePreview.src = url;
 
-            _renderServersideThumbnail: function (canvasId, url) {
-                var me = this;
-                this.thumbstore = this.thumbstore || dependency.resolve("epi.storeregistry").get("marketing.thumbnailstore");
-                this.thumbstore.get(url.replace(/\//g, "$")).then(function (result) {
-                    canvasId.height = 768;
-                    canvasId.width = 1024;
-                    var thumbnail = new Image();
-                    thumbnail.src = "data:image/png;base64," + result;
-                    thumbnail.onload = function () {
-                        var context = canvasId.getContext('2d');
-                        context.drawImage(thumbnail, 0, 0);
-                        me._setThumbState(canvasId, "none", "block", "none");
-                    };
-                }).otherwise(function () {
-                    me._setThumbState(canvasId, "none", "none", "block");
+            // Render the preview to the canvas that was specified
+            // as a parameter to this function.
+
+            var renderingOptions = {
+                canvas: canvasForPreviewImage,
+                height: previewHeight,
+                width: previewWidth,
+                windowHeight: previewHeight,
+                windowWidth: previewWidth
+            };
+            
+            // The content of the iframe is the page that we're attempting to preview. 
+            // Render it to the canvas after it loads.
+
+            iframeToLoadPagePreview.onload = function (e) {
+                var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
+                html2canvas(elementToRender, renderingOptions).then(function (canvas) {
+                    canvasForPreviewImage.style.width = "100%";     // The rendering tool applies it's own aspect ratio to the canvas,
+                    canvasForPreviewImage.style.height = "100%";    // override that to ensure that it fits properly within our UI.
+                    me._setPreviewState(canvasForPreviewImage, "none", "block", "none");
+                }).catch(function (error) {
+                    me._setPreviewState(canvasForPreviewImage, "none", "none", "block");
+                }).finally(function () {
+                    document.body.removeChild(iframeToLoadPagePreview); // Remove the hidden iframe from the DOM.
                 });
-            },
-
-            _renderClientsideThumbnail: function (canvasId, url) {
-                var me = this;
-                canvasId.height = 768;
-                canvasId.width = 1024;
-                rasterizehtml.drawURL(url, canvasId, { height: 768, width: 1024 }).then(function success(renderResult) {
-                    me._setThumbState(canvasId, "none", "block", "none");
-                });
-            },
-
-            _setThumbState: function (canvasId, spinnerState, previewState, errorState) {
-                document.getElementById(canvasId.id + "-spinner").style.display = spinnerState;
-                canvasId.style.display = previewState;
-                document.getElementById(canvasId.id + "-error").style.display = errorState;
             }
-        };
-    });
+
+            // Append the hidden iframe to the DOM so that the preview loads.
+
+            document.body.appendChild(iframeToLoadPagePreview);
+        },
+
+        _setPreviewState: function (canvasForPreviewImage, spinnerDisplayState, previewDisplayState, errorDisplayState) {
+            document.getElementById(canvasForPreviewImage.id + "-spinner").style.display = spinnerDisplayState;
+            canvasForPreviewImage.style.display = previewDisplayState;
+            document.getElementById(canvasForPreviewImage.id + "-error").style.display = errorDisplayState;
+        }
+    };
+});

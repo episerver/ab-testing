@@ -34,5 +34,10 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
         {
             return UrlResolver.Current.GetUrl(contentReference);
         }
+
+        public string GetRequestPath()
+        {
+            return HttpContext.Current!=null ? HttpContext.Current.Request.Path : string.Empty;
+        }
     }
 }

@@ -20,8 +20,7 @@ namespace EPiServer.Marketing.KPI.Manager
     [ServiceConfiguration(ServiceType = typeof(IKpiManager), Lifecycle = ServiceInstanceScope.Singleton)]
     public class KpiManager : IKpiManager
     {
-        private IKpiDataAccess _dataAccess;
-        private IServiceLocator _serviceLocator;
+        private IKpiDataAccess _dataAccess;        
         private ILogger _logger;
         public bool DatabaseNeedsConfiguring;
 
@@ -30,8 +29,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// </summary>
         [ExcludeFromCodeCoverage]
         public KpiManager()
-        {
-            _serviceLocator = ServiceLocator.Current;
+        {            
             _logger = LogManager.GetLogger();
 
             try
@@ -49,8 +47,7 @@ namespace EPiServer.Marketing.KPI.Manager
         /// </summary>
         /// <param name="serviceLocator"></param>
         internal KpiManager(IServiceLocator serviceLocator)
-        {
-            _serviceLocator = serviceLocator;
+        {            
             _dataAccess = serviceLocator.GetInstance<IKpiDataAccess>();
             _logger = serviceLocator.GetInstance<ILogger>();
         }

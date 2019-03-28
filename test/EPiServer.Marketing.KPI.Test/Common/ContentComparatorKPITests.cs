@@ -188,19 +188,6 @@ namespace EPiServer.Marketing.KPI.Test.Common
         }
 
         [Fact]
-        public void ContentComparator_Evaluate_Doesnt_Convert()
-        {
-            var kpi = GetUnitUnderTest();
-
-            var content3 = new Mock<IContent>();
-            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
-
-            var retVal = kpi.Evaluate(new object(), arg);
-
-            Assert.False(retVal.HasConverted, "Evaluate should have returned false");
-        }
-
-        [Fact]
         public void Kpi_Doesnt_Implement_Evaluate()
         {
             var kpi = new TestKpi();
@@ -211,9 +198,90 @@ namespace EPiServer.Marketing.KPI.Test.Common
         [Fact]
         public void Kpi_Doesnt_Implement_Validate()
         {
+            
             var kpi = new TestKpi();
 
             Assert.Throws<NotImplementedException>(() => kpi.Validate(new Dictionary<string, string>()));
+        }        
+
+        [Fact]
+        public void Kpi_Converts_IfContentPathEqualsRequestedPath_AndGuidsAreEqual()
+        {
+            var contentGuid = LandingPageGuid;
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(LandingPageGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns("/ContentPath/");
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.True(retVal.HasConverted);
+        }
+
+        [Fact]
+        public void Kpi_DoesNotConvert_IfContentPathEqualsRequestedPath_AndGuidsAreNotEqual()
+        {
+            var contentGuid = Guid.NewGuid();
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(contentGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns("/ContentPath/");
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.False(retVal.HasConverted);
+        }
+
+        [Fact]
+        public void Kpi_DoesNotConvert_IfContentPathDoesNotEqualRequestedPath_AndGuidsAreNotEqual()
+        {
+            var contentGuid = Guid.NewGuid();
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(contentGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns("/DifferentContentPath/");
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.False(retVal.HasConverted);
+        }
+
+        [Fact]
+        public void Kpi_DoesNotConvert_IfContentDoesNotEqualRequestedContent_AndGuidsAreEqual()
+        {
+            var contentGuid = LandingPageGuid;
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(LandingPageGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns("/DifferentContentPath/");
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.False(retVal.HasConverted);
+        }
+
+        [Fact]
+        public void Kpi_DoesNotConvert_DoesNotThrowException_IfRequestPathIsEmpty()
+        {
+            var contentGuid = LandingPageGuid;
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(LandingPageGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns(string.Empty);
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.False(retVal.HasConverted);
         }
     }
 

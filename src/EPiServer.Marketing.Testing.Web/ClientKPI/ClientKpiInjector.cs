@@ -1,5 +1,4 @@
-﻿using EPiServer.Framework.Localization;
-using EPiServer.Logging;
+﻿using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web.ClientKPI
@@ -22,58 +22,80 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
     [ServiceConfiguration(ServiceType = typeof(IClientKpiInjector), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ClientKpiInjector : IClientKpiInjector
     {
+        internal const string ClientCookieName = "ClientKpiList";
+
+        private static readonly string _clientKpiWrapperScript;
+        private static readonly string _clientKpiScriptTemplate;
+
         private readonly ITestingContextHelper _contextHelper;
         private readonly IMarketingTestingWebRepository _testRepo;
-        private readonly IServiceLocator _serviceLocator;
-        private ILogger _logger;
-        private IHttpContextHelper _httpContextHelper;
+        private readonly IKpiManager _kpiManager;
+        private readonly ILogger _logger;
+        private readonly IHttpContextHelper _httpContextHelper;
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        static ClientKpiInjector()
+        {
+            _clientKpiWrapperScript = ReadScriptFromAssembly(
+                "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html"
+            );
 
-        internal readonly string _clientCookieName = "ClientKpiList";
+            _clientKpiScriptTemplate = ReadScriptFromAssembly(
+                "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html"
+            );
+        }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ClientKpiInjector()
         {
             _contextHelper = new TestingContextHelper();
             _testRepo = new MarketingTestingWebRepository();
-            _serviceLocator = ServiceLocator.Current;
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();
+            _kpiManager = new KpiManager();
+
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="serviceLocator">Dependency container</param>
         internal ClientKpiInjector(IServiceLocator serviceLocator)
         {
-            _serviceLocator = serviceLocator;
             _contextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
-            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();            
+            _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _logger = serviceLocator.GetInstance<ILogger>();
             _httpContextHelper = serviceLocator.GetInstance<IHttpContextHelper>();
+            _kpiManager = serviceLocator.GetInstance<IKpiManager>();
         }
 
         /// <summary>
         /// Checks for any client KPIs which may be assigned to the test and injects the provided
         /// markup via the current response.
         /// </summary>
-        /// <param name="kpiInstances">List of KPIs.</param>
+        /// <param name="kpis">List of KPIs.</param>
         /// <param name="cookieData">Cookie data related to the current test and KPIs.</param>
-        public void ActivateClientKpis(List<IKpi> kpiInstances, TestDataCookie cookieData)
+        public void ActivateClientKpis(List<IKpi> kpis, TestDataCookie cookieData)
         {
-            Dictionary<Guid, TestDataCookie> ClientKpiList = new Dictionary<Guid, TestDataCookie>();
-            foreach (var kpi in kpiInstances.Where(x => x is IClientKpi))
+            if (ShouldActivateKpis(cookieData))
             {
-                if (!_httpContextHelper.HasItem(kpi.Id.ToString())
-                    && !_contextHelper.IsInSystemFolder()
-                    && (!cookieData.Converted || cookieData.AlwaysEval))
+                var kpisToActivate = kpis.Where(kpi => kpi is IClientKpi).ToList();
+
+                if (kpisToActivate.Any(kpi => !_httpContextHelper.HasItem(kpi.Id.ToString())))
                 {
+                    kpisToActivate.ForEach(kpi => _httpContextHelper.SetItemValue(kpi.Id.ToString(), true));
 
-                    if (_httpContextHelper.HasCookie(_clientCookieName))
-                    {
-                        ClientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(_clientCookieName));
-                        _httpContextHelper.RemoveCookie(_clientCookieName);
-                    }
-
-                    ClientKpiList.Add(kpi.Id, cookieData);
-                    var tempKpiList = JsonConvert.SerializeObject(ClientKpiList);
-                    _httpContextHelper.AddCookie(new HttpCookie(_clientCookieName) { Value = tempKpiList });
-                    _httpContextHelper.SetItemValue(kpi.Id.ToString(), true);
+                    _httpContextHelper.RemoveCookie(ClientCookieName);
+                    _httpContextHelper.AddCookie(
+                        new HttpCookie(ClientCookieName)
+                        {
+                            Value = JsonConvert.SerializeObject(kpisToActivate.ToDictionary(kpi => kpi.Id, kpi => cookieData))
+                        }
+                    );
                 }
             }
         }
@@ -85,82 +107,113 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         {
             //Check if the current response has client kpis.  This lets us know we are in the correct response
             //so we don't inject scripts into an unrelated response stream.
-            if (_httpContextHelper.HasCookie(_clientCookieName))
+            if (_httpContextHelper.HasCookie(ClientCookieName))
             {
-                var wrapperScript = GetWrapperScript();
-                if (string.IsNullOrEmpty(wrapperScript))
-                    return;
-
-                //Marker to identify our injected code
-                string script = "<!-- ABT Script -->";
-                script += wrapperScript;
-                
-                //Get the current client kpis we are concered with.
-                var clientKpiList = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(_clientCookieName));
-
-                //Add clients custom evaluation scripts
-                foreach (KeyValuePair<Guid, TestDataCookie> data in clientKpiList)
-                {
-                    //TODO remove kpi manager reference and move the functionality to the KPI repo
-                    //Get required test information for current client kpi
-                    var _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
-                    var tempKpi = _kpiManager.Get(data.Key) as IKpi;
-                    var aClientKpi = tempKpi as IClientKpi;
-                    var test = _testRepo.GetTestById(data.Value.TestId,true);
-                    var itemVersion = test.Variants.FirstOrDefault(v => v.Id.ToString() == data.Value.TestVariantId.ToString()).ItemVersion;
-                    var clientScript = BuildClientScript(tempKpi.Id, test.Id, itemVersion, aClientKpi.ClientEvaluationScript);
-                    script += clientScript;
-
-                    _httpContextHelper.SetItemValue(tempKpi.Id.ToString(), true);
-                }
+                var clientKpis = JsonConvert.DeserializeObject<Dictionary<Guid, TestDataCookie>>(_httpContextHelper.GetCookieValue(ClientCookieName));
 
                 //Check to make sure we have client kpis to inject
-                if (_httpContextHelper.HasItem(clientKpiList.Keys.First().ToString()))
+                if (ShouldInjectKpiScript(clientKpis))
                 {
-                    //Remove the temporary cookie.
-                    _httpContextHelper.RemoveCookie(_clientCookieName);
+                    var clientKpiScript = new StringBuilder()
+                        .Append("<!-- ABT Script -->")
+                        .Append(_clientKpiWrapperScript);
 
-                    //Inject our script into the stream.
-                    if (_httpContextHelper.CanWriteToResponse())
+                    //Add clients custom evaluation scripts
+                    foreach (var kpiToTestCookie in clientKpis)
                     {
-                        _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script));
-                    }else
-                    {
-                        _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
-                    };
+                        var kpiId = kpiToTestCookie.Key;
+                        var testCookie = kpiToTestCookie.Value;
+                        var test = _testRepo.GetTestById(testCookie.TestId, true);
+                        var variant = test?.Variants.FirstOrDefault(v => v.Id.ToString() == testCookie.TestVariantId.ToString());
+
+                        if (variant == null)
+                        {
+                            _logger.Debug($"Could not find test {testCookie.TestId} or variant {testCookie.TestVariantId} when preparing client script for KPI {kpiId}.");
+                        }
+                        else
+                        {
+                            var kpi = _kpiManager.Get(kpiId);
+                            var clientKpi = kpi as IClientKpi;
+                            var individualKpiScript = BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);
+
+                            clientKpiScript.Append(individualKpiScript);
+                        }
+                    }
+
+                    Inject(clientKpiScript.ToString());
                 }
             }
         }
 
-        private string GetWrapperScript()
+        /// <summary>
+        /// Determines whether or not client-side KPI scripts need to be injected into the response.
+        /// </summary>
+        /// <param name="clientKpiList">Collection of client KPIs</param>
+        /// <returns>True if the script needs to be injected, false otherwise</returns>
+        private bool ShouldInjectKpiScript(Dictionary<Guid, TestDataCookie> clientKpiList)
         {
-            var wrapperScript = "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiWrapper.html";
-            return ReadScriptFromAssembly(wrapperScript);
+            return clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString()));
         }
 
+        /// <summary>
+        /// Determines whether or not client KPIs should be activated for the current request.
+        /// </summary>
+        /// <param name="cookieData">Test cookie data</param>
+        /// <returns>True if client KPIs should be activated, false otherwise</returns>
+        private bool ShouldActivateKpis(TestDataCookie cookieData)
+        {
+            return !_contextHelper.IsInSystemFolder() && (!cookieData.Converted || cookieData.AlwaysEval);
+        }
+
+        /// <summary>
+        /// Injects the specified script into the response stream.
+        /// </summary>
+        /// <param name="script">Script to inject</param>
+        private void Inject(string script)
+        {
+            //Remove the temporary cookie.
+            _httpContextHelper.RemoveCookie(ClientCookieName);
+
+            //Inject our script into the stream.
+            if (_httpContextHelper.CanWriteToResponse())
+            {
+                _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script));
+            }
+            else
+            {
+                _logger.Debug("AB Testing: Unable to attach client kpi to stream. Stream not in writeable state");
+            };
+        }
+        
+        /// <summary>
+        /// Renders the template script for an individual client KPI with the given parameters.
+        /// </summary>
+        /// <param name="kpiId">ID of KPI</param>
+        /// <param name="testId">ID of test</param>
+        /// <param name="versionId">Variant item version</param>
+        /// <param name="clientScript">KPI evaluation script</param>
+        /// <returns>Script rendered from the template</returns>
         private string BuildClientScript(Guid kpiId, Guid testId, int versionId, string clientScript)
         {
-            var clientScriptToken = "{KpiClientScript}";
-            var kpiIdToken = "{KpiGuid}";
-            var testIdToken = "{ABTestGuid}";
-            var versionIdToken = "{VersionId}";
-            var successEventScript = "EPiServer.Marketing.Testing.Web.EmbeddedScriptFiles.ClientKpiSuccessEvent.html";
-
-            var tokenizedScript = ReadScriptFromAssembly(successEventScript);
-            var retScript = tokenizedScript.Replace(clientScriptToken, clientScript);
-            retScript = retScript.Replace(kpiIdToken, kpiId.ToString());
-            retScript = retScript.Replace(testIdToken, testId.ToString());
-            retScript = retScript.Replace(versionIdToken, versionId.ToString());
-
-            return retScript;
+            return _clientKpiScriptTemplate
+                .Replace("{KpiGuid}", kpiId.ToString())
+                .Replace("{ABTestGuid}", testId.ToString())
+                .Replace("{VersionId}", versionId.ToString())
+                .Replace("{KpiClientScript}", clientScript);
         }
 
-        private string ReadScriptFromAssembly(string resourceName)
+        /// <summary>
+        /// Reads the specified resource from the current assembly.
+        /// </summary>
+        /// <param name="resourceName">Name of resource</param>
+        /// <returns>Resource that was loaded</returns>
+        private static string ReadScriptFromAssembly(string resourceName)
         {
             var retString = string.Empty;
             var assembly = Assembly.GetExecutingAssembly();
             var scriptResource = resourceName;
             var resourceNames = assembly.GetManifestResourceNames();
+
             using (Stream resourceStream = assembly.GetManifestResourceStream(scriptResource))
             using (StreamReader reader = new StreamReader(resourceStream))
             {
