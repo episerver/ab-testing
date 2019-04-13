@@ -116,7 +116,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         {
             var cookieDelimeter = _adminConfigTestSettingsHelper.GetCookieDelimeter();
             var retCookie = new TestDataCookie();
-            var currentCulture = cultureName != null ? new CultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
+            var currentCulture = cultureName != null ? CultureInfo.GetCultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
             var currentCulturename = cultureName != null ? cultureName : _episerverHelper.GetContentCultureinfo().Name;
 
             // old cookies use : for delimeter, need to update them to use new delimeter, we should remove this in a future release.
@@ -216,7 +216,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var retCookie = new TestDataCookie();
 
             Guid outguid;
-            CultureInfo culture = new CultureInfo(cookieToConvert.Name.Split(_adminConfigTestSettingsHelper.GetCookieDelimeter()[0])[1]);
+            CultureInfo culture = CultureInfo.GetCultureInfo(cookieToConvert.Name.Split(_adminConfigTestSettingsHelper.GetCookieDelimeter()[0])[1]);
             retCookie.TestId = Guid.TryParse(cookieToConvert["TestId"], out outguid) ? outguid : Guid.Empty;
             retCookie.TestContentId = Guid.TryParse(cookieToConvert["TestContentId"], out outguid) ? outguid : Guid.Empty;
             retCookie.TestVariantId = Guid.TryParse(cookieToConvert["TestVariantId"], out outguid) ? outguid : Guid.Empty;

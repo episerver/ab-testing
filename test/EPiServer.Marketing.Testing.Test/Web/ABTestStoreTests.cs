@@ -40,7 +40,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
             Guid testGuid = Guid.NewGuid();
 
-            CultureInfo currentCulture = new CultureInfo("en-GB");
+            CultureInfo currentCulture = CultureInfo.GetCultureInfo("en-GB");
 
             ABTest test = new ABTest()
             {
@@ -84,7 +84,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid contentGuid = Guid.NewGuid();
             Guid testGuid = Guid.NewGuid();
 
-            CultureInfo currentCulture = new CultureInfo("en-GB");
+            CultureInfo currentCulture = CultureInfo.GetCultureInfo("en-GB");
 
             ABTest test = new ABTest()
             {

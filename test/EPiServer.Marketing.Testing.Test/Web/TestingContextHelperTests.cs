@@ -54,8 +54,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testVariantData = new Mock<IContent>();
             testConversionContent = new Mock<IContent>();           
 
-            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en");
-            ContentLanguage.PreferredCulture = new CultureInfo("en");
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en");
+            ContentLanguage.PreferredCulture = CultureInfo.GetCultureInfo("en");
 
             _mockServiceLocator.Setup(call => call.GetInstance<IContentRepository>())
               .Returns(_mockContentRepository.Object);
