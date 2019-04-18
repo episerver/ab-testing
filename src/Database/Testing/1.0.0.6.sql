@@ -1,10 +1,7 @@
 --beginvalidatingquery
-	if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[sp_DatabaseVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-    begin
+
 		 select 1, 'Upgrading database'
-    end
-    else
-		select -1, 'Not an EPiServer database'
+  
 --endvalidatingquery
 
 -- Create MultivariateTest Tables to Store MultivariateTest Information.
