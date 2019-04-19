@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-US"));
 
             var query = new ActiveTestsQuery(serviceLocator);
             
@@ -102,7 +102,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-US"));
 
             var query = new InactiveTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
@@ -134,7 +134,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-US"));
             var query = new ArchivedTestsQuery(serviceLocator);
             var results = query.ExecuteQuery(new ContentQueryParameters());
 
@@ -178,7 +178,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _webRepository.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(tests);
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-US"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-US"));
 
 
             var query = new CompletedTestsQuery(serviceLocator);

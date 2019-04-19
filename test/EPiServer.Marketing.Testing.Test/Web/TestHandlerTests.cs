@@ -222,7 +222,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference() { ID = 1, WorkID = 1 };
-            CultureInfo testCulture = new CultureInfo("en-GB");
+            CultureInfo testCulture = CultureInfo.GetCultureInfo("en-GB");
 
             var pageRef = new PageReference() { ID = 2, WorkID = 2 };
             var variantPage = new PageData(pageRef);
@@ -292,7 +292,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
             content.ContentLink = new ContentReference();
-            CultureInfo testCulture = new CultureInfo("en-GB");
+            CultureInfo testCulture = CultureInfo.GetCultureInfo("en-GB");
 
             IMarketingTest test = new ABTest()
             {
@@ -555,7 +555,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(new List<IKpiResult> { new KpiConversionResult() { HasConverted = true, KpiId = Guid.NewGuid()} });
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(convertedAndViewedCookieData);
             _mockContextHelper.Setup(call => call.SwapDisabled(It.IsAny<ContentEventArgs>())).Returns(false);
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
             ContentEventArgs args = new ContentEventArgs(new ContentReference(2, 100))
             {
                 Content = content,
@@ -571,7 +571,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void TestHandler_CheckForActiveTest()
         {
             var testHandler = GetUnitUnderTest();
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
         
             // find test for published page
             Assert.Equal(1, testHandler.CheckForActiveTests(_originalItemId, 0));
@@ -654,7 +654,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(),It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
 
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
 
             var t = new ContentReference(1, 3);
             var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent() });
