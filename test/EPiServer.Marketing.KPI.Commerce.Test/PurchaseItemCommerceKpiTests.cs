@@ -5,7 +5,9 @@ using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Orders;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using EPiServer.Core;
 using EPiServer.Marketing.KPI.Commerce.Test.Fakes;
 using Xunit;
@@ -105,7 +107,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         {
             var contentGuid = Guid.Parse("a94daef6-aaad-4d41-a4d9-711f2b441124");
 
-            var catBase = new Mock<CatalogContentBase>();
+            var catBase = new Mock<EntryContentBase>();
             catBase.SetupGet(x => x.Name).Returns("Mock Catalog Content");
             catBase.SetupGet(x => x.ContentGuid).Returns(contentGuid);
 
@@ -116,8 +118,8 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             var orderGroup = FakeHelpers.CreateFakePurchaseOrder();
 
-            _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<string>())).Returns(refer);
-            _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<Core.ContentReference>())).Returns(catBase.Object);
+            _mockReferenceConverter.Setup(call => call.GetContentLinks(It.IsAny<IEnumerable<string>>())).Returns(new Dictionary<string, ContentReference>() { { "code", refer } });
+            _mockContentLoader.Setup(call => call.GetItems(It.IsAny<IEnumerable<ContentReference>>(), It.IsAny<CultureInfo>())).Returns(new[] { catBase.Object });
 
             purchaseItemKpi.Id = _kpiId;
             purchaseItemKpi.ContentGuid = contentGuid;

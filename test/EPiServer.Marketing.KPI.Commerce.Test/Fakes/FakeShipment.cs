@@ -36,6 +36,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test.Fakes
         public string WarehouseCode { get; set; }
 
         public ICollection<ILineItem> LineItems { get; set; }
+        public IOrderGroup ParentOrderGroup { get; }
 
         public decimal ShipmentDiscount { get; set; }
 
