@@ -60,6 +60,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test.Fakes
         public Hashtable Properties { get; private set; }
 
         public bool PricesIncludeTax => throw new System.NotImplementedException();
+        public IOrderGroup ParentOrderGroup { get; }
 
         public static FakeOrderForm CreateOrderForm(Hashtable properties = null)
         {

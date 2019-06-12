@@ -9,6 +9,7 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using Xunit;
 using System.Collections.Generic;
+using System.Globalization;
 using EPiServer.Commerce.Order;
 using EPiServer.Commerce.Order.Internal;
 using EPiServer.Marketing.KPI.Exceptions;
@@ -39,7 +40,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
             _mockServiceLocator.Setup(loc => loc.GetInstance<IContentLoader>()).Returns(_mockContentLoader.Object);
             _mockServiceLocator.Setup(loc => loc.GetInstance<ReferenceConverter>()).Returns(_mockReferenceConverter.Object);
             _mockServiceLocator.Setup(loc => loc.GetInstance<IContentRepository>()).Returns(_mockContentRepository.Object);
-            _mockServiceLocator.Setup(loc => loc.GetInstance<IContentVersionRepository>()).Returns(_mockContentVersionRepository.Object);
+            _mockServiceLocator.Setup(loc => loc.GetInstance<IPublishedStateAssessor>()).Returns(_mockPublishedStateAssossor.Object);
 
             return new AddToCartKpi(_mockServiceLocator.Object);
         }
@@ -87,7 +88,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         {
             OrderGroupEventArgs orderArgs = new OrderGroupEventArgs(1, OrderGroupEventType.Cart);
             PurchaseOrder po = new PurchaseOrder(Guid.Parse("0fa0ac0c-25a0-4641-8929-f61b71f15ad2"));
-            
+
             AddToCartKpi addToCartKpi = GetUnitUnderTest();
             addToCartKpi.Id = _kpiId;
 
@@ -121,10 +122,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         {
             var contentGuid = Guid.Parse("a94daef6-aaad-4d41-a4d9-711f2b441124");
 
-            var catBase = new Mock<CatalogContentBase>();
+            var catBase = new Mock<EntryContentBase>();
             catBase.SetupGet(x => x.Name).Returns("Mock Catalog Content");
             catBase.SetupGet(x => x.ContentGuid).Returns(contentGuid);
-            
+
             var refer = new ContentReference() { ID = 1, WorkID = 111 };
             var orderArgs = new OrderGroupEventArgs(1, OrderGroupEventType.Cart);
 
@@ -132,8 +133,8 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             var orderGroup = FakeHelpers.CreateFakeOrderGroup();
 
-            _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<string>())).Returns(refer);
-            _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<ContentReference>())).Returns(catBase.Object);
+            _mockReferenceConverter.Setup(call => call.GetContentLinks(It.IsAny<IEnumerable<string>>())).Returns(new Dictionary<string, ContentReference>() { { "code", refer }});
+            _mockContentLoader.Setup(call => call.GetItems(It.IsAny<IEnumerable<ContentReference>>(), It.IsAny<CultureInfo>())).Returns(new[] { catBase.Object });
 
             addToCartKpi.Id = _kpiId;
             addToCartKpi.ContentGuid = contentGuid;
@@ -167,8 +168,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
             _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<int>(), It.IsAny<CatalogContentType>(), It.IsAny<int>())).Returns(new ContentReference(1));
-            _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
-
+            _mockContentLoader.Setup(call => call.GetItems(It.IsAny<IEnumerable<ContentReference>>(), It.IsAny<CultureInfo>())).Returns(new[] { _mockContent.Object });
             Assert.Throws<KpiValidationException>(() => addToCartKpi.Validate(responseData));
         }
 
@@ -188,10 +188,10 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
             _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<int>(), It.IsAny<CatalogContentType>(), It.IsAny<int>())).Returns(new ContentReference(1));
-            _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
-            _mockContentVersionRepository.Setup(call => call.LoadPublished(It.IsAny<ContentReference>())).Returns((DataAbstraction.ContentVersion) null);
-
-            Assert.Throws<KpiValidationException>(()=> addToCartKpi.Validate(responseData));
+            _mockContentLoader.Setup(call => call.Get<EntryContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
+            _mockPublishedStateAssossor.Setup(x => x.IsPublished(It.IsAny<IContent>(), PublishedStateCondition.None))
+                .Returns(false);
+            Assert.Throws<KpiValidationException>(() => addToCartKpi.Validate(responseData));
         }
 
         [Fact]
@@ -199,31 +199,6 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         {
             Dictionary<string, string> responseData = new Dictionary<string, string> { { "ConversionProduct", "1_100" }, { "CurrentContent", "2" } };
             Mock<VariationContent> _mockContent = new Mock<VariationContent>();
-            _mockContent.SetupGet(prop => prop.ContentLink).Returns(new ContentReference(1));
-            _mockContent.SetupGet(prop => prop.ContentType).Returns(CatalogContentType.CatalogEntry);
-            _mockContent.SetupGet(prop => prop.ContentGuid).Returns(_contentGuid);
-            
-
-            DataAbstraction.ContentVersion contentVersion = new DataAbstraction.ContentVersion(new ContentReference(1),"Test",VersionStatus.Published,DateTime.Now,"Me","Me",2,"en",false,false);
-            
-            var addToCartKpi = GetUnitUnderTest();
-
-            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
-            _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<int>(), It.IsAny<CatalogContentType>(), It.IsAny<int>())).Returns(new ContentReference(1));
-            _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
-            _mockContentVersionRepository.Setup(call => call.LoadPublished(It.IsAny<ContentReference>())).Returns(contentVersion);
-
-            addToCartKpi.Validate(responseData);
-            Assert.True(addToCartKpi.ContentGuid == _contentGuid);
-            Assert.True(addToCartKpi.isVariant == true);
-
-        }
-
-        [Fact]
-        public void Validate_SetsContentGuid_And_IsVariantFalse_WhenContentIsNotVariant()
-        {
-            Dictionary<string, string> responseData = new Dictionary<string, string> { { "ConversionProduct", "1_100" }, { "CurrentContent", "2" } };
-            Mock<CatalogContentBase> _mockContent = new Mock<CatalogContentBase>();
             _mockContent.SetupGet(prop => prop.ContentLink).Returns(new ContentReference(1));
             _mockContent.SetupGet(prop => prop.ContentType).Returns(CatalogContentType.CatalogEntry);
             _mockContent.SetupGet(prop => prop.ContentGuid).Returns(_contentGuid);
@@ -235,8 +210,32 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
             _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<int>(), It.IsAny<CatalogContentType>(), It.IsAny<int>())).Returns(new ContentReference(1));
-            _mockContentLoader.Setup(call => call.Get<CatalogContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
-            _mockContentVersionRepository.Setup(call => call.LoadPublished(It.IsAny<ContentReference>())).Returns(contentVersion);
+            _mockContentLoader.Setup(call => call.Get<EntryContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
+            _mockPublishedStateAssossor.Setup(x => x.IsPublished(It.IsAny<IContent>(), PublishedStateCondition.None))
+                .Returns(true);
+
+            addToCartKpi.Validate(responseData);
+            Assert.True(addToCartKpi.ContentGuid == _contentGuid);
+            Assert.True(addToCartKpi.isVariant == true);
+
+        }
+
+        [Fact]
+        public void Validate_SetsContentGuid_And_IsVariantFalse_WhenContentIsNotVariant()
+        {
+            Dictionary<string, string> responseData = new Dictionary<string, string> { { "ConversionProduct", "1_100" }, { "CurrentContent", "2" } };
+            Mock<EntryContentBase> _mockContent = new Mock<EntryContentBase>();
+            _mockContent.SetupGet(prop => prop.ContentLink).Returns(new ContentReference(1));
+            _mockContent.SetupGet(prop => prop.ContentType).Returns(CatalogContentType.CatalogEntry);
+            _mockContent.SetupGet(prop => prop.ContentGuid).Returns(_contentGuid);
+
+            var addToCartKpi = GetUnitUnderTest();
+
+            _mockContentRepository.Setup(call => call.Get<IContent>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
+            _mockReferenceConverter.Setup(call => call.GetContentLink(It.IsAny<int>(), It.IsAny<CatalogContentType>(), It.IsAny<int>())).Returns(new ContentReference(1));
+            _mockContentLoader.Setup(call => call.Get<EntryContentBase>(It.IsAny<ContentReference>())).Returns(_mockContent.Object);
+            _mockPublishedStateAssossor.Setup(x => x.IsPublished(It.IsAny<IContent>(), PublishedStateCondition.None))
+                .Returns(true);
 
             addToCartKpi.Validate(responseData);
             Assert.True(addToCartKpi.ContentGuid == _contentGuid);

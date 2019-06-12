@@ -21,13 +21,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
         //Mocked Content Objects
         public Mock<IContentLoader> _mockContentLoader = new Mock<IContentLoader>();
         public Mock<IContentRepository> _mockContentRepository = new Mock<IContentRepository>();
-        public Mock<IContentVersionRepository> _mockContentVersionRepository = new Mock<IContentVersionRepository>();
+        public Mock<IPublishedStateAssessor> _mockPublishedStateAssossor = new Mock<IPublishedStateAssessor>();
 
         //Mocked Commerce/Market Objects
         public Mock<IMarketService> _mockMarketService = new Mock<IMarketService>();
         public Mock<IMarket> _mockMarket = new Mock<IMarket>();
         public Mock<IOrderGroup> _mockOrderGroup = new Mock<IOrderGroup>();
-        public Mock<IOrderGroupTotalsCalculator> _mockOrderGroupTotalsCalculator = new Mock<IOrderGroupTotalsCalculator>();
+        public Mock<IOrderGroupCalculator> _mockOrderGroupCalculator = new Mock<IOrderGroupCalculator>();
 
         public Mock<ReferenceConverter> _mockReferenceConverter;
 
