@@ -51,16 +51,13 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
             //In this example we arbitrarily use the integer 1
             var productIdFromCommerce = responseData["ConversionProduct"].Split('_')[0];
 
-            var contentRepo = _servicelocator.GetInstance<IContentRepository>();
-            var currentContent = contentRepo.Get<IContent>(new ContentReference(responseData["CurrentContent"]));
-
             //We use the content link builder to get the contentlink to our product
             var productLink = referenceConverter.GetContentLink(Int32.Parse(productIdFromCommerce),
                 CatalogContentType.CatalogEntry, 0);
 
             //Get the product using CMS API
-            var content = contentLoader.Get<CatalogContentBase>(productLink);
-            if (content.ContentType != CatalogContentType.CatalogEntry || !IsContentPublished(content))
+            var content = contentLoader.Get<EntryContentBase>(productLink);
+            if (!IsContentPublished(content))
             {
                 throw new KpiValidationException(LocalizationService.Current.GetString("/commercekpi/" + LocalizationSection + "/config_markup/error_not_published_product"));
             }
@@ -70,14 +67,8 @@ namespace EPiServer.Marketing.KPI.Commerce.Kpis
 
         private bool IsContentPublished(IContent content)
         {
-            bool isPublished = true;
-            IContentVersionRepository repo = _servicelocator.GetInstance<IContentVersionRepository>();
-            var publishedContent = repo.LoadPublished(content.ContentLink);
-            if (publishedContent == null)
-            {
-                isPublished = false;
-            }
-            return isPublished;
+            var publishedStateAssessor = _servicelocator.GetInstance<IPublishedStateAssessor>();
+            return publishedStateAssessor.IsPublished(content, PagePublishedStatus.Published);
         }
 
         /// <inheritdoc />

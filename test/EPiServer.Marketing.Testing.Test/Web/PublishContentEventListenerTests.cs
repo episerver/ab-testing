@@ -26,7 +26,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
             _locator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(new FakeLocalizationService("whatever"));
             _mockEpiserverHelper = new Mock<IEpiserverHelper>();
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
             _locator.Setup(s1 => s1.GetInstance<IEpiserverHelper>()).Returns(_mockEpiserverHelper.Object);
 
             return new PublishContentEventListener(_locator.Object, _list.Object);
@@ -37,7 +37,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.Empty, ContentLanguage = "en-GB"};
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB"))).Returns(abTest);
             var eventArg = new ContentEventArgs(new ContentReference(111))
             {
                 CancelAction = false,
@@ -56,7 +56,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB"))).Returns(abTest);
 
             // make sure its not in the list, since its not in the listener the publish will be cancled
             // I.e. publish triggered for content that is part of a test but winner not selected.
@@ -78,7 +78,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB"))).Returns(abTest);
 
             // make sure its not in the list, since its not in the listener the publish will be cancled
             // I.e. publish triggered for content that is part of a test but winner not selected.
@@ -143,7 +143,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             var testUnit = GetUnitUnderTest();
             IMarketingTest abTest = new ABTest() { Id = Guid.NewGuid() };
-            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), new CultureInfo("en-GB"))).Returns(abTest);
+            _webRepo.Setup(call => call.GetActiveTestForContent(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB"))).Returns(abTest);
 
             var c = new FakeContentData() { ContentGuid = Guid.Empty };
             (c as IVersionable).StartPublish = DateTime.MaxValue;

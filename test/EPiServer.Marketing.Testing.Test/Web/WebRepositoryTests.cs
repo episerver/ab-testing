@@ -172,10 +172,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void GetActiveTestForContent_gets_a_test_if_it_exists_for_the_content_and_language()
         {
             var aRepo = GetUnitUnderTest();
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(new CultureInfo("en-GB"));
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(new List<IMarketingTest> { new ABTest() { State = TestState.Active, ContentLanguage = "en-GB" } });
 
-            var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
+            var aReturnValue = aRepo.GetActiveTestForContent(Guid.NewGuid(), CultureInfo.GetCultureInfo("en-GB"));
 
             Assert.True(aReturnValue != null);
         }
@@ -218,9 +218,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aRepo = GetUnitUnderTest();
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
 
-            aRepo.DeleteTestForContent(Guid.NewGuid(), new CultureInfo("en-GB"));
+            aRepo.DeleteTestForContent(Guid.NewGuid(), CultureInfo.GetCultureInfo("en-GB"));
 
-            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), new CultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
         }
 
         [Fact]
@@ -454,7 +454,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var webRepo = GetUnitUnderTest();
             _mockTestManager.Setup(call => call.GetTestList(It.IsAny<TestCriteria>())).Returns(testList);
 
-            var results = webRepo.GetTestList(criteria, new CultureInfo("en-US"));
+            var results = webRepo.GetTestList(criteria, CultureInfo.GetCultureInfo("en-US"));
 
             Assert.True(results.Count == 1);
             Assert.True(results[0].Title == "Test 2");

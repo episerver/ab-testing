@@ -267,7 +267,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc />
         public IContent GetVariantContent(Guid contentGuid)
         {
-            return GetVariantContent(contentGuid, new CultureInfo("en-GB"));
+            return GetVariantContent(contentGuid, CultureInfo.GetCultureInfo("en-GB"));
         }
 
         /// <inheritdoc />

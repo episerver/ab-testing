@@ -31,7 +31,7 @@ namespace EPiServer.Marketing.KPI.Commerce.Test
 
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketService>()).Returns(_mockMarketService.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IOrderGroupTotalsCalculator>()).Returns(_mockOrderGroupTotalsCalculator.Object);
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IOrderGroupCalculator>()).Returns(_mockOrderGroupCalculator.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger);
 
             return new AverageOrderKpi(_mockServiceLocator.Object);

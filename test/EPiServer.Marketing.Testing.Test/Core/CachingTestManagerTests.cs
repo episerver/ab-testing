@@ -95,7 +95,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockSignal.ResetCalls();
 
-            manager.Delete(testToArchive.Id, new CultureInfo(testToArchive.ContentLanguage));
+            manager.Delete(testToArchive.Id, CultureInfo.GetCultureInfo(testToArchive.ContentLanguage));
 
             _mockTestManager.Verify(
                 tm =>
@@ -264,7 +264,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var expectedItem = _expectedTests.First();
             var expectedItemId = expectedItem.OriginalItemId;
             var expectedContentLanguage = expectedItem.ContentLanguage;
-            var expectedCulture = new CultureInfo(expectedContentLanguage);
+            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
@@ -285,7 +285,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var manager = new CachingTestManager(cache, _mockSignal.Object, _mockEvents.Object, _mockTestManager.Object);
             var actualTests = manager.GetActiveTestsByOriginalItemId(
                 _expectedTests.First().OriginalItemId, 
-                new CultureInfo(_expectedTests.Last().ContentLanguage)
+                CultureInfo.GetCultureInfo(_expectedTests.Last().ContentLanguage)
             );
 
             Assert.True(actualTests.Count == 0);
@@ -358,7 +358,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var expectedTest = _expectedTests.First();
             var expectedItemId = expectedTest.OriginalItemId;
             var expectedContentLanguage = expectedTest.ContentLanguage;
-            var expectedCulture = new CultureInfo(expectedContentLanguage);
+            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
             var expectedVariant = Mock.Of<IContent>();
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
@@ -386,7 +386,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var expectedTest = _expectedTests.First();
             var expectedItemId = expectedTest.OriginalItemId;
             var expectedContentLanguage = expectedTest.ContentLanguage;
-            var expectedCulture = new CultureInfo(expectedContentLanguage);
+            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
             var expectedVariant = Mock.Of<IContent>();
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
@@ -412,7 +412,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var expectedTest = _expectedTests.First();
             var expectedItemId = expectedTest.OriginalItemId;
             var expectedContentLanguage = expectedTest.ContentLanguage;
-            var expectedCulture = new CultureInfo(expectedContentLanguage);
+            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
             var expectedVariant = Mock.Of<IContent>();
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
