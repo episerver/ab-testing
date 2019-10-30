@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Configuration;
@@ -151,6 +152,11 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             }
 
             return cookies;
+        }
+
+        public Encoding GetContentEncoding()
+        {
+            return HttpContext.Current.Request.ContentEncoding;
         }
     }
 }

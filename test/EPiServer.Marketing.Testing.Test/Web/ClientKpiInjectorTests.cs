@@ -11,6 +11,7 @@ using EPiServer.ServiceLocation;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Web;
 using Xunit;
 
@@ -175,11 +176,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(aFakeTest);
             mockHttpContextHelper.Setup(hch => hch.HasItem(It.IsAny<string>())).Returns(true);
             mockHttpContextHelper.Setup(hch => hch.CanWriteToResponse()).Returns(true);
+            mockHttpContextHelper.Setup(hch => hch.GetContentEncoding()).Returns(Encoding.UTF8);
             aClientKpiInjector.AppendClientKpiScript();
 
             //verify that the response was added to the stream
-            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => abrf._clientScript.Contains(aClientKpi.ClientEvaluationScript))),
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => abrf.ClientScript.Contains(aClientKpi.ClientEvaluationScript))),
                 Times.Once(), "the context was not called with the kpi's client script");
+            mockHttpContextHelper.VerifyAll();
         }
 
         [Fact]

@@ -11,15 +11,26 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     /// </summary>
     public class ABResponseFilter : Stream
     {
-        private Stream stream;
-        private StreamWriter streamWriter;
-        internal string bufferedHtml;
-        internal string _clientScript;
+        private Stream BaseStream;
+        private Encoding Encoding;
+        private bool LeaveOpen;
+        internal string ClientScript;
 
-        public ABResponseFilter(Stream stm, string script)
+        internal string HtmlResponseStream;
+
+        /// <summary>
+        /// Response filter used to inject jscript code related to KPI's into a page. 
+        /// </summary>
+        /// <param name="baseStream"></param>
+        /// <param name="clientScript"></param>
+        /// <param name="encoding"></param>
+        /// <param name="leaveOpen">True for unit testing, default false</param>
+        public ABResponseFilter(Stream baseStream, string clientScript, Encoding encoding, bool leaveOpen = false)
         {
-            stream = stm;
-            _clientScript = script;
+            this.BaseStream = baseStream;
+            this.ClientScript = clientScript;
+            this.Encoding = encoding;
+            this.LeaveOpen = leaveOpen;
         }
 
         //Takes incomming response stream and injects our code
@@ -27,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public override void Write(byte[] buffer, int offset, int count)
         {
             //intercept the write and build the content for cases where data is chunked
-            bufferedHtml += Encoding.UTF8.GetString(buffer);
+            HtmlResponseStream += Encoding.GetString(buffer);
         }
 
         //Unable to get a handle on the stream for unit testing, as it is disposed of after the streamwriter is disposed of. 
@@ -36,16 +47,24 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public override void Flush()
         {
             //transform the html and put it back into the stream
-            string html = bufferedHtml;
-            html = html.Replace("</body>", _clientScript + "</body>");
-
-            using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8))
+            if (!string.IsNullOrWhiteSpace(HtmlResponseStream))
             {
-                streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
-                streamWriter.Flush();
+                string html = HtmlResponseStream;
+                if (html.Contains("</body>"))
+                {
+                    html = html.Replace("</body>", ClientScript + "</body>");
+                }
+
+                if (BaseStream != null)
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(BaseStream, Encoding, (int)BaseStream.Length + HtmlResponseStream.Length, LeaveOpen))
+                    {
+                        streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
+                        streamWriter.Flush();
+                    }
+                }
             }
         }
-
         #region abstract required methods - not implemented
         [ExcludeFromCodeCoverage]
         public override bool CanRead
