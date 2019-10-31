@@ -57,7 +57,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
                 if (BaseStream != null)
                 {
-                    using (StreamWriter streamWriter = new StreamWriter(BaseStream, Encoding, (int)BaseStream.Length + HtmlResponseStream.Length, LeaveOpen))
+                    using (StreamWriter streamWriter = new StreamWriter(BaseStream, Encoding, HtmlResponseStream.Length, LeaveOpen))
                     {
                         streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
                         streamWriter.Flush();
