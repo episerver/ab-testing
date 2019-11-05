@@ -11,10 +11,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
     /// </summary>
     public class ABResponseFilter : Stream
     {
-        private Stream BaseStream;
-        private Encoding Encoding;
-        private bool LeaveOpen;
-        internal string ClientScript;
+        private Stream baseStream;
+        private Encoding encoding;
+        private bool leaveOpen;
+        internal string clientScript;
 
         internal string HtmlResponseStream;
 
@@ -27,10 +27,10 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="leaveOpen">True for unit testing, default false</param>
         public ABResponseFilter(Stream baseStream, string clientScript, Encoding encoding, bool leaveOpen = false)
         {
-            this.BaseStream = baseStream;
-            this.ClientScript = clientScript;
-            this.Encoding = encoding;
-            this.LeaveOpen = leaveOpen;
+            this.baseStream = baseStream;
+            this.clientScript = clientScript;
+            this.encoding = encoding;
+            this.leaveOpen = leaveOpen;
         }
 
         //Takes incomming response stream and injects our code
@@ -38,7 +38,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         public override void Write(byte[] buffer, int offset, int count)
         {
             //intercept the write and build the content for cases where data is chunked
-            HtmlResponseStream += Encoding.GetString(buffer);
+            HtmlResponseStream += encoding.GetString(buffer);
         }
 
         //Unable to get a handle on the stream for unit testing, as it is disposed of after the streamwriter is disposed of. 
@@ -52,12 +52,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 string html = HtmlResponseStream;
                 if (html.Contains("</body>"))
                 {
-                    html = html.Replace("</body>", ClientScript + "</body>");
+                    html = html.Replace("</body>", clientScript + "</body>");
                 }
 
-                if (BaseStream != null)
+                if (baseStream != null)
                 {
-                    using (StreamWriter streamWriter = new StreamWriter(BaseStream, Encoding, HtmlResponseStream.Length, LeaveOpen))
+                    using (StreamWriter streamWriter = new StreamWriter(baseStream, encoding, HtmlResponseStream.Length, leaveOpen))
                     {
                         streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
                         streamWriter.Flush();

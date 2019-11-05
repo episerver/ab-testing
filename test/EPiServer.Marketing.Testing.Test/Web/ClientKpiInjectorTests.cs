@@ -180,7 +180,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             aClientKpiInjector.AppendClientKpiScript();
 
             //verify that the response was added to the stream
-            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => abrf.ClientScript.Contains(aClientKpi.ClientEvaluationScript))),
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => abrf.clientScript.Contains(aClientKpi.ClientEvaluationScript))),
                 Times.Once(), "the context was not called with the kpi's client script");
             mockHttpContextHelper.VerifyAll();
         }
