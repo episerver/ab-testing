@@ -6,12 +6,11 @@ using System.Text;
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     /// <summary>
-    /// Filter to inject custom code wrappers and modifications
-    /// to response stream.
+    /// Minimal response filter used to inject custom code kpi client scripts to the response stream.
     /// </summary>
     public class ABResponseFilter : Stream
     {
-        private Stream baseStream;
+        private Stream responseFilterStream;
         private Encoding encoding;
         private bool leaveOpen;
         internal string clientScript;
@@ -19,31 +18,36 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         internal string HtmlResponseStream;
 
         /// <summary>
-        /// Response filter used to inject jscript code related to KPI's into a page. 
+        /// constructor for the response filter
         /// </summary>
-        /// <param name="baseStream"></param>
-        /// <param name="clientScript"></param>
-        /// <param name="encoding"></param>
-        /// <param name="leaveOpen">True for unit testing, default false</param>
-        public ABResponseFilter(Stream baseStream, string clientScript, Encoding encoding, bool leaveOpen = false)
+        /// <param name="responseFilterStream">httpcontext response filter stream</param>
+        /// <param name="clientScript">the script to inject</param>
+        /// <param name="encoding">the encoding of the httpcontext response</param>
+        /// <param name="leaveOpen">a flag to allow unit testing to verify that the client script has been properly injected into the response</param>
+        public ABResponseFilter(Stream responseFilterStream, string clientScript, Encoding encoding, bool leaveOpen = false)
         {
-            this.baseStream = baseStream;
+            this.responseFilterStream = responseFilterStream;
             this.clientScript = clientScript;
             this.encoding = encoding;
             this.leaveOpen = leaveOpen;
         }
 
-        //Takes incomming response stream and injects our code
-        // just before the </body> tag.
+
+        /// <summary>
+        /// Takes incomming bytes and stores it using the specified encoding
+        /// </summary>
+        /// <param name="buffer">buffer of bytes representing the response</param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
         public override void Write(byte[] buffer, int offset, int count)
         {
             //intercept the write and build the content for cases where data is chunked
             HtmlResponseStream += encoding.GetString(buffer);
         }
 
-        //Unable to get a handle on the stream for unit testing, as it is disposed of after the streamwriter is disposed of. 
-        //Can revisit to see if there is a good solution for this, excluding it from coverage for now.
-        [ExcludeFromCodeCoverage]
+        /// <summary>
+        /// Injects the clientscript into the response stream at the end of the body tag
+        /// </summary>
         public override void Flush()
         {
             //transform the html and put it back into the stream
@@ -55,9 +59,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     html = html.Replace("</body>", clientScript + "</body>");
                 }
 
-                if (baseStream != null)
+                if (responseFilterStream != null)
                 {
-                    using (StreamWriter streamWriter = new StreamWriter(baseStream, encoding, HtmlResponseStream.Length, leaveOpen))
+                    using (StreamWriter streamWriter = new StreamWriter(responseFilterStream, encoding, HtmlResponseStream.Length, leaveOpen))
                     {
                         streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
                         streamWriter.Flush();
