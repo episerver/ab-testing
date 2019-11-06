@@ -6,46 +6,69 @@ using System.Text;
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
     /// <summary>
-    /// Filter to inject custom code wrappers and modifications
-    /// to response stream.
+    /// Minimal response filter used to inject custom code kpi client scripts to the response stream.
     /// </summary>
     public class ABResponseFilter : Stream
     {
-        private Stream stream;
-        private StreamWriter streamWriter;
-        internal string bufferedHtml;
-        internal string _clientScript;
+        private Stream responseFilterStream;
+        private Encoding encoding;
+        private bool leaveOpen;
+        internal string clientScript;
 
-        public ABResponseFilter(Stream stm, string script)
+        internal string HtmlResponseStream;
+
+        /// <summary>
+        /// constructor for the response filter
+        /// </summary>
+        /// <param name="responseFilterStream">httpcontext response filter stream</param>
+        /// <param name="clientScript">the script to inject</param>
+        /// <param name="encoding">the encoding of the httpcontext response</param>
+        /// <param name="leaveOpen">a flag to allow unit testing to verify that the client script has been properly injected into the response</param>
+        public ABResponseFilter(Stream responseFilterStream, string clientScript, Encoding encoding, bool leaveOpen = false)
         {
-            stream = stm;
-            _clientScript = script;
+            this.responseFilterStream = responseFilterStream;
+            this.clientScript = clientScript;
+            this.encoding = encoding;
+            this.leaveOpen = leaveOpen;
         }
 
-        //Takes incomming response stream and injects our code
-        // just before the </body> tag.
+
+        /// <summary>
+        /// Takes incomming bytes and stores it using the specified encoding
+        /// </summary>
+        /// <param name="buffer">buffer of bytes representing the response</param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
         public override void Write(byte[] buffer, int offset, int count)
         {
             //intercept the write and build the content for cases where data is chunked
-            bufferedHtml += Encoding.UTF8.GetString(buffer);
+            HtmlResponseStream += encoding.GetString(buffer);
         }
 
-        //Unable to get a handle on the stream for unit testing, as it is disposed of after the streamwriter is disposed of. 
-        //Can revisit to see if there is a good solution for this, excluding it from coverage for now.
-        [ExcludeFromCodeCoverage]
+        /// <summary>
+        /// Injects the clientscript into the response stream at the end of the body tag
+        /// </summary>
         public override void Flush()
         {
             //transform the html and put it back into the stream
-            string html = bufferedHtml;
-            html = html.Replace("</body>", _clientScript + "</body>");
-
-            using (StreamWriter streamWriter = new StreamWriter(stream, Encoding.UTF8))
+            if (!string.IsNullOrWhiteSpace(HtmlResponseStream))
             {
-                streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
-                streamWriter.Flush();
+                string html = HtmlResponseStream;
+                if (html.Contains("</body>"))
+                {
+                    html = html.Replace("</body>", clientScript + "</body>");
+                }
+
+                if (responseFilterStream != null)
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(responseFilterStream, encoding, HtmlResponseStream.Length, leaveOpen))
+                    {
+                        streamWriter.Write(html.ToCharArray(), 0, html.ToCharArray().Length);
+                        streamWriter.Flush();
+                    }
+                }
             }
         }
-
         #region abstract required methods - not implemented
         [ExcludeFromCodeCoverage]
         public override bool CanRead

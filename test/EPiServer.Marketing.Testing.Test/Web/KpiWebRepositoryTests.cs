@@ -95,7 +95,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void ActivateKpiInstance_returns_commerce_kpi_when_kpiType_is_commerce()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
-            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.4.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.4.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
             var webRepo = GetUnitUnderTest();
             var result = webRepo.ActivateKpiInstance(kpiInstanceData);
             Assert.True(result is CommerceKpi);
@@ -105,7 +105,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void ActivateKpiInstance_returns_financial_kpi_when_kpiType_is_financial()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
-            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.AverageOrderKpi, EPiServer.Marketing.KPI.Commerce, Version=2.4.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.AverageOrderKpi, EPiServer.Marketing.KPI.Commerce, Version=2.4.2.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
             var webRepo = GetUnitUnderTest();
             var result = webRepo.ActivateKpiInstance(kpiInstanceData);
             Assert.True(result is IFinancialKpi);
