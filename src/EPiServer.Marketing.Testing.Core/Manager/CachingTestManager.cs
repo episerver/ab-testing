@@ -47,21 +47,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc/>
         public void Archive(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo = null)
         {
-            lock (_cache)
-            {
-                _inner.Archive(testObjectId, winningVariantId, cultureInfo);
-                RemoveFromCache(testObjectId);
-            }
+            _inner.Archive(testObjectId, winningVariantId, cultureInfo);
+            RemoveFromCache(testObjectId);
         }
 
         /// <inheritdoc/>
         public void Delete(Guid testObjectId, CultureInfo cultureInfo = null)
         {
-            lock (_cache)
-            {
-                _inner.Delete(testObjectId, cultureInfo);
-                RemoveFromCache(testObjectId);
-            }
+            _inner.Delete(testObjectId, cultureInfo);
+            RemoveFromCache(testObjectId);
         }
 
         /// <inheritdoc/>
@@ -170,17 +164,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc/>
         public Guid Save(IMarketingTest test)
         {
-            lock (_cache)
+            var testId = _inner.Save(test);
+
+            if (test.State == TestState.Active)
             {
-                var testId = _inner.Save(test);
-
-                if (test.State == TestState.Active)
-                {
-                    AddToCache(test);
-                }
-
-                return testId;
+                AddToCache(test);
             }
+
+            return testId;
         }
 
         /// <inheritdoc/>
@@ -192,27 +183,21 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc/>
         public IMarketingTest Start(Guid testId)
         {
-            lock (_cache)
+            var startedTest = _inner.Start(testId);
+
+            if (startedTest?.State == TestState.Active)
             {
-                var startedTest = _inner.Start(testId);
-
-                if (startedTest?.State == TestState.Active)
-                {
-                    AddToCache(startedTest);
-                }
-
-                return startedTest;
+                AddToCache(startedTest);
             }
+
+            return startedTest;
         }
 
         /// <inheritdoc/>
         public void Stop(Guid testObjectId, CultureInfo cultureInfo = null)
         {
-            lock (_cache)
-            {
-                _inner.Stop(testObjectId, cultureInfo);
-                RemoveFromCache(testObjectId);
-            }
+            _inner.Stop(testObjectId, cultureInfo);
+            RemoveFromCache(testObjectId);
         }
 
         /// <summary>
@@ -221,29 +206,26 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         public void RefreshCache()
         {
-            lock (_cache)
-            {
-                _cache.Where(cacheItem => cacheItem.Key.StartsWith("epi/marketing/testing/tests?id"))
-                    .Select(cacheItem => cacheItem.Value)
-                    .Cast<IMarketingTest>()
-                    .Select(test => test.Id)
-                    .ToList()
-                    .ForEach(test => RemoveFromCache(test, false));
+            _cache.Where(cacheItem => cacheItem.Key.StartsWith("epi/marketing/testing/tests?id"))
+                .Select(cacheItem => cacheItem.Value)
+                .Cast<IMarketingTest>()
+                .Select(test => test.Id)
+                .ToList()
+                .ForEach(test => RemoveFromCache(test, false));
 
-                var allActiveTests = new TestCriteria();
-                allActiveTests.AddFilter(
-                    new ABTestFilter
-                    {
-                        Property = ABTestProperty.State,
-                        Operator = FilterOperator.And,
-                        Value = TestState.Active
-                    }
-                );
+            var allActiveTests = new TestCriteria();
+            allActiveTests.AddFilter(
+                new ABTestFilter
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                }
+            );
 
-                _inner.GetTestList(allActiveTests).ForEach(test => AddToCache(test, false));
+            _inner.GetTestList(allActiveTests).ForEach(test => AddToCache(test, false));
 
-                _remoteCacheSignal.Set();
-            }
+            _remoteCacheSignal.Set();
         }
 
         /// <summary>
