@@ -87,7 +87,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private bool Personalize()
         {
             var evaluator = _serviceLocator.GetInstance<IAggregatedPersonalizationEvaluator>();
-            return evaluator == null ? true : evaluator.Personalize();
+            return evaluator.Personalize();
         }
 
         /// <summary>
