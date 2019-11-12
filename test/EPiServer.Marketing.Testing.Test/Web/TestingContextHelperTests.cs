@@ -18,6 +18,7 @@ using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.KPI.Common.Helpers;
+using EPiServer.Personalization;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -34,6 +35,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IContent> testPublishedData = new Mock<IContent>();
         private Mock<IContent> testVariantData = new Mock<IContent>();
         private Mock<IContent> testConversionContent = new Mock<IContent>();
+        private Mock<IAggregatedPersonalizationEvaluator> _personalizationEvaluator = new Mock<IAggregatedPersonalizationEvaluator>();
 
         LocalizationService _localizationService = new FakeLocalizationService("test");
 
@@ -52,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockEpiserverHelper = new Mock<IEpiserverHelper>();
             testPublishedData = new Mock<IContent>();
             testVariantData = new Mock<IContent>();
-            testConversionContent = new Mock<IContent>();           
+            testConversionContent = new Mock<IContent>();
 
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en");
             ContentLanguage.PreferredCulture = CultureInfo.GetCultureInfo("en");
@@ -65,7 +67,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(call => call.GetInstance<IUIHelper>()).Returns(_mockUIHelper.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<LocalizationService>()).Returns(_localizationService);
-
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IAggregatedPersonalizationEvaluator>()).Returns(_personalizationEvaluator.Object);
+            _personalizationEvaluator.Setup(m => m.Personalize()).Returns(true); 
 
             return new TestingContextHelper(_mockContextHelper.Object, _mockServiceLocator.Object, _mockEpiserverHelper.Object);
         }
@@ -166,6 +169,82 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
 
             Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_true_if_Personalize_returns_false()
+        {
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+
+            var testContextHelper = GetUnitUnderTest();
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            _personalizationEvaluator.Setup(m => m.Personalize()).Returns(false);
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_returns_false_if_Personalize_returns_true()
+        {
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+
+            var testContextHelper = GetUnitUnderTest();
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            _personalizationEvaluator.Setup(m => m.Personalize()).Returns(true);
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.False(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_with_ChildrenEventArgs_returns_true_if_Personalize_returns_false()
+        {
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+
+            var testContextHelper = GetUnitUnderTest();
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            _personalizationEvaluator.Setup(m => m.Personalize()).Returns(false);
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.True(swapDisabled);
+        }
+
+        [Fact]
+        public void SwapDisabled_with_ChildrenEventArgs_returns_false_if_Personalize_returns_true()
+        {
+            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+
+            var testContextHelper = GetUnitUnderTest();
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasUserAgent()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
+
+            _personalizationEvaluator.Setup(m => m.Personalize()).Returns(true);
+
+            var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
+
+            Assert.False(swapDisabled);
         }
 
         [Fact]
