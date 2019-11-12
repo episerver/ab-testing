@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
@@ -34,7 +34,7 @@
     <PackageReference Include="EPiServer.CMS.Core" Version="11.3.3" />
     <PackageReference Include="EPiServer.CMS.UI" Version="11.2.5" />
     <PackageReference Include="EPiServer.CMS.UI.Core" Version="11.2.5" />
-    <PackageReference Include="EPiServer.Framework" Version="11.3.3" />
+    <PackageReference Include="EPiServer.Framework" Version="11.8.0" />
     <PackageReference Include="EPiServer.Logging.Log4Net" Version="2.2.1" />
     <PackageReference Include="EPiServer.Packaging" Version="3.4.0" />
     <PackageReference Include="EPiServer.Packaging.UI" Version="3.4.0" />
