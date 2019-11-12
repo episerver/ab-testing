@@ -59,6 +59,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             ContentEventArgs ea = e as ContentEventArgs;
             return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
                     SkipRequest() ||
+                    !Personalize() ||
                     IsInSystemFolder());
         }
 

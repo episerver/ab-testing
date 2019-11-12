@@ -174,7 +174,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_returns_true_if_Personalize_returns_false()
         {
-            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+            var contentArgs = new ContentEventArgs(new ContentReference(1));
+            contentArgs.Content = new PageData();
 
             var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
@@ -182,7 +183,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
             _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
             _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
-
             _personalizationEvaluator.Setup(m => m.Personalize()).Returns(false);
 
             var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
@@ -193,7 +193,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void SwapDisabled_returns_false_if_Personalize_returns_true()
         {
-            var contentArgs = new ChildrenEventArgs(new ContentReference(1), new List<IContent>());
+            var contentArgs = new ContentEventArgs(new ContentReference(1));
+            contentArgs.Content = new PageData();
 
             var testContextHelper = GetUnitUnderTest();
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
@@ -201,7 +202,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockContextHelper.Setup(ch => ch.HasItem(It.IsAny<string>())).Returns(false);
             _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
             _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
-
             _personalizationEvaluator.Setup(m => m.Personalize()).Returns(true);
 
             var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
