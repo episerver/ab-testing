@@ -177,7 +177,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             //Inject our script into the stream.
             if (_httpContextHelper.CanWriteToResponse())
             {
-                _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script));
+                _httpContextHelper.SetResponseFilter(new ABResponseFilter(_httpContextHelper.GetResponseFilter(), script, _httpContextHelper.GetContentEncoding()));
             }
             else
             {

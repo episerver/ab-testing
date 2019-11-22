@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -144,6 +145,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         string GetSessionCookieName();
 
         Dictionary<string,string> GetCurrentCookieCollection();
+
+        /// <summary>
+        /// Returns the encoding contained in the request
+        /// </summary>
+        /// <returns></returns>
+        Encoding GetContentEncoding();
 
     }
 }

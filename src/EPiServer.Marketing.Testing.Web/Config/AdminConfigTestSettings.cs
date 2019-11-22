@@ -36,16 +36,24 @@ namespace EPiServer.Marketing.Testing.Web.Config
         public string CookieDelimeter { get; set; }
 
         internal static AdminConfigTestSettings _currentSettings;
+        internal static DynamicDataStoreFactory _factory;
 
-       [ExcludeFromCodeCoverage]
         public static AdminConfigTestSettings Current
         {
             get
             {
                 if (_currentSettings == null)
                 {
-                    var store = DynamicDataStoreFactory.Instance.GetStore(typeof(AdminConfigTestSettings));
+                    if(_factory == null)
+                    {
+                        _factory = DynamicDataStoreFactory.Instance;
+                    }
+                    var store = _factory.GetStore(typeof(AdminConfigTestSettings));
                     _currentSettings = store.LoadAll<AdminConfigTestSettings>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new AdminConfigTestSettings();
+                    if( _currentSettings.CookieDelimeter == null )
+                    {
+                        _currentSettings.CookieDelimeter = "_";
+                    }
                 }
 
                 return _currentSettings;
@@ -65,7 +73,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
             CookieDelimeter = "_";
         }
 
-        [ExcludeFromCodeCoverage]
         public void Save()
         {
             var store = DynamicDataStoreFactory.Instance.GetStore(typeof(AdminConfigTestSettings));

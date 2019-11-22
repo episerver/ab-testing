@@ -13,6 +13,7 @@ using EPiServer.Web.Routing;
 using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Personalization;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -58,6 +59,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             ContentEventArgs ea = e as ContentEventArgs;
             return ( (ea != null && ea.Content == null) || // if e is a contenteventargs make sure we have content.
                     SkipRequest() ||
+                    !Personalize() ||
                     IsInSystemFolder());
         }
 
@@ -73,8 +75,19 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             //which can be evaluated together here or individually.
             return (e.ContentLink == null ||
                     e.ChildrenItems == null ||
-                    SkipRequest() || 
+                    SkipRequest() ||
+                    !Personalize() ||
                     IsInSystemFolder());
+        }
+
+        /// <summary>
+        /// Check that personalization is enabled.
+        /// </summary>
+        /// <returns>true if allowed, else false</returns>
+        private bool Personalize()
+        {
+            var evaluator = _serviceLocator.GetInstance<IAggregatedPersonalizationEvaluator>();
+            return evaluator.Personalize();
         }
 
         /// <summary>
