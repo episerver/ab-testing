@@ -141,6 +141,10 @@
     <Compile Include="Migrations\201705222044071_AddContentLanguageToTest.Designer.cs">
       <DependentUpon>201705222044071_AddContentLanguageToTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002241846332_AddIndex_OriginalItemId.cs" />
+    <Compile Include="Migrations\202002241846332_AddIndex_OriginalItemId.Designer.cs">
+      <DependentUpon>202002241846332_AddIndex_OriginalItemId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -169,6 +173,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705222044071_AddContentLanguageToTest.resx">
       <DependentUpon>201705222044071_AddContentLanguageToTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002241846332_AddIndex_OriginalItemId.resx">
+      <DependentUpon>202002241846332_AddIndex_OriginalItemId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
