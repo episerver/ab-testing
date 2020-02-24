@@ -156,8 +156,8 @@ namespace EPiServer.Marketing.KPI.Common
                 {   
                     //We need to make sure the content being evaluated is the actual content being requested
                     //Addresses MAR-1226
-                    retval = (kpiHelper.GetUrl(_content.ContentLink).ToLower() == kpiHelper.GetRequestPath().ToLower()) 
-                        && ContentGuid.Equals(ea.Content.ContentGuid);                    
+                    retval = (kpiHelper.GetUrl(_content.ContentLink).ToLower().Trim('/') == kpiHelper.GetRequestPath().ToLower().Trim('/') 
+                        && ContentGuid.Equals(ea.Content.ContentGuid));                    
                 }
             }
 
