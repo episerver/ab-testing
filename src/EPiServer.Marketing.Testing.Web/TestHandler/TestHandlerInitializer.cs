@@ -5,11 +5,13 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
+using EPiServer.Marketing.Testing.Web.Initializers;
 
 namespace EPiServer.Marketing.Testing.Web
 {
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
+    [ModuleDependency(typeof(MarketingTestingInitialization))]
     public class TestHandlerInitializer : IInitializableHttpModule
     {
         private TestHandler _testHandler;
