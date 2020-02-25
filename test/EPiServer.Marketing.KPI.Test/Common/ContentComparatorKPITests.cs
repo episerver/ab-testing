@@ -221,6 +221,38 @@ namespace EPiServer.Marketing.KPI.Test.Common
         }
 
         [Fact]
+        public void Kpi_Converts_IfContentPathEqualsRequestedPath_IgnoringUrlTrailingSlash_AndGuidsAreEqual()
+        {
+            var contentGuid = LandingPageGuid;
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(LandingPageGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns("/ContentPath/");
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.True(retVal.HasConverted);
+        }
+
+        [Fact]
+        public void Kpi_Converts_IfContentPathEqualsRequestedPath_IgnoringRequestedContentTrailingSlash_AndGuidsAreEqual()
+        {
+            var contentGuid = LandingPageGuid;
+            var content3 = new Mock<IContent>();
+            content3.SetupGet(get => get.ContentGuid).Returns(LandingPageGuid);
+            var arg = new ContentEventArgs(new ContentReference()) { Content = content3.Object };
+
+            var kpi = GetUnitUnderTest();
+            _kpiHelper.Setup(call => call.GetUrl(It.IsAny<ContentReference>())).Returns("/ContentPath/");
+            _kpiHelper.Setup(call => call.GetRequestPath()).Returns("/ContentPath");
+
+            var retVal = kpi.Evaluate(new object(), arg);
+            Assert.True(retVal.HasConverted);
+        }
+
+        [Fact]
         public void Kpi_DoesNotConvert_IfContentPathEqualsRequestedPath_AndGuidsAreNotEqual()
         {
             var contentGuid = Guid.NewGuid();
