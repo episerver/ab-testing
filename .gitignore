@@ -203,3 +203,4 @@ ModelManifest.xml
 /.vs/restore.dg
 /buildprocess.cmd
 /.vs
+/Models/Testing/.vs/slnx.sqlite
