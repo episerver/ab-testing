@@ -41,7 +41,7 @@ A/B testing uses Entity framework to install and update the schema. These direct
 the schema to a newer version
 
 1. Add ..\episerver.marketing.testing\Models\Testing project to the solution.
-2. Make sure the connection string in the app.config points to a database that has A/B testing package installed.
+2. Make sure the connection string in the app.config points to a database for a site that has A/B testing package installed.
 ```
   <add name="EPiServerDB" connectionString="data source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\hemc\source\repos\AllowWithDelivra\AllowWithDelivra\App_Data\EPiServerDB_3a7f9c8d.mdf;Integrated Security=True;Connect Timeout=30"
           providerName="System.Data.SqlClient" />
@@ -80,7 +80,7 @@ BEGIN
 END
 ```
 7. Create a new sql file in the folder ..\src\Database\Testing and paste the sql MigrationName snippet in it.
- The filename should follow the same numbering format as the exisiting files.
+ The filename should follow the same numbering format as the existing files.
 8. Manually add the sql file created in step #7 to the ..\src\EPiServer.Marketing.Testing.Web\SchemaUpdater\Testing.zip file.
  
 
