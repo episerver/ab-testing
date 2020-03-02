@@ -13,8 +13,8 @@
         </releaseNotes>
         <tags>EPiServerModulePackage EPiServer KPI EPiServerBetaAddon</tags>
             <dependencies>
-          <dependency id="EPiServer.Marketing.KPI" version="[2.5.0, 3)" />
-          <dependency id="EPiServer.Commerce.Core" version="[13.0.0, 14)" />
+          <dependency id="EPiServer.Marketing.KPI" version="2.5.0-*, 3)" />
+          <dependency id="EPiServer.Commerce.Core" version="13.0.0-*, 14)" />
         </dependencies>
     </metadata>
 </package>

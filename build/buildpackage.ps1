@@ -44,7 +44,6 @@ if(Test-Path -Path $projectDir\*.csproj){
         $nuspec.SelectSingleNode('/package/metadata/dependencies').AppendChild($newdependency)
     }
 
- <#
     ForEach($dep in $nuspec.package.metadata.dependencies.dependency) 
     {
         $minVersion = "1.0.0"
@@ -56,7 +55,7 @@ if(Test-Path -Path $projectDir\*.csproj){
             $dep.version = "[$minVersion,$maxVersion)"
         }
     }
-#>
+
     $nuspec.Save($nuspecPath)
 }
 
