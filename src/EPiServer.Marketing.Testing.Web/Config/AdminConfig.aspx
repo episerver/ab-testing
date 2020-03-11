@@ -51,7 +51,7 @@
                 </div>
                 <div class="epi-size15">
                     <asp:Label AssociatedControlID="chkIsEnabled" runat="server"><%# Translate("/abtesting/admin/isenabled") %></asp:Label>
-                    <asp:CheckBox ID="chkIsEnabled" runat="server" Text="<%# TestSettings.IsEnabled %>" />
+                    <asp:CheckBox ID="chkIsEnabled" runat="server" Checked="<%# TestSettings.IsEnabled %>" />
                 </div>
                 <div align="right">
                     <EPiServerUI:ToolButton runat="server" SkinID="Save" Text="<%$ Resources: EPiServer, abtesting.admin.save %>" OnClick="Save_OnClick" CssClass="epi-cmsButton-text epi-cmsButton-tools" />
