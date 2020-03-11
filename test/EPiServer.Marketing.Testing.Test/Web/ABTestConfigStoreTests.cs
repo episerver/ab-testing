@@ -100,6 +100,41 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(5, testConfig.KpiLimit);
             Assert.NotNull(testConfig.CookieDelimeter);
             Assert.Equal("_", testConfig.CookieDelimeter);
+            Assert.True(testConfig.IsEnabled);
+        }
+
+        [Fact]
+        public void GetCurrent_ReturnsExpectedConfiguration()
+        {
+            // mock the datastore in epi
+            var ddsMock = new Mock<DynamicDataStore>(null);
+            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
+            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
+            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
+
+            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
+            AdminConfigTestSettings._currentSettings = null;
+
+            var expectedConfig = new AdminConfigTestSettings()
+            {
+                Id = Data.Identity.NewIdentity(),
+                AutoPublishWinner = false,
+                ConfidenceLevel = 50,
+                IsEnabled = false,
+                CookieDelimeter = ":",
+                KpiLimit = 25,
+                ParticipationPercent = 42,
+                TestDuration = 182
+            };
+
+            ddsMock.Setup(x => x.LoadAll<AdminConfigTestSettings>())
+                .Returns(new List<AdminConfigTestSettings> { expectedConfig });
+
+            var actualConfig = AdminConfigTestSettings.Current;
+
+            ddsFactoryMock.Verify();
+
+            Assert.Equal(expectedConfig, actualConfig);
         }
 
         [Fact]
@@ -139,26 +174,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True((result.Data as AdminConfigTestSettings).AutoPublishWinner == false, "AdminConfigTestSettings.AutoPublishWinner value does not match");
             Assert.True((result.Data as AdminConfigTestSettings).KpiLimit == 5, "AdminConfigTestSettings.KpiLimit value does not match");
             Assert.True((result.Data as AdminConfigTestSettings).CookieDelimeter == "_", "AdminConfigTestSettings.CookieDelimeter value does not match");
+            Assert.True((result.Data as AdminConfigTestSettings).IsEnabled, "AdminConfigTestSettings.IsEnabled value does not match");
         }
-
-        [Fact]
-        public void Reset_Current_Settings()
-        {
-            var id = Guid.NewGuid();
-            var settings = new AdminConfigTestSettings() { Id = id };
-
-            Assert.Equal(5, settings.KpiLimit);
-            Assert.Equal(95, settings.ConfidenceLevel);
-            Assert.Equal(30, settings.TestDuration);
-            Assert.Equal(10, settings.ParticipationPercent);
-            Assert.Equal(id, settings.Id);
-            Assert.Equal("_", settings.CookieDelimeter);
-
-            settings.Reset();
-
-            Assert.Null(AdminConfigTestSettings._currentSettings);
-
-        }
-
     }
 }
