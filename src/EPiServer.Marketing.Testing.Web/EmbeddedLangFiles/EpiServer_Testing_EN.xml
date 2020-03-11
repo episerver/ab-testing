@@ -71,6 +71,7 @@
         <testduration>Test Duration:</testduration>
         <cookiedelimeter>Cookie Delimeter (Only to be changed while there are no active tests; otherwise, it could lead to inaccurate test results):</cookiedelimeter>
         <delimetererror>Cookie delimeter must be a single character.</delimetererror>
+        <isenabled>Enable A/B testing.</isenabled>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>
