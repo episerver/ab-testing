@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using System;
+using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using System.Diagnostics.CodeAnalysis;
@@ -23,8 +24,8 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
 
             if (HttpContext.Current != null)
             {
-                inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
-                    .Contains(Shell.Paths.ProtectedRootPath.ToLower());
+                inSystemFolder = HttpContext.Current.Request.RawUrl
+                    .IndexOf(Shell.Paths.ProtectedRootPath, StringComparison.OrdinalIgnoreCase) >= 0;
             }
 
             return inSystemFolder;
