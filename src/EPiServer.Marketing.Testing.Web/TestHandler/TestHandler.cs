@@ -62,8 +62,6 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 EnableABTesting();
             }
-
-            enableProxyEventHandler();
         }
 
         //To support unit testing
@@ -698,15 +696,20 @@ namespace EPiServer.Marketing.Testing.Web
         {
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;     
-            contentEvents.LoadedContent += LoadedContent;       
+            contentEvents.LoadedContent += LoadedContent;
+
+            enableProxyEventHandler();
         }
 
         public void DisableABTesting()
         {
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren -= LoadedChildren;     
-            contentEvents.LoadedContent -= LoadedContent;       
+            contentEvents.LoadedContent -= LoadedContent;
+
+            disableProxyEventHandler();
         }
+
         #endregion
     }
 }

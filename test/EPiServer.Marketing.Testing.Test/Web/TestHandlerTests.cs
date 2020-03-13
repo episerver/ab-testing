@@ -151,7 +151,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_VerifyExceptionHandler()
+        public void VerifyExceptionHandler()
         {
             var th = GetUnitUnderTest();
 
@@ -170,7 +170,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_Page_Not_In_A_Test_Load_As_Normal()
+        public void Page_Not_In_A_Test_Load_As_Normal()
         {
             var content = new BasicContent();
             content.ContentGuid = _noAssociatedTestGuid;
@@ -257,6 +257,28 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void EnableABTesting_EnablesProxyEventHandlers()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
+            GetUnitUnderTest();
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var contentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            var testEvents = new FakeMarketingTestingEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
+
+            var testHandler = new TestHandler();
+            testHandler.EnableABTesting();
+
+            Assert.Equal(1, testEvents.TestAddedToCacheCounter);
+            Assert.Equal(1, testEvents.TestRemovedFromCacheCounter);
+        }
+
+        [Fact]
         public void DisableABTesting_RemovesLoadedContentListeners()
         {
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
@@ -279,10 +301,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(0, contentEvents.LoadedContentCounter);
             Assert.Equal(0, contentEvents.LoadedChildrenCounter);
         }
+
+        [Fact]
+        public void DisableABTesting_DisablesProxyEventHandlers()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
+            GetUnitUnderTest();
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var contentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            var testEvents = new FakeMarketingTestingEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
+
+            var testHandler = new TestHandler();
+            testHandler.DisableABTesting();
+
+            Assert.Equal(0, testEvents.TestAddedToCacheCounter);
+            Assert.Equal(0, testEvents.TestRemovedFromCacheCounter);
+        }
+
         #endregion
 
         [Fact]
-        public void TestHandler_Disabling_The_Page_Swap_Returns_The_Published_Page()
+        public void Disabling_The_Page_Swap_Returns_The_Published_Page()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -306,7 +351,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_Returns_A_Variant_To_User_Who_Gets_Included_In_A_Test_And_Is_Flagged_As_Seeing_The_Variant()
+        public void Returns_A_Variant_To_User_Who_Gets_Included_In_A_Test_And_Is_Flagged_As_Seeing_The_Variant()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -376,7 +421,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_ContentUnderTest_New_User_Marked_As_Included_In_Test_Seeing_Published_Version_Does_Not_Get_The_Variant()
+        public void ContentUnderTest_New_User_Marked_As_Included_In_Test_Seeing_Published_Version_Does_Not_Get_The_Variant()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -436,7 +481,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
         [Fact]
-        public void TestHandler_User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
+        public void User_Marked_As_Not_In_Test_Sees_The_Normal_Published_Page()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -491,7 +536,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_EvaluateKPIs_Should_Not_Be_Called_When_Cookies_Are_Marked_Converted_and_Viewed()
+        public void EvaluateKPIs_Should_Not_Be_Called_When_Cookies_Are_Marked_Converted_and_Viewed()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -523,7 +568,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_Cookies_Marked_Not_Converted_And_Viewed_Should_Be_Processed_By_EvaluateKPI_save_the_cookie_and_not_emit_conversion_increment()
+        public void Cookies_Marked_Not_Converted_And_Viewed_Should_Be_Processed_By_EvaluateKPI_save_the_cookie_and_not_emit_conversion_increment()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -609,7 +654,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_Cookies_Marked_Not_Converted_And_Viewed_With_ConvertedKPI_Should_Be_Processed_and_emit_conversion_increment()
+        public void Cookies_Marked_Not_Converted_And_Viewed_With_ConvertedKPI_Should_Be_Processed_and_emit_conversion_increment()
         {
             IContent content = new BasicContent();
             content.ContentGuid = _associatedTestGuid;
@@ -657,7 +702,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_DeleteActiveTests()
+        public void DeleteActiveTests()
         {
             var testHandler = GetUnitUnderTest();
             _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
@@ -673,7 +718,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_DeleteActiveTests_Returns_0_If_No_Tests_Found()
+        public void DeleteActiveTests_Returns_0_If_No_Tests_Found()
         {
             var testHandler = GetUnitUnderTest();
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
@@ -683,7 +728,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
         [Fact]
-        public void TestHandler_enableProxyEventHandler_checks_ref_and_adds_one()
+        public void EnableProxyEventHandler_checks_ref_and_adds_one()
         {
             var testHandler = GetUnitUnderTest();
             var expectedTests = new List<IMarketingTest>()
@@ -707,12 +752,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.enableProxyEventHandler();
 
             _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should have been called once but it wasnt.");
-            Assert.Equal(1, testEvents.TestRemovedFromCacheCounter);
             Assert.Equal(1, testEvents.TestAddedToCacheCounter);
+            Assert.Equal(1, testEvents.TestRemovedFromCacheCounter);
         }
 
         [Fact]
-        public void TestHandler_disableProxyEventHandler_checks_ref_and_removes_one()
+        public void DisableProxyEventHandler_checks_ref_and_removes_one()
         {
             var testHandler = GetUnitUnderTest();
             var expectedTests = new List<IMarketingTest>()
@@ -738,12 +783,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.disableProxyEventHandler();
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveRef should have been called once but it wasnt.");
-            Assert.Equal(0, testEvents.TestRemovedFromCacheCounter);
             Assert.Equal(0, testEvents.TestAddedToCacheCounter);
+            Assert.Equal(0, testEvents.TestRemovedFromCacheCounter);
         }
 
         [Fact]
-        public void TestHandler_TestRemovedFromCache_removes_reference_onSuccess()
+        public void TestRemovedFromCache_removes_reference_onSuccess()
         {
             var testHandler = GetUnitUnderTest();
 
@@ -765,7 +810,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_LoadedChildren()
+        public void LoadedChildren()
         {
             var th = GetUnitUnderTest();
 
