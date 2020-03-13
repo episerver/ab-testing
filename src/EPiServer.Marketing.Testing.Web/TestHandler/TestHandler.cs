@@ -63,7 +63,7 @@ namespace EPiServer.Marketing.Testing.Web
                 EnableABTesting();
             }
 
-            initProxyEventHandler();
+            enableProxyEventHandler();
         }
 
         //To support unit testing
@@ -592,9 +592,9 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         /// <summary>
-        /// At startup, initializes all the ProxyEventHandler's for all Kpi objects found in all active tests.
+        /// Initializes all the ProxyEventHandler's for all Kpi objects found in all active tests.
         /// </summary>
-        internal void initProxyEventHandler()
+        internal void enableProxyEventHandler()
         {
             foreach (var test in _testRepo.GetActiveTests())
             {

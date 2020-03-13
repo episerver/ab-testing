@@ -682,7 +682,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
 
         [Fact]
-        public void TestHandler_initProxyEventHandler_checks_ref_and_adds_one()
+        public void TestHandler_enableProxyEventHandler_checks_ref_and_adds_one()
         {
             var testHandler = GetUnitUnderTest();
             var expectedTests = new List<IMarketingTest>()
@@ -703,7 +703,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
 
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(true);
-            testHandler.initProxyEventHandler();
+            testHandler.enableProxyEventHandler();
 
             _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should have been called once but it wasnt.");
         }
