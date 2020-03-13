@@ -98,7 +98,7 @@ namespace EPiServer.Marketing.Testing.Web
             // get the actual content item so we can get its Guid to check against our tests
             if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
             {
-                CheckForActiveTests(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
+                DeleteActiveTests(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
             }
         }
 
@@ -117,18 +117,18 @@ namespace EPiServer.Marketing.Testing.Web
 
             foreach (var guid in guids)
             {
-                CheckForActiveTests(guid, 0);
+                DeleteActiveTests(guid, 0);
             }
         }
 
         /// <summary>
-        /// Check the guid passed in to see if the page/draft is part of a test.  For published pages, the version passed in will be 0, as all we need/get is the guid
-        /// for drafts, we the guid and version will be passed in to compare against known variants being tested.
+        /// Deletes any active test associated with the contentGuid.
         /// </summary>
         /// <param name="contentGuid">Guid of item being deleted.</param>
         /// <param name="contentVersion">0 if published page, workID if draft</param>
         /// <returns>Number of active tests that were deleted from the system.</returns>
-        internal int CheckForActiveTests(Guid contentGuid, int contentVersion)
+        /// <remarks>This works if the published version or the draft is deleted.</remarks>
+        internal int DeleteActiveTests(Guid contentGuid, int contentVersion)
         {
             var contentCulture = _episerverHelper.GetContentCultureinfo();
             var testsDeleted = 0;

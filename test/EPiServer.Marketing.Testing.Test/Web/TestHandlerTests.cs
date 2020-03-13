@@ -656,28 +656,28 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void TestHandler_CheckForActiveTest()
+        public void TestHandler_DeleteActiveTests()
         {
             var testHandler = GetUnitUnderTest();
             _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
         
             // find test for published page
-            Assert.Equal(1, testHandler.CheckForActiveTests(_originalItemId, 0));
+            Assert.Equal(1, testHandler.DeleteActiveTests(_originalItemId, 0));
 
             // no match for a variant
-            Assert.Equal(0, testHandler.CheckForActiveTests(_originalItemId, 1));
+            Assert.Equal(0, testHandler.DeleteActiveTests(_originalItemId, 1));
 
             // find test for variant match
-            Assert.Equal(1, testHandler.CheckForActiveTests(_originalItemId, 2));
+            Assert.Equal(1, testHandler.DeleteActiveTests(_originalItemId, 2));
         }
 
         [Fact]
-        public void TestHandler_CheckForActiveTests_Returns_0_If_No_Tests_Found()
+        public void TestHandler_DeleteActiveTests_Returns_0_If_No_Tests_Found()
         {
             var testHandler = GetUnitUnderTest();
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTestsByOriginalItemId(It.IsAny<Guid>()))
                 .Returns((List<IMarketingTest>)null);
-            Assert.Equal(0, testHandler.CheckForActiveTests(Guid.NewGuid(), 1));
+            Assert.Equal(0, testHandler.DeleteActiveTests(Guid.NewGuid(), 1));
         }
 
 
