@@ -1,27 +1,26 @@
 ﻿using EPiServer.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EPiServer.Marketing.Testing.Test.Web
+namespace EPiServer.Marketing.Testing.Test.Fakes
 {
     class FakeContentEvents : IContentEvents
     {
-        public event ChildrenEventHandler LoadingChildren;
+        public int LoadedContentCounter = 0;
         public int LoadedChildrenCounter = 0;
+
+        public event ChildrenEventHandler LoadingChildren;
         public event ChildrenEventHandler LoadedChildren
-        { 
+        {
             add { LoadedChildrenCounter++; }
             remove { LoadedChildrenCounter--; }
         }
+
         public event ChildrenEventHandler FailedLoadingChildren;
         public event EventHandler<ContentEventArgs> LoadingContent;
-        public int LoadedContentCounter = 0;
-        public event EventHandler<ContentEventArgs> LoadedContent 
-        { 
-            add { LoadedContentCounter++; } 
+
+        public event EventHandler<ContentEventArgs> LoadedContent
+        {
+            add { LoadedContentCounter++; }
             remove { LoadedContentCounter--; }
         }
 

@@ -611,6 +611,25 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         /// <summary>
+        /// Disables all the ProxyEventHandler's for all Kpi objects found in all active tests. 
+        /// </summary>
+        internal void disableProxyEventHandler()
+        {
+            foreach (var test in _testRepo.GetActiveTests())
+            {
+                foreach (var kpi in test.KpiInstances)
+                {
+                    RemoveProxyEventHandler(kpi);
+                }
+            }
+
+            // Setup our listener so when tests are added and removed and update our proxyEventHandler
+            var e = _serviceLocator.GetInstance<IMarketingTestingEvents>();
+            e.TestAddedToCache -= TestAddedToCache;
+            e.TestRemovedFromCache -= TestRemovedFromCache;
+        }
+
+        /// <summary>
         /// When a test is added to the active cache, this method will be fired.
         /// </summary>
         /// <param name="sender"></param>
