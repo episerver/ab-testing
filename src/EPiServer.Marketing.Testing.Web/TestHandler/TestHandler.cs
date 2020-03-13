@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -41,7 +42,6 @@ namespace EPiServer.Marketing.Testing.Web
         public const string SkipRaiseContentSwitchEvent = "SkipRaiseContentSwitchEvent";
         public const string ABTestHandlerSkipKpiEval = "ABTestHandlerSkipKpiEval";
 
-        [ExcludeFromCodeCoverage]
         public TestHandler()
         {
             _serviceLocator = ServiceLocator.Current;
@@ -52,12 +52,16 @@ namespace EPiServer.Marketing.Testing.Web
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
             _episerverHelper = _serviceLocator.GetInstance<IEpiserverHelper>();
+            
             // Setup our content events
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
-            contentEvents.LoadedChildren += LoadedChildren;
-            contentEvents.LoadedContent += LoadedContent;
-            contentEvents.DeletedContent += ContentEventsOnDeletedContent;
-            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
+            contentEvents.DeletedContent += ContentEventsOnDeletedContent; 
+            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion; 
+
+            if (AdminConfigTestSettings.Current.IsEnabled)
+            {
+                EnableABTesting();
+            }
 
             initProxyEventHandler();
         }
@@ -668,6 +672,21 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 kpi.EvaluateProxyEvent -= ProxyEventHandler;
             }
+        }
+
+        /// <inheritdoc/>
+        public void EnableABTesting()
+        {
+            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
+            contentEvents.LoadedChildren += LoadedChildren;     
+            contentEvents.LoadedContent += LoadedContent;       
+        }
+
+        public void DisableABTesting()
+        {
+            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
+            contentEvents.LoadedChildren -= LoadedChildren;     
+            contentEvents.LoadedContent -= LoadedContent;       
         }
         #endregion
     }

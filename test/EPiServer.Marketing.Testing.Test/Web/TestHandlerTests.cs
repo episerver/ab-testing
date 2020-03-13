@@ -19,6 +19,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -190,7 +191,94 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(content.ContentLink, args.ContentLink);
         }
 
-       
+        #region EnabelingABTesting
+        [Fact]
+        public void Contructor_EnablesABTesting_If_Enabled_In_Config()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings();
+            GetUnitUnderTest();
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var fakeContentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(fakeContentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+
+            var testHandler = new TestHandler();
+            Assert.Equal(1, fakeContentEvents.LoadedContentCounter);
+            Assert.Equal(1, fakeContentEvents.LoadedChildrenCounter);
+        }
+
+        [Fact]
+        public void Contructor_DisablesABTesting_If_Disabled_In_Config()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false } ;
+            GetUnitUnderTest();
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var fakeContentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(fakeContentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+
+            var testHandler = new TestHandler();
+            Assert.Equal(0, fakeContentEvents.LoadedContentCounter);
+            Assert.Equal(0, fakeContentEvents.LoadedChildrenCounter);
+        }
+
+        [Fact]
+        public void EnableABTesting_AddsLoadedContentListeners()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
+            GetUnitUnderTest();
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var contentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+
+            var testHandler = new TestHandler();
+            Assert.Equal(0, contentEvents.LoadedContentCounter);
+            Assert.Equal(0, contentEvents.LoadedChildrenCounter);
+
+            testHandler.EnableABTesting();
+            Assert.Equal(1, contentEvents.LoadedContentCounter);
+            Assert.Equal(1, contentEvents.LoadedChildrenCounter);
+        }
+
+        [Fact]
+        public void DisableABTesting_RemovesLoadedContentListeners()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
+            GetUnitUnderTest();
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var contentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+
+            var testHandler = new TestHandler();
+            Assert.Equal(1, contentEvents.LoadedContentCounter);
+            Assert.Equal(1, contentEvents.LoadedChildrenCounter);
+
+            testHandler.DisableABTesting();
+            Assert.Equal(0, contentEvents.LoadedContentCounter);
+            Assert.Equal(0, contentEvents.LoadedChildrenCounter);
+        }
+        #endregion
 
         [Fact]
         public void TestHandler_Disabling_The_Page_Swap_Returns_The_Published_Page()
