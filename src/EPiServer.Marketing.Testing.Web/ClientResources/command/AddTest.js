@@ -17,6 +17,7 @@ function (declare, topic, resources, _ContentCommandBase, ContentActionSupport, 
         label: resources.addtestcommand.label_text,
         tooltip: resources.addtestcommand.tooltip_text,
         iconClass: "epi-iconGraph",
+        configValues: "configValues",
 
         _contentActionSupport: ContentActionSupport,
         _topic: topic,
@@ -38,8 +39,13 @@ function (declare, topic, resources, _ContentCommandBase, ContentActionSupport, 
             var me = this,
                 store = this.store || dependency.resolve("epi.storeregistry").get("marketing.abtesting");
 
-            store.get(me.model.contentData.contentGuid).then(function (test) {
-                me._setVisibility(test, me);
+            var configStore = this.configStore || dependency.resolve("epi.storeregistry").get("marketing.abtestingconfig");
+
+            configStore.get().then(function (configValues) {
+                me.configValues = configValues;
+                store.get(me.model.contentData.contentGuid).then(function (test) {
+                    me._setVisibility(test, me);
+                });
             });
         },
 
@@ -60,7 +66,9 @@ function (declare, topic, resources, _ContentCommandBase, ContentActionSupport, 
                 (status === versionStatus.Rejected) ||
                 ((status === versionStatus.Published || status === versionStatus.Expired) && contentData.isCommonDraft)) &&
                 (contentData.currentLanguageBranch.languageId === me.model.currentContentLanguage) &&   // MAR-1079
-                !activeTest;
+                !activeTest &&
+                me.configValues.isEnabled;
+
             me.set("isAvailable", isAvailable);
             me._setCanExecute(me);
         },
