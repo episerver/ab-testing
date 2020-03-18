@@ -161,6 +161,7 @@
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
         <views>views</views>
+        <test_disabled>A/B testing is currently disabled. No additional views or conversions will be recorded for any test until A/B testing is re-enabled.</test_disabled>
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
