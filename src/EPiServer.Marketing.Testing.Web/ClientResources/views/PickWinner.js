@@ -140,6 +140,7 @@
 
             textHelper.renderTitle(this.title);
             textHelper.renderTestStatus(this.testStatus, this.testStarted);
+            textHelper.renderTestGloballyDisabled(this.testGloballyDisabled, this.detailsNotificationBar);
             textHelper.renderTestDuration(this.testDuration);
             textHelper.renderTestRemaining(this.testRemaining, this.testRemainingText);
             textHelper.renderDurationProgress(durationProgressBar);

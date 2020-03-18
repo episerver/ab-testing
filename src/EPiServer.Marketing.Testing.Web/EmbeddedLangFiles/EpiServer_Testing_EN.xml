@@ -220,6 +220,7 @@
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Number of participants</total_participants_details>
         <views>views</views>
+        <test_disabled>A/B testing is currently disabled. No additional views or conversions will be recorded for any test until A/B testing is re-enabled. You can still pick a winner or abort the test.</test_disabled>
       </pickwinnerview>
       <publishing>
         <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>
