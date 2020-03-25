@@ -267,6 +267,88 @@ Task("Test")
 	}
 );
 
+//
+// Task: PackageKpi
+// Creates a NuGet package for the Kpi project
+//
+Task("PackageKpi")
+	.Does(
+    () => {
+        var packageVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
+
+        var nuGetPackSettings = new NuGetPackSettings {           
+            Version = packageVersion,
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Symbols = false,
+            NoPackageAnalysis = true,
+            BasePath = $"../src/",
+            OutputDirectory = "../Artifacts",
+            Files = new []
+			{
+				new NuSpecContent { Source = $"EPiServer.Marketing.KPI/bin/{configuration}/net461/EPiServer.Marketing.KPI.dll", Target = "lib/net461" },
+                new NuSpecContent { Source = $"EPiServer.Marketing.KPI/bin/{configuration}/net461/EPiServer.Marketing.KPI.xml", Target = "lib/net461" },
+                new NuSpecContent { Source = $"Database/KPI/1.0.0.1.sql", Target = "tools/epiupdates/sql" }
+	        },
+            Dependencies = new []
+            {
+				new NuSpecDependency {}
+            }
+        };
+
+        NuGetPack($"../src/EPiServer.Marketing.KPI/Package.nuspec", nuGetPackSettings);
+	}
+);
+
+//
+// Task: PackageKpiCommerce
+// Creates a NuGet package for the Kpi Commerce project
+//
+Task("PackageKpiCommerce")
+	.Does(
+    () => {
+        var packageVersion = InformationalVersionFor("EPiServer.Marketing.KPI.Commerce");
+		
+		CreateDirectory("./module/Admin");
+		CopyFileToDirectory("../src/EPiServer.Marketing.KPI.Commerce/Config/CommerceKpiConfig.aspx", "./module/Admin");
+		CopyFileToDirectory("../src/EPiServer.Marketing.KPI.Commerce/module.config", "./module");
+        Zip("./module", "../EPiServer.Marketing.KPI.Commerce.zip");
+
+        var nuGetPackSettings = new NuGetPackSettings {           
+            Version = packageVersion,
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Symbols = false,
+            NoPackageAnalysis = true,
+            BasePath = $"../src/",
+            OutputDirectory = "../Artifacts",
+            Files = new []
+			{
+				new NuSpecContent { Source = $"EPiServer.Marketing.KPI.Commerce/bin/{configuration}/net461/EPiServer.Marketing.KPI.Commerce.dll", Target = "lib/net461" },
+                new NuSpecContent { Source = $"EPiServer.Marketing.KPI.Commerce/bin/{configuration}/net461/EPiServer.Marketing.KPI.Commerce.xml", Target = "lib/net461" },
+				new NuSpecContent { Source = "../EPiServer.Marketing.KPI.Commerce.zip", Target = "content/modules/_protected/EPiServer.Marketing.KPI.Commerce/" },
+				new NuSpecContent { Source = "EPiServer.Marketing.KPI.Commerce/web.config.transform", Target = "content/" }
+	        },
+            Dependencies = new []
+            {
+				new NuSpecDependency {Id = "EPiServer.Marketing.KPI", TargetFramework = "net461", Version = "[2.5.3, 3)" },
+				new NuSpecDependency {Id = "EPiServer.Commerce.Core", TargetFramework = "net461", Version = "[13.0.0, 14)" }
+            }
+        };
+
+        NuGetPack($"../src/EPiServer.Marketing.KPI.Commerce/Package.nuspec", nuGetPackSettings);
+		
+		DeleteDirectory("./module", recursive:true);
+		DeleteFile("../EPiServer.Marketing.KPI.Commerce.zip");
+	}
+);
+
+//
+// Task: PackageNuGets
+// Roll-up of creation for all Reporting NuGet packages.
+//
+Task("PackageNuGets")
+	.IsDependentOn("PackageKpi")
+	.IsDependentOn("PackageKpiCommerce");
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
@@ -275,10 +357,9 @@ Task("Default")
 	.IsDependentOn("Describe")	
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .IsDependentOn("Build");
+    .IsDependentOn("Build")
     .IsDependentOn("Test")
-	//.IsDependentOn("PackageNuGets")
+	.IsDependentOn("PackageNuGets");
     //.IsDependentOn("CollectNuGets")
-	//.IsDependentOn("PublishToT3");
 
 RunTarget(target);
