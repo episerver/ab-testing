@@ -342,12 +342,44 @@ Task("PackageKpiCommerce")
 );
 
 //
+// Task: PackageMessaging
+// Creates a NuGet package for the Messaging project
+//
+Task("PackageMessaging")
+	.Does(
+    () => {
+        var packageVersion = InformationalVersionFor("EPIServer.Marketing.Messaging");
+
+        var nuGetPackSettings = new NuGetPackSettings {           
+            Version = packageVersion,
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Symbols = false,
+            NoPackageAnalysis = true,
+            BasePath = $"../src/",
+            OutputDirectory = "../Artifacts",
+            Files = new []
+			{
+				new NuSpecContent { Source = $"EPIServer.Marketing.Messaging/bin/{configuration}/net461/EPIServer.Marketing.Messaging.dll", Target = "lib/net461" },
+                new NuSpecContent { Source = $"EPIServer.Marketing.Messaging/bin/{configuration}/net461/EPIServer.Marketing.Messaging.xml", Target = "lib/net461" }
+	        },
+            Dependencies = new []
+            {
+				new NuSpecDependency {}
+            }
+        };
+
+        NuGetPack($"../src/EPIServer.Marketing.Messaging/Package.nuspec", nuGetPackSettings);
+	}
+);
+
+//
 // Task: PackageNuGets
 // Roll-up of creation for all Reporting NuGet packages.
 //
 Task("PackageNuGets")
 	.IsDependentOn("PackageKpi")
-	.IsDependentOn("PackageKpiCommerce");
+	.IsDependentOn("PackageKpiCommerce")
+	.IsDependentOn("PackageMessaging");
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
