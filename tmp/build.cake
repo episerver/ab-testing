@@ -18,6 +18,31 @@ var isMasterBranch = branch == "master";
 var isPrereleaseBuild = !isMasterBranch;
 var isPublicBuild = isMasterBranch || branchType == "release";
 
+// Base component versions
+
+var kpiBaseVersion = "2.5.3";
+var kpiCommerceBaseVersion = "2.4.2";
+var messagingBaseVersion = "1.3.0";
+var webBaseVersion = "2.6.0";
+
+var versionModifiers = new Dictionary<string, string>
+{
+	{ "release", "pre" },
+	{ "dev", "dev" },
+	{ "bugfix", "bugfix" },
+	{ "feature", "feature" }
+};
+
+// Table of project versions
+
+var versions = new Dictionary<string, string>
+{
+	{ "EPiServer.Marketing.KPI", kpiBaseVersion },
+	{ "EPiServer.Marketing.KPI.Commerce", kpiCommerceBaseVersion },
+	{ "EPIServer.Marketing.Messaging", messagingBaseVersion },
+	{ "EPiServer.Marketing.Testing.Web", webBaseVersion }
+};
+
 
 //////////////////////////////////////////////////////////////////////
 // HELPERS
@@ -37,6 +62,32 @@ public int BuildNumber
 	}
 }
 
+public string AssemblyVersionFor(string projectId)
+{
+	return versions[projectId];
+}
+
+public string FileVersionFor(string projectId)
+{
+	return $"{versions[projectId]}.{BuildNumber}";
+}
+
+public string InformationalVersionFor(string projectId)
+{
+	string informationalVersion = AssemblyVersionFor(projectId);
+
+	if(isPrereleaseBuild)	
+	{
+		// Discover the release modifier given the branch type
+		var versionModifier = versionModifiers.ContainsKey(branchType)
+			? versionModifiers[branchType]
+			: versionModifiers["feature"];
+
+		informationalVersion += $"-{versionModifier}-{BuildNumber.ToString("D6")}";
+	}
+
+	return informationalVersion;
+}
 
 //////////////////////////////////////////////////////////////////////
 // TASKS
@@ -91,14 +142,44 @@ Task("Restore").Does(
 );
 
 //
+// Task: Version
+// Creates an AssemblyInfo.cs, with the appropriate version information,
+// for each project with a defined version.
+//
+Task("Version").IsDependentOn("Describe")
+			   .Does(
+	() =>
+	{	
+		foreach(var projectId in versions.Keys)
+		{
+			var assemblyInfoPath = new FilePath($"../src/{projectId}/AssemblyVersionAuto.cs");
+			
+			if (FileExists(assemblyInfoPath))
+			{
+			    DeleteFile(assemblyInfoPath);
+			}
+			
+			CreateAssemblyInfo(
+				assemblyInfoPath,
+				new AssemblyInfoSettings
+				{
+					Version = AssemblyVersionFor(projectId),
+					InformationalVersion = InformationalVersionFor(projectId),
+					Copyright = $"Copyright (c) Episerver {DateTime.Now.Year}"
+				}
+			);
+		}		
+	}
+);
+
+//
 // Task: Build
 // Performs a full build of the solution for the specified configuration.
 //
-Task("Build")
+Task("Build").IsDependentOn("Describe")
 			 .IsDependentOn("Clean")
 			 .IsDependentOn("Restore")
-			 .IsDependentOn("Describe")
-			 //.IsDependentOn("Version")
+			 .IsDependentOn("Version")
 			 .Does(
 	() =>
 	{

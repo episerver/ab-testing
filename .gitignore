@@ -204,3 +204,7 @@ ModelManifest.xml
 /buildprocess.cmd
 /.vs
 /Models/Testing/.vs/slnx.sqlite
+/tmp/tools/Cake
+/tmp/tools/NUnit.ConsoleRunner.3.4.0
+/tmp/tools/packages.config.md5sum
+/tmp/tools/packages.config
