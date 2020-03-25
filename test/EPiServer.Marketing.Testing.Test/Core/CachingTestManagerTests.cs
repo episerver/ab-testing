@@ -739,7 +739,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             
             var manager = new CachingTestManager(cache, _mockSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
-            var iterations = 50000;
+            var iterations = 10000;
 
             Thread addManyTests = new Thread(
                 () =>

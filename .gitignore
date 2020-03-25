@@ -208,3 +208,6 @@ ModelManifest.xml
 /tmp/tools/NUnit.ConsoleRunner.3.4.0
 /tmp/tools/packages.config.md5sum
 /tmp/tools/packages.config
+/tmp/CodeCoverage
+/tmp/tools/xunit.runner.console.2.4.1
+/tmp/tools/JetBrains.dotCover.CommandLineTools.2019.1.3

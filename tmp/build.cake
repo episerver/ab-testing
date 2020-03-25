@@ -1,4 +1,12 @@
+
+//////////////////////////////////////////////////////////////////////
+// TOOLS
+//////////////////////////////////////////////////////////////////////
+
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2019.1.3"
+#tool "nuget:?package=xunit.runner.console"
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -205,6 +213,60 @@ Task("Build").IsDependentOn("Describe")
 	}
 );
 
+//
+// Task: Test
+// Runs all unit tests with DotNetCoreTool and reports their code coverage using DotCoverCover.
+//
+Task("Test")
+	.IsDependentOn("Build")
+	.Does(
+	() =>
+	{
+	    foreach(var project in GetFiles("../test/**/*Test.csproj"))
+        {
+            var projectName = project.GetFilenameWithoutExtension().ToString();
+              
+			var coverageSettings = new DotCoverCoverSettings
+			{
+				TargetWorkingDir = project.GetDirectory().FullPath
+			}
+			.WithFilter("-:*.Test*")					// Exclude Test assemblies
+			.WithFilter("-:*MSBuild*")				// Exclude MSBuild assemblies
+			.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
+			
+			DotCoverCover(
+				cake => 
+				{
+					cake.DotNetCoreTool(projectPath: project.FullPath, command: "test", arguments: $"--configuration {configuration} --no-build --no-restore -v m");
+				},
+				new FilePath($"CodeCoverage/{projectName}.dcvr"),
+				coverageSettings
+			);     
+        } 
+
+        //Merge Code Coverage
+        DotCoverMerge(GetFiles("CodeCoverage/*.dcvr"), new FilePath("CodeCoverage/coverage.dcvr"));
+
+		// Report code coverage
+		if(isTeamCity)
+		{
+			var dotCoverToolFilePath = Context.Tools.Resolve("dotCover.exe");
+			var dotCoverToolDirectory = dotCoverToolFilePath.GetDirectory();
+			var coverageData = MakeAbsolute(new FilePath("./CodeCoverage/coverage.dcvr"));
+
+			TeamCity.ImportDotCoverCoverage(coverageData, dotCoverToolDirectory);
+		}
+		else 
+		{			
+			DotCoverReport(
+				new FilePath("CodeCoverage/coverage.dcvr"),
+				new FilePath("CodeCoverage/coverage.html"),
+				new DotCoverReportSettings { ReportType = DotCoverReportType.HTML }
+			);
+		} 
+	}
+);
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
@@ -214,7 +276,7 @@ Task("Default")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
     .IsDependentOn("Build");
-    //.IsDependentOn("Test")
+    .IsDependentOn("Test")
 	//.IsDependentOn("PackageNuGets")
     //.IsDependentOn("CollectNuGets")
 	//.IsDependentOn("PublishToT3");
