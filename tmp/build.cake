@@ -291,7 +291,8 @@ Task("PackageKpi")
 	        },
             Dependencies = new []
             {
-				new NuSpecDependency {}
+				new NuSpecDependency {Id = "EntityFramework", TargetFramework = "net461", Version = "[6.2.0, 7)" },
+				new NuSpecDependency {Id = "EPiServer.CMS.UI.Core", TargetFramework = "net461", Version = "[11.2.5, 12)" }
             }
         };
 
@@ -373,13 +374,77 @@ Task("PackageMessaging")
 );
 
 //
+// Task: PackageABTesting
+// Creates a NuGet package for the AB Testing project
+//
+Task("PackageABTesting")
+	.Does(
+    () => {
+        var packageVersion = InformationalVersionFor("EPiServer.Marketing.Testing.Web");
+		
+		CreateDirectory("./module/Admin");
+		CopyFileToDirectory("../src/EPiServer.Marketing.Testing.Web/Config/AdminConfig.aspx", "./module/Admin");
+		CopyDirectory("../src/EPiServer.Marketing.Testing.Web/ClientResources", "./module/ClientResources");
+		CopyDirectory("../src/EPiServer.Marketing.Testing.Web/EmbeddedLangFiles", "./module/EmbeddedLangFiles");
+		CopyDirectory("../src/EPiServer.Marketing.Testing.Web/Images", "./module/Images");
+		CopyFileToDirectory("../src/EPiServer.Marketing.Testing.Web/module.config", "./module");
+        Zip("./module", "../EPiServer.Marketing.Testing.zip");
+
+		var nuspecContentList = new List<NuSpecContent>();
+		foreach(var file in GetFiles("../src/Database/Testing/*.sql"))
+		{
+		   nuspecContentList.Add(new NuSpecContent { Source = "../src/Database/Testing/" + file.GetFilename().ToString(), Target = "tools/epiupdates/sql" });
+		}
+		
+		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Web/bin/{configuration}/net461/EPiServer.Marketing.Testing.Web.dll", Target = "lib/net461" });
+		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Web/bin/{configuration}/net461/EPiServer.Marketing.Testing.Web.xml", Target = "lib/net461" });
+		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Dal/bin/{configuration}/net461/EPiServer.Marketing.Testing.Dal.dll", Target = "lib/net461" });
+		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Dal/bin/{configuration}/net461/EPiServer.Marketing.Testing.Dal.xml", Target = "lib/net461" });
+		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Core/bin/{configuration}/net461/EPiServer.Marketing.Testing.Core.dll", Target = "lib/net461" });
+		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Core/bin/{configuration}/net461/EPiServer.Marketing.Testing.Core.xml", Target = "lib/net461" });
+		nuspecContentList.Add(new NuSpecContent { Source = "../EPiServer.Marketing.Testing.zip", Target = "content/modules/_protected/EPiServer.Marketing.Testing/" });
+		nuspecContentList.Add(new NuSpecContent { Source = "EPiServer.Marketing.Testing.Web/web.config.transform", Target = "content/" });
+		nuspecContentList.Add(new NuSpecContent { Source = "EPiServer.Marketing.Testing.Web/web.config.install.xdt", Target = "content/" });
+
+        var nuGetPackSettings = new NuGetPackSettings {           
+            Version = packageVersion,
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Symbols = false,
+            NoPackageAnalysis = true,
+            BasePath = $"../src/",
+            OutputDirectory = "../Artifacts",
+            Files = nuspecContentList.ToArray(),
+            Dependencies = new []
+            {
+				new NuSpecDependency {Id = "EPiServer.Marketing.KPI", TargetFramework = "net461", Version = "[2.5.3, 3)" },
+				new NuSpecDependency {Id = "EPiServer.Marketing.Messaging", TargetFramework = "net461", Version = "[1.3.0, 2)" },
+				new NuSpecDependency {Id = "EPiServer.CMS.AspNet", TargetFramework = "net461", Version = "[11.3.3, 12)" },
+				new NuSpecDependency {Id = "EPiServer.CMS.Core", TargetFramework = "net461", Version = "[11.3.3, 12)" },
+				new NuSpecDependency {Id = "EPiServer.CMS.UI", TargetFramework = "net461", Version = "[11.2.5, 12)" },
+				new NuSpecDependency {Id = "EPiServer.CMS.UI.Core", TargetFramework = "net461", Version = "[11.2.5, 12)" },
+				new NuSpecDependency {Id = "EPiServer.Framework", TargetFramework = "net461", Version = "[11.8.0, 12)" },
+				new NuSpecDependency {Id = "EPiServer.Framework.AspNet", TargetFramework = "net461", Version = "[11.3.3, 12)" },
+				new NuSpecDependency {Id = "Microsoft.AspNet.WebApi", TargetFramework = "net461", Version = "[5.2.3, 6)" },
+				new NuSpecDependency {Id = "Microsoft.AspNet.Mvc", TargetFramework = "net461", Version = "[5.2.3, 6)" }
+            }
+        };
+
+        NuGetPack($"../src/EPiServer.Marketing.Testing.Web/Package.nuspec", nuGetPackSettings);
+		
+		DeleteDirectory("./module", recursive:true);
+		DeleteFile("../EPiServer.Marketing.Testing.zip");
+	}
+);
+
+//
 // Task: PackageNuGets
 // Roll-up of creation for all Reporting NuGet packages.
 //
 Task("PackageNuGets")
 	.IsDependentOn("PackageKpi")
 	.IsDependentOn("PackageKpiCommerce")
-	.IsDependentOn("PackageMessaging");
+	.IsDependentOn("PackageMessaging")
+	.IsDependentOn("PackageABTesting");
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
