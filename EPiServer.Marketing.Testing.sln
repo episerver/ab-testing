@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0ACC9772-A4A0-4B7D-B3E6-CC1D3D696F82}"
 	ProjectSection(SolutionItems) = preProject
@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPiServer.Marketing.Testing
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPiServer.Marketing.Testing.Dal", "src\EPiServer.Marketing.Testing.Dal\EPiServer.Marketing.Testing.Dal.csproj", "{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPiServer.Marketing.Testing.TestPages", "samples\EPiServer.Marketing.Testing.TestPages\EPiServer.Marketing.Testing.TestPages.csproj", "{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPIServer.Marketing.Messaging", "src\EPIServer.Marketing.Messaging\EPIServer.Marketing.Messaging.csproj", "{167D31D8-063C-48CA-84EC-0D136BAED1F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPiServer.Marketing.Messaging.Test", "test\EPiServer.Marketing.Messaging.Test\EPiServer.Marketing.Messaging.Test.csproj", "{FB9CF5F7-4982-4710-B13E-BC6A982501D1}"
@@ -37,8 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPiServer.Marketing.KPI", "
 	ProjectSection(ProjectDependencies) = postProject
 		{167D31D8-063C-48CA-84EC-0D136BAED1F8} = {167D31D8-063C-48CA-84EC-0D136BAED1F8}
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Templates.Alloy", "samples\EPiServer.Templates.Alloy\EPiServer.Templates.Alloy.csproj", "{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPiServer.Marketing.KPI.Test", "test\EPiServer.Marketing.KPI.Test\EPiServer.Marketing.KPI.Test.csproj", "{5909B279-FD10-45D8-8208-95AB9A00090B}"
 EndProject
@@ -99,10 +95,6 @@ Global
 		{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D24A24A-C116-4665-86D2-8B7B6B4EEC8A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{167D31D8-063C-48CA-84EC-0D136BAED1F8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -116,9 +108,6 @@ Global
 		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B89EB2B0-D652-4198-83FF-AC2C395D41E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5909B279-FD10-45D8-8208-95AB9A00090B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5909B279-FD10-45D8-8208-95AB9A00090B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5909B279-FD10-45D8-8208-95AB9A00090B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -145,9 +134,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5391A93B-A17B-425E-B511-71CBA13E710F} = {4DCCE100-6879-491C-BCC9-85A6DA6B0EE7}
-		{54B835AA-94DF-4E54-BBAF-90DC8BD58FF5} = {161B3773-B01D-4D63-BDE5-CA6A022DF4DD}
 		{FB9CF5F7-4982-4710-B13E-BC6A982501D1} = {4DCCE100-6879-491C-BCC9-85A6DA6B0EE7}
-		{23966D6E-2BC8-46AD-8B17-AA3A03A6F4E2} = {161B3773-B01D-4D63-BDE5-CA6A022DF4DD}
 		{5909B279-FD10-45D8-8208-95AB9A00090B} = {4DCCE100-6879-491C-BCC9-85A6DA6B0EE7}
 		{33088987-87DC-4F89-A94F-37218839A757} = {37A150D0-2DED-4E04-B413-A8456D9DB7D6}
 		{7065CEEB-AB19-4CB7-BF20-1FF4DFFDBAF0} = {37A150D0-2DED-4E04-B413-A8456D9DB7D6}
