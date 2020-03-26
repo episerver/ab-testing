@@ -383,7 +383,7 @@ Task("PackageABTesting")
     () => {
         var packageVersion = InformationalVersionFor("EPiServer.Marketing.Testing.Web");
 		var kpiVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
-		var messagingVersion = InformationalVersionFor("EPiServer.Marketing.Messaging");
+		var messagingVersion = InformationalVersionFor("EPIServer.Marketing.Messaging");
 		
 		CreateDirectory("./module/Admin");
 		CopyFileToDirectory("../src/EPiServer.Marketing.Testing.Web/Config/AdminConfig.aspx", "./module/Admin");
