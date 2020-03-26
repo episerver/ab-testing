@@ -308,6 +308,7 @@ Task("PackageKpiCommerce")
 	.Does(
     () => {
         var packageVersion = InformationalVersionFor("EPiServer.Marketing.KPI.Commerce");
+		var kpiVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
 		
 		CreateDirectory("./module/Admin");
 		CopyFileToDirectory("../src/EPiServer.Marketing.KPI.Commerce/Config/CommerceKpiConfig.aspx", "./module/Admin");
@@ -330,7 +331,7 @@ Task("PackageKpiCommerce")
 	        },
             Dependencies = new []
             {
-				new NuSpecDependency {Id = "EPiServer.Marketing.KPI", TargetFramework = "net461", Version = "[2.5.3, 3)" },
+				new NuSpecDependency {Id = "EPiServer.Marketing.KPI", TargetFramework = "net461", Version = $"[{kpiVersion}, 3)" },
 				new NuSpecDependency {Id = "EPiServer.Commerce.Core", TargetFramework = "net461", Version = "[13.0.0, 14)" }
             }
         };
@@ -381,6 +382,8 @@ Task("PackageABTesting")
 	.Does(
     () => {
         var packageVersion = InformationalVersionFor("EPiServer.Marketing.Testing.Web");
+		var kpiVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
+		var messagingVersion = InformationalVersionFor("EPiServer.Marketing.Messaging");
 		
 		CreateDirectory("./module/Admin");
 		CopyFileToDirectory("../src/EPiServer.Marketing.Testing.Web/Config/AdminConfig.aspx", "./module/Admin");
@@ -416,8 +419,8 @@ Task("PackageABTesting")
             Files = nuspecContentList.ToArray(),
             Dependencies = new []
             {
-				new NuSpecDependency {Id = "EPiServer.Marketing.KPI", TargetFramework = "net461", Version = "[2.5.3, 3)" },
-				new NuSpecDependency {Id = "EPiServer.Marketing.Messaging", TargetFramework = "net461", Version = "[1.3.0, 2)" },
+				new NuSpecDependency {Id = "EPiServer.Marketing.KPI", TargetFramework = "net461", Version = $"[{kpiVersion}, 3)" },
+				new NuSpecDependency {Id = "EPiServer.Marketing.Messaging", TargetFramework = "net461", Version = $"[{messagingVersion}, 2)" },
 				new NuSpecDependency {Id = "EPiServer.CMS.AspNet", TargetFramework = "net461", Version = "[11.3.3, 12)" },
 				new NuSpecDependency {Id = "EPiServer.CMS.Core", TargetFramework = "net461", Version = "[11.3.3, 12)" },
 				new NuSpecDependency {Id = "EPiServer.CMS.UI", TargetFramework = "net461", Version = "[11.2.5, 12)" },
