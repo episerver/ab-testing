@@ -6,6 +6,5 @@
 using System.Reflection;
 
 [assembly: AssemblyVersion("2.5.3")]
-[assembly: AssemblyInformationalVersion("2.5.3-bugfix-000000")]
-[assembly: AssemblyCopyright("Copyright (c) Episerver 2020")]
+[assembly: AssemblyInformationalVersion("2.5.3")]
 
