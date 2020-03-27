@@ -230,8 +230,11 @@ Task("Test")
 			{
 				TargetWorkingDir = project.GetDirectory().FullPath
 			}
-			.WithFilter("-:*.Test*")					// Exclude Test assemblies
-			.WithFilter("-:*MSBuild*")				// Exclude MSBuild assemblies
+			.WithFilter("-:*EPiServer.Marketing.KPI.Test*")
+            .WithFilter("-:*EPiServer.Marketing.KPI.Commerce.Test*")
+            .WithFilter("-:*EPiServer.Marketing.Messaging.Test*")	
+            .WithFilter("-:*EPiServer.Marketing.Testing.Test*")
+		    .WithFilter("-:*xunit.assert*")
 			.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
 			
 			DotCoverCover(
