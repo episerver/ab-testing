@@ -152,10 +152,17 @@ Task("Describe").Does(
 		Information("Is Public Build: {0}", isPublicBuild);
 		Information("Is Production Build: {0}", isMasterBranch);
 		
-		foreach(var process in System.Diagnostics.Process.GetProcesses())
+		StopProcessesByName("chrome");
+		try
 		{
-			Information($"process {process.Id} ({process.MainModule.FileName})");
-		}
+			foreach(var process in System.Diagnostics.Process.GetProcesses())
+			{
+				Information($"process {process.Id} ({process.MainModule.FileName})");
+			}
+			} catch( Exception e )
+			{
+			  Information("Caught error " + e.Message);
+			}
 		Information($"done describe");
     }
 );
