@@ -199,9 +199,6 @@ Task("Build").IsDependentOn("Describe")
         
         if(isTeamCity)
         {
-			// Our old version of TeamCity requires the MSBuild 14 version of the logger
-			// even though we build with MSBuild 15.
-
             buildSettings.WithLogger(
                 MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild15/TeamCity.MSBuild.Logger.dll")).FullPath, 
                 "TeamCity.MSBuild.Logger.TeamCityMSBuildLogger", 
