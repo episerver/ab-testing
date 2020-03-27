@@ -3,7 +3,7 @@
 // TOOLS
 //////////////////////////////////////////////////////////////////////
 
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool "nuget:?package=NUnit.ConsoleRunner&version=3.4.0"
 #tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2019.1.3"
 #tool "nuget:?package=xunit.runner.console"
 
@@ -200,7 +200,7 @@ Task("Build").IsDependentOn("Describe")
         if(isTeamCity)
         {
             buildSettings.WithLogger(
-                MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild14/TeamCity.MSBuild.Logger.dll")).FullPath, 
+                MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild15/TeamCity.MSBuild.Logger.dll")).FullPath, 
                 "TeamCity.MSBuild.Logger.TeamCityMSBuildLogger", 
                 "teamcity"
             ).SetNoConsoleLogger(true);
