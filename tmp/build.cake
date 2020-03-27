@@ -203,7 +203,7 @@ Task("Build").IsDependentOn("Describe")
 			// even though we build with MSBuild 15.
 
             buildSettings.WithLogger(
-                MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild14/TeamCity.MSBuild.Logger.dll")).FullPath, 
+                MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild15/TeamCity.MSBuild.Logger.dll")).FullPath, 
                 "TeamCity.MSBuild.Logger.TeamCityMSBuildLogger", 
                 "teamcity"
             ).SetNoConsoleLogger(true);
