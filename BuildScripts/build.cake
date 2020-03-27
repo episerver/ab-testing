@@ -102,11 +102,6 @@ public string InformationalVersionFor(string projectId)
 //////////////////////////////////////////////////////////////////////
 public void StopProcessesByName(string processName)
 {
-	foreach(var process in System.Diagnostics.Process.GetProcesses())
-	{
-		Information($"process {process.Id} ({process.MainModule.FileName})");
-	}
-
 	Information($"Stopping {processName} processes.");
 	try
 	{
@@ -138,6 +133,7 @@ Teardown(
 	context =>
 	{
 		StopProcessesByName("dotnet");
+		StopProcessesByName("chrome");
 	}
 );
 
@@ -160,6 +156,7 @@ Task("Describe").Does(
 		{
 			Information($"process {process.Id} ({process.MainModule.FileName})");
 		}
+		Information($"done describe");
     }
 );
 
