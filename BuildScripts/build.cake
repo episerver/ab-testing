@@ -100,6 +100,46 @@ public string InformationalVersionFor(string projectId)
 //////////////////////////////////////////////////////////////////////
 // TASKS
 //////////////////////////////////////////////////////////////////////
+public void StopProcessesByName(string processName)
+{
+	foreach(var process in System.Diagnostics.Process.GetProcesses())
+	{
+		Information($"process {process.Id} ({process.MainModule.FileName})");
+	}
+
+	Information($"Stopping {processName} processes.");
+	try
+	{
+		foreach(var process in System.Diagnostics.Process.GetProcessesByName(processName))
+		{
+			Information($"Stopping process {process.Id} ({process.MainModule.FileName})");
+
+			try
+			{
+				process.Kill();
+			}
+			catch (Exception ex)
+			{
+				Warning($"Could not stop process {process.Id} ({process.MainModule.FileName}): {ex.Message}");
+			}
+		}
+	}
+	catch(Exception ex)
+	{
+		Warning($"Could not stop {processName} processes: {ex.Message}");
+	}
+}
+
+//
+// Teardown
+// Cleans up processes and/or resources lingering after a build.
+//
+Teardown(
+	context =>
+	{
+		StopProcessesByName("dotnet");
+	}
+);
 
 //
 // Task: Prepare
@@ -115,6 +155,11 @@ Task("Describe").Does(
 		Information("Build Number: {0}", BuildNumber);
 		Information("Is Public Build: {0}", isPublicBuild);
 		Information("Is Production Build: {0}", isMasterBranch);
+		
+		foreach(var process in System.Diagnostics.Process.GetProcesses())
+		{
+			Information($"process {process.Id} ({process.MainModule.FileName})");
+		}
     }
 );
 
