@@ -133,7 +133,6 @@ Teardown(
 	context =>
 	{
 		StopProcessesByName("dotnet");
-		StopProcessesByName("chrome");
 	}
 );
 
@@ -151,19 +150,6 @@ Task("Describe").Does(
 		Information("Build Number: {0}", BuildNumber);
 		Information("Is Public Build: {0}", isPublicBuild);
 		Information("Is Production Build: {0}", isMasterBranch);
-		
-		StopProcessesByName("chrome");
-		try
-		{
-			foreach(var process in System.Diagnostics.Process.GetProcesses())
-			{
-				Information($"process {process.Id} ({process.MainModule.FileName})");
-			}
-			} catch( Exception e )
-			{
-			  Information("Caught error " + e.Message);
-			}
-		Information($"done describe");
     }
 );
 
@@ -174,6 +160,7 @@ Task("Clean")
 	
     CleanDirectories(path);
 	CleanDirectories("../Artifacts");
+	CleanDirectories("CodeCoverage");
 });
 
 //
@@ -262,6 +249,11 @@ Task("Test")
 	    foreach(var project in GetFiles("../test/**/*Test.csproj"))
         {
             var projectName = project.GetFilenameWithoutExtension().ToString();
+			
+			if(projectName == "EPiServer.Marketing.Testing.Web.ClientTest")
+			{
+				continue;
+			}
               
 			var coverageSettings = new DotCoverCoverSettings
 			{
