@@ -245,16 +245,7 @@ Task("Build").IsDependentOn("Describe")
         var buildSettings = new MSBuildSettings()
 			.SetConfiguration(configuration)
 			.SetVerbosity(Verbosity.Minimal);
-/*        
-        if(isTeamCity)
-        {
-            buildSettings.WithLogger(
-                MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild14/TeamCity.MSBuild.Logger.dll")).FullPath, 
-                "TeamCity.MSBuild.Logger.TeamCityMSBuildLogger", 
-                "teamcity"
-            ).SetNoConsoleLogger(true);
-        }
-  */      
+   
 		MSBuild("../EPiServer.Marketing.Testing.sln",  buildSettings);
 	}
 );
