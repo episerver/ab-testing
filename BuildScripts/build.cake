@@ -250,30 +250,28 @@ Task("Test")
         {
             var projectName = project.GetFilenameWithoutExtension().ToString();
 			
-			if(projectName == "EPiServer.Marketing.Testing.Web.ClientTest")
-			{
-				continue;
-			}
-              
-			var coverageSettings = new DotCoverCoverSettings
-			{
-				TargetWorkingDir = project.GetDirectory().FullPath
-			}
-			.WithFilter("-:*EPiServer.Marketing.KPI.Test*")
-            .WithFilter("-:*EPiServer.Marketing.KPI.Commerce.Test*")
-            .WithFilter("-:*EPiServer.Marketing.Messaging.Test*")	
-            .WithFilter("-:*EPiServer.Marketing.Testing.Test*")
-		    .WithFilter("-:*xunit.assert*")
-			.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
-			
-			DotCoverCover(
-				cake => 
+			if(projectName != "EPiServer.Marketing.Testing.Web.ClientTest")
+			{ 
+				var coverageSettings = new DotCoverCoverSettings
 				{
-					cake.DotNetCoreTool(projectPath: project.FullPath, command: "test", arguments: $"--configuration {configuration} --no-build --no-restore -v m");
-				},
-				new FilePath($"CodeCoverage/{projectName}.dcvr"),
-				coverageSettings
-			);     
+					TargetWorkingDir = project.GetDirectory().FullPath
+				}
+				.WithFilter("-:*EPiServer.Marketing.KPI.Test*")
+				.WithFilter("-:*EPiServer.Marketing.KPI.Commerce.Test*")
+				.WithFilter("-:*EPiServer.Marketing.Messaging.Test*")	
+				.WithFilter("-:*EPiServer.Marketing.Testing.Test*")
+				.WithFilter("-:*xunit.assert*")
+				.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
+				
+				DotCoverCover(
+					cake => 
+					{
+						cake.DotNetCoreTool(projectPath: project.FullPath, command: "test", arguments: $"--configuration {configuration} --no-build --no-restore -v m");
+					},
+					new FilePath($"CodeCoverage/{projectName}.dcvr"),
+					coverageSettings
+				);  
+			}			
         } 
 
         //Merge Code Coverage
