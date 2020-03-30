@@ -245,7 +245,7 @@ Task("Build").IsDependentOn("Describe")
         var buildSettings = new MSBuildSettings()
 			.SetConfiguration(configuration)
 			.SetVerbosity(Verbosity.Minimal);
-        
+/*        
         if(isTeamCity)
         {
             buildSettings.WithLogger(
@@ -254,7 +254,7 @@ Task("Build").IsDependentOn("Describe")
                 "teamcity"
             ).SetNoConsoleLogger(true);
         }
-        
+  */      
 		MSBuild("../EPiServer.Marketing.Testing.sln",  buildSettings);
 	}
 );
