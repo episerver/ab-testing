@@ -456,7 +456,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var results = webRepo.GetTestList(criteria, CultureInfo.GetCultureInfo("en-US"));
 
-            Assert.True(results.Count == 1);
+            Assert.True(results.Count == 2);
             Assert.True(results[0].Title == "Test 2");
         }
     }
