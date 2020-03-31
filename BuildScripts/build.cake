@@ -133,7 +133,6 @@ Teardown(
 	context =>
 	{
 		StopProcessesByName("dotnet");
-		StopProcessesByName("chrome");
 	}
 );
 
@@ -151,19 +150,6 @@ Task("Describe").Does(
 		Information("Build Number: {0}", BuildNumber);
 		Information("Is Public Build: {0}", isPublicBuild);
 		Information("Is Production Build: {0}", isMasterBranch);
-		
-		StopProcessesByName("chrome");
-		try
-		{
-			foreach(var process in System.Diagnostics.Process.GetProcesses())
-			{
-				Information($"process {process.Id} ({process.MainModule.FileName})");
-			}
-			} catch( Exception e )
-			{
-			  Information("Caught error " + e.Message);
-			}
-		Information($"done describe");
     }
 );
 
@@ -174,6 +160,7 @@ Task("Clean")
 	
     CleanDirectories(path);
 	CleanDirectories("../Artifacts");
+	CleanDirectories("CodeCoverage");
 });
 
 //
@@ -245,16 +232,7 @@ Task("Build").IsDependentOn("Describe")
         var buildSettings = new MSBuildSettings()
 			.SetConfiguration(configuration)
 			.SetVerbosity(Verbosity.Minimal);
-/*        
-        if(isTeamCity)
-        {
-            buildSettings.WithLogger(
-                MakeAbsolute(new DirectoryPath($"./tools/TeamCity.MSBuild.Logger/msbuild14/TeamCity.MSBuild.Logger.dll")).FullPath, 
-                "TeamCity.MSBuild.Logger.TeamCityMSBuildLogger", 
-                "teamcity"
-            ).SetNoConsoleLogger(true);
-        }
-  */      
+   
 		MSBuild("../EPiServer.Marketing.Testing.sln",  buildSettings);
 	}
 );
@@ -271,26 +249,29 @@ Task("Test")
 	    foreach(var project in GetFiles("../test/**/*Test.csproj"))
         {
             var projectName = project.GetFilenameWithoutExtension().ToString();
-              
-			var coverageSettings = new DotCoverCoverSettings
-			{
-				TargetWorkingDir = project.GetDirectory().FullPath
-			}
-			.WithFilter("-:*EPiServer.Marketing.KPI.Test*")
-            .WithFilter("-:*EPiServer.Marketing.KPI.Commerce.Test*")
-            .WithFilter("-:*EPiServer.Marketing.Messaging.Test*")	
-            .WithFilter("-:*EPiServer.Marketing.Testing.Test*")
-		    .WithFilter("-:*xunit.assert*")
-			.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
 			
-			DotCoverCover(
-				cake => 
+			if(projectName != "EPiServer.Marketing.Testing.Web.ClientTest")
+			{ 
+				var coverageSettings = new DotCoverCoverSettings
 				{
-					cake.DotNetCoreTool(projectPath: project.FullPath, command: "test", arguments: $"--configuration {configuration} --no-build --no-restore -v m");
-				},
-				new FilePath($"CodeCoverage/{projectName}.dcvr"),
-				coverageSettings
-			);     
+					TargetWorkingDir = project.GetDirectory().FullPath
+				}
+				.WithFilter("-:*EPiServer.Marketing.KPI.Test*")
+				.WithFilter("-:*EPiServer.Marketing.KPI.Commerce.Test*")
+				.WithFilter("-:*EPiServer.Marketing.Messaging.Test*")	
+				.WithFilter("-:*EPiServer.Marketing.Testing.Test*")
+				.WithFilter("-:*xunit.assert*")
+				.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
+				
+				DotCoverCover(
+					cake => 
+					{
+						cake.DotNetCoreTool(projectPath: project.FullPath, command: "test", arguments: $"--configuration {configuration} --no-build --no-restore -v m");
+					},
+					new FilePath($"CodeCoverage/{projectName}.dcvr"),
+					coverageSettings
+				);  
+			}			
         } 
 
         //Merge Code Coverage
