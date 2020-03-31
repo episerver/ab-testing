@@ -490,7 +490,7 @@ Task("PackageABTesting")
 
 //
 // Task: PackageNuGets
-// Roll-up of creation for all Reporting NuGet packages.
+// Roll-up of creation for all NuGet packages.
 //
 Task("PackageNuGets")
 	.IsDependentOn("PackageKpi")
@@ -509,6 +509,5 @@ Task("Default")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
 	.IsDependentOn("PackageNuGets");
-    //.IsDependentOn("CollectNuGets")
 
 RunTarget(target);
