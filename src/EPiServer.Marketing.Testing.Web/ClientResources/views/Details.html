@@ -21,6 +21,18 @@
                 &nbsp;
             </div>
         </div>
+        <div class="epi-notificationBar" data-dojo-attach-point="detailsNotificationBar" style="display:none">
+            <div>
+                <div class="epi-notificationBarItem">
+                    <div class="epi-notificationBarText">
+                        <p>
+                            <div data-dojo-attach-point="testGloballyDisabled"></div>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
     <div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center', splitter:false" class="epi-abtest-body-container">
         <div class="epi-abtest-body" id="detailsAbTestBody">
@@ -32,6 +44,7 @@
                         <span data-dojo-attach-point="testStatus"></span>
                         <span class="epi-abtest-status" data-dojo-attach-point="testStarted"></span>
                     </h2>
+
                 </div>
             </div>
             <!-- Control/Published Version -->

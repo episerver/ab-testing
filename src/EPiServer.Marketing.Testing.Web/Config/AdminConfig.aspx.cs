@@ -1,11 +1,11 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Web.UI.WebControls;
-using Castle.Core.Internal;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using EPiServer.Logging;
 using EPiServer.PlugIn;
+using EPiServer.ServiceLocation;
 using EPiServer.Shell.WebForms;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Web.UI.WebControls;
 
 namespace EPiServer.Marketing.Testing.Web.Config
 {
@@ -17,7 +17,15 @@ namespace EPiServer.Marketing.Testing.Web.Config
     {
         private static readonly ILogger _logger = LogManager.GetLogger();
 
-        protected AdminConfigTestSettings TestSettings => AdminConfigTestSettings.Current;
+        protected AdminConfigTestSettings TestSettings => new AdminConfigTestSettings()
+        {
+            TestDuration = AdminConfigTestSettings.Current.TestDuration,
+            ParticipationPercent = AdminConfigTestSettings.Current.ParticipationPercent,
+            ConfidenceLevel = AdminConfigTestSettings.Current.ConfidenceLevel,
+            AutoPublishWinner = AdminConfigTestSettings.Current.AutoPublishWinner,
+            IsEnabled = AdminConfigTestSettings.Current.IsEnabled
+        };
+
 
         protected override void OnInit(EventArgs e)
         {
@@ -66,8 +74,23 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 TestDuration = duration,
                 ParticipationPercent = particiaption,
                 ConfidenceLevel = Convert.ToInt16(ConfidenceLevel.SelectedValue),
-                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue)
+                AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
+                IsEnabled = chkIsEnabled.Checked
             };
+
+            if (settings.IsEnabled != AdminConfigTestSettings.Current.IsEnabled)
+            {
+                var testHandler = ServiceLocator.Current.GetInstance<ITestHandler>();
+
+                if (AdminConfigTestSettings.Current.IsEnabled)
+                {
+                    testHandler.DisableABTesting();
+                }
+                else
+                {
+                    testHandler.EnableABTesting();
+                }
+            }
 
             settings.Save();
 
@@ -103,6 +126,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             ParticipationPercent.Text = TestSettings.ParticipationPercent.ToString();
             ConfidenceLevel.Text = TestSettings.ConfidenceLevel.ToString();
             AutoPublishWinner.SelectedValue = TestSettings.AutoPublishWinner.ToString();
+            chkIsEnabled.Checked = TestSettings.IsEnabled;
         }
 
         private void ShowMessage(string msg, bool isWarning)

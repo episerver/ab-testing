@@ -35,6 +35,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
         [StringLength(1, ErrorMessage = "Must be a single character.")]
         public string CookieDelimeter { get; set; }
 
+        public bool IsEnabled { get; set; }
+
         internal static AdminConfigTestSettings _currentSettings;
         internal static DynamicDataStoreFactory _factory;
 
@@ -71,6 +73,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             AutoPublishWinner = false;
             KpiLimit = 5;
             CookieDelimeter = "_";
+            IsEnabled = true;
         }
 
         public void Save()
@@ -79,14 +82,6 @@ namespace EPiServer.Marketing.Testing.Web.Config
             store.Save(this);
 
             _currentSettings = this;
-        }
-
-        /// <summary>
-        /// Clears setting values that being stored in memory.
-        /// </summary>
-        public void Reset()
-        {
-            _currentSettings = null;
         }
     }
 }
