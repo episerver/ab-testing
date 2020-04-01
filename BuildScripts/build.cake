@@ -70,6 +70,12 @@ public int BuildNumber
 	}
 }
 
+public void SignAssembly(string assemblyFullPath)
+{
+	var exitCode = StartProcess("sn", new ProcessSettings{ Arguments = $"-q -Rc \"..\\src\\{assemblyFullPath}\" \"EPiServerProduct\"" });
+	Information("Exit code: {0}", exitCode);
+}
+
 public string AssemblyVersionFor(string projectId)
 {
 	return versions[projectId];
@@ -237,6 +243,37 @@ Task("Build").IsDependentOn("Describe")
 	}
 );
 
+//
+// Task: SignAssemblies
+// Signs the assemblies.
+//
+Task("SignAssemblies")
+	.IsDependentOn("Build")
+	.Does(
+	() =>
+	{
+		// Prepare the PATH so that the build routine can find the tools it
+		// requires to run successfully.
+		var signingToolPath = GetFiles("C:/Program Files (x86)/Microsoft SDKs/Windows/*/bin/*Tools/x64/sn.exe")
+								.Select(t => t.GetDirectory().FullPath)
+								.FirstOrDefault();
+
+		if(string.IsNullOrWhiteSpace(signingToolPath))
+		{
+			throw new Exception("No assembly signing tools could be found on this build agent.");
+		}
+		
+		Environment.SetEnvironmentVariable("Path", $"{signingToolPath};{EnvironmentVariable("Path")}");
+		
+		SignAssembly($"EPiServer.Marketing.KPI/bin/{configuration}/net461/EPiServer.Marketing.KPI.dll");
+		SignAssembly($"EPiServer.Marketing.KPI.Commerce/bin/{configuration}/net461/EPiServer.Marketing.KPI.Commerce.dll");
+		SignAssembly($"EPIServer.Marketing.Messaging/bin/{configuration}/net461/EPIServer.Marketing.Messaging.dll");
+		SignAssembly($"EPiServer.Marketing.Testing.Web/bin/{configuration}/net461/EPiServer.Marketing.Testing.Web.dll");
+		SignAssembly($"EPiServer.Marketing.Testing.Dal/bin/{configuration}/net461/EPiServer.Marketing.Testing.Dal.dll");
+		SignAssembly($"EPiServer.Marketing.Testing.Core/bin/{configuration}/net461/EPiServer.Marketing.Testing.Core.dll");
+	}
+);
+	
 //
 // Task: Test
 // Runs all unit tests with DotNetCoreTool and reports their code coverage using DotCoverCover.
@@ -488,6 +525,7 @@ Task("Default")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
     .IsDependentOn("Build")
+	.IsDependentOn("SignAssemblies")
     .IsDependentOn("Test")
 	.IsDependentOn("PackageNuGets");
 
