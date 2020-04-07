@@ -69,7 +69,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 return;
             }
 
-            var settings = new AdminConfigTestSettings()
+            var newSettings = new AdminConfigTestSettings()
             {
                 TestDuration = duration,
                 ParticipationPercent = particiaption,
@@ -77,22 +77,22 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
                 IsEnabled = chkIsEnabled.Checked
             };
-
-            if (settings.IsEnabled != AdminConfigTestSettings.Current.IsEnabled)
+           
+            if (newSettings.IsEnabled != TestSettings.IsEnabled)
             {
                 var testHandler = ServiceLocator.Current.GetInstance<ITestHandler>();
 
-                if (AdminConfigTestSettings.Current.IsEnabled)
-                {
-                    testHandler.DisableABTesting();
-                }
-                else
+                if (newSettings.IsEnabled)
                 {
                     testHandler.EnableABTesting();
                 }
+                else
+                {
+                    testHandler.DisableABTesting();
+                }
             }
 
-            settings.Save();
+            newSettings.Save();
 
             ShowMessage(string.Format(Translate("/abtesting/admin/success")), true);
         }
