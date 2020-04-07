@@ -147,6 +147,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _contentEvents = new Mock<IContentEvents>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
             _mockHttpContextHelper = new Mock<IHttpContextHelper>();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
+
             return new TestHandler(_mockServiceLocator.Object, _mockHttpContextHelper.Object);
         }
 
@@ -196,7 +198,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Contructor_EnablesABTesting_If_Enabled_In_Config()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings();
             GetUnitUnderTest();
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -215,8 +216,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Contructor_DisablesABTesting_If_Disabled_In_Config()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -235,8 +236,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void EnableABTesting_AddsLoadedContentListeners_OnlyOnce()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -261,8 +262,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void EnableABTesting_AddsLoadedContentListeners()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -285,8 +286,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void EnableABTesting_EnablesProxyEventHandlers()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -307,7 +308,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void DisableABTesting_RemovesLoadedContentListeners()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             GetUnitUnderTest();
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
@@ -331,7 +331,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void DisableABTesting_DisablesProxyEventHandlers()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             GetUnitUnderTest();
 
             IMarketingTest test = new ABTest()
@@ -797,7 +796,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void DisableProxyEventHandler_checks_ref_and_removes_one()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             var testHandler = GetUnitUnderTest();
             var expectedTests = new List<IMarketingTest>()
             {
