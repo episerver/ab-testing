@@ -233,6 +233,32 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void EnableABTesting_AddsLoadedContentListeners_OnlyOnce()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
+            GetUnitUnderTest();
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var contentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+
+            var testHandler = new TestHandler();
+            Assert.Equal(0, contentEvents.LoadedContentCounter);
+            Assert.Equal(0, contentEvents.LoadedChildrenCounter);
+
+            testHandler.EnableABTesting();
+            testHandler.EnableABTesting();
+
+            Assert.Equal(1, contentEvents.LoadedContentCounter);
+            Assert.Equal(1, contentEvents.LoadedChildrenCounter);
+        }
+
+        [Fact]
         public void EnableABTesting_AddsLoadedContentListeners()
         {
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
@@ -308,12 +334,24 @@ namespace EPiServer.Marketing.Testing.Test.Web
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             GetUnitUnderTest();
 
+            IMarketingTest test = new ABTest()
+            {
+                Id = _activeTestGuid,
+                OriginalItemId = _associatedTestGuid,
+                State = TestState.Active,
+                ContentLanguage = "en-GB",
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
+            };
+
+            List<IMarketingTest> testList = new List<IMarketingTest>() { test };
+
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
-                .Returns(new List<IMarketingTest>());
+                .Returns(testList);
             var testEvents = new FakeMarketingTestingEvents();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
 
@@ -321,7 +359,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             testHandler.DisableABTesting();
 
             Assert.Equal(0, testEvents.TestAddedToCacheCounter);
-            Assert.Equal(0, testEvents.TestRemovedFromCacheCounter);
+            Assert.Equal(1, testEvents.TestRemovedFromCacheCounter);
         }
 
         #endregion
@@ -759,6 +797,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void DisableProxyEventHandler_checks_ref_and_removes_one()
         {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             var testHandler = GetUnitUnderTest();
             var expectedTests = new List<IMarketingTest>()
             {
@@ -778,7 +817,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
 
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(true);
-            testHandler.enableProxyEventHandler();
 
             testHandler.disableProxyEventHandler();
 

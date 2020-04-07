@@ -16,13 +16,13 @@ namespace EPiServer.Marketing.Testing.Test.Fakes
         public event EventHandler<TestEventArgs> TestAddedToCache
         {
             add { TestAddedToCacheCounter++; }
-            remove { TestAddedToCacheCounter--; }
+            remove { if (TestAddedToCacheCounter != 0) { TestAddedToCacheCounter--; } }
         }
 
         public event EventHandler<TestEventArgs> TestRemovedFromCache
         {
             add { TestRemovedFromCacheCounter++; }
-            remove { TestRemovedFromCacheCounter--; }
+            remove { if (TestAddedToCacheCounter != 0) { TestRemovedFromCacheCounter--; } }
         }
 
         public event EventHandler<TestEventArgs> ContentSwitched;
