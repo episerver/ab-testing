@@ -28,6 +28,8 @@ namespace EPiServer.Marketing.Testing.Web
         public void Initialize(InitializationEngine context)
         {
             ServiceLocator.Current.GetInstance<ITestHandler>();
+            ServiceLocator.Current.GetInstance<FeatureEnabler>();
+
             _clientKpiInjector = new ClientKpiInjector();
             _logger = LogManager.GetLogger();
         }
