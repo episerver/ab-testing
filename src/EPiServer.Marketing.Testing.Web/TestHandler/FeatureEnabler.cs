@@ -1,4 +1,5 @@
 ﻿using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web
@@ -31,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Web
         public void TestAddedToCache(object sender, TestEventArgs e)
         {
             var testManager = serviceLocator.GetInstance<ITestManager>();
-            if (testManager.GetActiveTests().Count == 1)
+            if (testManager.GetActiveTests().Count == 1 && AdminConfigTestSettings.Current.IsEnabled)
             {
                 var testHandler = serviceLocator.GetInstance<ITestHandler>();
                 testHandler.EnableABTesting();
