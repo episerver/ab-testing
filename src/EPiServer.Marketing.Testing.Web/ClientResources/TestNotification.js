@@ -88,7 +88,7 @@ define([
                 }
 
                 if (!isAbEnabled) {
-                    message = resources.detailsview.test_disabled + "&nbsp";
+                    message = resources.notificationbar.test_disabled + "&nbsp";
                 }
 
                 var notificationMesage = domConstruct.create("div", { innerHTML: message });

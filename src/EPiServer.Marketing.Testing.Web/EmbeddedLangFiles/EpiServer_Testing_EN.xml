@@ -176,6 +176,7 @@
         <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
         <winner_link_text>Pick winner</winner_link_text>
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
+        <test_disabled>A/B testing is currently disabled. No additional views or conversions will be recorded for any test until A/B testing is re-enabled.</test_disabled>
       </notificationbar>
       <percentagetemplate>
         <conversion_rate>Conversion Rate</conversion_rate>
