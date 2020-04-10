@@ -7,8 +7,8 @@ namespace EPiServer.Marketing.Testing.Web
     /// <summary>
     /// Enables and disables AB testing based on number of active tests in cache.
     /// </summary>
-    [ServiceConfiguration(ServiceType = typeof(FeatureEnabler), Lifecycle = ServiceInstanceScope.Singleton)]
-    public class FeatureEnabler
+    [ServiceConfiguration(ServiceType = typeof(IFeatureEnabler), Lifecycle = ServiceInstanceScope.Singleton)]
+    public class FeatureEnabler: IFeatureEnabler
     {
         private IServiceLocator serviceLocator;
 
