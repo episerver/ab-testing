@@ -33,7 +33,7 @@ Note: The build definition for this project on Team City is named "Cake" and it 
 
 ### Code Coverage
 After a successful build, a code coverage report is generated on Team City.
-On development environments, this report is created in a file "codecoverage.html" under the folder BuildScripts/CodeCoverage.
+On development environments, this report is created in a file "coverage.html" under the folder BuildScripts/CodeCoverage.
 
 ### Signing Assemblies
 All the assemblies are delay signed with a strong name key file "EPiServerProduct_PublicKey.snk" located in the build folder.
