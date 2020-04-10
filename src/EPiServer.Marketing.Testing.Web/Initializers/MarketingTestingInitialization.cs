@@ -33,6 +33,18 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                         new TestManager()
                     )
             );
+
+            context.Services.AddSingleton<IConfigurationMonitor, ConfigurationMonitor>(
+            serviceLocator =>
+                new ConfigurationMonitor(serviceLocator,
+                    new RemoteCacheSignal(
+                        serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
+                        LogManager.GetLogger(),
+                        "epi/marketing/testing/configuration",
+                        TimeSpan.FromMilliseconds(500)
+                    )
+                )
+        );
         }
 
         public void Initialize(InitializationEngine context){ }

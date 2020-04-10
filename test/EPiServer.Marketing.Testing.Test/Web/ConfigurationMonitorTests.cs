@@ -38,8 +38,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             configMonitor.HandleConfigurationChange();
 
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Exactly(2));
+            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once);
             mockTestHandler.Verify(t => t.DisableABTesting(), Times.Never);
+            mockSignal.Verify(s => s.Reset(), Times.Once);
         }
 
         [Fact]
@@ -51,8 +52,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             configMonitor.HandleConfigurationChange();
 
-            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Exactly(2));
+            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Once);
             mockTestHandler.Verify(t => t.EnableABTesting(), Times.Never);
+            mockSignal.Verify(s => s.Reset(), Times.Once);
         }
 
         [Fact]

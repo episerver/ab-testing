@@ -7,6 +7,7 @@ namespace EPiServer.Marketing.Testing.Web
     /// <summary>
     /// Contains methods to monitor configuration changes and apply them to all the remote nodes.
     /// </summary>
+    [ServiceConfiguration(ServiceType = typeof(IConfigurationMonitor), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ConfigurationMonitor : IConfigurationMonitor
     {
         private IServiceLocator serviceLocator;
@@ -22,7 +23,7 @@ namespace EPiServer.Marketing.Testing.Web
             this.serviceLocator = serviceLocator;
             this.cacheSignal = cacheSignal;
 
-            HandleConfigurationChange();
+            this.cacheSignal.Set();
             this.cacheSignal.Monitor(HandleConfigurationChange);
         }
 
@@ -35,10 +36,12 @@ namespace EPiServer.Marketing.Testing.Web
             if (AdminConfigTestSettings.Current.IsEnabled)
             {
                 testHandler.EnableABTesting();
+                this.cacheSignal.Reset();
             }
             else
             {
                 testHandler.DisableABTesting();
+                this.cacheSignal.Reset();
             }
 
             this.cacheSignal.Set();
