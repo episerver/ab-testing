@@ -1,4 +1,5 @@
-﻿using EPiServer.Marketing.Testing.Web.Config;
+﻿using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web
@@ -9,14 +10,20 @@ namespace EPiServer.Marketing.Testing.Web
     public class ConfigurationMonitor : IConfigurationMonitor
     {
         private IServiceLocator serviceLocator;
+        private ICacheSignal cacheSignal;
 
         /// <summary>
         /// Default
         /// </summary>
         /// <param name="serviceLocator"></param>
-        public ConfigurationMonitor(IServiceLocator serviceLocator)
+        /// <param name="cacheSignal"></param>
+        public ConfigurationMonitor(IServiceLocator serviceLocator, ICacheSignal cacheSignal)
         {
             this.serviceLocator = serviceLocator;
+            this.cacheSignal = cacheSignal;
+
+            HandleConfigurationChange();
+            this.cacheSignal.Monitor(HandleConfigurationChange);
         }
 
         /// <summary>
@@ -33,6 +40,8 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 testHandler.DisableABTesting();
             }
+
+            this.cacheSignal.Set();
         }
     }
 }
