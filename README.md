@@ -26,8 +26,14 @@ To run the script, execute the following command in a powershell window:
 ```
 Example: .\build.ps1 -configuration "Debug" -target "PackageNuGets"
 ```
+If no task is specified as the target, the "Default" task is run. 
+After a successful run, the nuget packages are created in the "Artifacts" folder, which is on the same level as the "BuildScripts" folder.
 
+Note: The build definition for this project on Team City is named "Cake" and it also leverages the scripts and the tools folder listed above for running the build and creating the artifacts.
 
+### Code Coverage
+After a successful build, a code coverage report is generated on Team City.
+On development environments, this report is created in a file "codecoverage.html" under the folder BuildScripts/CodeCoverage.
 
 ### Signing Assemblies
 All the assemblies are delay signed with a strong name key file "EPiServerProduct_PublicKey.snk" located in the build folder.
@@ -64,7 +70,7 @@ Right-click project -> Properties -> Signing <Update the path here>
 ```
 
 ### Updating Nuget package versions.
-The versioning of the assemblies and nuget packages is done in the build.cake file based on the values specified in the the following variables.
+The versioning of the assemblies and nuget packages is done in the build.cake file. Each package is independently versioned. Refer to the task "Version" in the script that uses the values of the following variables to create assembly versions, which are then used in the individual tasks that generate the nuget packages i.e. "PackageKpi", "PackageKpiCommerce", "PackageMessaging" and "PackageABTesting".
 
 ```
 var kpiBaseVersion = "2.5.3";  // For EPiServer.Marketing.KPI package
