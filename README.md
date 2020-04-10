@@ -10,31 +10,72 @@ We make use of the NuGet *package restore* functionality to fetch our dependenci
 * To make use of both package sources at the same time select *All* as the *Package Source*
 * The *Package Restore* setting needs to be enabled
 
+### Cake script
+We use cake script for the build. For documentation refer https://cakebuild.net/.
+The scripts are located in the BuildScripts folder.
 
-### Development Environment Setup
-1. Run setup script in the root folder in order to clean, build and configure development environment:
-```
-setup
-```
-2. Run /samples/EPiServer.Templates.Alloy test site in Visual Studio.
+1. build.ps1 - This contains bootstrapper script for powershell and shouldn't be changed.
+2. build.cake - This is the cake script file that contains various tasks required to clean, restore, build, run tests and create nuget packages. This follows C# syntax and can be modified as per requirements.
+3. tools - This folder contains different tools required by build.cake script to run successfully.
 
-### How to
-#### Upgrading EPiServer packages in the solution
-0. Clean your environment to make sure that no garbage is committed after update:
+To run the script, execute the following command in a powershell window:
+
 ```
-clean
+.\build.ps1 [-configuration <"Debug"|"Release">] [-target "<taskname>" ]
 ```
-1. Remove/comment the following line in /samples/.gitignore file to make sure that changes in Alloy project can be committed:
 ```
-EPiServer.Templates.Alloy/*
+Example: .\build.ps1 -configuration "Debug" -target "PackageNuGets"
 ```
-2. Update Episerver packages in the solution and rebuild.
-3. Run the following command in VS Package Manager Console in order to update test database:
+
+
+
+### Signing Assemblies
+All the assemblies are delay signed with a strong name key file "EPiServerProduct_PublicKey.snk" located in the build folder.
+The signing is completed on Team City by a key file containing the private key.
+
+For the assemblies to work on development machines, they have to be registered for verification skipping by running the following commands in a command window.
+
 ```
-Update-EPiDatabase
+cd C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools
+sn -Vr *,8fe83dea738b45b7
 ```
-4. Copy database file from /samples/EPiServer.Templates.Alloy/App_Data to /build/resources folder. Don't run Alloy site before doing it.
-5. Commit your changes and discard editing of /samples/.gitignore
+
+```
+cd C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\x64
+sn -Vr *,8fe83dea738b45b7
+```
+
+To unregister the assemblies from verification skipping:
+
+```
+sn -Vu *,8fe83dea738b45b7
+```
+OR
+
+```
+sn -Vx (unregisters all assemblies)
+```
+
+Note: The "EPiServerProduct_PublicKey.snk" file can be moved to "BuildScripts" folder and the build folder can be deleted. The rest of the files in that folder are not used anymore.
+If this is done, update the path to the snk file in the project properties of each project in the solution.
+
+```
+Right-click project -> Properties -> Signing <Update the path here>
+```
+
+### Updating Nuget package versions.
+The versioning of the assemblies and nuget packages is done in the build.cake file based on the values specified in the the following variables.
+
+```
+var kpiBaseVersion = "2.5.3";  // For EPiServer.Marketing.KPI package
+
+var kpiCommerceBaseVersion = "2.4.2"; // EPiServer.Marketing.KPI.Commerce
+
+var messagingBaseVersion = "1.3.0";  // EPiServer.Marketing.Messaging
+
+var webBaseVersion = "2.6.0";  // EPiServer.Marketing.Testing
+
+```
 
 #### Adding migration scripts.
 A/B testing uses Entity framework to install and update the schema. These directions explain how to migrate 
