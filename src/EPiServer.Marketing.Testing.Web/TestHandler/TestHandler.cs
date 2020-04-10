@@ -694,10 +694,9 @@ namespace EPiServer.Marketing.Testing.Web
         /// <inheritdoc/>
         public void EnableABTesting()
         {
-            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
-
             DisableABTesting();
 
+            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.LoadedChildren += LoadedChildren;     
             contentEvents.LoadedContent += LoadedContent;
 
