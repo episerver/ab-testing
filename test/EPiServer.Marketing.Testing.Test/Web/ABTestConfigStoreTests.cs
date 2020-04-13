@@ -104,7 +104,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void GetCurrent_ReturnsExpectedConfiguration()
+        public void GetCurrent_CallsDDSFactoryGetStore_ToFetchAdminConfigSettings()
         {
             // mock the datastore in epi
             var ddsMock = new Mock<DynamicDataStore>(null);
@@ -133,8 +133,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var actualConfig = AdminConfigTestSettings.Current;
 
             ddsFactoryMock.Verify();
-
-            Assert.Equal(expectedConfig, actualConfig);
         }
 
         [Fact]
