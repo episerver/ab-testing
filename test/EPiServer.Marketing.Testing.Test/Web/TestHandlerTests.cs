@@ -234,7 +234,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var fakeContentEvents = new FakeContentEvents();
@@ -254,7 +254,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
@@ -290,7 +290,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
@@ -314,7 +314,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
