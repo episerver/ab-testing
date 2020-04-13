@@ -58,7 +58,7 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.DeletedContent += ContentEventsOnDeletedContent; 
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion; 
 
-            if (AdminConfigTestSettings.Current.IsEnabled)
+             if (AdminConfigTestSettings.Current.IsEnabled)
             {
                 EnableABTesting();
             }
@@ -701,6 +701,7 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent += LoadedContent;
 
             enableProxyEventHandler();
+            _logger.Information("A/B testing has been enabled.");
         }
 
         public void DisableABTesting()
@@ -710,6 +711,7 @@ namespace EPiServer.Marketing.Testing.Web
             contentEvents.LoadedContent -= LoadedContent;
 
             disableProxyEventHandler();
+            _logger.Information("A/B testing has been disabled.");
         }
 
         #endregion
