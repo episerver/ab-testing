@@ -6,6 +6,7 @@ using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Initializers;
+using EPiServer.ServiceLocation;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -14,7 +15,6 @@ namespace EPiServer.Marketing.Testing.Web
     [ModuleDependency(typeof(MarketingTestingInitialization))]
     public class TestHandlerInitializer : IInitializableHttpModule
     {
-        private TestHandler _testHandler;
         private IClientKpiInjector _clientKpiInjector;
         private ILogger _logger;
 
@@ -27,7 +27,9 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public void Initialize(InitializationEngine context)
         {
-            _testHandler = new TestHandler();
+            ServiceLocator.Current.GetInstance<ITestHandler>();
+            ServiceLocator.Current.GetInstance<FeatureEnabler>();
+
             _clientKpiInjector = new ClientKpiInjector();
             _logger = LogManager.GetLogger();
         }
@@ -35,10 +37,6 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public void InitializeHttpEvents(HttpApplication application)
         {
-            // We are not actually doing in anything in begin and end request 
-            // anymore however leaving this here in case we do. 
-            //  application.BeginRequest += BeginRequest;
-            //application.EndRequest += EndRequest;
             application.PostReleaseRequestState += onPostReleaseRequestState;
         }
 

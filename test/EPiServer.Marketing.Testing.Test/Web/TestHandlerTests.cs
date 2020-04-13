@@ -29,6 +29,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public bool ErrorCalled;
         public bool WarningCalled;
         public bool DebugCalled;
+        public bool InformationCalled;
+        public string Message { get; set; }
+
         public bool IsEnabled(Level level)
         {
             return true;
@@ -48,6 +51,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             {
                 DebugCalled = true;
             }
+            else if (level == Level.Information)
+            {
+                InformationCalled = true;
+            }
+
+            Message = messageFormatter.Invoke(state, exception);
         }
     }
 
@@ -83,6 +92,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private readonly Guid _activeTestGuid = Guid.Parse("d9866579-ea05-4c74-a508-ab1c95766660");
         private readonly Guid _matchingVariantId = Guid.Parse("c6c08d71-2e61-4768-8549-7bdcc43af083");
         private readonly Guid _firstKpiId = Guid.Parse("ebb50f9d-8a4c-4f7f-8734-a8c31967a39a");
+        private FakeMarketingTestingEvents _testEvents;
 
         private Guid _originalItemId = Guid.NewGuid();
 
@@ -104,6 +114,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
                         Variants = new List<Variant>() {new Variant() { ItemId = _originalItemId, ItemVersion = 2 } }
                     }
                 });
+
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests()).Returns(new List<IMarketingTest> { });
 
             Variant testVariant = new Variant()
             {
@@ -147,6 +159,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _contentEvents = new Mock<IContentEvents>();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(_contentEvents.Object);
             _mockHttpContextHelper = new Mock<IHttpContextHelper>();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
+
+            // proxyEventHandler listens for events when tests are added / removed from cache.
+            _testEvents = new FakeMarketingTestingEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(_testEvents);
+
             return new TestHandler(_mockServiceLocator.Object, _mockHttpContextHelper.Object);
         }
 
@@ -196,7 +214,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Contructor_EnablesABTesting_If_Enabled_In_Config()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings();
             GetUnitUnderTest();
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -215,8 +232,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void Contructor_DisablesABTesting_If_Disabled_In_Config()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -233,10 +250,46 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void EnableABTesting_AddsLoadedContentListeners_OnlyOnce()
+        {
+            GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
+
+            ServiceLocator.SetLocator(_mockServiceLocator.Object);
+
+            var contentEvents = new FakeContentEvents();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
+            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
+                .Returns(new List<IMarketingTest>());
+            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
+            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
+
+            var testHandler = new TestHandler();
+            Assert.Equal(0, contentEvents.LoadedContentCounter);
+            Assert.Equal(0, contentEvents.LoadedChildrenCounter);
+
+            testHandler.EnableABTesting();
+            testHandler.EnableABTesting();
+
+            Assert.Equal(1, contentEvents.LoadedContentCounter);
+            Assert.Equal(1, contentEvents.LoadedChildrenCounter);
+        }
+
+        [Fact]
+        public void EnableABTesting_LogsInformationMessage()
+        {
+            var testHandler = GetUnitUnderTest();
+            testHandler.EnableABTesting();
+
+            Assert.True(_logger.InformationCalled);
+            Assert.Contains("enabled", _logger.Message);
+        }
+
+        [Fact]
         public void EnableABTesting_AddsLoadedContentListeners()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -259,8 +312,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void EnableABTesting_EnablesProxyEventHandlers()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
             GetUnitUnderTest();
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
@@ -268,20 +321,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
                 .Returns(new List<IMarketingTest>());
-            var testEvents = new FakeMarketingTestingEvents();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
 
             var testHandler = new TestHandler();
             testHandler.EnableABTesting();
 
-            Assert.Equal(1, testEvents.TestAddedToCacheCounter);
-            Assert.Equal(1, testEvents.TestRemovedFromCacheCounter);
+            Assert.Equal(1, _testEvents.TestAddedToCacheCounter);
+            Assert.Equal(1, _testEvents.TestRemovedFromCacheCounter);
         }
 
         [Fact]
         public void DisableABTesting_RemovesLoadedContentListeners()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             GetUnitUnderTest();
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
@@ -303,25 +353,44 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void DisableABTesting_LogsInformationMessage()
+        {
+            var testHandler = GetUnitUnderTest();
+            testHandler.DisableABTesting();
+
+            Assert.True(_logger.InformationCalled);
+            Assert.Contains("disabled", _logger.Message);
+        }
+
+        [Fact]
         public void DisableABTesting_DisablesProxyEventHandlers()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
             GetUnitUnderTest();
+
+            IMarketingTest test = new ABTest()
+            {
+                Id = _activeTestGuid,
+                OriginalItemId = _associatedTestGuid,
+                State = TestState.Active,
+                ContentLanguage = "en-GB",
+                KpiInstances = new List<IKpi>(),
+                Variants = new List<Variant>()
+            };
+
+            List<IMarketingTest> testList = new List<IMarketingTest>() { test };
 
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
             _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(contentEvents);
             _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
-                .Returns(new List<IMarketingTest>());
-            var testEvents = new FakeMarketingTestingEvents();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
+                .Returns(testList);
 
             var testHandler = new TestHandler();
             testHandler.DisableABTesting();
 
-            Assert.Equal(0, testEvents.TestAddedToCacheCounter);
-            Assert.Equal(0, testEvents.TestRemovedFromCacheCounter);
+            Assert.Equal(0, _testEvents.TestAddedToCacheCounter);
+            Assert.Equal(1, _testEvents.TestRemovedFromCacheCounter);
         }
 
         #endregion
@@ -743,17 +812,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             };
 
             _mockMarketingTestingWebRepository.Setup(r => r.GetActiveTests()).Returns(expectedTests);
-
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            var testEvents = new FakeMarketingTestingEvents();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
-
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(true);
             testHandler.enableProxyEventHandler();
 
             _referenceCounter.Verify(m => m.AddReference(It.IsAny<object>()), Times.Once, "AddRef should have been called once but it wasnt.");
-            Assert.Equal(1, testEvents.TestAddedToCacheCounter);
-            Assert.Equal(1, testEvents.TestRemovedFromCacheCounter);
+            Assert.Equal(1, _testEvents.TestAddedToCacheCounter);
+            Assert.Equal(1, _testEvents.TestRemovedFromCacheCounter);
         }
 
         [Fact]
@@ -773,18 +837,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _mockMarketingTestingWebRepository.Setup(r => r.GetActiveTests()).Returns(expectedTests);
 
-            // proxyEventHandler listens for events when tests are added / removed from cache.
-            var testEvents = new FakeMarketingTestingEvents();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents);
-
             _referenceCounter.Setup(m => m.hasReference(It.IsAny<object>())).Returns(true);
-            testHandler.enableProxyEventHandler();
 
             testHandler.disableProxyEventHandler();
 
             _referenceCounter.Verify(m => m.RemoveReference(It.IsAny<object>()), Times.Once, "RemoveRef should have been called once but it wasnt.");
-            Assert.Equal(0, testEvents.TestAddedToCacheCounter);
-            Assert.Equal(0, testEvents.TestRemovedFromCacheCounter);
+            Assert.Equal(0, _testEvents.TestAddedToCacheCounter);
+            Assert.Equal(0, _testEvents.TestRemovedFromCacheCounter);
         }
 
         [Fact]

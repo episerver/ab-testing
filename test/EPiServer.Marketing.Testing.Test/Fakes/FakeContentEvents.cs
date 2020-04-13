@@ -12,7 +12,7 @@ namespace EPiServer.Marketing.Testing.Test.Fakes
         public event ChildrenEventHandler LoadedChildren
         {
             add { LoadedChildrenCounter++; }
-            remove { LoadedChildrenCounter--; }
+            remove { if (LoadedChildrenCounter != 0) { LoadedChildrenCounter--; } }
         }
 
         public event ChildrenEventHandler FailedLoadingChildren;
@@ -21,7 +21,7 @@ namespace EPiServer.Marketing.Testing.Test.Fakes
         public event EventHandler<ContentEventArgs> LoadedContent
         {
             add { LoadedContentCounter++; }
-            remove { LoadedContentCounter--; }
+            remove { if (LoadedContentCounter != 0) { LoadedContentCounter--; } }
         }
 
         public event EventHandler<ContentEventArgs> FailedLoadingContent;
