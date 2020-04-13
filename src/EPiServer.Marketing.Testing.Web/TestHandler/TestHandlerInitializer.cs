@@ -37,10 +37,6 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public void InitializeHttpEvents(HttpApplication application)
         {
-            // We are not actually doing in anything in begin and end request 
-            // anymore however leaving this here in case we do. 
-            //  application.BeginRequest += BeginRequest;
-            //application.EndRequest += EndRequest;
             application.PostReleaseRequestState += onPostReleaseRequestState;
         }
 
