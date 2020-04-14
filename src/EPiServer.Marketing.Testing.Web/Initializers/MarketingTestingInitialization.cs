@@ -14,6 +14,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 {
     [ExcludeFromCodeCoverage]
     [InitializableModule]
+    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class MarketingTestingInitialization : IConfigurableModule
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
@@ -49,7 +50,13 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                 serviceLocator => new FeatureEnabler(serviceLocator));
         }
 
-        public void Initialize(InitializationEngine context) { }
+        public void Initialize(InitializationEngine context) 
+        {
+            ServiceLocator.Current.GetInstance<ITestManager>();
+            ServiceLocator.Current.GetInstance<ITestHandler>();
+            ServiceLocator.Current.GetInstance<IFeatureEnabler>();
+            ServiceLocator.Current.GetInstance<IConfigurationMonitor>();
+        }
 
         public void Uninitialize(InitializationEngine context) { }
     }

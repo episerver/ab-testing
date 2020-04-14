@@ -7,7 +7,6 @@ namespace EPiServer.Marketing.Testing.Web
     /// <summary>
     /// Contains methods to monitor configuration changes and apply them to all the remote nodes.
     /// </summary>
-    [ServiceConfiguration(ServiceType = typeof(IConfigurationMonitor), Lifecycle = ServiceInstanceScope.Singleton)]
     public class ConfigurationMonitor : IConfigurationMonitor
     {
         private IServiceLocator serviceLocator;
