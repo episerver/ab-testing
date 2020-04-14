@@ -57,11 +57,6 @@ namespace EPiServer.Marketing.Testing.Web
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.DeletedContent += ContentEventsOnDeletedContent; 
             contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion; 
-
-             if (AdminConfigTestSettings.Current.IsEnabled)
-            {
-                EnableABTesting();
-            }
         }
 
         //To support unit testing

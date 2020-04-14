@@ -22,7 +22,7 @@ namespace EPiServer.Marketing.Testing.Web
             this.serviceLocator = serviceLocator;
             this.cacheSignal = cacheSignal;
 
-            this.cacheSignal.Set();
+            HandleConfigurationChange();
             this.cacheSignal.Monitor(HandleConfigurationChange);
         }
 
