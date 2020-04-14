@@ -32,7 +32,9 @@ namespace EPiServer.Marketing.Testing.Web
         public void HandleConfigurationChange()
         {
             var testHandler = serviceLocator.GetInstance<ITestHandler>();
-            if (AdminConfigTestSettings.Current.IsEnabled)
+            var testManager = serviceLocator.GetInstance<ITestManager>();
+
+            if (AdminConfigTestSettings.Current.IsEnabled && testManager.GetActiveTests().Count >= 1)
             {
                 testHandler.EnableABTesting();
                 this.cacheSignal.Reset();
