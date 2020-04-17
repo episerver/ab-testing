@@ -14,9 +14,11 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 {
     [ExcludeFromCodeCoverage]
     [InitializableModule]
+    [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     public class MarketingTestingInitialization : IConfigurableModule
     {
-        public void ConfigureContainer(ServiceConfigurationContext context) {
+        public void ConfigureContainer(ServiceConfigurationContext context)
+        {
             context.Services.AddTransient<IContentLockEvaluator, ABTestLockEvaluator>();
 
             context.Services.AddSingleton<ITestManager, CachingTestManager>(
@@ -31,11 +33,30 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                         ),
                         serviceLocator.GetInstance<DefaultMarketingTestingEvents>(),
                         new TestManager()
-                    )
-            );
+                    ));
+
+            context.Services.AddSingleton<IConfigurationMonitor, ConfigurationMonitor>(
+            serviceLocator =>
+                new ConfigurationMonitor(serviceLocator,
+                    new RemoteCacheSignal(
+                        serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
+                        LogManager.GetLogger(),
+                        "epi/marketing/testing/configuration",
+                        TimeSpan.FromMilliseconds(500)
+                    )));
+
+            context.Services.AddSingleton<ITestHandler, TestHandler>();
+            context.Services.AddSingleton<IFeatureEnabler, FeatureEnabler>(
+                serviceLocator => new FeatureEnabler(serviceLocator));
         }
 
-        public void Initialize(InitializationEngine context){ }
+        public void Initialize(InitializationEngine context) 
+        {
+            ServiceLocator.Current.GetInstance<ITestManager>();
+            ServiceLocator.Current.GetInstance<ITestHandler>();
+            ServiceLocator.Current.GetInstance<IFeatureEnabler>();
+            ServiceLocator.Current.GetInstance<IConfigurationMonitor>();
+        }
 
         public void Uninitialize(InitializationEngine context) { }
     }

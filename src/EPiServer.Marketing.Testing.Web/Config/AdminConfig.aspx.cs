@@ -77,23 +77,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
                 AutoPublishWinner = Convert.ToBoolean(AutoPublishWinner.SelectedValue),
                 IsEnabled = chkIsEnabled.Checked
             };
-           
-            if (newSettings.IsEnabled != TestSettings.IsEnabled)
-            {
-                var testHandler = ServiceLocator.Current.GetInstance<ITestHandler>();
-
-                if (newSettings.IsEnabled)
-                {
-                    testHandler.EnableABTesting();
-                }
-                else
-                {
-                    testHandler.DisableABTesting();
-                }
-            }
 
             newSettings.Save();
-
             ShowMessage(string.Format(Translate("/abtesting/admin/success")), true);
         }
 

@@ -212,29 +212,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         #region EnabelingABTesting
         [Fact]
-        public void Contructor_EnablesABTesting_If_Enabled_In_Config()
-        {
-            GetUnitUnderTest();
-            ServiceLocator.SetLocator(_mockServiceLocator.Object);
-
-            var fakeContentEvents = new FakeContentEvents();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IContentEvents>()).Returns(fakeContentEvents);
-            _mockMarketingTestingWebRepository.Setup(call => call.GetActiveTests())
-                .Returns(new List<IMarketingTest>());
-            Mock<IMarketingTestingEvents> testEvents = new Mock<IMarketingTestingEvents>();
-            _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
-
-            var testHandler = new TestHandler();
-            Assert.Equal(1, fakeContentEvents.LoadedContentCounter);
-            Assert.Equal(1, fakeContentEvents.LoadedChildrenCounter);
-        }
-
-        [Fact]
         public void Contructor_DisablesABTesting_If_Disabled_In_Config()
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var fakeContentEvents = new FakeContentEvents();
@@ -254,7 +236,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
@@ -290,7 +272,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
@@ -314,7 +296,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         {
             GetUnitUnderTest();
             AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
+            AdminConfigTestSettings._currentSettings._serviceLocator = _mockServiceLocator.Object;
             ServiceLocator.SetLocator(_mockServiceLocator.Object);
 
             var contentEvents = new FakeContentEvents();
@@ -344,6 +326,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>()).Returns(testEvents.Object);
 
             var testHandler = new TestHandler();
+            testHandler.EnableABTesting();
             Assert.Equal(1, contentEvents.LoadedContentCounter);
             Assert.Equal(1, contentEvents.LoadedChildrenCounter);
 
@@ -387,6 +370,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 .Returns(testList);
 
             var testHandler = new TestHandler();
+            testHandler.EnableABTesting();
             testHandler.DisableABTesting();
 
             Assert.Equal(0, _testEvents.TestAddedToCacheCounter);

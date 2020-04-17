@@ -1,25 +1,23 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Web;
-using EPiServer.Framework;
+﻿using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
-using EPiServer.Marketing.Testing.Web.Initializers;
-using EPiServer.ServiceLocation;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Web;
 
-namespace EPiServer.Marketing.Testing.Web
+namespace EPiServer.Marketing.Testing.Web.Initializers
 {
     [InitializableModule]
     [ModuleDependency(typeof(EPiServer.Web.InitializationModule))]
     [ModuleDependency(typeof(MarketingTestingInitialization))]
-    public class TestHandlerInitializer : IInitializableHttpModule
+    public class ClientKpiInjectorInitializer : IInitializableHttpModule
     {
         private IClientKpiInjector _clientKpiInjector;
         private ILogger _logger;
 
         [ExcludeFromCodeCoverage]
-        public TestHandlerInitializer()
+        public ClientKpiInjectorInitializer()
         {
             _logger = LogManager.GetLogger();
         }
@@ -27,9 +25,6 @@ namespace EPiServer.Marketing.Testing.Web
         [ExcludeFromCodeCoverage]
         public void Initialize(InitializationEngine context)
         {
-            ServiceLocator.Current.GetInstance<ITestHandler>();
-            ServiceLocator.Current.GetInstance<FeatureEnabler>();
-
             _clientKpiInjector = new ClientKpiInjector();
             _logger = LogManager.GetLogger();
         }
@@ -46,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Web
             {
                 _clientKpiInjector.AppendClientKpiScript();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error("An error occurred while injecting client KPI script.", ex);
             }
