@@ -19,6 +19,8 @@ using EPiServer.Marketing.KPI.Manager;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.KPI.Common.Helpers;
 using EPiServer.Personalization;
+using System.Web;
+using System.IO;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -85,6 +87,33 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void IsInSystemFolder_AddsPositiveResult_To_Items()
+        {
+            var testContextHelper = GetUnitUnderTest();
+
+            HttpRequest httpRequest = new HttpRequest("", "http://mySomething/", "");
+            StringWriter stringWriter = new StringWriter();
+            HttpResponse httpResponse = new HttpResponse(stringWriter);
+            HttpContext httpContextMock = new HttpContext(httpRequest, httpResponse);
+
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.GetCurrentContext()).Returns(httpContextMock); 
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("myUrl");
+
+            var swapDisabled = testContextHelper.IsInSystemFolder();
+            _mockContextHelper.Verify(ch => ch.SetItemValue(It.Is<string>(str => str == "InSystemFolder"),
+                It.Is<Boolean>(b => b == true)));
+
+            httpContextMock.Items.Add("InSystemFolder", true);
+            _mockContextHelper.Setup(ch => ch.HasItem(It.Is<string>(str => str == "InSystemFolder"))).Returns(true);
+            swapDisabled = testContextHelper.IsInSystemFolder();
+
+            _mockContextHelper.Verify(ch => ch.RequestedUrl(), Times.Once());
+            
+        }
+
+        [Fact]
         public void SwapDisabled_returns_false_when_we_are_able_to_swap()
         {
             var contentArgs = new ContentEventArgs(new ContentReference(1));
@@ -98,7 +127,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("adifferentUrl");
 
             var swapDisabled = testContextHelper.SwapDisabled(contentArgs);
-
+       
             Assert.False(swapDisabled);
         }
 
