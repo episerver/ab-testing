@@ -86,31 +86,44 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(swapDisabled);
         }
 
-        [Fact]
-        public void IsInSystemFolder_AddsPositiveResult_To_Items()
+        [Theory]
+        [InlineData(true, "http://mySomething/myUrl", "http://mySomething/myUrl")]
+        [InlineData(false, "http://mySomething/myUrl", "http://mySomething/DOESNT_MATCH")]
+        public void IsInSystemFolder_Adds_SystemFolderItemFlag_To_ContextItems(Boolean expectedResult, string currentUrl, string rootUrl)
         {
             var testContextHelper = GetUnitUnderTest();
 
-            HttpRequest httpRequest = new HttpRequest("", "http://mySomething/", "");
-            StringWriter stringWriter = new StringWriter();
-            HttpResponse httpResponse = new HttpResponse(stringWriter);
-            HttpContext httpContextMock = new HttpContext(httpRequest, httpResponse);
+            _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
+            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns(currentUrl);
+            _mockContextHelper.Setup(ch => ch.SetItemValue("InSystemFolder", expectedResult)).Verifiable();
+            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns(rootUrl);
+
+            var result = testContextHelper.IsInSystemFolder();
+            Assert.Equal(expectedResult, result);
+            _mockContextHelper.VerifyAll();
+            _mockEpiserverHelper.VerifyAll();
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void IsInSystemFolder_DoesNotAdd_SystemFolderItemFlag_IfAlreadyThere_And_ReturnsExpectedResult(Boolean expectedResult)
+        {
+            var testContextHelper = GetUnitUnderTest();
+
+            var httpRequest = new HttpRequest("", "http://mySomething/myUrl", "");
+            var stringWriter = new StringWriter();
+            var httpResponse = new HttpResponse(stringWriter);
+            var httpContextMock = new HttpContext(httpRequest, httpResponse);
+            httpContextMock.Items.Add("InSystemFolder", expectedResult);
 
             _mockContextHelper.Setup(ch => ch.HasCurrentContext()).Returns(true);
-            _mockContextHelper.Setup(ch => ch.GetCurrentContext()).Returns(httpContextMock); 
-            _mockContextHelper.Setup(ch => ch.RequestedUrl()).Returns("myUrl");
-            _mockEpiserverHelper.Setup(ch => ch.GetRootPath()).Returns("myUrl");
+            _mockContextHelper.Setup(ch => ch.HasItem(It.Is<string>(s => s == "InSystemFolder"))).Returns(true);
+            _mockContextHelper.Setup(ch => ch.GetCurrentContext()).Returns(httpContextMock);
 
-            var swapDisabled = testContextHelper.IsInSystemFolder();
-            _mockContextHelper.Verify(ch => ch.SetItemValue(It.Is<string>(str => str == "InSystemFolder"),
-                It.Is<Boolean>(b => b == true)));
-
-            httpContextMock.Items.Add("InSystemFolder", true);
-            _mockContextHelper.Setup(ch => ch.HasItem(It.Is<string>(str => str == "InSystemFolder"))).Returns(true);
-            swapDisabled = testContextHelper.IsInSystemFolder();
-
-            _mockContextHelper.Verify(ch => ch.RequestedUrl(), Times.Once());
-            
+            var result = testContextHelper.IsInSystemFolder();
+            _mockContextHelper.VerifyAll();
+            Assert.Equal(expectedResult, result);
         }
 
         [Fact]
