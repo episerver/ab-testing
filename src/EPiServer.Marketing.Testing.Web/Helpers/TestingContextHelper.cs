@@ -241,6 +241,12 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             return inSystemFolder;
         }
 
+        public bool IsHtmlContentType()
+        {
+             return _contextHelper.HasCurrentContext() ? 
+                _contextHelper.GetCurrentContext().Request.AcceptTypes.Contains("text/html") : false;
+        }
+
         /// <summary>
         /// Map IContent version data into the model
         /// </summary>
