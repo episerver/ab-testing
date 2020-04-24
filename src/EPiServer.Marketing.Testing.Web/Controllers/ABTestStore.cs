@@ -46,6 +46,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">Guid of the CMS content.</param>
         /// <returns>IMarketingTest object in a Rest result or InternalServerError.</returns>
         [HttpGet]
+        [Authorize(Roles = "CmsEditors, CmsAdmins")]
         public ActionResult Get(string id)
         {
             ActionResult result;
@@ -72,6 +73,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">Guid of the CMS content.</param>
         /// <returns>HttpStatusCode.OK or InternalServerError</returns>
         [HttpDelete]
+        [Authorize(Roles = "CmsEditors, CmsAdmins")]
         public ActionResult Delete(string id)
         {
             ActionResult result;
