@@ -98,6 +98,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="testData"></param>
         /// <returns>HttpStatusCode.Created or HttpStatusCode.InternalServerError</returns>
         [HttpPost]
+        [Authorize(Roles = "CmsEditors, CmsAdmins")]
         public ActionResult Post(TestingStoreModel testData)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
@@ -130,6 +131,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="testResult"></param>
         /// <returns>publishedVersionContentLink or InternalServerError</returns>
         [HttpPut]
+        [Authorize(Roles = "CmsEditors, CmsAdmins")]
         public ActionResult Put(TestResultStoreModel testResult)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
