@@ -170,6 +170,7 @@ Task("Clean")
     CleanDirectories(path);
 	CleanDirectories("../Artifacts");
 	CleanDirectories("CodeCoverage");
+	CleanDirectories(".sonarqube");
 });
 
 //
