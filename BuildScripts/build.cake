@@ -574,9 +574,11 @@ Task("Default")
 	.IsDependentOn("Describe")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
+	.IsDependentOn("StartAnalysis")
     .IsDependentOn("Build")
 	.IsDependentOn("SignAssemblies")
     .IsDependentOn("Test")
+	.IsDependentOn("StopAnalysis")
 	.IsDependentOn("PackageNuGets");
 
 RunTarget(target);
