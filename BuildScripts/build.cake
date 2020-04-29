@@ -27,7 +27,7 @@ var branchType = branch.Split('/')[0];
 var isMasterBranch = branch == "master";
 var isPrereleaseBuild = !isMasterBranch;
 var isPublicBuild = isMasterBranch || branchType == "release";
-var runAnalysis = true; // (Temporary to test from TC) isTeamCity && isMasterBranch;
+var runAnalysis = isTeamCity && isMasterBranch;
 
 // Base component versions
 
