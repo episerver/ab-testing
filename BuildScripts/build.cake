@@ -247,7 +247,8 @@ Task("StartAnalysis")
 				DotCoverReportsPath = MakeAbsolute(new FilePath("CodeCoverage/coverage.html")).FullPath,
 				Inclusions = string.Join(",", analysisInclusions),
 				Url = EnvironmentVariable("SonarQubeUrl"),
-				Login = EnvironmentVariable("SonarQubeLoginKey")
+				Login = EnvironmentVariable("SonarQubeLoginKey"),
+				UseCoreClr = false
 			}
 		);
 	})
@@ -378,7 +379,7 @@ Task("StopAnalysis")
 		SonarEnd(
 			new SonarEndSettings {
 				Login = EnvironmentVariable("SonarQubeLoginKey"),
-				UseCoreClr = true
+				UseCoreClr = false
 			}
 		);
 	})
