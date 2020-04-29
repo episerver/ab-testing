@@ -377,7 +377,7 @@ Task("StopAnalysis")
 	{
 		SonarEnd(
 			new SonarEndSettings {
-				Login = EnvironmentVariable("SonarQubeLoginKey")
+				Login = EnvironmentVariable("SonarQubeLoginKey"),
 				UseCoreClr = true
 			}
 		);
