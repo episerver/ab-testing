@@ -215,3 +215,6 @@ ModelManifest.xml
 /src/EPIServer.Marketing.Messaging/AssemblyVersionAuto.cs
 /src/EPiServer.Marketing.KPI.Commerce/AssemblyVersionAuto.cs
 /src/EPiServer.Marketing.KPI/AssemblyVersionAuto.cs
+/BuildScripts/.sonarqube
+/BuildScripts/tools/Addins/Cake.Sonar.1.1.25
+/BuildScripts/tools/MSBuild.SonarQube.Runner.Tool.4.8.0
