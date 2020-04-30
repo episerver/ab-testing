@@ -71,7 +71,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aTestCookie = new TestDataCookie();
 
             var aClientKpiInjector = GetUnitUnderTest();
-            
+            mockTestingHelper.Setup(m => m.IsHtmlContentType()).Returns(true).Verifiable();
+
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
             //verify the cookie was added only once
@@ -80,6 +81,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.Is<string>(item => item == aClientKpi.Id.ToString()), It.IsAny<object>()),
                 Times.Once(), "the item with the KPI id was not added to the HttpContext");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
         }
 
         [Fact]
@@ -91,6 +93,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aTestCookie = new TestDataCookie();
 
             var aClientKpiInjector = GetUnitUnderTest();
+            mockTestingHelper.Setup(m => m.IsHtmlContentType()).Returns(true).Verifiable();
 
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
@@ -100,6 +103,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.Is<string>(item => item == aClientKpi.Id.ToString()), It.IsAny<object>()),
                 Times.Once(), "only the client kpi should be set in the items collection");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
         }
 
         [Fact]
@@ -120,6 +124,28 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.IsAny<string>(), It.IsAny<object>()),
                 Times.Never(), "should not do work when the item already exists in the HttpContext");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
+        }
+
+        [Fact]
+        public void ActivateClientKpis_does_not_add_items_or_cookies_when_ContentIsNotHtml()
+        {
+            var aClientKpi = new TimeOnPageClientKpi() { Id = Guid.NewGuid() };
+            var aKpiList = new List<IKpi> { aClientKpi };
+            var aTestCookie = new TestDataCookie();
+
+            var aClientKpiInjector = GetUnitUnderTest();
+            mockTestingHelper.Setup(th => th.IsHtmlContentType()).Returns(false);
+
+            aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
+
+            //verify the cookie was added only once
+            mockHttpContextHelper.Verify(hch => hch.AddCookie(It.IsAny<HttpCookie>()),
+                Times.Never(), "should not do work when in edit mode");
+            //verify the expected item name and value are set
+            mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.IsAny<string>(), It.IsAny<object>()),
+                Times.Never(), "should not do work when in edit mode");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
         }
 
         [Fact]
@@ -140,6 +166,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.IsAny<string>(), It.IsAny<object>()),
                 Times.Never(), "should not do work when in edit mode");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
         }
 
         [Fact]
@@ -150,6 +177,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var aTestCookie = new TestDataCookie() { Converted = true, AlwaysEval = false };
 
             var aClientKpiInjector = GetUnitUnderTest();
+            mockHttpContextHelper.Setup(hch => hch.HasItem(It.IsAny<string>())).Returns(true);
 
             aClientKpiInjector.ActivateClientKpis(aKpiList, aTestCookie);
 
@@ -159,6 +187,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             //verify the expected item name and value are set
             mockHttpContextHelper.Verify(hch => hch.SetItemValue(It.IsAny<string>(), It.IsAny<object>()),
                 Times.Never(), "should not do work when in edit mode");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
         }
 
         [Fact]

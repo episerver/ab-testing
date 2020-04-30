@@ -10,6 +10,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
         protected global::System.Web.UI.WebControls.RangeValidator DurationValidator;
         protected global::System.Web.UI.WebControls.RangeValidator ParticipationValidator;
         protected global::System.Web.UI.WebControls.TextBox CookieDelimeter;
+        protected global::System.Web.UI.WebControls.CheckBox chkIsEnabled;
         protected global::System.Web.UI.WebControls.Panel ConnectionNote;
         protected global::System.Web.UI.WebControls.Panel MessagePanel;
 

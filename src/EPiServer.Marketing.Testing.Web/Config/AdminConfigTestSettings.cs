@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using EPiServer.Data;
+﻿using EPiServer.Data;
 using EPiServer.Data.Dynamic;
+using EPiServer.ServiceLocation;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace EPiServer.Marketing.Testing.Web.Config
@@ -35,8 +35,11 @@ namespace EPiServer.Marketing.Testing.Web.Config
         [StringLength(1, ErrorMessage = "Must be a single character.")]
         public string CookieDelimeter { get; set; }
 
+        public bool IsEnabled { get; set; }
+
         internal static AdminConfigTestSettings _currentSettings;
         internal static DynamicDataStoreFactory _factory;
+        internal IServiceLocator _serviceLocator;
 
         public static AdminConfigTestSettings Current
         {
@@ -44,13 +47,13 @@ namespace EPiServer.Marketing.Testing.Web.Config
             {
                 if (_currentSettings == null)
                 {
-                    if(_factory == null)
+                    if (_factory == null)
                     {
                         _factory = DynamicDataStoreFactory.Instance;
                     }
                     var store = _factory.GetStore(typeof(AdminConfigTestSettings));
                     _currentSettings = store.LoadAll<AdminConfigTestSettings>().OrderByDescending(x => x.Id.StoreId).FirstOrDefault() ?? new AdminConfigTestSettings();
-                    if( _currentSettings.CookieDelimeter == null )
+                    if (_currentSettings.CookieDelimeter == null)
                     {
                         _currentSettings.CookieDelimeter = "_";
                     }
@@ -71,6 +74,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             AutoPublishWinner = false;
             KpiLimit = 5;
             CookieDelimeter = "_";
+            IsEnabled = true;
         }
 
         public void Save()
@@ -79,14 +83,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
             store.Save(this);
 
             _currentSettings = this;
-        }
-
-        /// <summary>
-        /// Clears setting values that being stored in memory.
-        /// </summary>
-        public void Reset()
-        {
-            _currentSettings = null;
+            var configurationMonitor = (_serviceLocator == null ? ServiceLocator.Current : _serviceLocator).GetInstance<IConfigurationMonitor>();
+            configurationMonitor.HandleConfigurationChange();
         }
     }
 }

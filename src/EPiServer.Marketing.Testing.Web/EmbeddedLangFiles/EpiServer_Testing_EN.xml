@@ -71,6 +71,7 @@
         <testduration>Test Duration:</testduration>
         <cookiedelimeter>Cookie Delimeter (Only to be changed while there are no active tests; otherwise, it could lead to inaccurate test results):</cookiedelimeter>
         <delimetererror>Cookie delimeter must be a single character.</delimetererror>
+        <isenabled>Enable A/B testing.</isenabled>
       </admin>
       <archivedtestcomponent>
         <description>Shows archived tests for the selected content.</description>
@@ -160,6 +161,7 @@
         <view_challenger_content>View challenger content</view_challenger_content>
         <view_control_content>View control content</view_control_content>
         <views>views</views>
+        <test_disabled>A/B testing is currently disabled. No additional views or conversions will be recorded for any test until A/B testing is re-enabled.</test_disabled>
       </detailsview>
       <kpisummarywidget>
         <conversions>Conversions</conversions>
@@ -174,6 +176,7 @@
         <scheduled_test>An A/B test is scheduled to run on a version of this content </scheduled_test>
         <winner_link_text>Pick winner</winner_link_text>
         <winner_link_tooltip>View test details and pick winner </winner_link_tooltip>
+        <test_disabled>A/B testing is currently disabled. No additional views or conversions will be recorded for any test until A/B testing is re-enabled.</test_disabled>
       </notificationbar>
       <percentagetemplate>
         <conversion_rate>Conversion Rate</conversion_rate>
@@ -218,6 +221,7 @@
         <test_status_running>Test is running, </test_status_running>
         <total_participants_details>Number of participants</total_participants_details>
         <views>views</views>
+        <test_disabled>A/B testing is currently disabled. No additional views or conversions will be recorded for any test until A/B testing is re-enabled. You can still pick a winner or abort the test.</test_disabled>
       </pickwinnerview>
       <publishing>
         <error_cannot_publish>You cannot publish content while it is being tested. To publish your content, choose a winner or cancel the current test.</error_cannot_publish>

@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("Messaging engine for EPiServer")]
 [assembly: AssemblyCompany("EPiServer AB")]
 [assembly: AssemblyProduct("EPiServer.Marketing.Messaging")]
-[assembly: AssemblyCopyright("©  2015 by EPiServer AB. All rights reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

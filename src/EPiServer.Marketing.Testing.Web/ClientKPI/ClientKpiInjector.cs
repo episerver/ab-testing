@@ -162,7 +162,8 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         /// <returns>True if client KPIs should be activated, false otherwise</returns>
         private bool ShouldActivateKpis(TestDataCookie cookieData)
         {
-            return !_contextHelper.IsInSystemFolder() && (!cookieData.Converted || cookieData.AlwaysEval);
+            return _contextHelper.IsHtmlContentType() &&
+                     !_contextHelper.IsInSystemFolder() && (!cookieData.Converted || cookieData.AlwaysEval);
         }
 
         /// <summary>

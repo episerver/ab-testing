@@ -234,11 +234,26 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
 
             if (_contextHelper.HasCurrentContext())
             {
-                inSystemFolder = _contextHelper.RequestedUrl().ToLower()
-                    .Contains(_episerverHelper.GetRootPath().ToLower());
+                if (_contextHelper.HasItem("InSystemFolder"))
+                {
+                    inSystemFolder = (bool)_contextHelper.GetCurrentContext().Items["InSystemFolder"];
+                }
+                else
+                {
+                    inSystemFolder = _contextHelper.RequestedUrl().ToLower()
+                        .Contains(_episerverHelper.GetRootPath().ToLower());
+
+                    _contextHelper.SetItemValue("InSystemFolder", inSystemFolder);
+                }
             }
 
             return inSystemFolder;
+        }
+
+        public bool IsHtmlContentType()
+        {
+             return _contextHelper.HasCurrentContext() ? 
+                _contextHelper.GetCurrentContext().Request.AcceptTypes.Contains("text/html") : false;
         }
 
         /// <summary>

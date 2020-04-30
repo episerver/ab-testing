@@ -48,6 +48,9 @@
 
             kpiLimit: null,
 
+            // Is A/B testing enabled
+            isEnabled: null,
+
             postscript: function () {
                 this.inherited(arguments);
                 this.setupContentData();
@@ -75,6 +78,7 @@
                     this.set("participationPercent", config.participationPercent);
                     this.set("confidenceLevel", config.confidenceLevel);
                     this.set("kpiLimit", config.kpiLimit);
+                    this.set("isEnabled", config.isEnabled);
                 }.bind(this));
             },
 

@@ -17,6 +17,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Globalization;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web
 {
@@ -41,7 +42,6 @@ namespace EPiServer.Marketing.Testing.Web
         public const string SkipRaiseContentSwitchEvent = "SkipRaiseContentSwitchEvent";
         public const string ABTestHandlerSkipKpiEval = "ABTestHandlerSkipKpiEval";
 
-        [ExcludeFromCodeCoverage]
         public TestHandler()
         {
             _serviceLocator = ServiceLocator.Current;
@@ -52,14 +52,11 @@ namespace EPiServer.Marketing.Testing.Web
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
             _episerverHelper = _serviceLocator.GetInstance<IEpiserverHelper>();
+            
             // Setup our content events
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
-            contentEvents.LoadedChildren += LoadedChildren;
-            contentEvents.LoadedContent += LoadedContent;
-            contentEvents.DeletedContent += ContentEventsOnDeletedContent;
-            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion;
-
-            initProxyEventHandler();
+            contentEvents.DeletedContent += ContentEventsOnDeletedContent; 
+            contentEvents.DeletingContentVersion += ContentEventsOnDeletingContentVersion; 
         }
 
         //To support unit testing
@@ -94,7 +91,7 @@ namespace EPiServer.Marketing.Testing.Web
             // get the actual content item so we can get its Guid to check against our tests
             if (repo.TryGet(contentEventArgs.ContentLink, out draftContent))
             {
-                CheckForActiveTests(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
+                DeleteActiveTests(draftContent.ContentGuid, contentEventArgs.ContentLink.WorkID);
             }
         }
 
@@ -113,18 +110,18 @@ namespace EPiServer.Marketing.Testing.Web
 
             foreach (var guid in guids)
             {
-                CheckForActiveTests(guid, 0);
+                DeleteActiveTests(guid, 0);
             }
         }
 
         /// <summary>
-        /// Check the guid passed in to see if the page/draft is part of a test.  For published pages, the version passed in will be 0, as all we need/get is the guid
-        /// for drafts, we the guid and version will be passed in to compare against known variants being tested.
+        /// Deletes any active test associated with the contentGuid.
         /// </summary>
         /// <param name="contentGuid">Guid of item being deleted.</param>
         /// <param name="contentVersion">0 if published page, workID if draft</param>
         /// <returns>Number of active tests that were deleted from the system.</returns>
-        internal int CheckForActiveTests(Guid contentGuid, int contentVersion)
+        /// <remarks>This works if the published version or the draft is deleted.</remarks>
+        internal int DeleteActiveTests(Guid contentGuid, int contentVersion)
         {
             var contentCulture = _episerverHelper.GetContentCultureinfo();
             var testsDeleted = 0;
@@ -588,9 +585,9 @@ namespace EPiServer.Marketing.Testing.Web
         }
 
         /// <summary>
-        /// At startup, initializes all the ProxyEventHandler's for all Kpi objects found in all active tests.
+        /// Initializes all the ProxyEventHandler's for all Kpi objects found in all active tests.
         /// </summary>
-        internal void initProxyEventHandler()
+        internal void enableProxyEventHandler()
         {
             foreach (var test in _testRepo.GetActiveTests())
             {
@@ -604,6 +601,25 @@ namespace EPiServer.Marketing.Testing.Web
             var e = _serviceLocator.GetInstance<IMarketingTestingEvents>();
             e.TestAddedToCache += TestAddedToCache;
             e.TestRemovedFromCache += TestRemovedFromCache;
+        }
+
+        /// <summary>
+        /// Disables all the ProxyEventHandler's for all Kpi objects found in all active tests. 
+        /// </summary>
+        internal void disableProxyEventHandler()
+        {
+            foreach (var test in _testRepo.GetActiveTests())
+            {
+                foreach (var kpi in test.KpiInstances)
+                {
+                    RemoveProxyEventHandler(kpi);
+                }
+            }
+
+            // Setup our listener so when tests are added and removed and update our proxyEventHandler
+            var e = _serviceLocator.GetInstance<IMarketingTestingEvents>();
+            e.TestAddedToCache -= TestAddedToCache;
+            e.TestRemovedFromCache -= TestRemovedFromCache;
         }
 
         /// <summary>
@@ -669,6 +685,31 @@ namespace EPiServer.Marketing.Testing.Web
                 kpi.EvaluateProxyEvent -= ProxyEventHandler;
             }
         }
+
+        /// <inheritdoc/>
+        public void EnableABTesting()
+        {
+            // Remove event handlers first so that we never have more than one of each.
+            DisableABTesting();
+
+            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
+            contentEvents.LoadedChildren += LoadedChildren;     
+            contentEvents.LoadedContent += LoadedContent;
+
+            enableProxyEventHandler();
+            _logger.Information("A/B testing has been enabled.");
+        }
+
+        public void DisableABTesting()
+        {
+            var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
+            contentEvents.LoadedChildren -= LoadedChildren;     
+            contentEvents.LoadedContent -= LoadedContent;
+
+            disableProxyEventHandler();
+            _logger.Information("A/B testing has been disabled.");
+        }
+
         #endregion
     }
 }

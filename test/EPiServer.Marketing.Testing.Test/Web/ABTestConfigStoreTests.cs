@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Linq.Expressions;
-using EPiServer.Data.Dynamic;
+﻿using EPiServer.Data.Dynamic;
 using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Web;
 using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
@@ -22,11 +23,15 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<DynamicDataStoreFactory> _factory = new Mock<DynamicDataStoreFactory>();
         Mock<DynamicDataStore> _store = new Mock<DynamicDataStore>();
         Mock<AdminConfigTestSettings> _settings = new Mock<AdminConfigTestSettings>();
+        Mock<IConfigurationMonitor> _configurationMonitor = new Mock<IConfigurationMonitor>();
 
         private ABTestConfigStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<AdminConfigTestSettings>()).Returns(_settings.Object);
+            _locator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(_configurationMonitor.Object);
+            _configurationMonitor.Setup(c => c.HandleConfigurationChange());
+
             var testStore = new ABTestConfigStore(_locator.Object);
             return testStore;
         }
@@ -66,10 +71,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
             AdminConfigTestSettings._currentSettings = null;
 
             var settings = new AdminConfigTestSettings();
+            _locator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(_configurationMonitor.Object);
+            settings._serviceLocator = _locator.Object;
+
             settings.Save();
 
             ddsFactoryMock.Verify();
-            ddsMock.Verify(d => d.Save(It.Is<AdminConfigTestSettings>( s => s == settings)));
+            ddsMock.Verify(d => d.Save(It.Is<AdminConfigTestSettings>(s => s == settings)));
         }
 
         [Fact]
@@ -100,6 +108,39 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.Equal(5, testConfig.KpiLimit);
             Assert.NotNull(testConfig.CookieDelimeter);
             Assert.Equal("_", testConfig.CookieDelimeter);
+            Assert.True(testConfig.IsEnabled);
+        }
+
+        [Fact]
+        public void GetCurrent_CallsDDSFactoryGetStore_ToFetchAdminConfigSettings()
+        {
+            // mock the datastore in epi
+            var ddsMock = new Mock<DynamicDataStore>(null);
+            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
+            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
+            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
+
+            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
+            AdminConfigTestSettings._currentSettings = null;
+
+            var expectedConfig = new AdminConfigTestSettings()
+            {
+                Id = Data.Identity.NewIdentity(),
+                AutoPublishWinner = false,
+                ConfidenceLevel = 50,
+                IsEnabled = false,
+                CookieDelimeter = ":",
+                KpiLimit = 25,
+                ParticipationPercent = 42,
+                TestDuration = 182
+            };
+
+            ddsMock.Setup(x => x.LoadAll<AdminConfigTestSettings>())
+                .Returns(new List<AdminConfigTestSettings> { expectedConfig });
+
+            var actualConfig = AdminConfigTestSettings.Current;
+
+            ddsFactoryMock.Verify();
         }
 
         [Fact]
@@ -139,26 +180,29 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True((result.Data as AdminConfigTestSettings).AutoPublishWinner == false, "AdminConfigTestSettings.AutoPublishWinner value does not match");
             Assert.True((result.Data as AdminConfigTestSettings).KpiLimit == 5, "AdminConfigTestSettings.KpiLimit value does not match");
             Assert.True((result.Data as AdminConfigTestSettings).CookieDelimeter == "_", "AdminConfigTestSettings.CookieDelimeter value does not match");
+            Assert.True((result.Data as AdminConfigTestSettings).IsEnabled, "AdminConfigTestSettings.IsEnabled value does not match");
         }
 
         [Fact]
-        public void Reset_Current_Settings()
+        public void AdminConfigTestSettings_SavesSettings_And_CallsConfigurationMonitor()
         {
-            var id = Guid.NewGuid();
-            var settings = new AdminConfigTestSettings() { Id = id };
+            // mock the datastore in epi
+            var ddsMock = new Mock<DynamicDataStore>(null);
+            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
+            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
+            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
 
-            Assert.Equal(5, settings.KpiLimit);
-            Assert.Equal(95, settings.ConfidenceLevel);
-            Assert.Equal(30, settings.TestDuration);
-            Assert.Equal(10, settings.ParticipationPercent);
-            Assert.Equal(id, settings.Id);
-            Assert.Equal("_", settings.CookieDelimeter);
+            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
+            AdminConfigTestSettings._currentSettings = null;
 
-            settings.Reset();
+            var testClass = GetUnitUnderTest();
+            var result = testClass.Get() as RestResult;
+            var settings = result.Data as AdminConfigTestSettings;
 
-            Assert.Null(AdminConfigTestSettings._currentSettings);
+            settings._serviceLocator = _locator.Object;
+            settings.Save();
 
+            _configurationMonitor.Verify(c => c.HandleConfigurationChange(), Times.Once);
         }
-
     }
 }

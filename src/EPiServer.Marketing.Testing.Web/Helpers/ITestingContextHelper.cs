@@ -13,6 +13,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         bool SwapDisabled(ChildrenEventArgs e);
         MarketingTestingContextModel GenerateContextData(IMarketingTest testData);
         bool IsInSystemFolder();
+        bool IsHtmlContentType();
 
     }
 }

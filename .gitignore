@@ -204,3 +204,14 @@ ModelManifest.xml
 /buildprocess.cmd
 /.vs
 /Models/Testing/.vs/slnx.sqlite
+/BuildScripts/CodeCoverage
+/BuildScripts/tools/xunit.runner.console.2.4.1
+/BuildScripts/tools/packages.config.md5sum
+/BuildScripts/tools/packages.config
+/BuildScripts/tools/NUnit.ConsoleRunner.3.4.0
+/BuildScripts/tools/JetBrains.dotCover.CommandLineTools.2019.1.3
+/BuildScripts/tools/Cake
+/src/EPiServer.Marketing.Testing.Web/AssemblyVersionAuto.cs
+/src/EPIServer.Marketing.Messaging/AssemblyVersionAuto.cs
+/src/EPiServer.Marketing.KPI.Commerce/AssemblyVersionAuto.cs
+/src/EPiServer.Marketing.KPI/AssemblyVersionAuto.cs
