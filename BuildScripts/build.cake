@@ -6,6 +6,8 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.4.0"
 #tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2019.1.3"
 #tool "nuget:?package=xunit.runner.console"
+#addin "nuget:?package=Cake.Sonar"
+#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -25,6 +27,7 @@ var branchType = branch.Split('/')[0];
 var isMasterBranch = branch == "master";
 var isPrereleaseBuild = !isMasterBranch;
 var isPublicBuild = isMasterBranch || branchType == "release";
+var runAnalysis = isTeamCity && isMasterBranch;
 
 // Base component versions
 
@@ -56,7 +59,7 @@ var versions = new Dictionary<string, string>
 // HELPERS
 //////////////////////////////////////////////////////////////////////
 
-public int BuildNumber 
+public int BuildNumber
 {
 	get
 	{
@@ -90,7 +93,7 @@ public string InformationalVersionFor(string projectId)
 {
 	string informationalVersion = AssemblyVersionFor(projectId);
 
-	if(isPrereleaseBuild)	
+	if(isPrereleaseBuild)
 	{
 		// Discover the release modifier given the branch type
 		var versionModifier = versionModifiers.ContainsKey(branchType)
@@ -144,7 +147,7 @@ Teardown(
 
 //
 // Task: Prepare
-// Prepares the build by determining the environment, branch, 
+// Prepares the build by determining the environment, branch,
 // component versions, and other factors.
 //
 Task("Describe").Does(
@@ -161,12 +164,13 @@ Task("Describe").Does(
 
 Task("Clean")
     .Does(() =>
-{ 
+{
 	var path =  $"../src/EPiServer.Marketing.*/**/bin/{configuration}/net461";
-	
+
     CleanDirectories(path);
 	CleanDirectories("../Artifacts");
 	CleanDirectories("CodeCoverage");
+	CleanDirectories(".sonarqube");
 });
 
 //
@@ -174,14 +178,14 @@ Task("Clean")
 // Restores all NuGet packages for the solution.
 //
 Task("Restore").Does(
-	() => 
+	() =>
 	{
 		Information($"Using MSBuildSdksPath: {EnvironmentVariable("MSBuildSdksPath")}");
 
 		NuGetRestore(
 			"../EPiServer.Marketing.Testing.sln",
-			new NuGetRestoreSettings 
-			{ 
+			new NuGetRestoreSettings
+			{
 				ToolPath = "tools/nuget.exe",
 				ConfigFile = "../nuget.config",
 				NoCache = true,
@@ -199,16 +203,16 @@ Task("Restore").Does(
 Task("Version").IsDependentOn("Describe")
 			   .Does(
 	() =>
-	{	
+	{
 		foreach(var projectId in versions.Keys)
 		{
 			var assemblyInfoPath = new FilePath($"../src/{projectId}/AssemblyVersionAuto.cs");
-			
+
 			if (FileExists(assemblyInfoPath))
 			{
 			    DeleteFile(assemblyInfoPath);
 			}
-			
+
 			CreateAssemblyInfo(
 				assemblyInfoPath,
 				new AssemblyInfoSettings
@@ -218,9 +222,38 @@ Task("Version").IsDependentOn("Describe")
 					Copyright = $"Copyright (c) Episerver {DateTime.Now.Year}"
 				}
 			);
-		}		
+		}
 	}
 );
+
+//
+// Task: StartAnalysis
+// Start SonarQube analysis.
+//
+Task("StartAnalysis")
+	.WithCriteria(runAnalysis)
+	.ContinueOnError()
+	.Does(
+	() =>
+	{
+		var analysisInclusions = new []
+		{
+			"**/src/**/*"
+		};
+
+		SonarBegin(
+			new SonarBeginSettings {
+				Key = "MAR",
+				Version = InformationalVersionFor("EPiServer.Marketing.Testing.Web"),
+				DotCoverReportsPath = MakeAbsolute(new FilePath("CodeCoverage/coverage.html")).FullPath,
+				Inclusions = string.Join(",", analysisInclusions),
+				Url = EnvironmentVariable("SonarQubeUrl"),
+				Login = EnvironmentVariable("SonarQubeLoginKey"),
+				UseCoreClr = false
+			}
+		);
+	})
+	.ReportError(ex => Warning(ex.ToString()));
 
 //
 // Task: Build
@@ -230,6 +263,7 @@ Task("Build").IsDependentOn("Describe")
 			 .IsDependentOn("Clean")
 			 .IsDependentOn("Restore")
 			 .IsDependentOn("Version")
+			 .IsDependentOn("StartAnalysis")
 			 .Does(
 	() =>
 	{
@@ -238,7 +272,7 @@ Task("Build").IsDependentOn("Describe")
         var buildSettings = new MSBuildSettings()
 			.SetConfiguration(configuration)
 			.SetVerbosity(Verbosity.Minimal);
-   
+
 		MSBuild("../EPiServer.Marketing.Testing.sln",  buildSettings);
 	}
 );
@@ -262,9 +296,9 @@ Task("SignAssemblies")
 		{
 			throw new Exception("No assembly signing tools could be found on this build agent.");
 		}
-		
+
 		Environment.SetEnvironmentVariable("Path", $"{signingToolPath};{EnvironmentVariable("Path")}");
-		
+
 		SignAssembly($"EPiServer.Marketing.KPI/bin/{configuration}/net461/EPiServer.Marketing.KPI.dll");
 		SignAssembly($"EPiServer.Marketing.KPI.Commerce/bin/{configuration}/net461/EPiServer.Marketing.KPI.Commerce.dll");
 		SignAssembly($"EPIServer.Marketing.Messaging/bin/{configuration}/net461/EPIServer.Marketing.Messaging.dll");
@@ -273,7 +307,7 @@ Task("SignAssemblies")
 		SignAssembly($"EPiServer.Marketing.Testing.Core/bin/{configuration}/net461/EPiServer.Marketing.Testing.Core.dll");
 	}
 );
-	
+
 //
 // Task: Test
 // Runs all unit tests with DotNetCoreTool and reports their code coverage using DotCoverCover.
@@ -286,30 +320,30 @@ Task("Test")
 	    foreach(var project in GetFiles("../test/**/*Test.csproj"))
         {
             var projectName = project.GetFilenameWithoutExtension().ToString();
-			
+
 			if(projectName != "EPiServer.Marketing.Testing.Web.ClientTest")
-			{ 
+			{
 				var coverageSettings = new DotCoverCoverSettings
 				{
 					TargetWorkingDir = project.GetDirectory().FullPath
 				}
 				.WithFilter("-:*EPiServer.Marketing.KPI.Test*")
 				.WithFilter("-:*EPiServer.Marketing.KPI.Commerce.Test*")
-				.WithFilter("-:*EPiServer.Marketing.Messaging.Test*")	
+				.WithFilter("-:*EPiServer.Marketing.Messaging.Test*")
 				.WithFilter("-:*EPiServer.Marketing.Testing.Test*")
 				.WithFilter("-:*xunit.assert*")
-				.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks				
-				
+				.WithAttributeFilter("System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute");	// Exclude explicitly marked blocks
+
 				DotCoverCover(
-					cake => 
+					cake =>
 					{
 						cake.DotNetCoreTool(projectPath: project.FullPath, command: "test", arguments: $"--configuration {configuration} --no-build --no-restore -v m");
 					},
 					new FilePath($"CodeCoverage/{projectName}.dcvr"),
 					coverageSettings
-				);  
-			}			
-        } 
+				);
+			}
+        }
 
         //Merge Code Coverage
         DotCoverMerge(GetFiles("CodeCoverage/*.dcvr"), new FilePath("CodeCoverage/coverage.dcvr"));
@@ -323,16 +357,34 @@ Task("Test")
 
 			TeamCity.ImportDotCoverCoverage(coverageData, dotCoverToolDirectory);
 		}
-		else 
-		{			
-			DotCoverReport(
-				new FilePath("CodeCoverage/coverage.dcvr"),
-				new FilePath("CodeCoverage/coverage.html"),
-				new DotCoverReportSettings { ReportType = DotCoverReportType.HTML }
-			);
-		} 
+
+		DotCoverReport(
+			new FilePath("CodeCoverage/coverage.dcvr"),
+			new FilePath("CodeCoverage/coverage.html"),
+			new DotCoverReportSettings { ReportType = DotCoverReportType.HTML }
+		);
 	}
 );
+
+//
+// Task: StopAnalysis
+// Complete SonarQube analysis and submit results.
+//
+Task("StopAnalysis")
+	.IsDependentOn("Test")
+	.WithCriteria(runAnalysis)
+	.ContinueOnError()
+	.Does(
+	() =>
+	{
+		SonarEnd(
+			new SonarEndSettings {
+				Login = EnvironmentVariable("SonarQubeLoginKey"),
+				UseCoreClr = false
+			}
+		);
+	})
+	.ReportError(ex => Warning(ex.ToString()));
 
 //
 // Task: PackageKpi
@@ -343,9 +395,9 @@ Task("PackageKpi")
     () => {
         var packageVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
 
-        var nuGetPackSettings = new NuGetPackSettings {           
+        var nuGetPackSettings = new NuGetPackSettings {
             Version = packageVersion,
-            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",
             Symbols = false,
             NoPackageAnalysis = true,
             BasePath = $"../src/",
@@ -376,15 +428,15 @@ Task("PackageKpiCommerce")
     () => {
         var packageVersion = InformationalVersionFor("EPiServer.Marketing.KPI.Commerce");
 		var kpiVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
-		
+
 		CreateDirectory("./module/Admin");
 		CopyFileToDirectory("../src/EPiServer.Marketing.KPI.Commerce/Config/CommerceKpiConfig.aspx", "./module/Admin");
 		CopyFileToDirectory("../src/EPiServer.Marketing.KPI.Commerce/module.config", "./module");
         Zip("./module", "../EPiServer.Marketing.KPI.Commerce.zip");
 
-        var nuGetPackSettings = new NuGetPackSettings {           
+        var nuGetPackSettings = new NuGetPackSettings {
             Version = packageVersion,
-            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",
             Symbols = false,
             NoPackageAnalysis = true,
             BasePath = $"../src/",
@@ -404,7 +456,7 @@ Task("PackageKpiCommerce")
         };
 
         NuGetPack($"../src/EPiServer.Marketing.KPI.Commerce/Package.nuspec", nuGetPackSettings);
-		
+
 		DeleteDirectory("./module", recursive:true);
 		DeleteFile("../EPiServer.Marketing.KPI.Commerce.zip");
 	}
@@ -419,9 +471,9 @@ Task("PackageMessaging")
     () => {
         var packageVersion = InformationalVersionFor("EPIServer.Marketing.Messaging");
 
-        var nuGetPackSettings = new NuGetPackSettings {           
+        var nuGetPackSettings = new NuGetPackSettings {
             Version = packageVersion,
-            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",
             Symbols = false,
             NoPackageAnalysis = true,
             BasePath = $"../src/",
@@ -451,7 +503,7 @@ Task("PackageABTesting")
         var packageVersion = InformationalVersionFor("EPiServer.Marketing.Testing.Web");
 		var kpiVersion = InformationalVersionFor("EPiServer.Marketing.KPI");
 		var messagingVersion = InformationalVersionFor("EPIServer.Marketing.Messaging");
-		
+
 		CreateDirectory("./module/Admin");
 		CopyFileToDirectory("../src/EPiServer.Marketing.Testing.Web/Config/AdminConfig.aspx", "./module/Admin");
 		CopyDirectory("../src/EPiServer.Marketing.Testing.Web/ClientResources", "./module/ClientResources");
@@ -465,7 +517,7 @@ Task("PackageABTesting")
 		{
 		   nuspecContentList.Add(new NuSpecContent { Source = "../src/Database/Testing/" + file.GetFilename().ToString(), Target = "tools/epiupdates/sql" });
 		}
-		
+
 		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Web/bin/{configuration}/net461/EPiServer.Marketing.Testing.Web.dll", Target = "lib/net461" });
 		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Web/bin/{configuration}/net461/EPiServer.Marketing.Testing.Web.xml", Target = "lib/net461" });
 		nuspecContentList.Add(new NuSpecContent { Source = $"EPiServer.Marketing.Testing.Dal/bin/{configuration}/net461/EPiServer.Marketing.Testing.Dal.dll", Target = "lib/net461" });
@@ -476,9 +528,9 @@ Task("PackageABTesting")
 		nuspecContentList.Add(new NuSpecContent { Source = "EPiServer.Marketing.Testing.Web/web.config.transform", Target = "content/" });
 		nuspecContentList.Add(new NuSpecContent { Source = "EPiServer.Marketing.Testing.Web/web.config.install.xdt", Target = "content/" });
 
-        var nuGetPackSettings = new NuGetPackSettings {           
+        var nuGetPackSettings = new NuGetPackSettings {
             Version = packageVersion,
-            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",                                    
+            Copyright = $"Copyright Episerver (c) {DateTime.Now.Year}",
             Symbols = false,
             NoPackageAnalysis = true,
             BasePath = $"../src/",
@@ -500,7 +552,7 @@ Task("PackageABTesting")
         };
 
         NuGetPack($"../src/EPiServer.Marketing.Testing.Web/Package.nuspec", nuGetPackSettings);
-		
+
 		DeleteDirectory("./module", recursive:true);
 		DeleteFile("../EPiServer.Marketing.Testing.zip");
 	}
@@ -521,12 +573,14 @@ Task("PackageNuGets")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Describe")	
+	.IsDependentOn("Describe")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
+	.IsDependentOn("StartAnalysis")
     .IsDependentOn("Build")
 	.IsDependentOn("SignAssemblies")
     .IsDependentOn("Test")
+	.IsDependentOn("StopAnalysis")
 	.IsDependentOn("PackageNuGets");
 
 RunTarget(target);
