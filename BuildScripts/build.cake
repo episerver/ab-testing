@@ -31,7 +31,7 @@ var isPublicBuild = isMasterBranch || branchType == "release";
 var kpiBaseVersion = "2.5.3";
 var kpiCommerceBaseVersion = "2.4.2";
 var messagingBaseVersion = "1.3.0";
-var webBaseVersion = "2.6.0";
+var webBaseVersion = "2.6.1";
 
 var versionModifiers = new Dictionary<string, string>
 {
