@@ -146,6 +146,8 @@
             },
 
             startup: function () {
+                this.reset();
+                this._setViewCurrentVersionAttr();
                 if (document.getElementById("draftThumbnaildetail")) {
                     thumbnails._setPreviewState("publishThumbnaildetail", block, none);
                     thumbnails._setPreviewState("draftThumbnaildetail", block, none);
@@ -156,8 +158,6 @@
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
-                this._resetView();
-                this._setViewCurrentVersionAttr();
             },
 
             // TEST DATA MODEL & FORM SETTERS
