@@ -106,7 +106,7 @@
                 this.kpiModel = this.kpiModel || new KpiViewModel();
                 if (this.kpiModel.availableKpis) {
                     this._setKpiSelectList(this.kpiModel.availableKpis);
-                };
+                }
 
                 this.kpiModel.watch("availableKpis",
                     function (name, oldvalue, value) {
@@ -120,12 +120,8 @@
                 this.kpiEntries = 0;
                 this._adjustKpiSelectorCombo();
                 if (document.getElementById("publishThumbnaildetail-spinner")) {
-                    document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
-                    document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                    document.getElementById("publishThumbnaildetail-error").style.display = "none";
-                    document.getElementById("draftThumbnaildetail-error").style.display = "none";
-                    document.getElementById("publishThumbnaildetail").style.display = "none";
-                    document.getElementById("draftThumbnaildetail").style.display = "none";
+                    thumbnails._setPreviewState("publishThumbnaildetail", block, none);
+                    thumbnails._setPreviewState("draftThumbnaildetail", block, none);
                 }
                 this.reset();
             },
@@ -142,7 +138,7 @@
 
             decrementKpiEntries: function () {
                 this.kpiEntries--;
-                if (this.kpiEntries == 0) {
+                if (this.kpiEntries === 0) {
                     this.isMultiKpiTest = true;
                 }
                 this._adjustKpiSelectorCombo();
@@ -150,13 +146,11 @@
             },
 
             startup: function () {
+                this.reset();
+                this._setViewCurrentVersionAttr();
                 if (document.getElementById("draftThumbnaildetail")) {
-                    document.getElementById("publishThumbnaildetail-spinner").style.display = "block";
-                    document.getElementById("draftThumbnaildetail-spinner").style.display = "block";
-                    document.getElementById("publishThumbnaildetail-error").style.display = "none";
-                    document.getElementById("draftThumbnaildetail-error").style.display = "none";
-                    document.getElementById("publishThumbnaildetail").style.display = "none";
-                    document.getElementById("draftThumbnaildetail").style.display = "none";
+                    thumbnails._setPreviewState("publishThumbnaildetail", block, none);
+                    thumbnails._setPreviewState("draftThumbnaildetail", block, none);
                 }
                 if (this.breadcrumbWidget) {
                     this.breadcrumbWidget.set("contentLink", this.contentData.contentLink);
@@ -164,7 +158,6 @@
                     this.breadcrumbWidget._addResizeListener();
                     this.breadcrumbWidget.layout();
                 }
-                this._resetView();
             },
 
             // TEST DATA MODEL & FORM SETTERS
