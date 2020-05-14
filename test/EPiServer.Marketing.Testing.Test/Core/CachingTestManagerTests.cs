@@ -122,7 +122,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockSignal.ResetCalls();
 
-             manager.Delete(expectedTest.Id, expectedCultureInfo);
+            manager.Delete(expectedTest.Id, expectedCultureInfo);
 
             _mockTestManager.Verify( tm => tm.Delete(expectedTest.Id, expectedCultureInfo), Times.Once );
 
@@ -573,21 +573,19 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Assert.Equal(expectedTest.Id, actualTestId);
 
             _mockTestManager.VerifyAll();
-            _mockEvents.Verify(
-                e =>
-                    e.RaiseMarketingTestingEvent(
-                        DefaultMarketingTestingEvents.TestAddedToCacheEvent,
-                        It.Is<TestEventArgs>(args => args.Test == expectedTest)
-                    ),
-                Times.Once // Once During constructor
+            _mockEvents.Verify( e =>
+                                e.RaiseMarketingTestingEvent(
+                                DefaultMarketingTestingEvents.TestAddedToCacheEvent,
+                                It.Is<TestEventArgs>(args => args.Test == expectedTest)
+                                ),
+                                Times.Once // Once During constructor
             );
-            _mockEvents.Verify(
-                 e =>
-                     e.RaiseMarketingTestingEvent(
-                         DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,
-                         It.Is<TestEventArgs>(args => args.Test == expectedTest)
-                     ),
-                 Times.Once // once when removed
+            _mockEvents.Verify( e =>
+                                e.RaiseMarketingTestingEvent(
+                                    DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,
+                                    It.Is<TestEventArgs>(args => args.Test == expectedTest)
+                                ),
+                                Times.Once // once when removed
              );
             _mockSignal.Verify(s => s.Reset(), Times.Once());
         }
