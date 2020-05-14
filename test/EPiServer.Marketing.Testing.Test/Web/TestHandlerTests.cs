@@ -853,22 +853,56 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void LoadedChildren()
+        public void LoadedChildren_ReplacesContent()
         {
             var th = GetUnitUnderTest();
+            var ExpectedCulture = CultureInfo.GetCultureInfo("en-GB");
 
-            _mockMarketingTestingWebRepository.Setup(call => call.GetVariantContent(It.IsAny<Guid>())).Returns(new BasicContent());
-
-            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookies()).Returns(new List<TestDataCookie>() { new TestDataCookie() });
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(ExpectedCulture);
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(new TestDataCookie());
             _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
             _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
-
-            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
+         
+            var ExpectedReplacementContent = new BasicContent();
+            _mockMarketingTestingWebRepository.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), ExpectedCulture)).Returns(ExpectedReplacementContent);
 
             var t = new ContentReference(1, 3);
-            var args = new ChildrenEventArgs(t, new List<IContent>() { new BasicContent() });
+            var originalExpectedContent = new BasicContent();
+            var args = new ChildrenEventArgs(t, new List<IContent>() { originalExpectedContent });
+
             th.LoadedChildren(new object(), args);
+
+            _mockTestDataCookieHelper.VerifyAll();
+            _mockEpiserverHelper.VerifyAll();
+            _mockMarketingTestingWebRepository.Verify(call => call.GetVariantContent(It.IsAny<Guid>(), ExpectedCulture));
+            Assert.Contains(ExpectedReplacementContent, args.ChildrenItems);
+         }
+
+        [Fact]
+        public void LoadedChildren_UsesOriginalContentIfVariantNull()
+        {
+            var th = GetUnitUnderTest();
+            var ExpectedCulture = CultureInfo.GetCultureInfo("en-GB");
+
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(ExpectedCulture);
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(new TestDataCookie());
+            _mockTestDataCookieHelper.Setup(call => call.HasTestData(It.IsAny<TestDataCookie>())).Returns(true);
+            _mockTestDataCookieHelper.Setup(call => call.IsTestParticipant(It.IsAny<TestDataCookie>())).Returns(true);
+            _mockTestDataCookieHelper.Setup(call => call.GetTestDataFromCookie(It.IsAny<string>(), It.IsAny<string>())).Returns(new TestDataCookie() { ShowVariant = true });
+            
+            var t = new ContentReference(1, 3);
+            var originalExpectedContent = new BasicContent();
+            var args = new ChildrenEventArgs(t, new List<IContent>() { originalExpectedContent });
+
+            _mockMarketingTestingWebRepository.Setup(call => call.GetVariantContent(It.IsAny<Guid>(), ExpectedCulture)).Returns(null as BasicContent);
+
+            th.LoadedChildren(new object(), args);
+
+            _mockTestDataCookieHelper.VerifyAll();
+            _mockEpiserverHelper.VerifyAll();
+            _mockMarketingTestingWebRepository.Verify(call => call.GetVariantContent(It.IsAny<Guid>(), ExpectedCulture));
+            Assert.Contains(originalExpectedContent, args.ChildrenItems);
         }
     }
 }
