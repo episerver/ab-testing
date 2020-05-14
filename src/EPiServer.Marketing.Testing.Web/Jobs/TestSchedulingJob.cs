@@ -6,7 +6,6 @@ using EPiServer.ServiceLocation;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Security.Principal;
 using System.Web;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
@@ -16,7 +15,7 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.Security;
-using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.Testing.Web.Jobs
 {
@@ -76,9 +75,9 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                         var utcEndDate = test.EndDate.ToUniversalTime();
                         if (DateTime.UtcNow > utcEndDate) // stop it now
                         {
-                            webRepo.StopMarketingTest(test.Id);
+                            LogManager.GetLogger().Information("Stopping test " + test.Description);
 
-                            UpdateTest(test, webRepo, testingContextHelper, autoPublishTestResults);
+                            CalculateResultsAndSaveTest(test, webRepo, testingContextHelper, autoPublishTestResults);
 
                             stopped++;
                         }
@@ -88,10 +87,12 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
                             nextExecutionUTC = utcEndDate;
                         }
                         break;
+
                     case TestState.Inactive:
                         var utcStartDate = test.StartDate.ToUniversalTime();
                         if (DateTime.UtcNow > utcStartDate) // start it now
                         {
+                            LogManager.GetLogger().Information("starting test " + test.Description);
                             webRepo.StartMarketingTest(test.Id);
                             started++;
                         }
@@ -130,53 +131,61 @@ namespace EPiServer.Marketing.Testing.Web.Jobs
         }
 
         /// <summary>
-        /// Calculate test results to see if they are significant or not and updat the test.  Also, autopublish the winning variant if the results are significant and autopublish is enabled.
+        /// Calculate test results significance, auto publish if needed, update the test results, and stop the test
         /// </summary>
         /// <param name="test"></param>
         /// <param name="webRepo"></param>
         /// <param name="testingContextHelper"></param>
         /// <param name="autoPublishTestResults"></param>
-        private void UpdateTest(IMarketingTest test, IMarketingTestingWebRepository webRepo, ITestingContextHelper testingContextHelper, bool autoPublishTestResults)
+        private void CalculateResultsAndSaveTest(IMarketingTest test, IMarketingTestingWebRepository webRepo, ITestingContextHelper testingContextHelper, bool autoPublishTestResults)
         {
-            //calculate significance results
-            var sigResults = Significance.CalculateIsSignificant(test);
-            test.IsSignificant = sigResults.IsSignificant;
-            test.ZScore = sigResults.ZScore;
-
-            if (autoPublishTestResults && sigResults.IsSignificant)
+            try
             {
-                if (Guid.Empty != sigResults.WinningVariantId)
+                //calculate significance results
+                var sigResults = Significance.CalculateIsSignificant(test);
+                test.IsSignificant = sigResults.IsSignificant;
+                test.ZScore = sigResults.ZScore;
+
+                if (autoPublishTestResults && sigResults.IsSignificant)
                 {
-                    var winningVariant = test.Variants.First(v => v.Id == sigResults.WinningVariantId);
-                    winningVariant.IsWinner = true;
-
-                    webRepo.SaveMarketingTest(test);
-
-                    var contextData = testingContextHelper.GenerateContextData(test);
-                    var winningLink = winningVariant.IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
-
-                    var storeModel = new TestResultStoreModel()
+                    if (Guid.Empty != sigResults.WinningVariantId)
                     {
-                        DraftContentLink = contextData.DraftVersionContentLink,
-                        PublishedContentLink = contextData.PublishedVersionContentLink,
-                        TestId = test.Id.ToString(),
-                        WinningContentLink = winningLink
-                    };
+                        var winningVariant = test.Variants.First(v => v.Id == sigResults.WinningVariantId);
+                        winningVariant.IsWinner = true;
 
-                    // We need to impersonate the user that created the test because the job may not have sufficient priviledges.  If there is no context(i.e. someone didn't force run the job) then 
-                    // the test creator will be used and the log will show this user name.
-                    if (HttpContext.Current == null)
-                    {
-                        PrincipalInfo.CurrentPrincipal = PrincipalInfo.CreatePrincipal(test.Owner);
+                        webRepo.SaveMarketingTest(test);
+
+                        var contextData = testingContextHelper.GenerateContextData(test);
+                        var winningLink = winningVariant.IsPublished ? contextData.PublishedVersionContentLink : contextData.DraftVersionContentLink;
+
+                        var storeModel = new TestResultStoreModel()
+                        {
+                            DraftContentLink = contextData.DraftVersionContentLink,
+                            PublishedContentLink = contextData.PublishedVersionContentLink,
+                            TestId = test.Id.ToString(),
+                            WinningContentLink = winningLink
+                        };
+
+                        // We need to impersonate the user that created the test because the job may not have sufficient priviledges.  If there is no context(i.e. someone didn't force run the job) then 
+                        // the test creator will be used and the log will show this user name.
+                        if (HttpContext.Current == null)
+                        {
+                            PrincipalInfo.CurrentPrincipal = PrincipalInfo.CreatePrincipal(test.Owner);
+                        }
+
+                        webRepo.PublishWinningVariant(storeModel);
                     }
-
-                    webRepo.PublishWinningVariant(storeModel);
+                }
+                else
+                {
+                    webRepo.SaveMarketingTest(test);
                 }
             }
-            else
+            catch(Exception e)
             {
-                webRepo.SaveMarketingTest(test);
+                LogManager.GetLogger().Error("Internal error publishing variant.", e);
             }
+            webRepo.StopMarketingTest(test.Id);
         }
     }
 }

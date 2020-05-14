@@ -167,12 +167,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _webRepo.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()),
                 "Get did not call getTestList");
-            _webRepo.Verify(tm => tm.StopMarketingTest(It.Is<Guid>(g => g == TestToStop)), Times.Once,
+            _webRepo.Verify(tm => tm.StopMarketingTest(TestToStop), Times.Once,
                 "Failed to stop test with proper Guid");
             _webRepo.Verify(m => m.PublishWinningVariant(It.IsAny<TestResultStoreModel>()), Times.Exactly(2),
                 "Failed to auto publish results");
         }
-
 
         public class MyLS : LocalizationService
         {
