@@ -113,24 +113,18 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public void CachingTestManager_Delete_SignalsCacheInvalidation()
         {
             var cache = new MemoryCache(nameof(CachingTestManager_Delete_SignalsCacheInvalidation));
+            var expectedTest = _expectedTests.First();
+            var expectedCultureInfo = CultureInfo.GetCultureInfo(expectedTest.ContentLanguage);
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
-            var testToArchive = _expectedTests.First();
             var manager = new CachingTestManager(cache, _mockSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
             _mockSignal.ResetCalls();
 
-            manager.Delete(testToArchive.Id, CultureInfo.GetCultureInfo(testToArchive.ContentLanguage));
+             manager.Delete(expectedTest.Id, expectedCultureInfo);
 
-            _mockTestManager.Verify(
-                tm =>
-                    tm.Delete(
-                        It.Is<Guid>(actualTestId => actualTestId == testToArchive.Id),
-                        It.Is<CultureInfo>(actualContentCulture => actualContentCulture.Name == testToArchive.ContentLanguage)
-                    ),
-                Times.Once
-            );
+            _mockTestManager.Verify( tm => tm.Delete(expectedTest.Id, expectedCultureInfo), Times.Once );
 
             _mockSignal.Verify(s => s.Reset(), Times.Once());
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
@@ -561,18 +555,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Save_DoesNotCacheTestIfNotActive()
+        public void CachingTestManager_Save_RemovesFromCacheIfNotActive_SendsMessageToReset()
         {
-            var cache = new MemoryCache(nameof(CachingTestManager_Save_DoesNotCacheTestIfNotActive));
-
-            var expectedTest = new ABTest
-            {
-                Id = Guid.NewGuid(),
-                OriginalItemId = Guid.NewGuid(),
-                ContentLanguage = "en-GB",
-                State = TestState.Inactive,
-                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
-            };
+            var expectedTest = _expectedTests.First();
+            var cache = new MemoryCache(nameof(CachingTestManager_Save_RemovesFromCacheIfNotActive_SendsMessageToReset));
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.Save(expectedTest)).Returns(expectedTest.Id);
@@ -581,6 +567,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockSignal.ResetCalls();
 
+            expectedTest.State = TestState.Inactive;
             var actualTestId = manager.Save(expectedTest);
 
             Assert.Equal(expectedTest.Id, actualTestId);
@@ -592,10 +579,17 @@ namespace EPiServer.Marketing.Testing.Test.Core
                         DefaultMarketingTestingEvents.TestAddedToCacheEvent,
                         It.Is<TestEventArgs>(args => args.Test == expectedTest)
                     ),
-                Times.Never
+                Times.Once // Once During constructor
             );
-
-            _mockSignal.Verify(s => s.Reset(), Times.Never());
+            _mockEvents.Verify(
+                 e =>
+                     e.RaiseMarketingTestingEvent(
+                         DefaultMarketingTestingEvents.TestRemovedFromCacheEvent,
+                         It.Is<TestEventArgs>(args => args.Test == expectedTest)
+                     ),
+                 Times.Once // once when removed
+             );
+            _mockSignal.Verify(s => s.Reset(), Times.Once());
         }
 
         [Fact]
