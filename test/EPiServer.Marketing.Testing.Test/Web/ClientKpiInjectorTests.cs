@@ -206,11 +206,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockHttpContextHelper.Setup(hch => hch.HasItem(It.IsAny<string>())).Returns(true);
             mockHttpContextHelper.Setup(hch => hch.CanWriteToResponse()).Returns(true);
             mockHttpContextHelper.Setup(hch => hch.GetContentEncoding()).Returns(Encoding.UTF8);
+            mockTestingHelper.Setup(mth => mth.IsHtmlContentType()).Returns(true);
+
             aClientKpiInjector.AppendClientKpiScript();
 
             //verify that the response was added to the stream
             mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => abrf.clientScript.Contains(aClientKpi.ClientEvaluationScript))),
                 Times.Once(), "the context was not called with the kpi's client script");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
             mockHttpContextHelper.VerifyAll();
         }
 
@@ -224,6 +227,30 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.IsAny<ABResponseFilter>()), 
                 Times.Never(), "setup a filter with no cookie in the request");
+        }
+
+        [Fact]
+        public void AppendClientKpiScript_does_not_set_the_filter_when_not_html_content()
+        {
+            var aClientKpiInjector = GetUnitUnderTest();
+            var aClientKpi = new FakeClientKpi();
+            var aKpiList = new List<IKpi> { aClientKpi };
+            var aFakeTest = FakeABTest();
+            var aFakeCookie = FakeClientCookie();
+            mockHttpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(mockKpiManager.Object);
+            mockHttpContextHelper.Setup(hch => hch.GetCookieValue(It.IsAny<string>())).Returns(aFakeCookie);
+            mockKpiManager.Setup(km => km.Get(It.IsAny<Guid>())).Returns(aClientKpi);
+            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(aFakeTest);
+            mockTestingHelper.Setup(mth => mth.IsHtmlContentType()).Returns(false);
+
+            aClientKpiInjector.AppendClientKpiScript();
+
+            //verify that the response was added to the stream
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => abrf.clientScript.Contains(aClientKpi.ClientEvaluationScript))),
+                Times.Never, "the context was not called with the kpi's client script");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
+            mockHttpContextHelper.VerifyAll();
         }
 
         [Fact]

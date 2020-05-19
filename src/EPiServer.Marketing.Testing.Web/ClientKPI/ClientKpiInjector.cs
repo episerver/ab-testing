@@ -152,7 +152,9 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         /// <returns>True if the script needs to be injected, false otherwise</returns>
         private bool ShouldInjectKpiScript(Dictionary<Guid, TestDataCookie> clientKpiList)
         {
-            return clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString()));
+            return _contextHelper.IsHtmlContentType() && 
+                       !_contextHelper.IsInSystemFolder() &&
+                       clientKpiList.Any(kpi => _httpContextHelper.HasItem(kpi.Key.ToString()));
         }
 
         /// <summary>
