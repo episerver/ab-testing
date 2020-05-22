@@ -194,7 +194,16 @@ namespace EPiServer.Marketing.Testing.Web
                             if (testCookieData.ShowVariant && _testDataCookieHelper.IsTestParticipant(testCookieData))
                             {
                                 modified = true;
-                                childList.Add(_testRepo.GetVariantContent(content.ContentGuid, currentContentCulture));
+                                var variant = _testRepo.GetVariantContent(content.ContentGuid, currentContentCulture);
+                                if (null != variant)
+                                {
+                                    childList.Add(_testRepo.GetVariantContent(content.ContentGuid, currentContentCulture));
+                                }
+                                else
+                                {
+                                    _logger.Information("Variant was NULL");
+                                    childList.Add(content);
+                                }
                             }
                             else
                             {

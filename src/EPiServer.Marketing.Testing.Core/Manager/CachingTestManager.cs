@@ -170,6 +170,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 AddToCache(test);
             }
+            else
+            {
+                RemoveFromCache(test.Id);
+            }
 
             return testId;
         }
@@ -360,7 +364,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _remoteCacheSignal.Reset();
             }
-        }
+         }
 
         /// <summary>
         /// Gets the caching policy for a test.
