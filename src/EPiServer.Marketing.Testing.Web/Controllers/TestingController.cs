@@ -49,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// </summary>
         /// <returns>List of tests.</returns>
         [HttpGet]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [ABAuthorizeAttribute(Roles = "CmsEditors, CmsAdmins")]
         public HttpResponseMessage GetAllTests()
         {
             var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
@@ -71,7 +71,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">ID of a test.</param>
         /// <returns>A test.</returns>
         [HttpGet]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [ABAuthorizeAttribute(Roles = "CmsEditors, CmsAdmins")]
         public HttpResponseMessage GetTest(string id)
         {
             var tm = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
