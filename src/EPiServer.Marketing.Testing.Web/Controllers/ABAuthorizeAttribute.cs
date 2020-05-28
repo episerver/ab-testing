@@ -9,34 +9,35 @@ using System.Web.Mvc;
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
     /// <summary>
-    /// AB Authorization class that allows inclusion of groups from app settings in web app.
+    /// AB Authorization class that allows inclusion of roles and users from app settings.
     /// </summary>
     public class ABAuthorizeAttribute : AuthorizeAttribute
     {
         /// <summary>
         /// The roles to be authorized against.
         /// </summary>
-        protected List<string> DefaultRoles = new List<string>();
+        protected new List<string> Roles = new List<string>();
 
         /// <summary>
         /// The users to be authorized.
         /// </summary>
-        protected List<string> DefaultUsers = new List<string>();
+        protected new List<string> Users = new List<string>();
 
         /// <summary>
         /// default constructor
         /// </summary>
         /// <param name="roles">Default roles, can be empty</param>
-        public ABAuthorizeAttribute(string roles = "", string users = "" )
+        /// <param name="users">Default users, can be empty</param>
+        public ABAuthorizeAttribute(string roles = "", string users = "")
         {
-            DefaultRoles.AddRange(SplitString(roles));
-            DefaultRoles.AddRange(SplitString(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString()));
-
-            DefaultUsers.AddRange(SplitString(users));
+            Roles.AddRange(SplitString(roles));
+            Roles.AddRange(SplitString(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString()));
+            Users.AddRange(SplitString(users));
+            Users.AddRange(SplitString(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Users"]?.ToString()));
         }
 
         /// <summary>
-        /// Overrridden to use the list of users and roles specified in the app settings or at construction.
+        /// Overrridden to use the list of users and roles specified in the app settings or in the constructor.
         /// </summary>
         /// <param name="httpContext">The HttpContext.</param>
         /// <returns></returns>
@@ -51,11 +52,12 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             IPrincipal user = httpContext.User;
             if (user.Identity.IsAuthenticated)
             {
-                if (DefaultUsers.Contains(user.Identity.Name, StringComparer.OrdinalIgnoreCase) || DefaultRoles.Any(user.IsInRole))
+                if (Roles.Any(user.IsInRole) || Users.Contains(user.Identity.Name, StringComparer.OrdinalIgnoreCase))
                 {
                     return true;
                 }
             }
+
             return false;
         }
 

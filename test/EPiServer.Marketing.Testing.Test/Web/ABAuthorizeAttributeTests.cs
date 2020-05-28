@@ -4,29 +4,32 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Principal;
 using System.Web;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
+    [ExcludeFromCodeCoverage]
     public class ABAuthorizeAttributeTests : ABAuthorizeAttribute
     {
-        public static List<string> userRoles = new List<string> { "CmsAdmin", "CmsEditor", "BaseRole" };
+        public static List<string> userRoles = new List<string> { "CmsAdmin", "CmsEditor", "ConstructorRole" };
 
         static ABAuthorizeAttributeTests()
         {
-            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "LocalAdmins";
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "AppSettingsRole";
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Users"] = "AppSettingsUser";
         }
 
-        public ABAuthorizeAttributeTests() : base(roles: "BaseRole", users: "UserName")
+        public ABAuthorizeAttributeTests() : base(roles: "ConstructorRole", users: "ConstructorUser")
         {
         }
 
         [Fact]
         public void Constructor_AddsExpectedUsers_And_Authorizes()
         {
-            this.DefaultRoles.Clear();
+            this.Roles.Clear();
 
             Assert.True(AuthorizeCore(GetContext()));
         }
@@ -41,18 +44,34 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void Constructor_AddsExpectedRoles_FromAppSettings()
         {
             userRoles.Clear();
-            userRoles.Add("LocalAdmins");
+            userRoles.Add("AppSettingsRole");
 
             Assert.True(AuthorizeCore(GetContext()));
-            Assert.Equal(2, this.DefaultRoles.Count);
-            Assert.True(this.DefaultRoles.Contains("LocalAdmins") && this.DefaultRoles.Contains("BaseRole"));
+            Assert.Equal(2, this.Roles.Count);
+            Assert.True(this.Roles.Contains("AppSettingsRole") && this.Roles.Contains("ConstructorRole"));
+        }
+
+        [Fact]
+        public void Constructor_AddsExpectedUsers_FromAppSettings()
+        {
+            userRoles.Clear();
+
+            Assert.True(AuthorizeCore(GetContext()));
+            Assert.Equal(2, this.Users.Count);
+            Assert.True(this.Users.Contains("AppSettingsUser") && this.Users.Contains("ConstructorUser"));
+        }
+
+        [Fact]
+        public void AuthorizeCore_ThrowsException_When_HttpContext_IsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => AuthorizeCore(null));
         }
 
         [Fact]
         public void AuthorizeCore_ReturnsTrue_WhenUserInRole()
         {
-            this.DefaultRoles.Clear();
-            this.DefaultRoles.Add("CmsAdmin");
+            this.Roles.Clear();
+            this.Roles.Add("CmsAdmin");
 
             Assert.True(AuthorizeCore(GetContext()));
         }
@@ -60,11 +79,18 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void AuthorizeCore_ReturnsFalse_WhenUserNotInRole()
         {
-            this.DefaultRoles.Clear();
-            this.DefaultUsers.Clear();
-            this.DefaultRoles.Add("NotAMember");
+            this.Roles.Clear();
+            this.Users.Clear();
+            this.Roles.Add("NotAMember");
 
             Assert.False(AuthorizeCore(GetContext()));
+        }
+
+        [Fact]
+        public void SplitString_Returns_EmptyArray()
+        {
+            Assert.Empty(SplitString(null));
+            Assert.Empty(SplitString(""));
         }
 
         private HttpContextBase GetContext()
@@ -73,7 +99,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var httpContext = new Mock<HttpContextBase>(MockBehavior.Strict);
             var winIdentity = new Mock<IIdentity>();
             winIdentity.Setup(i => i.IsAuthenticated).Returns(() => true);
-            winIdentity.Setup(i => i.Name).Returns(() => "UserName");
+            winIdentity.Setup(i => i.Name).Returns(() => "ConstructorUser");
             httpContext.SetupGet(c => c.User).Returns(() => new ImdPrincipal(winIdentity.Object));
             var requestBase = new Mock<HttpRequestBase>();
             var headers = new NameValueCollection
@@ -93,15 +119,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         public class ImdPrincipal : IPrincipal
         {
-            IIdentity identiy;
+            IIdentity identity;
 
-            public ImdPrincipal(IIdentity identiy)
-            { 
-                Identity = identiy;
-                Name = "UserName";
+            public ImdPrincipal(IIdentity identity)
+            {
+                Identity = identity;
             }
 
-            public string Name  { get; set; }
+            public string Name { get; set; }
 
             public string AuthenticationType => throw new NotImplementedException();
 

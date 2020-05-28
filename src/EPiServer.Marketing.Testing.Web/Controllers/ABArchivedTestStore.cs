@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">Guid of the cms content</param>
         /// <returns>IMarketingTest object in a Rest result or InternalServerError</returns>
         [HttpGet]
-        [ABAuthorizeAttribute]
+        [ABAuthorizeAttribute(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Get(string id)
         {
             ActionResult result;
