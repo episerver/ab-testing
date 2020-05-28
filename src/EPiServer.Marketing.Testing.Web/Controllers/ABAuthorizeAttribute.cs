@@ -1,9 +1,12 @@
-﻿using System;
+﻿using EPiServer.Core.Transfer.Internal;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -12,11 +15,16 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     /// </summary>
     public class ABAuthorizeAttribute : AuthorizeAttribute
     {
+        protected List<string> DefaultRoles = new List<string>();
+
         /// <summary>
         /// default constructor
         /// </summary>
-        public ABAuthorizeAttribute()
+        /// <param name="roles">Default roles, can be empty</param>
+        public ABAuthorizeAttribute(string Roles = "")
         {
+            DefaultRoles.AddRange( SplitString(Roles).ToList() );
+
 //            var addRoles = ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString();
 //            this.Roles = addRoles ?? this.Roles;
 
@@ -39,8 +47,15 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             //{
             //    return false;
             //}
-            var roles = SplitString( ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString() );
-            if (roles.Length > 0 && !roles.Any(user.IsInRole))
+
+            // this works
+            //var roles = SplitString( ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString() );
+            //if (roles.Length > 0 && !roles.Any(user.IsInRole))
+            //{
+            //    return false;
+            //}
+
+            if (!DefaultRoles.Any(user.IsInRole))
             {
                 return false;
             }
@@ -61,36 +76,5 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
                         select trimmed;
             return split.ToArray();
         }
-
-        //public override void OnAuthorization(AuthorizationContext actionContext)
-        //{
-        //    var addRoles = ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString();
-
-        //    if (httpContext == null)
-        //    {
-        //        throw new ArgumentNullException("httpContext");
-        //    }
-
-        //    IPrincipal user = httpContext.User;
-        //    if (!user.Identity.IsAuthenticated)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (_usersSplit.Length > 0 && !_usersSplit.Contains(user.Identity.Name, StringComparer.OrdinalIgnoreCase))
-        //    {
-        //        return false;
-        //    }
-
-        //    if (_rolesSplit.Length > 0 && !_rolesSplit.Any(user.IsInRole))
-        //    {
-        //        return false;
-        //    }
-
-        //    return true;
-
-        //    this.Roles = addRoles ?? this.Roles;
-        //    base.OnAuthorization(actionContext);
-        //}
     }
 }
