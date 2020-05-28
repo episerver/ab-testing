@@ -19,13 +19,20 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         protected List<string> DefaultRoles = new List<string>();
 
         /// <summary>
+        /// The users to be authorized.
+        /// </summary>
+        protected List<string> DefaultUsers = new List<string>();
+
+        /// <summary>
         /// default constructor
         /// </summary>
         /// <param name="roles">Default roles, can be empty</param>
-        public ABAuthorizeAttribute(string roles = "")
+        public ABAuthorizeAttribute(string roles = "", string users = "" )
         {
             DefaultRoles.AddRange(SplitString(roles));
             DefaultRoles.AddRange(SplitString(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString()));
+
+            DefaultUsers.AddRange(SplitString(users));
         }
 
         /// <summary>
@@ -42,22 +49,14 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
 
             IPrincipal user = httpContext.User;
-            if (!user.Identity.IsAuthenticated)
+            if (user.Identity.IsAuthenticated)
             {
-                return false;
+                if (DefaultUsers.Contains(user.Identity.Name, StringComparer.OrdinalIgnoreCase) || DefaultRoles.Any(user.IsInRole))
+                {
+                    return true;
+                }
             }
-
-            //if (_usersSplit.Length > 0 && !_usersSplit.Contains(user.Identity.Name, StringComparer.OrdinalIgnoreCase))
-            //{
-            //    return false;
-            //}
-
-            if (!DefaultRoles.Any(user.IsInRole))
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         internal static string[] SplitString(string original)

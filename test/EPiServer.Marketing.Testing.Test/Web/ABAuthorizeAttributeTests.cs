@@ -19,8 +19,16 @@ namespace EPiServer.Marketing.Testing.Test.Web
             ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "LocalAdmins";
         }
 
-        public ABAuthorizeAttributeTests() : base(roles: "BaseRole")
+        public ABAuthorizeAttributeTests() : base(roles: "BaseRole", users: "UserName")
         {
+        }
+
+        [Fact]
+        public void Constructor_AddsExpectedUsers_And_Authorizes()
+        {
+            this.DefaultRoles.Clear();
+
+            Assert.True(AuthorizeCore(GetContext()));
         }
 
         [Fact]
@@ -53,6 +61,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void AuthorizeCore_ReturnsFalse_WhenUserNotInRole()
         {
             this.DefaultRoles.Clear();
+            this.DefaultUsers.Clear();
             this.DefaultRoles.Add("NotAMember");
 
             Assert.False(AuthorizeCore(GetContext()));
@@ -64,8 +73,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var httpContext = new Mock<HttpContextBase>(MockBehavior.Strict);
             var winIdentity = new Mock<IIdentity>();
             winIdentity.Setup(i => i.IsAuthenticated).Returns(() => true);
-            winIdentity.Setup(i => i.Name).Returns(() => "WHEEEE");
-            httpContext.SetupGet(c => c.User).Returns(() => new ImdPrincipal(winIdentity.Object)); // This is my implementation of IIdentity
+            winIdentity.Setup(i => i.Name).Returns(() => "UserName");
+            httpContext.SetupGet(c => c.User).Returns(() => new ImdPrincipal(winIdentity.Object));
             var requestBase = new Mock<HttpRequestBase>();
             var headers = new NameValueCollection
         {
@@ -87,9 +96,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             IIdentity identiy;
 
             public ImdPrincipal(IIdentity identiy)
-            { Identity = identiy; }
+            { 
+                Identity = identiy;
+                Name = "UserName";
+            }
 
-            public string Name => throw new NotImplementedException();
+            public string Name  { get; set; }
 
             public string AuthenticationType => throw new NotImplementedException();
 
