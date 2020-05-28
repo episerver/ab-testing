@@ -3,28 +3,41 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Data.Entity.Core.Metadata.Edm;
-using System.Linq;
+using System.Configuration;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     public class ABAuthorizeAttributeTests : ABAuthorizeAttribute
     {
-        public ABAuthorizeAttributeTests() : base(Roles: "BaseRole")
+        public static List<string> userRoles = new List<string> { "CmsAdmin", "CmsEditor", "BaseRole" };
+
+        static ABAuthorizeAttributeTests()
+        {
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "LocalAdmins";
+        }
+
+        public ABAuthorizeAttributeTests() : base(roles: "BaseRole")
         {
         }
 
         [Fact]
         public void Constructor_AddsExpectedRoles()
         {
-             Assert.True(AuthorizeCore(GetContext()));
+            Assert.True(AuthorizeCore(GetContext()));
+        }
+
+        [Fact]
+        public void Constructor_AddsExpectedRoles_FromAppSettings()
+        {
+            userRoles.Clear();
+            userRoles.Add("LocalAdmins");
+
+            Assert.True(AuthorizeCore(GetContext()));
+            Assert.Equal(2, this.DefaultRoles.Count);
+            Assert.True(this.DefaultRoles.Contains("LocalAdmins") && this.DefaultRoles.Contains("BaseRole"));
         }
 
         [Fact]
@@ -68,26 +81,26 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             return httpContext.Object;
         }
-    }
 
-    public class ImdPrincipal : IPrincipal
-    {
-        IIdentity identiy;
-
-        public ImdPrincipal(IIdentity identiy) 
-        { Identity = identiy;  }
-
-        public string Name => throw new NotImplementedException();
-
-        public string AuthenticationType => throw new NotImplementedException();
-
-        public bool IsAuthenticated => throw new NotImplementedException();
-
-        public IIdentity Identity { get; set; }
-
-        public bool IsInRole(string role)
+        public class ImdPrincipal : IPrincipal
         {
-            return role == "CmsAdmin" || role == "CmsEditor" || role == "BaseRole";
+            IIdentity identiy;
+
+            public ImdPrincipal(IIdentity identiy)
+            { Identity = identiy; }
+
+            public string Name => throw new NotImplementedException();
+
+            public string AuthenticationType => throw new NotImplementedException();
+
+            public bool IsAuthenticated => throw new NotImplementedException();
+
+            public IIdentity Identity { get; set; }
+
+            public bool IsInRole(string role)
+            {
+                return ABAuthorizeAttributeTests.userRoles.Contains(role);
+            }
         }
     }
 }

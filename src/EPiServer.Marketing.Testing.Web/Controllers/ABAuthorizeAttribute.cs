@@ -1,12 +1,10 @@
-﻿using EPiServer.Core.Transfer.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace EPiServer.Marketing.Testing.Web.Controllers
 {
@@ -15,21 +13,27 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
     /// </summary>
     public class ABAuthorizeAttribute : AuthorizeAttribute
     {
+        /// <summary>
+        /// The roles to be authorized against.
+        /// </summary>
         protected List<string> DefaultRoles = new List<string>();
 
         /// <summary>
         /// default constructor
         /// </summary>
         /// <param name="roles">Default roles, can be empty</param>
-        public ABAuthorizeAttribute(string Roles = "")
+        public ABAuthorizeAttribute(string roles = "")
         {
-            DefaultRoles.AddRange( SplitString(Roles).ToList() );
-
-//            var addRoles = ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString();
-//            this.Roles = addRoles ?? this.Roles;
-
+            DefaultRoles.AddRange(SplitString(roles));
+            DefaultRoles.AddRange(SplitString(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString()));
         }
-        // This method must be thread-safe since it is called by the thread-safe OnCacheAuthorization() method.
+
+        /// <summary>
+        /// Overrridden to use the list of users and roles specified in the app settings or at construction.
+        /// </summary>
+        /// <param name="httpContext">The HttpContext.</param>
+        /// <returns></returns>
+        /// <remarks>This method must be thread-safe since it is called by the thread-safe OnCacheAuthorization() method.</remarks> 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             if (httpContext == null)
@@ -44,13 +48,6 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
             }
 
             //if (_usersSplit.Length > 0 && !_usersSplit.Contains(user.Identity.Name, StringComparer.OrdinalIgnoreCase))
-            //{
-            //    return false;
-            //}
-
-            // this works
-            //var roles = SplitString( ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"]?.ToString() );
-            //if (roles.Length > 0 && !roles.Any(user.IsInRole))
             //{
             //    return false;
             //}
