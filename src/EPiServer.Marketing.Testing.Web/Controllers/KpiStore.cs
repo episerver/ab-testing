@@ -43,7 +43,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ABAuthorizeAttribute(Roles="CmsAdmins, CmsEditors")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public RestResult Get()
         {
             var kpiRepo = _serviceLocator.GetInstance<IKpiWebRepository>();

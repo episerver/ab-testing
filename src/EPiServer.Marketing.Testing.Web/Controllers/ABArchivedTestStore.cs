@@ -7,7 +7,6 @@ using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using System.Net;
 using EPiServer.Logging;
-using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Core;
@@ -50,7 +49,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">Guid of the cms content</param>
         /// <returns>IMarketingTest object in a Rest result or InternalServerError</returns>
         [HttpGet]
-        [ABAuthorizeAttribute(Roles="CmsAdmins, CmsEditors")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Get(string id)
         {
             ActionResult result;

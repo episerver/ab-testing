@@ -12,26 +12,18 @@ using Xunit;
 namespace EPiServer.Marketing.Testing.Test.Web
 {
     [ExcludeFromCodeCoverage]
-    public class ABAuthorizeAttributeTests : ABAuthorizeAttribute
+    public class AppSettingsAuthorizeAttributeTests : AppSettingsAuthorizeAttribute
     {
         public static List<string> userRoles = new List<string> { "CmsAdmin", "CmsEditor", "ConstructorRole" };
 
-        static ABAuthorizeAttributeTests()
+        static AppSettingsAuthorizeAttributeTests()
         {
             ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "AppSettingsRole";
-            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Users"] = "AppSettingsUser";
         }
 
-        public ABAuthorizeAttributeTests() : base(roles: "ConstructorRole", users: "ConstructorUser")
+        public AppSettingsAuthorizeAttributeTests()
         {
-        }
-
-        [Fact]
-        public void Constructor_AddsExpectedUsers_And_Authorizes()
-        {
-            this.Roles.Clear();
-
-            Assert.True(AuthorizeCore(GetContext()));
+            Roles = "ConstructorRole";
         }
 
         [Fact]
@@ -47,18 +39,42 @@ namespace EPiServer.Marketing.Testing.Test.Web
             userRoles.Add("AppSettingsRole");
 
             Assert.True(AuthorizeCore(GetContext()));
-            Assert.Equal(2, this.Roles.Count);
-            Assert.True(this.Roles.Contains("AppSettingsRole") && this.Roles.Contains("ConstructorRole"));
+            Assert.Equal(2, this.Roles.Split(',').Length);
+            Assert.True(Roles.Contains("AppSettingsRole") && Roles.Contains("ConstructorRole"));
         }
 
         [Fact]
-        public void Constructor_AddsExpectedUsers_FromAppSettings()
+        public void Constructor_AddsExpectedRoles_IgnoresmAppSettingsWhenKeyIsNull()
         {
             userRoles.Clear();
+            userRoles.Add("ConstructorRole");
+
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = null;
+            this.Roles = "ConstructorRole";
 
             Assert.True(AuthorizeCore(GetContext()));
-            Assert.Equal(2, this.Users.Count);
-            Assert.True(this.Users.Contains("AppSettingsUser") && this.Users.Contains("ConstructorUser"));
+            Assert.Single(this.Roles.Split(','));
+            Assert.True(!Roles.Contains("AppSettingsRole") && Roles.Contains("ConstructorRole"));
+
+            // Reset the app settings for the rest of the tests
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "AppSettingsRole";
+        }
+
+        [Fact]
+        public void Constructor_AddsExpectedRoles_IgnoresmAppSettingsWhenKeyIsEmpty()
+        {
+            userRoles.Clear();
+            userRoles.Add("ConstructorRole");
+
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = " ";
+            this.Roles = "ConstructorRole";
+
+            Assert.True(AuthorizeCore(GetContext()));
+            Assert.Single(this.Roles.Split(','));
+            Assert.True(!Roles.Contains("AppSettingsRole") && Roles.Contains("ConstructorRole"));
+
+            // Reset the app settings for the rest of the tests
+            ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:Roles"] = "AppSettingsRole";
         }
 
         [Fact]
@@ -70,8 +86,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void AuthorizeCore_ReturnsTrue_WhenUserInRole()
         {
-            this.Roles.Clear();
-            this.Roles.Add("CmsAdmin");
+            this.Roles = "CmsAdmin";
 
             Assert.True(AuthorizeCore(GetContext()));
         }
@@ -79,18 +94,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void AuthorizeCore_ReturnsFalse_WhenUserNotInRole()
         {
-            this.Roles.Clear();
-            this.Users.Clear();
-            this.Roles.Add("NotAMember");
+            this.Roles = "NotAMember";
 
             Assert.False(AuthorizeCore(GetContext()));
-        }
-
-        [Fact]
-        public void SplitString_Returns_EmptyArray()
-        {
-            Assert.Empty(SplitString(null));
-            Assert.Empty(SplitString(""));
         }
 
         private HttpContextBase GetContext()
@@ -119,8 +125,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         public class ImdPrincipal : IPrincipal
         {
-            IIdentity identity;
-
             public ImdPrincipal(IIdentity identity)
             {
                 Identity = identity;
@@ -136,7 +140,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             public bool IsInRole(string role)
             {
-                return ABAuthorizeAttributeTests.userRoles.Contains(role);
+                return AppSettingsAuthorizeAttributeTests.userRoles.Contains(role);
             }
         }
     }
