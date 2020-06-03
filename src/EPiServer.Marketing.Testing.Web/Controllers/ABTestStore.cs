@@ -8,7 +8,6 @@ using EPiServer.Shell.Services.Rest;
 using System.Net;
 using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web.Models;
-using EPiServer.Globalization;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using System.Globalization;
 
@@ -46,7 +45,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">Guid of the CMS content.</param>
         /// <returns>IMarketingTest object in a Rest result or InternalServerError.</returns>
         [HttpGet]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Get(string id)
         {
             ActionResult result;
@@ -73,7 +72,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="id">Guid of the CMS content.</param>
         /// <returns>HttpStatusCode.OK or InternalServerError</returns>
         [HttpDelete]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Delete(string id)
         {
             ActionResult result;
@@ -98,7 +97,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="testData"></param>
         /// <returns>HttpStatusCode.Created or HttpStatusCode.InternalServerError</returns>
         [HttpPost]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Post(TestingStoreModel testData)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
@@ -131,7 +130,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         /// <param name="testResult"></param>
         /// <returns>publishedVersionContentLink or InternalServerError</returns>
         [HttpPut]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Put(TestResultStoreModel testResult)
         {
             ActionResult result = new RestStatusCodeResult((int)HttpStatusCode.InternalServerError);
