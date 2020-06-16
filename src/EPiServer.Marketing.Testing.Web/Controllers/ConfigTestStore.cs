@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "CmsEditors, CmsAdmins")]
+        [AppSettingsAuthorize(Roles="CmsAdmins, CmsEditors")]
         public ActionResult Get()
         {
             ActionResult result;

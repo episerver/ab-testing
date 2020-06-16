@@ -45,6 +45,8 @@
 
   <ItemGroup>
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Services" />
   </ItemGroup>
 
   <!--<ItemGroup Condition=" '$(TargetFramework)' == 'dnx451' ">
