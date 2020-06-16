@@ -34,6 +34,7 @@ namespace EPiServer.Marketing.Testing.Web
         private readonly IReferenceCounter _ReferenceCounter = new ReferenceCounter();
         private IHttpContextHelper _httpContextHelper;
         private IEpiserverHelper _episerverHelper;
+        private IDatabaseMode _databaseMode;
 
         /// <summary>
         /// HTTPContext flag used to skip AB Test Processing in LoadContent event handler.
@@ -52,7 +53,7 @@ namespace EPiServer.Marketing.Testing.Web
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _marketingTestingEvents = _serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
             _episerverHelper = _serviceLocator.GetInstance<IEpiserverHelper>();
-            
+            _databaseMode = _serviceLocator.GetInstance<IDatabaseMode>();
             // Setup our content events
             var contentEvents = _serviceLocator.GetInstance<IContentEvents>();
             contentEvents.DeletedContent += ContentEventsOnDeletedContent; 
@@ -68,6 +69,7 @@ namespace EPiServer.Marketing.Testing.Web
             _logger = serviceLocator.GetInstance<ILogger>();
             _testRepo = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
             _episerverHelper = serviceLocator.GetInstance<IEpiserverHelper>();
+            _databaseMode = serviceLocator.GetInstance<IDatabaseMode>();
             _httpContextHelper = httpContextHelper;
             _marketingTestingEvents = serviceLocator.GetInstance<DefaultMarketingTestingEvents>();
             IReferenceCounter rc = serviceLocator.GetInstance<IReferenceCounter>();
@@ -567,8 +569,7 @@ namespace EPiServer.Marketing.Testing.Web
 
         private bool DbReadWrite()
         {
-            var dbmode = _serviceLocator.GetInstance<IDatabaseMode>().DatabaseMode;
-            return dbmode == DatabaseMode.ReadWrite;
+            return _databaseMode.DatabaseMode == DatabaseMode.ReadWrite;
         }
 
         #region ProxyEventHandlerSupport
