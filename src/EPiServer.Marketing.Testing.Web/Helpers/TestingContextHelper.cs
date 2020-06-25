@@ -18,12 +18,13 @@ using EPiServer.Personalization;
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
 
-    [ServiceConfiguration(ServiceType = typeof(ITestingContextHelper))]
+    [ServiceConfiguration(ServiceType = typeof(ITestingContextHelper), Lifecycle = ServiceInstanceScope.Singleton)]
     public class TestingContextHelper : ITestingContextHelper
     {
         private readonly IServiceLocator _serviceLocator;
         private IHttpContextHelper _contextHelper;
         private IEpiserverHelper _episerverHelper;
+        private IAggregatedPersonalizationEvaluator _aggregatedPersonalizationEvaluator;
 
         [ExcludeFromCodeCoverage]
         public TestingContextHelper()
@@ -31,6 +32,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             _serviceLocator = ServiceLocator.Current;
             _contextHelper = new HttpContextHelper();
             _episerverHelper = new EpiserverHelper();
+            _aggregatedPersonalizationEvaluator =
+                _serviceLocator.GetInstance<IAggregatedPersonalizationEvaluator>();
         }
 
         /// <summary>
@@ -44,6 +47,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             _contextHelper = contextHelper;
             _serviceLocator = mockServiceLocator;
             _episerverHelper = episerverHelper;
+            _aggregatedPersonalizationEvaluator = mockServiceLocator.GetInstance<IAggregatedPersonalizationEvaluator>(); ;
         }
 
         /// <summary>
@@ -86,8 +90,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <returns>true if allowed, else false</returns>
         private bool Personalize()
         {
-            var evaluator = _serviceLocator.GetInstance<IAggregatedPersonalizationEvaluator>();
-            return evaluator.Personalize();
+            return _aggregatedPersonalizationEvaluator.Personalize();
         }
 
         /// <summary>
