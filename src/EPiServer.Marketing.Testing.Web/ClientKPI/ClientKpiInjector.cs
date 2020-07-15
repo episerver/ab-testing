@@ -224,7 +224,8 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             { 
                 retString = reader.ReadToEnd();
             }
-            retString = retString.StartsWith(_byteOrderMarkUtf8, StringComparison.Ordinal) ? retString.Remove(0, _byteOrderMarkUtf8.Length) : retString;
+            retString = retString.StartsWith(_byteOrderMarkUtf8, StringComparison.Ordinal) ? 
+                        retString.Remove(0, _byteOrderMarkUtf8.Length) : retString;
             return retString;
         }
     }
