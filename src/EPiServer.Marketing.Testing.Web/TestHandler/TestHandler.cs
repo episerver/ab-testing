@@ -47,7 +47,7 @@ namespace EPiServer.Marketing.Testing.Web
         {
             _serviceLocator = ServiceLocator.Current;
             _testDataCookieHelper = new TestDataCookieHelper();
-            _contextHelper = new TestingContextHelper();
+            _contextHelper = _serviceLocator.GetInstance<ITestingContextHelper>();
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();
             _testRepo = _serviceLocator.GetInstance<IMarketingTestingWebRepository>();
