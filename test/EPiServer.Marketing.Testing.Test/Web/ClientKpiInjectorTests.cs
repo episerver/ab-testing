@@ -191,6 +191,34 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
+        public void AppendClientKpiScript_attaches_an_ab_filter_with_the_clientkpi_script_and_removes_special_chars()
+        {
+            var aClientKpiInjector = GetUnitUnderTest();
+            var aClientKpi = new TimeOnPageClientKpi();
+            var aKpiList = new List<IKpi> { aClientKpi };
+            var aFakeTest = FakeABTest();
+            var aFakeCookie = FakeClientCookie();
+            mockHttpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
+            mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(mockKpiManager.Object);
+            mockHttpContextHelper.Setup(hch => hch.GetCookieValue(It.IsAny<string>())).Returns(aFakeCookie);
+            mockKpiManager.Setup(km => km.Get(It.IsAny<Guid>())).Returns(aClientKpi);
+            mockWebRepo.Setup(wr => wr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(aFakeTest);
+            mockHttpContextHelper.Setup(hch => hch.HasItem(It.IsAny<string>())).Returns(true);
+            mockHttpContextHelper.Setup(hch => hch.CanWriteToResponse()).Returns(true);
+            mockHttpContextHelper.Setup(hch => hch.GetContentEncoding()).Returns(Encoding.UTF8);
+            mockTestingHelper.Setup(mth => mth.IsHtmlContentType()).Returns(true);
+
+            aClientKpiInjector.AppendClientKpiScript();
+
+            //verify that the response was added to the stream
+            mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => 
+                                                !abrf.clientScript.Contains(Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble())))),
+                                                Times.Once(), "the clientScript contains a UTF Preamble");
+            mockTestingHelper.Verify(hch => hch.IsHtmlContentType(), Times.Once);
+            mockHttpContextHelper.VerifyAll();
+        }
+
+        [Fact]
         public void AppendClientKpiScript_attaches_an_ab_filter_with_the_clientkpi_script()
         {
             var aClientKpiInjector = GetUnitUnderTest();
