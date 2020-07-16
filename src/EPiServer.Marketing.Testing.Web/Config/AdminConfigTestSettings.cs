@@ -84,6 +84,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
             _currentSettings = this;
             var configurationMonitor = (_serviceLocator == null ? ServiceLocator.Current : _serviceLocator).GetInstance<IConfigurationMonitor>();
+            configurationMonitor.Reset();
             configurationMonitor.HandleConfigurationChange();
         }
     }

@@ -7,6 +7,7 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Evaluator;
 using EPiServer.ServiceLocation;
 using System;
+using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Caching;
 
@@ -21,6 +22,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         {
             context.Services.AddTransient<IContentLockEvaluator, ABTestLockEvaluator>();
 
+            int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:TestMonitorSeconds"]?.ToString(), out var testMonitorValue);
             context.Services.AddSingleton<ITestManager, CachingTestManager>(
                 serviceLocator =>
                     new CachingTestManager(
@@ -29,22 +31,22 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                             serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
                             LogManager.GetLogger(),
                             "epi/marketing/testing/cache",
-                            TimeSpan.FromMilliseconds(100)
+                            TimeSpan.FromSeconds(testMonitorValue > 0 ? testMonitorValue : 1)
                         ),
                         serviceLocator.GetInstance<DefaultMarketingTestingEvents>(),
                         new TestManager()
                     ));
 
-            context.Services.AddSingleton<IConfigurationMonitor, ConfigurationMonitor>(
-            serviceLocator =>
-                new ConfigurationMonitor(serviceLocator,
+            int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:ConfigurationMonitorSeconds"]?.ToString(), out var configurationMonitorValue);
+            context.Services.AddSingleton<IConfigurationMonitor, ConfigurationMonitor>( 
+                serviceLocator =>
+                    new ConfigurationMonitor(serviceLocator,
                     new RemoteCacheSignal(
                         serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
                         LogManager.GetLogger(),
                         "epi/marketing/testing/configuration",
-                        TimeSpan.FromMilliseconds(500)
+                        TimeSpan.FromSeconds(configurationMonitorValue > 0 ? configurationMonitorValue : 60)
                     )));
-
             context.Services.AddSingleton<ITestHandler, TestHandler>();
             context.Services.AddSingleton<IFeatureEnabler, FeatureEnabler>(
                 serviceLocator => new FeatureEnabler(serviceLocator));

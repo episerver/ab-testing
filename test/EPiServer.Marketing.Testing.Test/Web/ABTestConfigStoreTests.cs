@@ -78,6 +78,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             ddsFactoryMock.Verify();
             ddsMock.Verify(d => d.Save(It.Is<AdminConfigTestSettings>(s => s == settings)));
+            _configurationMonitor.Verify(m => m.Reset(), Times.Once);
+            _configurationMonitor.Verify(m => m.HandleConfigurationChange(), Times.Once);
         }
 
         [Fact]
@@ -202,6 +204,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             settings._serviceLocator = _locator.Object;
             settings.Save();
 
+            _configurationMonitor.Verify(m => m.Reset(), Times.Once);
             _configurationMonitor.Verify(c => c.HandleConfigurationChange(), Times.Once);
         }
     }
