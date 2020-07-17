@@ -26,6 +26,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
 
         private static readonly string _clientKpiWrapperScript;
         private static readonly string _clientKpiScriptTemplate;
+        private static readonly string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
 
         private readonly ITestingContextHelper _contextHelper;
         private readonly IMarketingTestingWebRepository _testRepo;
@@ -136,6 +137,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
                             var clientKpi = kpi as IClientKpi;
                             var individualKpiScript = BuildClientScript(kpi.Id, test.Id, variant.ItemVersion, clientKpi.ClientEvaluationScript);
 
+                            individualKpiScript = individualKpiScript.StartsWith(_byteOrderMarkUtf8, StringComparison.Ordinal) ? individualKpiScript.Remove(0, _byteOrderMarkUtf8.Length) : individualKpiScript;                            
                             clientKpiScript.Append(individualKpiScript);
                         }
                     }
@@ -218,11 +220,12 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
             var resourceNames = assembly.GetManifestResourceNames();
 
             using (Stream resourceStream = assembly.GetManifestResourceStream(scriptResource))
-            using (StreamReader reader = new StreamReader(resourceStream))
-            {
+            using (StreamReader reader = new StreamReader(resourceStream, Encoding.UTF8, false))
+            { 
                 retString = reader.ReadToEnd();
             }
-
+            retString = retString.StartsWith(_byteOrderMarkUtf8, StringComparison.Ordinal) ? 
+                        retString.Remove(0, _byteOrderMarkUtf8.Length) : retString;
             return retString;
         }
     }
