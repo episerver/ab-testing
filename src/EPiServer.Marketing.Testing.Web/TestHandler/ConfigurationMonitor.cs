@@ -34,6 +34,7 @@ namespace EPiServer.Marketing.Testing.Web
             var testHandler = serviceLocator.GetInstance<ITestHandler>();
             var testManager = serviceLocator.GetInstance<ITestManager>();
 
+            AdminConfigTestSettings.Reset();
             if (AdminConfigTestSettings.Current.IsEnabled && testManager.GetActiveTests().Count >= 1)
             {
                 testHandler.EnableABTesting();

@@ -1,4 +1,5 @@
-﻿using EPiServer.Marketing.Testing.Core.DataClass;
+﻿using EPiServer.Data.Dynamic;
+using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web;
@@ -41,7 +42,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void HandleConfigurationChange_EnablesAB_When_EnabledInConfig_And_There_Is_Atleast_One_ActiveTest()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = true };
+            // mock the datastore in epi
+            var ddsMock = new Mock<DynamicDataStore>(null);
+            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
+            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
+            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
+            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
+ 
             var tests = new List<IMarketingTest> { new ABTest { State = TestState.Active }, new ABTest { State = TestState.Archived } };
 
             var configMonitor = GetUnitUnderTest(tests);
@@ -70,7 +77,27 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void HandleConfigurationChange_DisablesAB_When_DisabledInConfig()
         {
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
+            // mock the datastore in epi
+            var ddsMock = new Mock<DynamicDataStore>(null);
+            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
+            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
+            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
+
+            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
+            AdminConfigTestSettings._currentSettings = null;
+
+            var expectedConfig = new AdminConfigTestSettings()
+            {
+                Id = Data.Identity.NewIdentity(),
+                AutoPublishWinner = false,
+                ConfidenceLevel = 50,
+                IsEnabled = false,
+                CookieDelimeter = ":",
+                KpiLimit = 25,
+                ParticipationPercent = 42,
+                TestDuration = 182
+            };
+            ddsMock.Setup(x => x.LoadAll<AdminConfigTestSettings>()).Returns(new List<AdminConfigTestSettings> { expectedConfig });
 
             var configMonitor = GetUnitUnderTest();
 

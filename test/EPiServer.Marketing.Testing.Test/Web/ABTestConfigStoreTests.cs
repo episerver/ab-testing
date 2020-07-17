@@ -207,5 +207,27 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _configurationMonitor.Verify(m => m.Reset(), Times.Once);
             _configurationMonitor.Verify(c => c.HandleConfigurationChange(), Times.Once);
         }
+        [Fact]
+        public void Reset_ForcesADatabaseCall()
+        {
+            // mock the datastore in epi
+            var ddsMock = new Mock<DynamicDataStore>(null);
+            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
+            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
+            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
+
+            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
+ 
+            ddsMock.Setup(x => x.LoadAll<AdminConfigTestSettings>()).Returns(new List<AdminConfigTestSettings>() {
+                new AdminConfigTestSettings() { Id = Data.Identity.NewIdentity() }
+            });
+
+            AdminConfigTestSettings.Reset();                    // makes 
+            var testConfig = AdminConfigTestSettings.Current;   // call the mock once
+            testConfig = AdminConfigTestSettings.Current;       // get it twice
+
+            ddsMock.Verify(x => x.LoadAll<AdminConfigTestSettings>(),Times.Once());
+ 
+        }
     }
 }
