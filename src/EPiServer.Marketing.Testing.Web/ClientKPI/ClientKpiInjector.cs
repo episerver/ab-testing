@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         /// </summary>
         public ClientKpiInjector()
         {
-            _contextHelper = new TestingContextHelper();
+            _contextHelper = ServiceLocator.Current.GetInstance<ITestingContextHelper>();
             _testRepo = new MarketingTestingWebRepository();
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();

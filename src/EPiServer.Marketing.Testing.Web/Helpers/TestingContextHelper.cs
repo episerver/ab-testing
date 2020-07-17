@@ -51,7 +51,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         /// <summary>
-        /// Evaluates a set of conditions which would preclue a test from swapping content
+        /// Evaluates a set of conditions which would preclude a test from swapping content
         /// * Specific to loading regular content
         /// </summary>
         /// <returns></returns>
@@ -68,7 +68,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         }
 
         /// <summary>
-        /// Evaluates a set of conditions which would preclue a test from swapping content
+        /// Evaluates a set of conditions which would preclude a test from swapping content
         /// * Specific to loading children
         /// </summary>
         /// <returns></returns>

@@ -24,7 +24,7 @@ namespace EPiServer.Marketing.Testing.Web.Context
         {
             var serviceLocator = ServiceLocator.Current;
             _marketingTestRepository = serviceLocator.GetInstance<IMarketingTestingWebRepository>();
-            _testingContextHelper = new TestingContextHelper();
+            _testingContextHelper = serviceLocator.GetInstance<ITestingContextHelper>();
         }
 
         internal MarketingTestingContextResolver(IServiceLocator mockServiceLocatorserviceLocator)
