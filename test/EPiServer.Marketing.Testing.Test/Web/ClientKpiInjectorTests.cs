@@ -8,6 +8,7 @@ using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
+using Mediachase.Web.Console.Config;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -210,7 +211,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             aClientKpiInjector.AppendClientKpiScript();
 
-            //verify that the response was added to the stream
+            Assert.Contains(Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble()), aClientKpi.ClientEvaluationScript);
+
+            //verify that the response was added to the stream and does not contain the BOM char
             mockHttpContextHelper.Verify(hch => hch.SetResponseFilter(It.Is<ABResponseFilter>(abrf => 
                                                 !abrf.clientScript.Contains(Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble())))),
                                                 Times.Once(), "the clientScript contains a UTF Preamble");
