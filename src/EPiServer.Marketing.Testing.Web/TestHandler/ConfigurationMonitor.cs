@@ -37,15 +37,21 @@ namespace EPiServer.Marketing.Testing.Web
             if (AdminConfigTestSettings.Current.IsEnabled && testManager.GetActiveTests().Count >= 1)
             {
                 testHandler.EnableABTesting();
-                this.cacheSignal.Reset();
             }
             else
             {
                 testHandler.DisableABTesting();
-                this.cacheSignal.Reset();
             }
 
             this.cacheSignal.Set();
+        }
+
+        /// <summary>
+        /// Called by the UI to reset the monitor and force all other nodes to re-read the config.
+        /// </summary>
+        public void Reset()
+        {
+            this.cacheSignal.Reset();
         }
     }
 }

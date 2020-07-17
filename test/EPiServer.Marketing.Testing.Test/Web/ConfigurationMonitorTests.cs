@@ -49,7 +49,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             mockTestHandler.Verify(t => t.EnableABTesting(), Times.Exactly(2));
             mockTestHandler.Verify(t => t.DisableABTesting(), Times.Never);
-            mockSignal.Verify(s => s.Reset(), Times.Exactly(2));
+            mockSignal.Verify(s => s.Reset(), Times.Never);
+            mockSignal.Verify(s => s.Set(), Times.Exactly(2));
         }
 
         [Fact]
@@ -62,7 +63,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             mockTestHandler.Verify(t => t.DisableABTesting(), Times.Exactly(2)); // once in constructor, once in HandleConfigurationChange
             mockTestHandler.Verify(t => t.EnableABTesting(), Times.Never);
-            mockSignal.Verify(s => s.Reset(), Times.Exactly(2));
+            mockSignal.Verify(s => s.Reset(), Times.Never);
+            mockSignal.Verify(s => s.Set(), Times.Exactly(2));
         }
 
         [Fact]
@@ -74,9 +76,25 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             configMonitor.HandleConfigurationChange();
 
-            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Exactly(2)); // once in constructor, once in HandleConfigurationChange
+            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Exactly(2)); 
             mockTestHandler.Verify(t => t.EnableABTesting(), Times.Never);
-            mockSignal.Verify(s => s.Reset(), Times.Exactly(2));
+            mockSignal.Verify(s => s.Reset(), Times.Never);
+            mockSignal.Verify(s => s.Set(), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void HandleResetConfig_Calls_CacheSignal_Reset()
+        {
+            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
+
+            var configMonitor = GetUnitUnderTest();
+
+            configMonitor.Reset();
+
+            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Once); 
+            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Never);
+            mockSignal.Verify(s => s.Reset(), Times.Once);
+            mockSignal.Verify(s => s.Set(), Times.Once);
         }
 
         [Fact]
