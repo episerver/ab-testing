@@ -15,20 +15,17 @@ namespace EPiServer.Marketing.Testing.Test.Web
     [ExcludeFromCodeCoverage]
     public class FeatureEnablerTests
     {
-        private Mock<ITestHandler> mockTestHandler;
-        private Mock<ITestManager> mockTestManager;
         private IMarketingTestingEvents marketingTestingEvents;
         private Mock<IServiceLocator> mockServiceLocator;
+        private Mock<IConfigurationMonitor> mockConfigurationMonitor;
 
         private FeatureEnabler GetUnitUnderTest()
         {
-            mockTestHandler = new Mock<ITestHandler>();
-            mockTestManager = new Mock<ITestManager>();
+            mockConfigurationMonitor = new Mock<IConfigurationMonitor>();
             marketingTestingEvents = new FakeMarketingTestingEvents();
 
             mockServiceLocator = new Mock<IServiceLocator>();
-            mockServiceLocator.Setup(sl => sl.GetInstance<ITestHandler>()).Returns(mockTestHandler.Object);
-            mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(mockTestManager.Object);
+            mockServiceLocator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(mockConfigurationMonitor.Object);
             mockServiceLocator.Setup(sl => sl.GetInstance<IMarketingTestingEvents>())
                 .Returns(marketingTestingEvents);
 
@@ -38,61 +35,21 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void OnTestAddedToCache_Enables_ABTesting_If_ActiveTestCount_Is_One()
+        public void OnTestAddedToCache_CallsHandleConfigurationChange()
         {
             var featureEnabler = GetUnitUnderTest();
-            mockTestManager.Setup(t => t.GetActiveTests()).Returns(new List<IMarketingTest> { new ABTest { State = TestState.Active } });
-            mockTestHandler.Setup(t => t.EnableABTesting()).Verifiable();
-
+      
             featureEnabler.TestAddedToCache(null, null);
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once);
+            mockConfigurationMonitor.Verify(t => t.HandleConfigurationChange(), Times.Once);
         }
 
         [Fact]
-        public void OnTestAddedToCache_DoesNot_Enable_ABTesting_If_ActiveTestCount_Is_One_And_Config_IsDisabled()
+        public void OnTestRemovedFromCache_CallsHandleConfigurationChange()
         {
             var featureEnabler = GetUnitUnderTest();
-            AdminConfigTestSettings._currentSettings = new AdminConfigTestSettings() { IsEnabled = false };
-
-            mockTestManager.Setup(t => t.GetActiveTests()).Returns(new List<IMarketingTest> { new ABTest { State = TestState.Active } });
-            mockTestHandler.Setup(t => t.EnableABTesting()).Verifiable();
-
-            featureEnabler.TestAddedToCache(null, null);
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Never);
-        }
-
-        [Fact]
-        public void OnTestAddedToCache_DoesNotEnable_ABTesting_If_ActiveTestCount_Is_More_Than_One()
-        {
-            var featureEnabler = GetUnitUnderTest();
-            var tests = new List<IMarketingTest> { new ABTest { State = TestState.Active }, new ABTest { State = TestState.Active } };
-            mockTestManager.Setup(t => t.GetActiveTests()).Returns(tests);
-            mockTestHandler.Setup(t => t.EnableABTesting()).Verifiable();
-
-            featureEnabler.TestAddedToCache(null, null);
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Never);
-        }
-
-        [Fact]
-        public void OnTestRemovedFromCache_Disables_ABTesting_If_ActiveTestCount_Is_Zero()
-        {
-            var featureEnabler = GetUnitUnderTest();
-            mockTestManager.Setup(t => t.GetActiveTests()).Returns(new List<IMarketingTest> { });
-            mockTestHandler.Setup(t => t.DisableABTesting()).Verifiable();
 
             featureEnabler.TestRemovedFromCache(null, null);
-            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Once);
-        }
-
-        [Fact]
-        public void OnTestRemovedFromCache_DoesNotDisable_ABTesting_If_ActiveTestCount_Is_One_Or_More()
-        {
-            var featureEnabler = GetUnitUnderTest();
-            mockTestManager.Setup(t => t.GetActiveTests()).Returns(new List<IMarketingTest> { new ABTest { State = TestState.Active } });
-            mockTestHandler.Setup(t => t.DisableABTesting()).Verifiable();
-
-            featureEnabler.TestRemovedFromCache(null, null);
-            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Never);
+            mockConfigurationMonitor.Verify(t => t.HandleConfigurationChange(), Times.Once);
         }
 
         [Fact]

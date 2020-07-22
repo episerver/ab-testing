@@ -31,12 +31,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         public void TestAddedToCache(object sender, TestEventArgs e)
         {
-            var testManager = serviceLocator.GetInstance<ITestManager>();
-            if (testManager.GetActiveTests().Count == 1 && AdminConfigTestSettings.Current.IsEnabled)
-            {
-                var testHandler = serviceLocator.GetInstance<ITestHandler>();
-                testHandler.EnableABTesting();
-            }
+            var monitor = serviceLocator.GetInstance<IConfigurationMonitor>();
+            monitor.HandleConfigurationChange();
         }
 
         /// <summary>
@@ -46,12 +42,8 @@ namespace EPiServer.Marketing.Testing.Web
         /// <param name="e"></param>
         public void TestRemovedFromCache(object sender, TestEventArgs e)
         {
-            var testManager = serviceLocator.GetInstance<ITestManager>();
-            if (testManager.GetActiveTests().Count == 0)
-            {
-                var testHandler = serviceLocator.GetInstance<ITestHandler>();
-                testHandler.DisableABTesting();
-            }
+            var monitor = serviceLocator.GetInstance<IConfigurationMonitor>();
+            monitor.HandleConfigurationChange();
         }
     }
 }

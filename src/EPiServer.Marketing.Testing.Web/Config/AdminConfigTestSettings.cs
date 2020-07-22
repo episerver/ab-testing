@@ -41,6 +41,18 @@ namespace EPiServer.Marketing.Testing.Web.Config
         internal static DynamicDataStoreFactory _factory;
         internal IServiceLocator _serviceLocator;
 
+        /// <summary>
+        /// Resets the config and forces a re-read of the settings from the db.
+        /// </summary>
+        /// <returns></returns>
+        public static void Reset()
+        {
+            _currentSettings = null;
+        }
+
+        /// <summary>
+        /// Gets the current config
+        /// </summary>
         public static AdminConfigTestSettings Current
         {
             get

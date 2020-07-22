@@ -23,6 +23,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private readonly ITestManager _inner;
         private readonly ObjectCache _cache;
         private readonly ICacheSignal _remoteCacheSignal;
+        private readonly ICacheSignal _remoteConfigurationCacheSignal;
         private readonly DefaultMarketingTestingEvents _events;
 
         /// <summary>
@@ -30,11 +31,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         /// <param name="cache">Cache in which to store tests and related data</param>
         /// <param name="remoteCacheSignal">Signal for communicating with other nodes maintaining caches</param>
+        /// <param name="remoteConfigurationCacheSignal">Signal for communicating with other nodes to refresh thier config.</param>
         /// <param name="events">Marketing event publisher</param>
         /// <param name="inner">Test manager to defer to when tests are not in the cache</param>
-        public CachingTestManager(ObjectCache cache, ICacheSignal remoteCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner)
+        public CachingTestManager(ObjectCache cache, ICacheSignal remoteCacheSignal, ICacheSignal remoteConfigurationCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner)
         {
             _remoteCacheSignal = remoteCacheSignal;
+            _remoteConfigurationCacheSignal = remoteConfigurationCacheSignal;
             _inner = inner;
             _events = events;
             _cache = cache;
@@ -226,7 +229,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     Value = TestState.Active
                 }
             );
-
+            
             _inner.GetTestList(allActiveTests).ForEach(test => AddToCache(test, false));
 
             _remoteCacheSignal.Set();
@@ -275,6 +278,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             if (impactsRemoteNodes)
             {
                 _remoteCacheSignal.Reset();
+                _remoteConfigurationCacheSignal.Reset();
             }
         }
 
@@ -363,6 +367,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             if (shouldSignalRemoteNodes)
             {
                 _remoteCacheSignal.Reset();
+                _remoteConfigurationCacheSignal.Reset();
             }
          }
 
