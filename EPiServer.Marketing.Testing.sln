@@ -4,6 +4,8 @@ VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0ACC9772-A4A0-4B7D-B3E6-CC1D3D696F82}"
 	ProjectSection(SolutionItems) = preProject
+		BuildScripts\build.cake = BuildScripts\build.cake
+		BuildScripts\build.ps1 = BuildScripts\build.ps1
 		CompleteRunsettings1.runsettings = CompleteRunsettings1.runsettings
 	EndProjectSection
 EndProject
