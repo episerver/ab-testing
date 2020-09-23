@@ -8,6 +8,7 @@ using EPiServer.ServiceLocation;
 using EPiServer.Framework.Localization;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.KPI.Manager.DataClass.Enums;
+using EPiServer.Logging;
 
 namespace EPiServer.Marketing.KPI.Manager.DataClass
 {
@@ -163,13 +164,16 @@ namespace EPiServer.Marketing.KPI.Manager.DataClass
             try
             {
                 var assembly = this.GetType().Assembly;
-                var text = new StreamReader(assembly.GetManifestResourceStream(key));
-                value = text.ReadToEnd();
+                using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(key)))
+                {
+                    value = reader.ReadToEnd();
+                }
                 retval = true;
             }
             catch (Exception e)
             {
-                value = e.Message;
+                LogManager.GetLogger().Error($"Failed to load resource {key}", e);
+                value = ""; 
             }
             return retval;
         }
