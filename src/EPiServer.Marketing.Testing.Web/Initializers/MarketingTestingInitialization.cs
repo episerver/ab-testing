@@ -28,7 +28,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
             context.Services.AddSingleton<ITestManager, CachingTestManager>(
                 serviceLocator =>
                     new CachingTestManager(
-                        new MemoryCache("Episerver.Marketing.Testing"),
+                        serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
                         new RemoteCacheSignal(
                             serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
                             LogManager.GetLogger(),
