@@ -130,6 +130,8 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            var expectedKey = CachingTestManager.GetCacheKeyForTest(expectedTest.Id);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(expectedTest);
 
             _mockSignal.ResetCalls();
 
@@ -139,8 +141,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockSignal.Verify(s => s.Reset(), Times.Once());
             _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
-
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
         [Fact]

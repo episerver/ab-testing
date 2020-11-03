@@ -431,7 +431,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         /// <param name="id">ID of the test</param>
         /// <returns>Cache key</returns>
-        private static string GetCacheKeyForTest(Guid id)
+        internal static string GetCacheKeyForTest(Guid id)
         {
             return $"epi/marketing/testing/tests?id={id}";
         }
