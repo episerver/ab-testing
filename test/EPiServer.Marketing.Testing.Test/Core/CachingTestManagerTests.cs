@@ -709,27 +709,29 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.Is<TestCriteria>(tc =>
                                                 AssertTestCriteria.AreEquivalent(expectedTestCriteria, tc))))
                                                 .Returns(expectedTests);
-            _mockTestManager.Setup(tm => tm.GetVariantContent(It.IsAny<Guid>(), /*expectedTests[0].Id*/ It.IsAny<CultureInfo>()))
+            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedTests[0].OriginalItemId, It.IsAny<CultureInfo>()))
                                     .Returns(expectedContent1.Object);
-            _mockTestManager.Setup(tm => tm.GetVariantContent(It.IsAny<Guid>(), /*expectedTests[0].Id*/ It.IsAny<CultureInfo>()))
+            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedTests[1].OriginalItemId, It.IsAny<CultureInfo>()))
                                      .Returns(expectedContent2.Object);
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.MasterCacheKey));
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(expectedTests[0].OriginalItemId,
-                                                                     expectedLanguage),
-                                                                     expectedContent1.Object,
-                                                                     It.Is<CacheEvictionPolicy>(actual =>
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(
+                                                                        expectedTests[0].OriginalItemId,
+                                                                        expectedLanguage),
+                                                                        expectedContent1.Object,
+                                                                        It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
                                                                             new CacheEvictionPolicy(null,
                                                                             new string[] { CachingTestManager.MasterCacheKey }), actual))));
 
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(expectedTests[1].OriginalItemId,
-                                                                      expectedLanguage),
-                                                                       expectedContent2.Object,
-                                                                      It.Is<CacheEvictionPolicy>(actual =>
-                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                             new CacheEvictionPolicy(null,
-                                                                             new string[] { CachingTestManager.MasterCacheKey }), actual))));
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(
+                                                                        expectedTests[1].OriginalItemId,
+                                                                        expectedLanguage),
+                                                                        expectedContent2.Object,
+                                                                        It.Is<CacheEvictionPolicy>(actual =>
+                                                                            AssertCacheEvictionPolicy.AreEquivalent(
+                                                                                new CacheEvictionPolicy(null,
+                                                                                new string[] { CachingTestManager.MasterCacheKey }), actual))));
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
                                                                      expectedTests,
@@ -737,7 +739,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
                                                                             new CacheEvictionPolicy(null,
                                                                             new string[] { CachingTestManager.MasterCacheKey }), actual))));
-
 
             _mockRemoteCacheSignal.Setup(c => c.Set()).Verifiable();
 
