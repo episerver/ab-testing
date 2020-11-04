@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
 using System.Linq;
-
+using System.Web.UI.WebControls;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -225,9 +225,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             );
 
             var allTests = _inner.GetTestList(testCriteria);
+            foreach (var test in allTests)
+            {
+                _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
+                    _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
+                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            }
 
             _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
+            /// insertvariants for tests
             _remoteCacheSignal.Set();
         }
 
@@ -253,17 +260,17 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             //    |
             //     -- test (by original item)
 
-             _cache.Insert(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            // _cache.Insert(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
  
-            //Notify interested consumers that a test was added to the cache.
-            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+            ////Notify interested consumers that a test was added to the cache.
+            //_events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-            //Signal other nodes to reset their cache.
-            if (impactsRemoteNodes)
-            {
-                _remoteCacheSignal.Reset();
-                _remoteConfigurationCacheSignal.Reset();
-            }
+            ////Signal other nodes to reset their cache.
+            //if (impactsRemoteNodes)
+            //{
+            //    _remoteCacheSignal.Reset();
+            //    _remoteConfigurationCacheSignal.Reset();
+            //}
         }
 
         /// <summary>
@@ -322,11 +329,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             //      |
             //       --variant
 
-            var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
-            var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
+            //var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
+            //var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
 
-            _cache.Insert(cacheKeyForVariant, variant, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
-            _cache.Insert(cacheKeyForAssociatedTest, variant, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            //_cache.Insert(cacheKeyForVariant, variant, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            //_cache.Insert(cacheKeyForAssociatedTest, variant, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
         }
 
         /// <summary>
@@ -366,10 +373,21 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="contentGuid">ID of original content item</param>
         /// <param name="contentLanguage">Content language of original content item</param>
         /// <returns>Cache key</returns>
-        private static string GetCacheKeyForVariant(Guid contentGuid, string contentLanguage)
+        internal static string GetCacheKeyForVariant(Guid contentGuid, string contentLanguage)
         {
             return $"epi/marketing/testing/variants?originalItem={contentGuid}&culture={contentLanguage}";
         }
+
+        /// <summary>
+        /// Gets a cache key for a test.
+        /// </summary>
+        /// <param name="originalItemId">ID of original content item</param>
+        /// <param name="contentCulture">Culture of original content item</param>
+        /// <returns>Cache key</returns>
+        //private static string GetCacheKeyForTestByItem(Guid originalItemId, string contentCulture)
+        //{
+        //    return $"epi/marketing/testing/tests?originalItem={originalItemId}&culture={contentCulture}";
+        //}
 
         /// <summary>
         /// Gets the cache key for a test.
@@ -381,30 +399,5 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             return $"epi/marketing/testing/tests?id={id}";
         }
 
-        /// <summary>
-        /// Gets a cache key for a list of tests.
-        /// </summary>
-        /// <param name="criteria">Criteria that produced the list</param>
-        /// <returns>Cache key</returns>
-        private static string GetCacheKeyForTests(TestCriteria criteria)
-        {
-            var query = string.Join(
-                "&", 
-                criteria.GetFilters().Select(f => $"filter={f.Property.ToString()} {f.Operator.ToString()} {f.Value?.ToString() ?? ""}")
-            );
-
-            return $"epi/marketing/testing/tests?{query}";
-        }
-
-        /// <summary>
-        /// Gets a cache key for a test.
-        /// </summary>
-        /// <param name="originalItemId">ID of original content item</param>
-        /// <param name="contentCulture">Culture of original content item</param>
-        /// <returns>Cache key</returns>
-        private static string GetCacheKeyForTestByItem(Guid originalItemId, string contentCulture)
-        {
-            return $"epi/marketing/testing/tests?originalItem={originalItemId}&culture={contentCulture}";
-        }
     }
 }
