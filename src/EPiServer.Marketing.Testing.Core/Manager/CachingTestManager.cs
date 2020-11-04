@@ -240,8 +240,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
-            /// insertvariants for tests
             _remoteCacheSignal.Set();
+
+            //Notify interested consumers that a test was added to the cache.
+            foreach (var test in allTests)
+            {
+                _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+            }
         }
 
         /// <summary>

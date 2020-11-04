@@ -72,7 +72,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Ctor_PreparesCaching()
+        public void Ctor_CallsRefreshToloadCache()
         {
             _mockTestManager.Setup(tm => tm.GetTestList(It.Is<TestCriteria>( tc => 
                 tc.GetFilters().FirstOrDefault().Property == ABTestProperty.State &&
@@ -642,12 +642,18 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                  _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
             _mockRemoteCacheSignal.ResetCalls();
+            _mockEvents.ResetCalls();
 
             manager.RefreshCache();
 
             _mockTestManager.VerifyAll();
             _mockRemoteCacheSignal.VerifyAll();
             _mockSynchronizedObjectInstanceCache.VerifyAll();
+
+            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, It.IsAny<TestEventArgs>()), Times.Exactly(expectedTests.Count));
+            _mockRemoteCacheSignal.Verify(s => s.Set(), Times.Once);
+            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Never());
+            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Never());
         }
 
         [Fact]
