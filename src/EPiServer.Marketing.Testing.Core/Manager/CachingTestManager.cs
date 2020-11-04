@@ -373,16 +373,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             if (test != null)
             {
                 tests.Remove(test);
-            }
 
-            _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { CachingTestManager.MasterCacheKey }));
+                _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
-            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
+                _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
 
-            if (impactsRemoteNodes)
-            {
-                _remoteCacheSignal.Reset();
-                _remoteConfigurationCacheSignal.Reset();
+                if (impactsRemoteNodes)
+                {
+                    _remoteCacheSignal.Reset();
+                    _remoteConfigurationCacheSignal.Reset();
+                }
             }
         }
 
