@@ -367,17 +367,22 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="impactsRemoteNodes">Determines whether remote nodes should be notified</param>
         private void RemoveFromCache(Guid testId, bool impactsRemoteNodes)
         {
-            if (_cache.Get(GetCacheKeyForTest(testId)) is IMarketingTest test)
+            var tests = _cache.Get(AllTestsKey) as List<IMarketingTest>;
+            var test = tests.FirstOrDefault(t => t.Id == testId);
+
+            if (test != null)
             {
-                _cache.Remove(GetCacheKeyForTest(testId));
+                tests.Remove(test);
+            }
 
-                _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
+            _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { CachingTestManager.MasterCacheKey }));
 
-                if (impactsRemoteNodes)
-                {
-                    _remoteCacheSignal.Reset();
-                    _remoteConfigurationCacheSignal.Reset();
-                }
+            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
+
+            if (impactsRemoteNodes)
+            {
+                _remoteCacheSignal.Reset();
+                _remoteConfigurationCacheSignal.Reset();
             }
         }
 

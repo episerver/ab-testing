@@ -818,6 +818,49 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void Stop_RemovesTestFromCache()
+        {
+            string expectedLanguage = "es-ES";
+            var expectedTest =
+                new ABTest
+                {
+                    Id = Guid.NewGuid(),
+                    OriginalItemId = Guid.NewGuid(),
+                    ContentLanguage = expectedLanguage,
+                    State = TestState.Active,
+                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+                };
+            var expectedContent = new Mock<IContent>();
+            var expectedTests = new List<IMarketingTest> { expectedTest };
+
+            _mockTestManager.Setup(tm => tm.Stop(It.IsAny<Guid>(), It.IsAny<CultureInfo>()));
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
+
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.GetCacheKeyForVariant(
+                                                                        expectedTest.OriginalItemId,
+                                                                        expectedLanguage)));
+
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
+                                                                     new List<IMarketingTest>(),
+                                                                     It.Is<CacheEvictionPolicy>(actual =>
+                                                                        AssertCacheEvictionPolicy.AreEquivalent(
+                                                                            new CacheEvictionPolicy(null,
+                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object,
+                                                 _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockRemoteCacheSignal.ResetCalls();
+
+            manager.Stop(expectedTest.Id);
+
+            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
+            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
+        }
+
+        [Fact]
         public void CachingTestManager_CanHandleManyRequestsInParallel()
         {
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
