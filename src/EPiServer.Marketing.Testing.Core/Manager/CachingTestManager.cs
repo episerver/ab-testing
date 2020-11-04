@@ -226,7 +226,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             var allTests = _inner.GetTestList(testCriteria);
 
-            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(new string[0], new string[] { MasterCacheKey }));
+            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
             _remoteCacheSignal.Set();
         }

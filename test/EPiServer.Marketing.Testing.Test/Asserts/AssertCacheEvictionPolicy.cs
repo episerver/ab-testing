@@ -8,9 +8,7 @@ namespace EPiServer.Marketing.Testing.Test.Asserts
     {
         public static bool AreEquivalent(CacheEvictionPolicy expected, CacheEvictionPolicy actual)
         {
-            return expected.CacheKeys.Zip(actual.CacheKeys, (e, a) => new { Expected = e, Actual = a })
-                           .All(x => AreEqual(x.Expected, x.Actual)) &&
-                   expected.MasterKeys.Zip(actual.MasterKeys, (e, a) => new { Expected = e, Actual = a })
+            return expected.MasterKeys.Zip(actual.MasterKeys, (e, a) => new { Expected = e, Actual = a })
                             .All(x => AreEqual(x.Expected, x.Actual));
         }
 
