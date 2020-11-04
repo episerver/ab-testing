@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     public class CachingTestManager : ITestManager
     {
         private const string CacheValidityKey = "epi/marketing/testing/root";
-        private const string MasterCacheKey = "epi/marketing/testing/tests?id";
+        internal const string MasterCacheKey = "epi/marketing/testing/tests?id";
         internal const string AllTestsKey = "epi/marketing/testing/all";
 
         private readonly ITestManager _inner;
@@ -225,9 +225,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             );
 
             var allTests = _inner.GetTestList(testCriteria);
-            allTests.ForEach(test => AddToCache(test, false));
 
-            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(new string[0], new string[] { MasterCacheKey }));
 
             _remoteCacheSignal.Set();
         }

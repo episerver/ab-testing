@@ -5,6 +5,7 @@ using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
+using EPiServer.Marketing.Testing.Test.Asserts;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -634,6 +635,46 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
 
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+        }
+
+        [Fact]
+        public void RefreshCache_BuildsCache()
+        {
+            var expectedTests = new List<IMarketingTest>()
+            {
+                new ABTest { Id = Guid.NewGuid(), OriginalItemId = Guid.NewGuid(), ContentLanguage = "es-ES", State = TestState.Active, Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() }  } },
+                new ABTest { Id = Guid.NewGuid(), OriginalItemId = Guid.NewGuid(), ContentLanguage = "es-ES", State = TestState.Active, Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() }  } }
+            };
+
+            var expectedTestCriteria = new TestCriteria();
+            expectedTestCriteria.AddFilter(
+                new ABTestFilter
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                }
+            );
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.Is<TestCriteria>(tc =>
+                                                AssertTestCriteria.AreEquivalent(expectedTestCriteria, tc))))
+                                                .Returns(expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.MasterCacheKey));
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
+                                                                     expectedTests,
+                                                                     It.Is<CacheEvictionPolicy>(actual => 
+                                                                        AssertCacheEvictionPolicy.AreEquivalent(
+                                                                            new CacheEvictionPolicy(new string[0], 
+                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockSignal.ResetCalls();
+
+            manager.RefreshCache();
+
+            _mockTestManager.VerifyAll();
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
         [Fact]
