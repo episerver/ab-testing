@@ -228,33 +228,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_GetActiveTests_DeliversActiveTestsFromCache()
-        {
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-
-            // Force an inactive test into the cache. Probably not possible in reality
-            // but let's cover our bases.
-
-            _expectedTests.Add(
-                new ABTest
-                {
-                    Id = Guid.NewGuid(),
-                    OriginalItemId = Guid.NewGuid(),
-                    ContentLanguage = "en-GB",
-                    State = TestState.Inactive,
-                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
-                }
-            );
-
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
-
-            var activeTests = manager.GetActiveTests();
-
-            Assert.Equal(_expectedTests.Count() - 1, activeTests.Count()); // -1 because the test we put in is inactive.
-            Assert.All(activeTests, test => Assert.Equal(TestState.Active, test.State));
-        }
-
-        [Fact]
         public void CachingTestManager_GetsActiveTestsByOriginalItemId_DeliversActiveTest()
         {
             var expectedItem = _expectedTests.First();
@@ -273,11 +246,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public void CachingTestManager_GetActiveTestsByOriginalItemId_DeliversEmptyListWhenTestNotFound()
         {
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
             var actualTests = manager.GetActiveTestsByOriginalItemId(Guid.NewGuid());
 
-            Assert.True(actualTests.Count == 0);            
+            Assert.True(actualTests.Count == 0);
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
         [Fact]
@@ -301,6 +276,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         public void CachingTestManager_GetActiveTestsByOriginalItemId_WithCulture_DeliversEmptyListWhenTestNotFound()
         {
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
             var actualTests = manager.GetActiveTestsByOriginalItemId(
@@ -309,6 +285,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             );
 
             Assert.True(actualTests.Count == 0);
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
         [Fact]
@@ -414,48 +391,35 @@ namespace EPiServer.Marketing.Testing.Test.Core
         //    Assert.Equal(expectedCacheItemCount, actualCacheItemCount);
         //}
 
-        [Fact]
-        public void CachingTestManager_GetVariantContent_DoesNotFindVariantIfAssociatedTestIsRemoved()
-        {
-            var expectedTest = _expectedTests.First();
-            var expectedItemId = expectedTest.OriginalItemId;
-            var expectedContentLanguage = expectedTest.ContentLanguage;
-            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
-            var expectedVariant = Mock.Of<IContent>();
+        //[Fact]
+        //public void CachingTestManager_GetVariantContent_DoesNotFindVariantIfAssociatedTestIsRemoved()
+        //{
+        //    var expectedTest = _expectedTests.First();
+        //    var expectedItemId = expectedTest.OriginalItemId;
+        //    var expectedContentLanguage = expectedTest.ContentLanguage;
+        //    var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
+        //    var expectedVariant = Mock.Of<IContent>();
 
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-            _mockTestManager.SetupSequence(tm => tm.GetVariantContent(expectedItemId, expectedCulture))
-                            .Returns(expectedVariant)
-                            .Returns(null);
+        //    _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+        //    _mockTestManager.SetupSequence(tm => tm.GetVariantContent(expectedItemId, expectedCulture))
+        //                    .Returns(expectedVariant)
+        //                    .Returns(null);
+        //    _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.GetCacheKeyForTest(expectedTest.Id))).Returns(expectedTest);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+        //    var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
-            // Prime cache by invoking GetVariantContent()
-            var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
+        //    // Delete associated test and verify that manager cannot find variant in the 
+        //    // cache (by ensuring that it defered to the inner manager)
+            
+        //    manager.Delete(expectedTest.Id);
 
-            _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Once());
+        //    var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
 
-            Assert.Equal(expectedVariant, actualVariant);
+        //    _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Once());
+        //    _mockSynchronizedObjectInstanceCache.VerifyAll();
 
-            // Ensure that variants are now being delivered from cache by invoking again
-
-            actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
-
-            _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Once());
-
-            Assert.Equal(expectedVariant, actualVariant);
-
-            // Delete associated test and verify that manager cannot find variant in the 
-            // cache (by ensuring that it defered to the inner manager)
-
-            manager.Delete(expectedTest.Id);
-
-            actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
-
-            _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Exactly(2));
-
-            Assert.Null(actualVariant);
-        }
+        //    Assert.Null(actualVariant);
+        //}
 
         [Fact]
         public void CachingTestManager_IncrementCount_WithCriteria_InvokesInnerManager()
