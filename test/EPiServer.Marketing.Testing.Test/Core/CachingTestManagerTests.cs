@@ -754,6 +754,25 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void GetActiveTests_ReturnsCopiedList()
+        { 
+            var originalTestList = new List<IMarketingTest>();
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>()))
+                            .Returns(originalTestList);
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object,
+                                                  _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockRemoteCacheSignal.ResetCalls();
+
+            var actualList = manager.GetActiveTests();
+
+            // make sure we have a copy of the list in mem
+            originalTestList.Add(new ABTest { });
+            Assert.NotEqual(originalTestList, actualList);
+        }
+
+        [Fact]
         public void Start_AddsTestToCache()
         {
             string expectedLanguage = "es-ES";

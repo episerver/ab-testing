@@ -86,7 +86,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <inheritdoc/>
         public List<IMarketingTest> GetActiveTests()
         {
-            return _cache.Get(AllTestsKey) as List<IMarketingTest>;
+            var returnList = new List<IMarketingTest>();
+            var all = _cache.Get(AllTestsKey) as List<IMarketingTest>;
+            if (all != null)
+            {
+                returnList.AddRange(all);
+            }
+            return returnList;
         }
 
         /// <inheritdoc/>
