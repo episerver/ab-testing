@@ -277,14 +277,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
             //Notify interested consumers that a test was added to the cache.
-            //_events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-            //////Signal other nodes to reset their cache.
-            //if (impactsRemoteNodes)
-            //{
-            //    _remoteCacheSignal.Reset();
-            //    _remoteConfigurationCacheSignal.Reset();
-            //}
+            //Signal other nodes to reset their cache.
+            if (impactsRemoteNodes)
+            {
+                _remoteCacheSignal.Reset();
+                _remoteConfigurationCacheSignal.Reset();
+            }
         }
 
         /// <summary>

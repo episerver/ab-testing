@@ -811,6 +811,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockRemoteCacheSignal.ResetCalls();
 
             manager.Start(expectedTest.Id);
+
+            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
+            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
         }
 
         [Fact]
