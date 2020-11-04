@@ -93,36 +93,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Archive_SignalsCacheInvalidation()
-        {
-            var testToArchive = _expectedTests.First();
-
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(It.IsAny<string>())).Returns(testToArchive);
-
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
-
-            _mockRemoteCacheSignal.ResetCalls();
-
-            manager.Archive(testToArchive.Id, testToArchive.Variants.First().Id);
-
-            _mockTestManager.Verify(
-                tm =>
-                    tm.Archive(
-                        It.Is<Guid>(actualTestId => actualTestId == testToArchive.Id),
-                        It.Is<Guid>(actualVariantId => actualVariantId == testToArchive.Variants.First().Id),
-                        null
-                    ),
-                Times.Once
-            );
-
-            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
-            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
-
-            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
-        }
-
-        [Fact]
         public void CachingTestManager_Delete_SignalsCacheInvalidation()
         {
             var expectedTest = _expectedTests.First();
@@ -861,86 +831,129 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_CanHandleManyRequestsInParallel()
+        public void Archive_RemovesTestFromCache()
         {
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-            
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
-
-            var iterations = 10000;
-
-            Thread addManyTests = new Thread(
-                () =>
+            string expectedLanguage = "es-ES";
+            var expectedTest =
+                new ABTest
                 {
-                    for (int i = 0; i < iterations; i++)
-                    {
-                        var testToAdd = new ABTest
-                        {
-                            Id = Guid.NewGuid(),
-                            OriginalItemId = Guid.NewGuid(),
-                            ContentLanguage = "es-ES",
-                            State = TestState.Active,
-                            Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
-                        };
+                    Id = Guid.NewGuid(),
+                    OriginalItemId = Guid.NewGuid(),
+                    ContentLanguage = expectedLanguage,
+                    State = TestState.Active,
+                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+                };
+            var expectedContent = new Mock<IContent>();
+            var expectedTests = new List<IMarketingTest> { expectedTest };
 
-                        manager.Save(testToAdd);
-                    }
-                }
-            );
+            _mockTestManager.Setup(tm => tm.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CultureInfo>()));
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
 
-            var testToAdd2 = new ABTest
-            {
-                Id = Guid.NewGuid(),
-                OriginalItemId = Guid.NewGuid(),
-                ContentLanguage = "es-ES",
-                State = TestState.Active,
-                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
-            };
-            Thread addManySameTests = new Thread(
-                 () =>
-                 {
-                     for (int i = 0; i < iterations; i++)
-                     {
-                          manager.Save(testToAdd2);
-                     }
-                 }
-             );
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.GetCacheKeyForVariant(
+                                                                        expectedTest.OriginalItemId,
+                                                                        expectedLanguage)));
 
-            Thread deleteManyTests = new Thread(
-                () =>
-                {
-                    for (int i = 0; i < iterations; i++)
-                    {
-                        manager.Delete(Guid.NewGuid());
-                    }
-                }
-            );
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
+                                                                     new List<IMarketingTest>(),
+                                                                     It.Is<CacheEvictionPolicy>(actual =>
+                                                                        AssertCacheEvictionPolicy.AreEquivalent(
+                                                                            new CacheEvictionPolicy(null,
+                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
 
-            Thread refreshManyTimes = new Thread(
-                () =>
-                {
-                    for (int i = 0; i < iterations; i++)
-                    {
-                        manager.RefreshCache();
-                    }
-                }
-            );
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object,
+                                                 _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
-            _mockTestManager.ResetCalls();
+            _mockRemoteCacheSignal.ResetCalls();
 
-            addManyTests.Start();
-            deleteManyTests.Start();
-            refreshManyTimes.Start();
-            addManySameTests.Start();
+            manager.Archive(expectedTest.Id, expectedTest.Variants.First().Id);
 
-            Assert.True(addManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-            Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-            Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-            Assert.True(addManySameTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-
-            _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
-            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
-            _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
+            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
+            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
         }
+
+        //[Fact]
+        //public void CachingTestManager_CanHandleManyRequestsInParallel()
+        //{
+        //    _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+
+        //    var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+        //    var iterations = 10000;
+
+        //    Thread addManyTests = new Thread(
+        //        () =>
+        //        {
+        //            for (int i = 0; i < iterations; i++)
+        //            {
+        //                var testToAdd = new ABTest
+        //                {
+        //                    Id = Guid.NewGuid(),
+        //                    OriginalItemId = Guid.NewGuid(),
+        //                    ContentLanguage = "es-ES",
+        //                    State = TestState.Active,
+        //                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+        //                };
+
+        //                manager.Save(testToAdd);
+        //            }
+        //        }
+        //    );
+
+        //    var testToAdd2 = new ABTest
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        OriginalItemId = Guid.NewGuid(),
+        //        ContentLanguage = "es-ES",
+        //        State = TestState.Active,
+        //        Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+        //    };
+        //    Thread addManySameTests = new Thread(
+        //         () =>
+        //         {
+        //             for (int i = 0; i < iterations; i++)
+        //             {
+        //                  manager.Save(testToAdd2);
+        //             }
+        //         }
+        //     );
+
+        //    Thread deleteManyTests = new Thread(
+        //        () =>
+        //        {
+        //            for (int i = 0; i < iterations; i++)
+        //            {
+        //                manager.Delete(Guid.NewGuid());
+        //            }
+        //        }
+        //    );
+
+        //    Thread refreshManyTimes = new Thread(
+        //        () =>
+        //        {
+        //            for (int i = 0; i < iterations; i++)
+        //            {
+        //                manager.RefreshCache();
+        //            }
+        //        }
+        //    );
+
+        //    _mockTestManager.ResetCalls();
+
+        //    addManyTests.Start();
+        //    deleteManyTests.Start();
+        //    refreshManyTimes.Start();
+        //    addManySameTests.Start();
+
+        //    Assert.True(addManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+        //    Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+        //    Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+        //    Assert.True(addManySameTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+
+        //    _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
+        //    _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
+        //    _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
+        //}
     }
 }
