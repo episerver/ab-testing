@@ -754,6 +754,47 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void Start_AddsTestToCache()
+        {
+            string expectedLanguage = "es-ES";
+            var expectedTest = 
+                new ABTest { Id = Guid.NewGuid(), OriginalItemId = Guid.NewGuid(),
+                    ContentLanguage = expectedLanguage, State = TestState.Active,
+                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } } };
+            var expectedContent = new Mock<IContent>();
+            var expectedTests = new List<IMarketingTest> { expectedTest };
+
+            _mockTestManager.Setup(tm => tm.Start(It.IsAny<Guid>())).Returns(expectedTest);
+            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedTest.OriginalItemId, It.IsAny<CultureInfo>()))
+                            .Returns(expectedContent.Object);
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>());
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(new List<IMarketingTest>());
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(
+                                                                        expectedTest.OriginalItemId,
+                                                                        expectedLanguage),
+                                                                        expectedContent.Object,
+                                                                        It.Is<CacheEvictionPolicy>(actual =>
+                                                                        AssertCacheEvictionPolicy.AreEquivalent(
+                                                                            new CacheEvictionPolicy(null,
+                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
+                                                                     expectedTests,
+                                                                     It.Is<CacheEvictionPolicy>(actual =>
+                                                                        AssertCacheEvictionPolicy.AreEquivalent(
+                                                                            new CacheEvictionPolicy(null,
+                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object,
+                                                 _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockRemoteCacheSignal.ResetCalls();
+
+            manager.Start(expectedTest.Id);
+        }
+
+        [Fact]
         public void CachingTestManager_CanHandleManyRequestsInParallel()
         {
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);

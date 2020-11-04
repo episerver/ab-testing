@@ -260,12 +260,20 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             //    |
             //     -- test (by original item)
 
-            // _cache.Insert(GetCacheKeyForTestByItem(test.OriginalItemId, test.ContentLanguage), test, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
- 
-            ////Notify interested consumers that a test was added to the cache.
+            var allTests = GetActiveTests();
+
+            allTests.Add(test);
+
+            _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
+                    _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
+                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+
+            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+
+            //Notify interested consumers that a test was added to the cache.
             //_events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-            ////Signal other nodes to reset their cache.
+            //////Signal other nodes to reset their cache.
             //if (impactsRemoteNodes)
             //{
             //    _remoteCacheSignal.Reset();
