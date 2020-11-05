@@ -77,7 +77,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if (fromCache)
             {
-                test = (IMarketingTest)_cache.Get(GetCacheKeyForTest(testObjectId));
+                test = GetActiveTests().FirstOrDefault(t => t.Id == testObjectId);
             }
 
             return test ?? _inner.Get(testObjectId, false);

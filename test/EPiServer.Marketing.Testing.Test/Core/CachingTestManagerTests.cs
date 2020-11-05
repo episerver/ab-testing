@@ -93,31 +93,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Delete_SignalsCacheInvalidation()
-        {
-            var expectedTest = _expectedTests.First();
-            var expectedCultureInfo = CultureInfo.GetCultureInfo(expectedTest.ContentLanguage);
-
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
-            var expectedKey = CachingTestManager.GetCacheKeyForTest(expectedTest.Id);
-            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(expectedTest);
-
-            _mockRemoteCacheSignal.ResetCalls();
-
-            manager.Delete(expectedTest.Id, expectedCultureInfo);
-
-            _mockTestManager.Verify( tm => tm.Delete(expectedTest.Id, expectedCultureInfo), Times.Once );
-
-            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
-            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
-            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
-
-            _mockSynchronizedObjectInstanceCache.VerifyAll();
-        }
-
-        [Fact]
         public void CachingTestManager_EvaluateKPIs_InvokesInnerManager()
         {
             var expectedKpis = new List<IKpi>();
@@ -140,21 +115,27 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Get_DeliversTestFromCache()
+        public void Get_DeliversTestFromCache()
         {
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-
             var expectedTest = _expectedTests.Last();
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
+
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockTestManager.ResetCalls();
+
             var actualTest = manager.Get(expectedTest.Id, true);
 
             Assert.Equal(expectedTest, actualTest);
 
             _mockTestManager.Verify(tm => tm.Get(It.IsAny<Guid>(), It.IsAny<bool>()), Times.Never());
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
         [Fact]
-        public void CachingTestManager_Get_DeliversTestFromInnerManagerOnCacheMiss()
+        public void Get_DeliversTestFromInnerManagerOnCacheMiss()
         {
             var expectedTest = new ABTest
             {
@@ -873,6 +854,49 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockRemoteCacheSignal.ResetCalls();
 
             manager.Archive(expectedTest.Id, expectedTest.Variants.First().Id);
+
+            _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
+            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
+            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
+        }
+
+        [Fact]
+        public void Delete_RemovesTestFromCache()
+        {
+            string expectedLanguage = "es-ES";
+            var expectedTest =
+                new ABTest
+                {
+                    Id = Guid.NewGuid(),
+                    OriginalItemId = Guid.NewGuid(),
+                    ContentLanguage = expectedLanguage,
+                    State = TestState.Active,
+                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+                };
+            var expectedContent = new Mock<IContent>();
+            var expectedTests = new List<IMarketingTest> { expectedTest };
+
+            _mockTestManager.Setup(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()));
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
+
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.GetCacheKeyForVariant(
+                                                                        expectedTest.OriginalItemId,
+                                                                        expectedLanguage)));
+
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
+                                                                     new List<IMarketingTest>(),
+                                                                     It.Is<CacheEvictionPolicy>(actual =>
+                                                                        AssertCacheEvictionPolicy.AreEquivalent(
+                                                                            new CacheEvictionPolicy(null,
+                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object,
+                                                 _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            _mockRemoteCacheSignal.ResetCalls();
+            
+            manager.Delete(expectedTest.Id);
 
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
             _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
