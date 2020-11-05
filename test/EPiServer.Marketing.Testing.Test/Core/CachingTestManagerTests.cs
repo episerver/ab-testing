@@ -180,11 +180,12 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_GetsActiveTestsByOriginalItemId_DeliversActiveTest()
+        public void GetsActiveTestsByOriginalItemId_DeliversActiveTest()
         {
             var expectedItem = _expectedTests.First();
             var expectedItemId = expectedItem.OriginalItemId;
 
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
@@ -208,13 +209,14 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_GetsActiveTestsByOriginalItemId_WithCulture_DeliversActiveTest()
+        public void GetsActiveTestsByOriginalItemId_WithCulture_DeliversActiveTest()
         {
             var expectedItem = _expectedTests.First();
             var expectedItemId = expectedItem.OriginalItemId;
             var expectedContentLanguage = expectedItem.ContentLanguage;
             var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
 
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
