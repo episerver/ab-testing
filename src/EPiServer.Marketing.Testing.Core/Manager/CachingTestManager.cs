@@ -176,7 +176,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if (test.State == TestState.Active)
             {
-                AddToCache(test);
+                AddTestToCache(test);
             }
             else
             {
@@ -199,7 +199,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if (startedTest?.State == TestState.Active)
             {
-                AddToCache(startedTest);
+                AddTestToCache(startedTest);
             }
 
             return startedTest;
@@ -250,27 +250,11 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <summary>
-        /// Adds the specified test to the cache. Remote nodes maintaining
-        /// a cache will also be signaled.
-        /// </summary>
-        /// <param name="test">Test to cache</param>
-        private void AddToCache(IMarketingTest test)
-        {
-            AddToCache(test, true);
-        }
-
-        /// <summary>
         /// Adds the specified test to the cache.
         /// </summary>
         /// <param name="test">Test to cache</param>
-        /// <param name="impactsRemoteNodes">Determines whether remote nodes should be signaled</param>
-        private void AddToCache(IMarketingTest test, bool impactsRemoteNodes)
+        private void AddTestToCache(IMarketingTest test)
         {
-            // Adds the test and dependent entries to the cache:
-            //   test (root)
-            //    |
-            //     -- test (by original item)
-
             var allTests = GetActiveTests();
 
             allTests.Add(test);
@@ -285,11 +269,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
             //Signal other nodes to reset their cache.
-            if (impactsRemoteNodes)
-            {
-                _remoteCacheSignal.Reset();
-                _remoteConfigurationCacheSignal.Reset();
-            }
+            _remoteCacheSignal.Reset();
+            _remoteConfigurationCacheSignal.Reset();
         }
 
         /// <summary>
@@ -351,16 +332,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="testId">ID of test to remove</param>
         private void RemoveFromCache(Guid testId)            
         {
-            RemoveFromCache(testId, true);
-        }
-
-        /// <summary>
-        /// Removes the specified test from the cache.
-        /// </summary>
-        /// <param name="testId">ID of test to remove</param>
-        /// <param name="impactsRemoteNodes">Determines whether remote nodes should be notified</param>
-        private void RemoveFromCache(Guid testId, bool impactsRemoteNodes)
-        {
             var tests = _cache.Get(AllTestsKey) as List<IMarketingTest>;
             var test = tests.FirstOrDefault(t => t.Id == testId);
 
@@ -374,11 +345,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
 
-                if (impactsRemoteNodes)
-                {
-                    _remoteCacheSignal.Reset();
-                    _remoteConfigurationCacheSignal.Reset();
-                }
+                _remoteCacheSignal.Reset();
+                _remoteConfigurationCacheSignal.Reset();
             }
         }
 
@@ -392,27 +360,5 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         {
             return $"epi/marketing/testing/variants?originalItem={contentGuid}&culture={contentLanguage}";
         }
-
-        /// <summary>
-        /// Gets a cache key for a test.
-        /// </summary>
-        /// <param name="originalItemId">ID of original content item</param>
-        /// <param name="contentCulture">Culture of original content item</param>
-        /// <returns>Cache key</returns>
-        //private static string GetCacheKeyForTestByItem(Guid originalItemId, string contentCulture)
-        //{
-        //    return $"epi/marketing/testing/tests?originalItem={originalItemId}&culture={contentCulture}";
-        //}
-
-        /// <summary>
-        /// Gets the cache key for a test.
-        /// </summary>
-        /// <param name="id">ID of the test</param>
-        /// <returns>Cache key</returns>
-        internal static string GetCacheKeyForTest(Guid id)
-        {
-            return $"epi/marketing/testing/tests?id={id}";
-        }
-
     }
 }
