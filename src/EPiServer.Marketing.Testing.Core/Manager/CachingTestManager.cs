@@ -144,7 +144,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                 if (variant != null)
                 {
-                    AddToCache(contentGuid, cultureInfo, variant);
+                    AddVariantToCache(contentGuid, cultureInfo, variant);
                 }
             }
 
@@ -338,21 +338,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="originalItemId">ID of the original content item</param>
         /// <param name="culture">Culture of the original content item</param>
         /// <param name="variant">Variant content to cache</param>
-        private void AddToCache(Guid originalItemId, CultureInfo culture, IContent variant)
+        private void AddVariantToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
-            // Adds a variant to the cache. The variant is dependent on its parent test
-            // so that it will be invalidated if its parent should change.
-            // test(root)
-            //  |
-            //   --test(by original item)
-            //      |
-            //       --variant
-
-            //var cacheKeyForVariant = GetCacheKeyForVariant(originalItemId, culture.Name);
-            //var cacheKeyForAssociatedTest = GetCacheKeyForTestByItem(originalItemId, culture.Name);
-
-            //_cache.Insert(cacheKeyForVariant, variant, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
-            //_cache.Insert(cacheKeyForAssociatedTest, variant, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            _cache.Insert(GetCacheKeyForVariant(originalItemId, culture.Name), variant,
+                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
         }
 
         /// <summary>

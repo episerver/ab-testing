@@ -294,54 +294,75 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_GetVariantContent_WithCulture_DeliversFromCacheAfterFirstRetrieval()
+        public void GetVariantContent_WithCulture_DeliversFromCache()
         {
             var expectedTest = _expectedTests.First();
             var expectedItemId = expectedTest.OriginalItemId;
             var expectedContentLanguage = expectedTest.ContentLanguage;
             var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
             var expectedVariant = Mock.Of<IContent>();
+            var expectedKey = CachingTestManager.GetCacheKeyForVariant(expectedItemId, expectedContentLanguage);
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedItemId, expectedCulture)).Returns(expectedVariant);
-            
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(expectedVariant);
+
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
             var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
 
             _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Once());
-
             Assert.Equal(expectedVariant, actualVariant);
-
-            var actualVariantFromCache = manager.GetVariantContent(expectedItemId, expectedCulture);
-
-            _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Once());
-
-            Assert.Equal(expectedVariant, actualVariantFromCache);
         }
 
-        //[Fact]
-        //public void CachingTestManager_GetVariantContent_DoesNotAddNullVariantToCache()
-        //{
-        //    var expectedTest = _expectedTests.First();
-        //    var expectedItemId = expectedTest.OriginalItemId;
-        //    var expectedContentLanguage = expectedTest.ContentLanguage;
-        //    var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
-        //    var expectedVariant = Mock.Of<IContent>();
+        [Fact]
+        public void GetVariantContent_DoesNotAddNullVariantToCache()
+        {
+            var expectedTest = _expectedTests.First();
+            var expectedItemId = expectedTest.OriginalItemId;
+            var expectedContentLanguage = expectedTest.ContentLanguage;
+            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
+            var expectedVariant = Mock.Of<IContent>();
+            var expectedKey = CachingTestManager.GetCacheKeyForVariant(expectedItemId, expectedContentLanguage);
 
-        //    _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-        //    _mockTestManager.Setup(tm => tm.GetVariantContent(expectedItemId, expectedCulture)).Returns((IContent)null);
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
-        //    var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(null);
+            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedItemId, expectedCulture)).Returns((IContent)null);
 
-        //    var expectedCacheItemCount = cache.Count();
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            _mockSynchronizedObjectInstanceCache.ResetCalls();
 
-        //    var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
+            var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
 
-        //    var actualCacheItemCount = cache.Count();
+            Assert.Null(actualVariant);
+            _mockSynchronizedObjectInstanceCache.Verify(m => m.Insert(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<CacheEvictionPolicy>()), Times.Never);
+        }
 
-        //    Assert.Null(actualVariant);
-        //    Assert.Equal(expectedCacheItemCount, actualCacheItemCount);
-        //}
+        [Fact]
+        public void GetVariantContent_AddsVariantToCache()
+        {
+            var expectedTest = _expectedTests.First();
+            var expectedItemId = expectedTest.OriginalItemId;
+            var expectedContentLanguage = expectedTest.ContentLanguage;
+            var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
+            var expectedVariant = Mock.Of<IContent>();
+            var expectedKey = CachingTestManager.GetCacheKeyForVariant(expectedItemId, expectedContentLanguage);
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
+
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(null);
+            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedItemId, expectedCulture)).Returns(expectedVariant);
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            _mockSynchronizedObjectInstanceCache.ResetCalls();
+
+             var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
+
+            Assert.NotNull(actualVariant);
+            _mockSynchronizedObjectInstanceCache.Verify(m => m.Insert(expectedKey, expectedVariant, It.IsAny<CacheEvictionPolicy>()), Times.Once);
+        }
 
         //[Fact]
         //public void CachingTestManager_GetVariantContent_DoesNotFindVariantIfAssociatedTestIsRemoved()
@@ -362,7 +383,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
         //    // Delete associated test and verify that manager cannot find variant in the 
         //    // cache (by ensuring that it defered to the inner manager)
-            
+
         //    manager.Delete(expectedTest.Id);
 
         //    var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
@@ -563,25 +584,20 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Stop_SignalsCacheInvalidation()
+        public void Stop_SignalsCacheInvalidation()
         {
-            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-
             var expectedTest = _expectedTests.First();
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
+
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
             _mockRemoteCacheSignal.ResetCalls();
 
             manager.Stop(expectedTest.Id);
 
-            _mockTestManager.Verify(
-                tm =>
-                    tm.Stop(
-                        It.Is<Guid>(actualTestId => actualTestId == expectedTest.Id),
-                        null
-                    ),
-                Times.Once
-            );
+            _mockTestManager.Verify( tm => tm.Stop(expectedTest.Id, null), Times.Once );
 
             _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
             _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
