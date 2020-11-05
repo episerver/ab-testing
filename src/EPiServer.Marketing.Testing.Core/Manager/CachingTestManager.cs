@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
 using System.Linq;
-using System.Web.UI.WebControls;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
@@ -19,7 +18,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     /// </summary>
     public class CachingTestManager : ITestManager
     {
-        private const string CacheValidityKey = "epi/marketing/testing/root";
         internal const string MasterCacheKey = "epi/marketing/testing/tests?id";
         internal const string AllTestsKey = "epi/marketing/testing/all";
 
@@ -87,8 +85,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         public List<IMarketingTest> GetActiveTests()
         {
             var returnList = new List<IMarketingTest>();
-            var all = _cache.Get(AllTestsKey) as List<IMarketingTest>;
-            if (all != null)
+            if (_cache.Get(AllTestsKey) is List<IMarketingTest> all)
             {
                 returnList.AddRange(all);
             }
@@ -274,46 +271,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         }
 
         /// <summary>
-        /// Adds a list of tests to the cache.
-        /// </summary>
-        /// <param name="criteria">Criteria that produced the list of tests</param>
-        /// <param name="tests">Tests to cache</param>
-        private void AddToCache(TestCriteria criteria, IEnumerable<IMarketingTest> tests)
-        {
-            throw new NotImplementedException();
-            // Adds a list of tests to the cache. The list is dependent on all tests
-            // it contains so that it will be invalidated if one of those tests should
-            // change.
-            // 
-            //  test    test    test
-            //   |       |       |
-            //    ---------------
-            //           |
-            //          list
-
-            // Add the individual tests to the cache.
-
-            //List<string> dependencies = new List<string>();
-            //foreach (var test in tests)
-            //{
-            //    AddToCache(test);
-            //    dependencies.Add(GetCacheKeyForTest(test.Id));
-            //}
-
-            // Add the list to the cache and make it dependent on all of its children
-
-            //var policy = new CacheItemPolicy();
-
-            //if (dependencies.Any())
-            //{
-            //    policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(dependencies));
-            //}
-
-            //_cache.Insert(GetCacheKeyForTests(criteria), tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey })); 
-            //_cache.Add(GetCacheKeyForTests(criteria), tests, policy);
-        }
-
-        /// <summary>
         /// Adds a variant to the cache.
         /// </summary>
         /// <param name="originalItemId">ID of the original content item</param>
@@ -340,9 +297,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 tests.Remove(test);
 
                 _cache.Remove(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage));
-
                 _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
-
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
 
                 _remoteCacheSignal.Reset();
