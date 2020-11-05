@@ -415,7 +415,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Save_CachesTestIfActive()
+        public void Save_CachesTestIfActive()
         {
             var expectedTest = new ABTest
             {
@@ -452,12 +452,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void CachingTestManager_Save_RemovesFromCacheIfNotActive_SendsMessageToReset()
+        public void Save_RemovesFromCacheIfNotActive_SendsMessageToReset()
         {
             var expectedTest = _expectedTests.First();
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.Save(expectedTest)).Returns(expectedTest.Id);
+            _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
