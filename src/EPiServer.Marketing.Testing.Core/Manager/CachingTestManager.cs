@@ -216,8 +216,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         public void RefreshCache()
         {
-            _cache.Remove(MasterCacheKey);
-
             var testCriteria = new TestCriteria();
             testCriteria.AddFilter(
                 new ABTestFilter
@@ -228,15 +226,21 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 }
             );
 
-            var allTests = _inner.GetTestList(testCriteria);
+            List<IMarketingTest> allTests;
+
+            lock (listLock)
+            {
+                _cache.Remove(MasterCacheKey);
+                allTests = _inner.GetTestList(testCriteria);
+                _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            }
+
             foreach (var test in allTests)
             {
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
             }
-
-            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
             _remoteCacheSignal.Set();
 

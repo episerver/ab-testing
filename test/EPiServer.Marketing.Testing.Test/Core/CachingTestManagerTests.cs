@@ -9,6 +9,7 @@ using EPiServer.Marketing.Testing.Test.Asserts;
 using EPiServer.Shell.Gadgets;
 using Moq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
@@ -945,23 +946,25 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var manager = new CachingTestManager(new MyCache(), _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
 
-            var iterations = 1000;
+            var iterations = 10000;
+            var testIds = new ConcurrentQueue<Guid>();
 
             Thread addManyTests = new Thread(
                 () =>
                 {
                     for (int i = 0; i < iterations; i++)
                     {
+                        var testId = Guid.NewGuid();
                         var testToAdd = new ABTest
                         {
-                            Id = Guid.NewGuid(),
+                            Id = testId,
                             OriginalItemId = Guid.NewGuid(),
                             ContentLanguage = "es-ES",
                             State = TestState.Active,
                             Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
                         };
 
-                        manager.Save(testToAdd);
+                        testIds.Enqueue(manager.Save(testToAdd));
                     }
                 }
             );
@@ -987,10 +990,19 @@ namespace EPiServer.Marketing.Testing.Test.Core
             Thread deleteManyTests = new Thread(
                 () =>
                 {
-                    for (int i = 0; i < iterations; i++)
+                    var x = 0;
+                    do
                     {
-                        manager.Delete(Guid.NewGuid());
-                    }
+                        if (testIds.TryDequeue(out Guid testId))
+                        {
+                            manager.Delete(testId);
+                        }
+                        else
+                        {
+                            Thread.Sleep(250);
+                            x++;
+                        }
+                    } while (x < 10);
                 }
             );
 
@@ -1009,16 +1021,16 @@ namespace EPiServer.Marketing.Testing.Test.Core
             addManyTests.Start();
             addManySameTests.Start();
             deleteManyTests.Start();
-//            refreshManyTimes.Start();
+           // refreshManyTimes.Start();
 
             Assert.True(addManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
             Assert.True(addManySameTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
             Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-//            Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+           // Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
 
             _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
- //           _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
+           // _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
         }
     }
 }
