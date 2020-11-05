@@ -368,6 +368,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 tests.Remove(test);
 
+                _cache.Remove(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage));
+
                 _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));

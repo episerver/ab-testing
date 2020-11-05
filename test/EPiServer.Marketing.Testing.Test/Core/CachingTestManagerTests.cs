@@ -366,36 +366,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Verify(m => m.Insert(expectedKey, expectedVariant, It.IsAny<CacheEvictionPolicy>()), Times.Once);
         }
 
-        //[Fact]
-        //public void CachingTestManager_GetVariantContent_DoesNotFindVariantIfAssociatedTestIsRemoved()
-        //{
-        //    var expectedTest = _expectedTests.First();
-        //    var expectedItemId = expectedTest.OriginalItemId;
-        //    var expectedContentLanguage = expectedTest.ContentLanguage;
-        //    var expectedCulture = CultureInfo.GetCultureInfo(expectedContentLanguage);
-        //    var expectedVariant = Mock.Of<IContent>();
-
-        //    _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
-        //    _mockTestManager.SetupSequence(tm => tm.GetVariantContent(expectedItemId, expectedCulture))
-        //                    .Returns(expectedVariant)
-        //                    .Returns(null);
-        //    _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.GetCacheKeyForTest(expectedTest.Id))).Returns(expectedTest);
-
-        //    var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
-
-        //    // Delete associated test and verify that manager cannot find variant in the 
-        //    // cache (by ensuring that it defered to the inner manager)
-
-        //    manager.Delete(expectedTest.Id);
-
-        //    var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
-
-        //    _mockTestManager.Verify(tm => tm.GetVariantContent(expectedItemId, expectedCulture), Times.Once());
-        //    _mockSynchronizedObjectInstanceCache.VerifyAll();
-
-        //    Assert.Null(actualVariant);
-        //}
-
         [Fact]
         public void CachingTestManager_IncrementCount_WithCriteria_InvokesInnerManager()
         {
@@ -920,6 +890,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
             _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
             _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
         //[Fact]
