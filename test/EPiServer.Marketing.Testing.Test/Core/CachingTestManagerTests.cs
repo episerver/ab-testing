@@ -893,87 +893,132 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
-        //[Fact]
-        //public void CachingTestManager_CanHandleManyRequestsInParallel()
-        //{
-        //    _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+        public class MyCache : ISynchronizedObjectInstanceCache
+        {
+            public FailureRecoveryAction SynchronizationFailedStrategy { 
+                get => throw new NotImplementedException(); 
+                set => throw new NotImplementedException(); }
 
-        //    var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            public IObjectInstanceCache ObjectInstanceCache => new HttpRuntimeCache();
 
-        //    var iterations = 10000;
+            public void Clear()
+            {
+                ObjectInstanceCache.Clear();
+             }
 
-        //    Thread addManyTests = new Thread(
-        //        () =>
-        //        {
-        //            for (int i = 0; i < iterations; i++)
-        //            {
-        //                var testToAdd = new ABTest
-        //                {
-        //                    Id = Guid.NewGuid(),
-        //                    OriginalItemId = Guid.NewGuid(),
-        //                    ContentLanguage = "es-ES",
-        //                    State = TestState.Active,
-        //                    Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
-        //                };
+            public object Get(string key)
+            {
+                return ObjectInstanceCache.Get(key);
+            }
 
-        //                manager.Save(testToAdd);
-        //            }
-        //        }
-        //    );
+            public void Insert(string key, object value, CacheEvictionPolicy evictionPolicy)
+            {
+                ObjectInstanceCache.Insert(key, value, evictionPolicy);
+            }
 
-        //    var testToAdd2 = new ABTest
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        OriginalItemId = Guid.NewGuid(),
-        //        ContentLanguage = "es-ES",
-        //        State = TestState.Active,
-        //        Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
-        //    };
-        //    Thread addManySameTests = new Thread(
-        //         () =>
-        //         {
-        //             for (int i = 0; i < iterations; i++)
-        //             {
-        //                  manager.Save(testToAdd2);
-        //             }
-        //         }
-        //     );
+            public void Remove(string key)
+            {
+                ObjectInstanceCache.Remove(key);
+            }
 
-        //    Thread deleteManyTests = new Thread(
-        //        () =>
-        //        {
-        //            for (int i = 0; i < iterations; i++)
-        //            {
-        //                manager.Delete(Guid.NewGuid());
-        //            }
-        //        }
-        //    );
+            public void RemoveLocal(string key)
+            {
+                ObjectInstanceCache.Remove(key);
+            }
 
-        //    Thread refreshManyTimes = new Thread(
-        //        () =>
-        //        {
-        //            for (int i = 0; i < iterations; i++)
-        //            {
-        //                manager.RefreshCache();
-        //            }
-        //        }
-        //    );
+            public void RemoveRemote(string key)
+            {
+                
+            }
+        }
 
-        //    _mockTestManager.ResetCalls();
+        [Fact]
+        public void CachingTestManager_CanHandleManyRequestsInParallel()
+        {
+            var expectedVariant = Mock.Of<IContent>();
 
-        //    addManyTests.Start();
-        //    deleteManyTests.Start();
-        //    refreshManyTimes.Start();
-        //    addManySameTests.Start();
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockTestManager.Setup(tm => tm.GetVariantContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(expectedVariant);
 
-        //    Assert.True(addManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-        //    Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-        //    Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
-        //    Assert.True(addManySameTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
+            _mockTestManager.ResetCalls();
 
-        //    _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
-        //    _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
-        //    _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
-        //}
+            var manager = new CachingTestManager(new MyCache(), _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+
+            var iterations = 1000;
+
+            Thread addManyTests = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        var testToAdd = new ABTest
+                        {
+                            Id = Guid.NewGuid(),
+                            OriginalItemId = Guid.NewGuid(),
+                            ContentLanguage = "es-ES",
+                            State = TestState.Active,
+                            Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+                        };
+
+                        manager.Save(testToAdd);
+                    }
+                }
+            );
+
+            var testToAdd2 = new ABTest
+            {
+                Id = Guid.NewGuid(),
+                OriginalItemId = Guid.NewGuid(),
+                ContentLanguage = "es-ES",
+                State = TestState.Active,
+                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+            };
+            Thread addManySameTests = new Thread(
+                 () =>
+                 {
+                     for (int i = 0; i < iterations; i++)
+                     {
+                         manager.Save(testToAdd2);
+                     }
+                 }
+             );
+
+            Thread deleteManyTests = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        manager.Delete(Guid.NewGuid());
+                    }
+                }
+            );
+
+            Thread refreshManyTimes = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        manager.RefreshCache();
+                    }
+                }
+            );
+
+            _mockTestManager.ResetCalls();
+
+            addManyTests.Start();
+            addManySameTests.Start();
+            deleteManyTests.Start();
+//            refreshManyTimes.Start();
+
+            Assert.True(addManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+            Assert.True(addManySameTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+            Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+//            Assert.True(refreshManyTimes.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+
+            _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
+            _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
+ //           _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
+        }
     }
 }

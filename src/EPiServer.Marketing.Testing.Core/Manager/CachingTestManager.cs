@@ -20,6 +20,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     {
         internal const string MasterCacheKey = "epi/marketing/testing/tests?id";
         internal const string AllTestsKey = "epi/marketing/testing/all";
+        private readonly object listLock = new object();
 
         private readonly ITestManager _inner;
         private readonly ISynchronizedObjectInstanceCache _cache;
@@ -252,15 +253,18 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="test">Test to cache</param>
         private void AddTestToCache(IMarketingTest test)
         {
-            var allTests = GetActiveTests();
+            lock (listLock)
+            {
+                var allTests = GetActiveTests();
 
-            allTests.Add(test);
+                allTests.Add(test);
+
+                _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            }
 
             _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
-
-            _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
             //Notify interested consumers that a test was added to the cache.
             _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
@@ -289,15 +293,22 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="testId">ID of test to remove</param>
         private void RemoveFromCache(Guid testId)            
         {
-            var tests = _cache.Get(AllTestsKey) as List<IMarketingTest>;
-            var test = tests.FirstOrDefault(t => t.Id == testId);
+            IMarketingTest test = null;
+            lock (listLock)
+            {
+                var tests = _cache.Get(AllTestsKey) as List<IMarketingTest>;
+                test = tests.FirstOrDefault(t => t.Id == testId);
+
+                if (test != null)
+                {
+                    tests.Remove(test);
+                    _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                }
+            }
 
             if (test != null)
             {
-                tests.Remove(test);
-
                 _cache.Remove(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage));
-                _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
 
                 _remoteCacheSignal.Reset();
