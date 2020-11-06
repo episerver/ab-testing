@@ -230,7 +230,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             lock (listLock)
             {
-                _cache.Remove(MasterCacheKey);
+                _cache.RemoveLocal(MasterCacheKey);
                 allTests = _inner.GetTestList(testCriteria);
                 _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
             }
@@ -312,7 +312,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if (test != null)
             {
-                _cache.Remove(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage));
+                _cache.RemoveLocal(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage));
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
 
                 _remoteCacheSignal.Reset();

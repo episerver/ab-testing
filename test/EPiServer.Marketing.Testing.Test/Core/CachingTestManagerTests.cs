@@ -600,7 +600,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.Is<TestCriteria>(tc =>
                                                 AssertTestCriteria.AreEquivalent(expectedTestCriteria, tc))))
                                                 .Returns(expectedTests);
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.MasterCacheKey));
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.RemoveLocal(CachingTestManager.MasterCacheKey));
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
                                                                      expectedTests,
                                                                      It.Is<CacheEvictionPolicy>(actual => 
@@ -661,7 +661,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetVariantContent(expectedTests[1].OriginalItemId, It.IsAny<CultureInfo>()))
                                      .Returns(expectedContent2.Object);
 
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.MasterCacheKey));
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.RemoveLocal(CachingTestManager.MasterCacheKey));
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(
                                                                         expectedTests[0].OriginalItemId,
                                                                         expectedLanguage),
@@ -784,7 +784,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.GetCacheKeyForVariant(
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.RemoveLocal(CachingTestManager.GetCacheKeyForVariant(
                                                                         expectedTest.OriginalItemId,
                                                                         expectedLanguage)));
 
@@ -827,7 +827,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.GetCacheKeyForVariant(
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.RemoveLocal(CachingTestManager.GetCacheKeyForVariant(
                                                                         expectedTest.OriginalItemId,
                                                                         expectedLanguage)));
 
@@ -870,7 +870,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Remove(CachingTestManager.GetCacheKeyForVariant(
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.RemoveLocal(CachingTestManager.GetCacheKeyForVariant(
                                                                         expectedTest.OriginalItemId,
                                                                         expectedLanguage)));
 
@@ -892,45 +892,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Once());
             _mockConfigurationSignal.Verify(s => s.Reset(), Times.Once());
             _mockSynchronizedObjectInstanceCache.VerifyAll();
-        }
-
-        public class MyCache : ISynchronizedObjectInstanceCache
-        {
-            public FailureRecoveryAction SynchronizationFailedStrategy { 
-                get => throw new NotImplementedException(); 
-                set => throw new NotImplementedException(); }
-
-            public IObjectInstanceCache ObjectInstanceCache => new HttpRuntimeCache();
-
-            public void Clear()
-            {
-                ObjectInstanceCache.Clear();
-             }
-
-            public object Get(string key)
-            {
-                return ObjectInstanceCache.Get(key);
-            }
-
-            public void Insert(string key, object value, CacheEvictionPolicy evictionPolicy)
-            {
-                ObjectInstanceCache.Insert(key, value, evictionPolicy);
-            }
-
-            public void Remove(string key)
-            {
-                ObjectInstanceCache.Remove(key);
-            }
-
-            public void RemoveLocal(string key)
-            {
-                ObjectInstanceCache.Remove(key);
-            }
-
-            public void RemoveRemote(string key)
-            {
-                
-            }
         }
 
         [Fact]
@@ -1031,6 +992,47 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
             _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
+        }
+
+        public class MyCache : ISynchronizedObjectInstanceCache
+        {
+            public FailureRecoveryAction SynchronizationFailedStrategy
+            {
+                get => throw new NotImplementedException();
+                set => throw new NotImplementedException();
+            }
+
+            public IObjectInstanceCache ObjectInstanceCache => new HttpRuntimeCache();
+
+            public void Clear()
+            {
+                ObjectInstanceCache.Clear();
+            }
+
+            public object Get(string key)
+            {
+                return ObjectInstanceCache.Get(key);
+            }
+
+            public void Insert(string key, object value, CacheEvictionPolicy evictionPolicy)
+            {
+                ObjectInstanceCache.Insert(key, value, evictionPolicy);
+            }
+
+            public void Remove(string key)
+            {
+                ObjectInstanceCache.Remove(key);
+            }
+
+            public void RemoveLocal(string key)
+            {
+                ObjectInstanceCache.Remove(key);
+            }
+
+            public void RemoveRemote(string key)
+            {
+
+            }
         }
     }
 }
