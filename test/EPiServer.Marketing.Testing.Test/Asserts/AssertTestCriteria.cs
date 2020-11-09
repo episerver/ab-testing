@@ -1,9 +1,11 @@
 ﻿using EPiServer.Marketing.Testing.Core.DataClass;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Asserts
 {
+    [ExcludeFromCodeCoverage]
     public static class AssertTestCriteria
     {
         public static bool AreEquivalent(TestCriteria expected, TestCriteria actual)

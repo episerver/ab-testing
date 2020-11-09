@@ -1,9 +1,11 @@
 ﻿using EPiServer.Framework.Cache;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Asserts
 {
+    [ExcludeFromCodeCoverage]
     public static class AssertCacheEvictionPolicy
     {
         public static bool AreEquivalent(CacheEvictionPolicy expected, CacheEvictionPolicy actual)

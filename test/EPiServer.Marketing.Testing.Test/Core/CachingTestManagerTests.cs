@@ -6,12 +6,12 @@ using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Test.Asserts;
-using EPiServer.Shell.Gadgets;
 using Moq;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -28,6 +28,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         private List<IMarketingTest> _expectedTests;
         private Mock<ISynchronizedObjectInstanceCache> _mockSynchronizedObjectInstanceCache; 
 
+        [ExcludeFromCodeCoverage]
         public CachingTestManagerTests()
         {
             _mockRemoteCacheSignal = new Mock<ICacheSignal>();
@@ -902,12 +903,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.GetVariantContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(expectedVariant);
 
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
+             var manager = new CachingTestManager(new MyCache(), _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
             _mockTestManager.ResetCalls();
 
-            var manager = new CachingTestManager(new MyCache(), _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
-
-            var iterations = 10000;
+            var iterations = 2500;
             var testIds = new ConcurrentQueue<Guid>();
 
             Thread addManyTests = new Thread(
@@ -925,6 +924,9 @@ namespace EPiServer.Marketing.Testing.Test.Core
                             Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
                         };
 
+                        // this is alot of mocks, whatchout for mem usage. Needs to be mocked so save 
+                        // does not return an empty guid which in turn caused the remove from cache to fail all the time
+                        _mockTestManager.Setup(tm => tm.Save(testToAdd)).Returns(testToAdd.Id);
                         testIds.Enqueue(manager.Save(testToAdd));
                     }
                 }
@@ -961,7 +963,10 @@ namespace EPiServer.Marketing.Testing.Test.Core
                         else
                         {
                             Thread.Sleep(250);
-                            x++;
+                            if (!addManyTests.IsAlive)
+                            {
+                                x++;
+                            }
                         }
                     } while (x < 10);
                 }
@@ -977,8 +982,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 }
             );
 
-            _mockTestManager.ResetCalls();
-
             addManyTests.Start();
             addManySameTests.Start();
             deleteManyTests.Start();
@@ -992,6 +995,84 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Verify(tm => tm.Save(It.IsAny<IMarketingTest>()), Times.Exactly(iterations * 2));
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), It.IsAny<CultureInfo>()), Times.Exactly(iterations));
             _mockTestManager.Verify(tm => tm.GetTestList(It.IsAny<TestCriteria>()), Times.Exactly(iterations));
+        }
+
+        [Fact]
+        public void CachingTestManager_CanHandleManyAddAndRemoveInParallel()
+        {
+            var expectedVariant = Mock.Of<IContent>();
+
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
+            _mockTestManager.Setup(tm => tm.GetVariantContent(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(expectedVariant);
+
+            var manager = new CachingTestManager(new MyCache(), _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object);
+            var expectedActiveTests = manager.GetActiveTests();
+
+            _mockTestManager.ResetCalls();
+
+            var iterations = 5000;
+            var testIds = new ConcurrentQueue<Guid>();
+
+            Thread addManyTests = new Thread(
+                () =>
+                {
+                    for (int i = 0; i < iterations; i++)
+                    {
+                        var testId = Guid.NewGuid();
+                        var testToAdd = new ABTest
+                        {
+                            Id = testId,
+                            OriginalItemId = Guid.NewGuid(),
+                            ContentLanguage = "es-ES",
+                            State = TestState.Active,
+                            Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+                        };
+
+                        // this is alot of mocks, whatchout for mem usage. Needs to be mocked so save 
+                        // does not return an empty guid which in turn caused the remove from cache to fail all the time
+                        _mockTestManager.Setup(tm => tm.Save(testToAdd)).Returns(testToAdd.Id);
+                        _mockTestManager.Setup(tm => tm.Delete(testToAdd.Id, It.IsAny<CultureInfo>()));
+                        _mockTestManager.Setup(tm => tm.GetVariantContent(testToAdd.OriginalItemId, It.IsAny<CultureInfo>())).Returns(expectedVariant); 
+                        testIds.Enqueue(manager.Save(testToAdd));
+                    }
+                }
+            );
+
+            Thread deleteManyTests = new Thread(
+                () =>
+                {
+                    var x = 0;
+                    do
+                    {
+                        if (testIds.TryDequeue(out Guid testId))
+                        {
+                            manager.Delete(testId);
+                        }
+                        else
+                        {
+                            Thread.Sleep(250);
+                            if (!addManyTests.IsAlive)
+                            {
+                                x++;
+                            }
+                        }
+                    } while (x < 10 );
+                }
+            );
+
+            addManyTests.Start();
+            deleteManyTests.Start();
+ 
+            Assert.True(addManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+            Assert.True(deleteManyTests.Join(TimeSpan.FromSeconds(120)), "The test is taking too long. It's possible that the system has deadlocked.");
+
+            // Verify our starting and ending results are the same.
+            var actualActiveTests = manager.GetActiveTests();
+            Assert.Equal(expectedActiveTests, actualActiveTests);
+
+            // Verify that all the add and delete mocks where hit properly.
+            _mockTestManager.VerifyAll(); 
+
         }
 
         public class MyCache : ISynchronizedObjectInstanceCache

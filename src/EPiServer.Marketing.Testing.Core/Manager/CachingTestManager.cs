@@ -231,7 +231,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             lock (listLock)
             {
                 _cache.RemoveLocal(MasterCacheKey);
-                allTests = _inner.GetTestList(testCriteria);
+                allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
+                
                 _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
             }
 
