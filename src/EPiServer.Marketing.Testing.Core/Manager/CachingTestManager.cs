@@ -13,7 +13,7 @@ using System.Linq;
 namespace EPiServer.Marketing.Testing.Core.Manager
 {
     /// <summary>
-    /// The CachingTestManager class delivers marketing tests from a cache,
+    /// The CachingTestManager class delivers marketing tests from a cache ,
     /// if possible, prior to deferring to another test manager.
     /// </summary>
     public class CachingTestManager : ITestManager
