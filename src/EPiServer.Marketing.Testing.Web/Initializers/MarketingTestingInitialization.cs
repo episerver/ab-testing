@@ -36,13 +36,14 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                             TimeSpan.FromSeconds(testMonitorValue > 0 ? testMonitorValue : 1)
                         ),
                         new RemoteCacheSignal(
-                        ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
-                        LogManager.GetLogger(),
-                        "epi/marketing/testing/configuration",
-                        TimeSpan.FromSeconds(configurationMonitorValue > 0 ? configurationMonitorValue : 60)
-                    ),
+                            ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
+                            LogManager.GetLogger(),
+                            "epi/marketing/testing/configuration",
+                            TimeSpan.FromSeconds(configurationMonitorValue > 0 ? configurationMonitorValue : 60)
+                        ),
                         serviceLocator.GetInstance<DefaultMarketingTestingEvents>(),
-                        new TestManager()
+                        new TestManager(),
+                        LogManager.GetLogger(typeof(CachingTestManager))
                     ));
 
             

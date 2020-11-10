@@ -1,5 +1,6 @@
 ﻿using EPiServer.Core;
 using EPiServer.Framework.Cache;
+using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.KPI.Results;
 using EPiServer.Marketing.Testing.Core.DataClass;
@@ -22,6 +23,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         internal const string AllTestsKey = "epi/marketing/testing/all";
         private readonly object listLock = new object();
 
+        private readonly ILogger _logger;
         private readonly ITestManager _inner;
         private readonly ISynchronizedObjectInstanceCache _cache;
         private readonly ICacheSignal _remoteCacheSignal;
@@ -36,13 +38,16 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="remoteConfigurationCacheSignal">Signal for communicating with other nodes to refresh thier config.</param>
         /// <param name="events">Marketing event publisher</param>
         /// <param name="inner">Test manager to defer to when tests are not in the cache</param>
-        public CachingTestManager(ISynchronizedObjectInstanceCache cache, ICacheSignal remoteCacheSignal, ICacheSignal remoteConfigurationCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner)
+        public CachingTestManager(ISynchronizedObjectInstanceCache cache, ICacheSignal remoteCacheSignal,
+            ICacheSignal remoteConfigurationCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner,
+            ILogger logger)
         {
             _remoteCacheSignal = remoteCacheSignal;
             _remoteConfigurationCacheSignal = remoteConfigurationCacheSignal;
             _inner = inner;
             _events = events;
             _cache = cache;
+            _logger = logger;
 
             RefreshCache();
 
@@ -238,12 +243,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _cache.RemoveLocal(MasterCacheKey);
                 allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
-                
+
+                _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
+
                 _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
             }
 
             foreach (var test in allTests)
             {
+                _logger.Information("A/B testing Refreshing Cache - inserting variants.");
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
@@ -270,9 +278,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                 allTests.Add(test);
 
+                _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
+
                 _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
             }
 
+            _logger.Information("A/B testing Refreshing Cache - inserting variants.");
             _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
@@ -293,6 +304,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="variant">Variant content to cache</param>
         private void AddVariantToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
+            _logger.Information("A/B testing AddVariantToCache.");
+            
             _cache.Insert(GetCacheKeyForVariant(originalItemId, culture.Name), variant,
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
         }
@@ -313,6 +326,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 if (test != null)
                 {
                     tests.Remove(test);
+
+                    _logger.Information("A/B testing RemoveFromCache. test count = " + tests.Count);
+
                     _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 }
             }
