@@ -1,4 +1,5 @@
 ﻿using EPiServer.Data.Dynamic;
+using EPiServer.Framework.Cache;
 using EPiServer.Marketing.Testing.Core.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
@@ -21,6 +22,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<ICacheSignal> mockSignal;
         private Mock<IServiceLocator> mockServiceLocator;
         private Mock<DynamicDataStore> ddsMock;
+        private Mock<ISynchronizedObjectInstanceCache> mockSynchronizedObjectInstanceCache;
 
         public ConfigurationMonitor GetUnitUnderTest(List<IMarketingTest> tests = null)
         {
@@ -39,15 +41,18 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTestHandler = new Mock<ITestHandler>();
             mockTestManager = new Mock<ITestManager>();
             var testsReturned = tests == null ? new List<IMarketingTest> { } : tests;
-            mockTestManager.Setup(t => t.GetTestList(It.IsAny<TestCriteria>())).Returns(testsReturned);
+            mockTestManager.Setup(t => t.GetActiveTests()).Returns(testsReturned);
 
             mockSignal = new Mock<ICacheSignal>();
             mockTestHandler.Setup(t => t.EnableABTesting()).Verifiable();
             mockTestHandler.Setup(t => t.DisableABTesting()).Verifiable();
 
+            mockSynchronizedObjectInstanceCache = new Mock<ISynchronizedObjectInstanceCache>();
+
             mockServiceLocator = new Mock<IServiceLocator>();
             mockServiceLocator.Setup(sl => sl.GetInstance<ITestHandler>()).Returns(mockTestHandler.Object);
             mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(mockTestManager.Object);
+            mockServiceLocator.Setup(sl => sl.GetInstance<ISynchronizedObjectInstanceCache>()).Returns(mockSynchronizedObjectInstanceCache.Object);
 
             return new ConfigurationMonitor(mockServiceLocator.Object, mockSignal.Object);
         }
@@ -63,8 +68,10 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTestHandler.Verify(t => t.DisableABTesting(), Times.Never);
             mockSignal.Verify(s => s.Reset(), Times.Never);
             mockSignal.Verify(s => s.Set(), Times.Once);
+
+            mockSynchronizedObjectInstanceCache.Verify(m => m.RemoveLocal(CachingTestManager.MasterCacheKey), Times.Never);
         }
-        
+
         [Fact]
         public void HandleConfigurationChange_DoesNotEnableAB_When_EnabledInConfig_And_There_Are_No_ActiveTests()
         {
@@ -76,6 +83,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once);
             mockSignal.Verify(s => s.Reset(), Times.Never);
             mockSignal.Verify(s => s.Set(), Times.Exactly(2));
+
+            mockSynchronizedObjectInstanceCache.Verify(m => m.RemoveLocal(CachingTestManager.MasterCacheKey));
         }
 
         [Fact]
@@ -103,6 +112,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once); // in the constructor
             mockSignal.Verify(s => s.Reset(), Times.Never);
             mockSignal.Verify(s => s.Set(), Times.Exactly(2));
+            mockSynchronizedObjectInstanceCache.Verify(s => s.RemoveLocal(CachingTestManager.MasterCacheKey));
         }
 
         [Fact]

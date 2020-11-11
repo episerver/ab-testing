@@ -222,7 +222,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new AdminConfigTestSettings() { Id = Data.Identity.NewIdentity() }
             });
 
-            AdminConfigTestSettings.Reset();                    // makes 
+            AdminConfigTestSettings.Reset();                     
             var testConfig = AdminConfigTestSettings.Current;   // call the mock once
             testConfig = AdminConfigTestSettings.Current;       // get it twice
 

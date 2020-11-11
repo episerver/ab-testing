@@ -1,5 +1,4 @@
-﻿using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+﻿using EPiServer.Framework.Cache;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.ServiceLocation;
@@ -43,16 +42,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public void HandleConfigurationChange()
         {
-            var allActiveTests = new TestCriteria();
-            allActiveTests.AddFilter(
-                new ABTestFilter
-                {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                }
-            );
-            var dbTests = testManager.GetTestList(allActiveTests);
+            var dbTests = testManager.GetActiveTests();
 
             AdminConfigTestSettings.Reset();
             bool currentState = AdminConfigTestSettings.Current.IsEnabled && dbTests.Count >= 1;
@@ -66,6 +56,8 @@ namespace EPiServer.Marketing.Testing.Web
                 else
                 {
                     testHandler.DisableABTesting();
+                    var cache = serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
+                    cache.RemoveLocal(CachingTestManager.MasterCacheKey);
                 }
                 lastState = currentState;
             }

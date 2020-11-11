@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     /// </summary>
     public class CachingTestManager : ITestManager
     {
-        internal const string MasterCacheKey = "epi/marketing/testing/tests?id";
+        public const string MasterCacheKey = "epi/marketing/testing/tests?id";
         internal const string AllTestsKey = "epi/marketing/testing/all";
         private readonly object listLock = new object();
 
