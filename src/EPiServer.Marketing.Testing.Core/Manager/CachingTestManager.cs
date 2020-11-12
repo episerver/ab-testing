@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using Castle.Windsor.Diagnostics.Extensions;
+using EPiServer.Core;
 using EPiServer.Framework.Cache;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Manager.DataClass;
@@ -272,28 +273,37 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="test">Test to cache</param>
         private void AddTestToCache(IMarketingTest test)
         {
+            var testAdded = false;
+
             lock (listLock)
             {
                 var allTests = GetActiveTests();
 
-                allTests.Add(test);
+                if (allTests.FirstOrDefault(t => t.Id == test.Id) == null)
+                {
+                    testAdded = true;
+                    allTests.Add(test);
 
-                _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
+                    _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
 
-                _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                    _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                }
             }
 
-            _logger.Information("A/B testing Refreshing Cache - inserting variants.");
-            _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
-                    _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
-                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+            if (testAdded)
+            {
+                _logger.Information("A/B testing Refreshing Cache - inserting variants.");
+                _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
+                        _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
+                        new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
 
-            //Notify interested consumers that a test was added to the cache.
-            _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+                //Notify interested consumers that a test was added to the cache.
+                _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-            //Signal other nodes to reset their cache.
-            _remoteCacheSignal.Reset();
-            _remoteConfigurationCacheSignal.Reset();
+                //Signal other nodes to reset their cache.
+                _remoteCacheSignal.Reset();
+                _remoteConfigurationCacheSignal.Reset();
+            }
         }
 
         /// <summary>

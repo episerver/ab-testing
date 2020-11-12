@@ -468,6 +468,52 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
+        public void Save_DoesntCacheTestIfAlreadyInCache()
+        {
+            var expectedTest = new ABTest
+            {
+                Id = Guid.NewGuid(),
+                OriginalItemId = Guid.NewGuid(),
+                ContentLanguage = "en-GB",
+                State = TestState.Active,
+                Variants = new List<Variant> { new Variant { Id = Guid.NewGuid() } }
+            };
+            var expectedContent = new Mock<IContent>();
+            var expectedTests = new List<IMarketingTest> { expectedTest };
+            _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(expectedTests);
+            _mockTestManager.Setup(tm => tm.Save(expectedTest)).Returns(expectedTest.Id);
+            _mockTestManager.Setup(tm => tm.GetVariantContent(expectedTest.OriginalItemId, It.IsAny<CultureInfo>()))
+                            .Returns(expectedContent.Object);
+
+            _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
+
+
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockRemoteCacheSignal.Object, _mockConfigurationSignal.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+
+            _mockRemoteCacheSignal.ResetCalls();
+            _mockEvents.ResetCalls();
+            _mockConfigurationSignal.ResetCalls();
+
+            var actualTestId = manager.Save(expectedTest);
+
+            Assert.Equal(expectedTest.Id, actualTestId);
+
+            _mockEvents.Verify(
+                e =>
+                    e.RaiseMarketingTestingEvent(
+                        DefaultMarketingTestingEvents.TestAddedToCacheEvent,
+                        It.Is<TestEventArgs>(args => args.Test == expectedTest)
+                    ),
+                Times.Never
+            );
+
+            _mockRemoteCacheSignal.Verify(s => s.Reset(), Times.Never);
+            _mockConfigurationSignal.Verify(s => s.Reset(), Times.Never);
+            _mockTestManager.VerifyAll();
+            _mockSynchronizedObjectInstanceCache.VerifyAll();
+        }
+
+        [Fact]
         public void Save_RemovesFromCacheIfNotActive_SendsMessageToReset()
         {
             var expectedTest = _expectedTests.First();
