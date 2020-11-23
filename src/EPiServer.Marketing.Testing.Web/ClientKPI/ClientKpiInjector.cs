@@ -54,7 +54,7 @@ namespace EPiServer.Marketing.Testing.Web.ClientKPI
         public ClientKpiInjector()
         {
             _contextHelper = ServiceLocator.Current.GetInstance<ITestingContextHelper>();
-            _testRepo = new MarketingTestingWebRepository();
+            _testRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
             _logger = LogManager.GetLogger();
             _httpContextHelper = new HttpContextHelper();
             _kpiManager = new KpiManager();

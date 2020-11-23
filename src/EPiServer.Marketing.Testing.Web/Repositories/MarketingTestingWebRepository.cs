@@ -22,7 +22,7 @@ using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
-    [ServiceConfiguration(ServiceType = typeof(IMarketingTestingWebRepository))]
+    [ServiceConfiguration(ServiceType = typeof(IMarketingTestingWebRepository), Lifecycle = ServiceInstanceScope.Singleton) ]
     public class MarketingTestingWebRepository : IMarketingTestingWebRepository
     {
         private IServiceLocator _serviceLocator;
@@ -32,6 +32,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private IKpiManager _kpiManager;
         private IHttpContextHelper _httpContextHelper;
         private ICacheSignal _cacheSignal;
+        private ITestHandler _testHandler;
 
         /// <summary>
         /// Default constructor
@@ -44,6 +45,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testManager = _serviceLocator.GetInstance<ITestManager>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _httpContextHelper = new HttpContextHelper();
+            _testHandler = _serviceLocator.GetInstance<ITestHandler>();
+
             _logger = LogManager.GetLogger();
             _cacheSignal = new RemoteCacheSignal(
                             ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
@@ -88,7 +91,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             );
 
             AdminConfigTestSettings.Reset();
-            var testHandler = _serviceLocator.GetInstance<ITestHandler>();
 
             if (AdminConfigTestSettings.Current.IsEnabled)
             {
@@ -96,17 +98,17 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
                 if (dbTests.Count == 0)
                 {
-                    testHandler.DisableABTesting();
+                    _testHandler.DisableABTesting();
                 }
                 else
                 {
-                    testHandler.EnableABTesting();
+                    _testHandler.EnableABTesting();
                     ((CachingTestManager)_testManager).RefreshCache();
                 }
             }
             else
             {
-                testHandler.DisableABTesting();
+                _testHandler.DisableABTesting();
             }
 
             // check config to see if its enabled
@@ -210,7 +212,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             foreach (var test in testList)
             {
                 _testManager.Delete(test.Id);
-                _cacheSignal.Reset();
+            }
+
+            _cacheSignal.Reset();
+
+            if (_testManager.GetActiveTests().Count == 0)
+            {
+                _testHandler.DisableABTesting();
             }
         }
 
@@ -221,7 +229,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             foreach (var test in testList)
             {
                 _testManager.Delete(test.Id, cultureInfo);
-                _cacheSignal.Reset();
+            }
+
+            _cacheSignal.Reset();
+
+            if ( _testManager.GetActiveTests().Count == 0 )
+            {
+                _testHandler.DisableABTesting();
             }
         }
 
@@ -234,7 +248,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             IMarketingTest test = ConvertToMarketingTest(testData);
             _cacheSignal.Reset();
-            return _testManager.Save(test);
+            var tq = _testManager.Save(test);
+            if (_testManager.GetActiveTests().Count == 1)
+            {
+                _testHandler.EnableABTesting();
+            }
+            return tq;
         }
 
         /// <summary>
@@ -245,6 +264,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testManager.Delete(testGuid);
             _cacheSignal.Reset();
+            if (_testManager.GetActiveTests().Count == 0)
+            {
+                _testHandler.DisableABTesting();
+            }
         }
 
         /// <summary>
@@ -299,7 +322,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid SaveMarketingTest(IMarketingTest testData)
         {
             _cacheSignal.Reset();
-            return _testManager.Save(testData);
+            var tq = _testManager.Save(testData);
+            if (_testManager.GetActiveTests().Count == 1)
+            {
+                _testHandler.EnableABTesting();
+            }
+            return tq;
         }
 
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)

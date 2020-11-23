@@ -230,9 +230,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         public void RefreshCache()
         {
-            var isEnabled = _cache.Get("abconfigenabled");
-            if (isEnabled == "true")
-            {
+            //var isEnabled = _cache.Get("abconfigenabled");
+            //if (isEnabled == "true")
+            //{
                 var testCriteria = new TestCriteria();
                 testCriteria.AddFilter(
                     new ABTestFilter
@@ -271,12 +271,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 {
                     _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
                 }
-            }
-            else
-            {
-                _logger.Information("Refreshing Cache - disabled");
-                _cache.RemoveLocal(MasterCacheKey);
-            }
+            //}
+            //else
+            //{
+            //    _logger.Information("Refreshing Cache - disabled");
+            //    _cache.RemoveLocal(MasterCacheKey);
+            //}
         }
 
         /// <summary>
