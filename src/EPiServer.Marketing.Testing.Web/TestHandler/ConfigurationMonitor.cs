@@ -62,17 +62,20 @@ namespace EPiServer.Marketing.Testing.Web
                 {
                     testHandler.DisableABTesting();
                     cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
+                    logger.Information("ConfigurationMonitor - testing disabled");
                 }
                 else
                 {
                     testHandler.EnableABTesting();
                     cache.Insert("abconfigenabled", "true", new CacheEvictionPolicy(null, null));
+                    logger.Information("ConfigurationMonitor - testing enabled");
                 }
             }
             else
             {
                 testHandler.DisableABTesting();
                 cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
+                logger.Information("ConfigurationMonitor - testing disabled");
             }
 
             this.cacheSignal.Set();

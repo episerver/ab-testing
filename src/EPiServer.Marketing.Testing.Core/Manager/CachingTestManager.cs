@@ -251,14 +251,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                     allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
 
-                    _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
+                    _logger.Information("Refreshing Cache - count = " + allTests.Count);
 
                     _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 }
 
                 foreach (var test in allTests)
                 {
-                    _logger.Information("A/B testing Refreshing Cache - inserting variants.");
+                    _logger.Information("Refreshing Cache - inserting variants.");
                     _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                         _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                         new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
@@ -274,7 +274,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
             else
             {
-                _logger.Information("A/B testing Refreshing Cache - disabled");
+                _logger.Information("Refreshing Cache - disabled");
                 _cache.RemoveLocal(MasterCacheKey);
             }
         }
@@ -296,7 +296,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                     testAdded = true;
                     allTests.Add(test);
 
-                    _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
+                    _logger.Information("AddTestToCache - count = " + allTests.Count);
 
                     _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 }
@@ -304,7 +304,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             if (testAdded)
             {
-                _logger.Information("A/B testing Refreshing Cache - inserting variants.");
+                _logger.Information("AddTestToCache - inserting variant.");
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                         _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                         new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
@@ -325,7 +325,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="variant">Variant content to cache</param>
         private void AddVariantToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
-            _logger.Information("A/B testing AddVariantToCache.");
+            _logger.Information("AddVariantToCache");
             
             _cache.Insert(GetCacheKeyForVariant(originalItemId, culture.Name), variant,
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
@@ -348,7 +348,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 {
                     tests.Remove(test);
 
-                    _logger.Information("A/B testing RemoveFromCache. test count = " + tests.Count);
+                    _logger.Information("RemoveFromCache - count = " + tests.Count);
 
                     _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 }
