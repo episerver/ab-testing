@@ -17,6 +17,8 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
+using EPiServer.Framework.Cache;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -29,6 +31,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private ILogger _logger;
         private IKpiManager _kpiManager;
         private IHttpContextHelper _httpContextHelper;
+        private ICacheSignal _cacheSignal;
 
         /// <summary>
         /// Default constructor
@@ -42,6 +45,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _httpContextHelper = new HttpContextHelper();
             _logger = LogManager.GetLogger();
+            _cacheSignal = new RemoteCacheSignal(
+                            ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
+                            LogManager.GetLogger(),
+                            "epi/marketing/testing/webrepocache",
+                            TimeSpan.FromSeconds(15)
+                        );
+
+            _cacheSignal.Monitor(Refresh);
         }
         /// <summary>
         /// For unit testing
@@ -53,8 +64,56 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _testManager = locator.GetInstance<ITestManager>();
             _kpiManager = locator.GetInstance<IKpiManager>();
             _httpContextHelper = locator.GetInstance<IHttpContextHelper>();
+            _cacheSignal = new RemoteCacheSignal(
+                            ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
+                            LogManager.GetLogger(),
+                            "epi/marketing/testing/webrepocache",
+                            TimeSpan.FromSeconds(15));
+
+            _cacheSignal.Monitor(Refresh);
 
             _logger = logger;
+        }
+
+        public void Refresh()
+        {
+            var testCriteria = new TestCriteria();
+            testCriteria.AddFilter(
+                new ABTestFilter
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                }
+            );
+
+            AdminConfigTestSettings.Reset();
+            var testHandler = _serviceLocator.GetInstance<ITestHandler>();
+
+            if (AdminConfigTestSettings.Current.IsEnabled)
+            {
+                var dbTests = _testManager.GetTestList(testCriteria);
+
+                if (dbTests.Count == 0)
+                {
+                    testHandler.DisableABTesting();
+                }
+                else
+                {
+                    testHandler.EnableABTesting();
+                    ((CachingTestManager)_testManager).RefreshCache();
+                }
+            }
+            else
+            {
+                testHandler.DisableABTesting();
+            }
+
+            // check config to see if its enabled
+            //      if it is, get active tests from db, tell cachingtestmanager to update cache
+            //      if not, disable()
+
+            _cacheSignal.Set();
         }
 
         /// <summary>
@@ -151,6 +210,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             foreach (var test in testList)
             {
                 _testManager.Delete(test.Id);
+                _cacheSignal.Reset();
             }
         }
 
@@ -161,6 +221,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             foreach (var test in testList)
             {
                 _testManager.Delete(test.Id, cultureInfo);
+                _cacheSignal.Reset();
             }
         }
 
@@ -172,6 +233,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid CreateMarketingTest(TestingStoreModel testData)
         {
             IMarketingTest test = ConvertToMarketingTest(testData);
+            _cacheSignal.Reset();
             return _testManager.Save(test);
         }
 
@@ -182,6 +244,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void DeleteMarketingTest(Guid testGuid)
         {
             _testManager.Delete(testGuid);
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -191,6 +254,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StartMarketingTest(Guid testGuid)
         {
             _testManager.Start(testGuid);
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -200,6 +264,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StopMarketingTest(Guid testGuid)
         {
             _testManager.Stop(testGuid);
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -210,6 +275,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StopMarketingTest(Guid testGuid, CultureInfo cultureInfo)
         {
             _testManager.Stop(testGuid, cultureInfo);
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -218,6 +284,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId)
         {
             _testManager.Archive(testObjectId, winningVariantId);
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -226,10 +293,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo)
         {
             _testManager.Archive(testObjectId, winningVariantId, cultureInfo);
+            _cacheSignal.Reset();
         }
 
         public Guid SaveMarketingTest(IMarketingTest testData)
         {
+            _cacheSignal.Reset();
             return _testManager.Save(testData);
         }
 
@@ -404,12 +473,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             string GetCurrentUser()
         {
             return PrincipalInfo.CurrentPrincipal.Identity.Name;
-        }
-
-        private DateTime CalculateEndDateFromDuration(string startDate, int testDuration)
-        {
-            DateTime endDate = DateTime.Parse(startDate);
-            return endDate.AddDays(testDuration);
         }
 
         /// <summary>

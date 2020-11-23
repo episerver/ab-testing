@@ -27,8 +27,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private readonly ILogger _logger;
         private readonly ITestManager _inner;
         private readonly ISynchronizedObjectInstanceCache _cache;
-        private readonly ICacheSignal _remoteCacheSignal;
-        private readonly ICacheSignal _remoteConfigurationCacheSignal;
+        //private readonly ICacheSignal _remoteCacheSignal;
+        //private readonly ICacheSignal _remoteConfigurationCacheSignal;
         private readonly DefaultMarketingTestingEvents _events;
 
         /// <summary>
@@ -43,8 +43,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             ICacheSignal remoteConfigurationCacheSignal, DefaultMarketingTestingEvents events, ITestManager inner,
             ILogger logger)
         {
-            _remoteCacheSignal = remoteCacheSignal;
-            _remoteConfigurationCacheSignal = remoteConfigurationCacheSignal;
+            //_remoteCacheSignal = remoteCacheSignal;
+            //_remoteConfigurationCacheSignal = remoteConfigurationCacheSignal;
             _inner = inner;
             _events = events;
             _cache = cache;
@@ -52,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
  //           RefreshCache();
 
-            remoteCacheSignal.Monitor(RefreshCache);
+            //remoteCacheSignal.Monitor(RefreshCache);
         }
 
         /// <inheritdoc/>
@@ -264,7 +264,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                         new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 }
 
-                _remoteCacheSignal.Set();
+                //_remoteCacheSignal.Set();
 
                 //Notify interested consumers that a test was added to the cache.
                 foreach (var test in allTests)
@@ -312,8 +312,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 //Notify interested consumers that a test was added to the cache.
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-                _remoteCacheSignal.Reset();
-                _remoteConfigurationCacheSignal.Reset();
+                //_remoteCacheSignal.Reset();
+                //_remoteConfigurationCacheSignal.Reset();
             }
         }
 
@@ -360,8 +360,8 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
             }
 
-            _remoteCacheSignal.Reset();
-            _remoteConfigurationCacheSignal.Reset();
+            //_remoteCacheSignal.Reset();
+            //_remoteConfigurationCacheSignal.Reset();
         }
 
         /// <summary>

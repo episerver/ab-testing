@@ -27,12 +27,12 @@ namespace EPiServer.Marketing.Testing.Web
         public ConfigurationMonitor(IServiceLocator serviceLocator, ICacheSignal cacheSignal)
         {
             this.serviceLocator = serviceLocator;
-            this.cacheSignal = cacheSignal;
+            //this.cacheSignal = cacheSignal;
 
             testManager = serviceLocator.GetInstance<ITestManager>();
             testHandler = serviceLocator.GetInstance<ITestHandler>();
 
-             this.cacheSignal.Monitor(HandleConfigurationChange);
+             //this.cacheSignal.Monitor(HandleConfigurationChange);
         }
 
         /// <summary>
@@ -40,45 +40,45 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public void HandleConfigurationChange()
         {
-            var logger = LogManager.GetLogger();
+            //var logger = LogManager.GetLogger();
 
-            var testCriteria = new TestCriteria();
-            testCriteria.AddFilter(
-                new ABTestFilter
-                {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                }
-            );
-            var dbTests = testManager.GetTestList(testCriteria);
-            var cache = serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
+            //var testCriteria = new TestCriteria();
+            //testCriteria.AddFilter(
+            //    new ABTestFilter
+            //    {
+            //        Property = ABTestProperty.State,
+            //        Operator = FilterOperator.And,
+            //        Value = TestState.Active
+            //    }
+            //);
+            //var dbTests = testManager.GetTestList(testCriteria);
+            //var cache = serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
 
-            // forces a reload of the config component, not sure we still need to do this.
-            AdminConfigTestSettings.Reset(); 
-            if(AdminConfigTestSettings.Current.IsEnabled)
-            {
-                if (dbTests.Count == 0)
-                {
-                    testHandler.DisableABTesting();
-                    cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
-                    logger.Information("ConfigurationMonitor - testing disabled");
-                }
-                else
-                {
-                    testHandler.EnableABTesting();
-                    cache.Insert("abconfigenabled", "true", new CacheEvictionPolicy(null, null));
-                    logger.Information("ConfigurationMonitor - testing enabled");
-                }
-            }
-            else
-            {
-                testHandler.DisableABTesting();
-                cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
-                logger.Information("ConfigurationMonitor - testing disabled");
-            }
+            //// forces a reload of the config component, not sure we still need to do this.
+            //AdminConfigTestSettings.Reset(); 
+            //if(AdminConfigTestSettings.Current.IsEnabled)
+            //{
+            //    if (dbTests.Count == 0)
+            //    {
+            //        testHandler.DisableABTesting();
+            //        cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
+            //        logger.Information("ConfigurationMonitor - testing disabled");
+            //    }
+            //    else
+            //    {
+            //        testHandler.EnableABTesting();
+            //        cache.Insert("abconfigenabled", "true", new CacheEvictionPolicy(null, null));
+            //        logger.Information("ConfigurationMonitor - testing enabled");
+            //    }
+            //}
+            //else
+            //{
+            //    testHandler.DisableABTesting();
+            //    cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
+            //    logger.Information("ConfigurationMonitor - testing disabled");
+            //}
 
-            this.cacheSignal.Set();
+            //this.cacheSignal.Set();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public void Reset()
         {
-            this.cacheSignal.Reset();
+            //this.cacheSignal.Reset();
         }
     }
 }
