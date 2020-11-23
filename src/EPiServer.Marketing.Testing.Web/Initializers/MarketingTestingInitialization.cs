@@ -24,6 +24,15 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
 
             int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:ConfigurationMonitorSeconds"]?.ToString(), out var configurationMonitorValue);
             int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:TestMonitorSeconds"]?.ToString(), out var testMonitorValue);
+            
+            context.Services.AddSingleton<IConfigurationMonitor, ConfigurationMonitor>(
+                serviceLocator =>
+                    new ConfigurationMonitor(serviceLocator, new RemoteCacheSignal(
+                        ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
+                        LogManager.GetLogger(),
+                        "epi/marketing/testing/configuration",
+                        TimeSpan.FromSeconds(configurationMonitorValue > 0 ? configurationMonitorValue : 60)
+                    )));
 
             context.Services.AddSingleton<ITestManager, CachingTestManager>(
                 serviceLocator =>
@@ -33,28 +42,18 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                             serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>(),
                             LogManager.GetLogger(),
                             "epi/marketing/testing/cache",
-                            TimeSpan.FromSeconds(testMonitorValue > 0 ? testMonitorValue : 1)
+                            TimeSpan.FromSeconds(testMonitorValue > 20 ? testMonitorValue : 20)
                         ),
                         new RemoteCacheSignal(
                             ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
                             LogManager.GetLogger(),
                             "epi/marketing/testing/configuration",
-                            TimeSpan.FromSeconds(configurationMonitorValue > 0 ? configurationMonitorValue : 60)
+                            TimeSpan.FromSeconds(configurationMonitorValue > 30 ? configurationMonitorValue : 60)
                         ),
                         serviceLocator.GetInstance<DefaultMarketingTestingEvents>(),
                         new TestManager(),
                         LogManager.GetLogger(typeof(CachingTestManager))
                     ));
-
-            
-            context.Services.AddSingleton<IConfigurationMonitor, ConfigurationMonitor>( 
-                serviceLocator =>
-                    new ConfigurationMonitor(serviceLocator, new RemoteCacheSignal(
-                        ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
-                        LogManager.GetLogger(),
-                        "epi/marketing/testing/configuration",
-                        TimeSpan.FromSeconds(configurationMonitorValue > 0 ? configurationMonitorValue : 60)
-                    )));
 
             context.Services.AddSingleton<ITestHandler, TestHandler>();
             context.Services.AddSingleton<IFeatureEnabler, FeatureEnabler>(

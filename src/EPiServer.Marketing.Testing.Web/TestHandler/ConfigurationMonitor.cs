@@ -1,4 +1,7 @@
 ﻿using EPiServer.Framework.Cache;
+using EPiServer.Logging;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Core.DataClass.Enums;
 using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.ServiceLocation;
@@ -12,7 +15,6 @@ namespace EPiServer.Marketing.Testing.Web
     {
         private IServiceLocator serviceLocator;
         private ICacheSignal cacheSignal;
-        private bool lastState;
         private ITestHandler testHandler;
         private ITestManager testManager;
 
@@ -30,11 +32,7 @@ namespace EPiServer.Marketing.Testing.Web
             testManager = serviceLocator.GetInstance<ITestManager>();
             testHandler = serviceLocator.GetInstance<ITestHandler>();
 
-            testHandler.EnableABTesting();
-            this.lastState = true;
-
-            HandleConfigurationChange();
-            this.cacheSignal.Monitor(HandleConfigurationChange);
+             this.cacheSignal.Monitor(HandleConfigurationChange);
         }
 
         /// <summary>
@@ -42,24 +40,39 @@ namespace EPiServer.Marketing.Testing.Web
         /// </summary>
         public void HandleConfigurationChange()
         {
-            var dbTests = testManager.GetActiveTests();
+            var logger = LogManager.GetLogger();
 
-            AdminConfigTestSettings.Reset();
-            bool currentState = AdminConfigTestSettings.Current.IsEnabled && dbTests.Count >= 1;
-
-            if (currentState != lastState)
-            {
-                if (currentState)
+            var testCriteria = new TestCriteria();
+            testCriteria.AddFilter(
+                new ABTestFilter
                 {
-                    testHandler.EnableABTesting();
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                }
+            );
+            var dbTests = testManager.GetTestList(testCriteria);
+            var cache = serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
+
+            // forces a reload of the config component, not sure we still need to do this.
+            AdminConfigTestSettings.Reset(); 
+            if(AdminConfigTestSettings.Current.IsEnabled)
+            {
+                if (dbTests.Count == 0)
+                {
+                    testHandler.DisableABTesting();
+                    cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
                 }
                 else
                 {
-                    testHandler.DisableABTesting();
-                    var cache = serviceLocator.GetInstance<ISynchronizedObjectInstanceCache>();
-                    cache.RemoveLocal(CachingTestManager.MasterCacheKey);
+                    testHandler.EnableABTesting();
+                    cache.Insert("abconfigenabled", "true", new CacheEvictionPolicy(null, null));
                 }
-                lastState = currentState;
+            }
+            else
+            {
+                testHandler.DisableABTesting();
+                cache.Insert("abconfigenabled", "false", new CacheEvictionPolicy(null, null));
             }
 
             this.cacheSignal.Set();

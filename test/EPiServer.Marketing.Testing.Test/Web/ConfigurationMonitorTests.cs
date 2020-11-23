@@ -41,7 +41,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             mockTestHandler = new Mock<ITestHandler>();
             mockTestManager = new Mock<ITestManager>();
             var testsReturned = tests == null ? new List<IMarketingTest> { } : tests;
-            mockTestManager.Setup(t => t.GetActiveTests()).Returns(testsReturned);
+            mockTestManager.Setup(t => t.GetTestList(It.IsAny<TestCriteria>())).Returns(testsReturned);
 
             mockSignal = new Mock<ICacheSignal>();
             mockTestHandler.Setup(t => t.EnableABTesting()).Verifiable();
@@ -58,21 +58,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void HandleConfigurationChange_EnablesAB_When_EnabledInConfig_And_There_Is_Atleast_One_ActiveTest()
-        {
-            var tests = new List<IMarketingTest> { new ABTest { State = TestState.Active }, new ABTest { State = TestState.Archived } };
-
-            var configMonitor = GetUnitUnderTest(tests);
-
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once);
-            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Never);
-            mockSignal.Verify(s => s.Reset(), Times.Never);
-            mockSignal.Verify(s => s.Set(), Times.Once);
-
-            mockSynchronizedObjectInstanceCache.Verify(m => m.RemoveLocal(CachingTestManager.MasterCacheKey), Times.Never);
-        }
-
-        [Fact]
         public void HandleConfigurationChange_DoesNotEnableAB_When_EnabledInConfig_And_There_Are_No_ActiveTests()
         {
             var configMonitor = GetUnitUnderTest();
@@ -80,11 +65,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             configMonitor.HandleConfigurationChange();
 
             mockTestHandler.Verify(t => t.DisableABTesting(), Times.Once); 
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once);
             mockSignal.Verify(s => s.Reset(), Times.Never);
-            mockSignal.Verify(s => s.Set(), Times.Exactly(2));
-
-            mockSynchronizedObjectInstanceCache.Verify(m => m.RemoveLocal(CachingTestManager.MasterCacheKey));
+            mockSignal.Verify(s => s.Set(), Times.Once);
         }
 
         [Fact]
@@ -109,31 +91,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             configMonitor.HandleConfigurationChange();
 
             mockTestHandler.Verify(t => t.DisableABTesting(), Times.Once); 
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once); // in the constructor
             mockSignal.Verify(s => s.Reset(), Times.Never);
-            mockSignal.Verify(s => s.Set(), Times.Exactly(2));
-            mockSynchronizedObjectInstanceCache.Verify(s => s.RemoveLocal(CachingTestManager.MasterCacheKey));
-        }
-
-        [Fact]
-        public void HandleResetConfig_Calls_CacheSignal_Reset()
-        {
-            var configMonitor = GetUnitUnderTest();
-
-            configMonitor.Reset();
-
-            mockTestHandler.Verify(t => t.EnableABTesting(), Times.Once);
             mockSignal.Verify(s => s.Set(), Times.Once);
-
-            mockTestHandler.Verify(t => t.DisableABTesting(), Times.Once); 
-            mockSignal.Verify(s => s.Reset(), Times.Once);
         }
 
         [Fact]
         public void ConfigurationMonitor_Ctor_AddsMonitor()
         {
             GetUnitUnderTest();
-            mockSignal.Verify(s => s.Set(), Times.Once());
             mockSignal.Verify(s => s.Monitor(It.Is<Action>(a => a.Method.Name == "HandleConfigurationChange")), Times.Once());
         }
     }

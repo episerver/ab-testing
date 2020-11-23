@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _cache = cache;
             _logger = logger;
 
-            RefreshCache();
+ //           RefreshCache();
 
             remoteCacheSignal.Monitor(RefreshCache);
         }
@@ -94,13 +94,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             var returnList = new List<IMarketingTest>();
             var all = _cache.Get(AllTestsKey) as List<IMarketingTest>;
 
-            if (all == null)
+            if (all == null || !all.Any())
             {
                 RefreshCache();
                 all = _cache.Get(AllTestsKey) as List<IMarketingTest>;
             }
-
-            returnList.AddRange(all);
+            if (all != null)
+            {
+                returnList.AddRange(all);
+            }
 
             return returnList;
         }
@@ -228,42 +230,52 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// </summary>
         public void RefreshCache()
         {
-            var testCriteria = new TestCriteria();
-            testCriteria.AddFilter(
-                new ABTestFilter
+            var isEnabled = _cache.Get("abconfigenabled");
+            if (isEnabled == "true")
+            {
+                var testCriteria = new TestCriteria();
+                testCriteria.AddFilter(
+                    new ABTestFilter
+                    {
+                        Property = ABTestProperty.State,
+                        Operator = FilterOperator.And,
+                        Value = TestState.Active
+                    }
+                );
+
+                List<IMarketingTest> allTests;
+
+                lock (listLock)
                 {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
+                    _cache.RemoveLocal(MasterCacheKey);
+
+                    allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
+
+                    _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
+
+                    _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
                 }
-            );
 
-            List<IMarketingTest> allTests;
+                foreach (var test in allTests)
+                {
+                    _logger.Information("A/B testing Refreshing Cache - inserting variants.");
+                    _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
+                        _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
+                        new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                }
 
-            lock (listLock)
+                _remoteCacheSignal.Set();
+
+                //Notify interested consumers that a test was added to the cache.
+                foreach (var test in allTests)
+                {
+                    _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
+                }
+            }
+            else
             {
+                _logger.Information("A/B testing Refreshing Cache - disabled");
                 _cache.RemoveLocal(MasterCacheKey);
-                allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
-
-                _logger.Information("A/B testing Refreshing Cache - inserting testlist. count = " + allTests.Count);
-
-                _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
-            }
-
-            foreach (var test in allTests)
-            {
-                _logger.Information("A/B testing Refreshing Cache - inserting variants.");
-                _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
-                    _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
-                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
-            }
-
-            _remoteCacheSignal.Set();
-
-            //Notify interested consumers that a test was added to the cache.
-            foreach (var test in allTests)
-            {
-                _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
             }
         }
 
@@ -300,7 +312,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 //Notify interested consumers that a test was added to the cache.
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
 
-                //Signal other nodes to reset their cache.
                 _remoteCacheSignal.Reset();
                 _remoteConfigurationCacheSignal.Reset();
             }
@@ -347,10 +358,10 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _cache.RemoveLocal(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage));
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, new TestEventArgs(test));
-
-                _remoteCacheSignal.Reset();
-                _remoteConfigurationCacheSignal.Reset();
             }
+
+            _remoteCacheSignal.Reset();
+            _remoteConfigurationCacheSignal.Reset();
         }
 
         /// <summary>
