@@ -214,12 +214,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 _testManager.Delete(test.Id);
             }
 
-            _cacheSignal.Reset();
-
             if (_testManager.GetActiveTests().Count == 0)
             {
                 _testHandler.DisableABTesting();
             }
+            _cacheSignal.Reset();
         }
 
         public void DeleteTestForContent(Guid aContentGuid, CultureInfo cultureInfo)
@@ -231,12 +230,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 _testManager.Delete(test.Id, cultureInfo);
             }
 
-            _cacheSignal.Reset();
-
             if ( _testManager.GetActiveTests().Count == 0 )
             {
                 _testHandler.DisableABTesting();
             }
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -247,12 +245,13 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid CreateMarketingTest(TestingStoreModel testData)
         {
             IMarketingTest test = ConvertToMarketingTest(testData);
-            _cacheSignal.Reset();
             var tq = _testManager.Save(test);
             if (_testManager.GetActiveTests().Count == 1)
             {
                 _testHandler.EnableABTesting();
             }
+            _cacheSignal.Reset();
+
             return tq;
         }
 
@@ -263,11 +262,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void DeleteMarketingTest(Guid testGuid)
         {
             _testManager.Delete(testGuid);
-            _cacheSignal.Reset();
             if (_testManager.GetActiveTests().Count == 0)
             {
                 _testHandler.DisableABTesting();
             }
+            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -277,6 +276,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StartMarketingTest(Guid testGuid)
         {
             _testManager.Start(testGuid);
+            if (_testManager.GetActiveTests().Count == 1)
+            {
+                _testHandler.EnableABTesting();
+            }
             _cacheSignal.Reset();
         }
 
@@ -287,6 +290,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StopMarketingTest(Guid testGuid)
         {
             _testManager.Stop(testGuid);
+            if (_testManager.GetActiveTests().Count == 0)
+            {
+                _testHandler.DisableABTesting();
+            }
             _cacheSignal.Reset();
         }
 
@@ -298,6 +305,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StopMarketingTest(Guid testGuid, CultureInfo cultureInfo)
         {
             _testManager.Stop(testGuid, cultureInfo);
+            if (_testManager.GetActiveTests().Count == 0)
+            {
+                _testHandler.DisableABTesting();
+            }
             _cacheSignal.Reset();
         }
 
@@ -307,6 +318,11 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId)
         {
             _testManager.Archive(testObjectId, winningVariantId);
+
+            if (_testManager.GetActiveTests().Count == 0)
+            {
+                _testHandler.DisableABTesting();
+            }
             _cacheSignal.Reset();
         }
 
@@ -321,12 +337,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         public Guid SaveMarketingTest(IMarketingTest testData)
         {
-            _cacheSignal.Reset();
             var tq = _testManager.Save(testData);
             if (_testManager.GetActiveTests().Count == 1)
             {
                 _testHandler.EnableABTesting();
             }
+            _cacheSignal.Reset();
             return tq;
         }
 
