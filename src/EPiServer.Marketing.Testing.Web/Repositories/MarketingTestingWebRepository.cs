@@ -92,23 +92,23 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             if (AdminConfigTestSettings.Current.IsEnabled)
             {
                 var dbTests = _testManager.GetTestList(testCriteria);
-                _logger.Information("Refreshing Cache - count = " + dbTests.Count);
+                _logger.Debug("Refreshing Cache - count = " + dbTests.Count);
 
                 if (dbTests.Count == 0)
                 {
-                    _logger.Information("AB Testing disabled, there are no active tests.");
+                    _logger.Debug("AB Testing disabled, there are no active tests.");
                     _testHandler.DisableABTesting();
                 }
                 else
                 {
-                    _logger.Information("AB Testing enabled with active tests.");
+                    _logger.Debug("AB Testing enabled with active tests.");
                     _testHandler.EnableABTesting();
                     ((CachingTestManager)_testManager).RefreshCache();
                 }
             }
             else
             {
-                _logger.Information("AB Testing disabled through configuration.");
+                _logger.Debug("AB Testing disabled through configuration.");
                 _testHandler.DisableABTesting();
             }
 
@@ -224,12 +224,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
             if (_testManager.GetActiveTests().Count == 0)
             {
-                _logger.Information("AB Testing disabled, there are no active tests.");
+                _logger.Debug("AB Testing disabled, there are no active tests.");
                 _testHandler.DisableABTesting();
             }
             else if (_testManager.GetActiveTests().Count == 1)
             {
-                _logger.Information("AB Testing enabled with active tests.");
+                _logger.Debug("AB Testing enabled with active tests.");
                 _testHandler.EnableABTesting();
             }
         }
