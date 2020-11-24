@@ -3,6 +3,7 @@ using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web;
 using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Controllers;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
@@ -23,11 +24,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<DynamicDataStoreFactory> _factory = new Mock<DynamicDataStoreFactory>();
         Mock<DynamicDataStore> _store = new Mock<DynamicDataStore>();
         Mock<AdminConfigTestSettings> _settings = new Mock<AdminConfigTestSettings>();
+        Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
 
         private ABTestConfigStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<AdminConfigTestSettings>()).Returns(_settings.Object);
+            _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
 
             var testStore = new ABTestConfigStore(_locator.Object);
             return testStore;
@@ -69,11 +72,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var settings = new AdminConfigTestSettings();
             settings._serviceLocator = _locator.Object;
+            _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
 
             settings.Save();
 
             ddsFactoryMock.Verify();
             ddsMock.Verify(d => d.Save(It.Is<AdminConfigTestSettings>(s => s == settings)));
+            _webRepo.Verify(w => w.ConfigurationChanged());
         }
 
         [Fact]
@@ -179,25 +184,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True((result.Data as AdminConfigTestSettings).IsEnabled, "AdminConfigTestSettings.IsEnabled value does not match");
         }
 
-        [Fact]
-        public void AdminConfigTestSettings_SavesSettings_And_CallsConfigurationMonitor()
-        {
-            // mock the datastore in epi
-            var ddsMock = new Mock<DynamicDataStore>(null);
-            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
-            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
-            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
-
-            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
-            AdminConfigTestSettings._currentSettings = null;
-
-            var testClass = GetUnitUnderTest();
-            var result = testClass.Get() as RestResult;
-            var settings = result.Data as AdminConfigTestSettings;
-
-            settings._serviceLocator = _locator.Object;
-            settings.Save();
-        }
         [Fact]
         public void Reset_ForcesADatabaseCall()
         {
