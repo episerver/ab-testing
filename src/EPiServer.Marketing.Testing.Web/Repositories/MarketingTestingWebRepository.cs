@@ -62,15 +62,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// <param name="locator"></param>
         internal MarketingTestingWebRepository(IServiceLocator locator, ILogger logger)
         {
+            _serviceLocator = locator;
             _testResultHelper = locator.GetInstance<ITestResultHelper>();
             _testManager = locator.GetInstance<ITestManager>();
             _kpiManager = locator.GetInstance<IKpiManager>();
             _httpContextHelper = locator.GetInstance<IHttpContextHelper>();
-            _cacheSignal = new RemoteCacheSignal(
-                            ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
-                            LogManager.GetLogger(),
-                            "epi/marketing/testing/webrepocache",
-                            TimeSpan.FromSeconds(15));
+            _cacheSignal = locator.GetInstance<ICacheSignal>();
 
             _cacheSignal.Monitor(Refresh);
 
@@ -222,9 +219,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _cacheSignal.Reset();
         }
 
-        private void ConfigureABTestingUsingActiveTestsCount()
+        internal void ConfigureABTestingUsingActiveTestsCount()
         {
-            var  _testHandler = _serviceLocator.GetInstance<ITestHandler>();
+            var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
             if (_testManager.GetActiveTests().Count == 0)
             {
                 _logger.Information("AB Testing disabled, there are no active tests.");
