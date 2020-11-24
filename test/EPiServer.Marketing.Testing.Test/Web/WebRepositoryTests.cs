@@ -209,12 +209,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aRepo = GetUnitUnderTest();
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
-            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>());
+            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>() { new ABTest() { Id = Guid.NewGuid(), State = TestState.Active } });
 
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
             _mockCacheSignal.Verify(c => c.Reset());
+            this._mockTestHandler.Verify(m => m.EnableABTesting());
         }
 
         [Fact]
@@ -233,6 +234,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
             _mockCacheSignal.Verify(c => c.Reset());
+            this._mockTestHandler.Verify(m => m.DisableABTesting());
         }
 
         [Fact]
