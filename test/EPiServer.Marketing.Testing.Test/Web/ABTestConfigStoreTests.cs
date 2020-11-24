@@ -23,14 +23,11 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<DynamicDataStoreFactory> _factory = new Mock<DynamicDataStoreFactory>();
         Mock<DynamicDataStore> _store = new Mock<DynamicDataStore>();
         Mock<AdminConfigTestSettings> _settings = new Mock<AdminConfigTestSettings>();
-        Mock<IConfigurationMonitor> _configurationMonitor = new Mock<IConfigurationMonitor>();
 
         private ABTestConfigStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<AdminConfigTestSettings>()).Returns(_settings.Object);
-            _locator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(_configurationMonitor.Object);
-            _configurationMonitor.Setup(c => c.HandleConfigurationChange());
 
             var testStore = new ABTestConfigStore(_locator.Object);
             return testStore;
@@ -71,15 +68,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
             AdminConfigTestSettings._currentSettings = null;
 
             var settings = new AdminConfigTestSettings();
-            _locator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(_configurationMonitor.Object);
             settings._serviceLocator = _locator.Object;
 
             settings.Save();
 
             ddsFactoryMock.Verify();
             ddsMock.Verify(d => d.Save(It.Is<AdminConfigTestSettings>(s => s == settings)));
-            _configurationMonitor.Verify(m => m.Reset(), Times.Once);
-            _configurationMonitor.Verify(m => m.HandleConfigurationChange(), Times.Once);
         }
 
         [Fact]
@@ -203,9 +197,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             settings._serviceLocator = _locator.Object;
             settings.Save();
-
-            _configurationMonitor.Verify(m => m.Reset(), Times.Once);
-            _configurationMonitor.Verify(c => c.HandleConfigurationChange(), Times.Once);
         }
         [Fact]
         public void Reset_ForcesADatabaseCall()
