@@ -1,5 +1,6 @@
 ﻿using EPiServer.Data;
 using EPiServer.Data.Dynamic;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -95,9 +96,8 @@ namespace EPiServer.Marketing.Testing.Web.Config
             store.Save(this);
 
             _currentSettings = this;
-            var configurationMonitor = (_serviceLocator == null ? ServiceLocator.Current : _serviceLocator).GetInstance<IConfigurationMonitor>();
-            configurationMonitor.Reset();
-            configurationMonitor.HandleConfigurationChange();
+            var repo = (_serviceLocator == null ? ServiceLocator.Current : _serviceLocator).GetInstance<IMarketingTestingWebRepository>();
+            repo.ConfigurationChanged();
         }
     }
 }

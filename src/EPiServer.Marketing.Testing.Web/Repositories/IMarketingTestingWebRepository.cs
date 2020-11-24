@@ -37,5 +37,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         void IncrementCount(Guid testId, int itemVersion, CountType resultType, Guid kpiId = default(Guid), bool async = true);
         void SaveKpiResultData(Guid testId, int itemVersion, IKeyResult keyResult, KeyResultType type, bool async = true);
         IList<IKpiResult> EvaluateKPIs(IList<IKpi> kpis, object sender, EventArgs e);
+        void ConfigurationChanged();
     }
 }
