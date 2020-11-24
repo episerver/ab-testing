@@ -300,8 +300,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="variant">Variant content to cache</param>
         private void AddVariantToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
-            _logger.Debug("AddVariantToCache");
-            
             _cache.Insert(GetCacheKeyForVariant(originalItemId, culture.Name), variant,
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
         }

@@ -4,7 +4,6 @@ using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
@@ -32,7 +31,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private IKpiManager _kpiManager;
         private IHttpContextHelper _httpContextHelper;
         private ICacheSignal _cacheSignal;
-        //private ITestHandler _testHandler;
 
         /// <summary>
         /// Default constructor
@@ -74,6 +72,9 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _logger = logger;
         }
 
+        /// <summary>
+        /// refreshes the cache and sets the 
+        /// </summary>
         public void Refresh()
         {
             var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
@@ -111,10 +112,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 _logger.Debug("AB Testing disabled through configuration.");
                 _testHandler.DisableABTesting();
             }
-
-            // check config to see if its enabled
-            //      if it is, get active tests from db, tell cachingtestmanager to update cache
-            //      if not, disable()
 
             _cacheSignal.Set();
         }
@@ -216,7 +213,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
 
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         internal void ConfigureABTestingUsingActiveTestsCount()
@@ -232,6 +228,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                 _logger.Debug("AB Testing enabled with active tests.");
                 _testHandler.EnableABTesting();
             }
+            _cacheSignal.Reset();
         }
 
         public void DeleteTestForContent(Guid aContentGuid, CultureInfo cultureInfo)
@@ -244,7 +241,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
 
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -255,11 +251,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid CreateMarketingTest(TestingStoreModel testData)
         {
             IMarketingTest test = ConvertToMarketingTest(testData);
-            var tq = _testManager.Save(test);
-            ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
 
-            return tq;
+            var testId = _testManager.Save(test);
+            ConfigureABTestingUsingActiveTestsCount();
+            return testId;
         }
 
         /// <summary>
@@ -270,7 +265,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testManager.Delete(testGuid);
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -281,7 +275,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testManager.Start(testGuid);
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -292,7 +285,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testManager.Stop(testGuid);
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -304,7 +296,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testManager.Stop(testGuid, cultureInfo);
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -314,7 +305,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         {
             _testManager.Archive(testObjectId, winningVariantId);
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
         }
 
         /// <summary>
@@ -323,15 +313,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo)
         {
             _testManager.Archive(testObjectId, winningVariantId, cultureInfo);
-            _cacheSignal.Reset();
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         public Guid SaveMarketingTest(IMarketingTest testData)
         {
-            var tq = _testManager.Save(testData);
+            var testId = _testManager.Save(testData);
             ConfigureABTestingUsingActiveTestsCount();
-            _cacheSignal.Reset();
-            return tq;
+            return testId;
         }
 
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
@@ -573,6 +562,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             }
         }
 
+        /// <summary>
+        /// Called by the ui when the config is changed. Forces a reset and tells content deliver machines 
+        /// to refresh.
+        /// </summary>
         public void ConfigurationChanged()
         {
             Refresh();
