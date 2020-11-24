@@ -95,6 +95,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             if (AdminConfigTestSettings.Current.IsEnabled)
             {
                 var dbTests = _testManager.GetTestList(testCriteria);
+                _logger.Information("Refreshing Cache - count = " + dbTests.Count);
 
                 if (dbTests.Count == 0)
                 {

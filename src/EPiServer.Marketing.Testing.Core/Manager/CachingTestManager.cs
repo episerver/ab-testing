@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace EPiServer.Marketing.Testing.Core.Manager
 {

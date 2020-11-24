@@ -32,7 +32,7 @@ namespace EPiServer.Marketing.Testing.Web
         public void TestAddedToCache(object sender, TestEventArgs e)
         {
             var monitor = serviceLocator.GetInstance<IConfigurationMonitor>();
-            monitor.HandleConfigurationChange();
+ //           monitor.HandleConfigurationChange();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace EPiServer.Marketing.Testing.Web
         public void TestRemovedFromCache(object sender, TestEventArgs e)
         {
             var monitor = serviceLocator.GetInstance<IConfigurationMonitor>();
-            monitor.HandleConfigurationChange();
+ //           monitor.HandleConfigurationChange();
         }
     }
 }
