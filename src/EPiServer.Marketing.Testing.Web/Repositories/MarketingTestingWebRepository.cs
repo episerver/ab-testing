@@ -57,6 +57,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
             _cacheSignal.Monitor(Refresh);
         }
+
         /// <summary>
         /// For unit testing
         /// </summary>
@@ -77,12 +78,12 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
 
         /// <summary>
         /// Refreshes the cache and sets the cache signal for this machine.
-        /// Notes:
+        /// </summary>
+        /// <remarks>
         /// On content editing machines this method gets called when a config is saved or the cache is empty.
         /// On content delivery machines this method gets called when the content editing machine
         ///     modifies the state of a test Or the state of the config.
-        /// 
-        /// </summary>
+        /// </remarks>
         public void Refresh()
         {
             var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
