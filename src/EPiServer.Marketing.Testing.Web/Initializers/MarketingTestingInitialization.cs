@@ -19,10 +19,6 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
             context.Services.AddTransient<IContentLockEvaluator, ABTestLockEvaluator>();
-
-            int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:ConfigurationMonitorSeconds"]?.ToString(), out var configurationMonitorValue);
-            int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:TestMonitorSeconds"]?.ToString(), out var testMonitorValue);
-            
             context.Services.AddSingleton<ITestManager, CachingTestManager>(
                 serviceLocator =>
                     new CachingTestManager(

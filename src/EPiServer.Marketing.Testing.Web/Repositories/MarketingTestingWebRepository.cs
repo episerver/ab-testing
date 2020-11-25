@@ -18,6 +18,7 @@ using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
 using EPiServer.Framework.Cache;
 using EPiServer.Marketing.Testing.Web.Config;
+using System.Configuration;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
@@ -38,6 +39,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         [ExcludeFromCodeCoverage]
         public MarketingTestingWebRepository()
         {
+            int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:TestMonitorSeconds"]?.ToString(), out int testMonitorValue);
+
             _serviceLocator = ServiceLocator.Current;
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
             _testManager = _serviceLocator.GetInstance<ITestManager>();
@@ -49,7 +52,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                             ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
                             LogManager.GetLogger(),
                             "epi/marketing/testing/webrepocache",
-                            TimeSpan.FromSeconds(15)
+                            TimeSpan.FromSeconds(testMonitorValue > 15 ? testMonitorValue  : 15)
                         );
 
             _cacheSignal.Monitor(Refresh);
