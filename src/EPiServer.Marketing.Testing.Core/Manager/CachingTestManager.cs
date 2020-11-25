@@ -237,14 +237,14 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                 allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
 
-                _logger.Debug("Refreshing Cache - count = " + allTests.Count);
+                _logger.Debug("RefreshCache - count = " + allTests.Count);
 
                 _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
             }
 
             foreach (var test in allTests)
             {
-                _logger.Debug("Refreshing Cache - inserting variants.");
+                _logger.Debug("RefreshCache - inserting variants.");
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                     new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
