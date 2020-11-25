@@ -17,7 +17,6 @@ using EPiServer.Marketing.Testing.Core.Manager;
 using EPiServer.Marketing.Testing.Web.ClientKPI;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using System.Globalization;
-using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Web
 {
