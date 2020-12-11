@@ -17,6 +17,7 @@ using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Common.Helpers;
+using EPiServer.Marketing.Testing.Web;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -31,6 +32,9 @@ namespace EPiServer.Marketing.Testing.Test.Web
         internal Mock<IHttpContextHelper> _mockHttpHelper;
         internal Mock<IEpiserverHelper> _mockEpiserverHelper;
         internal Mock<IKpiHelper> _mockKpiHelper = new Mock<IKpiHelper>();
+        internal Mock<ITestHandler> _mockTestHandler;
+        internal Mock<ICacheSignal> _mockCacheSignal;
+
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
         private MarketingTestingWebRepository GetUnitUnderTest()
@@ -43,6 +47,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockEpiserverHelper = new Mock<IEpiserverHelper>();
             _mockTestManager = new Mock<ITestManager>();
+            _mockTestHandler = new Mock<ITestHandler>();
+            _mockCacheSignal = new Mock<ICacheSignal>();
 
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_mockKpiHelper.Object);
@@ -51,6 +57,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>()).Returns(_mockMarketingTestingWebRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IHttpContextHelper>()).Returns(_mockHttpHelper.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IEpiserverHelper>()).Returns(_mockEpiserverHelper.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<ITestHandler>()).Returns(_mockTestHandler.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<ICacheSignal>()).Returns(_mockCacheSignal.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
@@ -201,10 +209,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aRepo = GetUnitUnderTest();
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>() { new ABTest() { Id = Guid.NewGuid(), State = TestState.Active } });
 
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockCacheSignal.Verify(c => c.Reset());
+            this._mockTestHandler.Verify(m => m.EnableABTesting());
         }
 
         [Fact]
@@ -217,10 +228,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aRepo = GetUnitUnderTest();
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>());
 
             aRepo.DeleteTestForContent(Guid.NewGuid(), CultureInfo.GetCultureInfo("en-GB"));
 
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), CultureInfo.GetCultureInfo("en-GB")), Times.Exactly(testList.Count), "Delete was not called on all the tests in the list");
+            _mockCacheSignal.Verify(c => c.Reset());
+            this._mockTestHandler.Verify(m => m.DisableABTesting());
         }
 
         [Fact]
@@ -230,10 +244,12 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var aRepo = GetUnitUnderTest();
             _mockTestManager.Setup(tm => tm.GetTestByItemId(It.IsAny<Guid>())).Returns(testList);
+            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>());
 
             aRepo.DeleteTestForContent(Guid.NewGuid());
 
             _mockTestManager.Verify(tm => tm.Delete(It.IsAny<Guid>(), null), Times.Never, "Delete was called when it should not have been");
+            _mockCacheSignal.Verify(c => c.Reset());
         }
 
         [Fact]
@@ -262,6 +278,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(test);
             _mockTestManager.Setup(call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
+            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>());
+
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
                             reference => reference == ContentReference.Parse(testResultmodel.DraftContentLink))))
                 .Returns(draftContent);
@@ -278,6 +296,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(aResult == testResultmodel.TestId);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Once);
+            _mockCacheSignal.Verify(c => c.Reset());
         }
 
         [Fact]
@@ -306,6 +325,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             MarketingTestingWebRepository webRepo = GetUnitUnderTest();
             _mockTestManager.Setup(call => call.Get(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(test);
             _mockTestManager.Setup(call => call.Archive(It.IsAny<Guid>(), It.IsAny<Guid>(), null));
+            _mockTestManager.Setup(tm => tm.GetActiveTests()).Returns(new List<IMarketingTest>());
+
             _mockTestResultHelper.Setup(call => call.GetClonedContentFromReference(It.Is<ContentReference>(
                             reference => reference == ContentReference.Parse(testResultmodel.DraftContentLink))))
                 .Returns(draftContent);
@@ -322,6 +343,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.True(aResult == testResultmodel.TestId);
             _mockTestResultHelper.Verify(call => call.PublishContent(draftContent), Times.Once);
             _mockTestResultHelper.Verify(call => call.PublishContent(publishedContent), Times.Never);
+            _mockCacheSignal.Verify(c => c.Reset());
         }
 
         [Fact]

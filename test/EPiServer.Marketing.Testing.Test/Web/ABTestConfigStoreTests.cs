@@ -3,6 +3,7 @@ using EPiServer.Logging;
 using EPiServer.Marketing.Testing.Web;
 using EPiServer.Marketing.Testing.Web.Config;
 using EPiServer.Marketing.Testing.Web.Controllers;
+using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using EPiServer.Shell.Services.Rest;
 using Moq;
@@ -23,14 +24,13 @@ namespace EPiServer.Marketing.Testing.Test.Web
         Mock<DynamicDataStoreFactory> _factory = new Mock<DynamicDataStoreFactory>();
         Mock<DynamicDataStore> _store = new Mock<DynamicDataStore>();
         Mock<AdminConfigTestSettings> _settings = new Mock<AdminConfigTestSettings>();
-        Mock<IConfigurationMonitor> _configurationMonitor = new Mock<IConfigurationMonitor>();
+        Mock<IMarketingTestingWebRepository> _webRepo = new Mock<IMarketingTestingWebRepository>();
 
         private ABTestConfigStore GetUnitUnderTest()
         {
             _locator.Setup(sl => sl.GetInstance<ILogger>()).Returns(_logger.Object);
             _locator.Setup(sl => sl.GetInstance<AdminConfigTestSettings>()).Returns(_settings.Object);
-            _locator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(_configurationMonitor.Object);
-            _configurationMonitor.Setup(c => c.HandleConfigurationChange());
+            _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
 
             var testStore = new ABTestConfigStore(_locator.Object);
             return testStore;
@@ -71,15 +71,14 @@ namespace EPiServer.Marketing.Testing.Test.Web
             AdminConfigTestSettings._currentSettings = null;
 
             var settings = new AdminConfigTestSettings();
-            _locator.Setup(sl => sl.GetInstance<IConfigurationMonitor>()).Returns(_configurationMonitor.Object);
             settings._serviceLocator = _locator.Object;
+            _locator.Setup(sl => sl.GetInstance<IMarketingTestingWebRepository>()).Returns(_webRepo.Object);
 
             settings.Save();
 
             ddsFactoryMock.Verify();
             ddsMock.Verify(d => d.Save(It.Is<AdminConfigTestSettings>(s => s == settings)));
-            _configurationMonitor.Verify(m => m.Reset(), Times.Once);
-            _configurationMonitor.Verify(m => m.HandleConfigurationChange(), Times.Once);
+            _webRepo.Verify(w => w.ConfigurationChanged());
         }
 
         [Fact]
@@ -186,28 +185,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void AdminConfigTestSettings_SavesSettings_And_CallsConfigurationMonitor()
-        {
-            // mock the datastore in epi
-            var ddsMock = new Mock<DynamicDataStore>(null);
-            var ddsFactoryMock = new Mock<DynamicDataStoreFactory>();
-            ddsFactoryMock.Setup(x => x.GetStore(typeof(AdminConfigTestSettings))).Returns(ddsMock.Object);
-            DynamicDataStoreFactory.Instance = ddsFactoryMock.Object;
-
-            AdminConfigTestSettings._factory = ddsFactoryMock.Object;
-            AdminConfigTestSettings._currentSettings = null;
-
-            var testClass = GetUnitUnderTest();
-            var result = testClass.Get() as RestResult;
-            var settings = result.Data as AdminConfigTestSettings;
-
-            settings._serviceLocator = _locator.Object;
-            settings.Save();
-
-            _configurationMonitor.Verify(m => m.Reset(), Times.Once);
-            _configurationMonitor.Verify(c => c.HandleConfigurationChange(), Times.Once);
-        }
-        [Fact]
         public void Reset_ForcesADatabaseCall()
         {
             // mock the datastore in epi
@@ -222,7 +199,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 new AdminConfigTestSettings() { Id = Data.Identity.NewIdentity() }
             });
 
-            AdminConfigTestSettings.Reset();                    // makes 
+            AdminConfigTestSettings.Reset();                     
             var testConfig = AdminConfigTestSettings.Current;   // call the mock once
             testConfig = AdminConfigTestSettings.Current;       // get it twice
 

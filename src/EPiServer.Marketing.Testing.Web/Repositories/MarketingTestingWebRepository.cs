@@ -4,7 +4,6 @@ using EPiServer.ServiceLocation;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Security;
 using EPiServer.Core;
@@ -17,10 +16,13 @@ using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Models;
 using EPiServer.Marketing.KPI.Results;
 using Newtonsoft.Json;
+using EPiServer.Framework.Cache;
+using EPiServer.Marketing.Testing.Web.Config;
+using System.Configuration;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
-    [ServiceConfiguration(ServiceType = typeof(IMarketingTestingWebRepository))]
+    [ServiceConfiguration(ServiceType = typeof(IMarketingTestingWebRepository), Lifecycle = ServiceInstanceScope.Singleton) ]
     public class MarketingTestingWebRepository : IMarketingTestingWebRepository
     {
         private IServiceLocator _serviceLocator;
@@ -29,6 +31,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private ILogger _logger;
         private IKpiManager _kpiManager;
         private IHttpContextHelper _httpContextHelper;
+        private ICacheSignal _cacheSignal;
 
         /// <summary>
         /// Default constructor
@@ -36,25 +39,90 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         [ExcludeFromCodeCoverage]
         public MarketingTestingWebRepository()
         {
+            int.TryParse(ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:TestMonitorSeconds"]?.ToString(), out int testMonitorValue);
+
             _serviceLocator = ServiceLocator.Current;
             _testResultHelper = _serviceLocator.GetInstance<ITestResultHelper>();
             _testManager = _serviceLocator.GetInstance<ITestManager>();
             _kpiManager = _serviceLocator.GetInstance<IKpiManager>();
             _httpContextHelper = new HttpContextHelper();
+
             _logger = LogManager.GetLogger();
+            _cacheSignal = new RemoteCacheSignal(
+                            ServiceLocator.Current.GetInstance<ISynchronizedObjectInstanceCache>(),
+                            LogManager.GetLogger(),
+                            "epi/marketing/testing/webrepocache",
+                            TimeSpan.FromSeconds(testMonitorValue > 15 ? testMonitorValue  : 15)
+                        );
+
+            _cacheSignal.Monitor(Refresh);
         }
+
         /// <summary>
         /// For unit testing
         /// </summary>
         /// <param name="locator"></param>
         internal MarketingTestingWebRepository(IServiceLocator locator, ILogger logger)
         {
+            _serviceLocator = locator;
             _testResultHelper = locator.GetInstance<ITestResultHelper>();
             _testManager = locator.GetInstance<ITestManager>();
             _kpiManager = locator.GetInstance<IKpiManager>();
             _httpContextHelper = locator.GetInstance<IHttpContextHelper>();
+            _cacheSignal = locator.GetInstance<ICacheSignal>();
+
+            _cacheSignal.Monitor(Refresh);
 
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Refreshes the cache and sets the cache signal for this machine.
+        /// </summary>
+        /// <remarks>
+        /// On content editing machines this method gets called when a config is saved or the cache is empty.
+        /// On content delivery machines this method gets called when the content editing machine
+        ///     modifies the state of a test Or the state of the config.
+        /// </remarks>
+        public void Refresh()
+        {
+            var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
+            var testCriteria = new TestCriteria();
+            testCriteria.AddFilter(
+                new ABTestFilter
+                {
+                    Property = ABTestProperty.State,
+                    Operator = FilterOperator.And,
+                    Value = TestState.Active
+                }
+            );
+
+            AdminConfigTestSettings.Reset();
+
+            if (AdminConfigTestSettings.Current.IsEnabled)
+            {
+                var dbTests = _testManager.GetTestList(testCriteria);
+                _logger.Debug("Refresh - count = " + dbTests.Count);
+
+                if (dbTests.Count == 0)
+                {
+                    _logger.Debug("Refresh - AB Testing disabled, there are no active tests.");
+                    _testHandler.DisableABTesting();
+                }
+                else
+                {
+                    _logger.Debug("Refresh - AB Testing enabled with active tests.");
+                    _testHandler.EnableABTesting();
+                    ((CachingTestManager)_testManager).RefreshCache();
+                }
+            }
+            else
+            {
+                _logger.Debug("Refresh - AB Testing disabled through configuration.");
+                _testHandler.DisableABTesting();
+            }
+
+            _cacheSignal.Set();
         }
 
         /// <summary>
@@ -152,6 +220,24 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 _testManager.Delete(test.Id);
             }
+
+            ConfigureABTestingUsingActiveTestsCount();
+        }
+
+        internal void ConfigureABTestingUsingActiveTestsCount()
+        {
+            var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
+            if (_testManager.GetActiveTests().Count == 0)
+            {
+                _logger.Debug("ConfigureABTestingUsingActiveTestsCount - AB Testing disabled, there are no active tests.");
+                _testHandler.DisableABTesting();
+            }
+            else if (_testManager.GetActiveTests().Count == 1)
+            {
+                _logger.Debug("ConfigureABTestingUsingActiveTestsCount - AB Testing enabled with active test.");
+                _testHandler.EnableABTesting();
+            }
+            _cacheSignal.Reset();
         }
 
         public void DeleteTestForContent(Guid aContentGuid, CultureInfo cultureInfo)
@@ -162,6 +248,8 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             {
                 _testManager.Delete(test.Id, cultureInfo);
             }
+
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         /// <summary>
@@ -172,7 +260,10 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public Guid CreateMarketingTest(TestingStoreModel testData)
         {
             IMarketingTest test = ConvertToMarketingTest(testData);
-            return _testManager.Save(test);
+
+            var testId = _testManager.Save(test);
+            ConfigureABTestingUsingActiveTestsCount();
+            return testId;
         }
 
         /// <summary>
@@ -182,6 +273,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void DeleteMarketingTest(Guid testGuid)
         {
             _testManager.Delete(testGuid);
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         /// <summary>
@@ -191,6 +283,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StartMarketingTest(Guid testGuid)
         {
             _testManager.Start(testGuid);
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         /// <summary>
@@ -200,6 +293,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StopMarketingTest(Guid testGuid)
         {
             _testManager.Stop(testGuid);
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         /// <summary>
@@ -210,6 +304,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void StopMarketingTest(Guid testGuid, CultureInfo cultureInfo)
         {
             _testManager.Stop(testGuid, cultureInfo);
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         /// <summary>
@@ -218,6 +313,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId)
         {
             _testManager.Archive(testObjectId, winningVariantId);
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         /// <summary>
@@ -226,11 +322,14 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         public void ArchiveMarketingTest(Guid testObjectId, Guid winningVariantId, CultureInfo cultureInfo)
         {
             _testManager.Archive(testObjectId, winningVariantId, cultureInfo);
+            ConfigureABTestingUsingActiveTestsCount();
         }
 
         public Guid SaveMarketingTest(IMarketingTest testData)
         {
-            return _testManager.Save(testData);
+            var testId = _testManager.Save(testData);
+            ConfigureABTestingUsingActiveTestsCount();
+            return testId;
         }
 
         public IMarketingTest ConvertToMarketingTest(TestingStoreModel testData)
@@ -406,12 +505,6 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             return PrincipalInfo.CurrentPrincipal.Identity.Name;
         }
 
-        private DateTime CalculateEndDateFromDuration(string startDate, int testDuration)
-        {
-            DateTime endDate = DateTime.Parse(startDate);
-            return endDate.AddDays(testDuration);
-        }
-
         /// <summary>
         /// If more than 1 kpi, we need to calculate the weights for each one.
         /// </summary>
@@ -476,6 +569,16 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                                 SelectedWeight = kpiData.First(d => d.Key == kpiEntry.Key).Value
                             }));
             }
+        }
+
+        /// <summary>
+        /// Called by the ui when the config is changed. Forces a reset and tells content deliver machines 
+        /// to refresh.
+        /// </summary>
+        public void ConfigurationChanged()
+        {
+            Refresh();
+            _cacheSignal.Reset();
         }
     }
 }
