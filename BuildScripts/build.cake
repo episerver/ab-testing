@@ -31,10 +31,10 @@ var runAnalysis = isTeamCity && isMasterBranch;
 
 // Base component versions
 
-var kpiBaseVersion = "2.5.4";
-var kpiCommerceBaseVersion = "2.4.2";
+var kpiBaseVersion = "2.9.6";
+var kpiCommerceBaseVersion = "2.9.6";
 var messagingBaseVersion = "1.3.0";
-var webBaseVersion = "2.6.5";
+var webBaseVersion = "2.9.6";
 
 var versionModifiers = new Dictionary<string, string>
 {
@@ -457,7 +457,7 @@ Task("PackageKpiCommerce")
 
         NuGetPack($"../src/EPiServer.Marketing.KPI.Commerce/Package.nuspec", nuGetPackSettings);
 
-		DeleteDirectory("./module", recursive:true);
+		DeleteDirectory("./module", new DeleteDirectorySettings { Recursive = true, Force = true });
 		DeleteFile("../EPiServer.Marketing.KPI.Commerce.zip");
 	}
 );
@@ -553,7 +553,7 @@ Task("PackageABTesting")
 
         NuGetPack($"../src/EPiServer.Marketing.Testing.Web/Package.nuspec", nuGetPackSettings);
 
-		DeleteDirectory("./module", recursive:true);
+		DeleteDirectory("./module", new DeleteDirectorySettings { Recursive = true, Force = true });
 		DeleteFile("../EPiServer.Marketing.Testing.zip");
 	}
 );
