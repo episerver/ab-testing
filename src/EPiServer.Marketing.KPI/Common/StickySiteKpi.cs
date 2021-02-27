@@ -251,9 +251,11 @@ namespace EPiServer.Marketing.KPI.Common
 
         private bool CookieExists(string path, string contentGuid)
         {
-            foreach (HttpCookie cookie in HttpContext.Current.Response.Cookies)
+            foreach (string cookieName in HttpContext.Current.Response.Cookies.Keys)
             {
-                if (cookie.Name.Contains("SSK_") && cookie["path"] == path && cookie["contentguid"] == contentGuid)
+                if (cookieName.Contains("SSK_") && 
+                    HttpContext.Current.Response.Cookies[cookieName]["path"] == path && 
+                    HttpContext.Current.Response.Cookies[cookieName]["contentguid"] == contentGuid)
                 {
                     return true;
                 }

@@ -20,7 +20,7 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
         /// <returns></returns>
         public virtual bool IsInSystemFolder()
         {
-            return HttpContext.Current != null || HttpContext.Current.Request.RawUrl.Contains(Shell.Paths.ProtectedRootPath);
+            return HttpContext.Current == null || HttpContext.Current.Request.RawUrl.Contains(Shell.Paths.ProtectedRootPath);
         }
 
         public string GetUrl(ContentReference contentReference)
