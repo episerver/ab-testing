@@ -60,21 +60,14 @@ namespace EPiServer.Marketing.KPI.Common
             var retval = false;
 
             // we only want to evaluate once per request
-            var httpContext = HttpContext.Current;
-            var eventArgs = e as ContentEventArgs;
-            var cookieKey = getCookieKey();
-            if (httpContext != null && eventArgs != null && eventArgs.Content != null && !_stickyHelper.IsInSystemFolder())
+            if (!_stickyHelper.IsInSystemFolder() && e is ContentEventArgs eventArgs &&  eventArgs.Content != null &&
+                HttpContext.Current.Request.Cookies[$"SSK_{TestContentGuid}"] is HttpCookie cookie )
             {
-                if (httpContext.Request.Cookies[cookieKey] != null)
+                string path = cookie["path"];
+                if (HttpContext.Current.Request.Path != path && 
+                    eventArgs.Content.ContentGuid != TestContentGuid && !IsSupportingContent())
                 {
-                    HttpCookie cookie = httpContext.Request.Cookies[cookieKey];
-                    string path = cookie["path"];
-                    if (httpContext.Request.Path != path &&
-                        eventArgs.Content.ContentGuid != TestContentGuid &&
-                        !IsSupportingContent())
-                    {
-                        retval = true;
-                    }
+                    retval = true;
                 }
             }
 
@@ -179,35 +172,24 @@ namespace EPiServer.Marketing.KPI.Common
         public void AddSessionOnLoadedContent(object sender, ContentEventArgs e)
         {
             var isInSystemFolder = _stickyHelper.IsInSystemFolder();
-            var cookieKey = getCookieKey();
-
+            var cookieKey = $"SSK_{TestContentGuid}";
             var httpContext = HttpContext.Current;
-            if (httpContext != null && !isInSystemFolder && e.Content != null && e.Content.ContentGuid == TestContentGuid)
+
+            if (!_stickyHelper.IsInSystemFolder() && e.Content != null && e.Content.ContentGuid == TestContentGuid)
             {
-                if (!httpContext.Items.Contains(cookieKey) &&
-                    httpContext.Request.Cookies[cookieKey] == null)
+                if (!httpContext.Items.Contains(cookieKey) && httpContext.Request.Cookies[cookieKey] == null)
                 {
-                    string path;
-                    if (IsSupportingContent())
-                    {
-                        path = httpContext.Request.UrlReferrer.AbsolutePath;
-                    }
-                    else
-                    {
-                        path = httpContext.Request.Path;
-                    }
-
-                    var contentguid = TestContentGuid.ToString();
-
+                    var path = IsSupportingContent() ? httpContext.Request.UrlReferrer.AbsolutePath : httpContext.Request.Path;
+                    var contentId = TestContentGuid.ToString();
                     var cookie = new HttpCookie(cookieKey)
                     {
                         ["path"] = path,
-                        ["contentguid"] = contentguid,
+                        ["contentguid"] = contentId,
                         Expires = DateTime.Now.AddMinutes(Timeout),
                         HttpOnly = true
                     };
 
-                    if (!CookieExists(path, contentguid) && IsContentBeingLoaded(path))
+                    if (!CookieExists(path, contentId) && IsContentBeingLoaded(path))
                     {
                         httpContext.Response.Cookies.Add(cookie);
                         HttpContext.Current.Items[cookieKey] = true; // we are done for this request. 
@@ -224,19 +206,19 @@ namespace EPiServer.Marketing.KPI.Common
         /// <returns></returns>
         private bool IsContentBeingLoaded(string path)
         {
-            bool retval = false;
+            var cacheKey = $"SSK_{TestContentGuid}"; // use the cookie key as the cache key too. 
 
             HashSet<string> testcontentPaths;
-            var cacheKey = getCookieKey();          // use the cookie key as the cache key too. 
+
             if (_sessionCache.Contains(cacheKey))
             {
                 testcontentPaths = (HashSet<string>)_sessionCache.Get(cacheKey);
             }
-            else // fill the cache
+            else 
             {
-                testcontentPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
                 HttpContext.Current.Items[cacheKey] = true;    // we use this flag to keep us from processing more LoadedContent calls. 
+
+                testcontentPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 var contentRepo = _servicelocator.GetInstance<IContentRepository>();
                 var content = contentRepo.Get<IContent>(TestContentGuid);
                 var contentUrl = _servicelocator.GetInstance<UrlResolver>().GetUrl(content.ContentLink);
@@ -267,9 +249,7 @@ namespace EPiServer.Marketing.KPI.Common
                 HttpContext.Current.Items.Remove(cacheKey);
             }
 
-            retval = testcontentPaths.Contains(path);
-            
-            return retval;
+            return testcontentPaths.Contains(path);
         }
 
         private bool CookieExists(string path, string contentGuid)
@@ -284,16 +264,6 @@ namespace EPiServer.Marketing.KPI.Common
 
             return false;
         }
-
-        /// <summary>
-        /// Private method to build a unique cookie key
-        /// </summary>
-        /// <returns></returns>
-        private string getCookieKey()
-        {
-            return $"SSK_{TestContentGuid}";
-        }
-
 
         /// <summary>
         /// Returns true if the request is for an asset (such as image, css file)
