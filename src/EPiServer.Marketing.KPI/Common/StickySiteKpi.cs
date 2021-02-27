@@ -57,21 +57,15 @@ namespace EPiServer.Marketing.KPI.Common
         /// <inheritdoc />
         public override IKpiResult Evaluate(object sender, EventArgs e)
         {
-            var retval = false;
+            var hasConverted = !_stickyHelper.IsInSystemFolder() &&
+                               e is ContentEventArgs eventArgs &&
+                               eventArgs.Content != null &&
+                               eventArgs.Content.ContentGuid != TestContentGuid &&
+                               HttpContext.Current.Request.Cookies[$"SSK_{TestContentGuid}"] is HttpCookie cookie &&
+                               HttpContext.Current.Request.Path != cookie["path"] &&
+                               !IsSupportingContent();
 
-            // we only want to evaluate once per request
-            if (!_stickyHelper.IsInSystemFolder() && e is ContentEventArgs eventArgs &&  eventArgs.Content != null &&
-                HttpContext.Current.Request.Cookies[$"SSK_{TestContentGuid}"] is HttpCookie cookie )
-            {
-                string path = cookie["path"];
-                if (HttpContext.Current.Request.Path != path && 
-                    eventArgs.Content.ContentGuid != TestContentGuid && !IsSupportingContent())
-                {
-                    retval = true;
-                }
-            }
-
-            return new KpiConversionResult() { KpiId = Id, HasConverted = retval };
+            return new KpiConversionResult() { KpiId = Id, HasConverted = hasConverted };
         }
 
         /// <inheritdoc />
@@ -171,7 +165,6 @@ namespace EPiServer.Marketing.KPI.Common
         /// <param name="e"></param>
         public void AddSessionOnLoadedContent(object sender, ContentEventArgs e)
         {
-            var isInSystemFolder = _stickyHelper.IsInSystemFolder();
             var cookieKey = $"SSK_{TestContentGuid}";
             var httpContext = HttpContext.Current;
 
@@ -216,9 +209,10 @@ namespace EPiServer.Marketing.KPI.Common
             }
             else 
             {
+                testcontentPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
                 HttpContext.Current.Items[cacheKey] = true;    // we use this flag to keep us from processing more LoadedContent calls. 
 
-                testcontentPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                 var contentRepo = _servicelocator.GetInstance<IContentRepository>();
                 var content = contentRepo.Get<IContent>(TestContentGuid);
                 var contentUrl = _servicelocator.GetInstance<UrlResolver>().GetUrl(content.ContentLink);
@@ -242,8 +236,11 @@ namespace EPiServer.Marketing.KPI.Common
                         testcontentPaths.Add(UrlResolver.Current.GetUrl(x));
                     }
                 }
-                CacheItemPolicy policy = new CacheItemPolicy();
-                policy.AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(Timeout);
+
+                CacheItemPolicy policy = new CacheItemPolicy
+                {
+                    AbsoluteExpiration = DateTimeOffset.Now.AddSeconds(Timeout)
+                };
                 _sessionCache.Add(cacheKey, testcontentPaths, policy);
 
                 HttpContext.Current.Items.Remove(cacheKey);
@@ -254,15 +251,7 @@ namespace EPiServer.Marketing.KPI.Common
 
         private bool CookieExists(string path, string contentGuid)
         {
-            foreach (HttpCookie cookie in HttpContext.Current.Response.Cookies)
-            {
-                if (cookie.Name.Contains("SSK_") && cookie["path"] == path && cookie["contentguid"] == contentGuid)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return HttpContext.Current.Response.Cookies[$"SSK_{TestContentGuid}"] != null;
         }
 
         /// <summary>
@@ -271,19 +260,12 @@ namespace EPiServer.Marketing.KPI.Common
         /// <returns></returns>
         private bool IsSupportingContent()
         {
-            bool retval = false;
+            var pathExtensions = HttpContext.Current.Request.CurrentExecutionFilePathExtension;
 
-            var currentExecutionFilePathExtension = HttpContext.Current.Request.CurrentExecutionFilePathExtension;
-
-            if (currentExecutionFilePathExtension == ".png" ||
-                currentExecutionFilePathExtension == ".css" ||
-                HttpContext.Current.Request.Path.IndexOf(SystemContentRootNames.GlobalAssets, StringComparison.OrdinalIgnoreCase) > 0 ||
-                HttpContext.Current.Request.Path.IndexOf(SystemContentRootNames.ContentAssets, StringComparison.OrdinalIgnoreCase) > 0)
-            {
-                retval = true;
-            }
-
-            return retval;
+            return pathExtensions == ".png" ||
+                   pathExtensions == ".css" ||
+                   HttpContext.Current.Request.Path.IndexOf(SystemContentRootNames.GlobalAssets, StringComparison.OrdinalIgnoreCase) > 0 ||
+                   HttpContext.Current.Request.Path.IndexOf(SystemContentRootNames.ContentAssets, StringComparison.OrdinalIgnoreCase) > 0;
         }
     }
 }
