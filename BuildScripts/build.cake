@@ -457,7 +457,7 @@ Task("PackageKpiCommerce")
 
         NuGetPack($"../src/EPiServer.Marketing.KPI.Commerce/Package.nuspec", nuGetPackSettings);
 
-		DeleteDirectory("./module", recursive:true);
+		DeleteDirectory("./module", new DeleteDirectorySettings { Recursive = true, Force = true });
 		DeleteFile("../EPiServer.Marketing.KPI.Commerce.zip");
 	}
 );
@@ -553,7 +553,7 @@ Task("PackageABTesting")
 
         NuGetPack($"../src/EPiServer.Marketing.Testing.Web/Package.nuspec", nuGetPackSettings);
 
-		DeleteDirectory("./module", recursive:true);
+		DeleteDirectory("./module", new DeleteDirectorySettings { Recursive = true, Force = true });
 		DeleteFile("../EPiServer.Marketing.Testing.zip");
 	}
 );
