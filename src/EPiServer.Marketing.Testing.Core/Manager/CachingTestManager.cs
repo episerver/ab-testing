@@ -27,6 +27,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private readonly ITestManager _inner;
         private readonly ISynchronizedObjectInstanceCache _cache;
         private readonly DefaultMarketingTestingEvents _events;
+        private readonly int _cacheTimeout;
 
         /// <summary>
         /// Constructor
@@ -35,13 +36,15 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         /// <param name="events">Marketing event publisher</param>
         /// <param name="inner">Test manager to defer to when tests are not in the cache</param>
         /// <param name="logger">A logger.</param>
+        /// <param name="cacheTimeout">Cache timeout in seconds.</param>
         public CachingTestManager(ISynchronizedObjectInstanceCache cache, DefaultMarketingTestingEvents events, ITestManager inner,
-            ILogger logger)
+            ILogger logger, int cacheTimeout)
         {
             _inner = inner;
             _events = events;
             _cache = cache;
             _logger = logger;
+            _cacheTimeout = cacheTimeout;
         }
 
         /// <inheritdoc/>
@@ -239,7 +242,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                 _logger.Debug("RefreshCache - count = " + allTests.Count);
 
-                _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                _cache.Insert(AllTestsKey, allTests, CacheEvictionPolicy());
             }
 
             foreach (var test in allTests)
@@ -247,7 +250,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 _logger.Debug("RefreshCache - inserting variants.");
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
-                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                    CacheEvictionPolicy());
             }
 
             //Notify interested consumers that a test was added to the cache.
@@ -255,6 +258,12 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
             }
+        }
+
+        private CacheEvictionPolicy CacheEvictionPolicy()
+        {
+            return new CacheEvictionPolicy(
+                                new TimeSpan(0, _cacheTimeout, 0), CacheTimeoutType.Absolute, null, new string[] { MasterCacheKey });
         }
 
         /// <summary>
@@ -276,7 +285,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                     _logger.Debug("AddTestToCache - count = " + allTests.Count);
 
-                    _cache.Insert(AllTestsKey, allTests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                    _cache.Insert(AllTestsKey, allTests, CacheEvictionPolicy());
                 }
             }
 
@@ -285,7 +294,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 _logger.Debug("AddTestToCache - inserting variant.");
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                         _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
-                        new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                        CacheEvictionPolicy());
 
                 //Notify interested consumers that a test was added to the cache.
                 _events.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, new TestEventArgs(test));
@@ -301,7 +310,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
         private void AddVariantToCache(Guid originalItemId, CultureInfo culture, IContent variant)
         {
             _cache.Insert(GetCacheKeyForVariant(originalItemId, culture.Name), variant,
-                    new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                    CacheEvictionPolicy());
         }
 
         /// <summary>
@@ -323,7 +332,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                     _logger.Debug("RemoveFromCache - count = " + tests.Count);
 
-                    _cache.Insert(AllTestsKey, tests, new CacheEvictionPolicy(null, new string[] { MasterCacheKey }));
+                    _cache.Insert(AllTestsKey, tests, CacheEvictionPolicy());
                 }
             }
 
