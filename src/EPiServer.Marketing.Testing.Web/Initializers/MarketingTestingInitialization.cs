@@ -18,7 +18,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
     {
         public void ConfigureContainer(ServiceConfigurationContext context)
         {
-            var configuredTimeout = ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:CacheTimeoutInMinutes"]?.ToString();
+            var configuredTimeout = ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:CacheTimeoutInMinutes"];
             int.TryParse(configuredTimeout, out int timeout);
 
             context.Services.AddTransient<IContentLockEvaluator, ABTestLockEvaluator>();
@@ -29,7 +29,7 @@ namespace EPiServer.Marketing.Testing.Web.Initializers
                         serviceLocator.GetInstance<DefaultMarketingTestingEvents>(),
                         new TestManager(),
                         LogManager.GetLogger(typeof(CachingTestManager)),
-                        timeout < 10 ? timeout = 60 : timeout
+                        timeout < 10 ? 60 : timeout
                     ));
 
             context.Services.AddSingleton<ITestHandler, TestHandler>();
