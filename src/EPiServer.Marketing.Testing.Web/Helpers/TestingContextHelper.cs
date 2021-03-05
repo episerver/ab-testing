@@ -243,9 +243,9 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                 }
                 else
                 {
-                    inSystemFolder = _contextHelper.RequestedUrl().ToLower()
-                        .Contains(_episerverHelper.GetRootPath().ToLower());
-
+                    inSystemFolder = _contextHelper.RequestedUrl()
+                                                   .IndexOf(_episerverHelper.GetRootPath(), 
+                                                            StringComparison.OrdinalIgnoreCase) >= 0;
                     _contextHelper.SetItemValue("InSystemFolder", inSystemFolder);
                 }
             }

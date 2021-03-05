@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using System;
+using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 using System.Diagnostics.CodeAnalysis;
@@ -19,15 +20,8 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
         /// <returns></returns>
         public virtual bool IsInSystemFolder()
         {
-            var inSystemFolder = true;
-
-            if (HttpContext.Current != null)
-            {
-                inSystemFolder = HttpContext.Current.Request.RawUrl.ToLower()
-                    .Contains(Shell.Paths.ProtectedRootPath.ToLower());
-            }
-
-            return inSystemFolder;
+            return HttpContext.Current == null ||
+                   HttpContext.Current.Request.RawUrl.IndexOf(Shell.Paths.ProtectedRootPath, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public string GetUrl(ContentReference contentReference)
