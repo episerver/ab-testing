@@ -84,7 +84,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     tm.EvaluateKPIs(expectedKpis, expectedSender, expectedEventArgs)
             ).Returns(expectedResults);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualResults = manager.EvaluateKPIs(expectedKpis, expectedSender, expectedEventArgs);
 
             _mockTestManager.VerifyAll();
@@ -100,7 +100,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             _mockTestManager.ResetCalls();
 
@@ -125,7 +125,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockTestManager.Setup(tm => tm.Get(expectedTest.Id, false)).Returns(expectedTest);
             
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTest = manager.Get(expectedTest.Id, false);
 
             Assert.Equal(expectedTest, actualTest);
@@ -147,7 +147,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
              _mockTestManager.Setup(tm => tm.Get(expectedTest.Id, false)).Returns(expectedTest);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTest = manager.Get(expectedTest.Id, false);
 
             Assert.Equal(expectedTest, actualTest);
@@ -164,7 +164,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTests = manager.GetActiveTestsByOriginalItemId(expectedItemId);
 
             Assert.True(actualTests.Count == 1);
@@ -177,7 +177,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTests = manager.GetActiveTestsByOriginalItemId(Guid.NewGuid());
 
             Assert.True(actualTests.Count == 0);
@@ -195,7 +195,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTests = manager.GetActiveTestsByOriginalItemId(expectedItemId, expectedCulture);
 
             Assert.True(actualTests.Count == 1);
@@ -208,7 +208,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTests = manager.GetActiveTestsByOriginalItemId(
                 _expectedTests.First().OriginalItemId, 
                 CultureInfo.GetCultureInfo(_expectedTests.Last().ContentLanguage)
@@ -228,7 +228,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockTestManager.Setup(tm => tm.GetDatabaseVersion(expectedDbConnection, expectedSchema, expectedContextKey, expectedPopulateCache)).Returns(100L);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualVersion = manager.GetDatabaseVersion(expectedDbConnection, expectedSchema, expectedContextKey, expectedPopulateCache);
 
             _mockTestManager.VerifyAll();
@@ -244,7 +244,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
              _mockTestManager.Setup(tm => tm.GetTestByItemId(expectedItemId)).Returns(expectedTests);
             
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTests = manager.GetTestByItemId(expectedItemId);
 
             _mockTestManager.VerifyAll();
@@ -260,7 +260,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockTestManager.Setup(tm => tm.GetTestList(expectedCriteria)).Returns(expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualTests = manager.GetTestList(expectedCriteria);
 
             _mockTestManager.VerifyAll();
@@ -281,7 +281,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(expectedVariant);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
 
             Assert.Equal(expectedVariant, actualVariant);
@@ -303,7 +303,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(null);
             _mockTestManager.Setup(tm => tm.GetVariantContent(expectedItemId, expectedCulture)).Returns((IContent)null);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             _mockSynchronizedObjectInstanceCache.ResetCalls();
 
             var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
@@ -328,13 +328,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(expectedKey)).Returns(null);
             _mockTestManager.Setup(tm => tm.GetVariantContent(expectedItemId, expectedCulture)).Returns(expectedVariant);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             _mockSynchronizedObjectInstanceCache.ResetCalls();
 
              var actualVariant = manager.GetVariantContent(expectedItemId, expectedCulture);
 
             Assert.NotNull(actualVariant);
-            _mockSynchronizedObjectInstanceCache.Verify(m => m.Insert(expectedKey, expectedVariant, It.IsAny<CacheEvictionPolicy>()), Times.Once);
+            _mockSynchronizedObjectInstanceCache.Verify(m => m.Insert(expectedKey, expectedVariant, It.Is<CacheEvictionPolicy>( p => p.Expiration.TotalMinutes == 30)), Times.Once);
         }
 
         [Fact]
@@ -343,7 +343,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
             var expectedCriteria = new IncrementCountCriteria();            
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.IncrementCount(expectedCriteria);
 
             _mockTestManager.Verify(tm => tm.IncrementCount(expectedCriteria), Times.Once());
@@ -360,7 +360,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.IncrementCount(expectedTestId, expectedItemVersion, expectedResultType, expectedKpiId, expectedAsync);
 
             _mockTestManager.Verify(tm => tm.IncrementCount(expectedTestId, expectedItemVersion, expectedResultType, expectedKpiId, expectedAsync), Times.Once());
@@ -372,7 +372,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>())).Returns(_expectedTests);
 
             var expectedTestId = Guid.NewGuid();
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.ReturnLandingPage(expectedTestId);
 
             _mockTestManager.Verify(tm => tm.ReturnLandingPage(expectedTestId), Times.Once());
@@ -406,10 +406,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                         expectedContent.Object,
                                                                         It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }), 
+                                                                                                    actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             var actualTestId = manager.Save(expectedTest);
 
@@ -446,7 +449,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(expectedTests);
 
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             _mockEvents.ResetCalls();
 
@@ -475,7 +478,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.Save(expectedTest)).Returns(expectedTest.Id);
             _mockSynchronizedObjectInstanceCache.Setup(call => call.Get(CachingTestManager.AllTestsKey)).Returns(_expectedTests);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             expectedTest.State = TestState.Inactive;
             var actualTestId = manager.Save(expectedTest);
@@ -507,7 +510,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             _mockTestManager.Setup(tm => tm.Start(expectedTest.Id)).Returns(expectedTest);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             var actualTest = manager.Start(expectedTest.Id);
 
@@ -525,7 +528,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
         }
 
         [Fact]
-        public void RefreshCache_BuildsCache()
+        public void RefreshCache_BuildsCache_AndUsesExpectedCacheTimeout()
         {
             var expectedTests = new List<IMarketingTest>()
             {
@@ -542,6 +545,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                     Value = TestState.Active
                 }
             );
+            var expectedTimeout = 90;
 
             _mockTestManager.Setup(tm => tm.GetTestList(It.Is<TestCriteria>(tc =>
                                                 AssertTestCriteria.AreEquivalent(expectedTestCriteria, tc))))
@@ -551,10 +555,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                      expectedTests,
                                                                      It.Is<CacheEvictionPolicy>(actual => 
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null, 
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, expectedTimeout, 0),
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null, 
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }),
+                                                                                                    actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object, expectedTimeout);
 
             _mockEvents.ResetCalls();
 
@@ -606,8 +613,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                         expectedContent1.Object,
                                                                         It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0), 
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }),
+                                                                                                    actual))));
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(
                                                                         expectedTests[1].OriginalItemId,
@@ -615,17 +625,23 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                         expectedContent2.Object,
                                                                         It.Is<CacheEvictionPolicy>(actual =>
                                                                             AssertCacheEvictionPolicy.AreEquivalent(
-                                                                                new CacheEvictionPolicy(null,
-                                                                                new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                                new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                        CacheTimeoutType.Absolute, 
+                                                                                                        null,
+                                                                                                        new string[] { CachingTestManager.MasterCacheKey }),
+                                                                                                        actual))));
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
                                                                      expectedTests,
                                                                      It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }), 
+                                                                                                    actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             manager.RefreshCache();
 
@@ -640,7 +656,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>()))
                             .Returns(originalTestList);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Get(CachingTestManager.AllTestsKey)).Returns(originalTestList);
 
@@ -658,7 +674,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetTestList(It.IsAny<TestCriteria>()))
                             .Returns(originalTestList);
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
 
             _mockSynchronizedObjectInstanceCache.SetupSequence(c => c.Get(CachingTestManager.AllTestsKey))
                                                 .Returns(null)
@@ -697,17 +713,23 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                         expectedContent.Object,
                                                                         It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                    CacheTimeoutType.Absolute,
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }), 
+                                                                                                    actual))));
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
                                                                      expectedTests,
                                                                      It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }), 
+                                                                                                    actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.Start(expectedTest.Id);
 
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestAddedToCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
@@ -741,10 +763,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                      new List<IMarketingTest>(),
                                                                      It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }), 
+                                                                                                    actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.Stop(expectedTest.Id);
 
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
@@ -778,10 +803,13 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                      new List<IMarketingTest>(),
                                                                      It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
-                                                                            new string[] { CachingTestManager.MasterCacheKey }), actual))));
+                                                                            new CacheEvictionPolicy(new TimeSpan(0, 30, 0),
+                                                                                                    CacheTimeoutType.Absolute, 
+                                                                                                    null,
+                                                                                                    new string[] { CachingTestManager.MasterCacheKey }), 
+                                                                                                    actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.Archive(expectedTest.Id, expectedTest.Variants.First().Id);
 
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
@@ -815,10 +843,11 @@ namespace EPiServer.Marketing.Testing.Test.Core
                                                                      new List<IMarketingTest>(),
                                                                      It.Is<CacheEvictionPolicy>(actual =>
                                                                         AssertCacheEvictionPolicy.AreEquivalent(
-                                                                            new CacheEvictionPolicy(null,
+                                                                            new CacheEvictionPolicy(new TimeSpan(0,30,0), CacheTimeoutType.Absolute,
+                                                                            null,
                                                                             new string[] { CachingTestManager.MasterCacheKey }), actual))));
 
-            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             manager.Delete(expectedTest.Id);
 
             _mockEvents.Verify(e => e.RaiseMarketingTestingEvent(DefaultMarketingTestingEvents.TestRemovedFromCacheEvent, It.IsAny<TestEventArgs>()), Times.Once);
@@ -836,7 +865,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var cache = new MyCache();
             cache.Clear();
 
-            var manager = new CachingTestManager(cache, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(cache, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             _mockTestManager.ResetCalls();
 
             var iterations = 500;
@@ -939,7 +968,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
 
             var cache = new MyCache();
             cache.Clear();
-            var manager = new CachingTestManager(cache, _mockEvents.Object, _mockTestManager.Object, _logger.Object);
+            var manager = new CachingTestManager(cache, _mockEvents.Object, _mockTestManager.Object, _logger.Object,30);
             var expectedActiveTests = manager.GetActiveTests();
 
             _mockTestManager.ResetCalls();
