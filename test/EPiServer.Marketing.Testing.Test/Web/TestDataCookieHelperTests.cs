@@ -1,16 +1,14 @@
-﻿using System;
-using System.Web;
+﻿using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.Marketing.Testing.Web.Helpers;
-using Moq;
-using Xunit;
-using EPiServer.Marketing.KPI.Manager.DataClass;
-using System.Collections.Generic;
 using EPiServer.Marketing.Testing.Core.DataClass.Enums;
+using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.Testing.Web.Repositories;
+using Moq;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
-using EPiServer.Marketing.Testing.Web.Config;
-using EPiServer.ServiceLocation;
+using System.Web;
+using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -20,7 +18,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         private Mock<IHttpContextHelper> _httpContextHelper;
         private Mock<IEpiserverHelper> _epiHelper;
         private Mock<IAdminConfigTestSettingsHelper> _settingsHelper;
-        private Mock<ITestDataCookieMigrator> _testDataCookieMigrator;
 
         private Guid _activeTestId = Guid.Parse("a194bde9-af3c-40fa-9635-338d02f5dea4");
         private Guid _inactiveTestId = Guid.Parse("5e2f21e3-30f7-4dcf-89cd-b9d7ff8c7cd6");
@@ -58,9 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _httpContextHelper = new Mock<IHttpContextHelper>();
             _epiHelper = new Mock<IEpiserverHelper>();
 
-            _testDataCookieMigrator = new Mock<ITestDataCookieMigrator>();
-
-            return new TestDataCookieHelper(_settingsHelper.Object, _testRepo.Object, _httpContextHelper.Object, _epiHelper.Object, _testDataCookieMigrator.Object);
+            return new TestDataCookieHelper(_settingsHelper.Object, _testRepo.Object, _httpContextHelper.Object, _epiHelper.Object);
         }
 
         [Fact]
@@ -141,7 +136,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(_activeTest);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(),It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>());
+            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>());
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-US"));
             _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { test });
 
@@ -154,7 +149,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Assert.False(returnCookieData.Converted);
         }
 
-        
+
         [Fact]
         public void GetTestDataFromCookie_Returns_Correct_Values_For_Active_Test_From_Populated_Response_Cookie_With_Culture()
         {
@@ -294,7 +289,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Variants = new List<Variant>() { new Variant() { Id = Guid.Parse("3352e74c-11c9-402f-86f9-7a7f1bfab756") } }
             };
 
-            
+
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-us"));
@@ -592,71 +587,6 @@ namespace EPiServer.Marketing.Testing.Test.Web
         }
 
         [Fact]
-        public void GetTestDataFromOldCookie_Returns_Correct_Values_For_Outdated_Cookies()
-        {
-            var mockTestDataCookiehelper = GetUnitUnderTest();
-            var testContentId = Guid.NewGuid();
-            var startDate = DateTime.Now.AddDays(-2);
-            var expireDate = DateTime.Now.AddDays(2);
-            var kpiId = Guid.NewGuid();
-            var variant1 = new Variant()
-            {
-                Id = Guid.Parse("dee37c30-973b-4e48-9b59-148a6a730ed9"),
-                IsPublished = true
-            };
-
-            var variant2 = new Variant()
-            {
-                Id = Guid.Parse("a19221d7-b977-4f90-b256-2e6b3cfd8216"),
-            };
-
-            var testCookie = new HttpCookie(mockTestDataCookiehelper.COOKIE_PREFIX + testContentId.ToString() + _cookieDelimeter + "en-GB")
-            {
-                ["TestId"] = _activeTest.Id.ToString(),
-                ["TestContentId"] = testContentId.ToString(),
-                ["TestVariantId"] = variant2.Id.ToString(),
-                ["Viewed"] = "false",
-                ["Converted"] = "false",
-                ["ShowVariant"] = "true",
-                Expires = expireDate,
-                [kpiId + "-flag"] = true.ToString()
-            };
-
-            var kpiInstance = new Kpi()
-            {
-                Id = Guid.NewGuid(),
-            };
-
-            var test = new ABTest()
-            {
-                Id = _activeTestId,
-                StartDate = startDate,
-                OriginalItemId = testContentId,
-                Variants = new List<Variant>() { variant1, variant2 },
-                ContentLanguage = "en-GB",
-                KpiInstances = new List<IKpi>()
-                {
-                    kpiInstance
-                }
-            };
-
-            _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(false);
-            _httpContextHelper.Setup(hch => hch.GetRequestCookie(It.IsAny<string>())).Returns(testCookie);
-            _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(_activeTest);
-            _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { test });
-            _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-GB"));
-            _testRepo.Setup(tr => tr.GetTestList(It.IsAny<TestCriteria>())).Returns(new List<IMarketingTest>() { test });
-
-            var returnCookieData = mockTestDataCookiehelper.GetTestDataFromOldCookie(testCookie);
-            Assert.True(returnCookieData.TestId == _activeTestId);
-            Assert.True(returnCookieData.TestContentId == testContentId);
-            Assert.True(returnCookieData.ShowVariant);
-            Assert.True(returnCookieData.TestVariantId == variant2.Id);
-            Assert.False(returnCookieData.Viewed);
-            Assert.False(returnCookieData.Converted);
-        }
-
-        [Fact]
         public void TestDataCookieHelper_expires_cookie_if_no_active_test_exists()
         {
             var mockTestDataCookiehelper = GetUnitUnderTest();
@@ -683,7 +613,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
                 Expires = expireDate,
                 ["k0"] = true.ToString()
             };
-            
+
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
             _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns((IMarketingTest)null);
@@ -740,7 +670,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             _httpContextHelper.Setup(hch => hch.HasCookie(It.IsAny<string>())).Returns(true);
             _httpContextHelper.Setup(hch => hch.GetResponseCookie(It.IsAny<string>())).Returns(testCookie);
-            _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(_activeTest);            
+            _testRepo.Setup(tr => tr.GetTestById(It.IsAny<Guid>(), It.IsAny<bool>())).Returns(_activeTest);
             _epiHelper.Setup(call => call.GetContentCultureinfo()).Returns(CultureInfo.GetCultureInfo("en-US"));
             _testRepo.Setup(tr => tr.GetActiveTestsByOriginalItemId(It.IsAny<Guid>(), It.IsAny<CultureInfo>())).Returns(new List<IMarketingTest>() { test });
 
