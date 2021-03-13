@@ -34,7 +34,8 @@ function (dependency, html2canvas) {
                 windowHeight: previewHeight,
                 windowWidth: previewWidth,
                 allowTaint: true,
-                useCORS: true
+                useCORS: true,
+                letterRendering: true
             };
             
             // The content of the iframe is the page that we're attempting to preview. 
