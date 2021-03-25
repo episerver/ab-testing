@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using EPiServer.Marketing.KPI.Common.Attributes;
+using EPiServer.Marketing.Testing.Core.DataClass;
+using EPiServer.Marketing.Testing.Web.Repositories;
+using EPiServer.ServiceLocation;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Web;
-using EPiServer.Marketing.Testing.Core.DataClass;
-using EPiServer.ServiceLocation;
-using EPiServer.Marketing.Testing.Web.Repositories;
-using EPiServer.Marketing.KPI.Common.Attributes;
 using System.Globalization;
+using System.Linq;
+using System.Web;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
@@ -18,7 +18,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         private IHttpContextHelper _httpContextHelper;
         private IEpiserverHelper _episerverHelper;
         private IAdminConfigTestSettingsHelper _adminConfigTestSettingsHelper;
-        private ITestDataCookieMigrator _testDataCookieMigrator;
 
         internal readonly string COOKIE_PREFIX = "EPI-MAR-";
 
@@ -29,19 +28,17 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             _testRepo = ServiceLocator.Current.GetInstance<IMarketingTestingWebRepository>();
             _episerverHelper = ServiceLocator.Current.GetInstance<IEpiserverHelper>();
             _httpContextHelper = new HttpContextHelper();
-            _testDataCookieMigrator = new TestDataCookieMigrator();
         }
 
         /// <summary>
         /// unit tests should use this contructor and add needed services to the service locator as needed
         /// </summary>
-        internal TestDataCookieHelper(IAdminConfigTestSettingsHelper adminConfigTestSettingsHelper, IMarketingTestingWebRepository testRepo, IHttpContextHelper contextHelper, IEpiserverHelper epiHelper, ITestDataCookieMigrator testDataCookieMigrator)
+        internal TestDataCookieHelper(IAdminConfigTestSettingsHelper adminConfigTestSettingsHelper, IMarketingTestingWebRepository testRepo, IHttpContextHelper contextHelper, IEpiserverHelper epiHelper)
         {
             _adminConfigTestSettingsHelper = adminConfigTestSettingsHelper;
             _testRepo = testRepo;
             _httpContextHelper = contextHelper;
             _episerverHelper = epiHelper;
-            _testDataCookieMigrator = testDataCookieMigrator;
         }
 
         /// <summary>
@@ -70,7 +67,7 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
         /// <param name="testData"></param>
         public void SaveTestDataToCookie(TestDataCookie testData)
         {
-            var aTest = _testRepo.GetTestById(testData.TestId,true);
+            var aTest = _testRepo.GetTestById(testData.TestId, true);
             int varIndex = -1;
 
             if (testData.TestVariantId != Guid.Empty)
@@ -118,10 +115,6 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
             var retCookie = new TestDataCookie();
             var currentCulture = cultureName != null ? CultureInfo.GetCultureInfo(cultureName) : _episerverHelper.GetContentCultureinfo();
             var currentCulturename = cultureName != null ? cultureName : _episerverHelper.GetContentCultureinfo().Name;
-
-            // old cookies use : for delimeter, need to update them to use new delimeter, we should remove this in a future release.
-            UpdateOldCookie(testContentId, currentCulture, currentCulturename);
-
             var cookieKey = COOKIE_PREFIX + testContentId + cookieDelimeter + currentCulturename;
             var cookie = _httpContextHelper.HasCookie(cookieKey)
                 ? _httpContextHelper.GetResponseCookie(cookieKey)
@@ -136,13 +129,13 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                     retCookie.TestContentId = Guid.TryParse(cookie.Name.Substring(COOKIE_PREFIX.Length).Split(cookieDelimeter[0])[0], out outguid) ? outguid : Guid.Empty;
 
                     bool outval;
-                    
+
                     retCookie.TestStart = DateTime.Parse(cookie["start"], CultureInfo.InvariantCulture);
                     retCookie.Viewed = bool.TryParse(cookie["viewed"], out outval) ? outval : false;
                     retCookie.Converted = bool.TryParse(cookie["converted"], out outval) ? outval : false;
 
-                    var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId,currentCulture).FirstOrDefault();
-                    
+                    var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId, currentCulture).FirstOrDefault();
+
                     if (test != null && retCookie.TestStart.ToString(CultureInfo.InvariantCulture) == test.StartDate.ToString(CultureInfo.InvariantCulture))
                     {
                         var index = int.TryParse(cookie["vId"], out outint) ? outint : -1;
@@ -167,83 +160,8 @@ namespace EPiServer.Marketing.Testing.Web.Helpers
                         retCookie = new TestDataCookie();
                     }
                 }
-                else
-                {
-                    retCookie = GetTestDataFromOldCookie(cookie);
-                }
             }
-            return retCookie;
-        }
 
-        /// <summary>
-        /// previous verions of cookies used a colon : delimeter which causes issues with cookie based authentication
-        /// the colon is also an illegal charagter for cookie names.  this changes it to an underscore _
-        /// </summary>
-        /// <param name="testContentId"></param>
-        /// <param name="currentCulture"></param>
-        /// <param name="currentCulturename"></param>
-        internal void UpdateOldCookie(string testContentId, CultureInfo currentCulture, string currentCulturename)
-        {
-            var updatedTestDataCookie = _testDataCookieMigrator.UpdateOldCookie(COOKIE_PREFIX, testContentId,
-                currentCulture, currentCulturename);
-
-            if (updatedTestDataCookie != null)
-            {
-                SaveTestDataToCookie(updatedTestDataCookie);
-
-                var oldCookieName = COOKIE_PREFIX + testContentId + ":" + currentCulturename;
-                _httpContextHelper.RemoveCookie(oldCookieName);
-
-                var expiredCookie = new HttpCookie(oldCookieName)
-                {
-                    HttpOnly = true,
-                    Expires = DateTime.Now.AddDays(-1d)
-                };
-                _httpContextHelper.AddCookie(expiredCookie);
-            }
-        }
-
-        /// <summary>
-        /// This method converts cookies which contain a language indicator but are in the long key format to the shorthand format.
-        /// This is to support installs which may be using the long hand key format so as not to inturrupt or break their tests.
-        /// We can remove this after a couple of revs once it is no longer a concern.
-        /// </summary>
-        /// <param name="testContentId"></param>
-        /// <param name="cultureName"></param>
-        /// <returns></returns>
-        internal TestDataCookie GetTestDataFromOldCookie(HttpCookie cookieToConvert)
-        {
-            var retCookie = new TestDataCookie();
-
-            Guid outguid;
-            CultureInfo culture = CultureInfo.GetCultureInfo(cookieToConvert.Name.Split(_adminConfigTestSettingsHelper.GetCookieDelimeter()[0])[1]);
-            retCookie.TestId = Guid.TryParse(cookieToConvert["TestId"], out outguid) ? outguid : Guid.Empty;
-            retCookie.TestContentId = Guid.TryParse(cookieToConvert["TestContentId"], out outguid) ? outguid : Guid.Empty;
-            retCookie.TestVariantId = Guid.TryParse(cookieToConvert["TestVariantId"], out outguid) ? outguid : Guid.Empty;
-
-            bool outval;
-            retCookie.ShowVariant = bool.TryParse(cookieToConvert["ShowVariant"], out outval) ? outval : false;
-            retCookie.Viewed = bool.TryParse(cookieToConvert["Viewed"], out outval) ? outval : false;
-            retCookie.Converted = bool.TryParse(cookieToConvert["Converted"], out outval) ? outval : false;
-            retCookie.AlwaysEval = bool.TryParse(cookieToConvert["AlwaysEval"], out outval) ? outval : false;
-
-            var test = _testRepo.GetActiveTestsByOriginalItemId(retCookie.TestContentId, culture).FirstOrDefault();
-            if (test != null)
-            {
-                retCookie.TestStart = test.StartDate;
-                foreach (var kpi in test.KpiInstances)
-                {
-                    bool converted = false;
-                    bool.TryParse(cookieToConvert[kpi.Id + "-Flag"], out converted);
-                    retCookie.KpiConversionDictionary.Add(kpi.Id, converted);
-                }
-                UpdateTestDataCookie(retCookie);
-            }
-            else
-            {
-                ExpireTestDataCookie(retCookie);
-                retCookie = new TestDataCookie();
-            }            
             return retCookie;
         }
 
