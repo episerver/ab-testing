@@ -17,7 +17,6 @@ function (dependency, html2canvas) {
                 previewWidth = 1024;
 
             // Create a hidden iframe with the target aspect ratio.
-
             var iframeToLoadPagePreview = document.createElement('iframe');
             iframeToLoadPagePreview.style.cssText = 'position: absolute; opacity:0; z-index: -9999';
             iframeToLoadPagePreview.width = previewWidth;
@@ -26,37 +25,57 @@ function (dependency, html2canvas) {
 
             // Render the preview to the canvas that was specified
             // as a parameter to this function.
+            var configStore = this.configStore || dependency.resolve("epi.storeregistry").get("marketing.abtestingconfig");
+            configStore.get().then(function (configValues) {
+                let previewStyleOverride = configValues.previewStyleOverride;
 
-            var renderingOptions = {
-                canvas: canvasForPreviewImage,
-                height: previewHeight,
-                width: previewWidth,
-                windowHeight: previewHeight,
-                windowWidth: previewWidth,
-                allowTaint: true,
-                useCORS: true,
-                letterRendering: true
-            };
-            
-            // The content of the iframe is the page that we're attempting to preview. 
-            // Render it to the canvas after it loads.
+                // Render the preview to the canvas that was specified as a parameter to this function.
+                var renderingOptions = {
+                    canvas: canvasForPreviewImage,
+                    height: previewHeight,
+                    width: previewWidth,
+                    windowHeight: previewHeight,
+                    windowWidth: previewWidth,
+                    allowTaint: true,
+                    useCORS: true,
+                    letterRendering: true,
+                    onclone: (document) => {
+                        if (previewStyleOverride) {
+                            Array.from(
+                                document.querySelectorAll("*"),
+                            ).forEach((e) => {
+                                let existingStyle = e.getAttribute("style") || "";
+                                if (!existingStyle) {
+                                    e.setAttribute("style", previewStyleOverride);
+                                } else {
+                                    e.setAttribute("style", existingStyle + "; " + previewStyleOverride);
+                                }
+                                existingStyle = e.getAttribute("style") || "";
+                            });
+                        }
+                    }
+                };
 
-            iframeToLoadPagePreview.onload = function (e) {
-                var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
-                html2canvas(elementToRender, renderingOptions).then(function (canvas) {
-                    canvasForPreviewImage.style.width = "100%";     // The rendering tool applies it's own aspect ratio to the canvas,
-                    canvasForPreviewImage.style.height = "100%";    // override that to ensure that it fits properly within our UI.
-                    me._setPreviewState(canvasForPreviewImage, "none", "block", "none");
-                }).catch(function (error) {
-                    me._setPreviewState(canvasForPreviewImage, "none", "none", "block");
-                }).finally(function () {
-                    document.body.removeChild(iframeToLoadPagePreview); // Remove the hidden iframe from the DOM.
-                });
-            }
+                // The content of the iframe is the page that we're attempting to preview. 
+                // Render it to the canvas after it loads.
 
-            // Append the hidden iframe to the DOM so that the preview loads.
+                iframeToLoadPagePreview.onload = function (e) {
+                    var elementToRender = iframeToLoadPagePreview.contentDocument.documentElement;
+                    html2canvas(elementToRender, renderingOptions).then(function (canvas) {
+                        canvasForPreviewImage.style.width = "100%";     // The rendering tool applies it's own aspect ratio to the canvas,
+                        canvasForPreviewImage.style.height = "100%";    // override that to ensure that it fits properly within our UI.
+                        me._setPreviewState(canvasForPreviewImage, "none", "block", "none");
+                    }).catch(function (error) {
+                        me._setPreviewState(canvasForPreviewImage, "none", "none", "block");
+                    }).finally(function () {
+                        document.body.removeChild(iframeToLoadPagePreview); // Remove the hidden iframe from the DOM.
+                    });
+                }
 
-            document.body.appendChild(iframeToLoadPagePreview);
+                // Append the hidden iframe to the DOM so that the preview loads.
+
+                document.body.appendChild(iframeToLoadPagePreview);
+            });
         },
 
         _setPreviewState: function (canvasForPreviewImage, spinnerDisplayState, previewDisplayState, errorDisplayState) {

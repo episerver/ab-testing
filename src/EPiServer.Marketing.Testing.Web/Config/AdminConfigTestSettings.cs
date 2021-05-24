@@ -3,6 +3,7 @@ using EPiServer.Data.Dynamic;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 
 namespace EPiServer.Marketing.Testing.Web.Config
@@ -38,6 +39,9 @@ namespace EPiServer.Marketing.Testing.Web.Config
 
         public bool IsEnabled { get; set; }
 
+        public string PreviewStyleOverride { get; set; }
+        
+
         internal static AdminConfigTestSettings _currentSettings;
         internal static DynamicDataStoreFactory _factory;
         internal IServiceLocator _serviceLocator;
@@ -72,6 +76,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
                     }
                 }
 
+                _currentSettings.PreviewStyleOverride = ConfigurationManager.AppSettings["EPiServer:Marketing:Testing:PreviewStyleOverride"]?.ToString();
                 return _currentSettings;
             }
         }
@@ -88,6 +93,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
             KpiLimit = 5;
             CookieDelimeter = "_";
             IsEnabled = true;
+            PreviewStyleOverride = "";
         }
 
         public void Save()
