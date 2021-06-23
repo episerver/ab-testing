@@ -48,7 +48,9 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
 
             _onInvalidation = onInvalidation;
-            _timer = new Timer(PollValidity, null, 0, _frequencyInMilliseconds);
+
+            _timer = new Timer(PollValidity);
+            _timer.Change(0, _frequencyInMilliseconds);
         }
 
         /// <summary>
