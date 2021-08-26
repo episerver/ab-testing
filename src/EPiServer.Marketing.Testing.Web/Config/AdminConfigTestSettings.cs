@@ -96,6 +96,16 @@ namespace EPiServer.Marketing.Testing.Web.Config
             PreviewStyleOverride = "";
         }
 
+        /// <summary>
+        /// Forces a reload of the config and returns it.
+        /// </summary>
+        /// <returns></returns>
+        virtual public AdminConfigTestSettings ReloadConfig()
+        {
+            AdminConfigTestSettings.Reset();
+            return AdminConfigTestSettings.Current;
+        }
+
         public void Save()
         {
             var store = DynamicDataStoreFactory.Instance.GetStore(typeof(AdminConfigTestSettings));

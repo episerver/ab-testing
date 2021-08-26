@@ -19,7 +19,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
     /// </summary>
     public class CachingTestManager : ITestManager
     {
-        public const string MasterCacheKey = "epi/marketing/testing/masterkey";
+        internal const string MasterCacheKey = "epi/marketing/testing/masterkey";
         internal const string AllTestsKey = "epi/marketing/testing/all";
         private readonly object listLock = new object();
 
@@ -86,7 +86,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             var returnList = new List<IMarketingTest>();
             var all = _cache.Get(AllTestsKey) as List<IMarketingTest>;
 
-            if (all == null || !all.Any())
+            if (all == null)
             {
                 RefreshCache();
                 all = _cache.Get(AllTestsKey) as List<IMarketingTest>;
@@ -240,14 +240,13 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
                 allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
 
-                _logger.Debug("RefreshCache - count = " + allTests.Count);
+                _logger.Information("RefreshCache - count = " + allTests.Count);
 
                 _cache.Insert(AllTestsKey, allTests, GetCacheEvictionPolicy());
             }
 
             foreach (var test in allTests)
             {
-                _logger.Debug("RefreshCache - inserting variants.");
                 _cache.Insert(GetCacheKeyForVariant(test.OriginalItemId, test.ContentLanguage),
                     _inner.GetVariantContent(test.OriginalItemId, CultureInfo.GetCultureInfo(test.ContentLanguage)),
                     GetCacheEvictionPolicy());

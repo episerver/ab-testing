@@ -22,6 +22,10 @@ using System.Configuration;
 
 namespace EPiServer.Marketing.Testing.Web.Repositories
 {
+    /// <summary>
+    /// MarketingTestingWebRepository that encapsulates the business layer that controls the caching and signaling to remote load balanced 
+    /// cms systems to reload caches related to tests and variants
+    /// </summary>
     [ServiceConfiguration(ServiceType = typeof(IMarketingTestingWebRepository), Lifecycle = ServiceInstanceScope.Singleton) ]
     public class MarketingTestingWebRepository : IMarketingTestingWebRepository
     {
@@ -32,6 +36,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         private IKpiManager _kpiManager;
         private IHttpContextHelper _httpContextHelper;
         private ICacheSignal _cacheSignal;
+        private AdminConfigTestSettings _settings;
 
         /// <summary>
         /// Default constructor
@@ -56,6 +61,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
                         );
 
             _cacheSignal.Monitor(Refresh);
+            _settings = AdminConfigTestSettings.Current;
         }
 
         /// <summary>
@@ -70,6 +76,7 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
             _kpiManager = locator.GetInstance<IKpiManager>();
             _httpContextHelper = locator.GetInstance<IHttpContextHelper>();
             _cacheSignal = locator.GetInstance<ICacheSignal>();
+            _settings = locator.GetInstance<AdminConfigTestSettings>();
 
             _cacheSignal.Monitor(Refresh);
 
@@ -86,40 +93,30 @@ namespace EPiServer.Marketing.Testing.Web.Repositories
         /// </remarks>
         public void Refresh()
         {
-            var _testHandler = _serviceLocator.GetInstance<ITestHandler>();
-            var testCriteria = new TestCriteria();
-            testCriteria.AddFilter(
-                new ABTestFilter
-                {
-                    Property = ABTestProperty.State,
-                    Operator = FilterOperator.And,
-                    Value = TestState.Active
-                }
-            );
+            var testHandler = _serviceLocator.GetInstance<ITestHandler>();
 
-            AdminConfigTestSettings.Reset();
-
-            if (AdminConfigTestSettings.Current.IsEnabled)
+            if (_settings.ReloadConfig().IsEnabled)
             {
-                var dbTests = _testManager.GetTestList(testCriteria);
-                _logger.Debug("Refresh - count = " + dbTests.Count);
+                (_testManager as CachingTestManager)?.RefreshCache();
 
-                if (dbTests.Count == 0)
+                var abTests = _testManager.GetActiveTests();
+                _logger.Debug("Refresh - count = " + abTests.Count);
+
+                if (abTests.Count == 0)
                 {
                     _logger.Debug("Refresh - AB Testing disabled, there are no active tests.");
-                    _testHandler.DisableABTesting();
+                    testHandler.DisableABTesting();
                 }
                 else
                 {
                     _logger.Debug("Refresh - AB Testing enabled with active tests.");
-                    _testHandler.EnableABTesting();
-                    ((CachingTestManager)_testManager).RefreshCache();
+                    testHandler.EnableABTesting(); // disables and enables to ensure we dont have more than one set of listeners.
                 }
             }
             else
             {
                 _logger.Debug("Refresh - AB Testing disabled through configuration.");
-                _testHandler.DisableABTesting();
+                testHandler.DisableABTesting();
             }
 
             _cacheSignal.Set();
