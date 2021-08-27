@@ -100,7 +100,7 @@ namespace EPiServer.Marketing.Testing.Web.Config
         /// Forces a reload of the config and returns it.
         /// </summary>
         /// <returns></returns>
-        virtual public AdminConfigTestSettings ReloadConfig()
+        public virtual AdminConfigTestSettings ReloadConfig()
         {
             AdminConfigTestSettings.Reset();
             return AdminConfigTestSettings.Current;
