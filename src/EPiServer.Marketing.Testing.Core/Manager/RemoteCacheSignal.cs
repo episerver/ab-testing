@@ -50,7 +50,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             _onInvalidation = onInvalidation;
 
             _timer = new Timer(PollValidity);
-            _timer.Change(0, _frequencyInMilliseconds);
+            _timer.Change(_frequencyInMilliseconds, _frequencyInMilliseconds);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             {
                 if (IsCacheInvalid())
                 {
-                    _logger.Trace("Remote cache has signalled invalidation.");
+                    _logger.Information("Remote cache has signalled invalidation.");
                     _onInvalidation();
                 }
             }
@@ -93,7 +93,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
             }
             finally
             {
-                _timer.Change(_frequencyInMilliseconds, _frequencyInMilliseconds);
+                _timer.Change(_frequencyInMilliseconds * 2, _frequencyInMilliseconds);
             }
         }
 
