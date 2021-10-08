@@ -18,22 +18,25 @@ using EPiServer.ServiceLocation;
 using EPiServer.Marketing.Testing.Web.Helpers;
 using EPiServer.Marketing.KPI.Common.Helpers;
 using EPiServer.Marketing.Testing.Web;
+using System.Diagnostics.CodeAnalysis;
+using EPiServer.Marketing.Testing.Web.Config;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
-    public class WebRepositoryTests
+    [ExcludeFromCodeCoverage]
+    public class MarketingTestingWebRepositoryTests
     {
         internal Mock<ITestManager> _mockTestManager;
         internal Mock<ILogger> _mockLogger;
         internal Mock<IServiceLocator> _mockServiceLocator;
         internal Mock<ITestResultHelper> _mockTestResultHelper;
-        internal Mock<IMarketingTestingWebRepository> _mockMarketingTestingWebRepository;
         internal Mock<IKpiManager> _mockKpiManager;
         internal Mock<IHttpContextHelper> _mockHttpHelper;
         internal Mock<IEpiserverHelper> _mockEpiserverHelper;
         internal Mock<IKpiHelper> _mockKpiHelper = new Mock<IKpiHelper>();
         internal Mock<ITestHandler> _mockTestHandler;
         internal Mock<ICacheSignal> _mockCacheSignal;
+        internal Mock<AdminConfigTestSettings> _settings;
 
         private Guid _testGuid = Guid.Parse("984ae93a-3abc-469f-8664-250328ce8220");
 
@@ -44,24 +47,82 @@ namespace EPiServer.Marketing.Testing.Test.Web
             _mockTestResultHelper = new Mock<ITestResultHelper>();
             _mockHttpHelper = new Mock<IHttpContextHelper>();
             _mockKpiManager = new Mock<IKpiManager>();
-            _mockMarketingTestingWebRepository = new Mock<IMarketingTestingWebRepository>();
             _mockEpiserverHelper = new Mock<IEpiserverHelper>();
             _mockTestManager = new Mock<ITestManager>();
             _mockTestHandler = new Mock<ITestHandler>();
             _mockCacheSignal = new Mock<ICacheSignal>();
+            _settings = new Mock<AdminConfigTestSettings>();
 
             _mockServiceLocator.Setup(sl => sl.GetInstance<ITestManager>()).Returns(_mockTestManager.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiHelper>()).Returns(_mockKpiHelper.Object);
             _mockServiceLocator.Setup(sl => sl.GetInstance<IKpiManager>()).Returns(_mockKpiManager.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<ITestResultHelper>()).Returns(_mockTestResultHelper.Object);
-            _mockServiceLocator.Setup(call => call.GetInstance<IMarketingTestingWebRepository>()).Returns(_mockMarketingTestingWebRepository.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IHttpContextHelper>()).Returns(_mockHttpHelper.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<IEpiserverHelper>()).Returns(_mockEpiserverHelper.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<ITestHandler>()).Returns(_mockTestHandler.Object);
             _mockServiceLocator.Setup(call => call.GetInstance<ICacheSignal>()).Returns(_mockCacheSignal.Object);
+            _mockServiceLocator.Setup(call => call.GetInstance<AdminConfigTestSettings>()).Returns(_settings.Object);
 
             var aRepo = new MarketingTestingWebRepository(_mockServiceLocator.Object, _mockLogger.Object);
             return aRepo;
+        }
+
+        [Fact]
+        public void Refresh_DisablesTestingWhenConfigIsDisabled()
+        {
+            var webRepository = GetUnitUnderTest();
+
+            _settings.Setup(m => m.ReloadConfig()).Returns(new AdminConfigTestSettings() { IsEnabled = false });
+
+            webRepository.Refresh();
+
+            _mockTestHandler.Verify(m => m.DisableABTesting());
+            _mockCacheSignal.Verify(m => m.Set());
+        }
+
+        [Fact]
+        public void Refresh_ReadsActiveTests_ConfigIsEnabled_DisablesIfNoTests()
+        {
+            var webRepository = GetUnitUnderTest();
+
+            _settings.Setup(m => m.ReloadConfig()).Returns(new AdminConfigTestSettings() { IsEnabled = true });
+            _mockTestManager.Setup(m => m.GetActiveTests()).Returns( new List<IMarketingTest>());
+
+            webRepository.Refresh();
+
+            _mockTestHandler.Verify(m => m.DisableABTesting());
+            _mockCacheSignal.Verify(m => m.Set());
+            _mockTestManager.VerifyAll();
+        }
+
+        [Fact]
+        public void Refresh_ReadsActiveTests_ConfigIsEnabled_EnablesIf1Test()
+        {
+            var webRepository = GetUnitUnderTest();
+
+            _settings.Setup(m => m.ReloadConfig()).Returns(new AdminConfigTestSettings() { IsEnabled = true });
+            _mockTestManager.Setup(m => m.GetActiveTests()).Returns(new List<IMarketingTest>() { new ABTest() });
+
+            webRepository.Refresh();
+
+            _mockTestHandler.Verify(m => m.EnableABTesting());
+            _mockCacheSignal.Verify(m => m.Set());
+            _mockTestManager.VerifyAll();
+        }
+
+        [Fact]
+        public void Refresh_ReadsActiveTests_ConfigIsEnabled_EnablesIfMoreThan1()
+        {
+            var webRepository = GetUnitUnderTest();
+
+            _settings.Setup(m => m.ReloadConfig()).Returns(new AdminConfigTestSettings() { IsEnabled = true });
+            _mockTestManager.Setup(m => m.GetActiveTests()).Returns(new List<IMarketingTest>() { new ABTest(), new ABTest() });
+
+            webRepository.Refresh();
+
+            _mockTestHandler.Verify(m => m.EnableABTesting());
+            _mockCacheSignal.Verify(m => m.Set());
+            _mockTestManager.VerifyAll();
         }
 
         [Fact]

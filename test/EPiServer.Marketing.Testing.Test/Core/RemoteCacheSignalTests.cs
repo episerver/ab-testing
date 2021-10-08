@@ -55,7 +55,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
                 }
             );
 
-            Thread.Sleep(500); // Allow sufficient time for monitor to poll            
+            Thread.Sleep(1000); // Allow sufficient time for monitor to poll            
 
             // Assert that validy has been polled a sufficiently acceptable number of times
 

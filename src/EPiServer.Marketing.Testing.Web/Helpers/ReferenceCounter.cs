@@ -3,40 +3,40 @@ using System.Collections.Generic;
 
 namespace EPiServer.Marketing.Testing.Web.Helpers
 {
+    /// <summary>
+    /// Internal class used to count referencs to an object.
+    /// </summary>
     public class ReferenceCounter : IReferenceCounter
     {
-        IDictionary<object,int> dictionary = new ConcurrentDictionary<object, int>();
+        private readonly object referenceLock = new object();
+        ConcurrentDictionary<object,int> dictionary = new ConcurrentDictionary<object, int>();
 
         public void AddReference(object src)
         {
-            int value;
-            if( dictionary.TryGetValue(src, out value) )
-            {   // inc the count
-                dictionary.Remove(src);
-                dictionary.Add(src, ++value);
-            }
-            else
-            {   // make the count 1
-                dictionary.Add(src, 1);
+            lock (referenceLock)
+            {
+                dictionary.AddOrUpdate(src, 1, (key, oldValue) => oldValue + 1);
             }
         }
 
         public void RemoveReference(object src)
         {
-            int value;
-            if (dictionary.TryGetValue(src, out value))
+            lock (referenceLock)
             {
-                if (value > 1)
-                {   // decrement the curent count
-                    dictionary.Remove(src);
-                    dictionary.Add(src, --value);
-                } 
-                else
-                {   // remove the ref from the collection
-                    dictionary.Remove(src);
+                if (dictionary.TryGetValue(src, out int value))
+                {
+                    if (value > 1)
+                    {
+                        dictionary.AddOrUpdate(src, 0, (key, oldValue) => oldValue - 1);
+                    }
+                    else
+                    {   // remove the ref from the collection
+                        dictionary.TryRemove(src, out value);
+                    }
                 }
             }
         }
+
         public bool hasReference(object src)
         {
             // if its in the dictionary, we have a reference.
