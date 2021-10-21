@@ -236,8 +236,6 @@ namespace EPiServer.Marketing.Testing.Core.Manager
 
             lock (listLock)
             {
-                _cache.RemoveLocal(MasterCacheKey);
-
                 allTests = _inner.GetTestList(testCriteria) ?? new List<IMarketingTest>();
 
                 _logger.Information("RefreshCache - count = " + allTests.Count);
