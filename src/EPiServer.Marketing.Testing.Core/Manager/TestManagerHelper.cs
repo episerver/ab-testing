@@ -435,7 +435,7 @@ namespace EPiServer.Marketing.Testing.Core.Manager
                 }
                 catch(Exception ex)
                 {
-                    LogManager.GetLogger().Error("Failed to convert get the kpi associated with the test.", ex);
+                    LogManager.GetLogger().Debug("Failed to load the kpi, its possible it was deleted with the test and no longer exists.", ex);
                 }
             }
 
