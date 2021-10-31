@@ -616,7 +616,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockTestManager.Setup(tm => tm.GetVariantContent(expectedTests[1].OriginalItemId, It.IsAny<CultureInfo>()))
                                      .Returns(expectedContent2.Object);
 
-            _mockSynchronizedObjectInstanceCache.Setup(c => c.RemoveLocal(CachingTestManager.MasterCacheKey));
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.GetCacheKeyForVariant(
                                                                         expectedTests[0].OriginalItemId,
                                                                         expectedLanguage),
@@ -656,6 +655,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             manager.RefreshCache();
 
             // Verify all expected items where put in cache
+            _mockSynchronizedObjectInstanceCache.Verify(m => m.RemoveLocal(CachingTestManager.MasterCacheKey), Times.Never);
             _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
 
@@ -687,7 +687,6 @@ namespace EPiServer.Marketing.Testing.Test.Core
             _mockSynchronizedObjectInstanceCache.SetupSequence(c => c.Get(CachingTestManager.AllTestsKey))
                                                 .Returns(null)
                                                 .Returns(originalTestList);
-            _mockSynchronizedObjectInstanceCache.Setup(m => m.RemoveLocal(CachingTestManager.MasterCacheKey));
 
             _mockSynchronizedObjectInstanceCache.Setup(c => c.Insert(CachingTestManager.AllTestsKey,
                                                                      It.IsAny<List<IMarketingTest>>(), 
@@ -696,6 +695,7 @@ namespace EPiServer.Marketing.Testing.Test.Core
             var manager = new CachingTestManager(_mockSynchronizedObjectInstanceCache.Object, _mockEvents.Object, _mockTestManager.Object, _logger.Object, 30);
             var actualList = manager.GetActiveTests();
 
+            _mockSynchronizedObjectInstanceCache.Verify(m => m.RemoveLocal(CachingTestManager.MasterCacheKey), Times.Never);
             _mockTestManager.VerifyAll();
             _mockSynchronizedObjectInstanceCache.VerifyAll();
         }
