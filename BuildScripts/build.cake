@@ -6,7 +6,7 @@
 #tool "nuget:?package=NUnit.ConsoleRunner&version=3.4.0"
 #tool "nuget:?package=JetBrains.dotCover.CommandLineTools&version=2019.1.3"
 #tool "nuget:?package=xunit.runner.console"
-#addin "nuget:?package=Cake.Sonar"
+#addin "nuget:?package=Cake.Sonar&version=1.1.25"
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool"
 
 //////////////////////////////////////////////////////////////////////
