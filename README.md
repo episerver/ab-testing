@@ -15,7 +15,7 @@ We use cake script for the build. For documentation refer https://cakebuild.net/
 The scripts are located in the BuildScripts folder.
 
 1. build.ps1 - This contains bootstrapper script for powershell and shouldn't be changed.
-2. build.cake - This is the cake script file that contains various tasks required to clean, restore, build, run tests and create nuget packages. This follows C# syntax and can be modified as per requirements.
+2. build.cake - This is the cake script file that contains various tasks required to clean, restore, build, run tests and create nuget packages. This follows C# syntax and can be modified as per requirements. 
 3. tools - This folder contains different tools required by build.cake script to run successfully.
 
 To run the script, execute the following command in a powershell window:
