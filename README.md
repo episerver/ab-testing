@@ -4,6 +4,8 @@
 - [Development environment](#development-environment)
 - [Building with Cake](#building-with-cake)
 - [Signing Assemblies](#signing-assemblies)
+- [Updating Nuget package versions](#updating-nuget-package-versions)
+- [Adding migration scripts](#adding-migration-scripts)
 
 ## Overview
 A/B testing lets you create variations for a number of page elements (blocks, images, content, buttons, form fields, and so on), then compare which variation performs best. It measures the number of conversions obtained from the original (control) versus the variation (challenger), and the one that generates the most conversions during the testing period is typically promoted to the design for that page. Episerver A/B testing has several predefined conversion goals you can use when setting up a test, and it is also possible for Episerver developers to create customized conversion goals.
