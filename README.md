@@ -1,17 +1,31 @@
-# Marketing Tools - Testing
+# Marketing Tools - AB Testing
+
+- [AB Testing Overview](#overview)
+- [Development environment](#development-environment)
+- [Building with Cake](#building-with-cake)
+- [Signing Assemblies](#signing-assemblies)
+
+## Overview
+A/B testing lets you create variations for a number of page elements (blocks, images, content, buttons, form fields, and so on), then compare which variation performs best. It measures the number of conversions obtained from the original (control) versus the variation (challenger), and the one that generates the most conversions during the testing period is typically promoted to the design for that page. Episerver A/B testing has several predefined conversion goals you can use when setting up a test, and it is also possible for Episerver developers to create customized conversion goals.
+
+For more information and an overview of how to use the AB Testing package in your solution visit the AB Testing user guide which can be found here: https://webhelp.optimizely.com/21-1/en/cms-edit/ab-testing.htm
 
 ## Development environment 
-### Precondition
+### Prerequisites
+* Visual Studio 2019 (or higher)
+* Cms 11.x 
+
 #### NuGet Package Restore
-We make use of the NuGet *package restore* functionality to fetch our dependencies, for this to work properly the following is required in the NuGet configuration:
-* The following package sources are needed:
+This project makes use of the NuGet *package restore* functionality to fetch our dependencies, for this to work properly the following is required in the NuGet configuration:
+* The following package sources are required:
     * https://www.nuget.org/api/v2/
     * http://nuget.episerver.com/feed/packages.svc/
 * To make use of both package sources at the same time select *All* as the *Package Source*
 * The *Package Restore* setting needs to be enabled
 
-### Cake script
-We use cake script for the build. For documentation refer https://cakebuild.net/.
+### Building with Cake
+This project uses cake script for the build and will create nuget artifacts for convience. For more information related to Cake refer to the documentation which can be found here https://cakebuild.net/.
+
 The scripts are located in the BuildScripts folder. 
 
 1. build.ps1 - This contains bootstrapper script for powershell and shouldn't be changed.
@@ -28,12 +42,6 @@ Example: .\build.ps1 -configuration "Debug" -target "PackageNuGets"
 ```
 If no task is specified as the target, the "Default" task is run. 
 After a successful run, the nuget packages are created in the "Artifacts" folder, which is on the same level as the "BuildScripts" folder.
-
-Note: The build definition for this project on Team City is named "Cake" and it also leverages the scripts and the tools folder listed above for running the build and creating the artifacts.
-
-### Code Coverage
-After a successful build, a code coverage report is generated on Team City.
-On development environments, this report is created in a file "coverage.html" under the folder BuildScripts/CodeCoverage.
 
 ### Signing Assemblies
 All the assemblies are delay signed with a strong name key file "EPiServerProduct_PublicKey.snk" located in the build folder.
