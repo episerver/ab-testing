@@ -26,7 +26,7 @@ This project makes use of the NuGet *package restore* functionality to fetch our
 * The *Package Restore* setting needs to be enabled
 
 ### Building with Cake
-This project uses cake script for the build and will create nuget artifacts for convience. For more information related to Cake refer to the documentation which can be found here https://cakebuild.net/.
+This project uses cake for the build and will create nuget artifacts. For more information related to Cake refer to the documentation which can be found here https://cakebuild.net/.
 
 The scripts are located in the BuildScripts folder. 
 
