@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<modifications>
-  <add path="/configuration/connectionStrings">
-    <add name="{ConnectionStringName}" connectionString="Data Source={SqlDataSource};Database={DatabaseName};User Id={DatabaseUser};Password={DatabasePassword};MultipleActiveResultSets=True;" providerName="System.Data.SqlClient" __keyAttributes="name" />
-  </add>
-</modifications>

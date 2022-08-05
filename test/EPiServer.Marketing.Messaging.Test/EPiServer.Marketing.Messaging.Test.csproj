@@ -4,7 +4,7 @@
     <TargetFramework>net461</TargetFramework>
     <DelaySign>true</DelaySign>
     <AssemblyName>EPiServer.Marketing.Messaging.Test</AssemblyName>
-    <AssemblyOriginatorKeyFile>../../build/EPiServerProduct_PublicKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../BuildScripts/EPiServerProduct_PublicKey.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>EPiServer.Marketing.Messaging.Test</PackageId>
