@@ -8,7 +8,7 @@
 - [Adding migration scripts](#adding-migration-scripts)
 
 ## Overview
-A/B testing lets you create variations for a number of page elements (blocks, images, content, buttons, form fields, and so on), then compare which variation performs best. It measures the number of conversions obtained from the original (control) versus the variation (challenger), and the one that generates the most conversions during the testing period is typically promoted to the design for that page. Episerver A/B testing has several predefined conversion goals you can use when setting up a test, and it is also possible for Episerver developers to create customized conversion goals.
+A/B   testing lets you create variations for a number of page elements (blocks, images, content, buttons, form fields, and so on), then compare which variation performs best. It measures the number of conversions obtained from the original (control) versus the variation (challenger), and the one that generates the most conversions during the testing period is typically promoted to the design for that page. Episerver A/B testing has several predefined conversion goals you can use when setting up a test, and it is also possible for Episerver developers to create customized conversion goals.
 
 For more information and an overview of how to use the AB Testing package in your solution visit the AB Testing user guide which can be found here: https://webhelp.optimizely.com/21-1/en/cms-edit/ab-testing.htm
 
