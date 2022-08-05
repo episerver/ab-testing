@@ -9,8 +9,7 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Integrate EPiServer site with Messaging package</description>
         <copyright>Copyright EPiServer 2016</copyright>
-        <releaseNotes>
-        </releaseNotes>
+		<projectUrl>https://github.com/episerver/ab-testing</projectUrl>
         <tags>EPiServerModulePackage EPiServer Messaging EPiServerBetaAddon</tags>
         <dependencies>
         </dependencies>
