@@ -413,7 +413,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
             var testHandler = GetUnitUnderTest();
 
-            CultureInfo testCulture = CultureInfo.GetCultureInfo("ev");
+            CultureInfo.CurrentCulture = content.Language;
             _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(content.Language);
 
             ContentEventArgs args = new ContentEventArgs(content);
