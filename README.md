@@ -83,13 +83,13 @@ Right-click project -> Properties -> Signing <Update the path here>
 The versioning of the assemblies and nuget packages is done in the build.cake file. Each package is independently versioned. Refer to the task "Version" in the script that uses the values of the following variables to create assembly versions, which are then used in the individual tasks that generate the nuget packages i.e. "PackageKpi", "PackageKpiCommerce", "PackageMessaging" and "PackageABTesting".
 
 ```
-var kpiBaseVersion = "2.5.3";  // For EPiServer.Marketing.KPI package
+var kpiBaseVersion = "2.5.5";  // For EPiServer.Marketing.KPI package
 
 var kpiCommerceBaseVersion = "2.4.2"; // EPiServer.Marketing.KPI.Commerce
 
 var messagingBaseVersion = "1.3.0";  // EPiServer.Marketing.Messaging
 
-var webBaseVersion = "2.6.0";  // EPiServer.Marketing.Testing
+var webBaseVersion = "2.6.11";  // EPiServer.Marketing.Testing
 
 ```
 
