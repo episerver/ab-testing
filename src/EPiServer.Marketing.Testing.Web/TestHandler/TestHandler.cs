@@ -236,6 +236,12 @@ namespace EPiServer.Marketing.Testing.Web
         /// content loaded event to determine the state of a test and what content to display.
         public void LoadedContent(object sender, ContentEventArgs e)
         {
+            if (e.Content is ILocalizable localizable &&
+                !(localizable.Language.Equals(_episerverHelper.GetContentCultureinfo())))
+            {
+                return;
+            }
+
             if (!_contextHelper.SwapDisabled(e))
             {
                 try

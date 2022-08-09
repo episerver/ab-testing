@@ -379,6 +379,49 @@ namespace EPiServer.Marketing.Testing.Test.Web
 
         #endregion
 
+        public class LocalizableBasicContent : BasicContent, ILocalizable
+        {
+            public IEnumerable<CultureInfo> ExistingLanguages { get => new List<CultureInfo>() { CultureInfo.GetCultureInfo("en") } ; set => throw new NotImplementedException(); }
+            public CultureInfo MasterLanguage { get => CultureInfo.GetCultureInfo("en"); set => throw new NotImplementedException(); }
+            public CultureInfo Language { get => CultureInfo.GetCultureInfo("en"); set => throw new NotImplementedException(); }
+        }
+
+        [Fact]
+        public void LoadedContent_Skips_If_ContentIsLocalizable_AndContentIsNotCurrentLanguage()
+        {
+            IContent content = new LocalizableBasicContent();
+            content.ContentGuid = _associatedTestGuid;
+            content.ContentLink = new ContentReference();
+
+            var testHandler = GetUnitUnderTest();
+
+            CultureInfo testCulture = CultureInfo.GetCultureInfo("sv");
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(testCulture);
+
+            ContentEventArgs args = new ContentEventArgs(content);
+            testHandler.LoadedContent(new object(), args);
+
+            _mockContextHelper.Verify(call => call.SwapDisabled(It.IsAny<ContentEventArgs>()),Times.Never);
+        }
+
+        [Fact]
+        public void LoadedContent_CallsSwapDisabled_If_ContentLanguage_Matches_CurrentLanguage()
+        {
+            var content = new LocalizableBasicContent();
+            content.ContentGuid = _associatedTestGuid;
+            content.ContentLink = new ContentReference();
+
+            var testHandler = GetUnitUnderTest();
+
+            CultureInfo.CurrentCulture = content.Language;
+            _mockEpiserverHelper.Setup(call => call.GetContentCultureinfo()).Returns(content.Language);
+
+            ContentEventArgs args = new ContentEventArgs(content);
+            testHandler.LoadedContent(new object(), args);
+
+            _mockContextHelper.Verify(call => call.SwapDisabled(It.IsAny<ContentEventArgs>()), Times.Once);
+        }
+
         [Fact]
         public void Disabling_The_Page_Swap_Returns_The_Published_Page()
         {

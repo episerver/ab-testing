@@ -10,6 +10,9 @@
 ## Overview
 A/B testing lets you create variations for a number of page elements (blocks, images, content, buttons, form fields, and so on), then compare which variation performs best. It measures the number of conversions obtained from the original (control) versus the variation (challenger), and the one that generates the most conversions during the testing period is typically promoted to the design for that page. Episerver A/B testing has several predefined conversion goals you can use when setting up a test, and it is also possible for Episerver developers to create customized conversion goals.
 
+A/B Testing is now part of the open source community. More information can be found here:  
+<https://world.optimizely.com/blogs/kevin-shea/dates/2022/8/the-ab-testing-addon-for-optimizely-cms-is-now-open-source/>
+
 For more information and an overview of how to use the AB Testing package in your solution visit the AB Testing user guide which can be found here: https://webhelp.optimizely.com/21-1/en/cms-edit/ab-testing.htm
 
 ## Development environment 
@@ -83,13 +86,13 @@ Right-click project -> Properties -> Signing <Update the path here>
 The versioning of the assemblies and nuget packages is done in the build.cake file. Each package is independently versioned. Refer to the task "Version" in the script that uses the values of the following variables to create assembly versions, which are then used in the individual tasks that generate the nuget packages i.e. "PackageKpi", "PackageKpiCommerce", "PackageMessaging" and "PackageABTesting".
 
 ```
-var kpiBaseVersion = "2.5.3";  // For EPiServer.Marketing.KPI package
+var kpiBaseVersion = "2.5.5";  // For EPiServer.Marketing.KPI package
 
 var kpiCommerceBaseVersion = "2.4.2"; // EPiServer.Marketing.KPI.Commerce
 
 var messagingBaseVersion = "1.3.0";  // EPiServer.Marketing.Messaging
 
-var webBaseVersion = "2.6.0";  // EPiServer.Marketing.Testing
+var webBaseVersion = "2.6.11";  // EPiServer.Marketing.Testing
 
 ```
 
