@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EPiServer.Core;
+using EPiServer.Marketing.KPI.Commerce.Kpis;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Common.Helpers;
 using EPiServer.Marketing.KPI.Manager;
+using EPiServer.Marketing.KPI.Manager.DataClass;
 using EPiServer.Marketing.Testing.Web.Repositories;
 using EPiServer.ServiceLocation;
 using Moq;
-using Xunit;
-using EPiServer.Marketing.KPI.Manager.DataClass;
-using EPiServer.Marketing.KPI.Commerce.Kpis;
-using EPiServer.Marketing.KPI.Common.Helpers;
-using EPiServer.Core;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Xunit;
 
 namespace EPiServer.Marketing.Testing.Test.Web
 {
@@ -58,7 +58,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             var webRepoo = GetUnitUnderTest();
             IKpi testKpi = new Kpi();
             webRepoo.SaveKpi(testKpi);
-            _mockKpiManager.Verify(called => called.Save(It.Is<IKpi>(value=>value == testKpi)), Times.Once);
+            _mockKpiManager.Verify(called => called.Save(It.Is<IKpi>(value => value == testKpi)), Times.Once);
         }
 
         [Fact]
@@ -84,20 +84,20 @@ namespace EPiServer.Marketing.Testing.Test.Web
         [Fact]
         public void DeserializeJsonFormDataCollection_returns_correct_resultList_when_kpiTypes_are_provided()
         {
-            var jsonString = "[\n\t\"{\\\"ConversionProduct\\\": \\\"419__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\\\",\\\"widgetID\\\": \\\"KpiWidget_5\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\","+
-                "\n\t\"{\\\"ConversionProduct\\\": \\\"49__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7\\\",\\\"widgetID\\\": \\\"KpiWidget_6\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\"\n]";
+            var jsonString = "[\n\t\"{\\\"ConversionProduct\\\": \\\"419__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral\\\",\\\"widgetID\\\": \\\"KpiWidget_5\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\"," +
+                "\n\t\"{\\\"ConversionProduct\\\": \\\"49__CatalogContent\\\",\\\"kpiType\\\": \\\"EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral\\\",\\\"widgetID\\\": \\\"KpiWidget_6\\\",\\\"CurrentContent\\\": \\\"6_304\\\"}\"\n]";
             var webRepo = GetUnitUnderTest();
             var result = webRepo.DeserializeJsonKpiFormCollection(jsonString);
             Assert.True(result.Count == 2);
-            Assert.True(result[0]["kpiType"] == "EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
-            Assert.True(result[1]["kpiType"] == "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");          
+            Assert.True(result[0]["kpiType"] == "EPiServer.Marketing.KPI.Commerce.Kpis.AddToCartKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral");
+            Assert.True(result[1]["kpiType"] == "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Version=2.0.0.0, Culture=neutral");
         }
 
         [Fact]
         public void ActivateKpiInstance_returns_commerce_kpi_when_kpiType_is_commerce()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
-            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.PurchaseItemKpi, EPiServer.Marketing.KPI.Commerce, Culture=neutral");
             var webRepo = GetUnitUnderTest();
             var result = webRepo.ActivateKpiInstance(kpiInstanceData);
             Assert.True(result is CommerceKpi);
@@ -107,7 +107,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         public void ActivateKpiInstance_returns_financial_kpi_when_kpiType_is_financial()
         {
             Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
-            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.AverageOrderKpi, EPiServer.Marketing.KPI.Commerce, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+            kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Commerce.Kpis.AverageOrderKpi, EPiServer.Marketing.KPI.Commerce, Culture=neutral");
             var webRepo = GetUnitUnderTest();
             var result = webRepo.ActivateKpiInstance(kpiInstanceData);
             Assert.True(result is IFinancialKpi);
@@ -117,7 +117,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
         //public void ActivateKpiInstance_returns_kpi_when_kpiType_is_regularKpi()
         //{
         //    Dictionary<string, string> kpiInstanceData = new Dictionary<string, string>();
-        //    kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Common.ContentComparatorKPI, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral, PublicKeyToken=8fe83dea738b45b7");
+        //    kpiInstanceData.Add("kpiType", "EPiServer.Marketing.KPI.Common.ContentComparatorKPI, EPiServer.Marketing.KPI, Version=2.2.0.0, Culture=neutral");
         //    var webRepo = GetUnitUnderTest();
         //    var result = webRepo.ActivateKpiInstance(kpiInstanceData);
         //    Assert.True(result is IKpi);
@@ -129,7 +129,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             Guid testGuid = Guid.Parse("48fe0e90-67f9-4171-a65c-aa00efc0ce77");
             var webRepo = GetUnitUnderTest();
             webRepo.GetKpiInstance(testGuid);
-            _mockKpiManager.Verify(call => call.Get(It.Is<Guid>(val => val == testGuid)),Times.Once);
+            _mockKpiManager.Verify(call => call.Get(It.Is<Guid>(val => val == testGuid)), Times.Once);
         }
     }
 }
