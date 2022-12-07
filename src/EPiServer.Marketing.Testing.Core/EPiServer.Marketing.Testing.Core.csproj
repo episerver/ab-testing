@@ -2,11 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <DelaySign>true</DelaySign>
     <AssemblyName>EPiServer.Marketing.Testing.Core</AssemblyName>
-    <AssemblyOriginatorKeyFile>../../BuildScripts/EPiServerProduct_PublicKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <SignAssembly>false</SignAssembly>
     <PackageId>EPiServer.Marketing.Testing.Core</PackageId>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
