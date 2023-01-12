@@ -165,11 +165,11 @@ namespace EPiServer.Marketing.KPI.Common
         /// <param name="e"></param>
         public void AddSessionOnLoadedContent(object sender, ContentEventArgs e)
         {
-            var cookieKey = $"SSK_{TestContentGuid}";
-            var httpContext = HttpContext.Current;
-
             if (!_stickyHelper.IsInSystemFolder() && e.Content != null && e.Content.ContentGuid == TestContentGuid)
             {
+                var cookieKey = $"SSK_{TestContentGuid}";
+                var httpContext = HttpContext.Current;
+                
                 if (!httpContext.Items.Contains(cookieKey) && httpContext.Request.Cookies[cookieKey] == null)
                 {
                     var path = IsSupportingContent() ? httpContext.Request.UrlReferrer.AbsolutePath : httpContext.Request.Path;
