@@ -14,6 +14,19 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
     [ServiceConfiguration(ServiceType = typeof(IKpiHelper), Lifecycle = ServiceInstanceScope.Singleton)]
     internal class KpiHelper : IKpiHelper
     {
+        private readonly string ProtectedRootPath;
+
+        public KpiHelper()
+        {
+            ProtectedRootPath = Shell.Paths.ProtectedRootPath;
+        }
+        
+        //Internal constructor for unit testing, as Shell can't be mocked.
+        internal KpiHelper(string protectedPath)
+        {
+            ProtectedRootPath = protectedPath;
+        }
+
         /// <summary>
         /// Evaluates current URL to determine if page is in a system folder context (e.g Edit, or Preview)
         /// </summary>
@@ -21,7 +34,7 @@ namespace EPiServer.Marketing.KPI.Common.Helpers
         public virtual bool IsInSystemFolder()
         {
             return HttpContext.Current == null ||
-                   HttpContext.Current.Request.RawUrl.IndexOf(Shell.Paths.ProtectedRootPath, StringComparison.OrdinalIgnoreCase) >= 0;
+                   HttpContext.Current.Request.RawUrl.IndexOf(ProtectedRootPath, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public string GetUrl(ContentReference contentReference)

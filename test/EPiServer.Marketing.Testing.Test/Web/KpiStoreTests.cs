@@ -1,6 +1,7 @@
 ﻿using EPiServer.Framework.Localization;
 using EPiServer.Logging;
 using EPiServer.Marketing.KPI.Common;
+using EPiServer.Marketing.KPI.Common.Helpers;
 using EPiServer.Marketing.Testing.Test.Fakes;
 using EPiServer.Marketing.Testing.Web.Controllers;
 using EPiServer.Marketing.Testing.Web.Models;
@@ -97,7 +98,8 @@ namespace EPiServer.Marketing.Testing.Test.Web
             kpis.Add(dict2);
 
             _kpiWebRepoMock.Setup(call => call.DeserializeJsonKpiFormCollection(It.IsAny<string>())).Returns(kpis);
-            var sticky = new Mock<StickySiteKpi>();
+
+            var sticky = new Mock<StickySiteKpi>(new Mock<IServiceLocator>().Object, new KpiHelper(""));
             _kpiWebRepoMock.Setup(call => call.ActivateKpiInstance(It.IsAny<Dictionary<string, string>>())).Returns(sticky.Object);
 
             var retResult = testClass.Put("KpiFormData", "") as RestResult;
@@ -132,7 +134,7 @@ namespace EPiServer.Marketing.Testing.Test.Web
             kpis.Add(dict2);
 
             _kpiWebRepoMock.Setup(call => call.DeserializeJsonKpiFormCollection(It.IsAny<string>())).Returns(kpis);
-            var sticky = new Mock<StickySiteKpi>();
+            var sticky = new Mock<StickySiteKpi>(new Mock<IServiceLocator>().Object, new KpiHelper(""));
             _kpiWebRepoMock.Setup(call => call.ActivateKpiInstance(It.IsAny<Dictionary<string, string>>())).Returns(sticky.Object);
 
             var retResult = testClass.Put("KpiFormData", "") as RestResult;

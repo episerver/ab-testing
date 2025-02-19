@@ -16,7 +16,7 @@ namespace EPiServer.Marketing.KPI.Test.Common
     {
         private IKpiHelper GetUnitUnderTest()
         {            
-            return new KpiHelper();
+            return new KpiHelper("~/protected/");
         }        
 
         [Fact]
